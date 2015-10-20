@@ -124,11 +124,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
                 ReplaceFragment(new WaitingListFragment());
             }
         }
-
-        if (id == R.id.myAccount) {
-            Globals.initializeFragment(new ProfileFragment(), getSupportFragmentManager());
-        }
-
         return super.onOptionsItemSelected(item);
     }
 

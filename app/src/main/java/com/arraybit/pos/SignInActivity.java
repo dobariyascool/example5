@@ -1,16 +1,14 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.arraybit.global.Globals;
 import com.rey.material.widget.Button;
-import com.rey.material.widget.CompoundButton;
 import com.rey.material.widget.EditText;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener{
@@ -40,13 +38,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         Button btnSignIn=(Button)findViewById(R.id.btnSignIn);
         //end
 
-        //compound button
-        CompoundButton cbSignUp=(CompoundButton)findViewById(R.id.cbSignUp);
-        //end
 
         //event
         btnSignIn.setOnClickListener(this);
-        cbSignUp.setOnClickListener(this);
         //end
     }
 
@@ -59,9 +53,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             startActivity(intent);
             finish();
 
-        }
-        else if(v.getId()==R.id.cbSignUp){
-            Globals.initializeFragment(new SignUpFragment(), getSupportFragmentManager());
         }
     }
 
