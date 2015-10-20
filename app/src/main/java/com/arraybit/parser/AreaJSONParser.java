@@ -1,18 +1,16 @@
 package com.arraybit.parser;
 
 import com.arraybit.modal.AreaMaster;
-import com.arraybit.modal.RegisteredUserMaster;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 
 public class AreaJSONParser {
 
-
+    //region Class Methods
     private AreaMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
         AreaMaster objAreaMaster = null;
         try {
@@ -53,5 +51,7 @@ public class AreaJSONParser {
             return null;
         }
     }
+
+    //endregion
 
 }
