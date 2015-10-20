@@ -1,0 +1,46 @@
+package com.arraybit.parser;
+import com.arraybit.modal.UserMaster;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+public class UserMasterJSONParser {
+
+    //region Class Methods
+    private UserMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
+        UserMaster objUserMaster = null;
+        try {
+            if (jsonObject != null) {
+                objUserMaster = new UserMaster();
+                objUserMaster.setUserMasterId((short)jsonObject.getInt("UserMasterId"));
+                objUserMaster.setUsername(jsonObject.getString("Username"));
+                objUserMaster.setPassword(jsonObject.getString("Password"));
+            }
+            return objUserMaster;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+
+    private ArrayList<UserMaster> SetListPropertiesFromJSONArray(JSONArray jsonArray) {
+        ArrayList<UserMaster> lstUserMaster = new ArrayList<>();
+        UserMaster objUserMaster;
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                objUserMaster = new UserMaster();
+                objUserMaster.setUserMasterId((short) jsonArray.getJSONObject(i).getInt("UserMasterId"));
+                objUserMaster.setUsername(jsonArray.getJSONObject(i).getString("Username"));
+                objUserMaster.setPassword(jsonArray.getJSONObject(i).getString("Password"));
+                lstUserMaster.add(objUserMaster);
+            }
+            return lstUserMaster;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+    //endregion
+}
