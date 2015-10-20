@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- splash screen imageview size-->
+    <dimen name="sImageHeight">220dp</dimen>
+    <dimen name="sImageWidth">220dp</dimen>
+    <dimen name="sHeight">50dp</dimen>
+
+    <dimen name="navWidth">320dp</dimen>
+</resources>

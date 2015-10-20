@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<group android:checkableBehavior="single">-->
+
+        <item
+            android:id="@+id/home"
+            android:title="@string/navHome"
+            android:icon="@mipmap/home"/>
+
+        <item
+            android:id="@+id/wOffers"
+            android:icon="@mipmap/offers"
+            android:title="@string/navOffers" />
+
+        <item
+            android:id="@+id/wFeedback"
+            android:icon="@mipmap/feedback"
+            android:title="@string/navFeedback" />
+
+        <item
+            android:id="@+id/wChangeMode"
+            android:icon="@mipmap/change_mode"
+            android:title="@string/navChangeMode" />
+
+        <item
+            android:id="@+id/wRate"
+            android:icon="@mipmap/rating"
+            android:title="@string/navRate" />
+
+        <item
+            android:id="@+id/wAbout"
+            android:icon="@mipmap/aboutus"
+            android:title="@string/navAboutUs" />
+
+        <item
+            android:id="@+id/wExit"
+            android:icon="@mipmap/exit"
+            android:title="@string/navExit" />
+</menu>

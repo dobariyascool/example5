@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dialog_vertical_margin"
+    android:paddingEnd="@dimen/dialog_horizontal_margin"
+    android:paddingStart="@dimen/dialog_horizontal_margin"
+    android:paddingTop="@dimen/dialog_vertical_margin"
+    tools:context="com.arraybit.pos.GuestLoginDialogFragment">
+
+
+
+    <com.rey.material.widget.TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ldLogin"
+        android:paddingTop="@dimen/control_SpecingMedium"
+        android:paddingBottom="@dimen/control_SpecingMedium"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="@dimen/control_TextMedium"/>
+
+    <com.rey.material.widget.EditText
+        android:id="@+id/etUserName"
+        style="@style/EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/siUserName"
+        android:inputType="text" />
+
+    <com.rey.material.widget.EditText
+        android:id="@+id/etPassword"
+        style="@style/EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/siPassword"
+        android:inputType="textPassword" />
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:gravity="end">-->
+
+        <!--<com.rey.material.widget.Button-->
+            <!--android:id="@+id/btnSignIn"-->
+            <!--style="?android:buttonBarButtonStyle"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:text="@string/ldLogin" />-->
+
+        <!--<com.rey.material.widget.Button-->
+            <!--android:id="@+id/btnCancle"-->
+            <!--style="?android:buttonBarButtonStyle"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:text="@string/ldCancel" />-->
+
+    <!--</LinearLayout>-->
+</LinearLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<group android:checkableBehavior="single">-->
+
+        <item
+            android:id="@+id/home"
+            android:title="@string/navHome"
+            android:icon="@mipmap/home"/>
+
+        <!--<item-->
+            <!--android:id="@+id/login"-->
+            <!--android:checked="false"-->
+            <!--android:icon="@mipmap/login"-->
+            <!--android:title="@string/navLogin" />-->
+
+        <!--<item-->
+            <!--android:id="@+id/registration"-->
+            <!--android:checked="false"-->
+            <!--android:icon="@mipmap/registration"-->
+            <!--android:title="@string/navRegistration" />-->
+
+        <item
+            android:id="@+id/offers"
+            android:title="@string/navOffers"
+            android:icon="@mipmap/offers"/>
+
+
+        <item
+            android:id="@+id/changeMode"
+            android:title="@string/navChangeMode"
+            android:icon="@mipmap/change_mode"/>
+
+        <item
+            android:id="@+id/rate"
+            android:icon="@mipmap/rating"
+            android:title="@string/navRate" />
+
+        <item
+            android:id="@+id/feedback"
+            android:icon="@mipmap/feedback"
+            android:title="@string/navFeedback" />
+
+        <item
+            android:id="@+id/aboutus"
+            android:icon="@mipmap/aboutus"
+            android:title="@string/navAboutUs" />
+
+        <item
+            android:id="@+id/exit"
+            android:icon="@mipmap/exit"
+            android:title="@string/navExit" />
+
+    <!--</group>-->
+</menu>
+
+

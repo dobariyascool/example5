@@ -1,0 +1,12 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="com.arraybit.pos.TableTabFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvTables"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/control_SpecingTiny"
+        android:visibility="visible" />
+
+</LinearLayout>
