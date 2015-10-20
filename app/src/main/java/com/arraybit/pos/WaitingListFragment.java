@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -184,7 +183,6 @@ public class WaitingListFragment extends Fragment {
 
             if (alWaitingStatusMaster == null) {
                 Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgSelectFail));
-                Toast.makeText(getActivity(),getResources().getString(R.string.title_fragment_profile),Toast.LENGTH_LONG).show();
             } else if (alWaitingStatusMaster.size() == 0) {
                 Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgNoRecord));
             } else {
