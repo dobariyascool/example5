@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -82,58 +83,6 @@ public class WaitingListFragment extends Fragment {
 
     //region WaitingStatusLoadingTask
 
-    class WaitingStatusLoadingTask extends AsyncTask {
-
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-
-            WaitingStatusJSONParser objWaitingStatusJSONParser = new WaitingStatusJSONParser();
-            alWaitingStatusMaster = objWaitingStatusJSONParser.SelectAllWaitingStatusMaster();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-
-            if (alWaitingStatusMaster == null) {
-                Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgSelectFail));
-            } else if (alWaitingStatusMaster.size() == 0) {
-                Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgNoRecord));
-            } else {
-                Globals.SetErrorLayout(error_layout, false, null);
-
-                PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager());
-                for (int j = 0; j < alWaitingStatusMaster.size(); j++) {
-
-                    alWaitingPerson = SetList(alWaitingStatusMaster.get(j).getWaitingStatusMasterId());
-                    if (j == 0) {
-                        pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingPerson.size()), alWaitingStatusMaster.get(j).getWaitingStatus());
-                    } else if (j == 1) {
-                        pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingPerson.size()), alWaitingStatusMaster.get(j).getWaitingStatus());
-                    }
-                }
-                viewPager.setAdapter(pagerAdapter);
-                waitingTabLayout.setupWithViewPager(viewPager);
-            }
-
-            progressDialog.dismiss();
-        }
-    }
-
-    //endregion
-
     public void SetStatusList() {
         alInteger = new ArrayList<>();
         alInteger.add(new Integer(1));
@@ -142,6 +91,8 @@ public class WaitingListFragment extends Fragment {
         alInteger.add(new Integer(4));
         alInteger.add(new Integer(5));
     }
+
+    //endregion
 
     public ArrayList<WaitingPerson> SetList(int id) {
         alWaitingPerson = new ArrayList<>();
@@ -203,6 +154,57 @@ public class WaitingListFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             return fragmentTitleList.get(position);
+        }
+    }
+
+    class WaitingStatusLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            WaitingStatusJSONParser objWaitingStatusJSONParser = new WaitingStatusJSONParser();
+            alWaitingStatusMaster = objWaitingStatusJSONParser.SelectAllWaitingStatusMaster();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+
+            if (alWaitingStatusMaster == null) {
+                Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgSelectFail));
+                Toast.makeText(getActivity(),getResources().getString(R.string.title_fragment_profile),Toast.LENGTH_LONG).show();
+            } else if (alWaitingStatusMaster.size() == 0) {
+                Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgNoRecord));
+            } else {
+                Globals.SetErrorLayout(error_layout, false, null);
+
+                PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager());
+                for (int j = 0; j < alWaitingStatusMaster.size(); j++) {
+
+                    alWaitingPerson = SetList(alWaitingStatusMaster.get(j).getWaitingStatusMasterId());
+                    if (j == 0) {
+                        pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingPerson.size()), alWaitingStatusMaster.get(j).getWaitingStatus());
+                    } else if (j == 1) {
+                        pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingPerson.size()), alWaitingStatusMaster.get(j).getWaitingStatus());
+                    }
+                }
+                viewPager.setAdapter(pagerAdapter);
+                waitingTabLayout.setupWithViewPager(viewPager);
+            }
+
+            progressDialog.dismiss();
         }
     }
 
