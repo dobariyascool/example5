@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.arraybit.modal.Person;
+import com.arraybit.modal.WaitingMaster;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
@@ -16,15 +16,15 @@ import java.util.ArrayList;
 public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.WaitingListViewHolder> {
 
     Context context;
-    ArrayList<Person> alPerson;
+    ArrayList<WaitingMaster> alWaitingMaster;
     LayoutInflater layoutInflater;
     View view;
     WaitingList waitingList;
 
     // Constructor
-    public WaitingListAdapter(Context context, ArrayList<Person> result) {
+    public WaitingListAdapter(Context context, ArrayList<WaitingMaster> result) {
         this.context = context;
-        this.alPerson = result;
+        this.alWaitingMaster = result;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -37,22 +37,22 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
     @Override
     public void onBindViewHolder(WaitingListViewHolder holder, int position) {
 
-        Person objPerson = alPerson.get(position);
+        WaitingMaster objWaitingMaster = alWaitingMaster.get(position);
 
         if (position == 0) {
             holder.headerLayout.setVisibility(View.VISIBLE);
         } else {
             holder.headerLayout.setVisibility(View.GONE);
         }
-        holder.txtIndex.setText(String.valueOf(objPerson.getIndex()));
-        holder.txtName.setText(String.valueOf(objPerson.getName()));
-        holder.txtMobileNo.setText(String.valueOf(objPerson.getMobile()));
-        holder.txtPersons.setText(String.valueOf(objPerson.getPerson()));
+        holder.txtIndex.setText(String.valueOf(position+1));
+        holder.txtName.setText(String.valueOf(objWaitingMaster.getPersonName()));
+        holder.txtMobileNo.setText(String.valueOf(objWaitingMaster.getPersonMobile()));
+        holder.txtPersons.setText(String.valueOf(objWaitingMaster.getNoOfPersons()));
     }
 
     @Override
     public int getItemCount() {
-        return alPerson.size();
+        return alWaitingMaster.size();
     }
 
     public interface WaitingList {
