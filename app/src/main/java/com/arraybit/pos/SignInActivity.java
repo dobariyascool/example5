@@ -36,6 +36,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         //button
         Button btnSignIn=(Button)findViewById(R.id.btnSignIn);
+        //btnSignIn.setVisibility(View.GONE);
         //end
 
 
