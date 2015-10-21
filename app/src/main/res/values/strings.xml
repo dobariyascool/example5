@@ -61,6 +61,8 @@
     <string name="siSignIn">Login</string>
     <string name="siNewUser">New User?</string>
     <string name="siSignupHere">Sign Up</string>
+    <string name="siLoginFailedMsg">Username or Password are invalid.</string>
+    <string name="siLoginSucessMsg">Successfully logged in.</string>
     <!-- end -->
 
 

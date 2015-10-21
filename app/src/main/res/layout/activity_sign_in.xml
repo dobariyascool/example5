@@ -1,25 +1,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.arraybit.pos.SignInActivity">
 
     <include
         android:id="@+id/app_bar"
-        layout="@layout/app_bar"/>
+        layout="@layout/app_bar" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     <com.rey.material.widget.EditText
-            android:id="@+id/etName"
-            style="@style/EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/siUserName"
-            android:inputType="text"
-            android:paddingEnd="@dimen/control_SpecingSmall"
-            android:paddingStart="@dimen/control_SpecingSmall"
-            android:paddingTop="@dimen/control_SpecingSmall" />
+        android:id="@+id/etName"
+        style="@style/EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/siUserName"
+        android:inputType="text"
+        android:paddingEnd="@dimen/control_SpecingSmall"
+        android:paddingStart="@dimen/control_SpecingSmall"
+        android:paddingTop="@dimen/control_SpecingSmall" />
 
-    <com.rey.material.widget.EditText
+    <ImageButton
+        android:id="@+id/ibClear"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignEnd="@+id/etName"
+        android:layout_marginTop="8dp"
+        android:background="@mipmap/close"
+        android:contentDescription="About App"
+        android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.rey.material.widget.EditText
             android:id="@+id/etPassword"
             style="@style/EditText"
             android:layout_width="match_parent"
@@ -28,6 +49,14 @@
             android:inputType="textPassword"
             android:paddingEnd="@dimen/control_SpecingSmall"
             android:paddingStart="@dimen/control_SpecingSmall" />
+
+        <ToggleButton
+            android:id="@+id/btnPasswordShow"
+            style="@style/EditTextToogleButton"
+            android:layout_alignEnd="@+id/etPassword"
+            android:background="@drawable/showhideselector"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <com.rey.material.widget.Button
         android:id="@+id/btnSignIn"

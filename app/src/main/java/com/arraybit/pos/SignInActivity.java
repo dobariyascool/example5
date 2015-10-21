@@ -1,19 +1,38 @@
 package com.arraybit.pos;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.modal.UserMaster;
+import com.arraybit.parser.UserMasterJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
-public class SignInActivity extends AppCompatActivity implements View.OnClickListener{
+@SuppressWarnings("ALL")
+public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText etName,etPassword;
+    EditText etName, etPassword;
+    ToggleButton btnPasswordShow;
+    ImageButton ibClear;
+
+    UserMasterJSONParser objUserMasterJSONParser = null;
+    UserMaster objUserMaster = null;
+    SharePreferenceManage objSharePreferenceManage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +40,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_in);
 
         //app_bar
-        Toolbar app_bar=(Toolbar)findViewById(R.id.app_bar);
+        Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
 
         if (getSupportActionBar() != null) {
@@ -30,31 +49,146 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //end
 
         //edittext
-        etName=(EditText)findViewById(R.id.etName);
-        etPassword=(EditText)findViewById(R.id.etPassword);
+        etName = (EditText) findViewById(R.id.etName);
+        etPassword = (EditText) findViewById(R.id.etPassword);
         //end
 
         //button
-        Button btnSignIn=(Button)findViewById(R.id.btnSignIn);
+        Button btnSignIn = (Button) findViewById(R.id.btnSignIn);
+        btnPasswordShow = (ToggleButton) findViewById(R.id.btnPasswordShow);
+        ibClear = (ImageButton) findViewById(R.id.ibClear);
         //btnSignIn.setVisibility(View.GONE);
         //end
 
-
         //event
         btnSignIn.setOnClickListener(this);
+        btnPasswordShow.setOnClickListener(this);
+        ibClear.setOnClickListener(this);
         //end
+
+        /*btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getId() == R.id.btnSignIn) {
+                    if (!ValidateControls()) {
+                        Toast.makeText(SignInActivity.this, getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (Service.CheckNet(SignInActivity.this)) {
+                        new SignInLodingTask().execute();
+
+                    } else {
+                        Toast.makeText(SignInActivity.this, getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });*/
+
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ibClear.setVisibility(View.VISIBLE);
+                if (etName.getText().toString().equals("")) {
+                    ibClear.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                btnPasswordShow.setVisibility(View.VISIBLE);
+                if (etPassword.getText().toString().equals("")) {
+                    btnPasswordShow.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        /*btnPasswordShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (btnPasswordShow.isChecked()) {
+                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                } else {
+                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+            }
+        });*/
+
+        /*ibClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etName.setText("");
+                ibClear.setVisibility(View.GONE);
+            }
+        });*/
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.btnSignIn){
+        if (v.getId() == R.id.btnSignIn) {
+            if (!ValidateControls()) {
+                Toast.makeText(SignInActivity.this, getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (Service.CheckNet(SignInActivity.this)) {
+                new SignInLodingTask().execute();
 
-            Intent intent = new Intent(SignInActivity.this, WelcomeActivity.class);
-            intent.putExtra("username",etName.getText().toString());
-            startActivity(intent);
-            finish();
-
+            } else {
+                Toast.makeText(SignInActivity.this, getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+            }
         }
+        if(v.getId() == R.id.ibClear){
+            etName.setText("");
+            ibClear.setVisibility(View.GONE);
+        }
+        if(v.getId() == R.id.btnPasswordShow){
+            if (btnPasswordShow.isChecked()) {
+                etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+            } else {
+                etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            }
+        }
+    }
+
+    boolean ValidateControls() {
+        boolean IsValid = true;
+
+        if (etName.getText().toString().equals("")) {
+            etName.setError(getResources().getString(R.string.siUserName));
+            IsValid = false;
+        }
+        if (etPassword.getText().toString().equals("")) {
+            etPassword.setError("Enter " + getResources().getString(R.string.siPassword));
+            IsValid = false;
+        }
+
+        return IsValid;
+    }
+
+    void ClearControls() {
+        etName.setText("");
+        etPassword.setText("");
     }
 
     @Override
@@ -81,12 +215,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
 
-            if(getSupportFragmentManager().getBackStackEntryCount()!=0)
-            {
+            if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
                 getSupportFragmentManager().popBackStack();
-            }
-            else
-            {
+            } else {
                 finish();
             }
             return true;
@@ -99,10 +230,74 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onBackPressed() {
         //fragment backPressed
-        if(getSupportFragmentManager().getBackStackEntryCount()!=0)
-        {
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getSupportFragmentManager().popBackStack();
         }
     }
     //end
+
+    public class SignInLodingTask extends AsyncTask {
+
+        ProgressDialog pDialog;
+        String strName, strPassword;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(SignInActivity.this);
+            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+            strName = etName.getText().toString();
+            strPassword = etPassword.getText().toString();
+            objUserMasterJSONParser = new UserMasterJSONParser();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            objUserMaster = objUserMasterJSONParser.SelectRegisteredUserName(strName, strPassword);
+            return objUserMaster;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
+            if (result == null) {
+                Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginFailedMsg), Toast.LENGTH_LONG).show();
+                pDialog.dismiss();
+            } else {
+                objSharePreferenceManage = new SharePreferenceManage();
+                if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", SignInActivity.this) == null) {
+                    objSharePreferenceManage.CreatePreference("RegistrationPreference", "UserName", etName.getText().toString(), SignInActivity.this);
+                }
+
+                if (objSharePreferenceManage.GetPreference("RegisteredUserMasterIdPreference", "RegisteredUserMasterId", SignInActivity.this) == null) {
+                    objSharePreferenceManage.CreatePreference("RegisteredUserMasterIdPreference", "RegisteredUserMasterId", String.valueOf(objUserMaster.getUserMasterId()), SignInActivity.this);
+                }
+
+                ClearControls();
+                Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_LONG).show();
+
+                /*Intent intent = getIntent();
+                if (intent.getStringExtra("WelcomeActivity") != null) {*/
+
+                    Intent i = new Intent(SignInActivity.this, WelcomeActivity.class);
+                    startActivity(i);
+                    finish();
+                /*} else {
+
+                    Intent i = new Intent(SignInActivity.this, .class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }*/
+            }
+        }
+    }
 }
+
