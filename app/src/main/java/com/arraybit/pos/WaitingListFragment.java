@@ -17,8 +17,9 @@ import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
-import com.arraybit.modal.WaitingPerson;
+import com.arraybit.modal.WaitingMaster;
 import com.arraybit.modal.WaitingStatusMaster;
+import com.arraybit.parser.WaitingJSONParser;
 import com.arraybit.parser.WaitingStatusJSONParser;
 
 import java.util.ArrayList;
@@ -30,8 +31,7 @@ public class WaitingListFragment extends Fragment {
     TabLayout waitingTabLayout;
     ViewPager viewPager;
     LinearLayout error_layout;
-    ArrayList<WaitingPerson> alWaitingPerson;
-    ArrayList<Integer> alInteger;
+    ArrayList<WaitingMaster> alWaitingMaster;
     ArrayList<WaitingStatusMaster> alWaitingStatusMaster;
 
     public WaitingListFragment() {
@@ -60,71 +60,40 @@ public class WaitingListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
-
-        //SetStatusList();
-//        for (int j = 0; j < alWaitingStatusMaster.size(); j++) {
-//
-//            alWaitingPerson = SetList(alWaitingStatusMaster.get(j).getWaitingStatusMasterId());
-//            if (j == 0) {
-//                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingPerson.size()),alWaitingStatusMaster.get(j).getWaitingStatus());
-//            } else if (j == 1) {
-//                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingPerson.size()),alWaitingStatusMaster.get(j).getWaitingStatus());
-//            }
-//        }
-//
-//        //pagerAdapter.addFragment(WaitingTabFragment.createInstance(3),"Waiting");
-//        //pagerAdapter.addFragment(WaitingTabFragment.createInstance(5),"Served");
-//        viewPager.setAdapter(pagerAdapter);
-//        waitingTabLayout.setupWithViewPager(viewPager);
     }
 
-    //region WaitingStatusLoadingTask
+    void AddTab(){
 
-    public void SetStatusList() {
-        alInteger = new ArrayList<>();
-        alInteger.add(new Integer(1));
-        alInteger.add(new Integer(2));
-        alInteger.add(new Integer(3));
-        alInteger.add(new Integer(4));
-        alInteger.add(new Integer(5));
-    }
+        ArrayList<WaitingMaster> alWaiting=null;
+        WaitingMaster objWaitingMaster;
+        PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager());
+        for (int i = 0; i < alWaitingStatusMaster.size(); i++) {
 
-    //endregion
+            alWaiting=new ArrayList<>();
+            for(int j=0;j<alWaitingMaster.size();j++) {
 
-    public ArrayList<WaitingPerson> SetList(int id) {
-        alWaitingPerson = new ArrayList<>();
-        if (id == 1) {
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 1));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 1));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 1));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 1));
-            return alWaitingPerson;
-        } else if (id == 2) {
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 4));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 4));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 4));
-            return alWaitingPerson;
-        } else if (id == 3) {
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 3));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 3));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 3));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 3));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 3));
-            return alWaitingPerson;
-        } else if (id == 4) {
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 4));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 4));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 4));
-            return alWaitingPerson;
-        } else {
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 5));
-            alWaitingPerson.add(new WaitingPerson(1, "abc", "598437583", 7, 5));
-            return alWaitingPerson;
+
+                if(alWaitingMaster.get(j).getlinktoWaitingStatusMasterId()==alWaitingStatusMaster.get(i).getWaitingStatusMasterId())
+                {
+                    objWaitingMaster=new WaitingMaster();
+                    objWaitingMaster.setWaitingMasterId(alWaitingMaster.get(j).getWaitingMasterId());
+                    objWaitingMaster.setPersonName(alWaitingMaster.get(j).getPersonName());
+                    objWaitingMaster.setPersonMobile(alWaitingMaster.get(j).getPersonMobile());
+                    objWaitingMaster.setNoOfPersons(alWaitingMaster.get(j).getNoOfPersons());
+                    alWaiting.add(objWaitingMaster);
+                }
+
+            }
+
+            pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaiting), alWaitingStatusMaster.get(i).getWaitingStatus());
         }
 
+        viewPager.setAdapter(pagerAdapter);
+        waitingTabLayout.setupWithViewPager(viewPager);
+
     }
+
+    //region LoadingTask
 
     static class PagerAdapter extends FragmentStatePagerAdapter {
 
@@ -188,22 +157,49 @@ public class WaitingListFragment extends Fragment {
             } else {
                 Globals.SetErrorLayout(error_layout, false, null);
 
-                PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager());
-                for (int j = 0; j < alWaitingStatusMaster.size(); j++) {
-
-                    alWaitingPerson = SetList(alWaitingStatusMaster.get(j).getWaitingStatusMasterId());
-                    if (j == 0) {
-                        pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingPerson.size()), alWaitingStatusMaster.get(j).getWaitingStatus());
-                    } else if (j == 1) {
-                        pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingPerson.size()), alWaitingStatusMaster.get(j).getWaitingStatus());
-                    }
-                }
-                viewPager.setAdapter(pagerAdapter);
-                waitingTabLayout.setupWithViewPager(viewPager);
+                new WaitingMasterLoadingTask().execute();
             }
 
             progressDialog.dismiss();
         }
     }
 
+    //endregion
+
+    class WaitingMasterLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
+            alWaitingMaster = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(1);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+
+            if (alWaitingMaster == null) {
+                Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgSelectFail));
+            } else if (alWaitingMaster.size() == 0) {
+                Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgNoRecord));
+            } else {
+                Globals.SetErrorLayout(error_layout, false, null);
+                AddTab();
+            }
+            progressDialog.dismiss();
+        }
+    }
 }

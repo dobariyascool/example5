@@ -20,7 +20,7 @@ public class WaitingJSONParser
     public String InsertWaitingMaster = "InsertWaitingMaster";
     public String UpdateWaitingMaster = "UpdateWaitingMaster";
     public String SelectWaitingMaster = "SelectWaitingMaster";
-    public String SelectAllWaitingMaster = "SelectAllWaitingMasterPageWise";
+    public String SelectAllWaitingMaster = "SelectAllWaitingMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     Date dt = null;
@@ -172,6 +172,23 @@ public class WaitingJSONParser
             JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMaster);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllWaitingMaster + "PageWiseResult");
+                if (jsonArray != null) {
+                    lstWaitingMaster = SetListPropertiesFromJSONArray(jsonArray);
+                }
+            }
+            return lstWaitingMaster;
+        }
+        catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public ArrayList<WaitingMaster> SelectAllWaitingMasterByWaitingStatusMasterId(int currentPage) {
+        ArrayList<WaitingMaster> lstWaitingMaster = null;
+        try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMaster +"/"+currentPage);
+            if (jsonResponse != null) {
+                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllWaitingMaster + "Result");
                 if (jsonArray != null) {
                     lstWaitingMaster = SetListPropertiesFromJSONArray(jsonArray);
                 }

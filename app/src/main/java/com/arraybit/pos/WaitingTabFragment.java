@@ -2,7 +2,6 @@ package com.arraybit.pos;
 
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.arraybit.adapter.WaitingListAdapter;
-import com.arraybit.modal.Person;
+import com.arraybit.modal.WaitingMaster;
 
 import java.util.ArrayList;
 
@@ -20,16 +19,17 @@ public class WaitingTabFragment extends Fragment {
 
     public final static String ITEMS_COUNT_KEY = "WaitingTabFragment$ItemsCount";
     RecyclerView rvWaiting;
+    ArrayList<WaitingMaster> alWaitingMaster;
+
 
     public WaitingTabFragment() {
-        // Required empty public constructor
     }
 
-    public static WaitingTabFragment createInstance(int itemsCount) {
+    public static WaitingTabFragment createInstance(ArrayList<WaitingMaster> alWaitingMaster) {
 
         WaitingTabFragment waitingTabFragment = new WaitingTabFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(ITEMS_COUNT_KEY, itemsCount);
+        bundle.putParcelableArrayList(ITEMS_COUNT_KEY, alWaitingMaster);
         waitingTabFragment.setArguments(bundle);
         return waitingTabFragment;
     }
@@ -47,23 +47,17 @@ public class WaitingTabFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-
-        WaitingListAdapter waitingListAdapter = new WaitingListAdapter(getActivity(), createItemList());
+        WaitingListAdapter waitingListAdapter = new WaitingListAdapter(getActivity(),createItemList());
         rvWaiting.setAdapter(waitingListAdapter);
         rvWaiting.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }
 
-    private ArrayList<Person> createItemList() {
-        ArrayList<Person> itemList = new ArrayList<>();
-        Person objPerson;
+    private ArrayList<WaitingMaster> createItemList() {
+        ArrayList<WaitingMaster> itemList = new ArrayList<>();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            int itemsCount = bundle.getInt(ITEMS_COUNT_KEY);
-            for (int i = 0; i < itemsCount; i++) {
-
-                itemList.add(new Person(i + 1, "abc", "9923124512", 5));
-            }
+            itemList = bundle.getParcelableArrayList(ITEMS_COUNT_KEY);
         }
         return itemList;
     }
