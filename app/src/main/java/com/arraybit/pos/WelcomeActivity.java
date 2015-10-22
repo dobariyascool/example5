@@ -2,39 +2,29 @@ package com.arraybit.pos;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.LoginFilter;
-import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.widget.ImageView;
 
-import com.arraybit.global.Globals;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+import com.arraybit.global.SharePreferenceManage;
+
+import java.util.Objects;
 
 
 public class WelcomeActivity extends Activity implements GestureDetector.OnGestureListener {
 
     GestureDetector gestureDetector;
-    String UserName;
+
+    SharePreferenceManage objSharePreferenceManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        gestureDetector=new GestureDetector(this,this);
-
-        Intent intent = getIntent();
-        if(intent.getStringExtra("username")!=null)
-        {
-            UserName=intent.getStringExtra("username");
-        }
+        gestureDetector = new GestureDetector(this, this);
     }
 
     @Override
@@ -92,40 +82,19 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if(e1.getX() > e2.getX() && velocityY < 1000)
-        {
-            switch (UserName) {
-                case "g": {
-                    Intent intent = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("username", UserName);
-                    startActivity(intent);
-                    WelcomeActivity.this.finish();
-                    break;
-                }
-                case "w": {
-                    Intent intent = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    WelcomeActivity.this.finish();
-                    break;
-                }
-                case "wl": {
-                    Intent intent = new Intent(WelcomeActivity.this, WaitingActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    WelcomeActivity.this.finish();
-                    break;
-                }
-                default: {
-                    Intent intent = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    WelcomeActivity.this.finish();
-                    break;
-                }
-            }
+        if (e1.getX() > e2.getX() && velocityY < 1000) {
 
+            objSharePreferenceManage = new SharePreferenceManage();
+            if (Objects.equals(objSharePreferenceManage.GetPreference("WaitingPreference", "WaitingUserTypeMasterId", WelcomeActivity.this), "1")) {
+                Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                WelcomeActivity.this.finish();
+            } else {
+                Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
+                startActivity(i);
+                WelcomeActivity.this.finish();
+            }
             return true;
         }
         return false;

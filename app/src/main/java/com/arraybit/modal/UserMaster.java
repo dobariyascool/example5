@@ -9,9 +9,6 @@ public class UserMaster implements Parcelable {
     short UserMasterId;
     String Username;
     String Password;
-    short linktoUserTypeMasterId;
-    short linktoRoleMasterId;
-    String Role;
     public static final Creator<UserMaster> CREATOR = new Creator<UserMaster>() {
         @Override
         public UserMaster createFromParcel(Parcel source) {
@@ -19,9 +16,6 @@ public class UserMaster implements Parcelable {
             objUserMaster.UserMasterId = (short) source.readInt();
             objUserMaster.Username = source.readString();
             objUserMaster.Password = source.readString();
-            objUserMaster.linktoUserTypeMasterId = (short) source.readInt();
-            objUserMaster.linktoRoleMasterId = (short) source.readInt();
-            objUserMaster.Role = source.readString();
             return objUserMaster;
         }
 
@@ -30,30 +24,6 @@ public class UserMaster implements Parcelable {
             return new UserMaster[size];
         }
     };
-
-    public short getLinktoUserTypeMasterId() {
-        return linktoUserTypeMasterId;
-    }
-
-    public void setLinktoUserTypeMasterId(short linktoUserTypeMasterId) {
-        this.linktoUserTypeMasterId = linktoUserTypeMasterId;
-    }
-
-    public short getLinktoRoleMasterId() {
-        return linktoRoleMasterId;
-    }
-
-    public void setLinktoRoleMasterId(short linktoRoleMasterId) {
-        this.linktoRoleMasterId = linktoRoleMasterId;
-    }
-
-    public String getRole() {
-        return Role;
-    }
-
-    public void setRole(String role) {
-        Role = role;
-    }
 
     public short getUserMasterId() {
         return UserMasterId;
@@ -74,7 +44,6 @@ public class UserMaster implements Parcelable {
     public String getPassword() {
         return Password;
     }
-
     //endregion
 
     public void setPassword(String password) {
@@ -91,8 +60,5 @@ public class UserMaster implements Parcelable {
         parcel.writeInt(UserMasterId);
         parcel.writeString(Username);
         parcel.writeString(Password);
-        parcel.writeInt(linktoUserTypeMasterId);
-        parcel.writeInt(linktoRoleMasterId);
-        parcel.writeString(Role);
     }
 }
