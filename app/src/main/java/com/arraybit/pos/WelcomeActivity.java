@@ -92,6 +92,7 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
                 WelcomeActivity.this.finish();
             } else {
                 Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 WelcomeActivity.this.finish();
             }
