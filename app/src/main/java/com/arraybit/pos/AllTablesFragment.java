@@ -1,6 +1,8 @@
 package com.arraybit.pos;
 
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -12,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.arraybit.modal.SectionMaster;
+import com.arraybit.parser.SectionJSONParser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +25,7 @@ public class AllTablesFragment extends Fragment {
 
     TabLayout tabLayout1;
     ViewPager viewPager1;
+    ArrayList<SectionMaster> alSectionMaster;
 
     public AllTablesFragment() {
         // Required empty public constructor
@@ -43,7 +49,7 @@ public class AllTablesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        PagerAdapter1 pagerAdapter = new PagerAdapter1(getChildFragmentManager());
+        PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager());
         pagerAdapter.addFragment(TableTabFragment.createInstance(20),"All");
         pagerAdapter.addFragment(TableTabFragment.createInstance(10), "Non AC");
         pagerAdapter.addFragment(TableTabFragment.createInstance(5), "AC");
@@ -57,12 +63,12 @@ public class AllTablesFragment extends Fragment {
         super.onDestroy();
     }
 
-    static class PagerAdapter1 extends FragmentStatePagerAdapter {
+    static class PagerAdapter extends FragmentStatePagerAdapter {
 
         private final List<Fragment> fragmentList1 = new ArrayList<>();
         private final List<String> fragmentTitleList1 = new ArrayList<>();
 
-        public PagerAdapter1(FragmentManager fragmentManager) {
+        public PagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
 
@@ -85,4 +91,50 @@ public class AllTablesFragment extends Fragment {
             return fragmentTitleList1.get(position);
         }
     }
+
+    //region Loading Task
+
+    class WaitingStatusLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            SectionJSONParser objSectionJSONParser = new SectionJSONParser();
+            alSectionMaster = objSectionJSONParser.SelectAllSectionMaster();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+
+            if (alSectionMaster == null) {
+                //Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgSelectFail));
+            } else if (alSectionMaster.size() == 0) {
+                //Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgNoRecord));
+            } else {
+                //Globals.SetErrorLayout(error_layout, false, null);
+
+                //pagerAdapter = new PagerAdapter(getChildFragmentManager());
+
+                //new WaitingMasterLoadingTask().execute();
+            }
+
+            progressDialog.dismiss();
+        }
+    }
+
+    //endregion
+
 }
