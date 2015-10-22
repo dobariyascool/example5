@@ -19,12 +19,12 @@ public class UserMasterJSONParser {
         try {
             if (jsonObject != null) {
                 objUserMaster = new UserMaster();
-                objUserMaster.setUserMasterId((short)jsonObject.getInt("UserMasterId"));
+                objUserMaster.setUserMasterId((short) jsonObject.getInt("UserMasterId"));
                 objUserMaster.setUsername(jsonObject.getString("Username"));
                 objUserMaster.setPassword(jsonObject.getString("Password"));
                 objUserMaster.setLinktoRoleMasterId((short) jsonObject.getInt("linktoRoleMasterId"));
                 objUserMaster.setLinktoUserTypeMasterId(((short) jsonObject.getInt("linktoUserTypeMasterId")));
-                objUserMaster.setRole(jsonObject.getString("Role"));
+                //objUserMaster.setRole(jsonObject.getString("Role"));
             }
             return objUserMaster;
         } catch (JSONException e) {
