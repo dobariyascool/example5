@@ -85,7 +85,7 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
         if (e1.getX() > e2.getX() && velocityY < 1000) {
 
             objSharePreferenceManage = new SharePreferenceManage();
-            if (Objects.equals(objSharePreferenceManage.GetPreference("WaitingPreference", "WaitingUserTypeMasterId", WelcomeActivity.this), "1")) {
+            if (Objects.equals(objSharePreferenceManage.GetPreference("WaitingPreference", "UserTypeMasterId", WelcomeActivity.this), "1")) {
                 Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
