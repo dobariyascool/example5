@@ -26,11 +26,11 @@
 
         <ImageButton
             android:id="@+id/ibClear"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/control_SpecingLarge"
+            android:layout_height="@dimen/control_SpecingLarge"
             android:layout_alignEnd="@+id/etName"
             android:layout_marginEnd="@dimen/control_SpecingMedium"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/button_Margin"
             android:background="@mipmap/close"
             android:contentDescription="@string/clear_text"
             android:visibility="gone"/>

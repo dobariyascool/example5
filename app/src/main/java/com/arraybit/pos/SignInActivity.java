@@ -234,12 +234,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 pDialog.dismiss();
             } else {
                 objSharePreferenceManage = new SharePreferenceManage();
-                if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", SignInActivity.this) == null) {
-                    objSharePreferenceManage.CreatePreference("RegistrationPreference", "UserName", etName.getText().toString(), SignInActivity.this);
+                if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SignInActivity.this) == null) {
+                    objSharePreferenceManage.CreatePreference("WaitingPreference", "UserName", etName.getText().toString(), SignInActivity.this);
                 }
 
-                if (objSharePreferenceManage.GetPreference("RegisteredUserMasterIdPreference", "RegisteredUserMasterId", SignInActivity.this) == null) {
-                    objSharePreferenceManage.CreatePreference("RegisteredUserMasterIdPreference", "RegisteredUserMasterId", String.valueOf(objUserMaster.getUserMasterId()), SignInActivity.this);
+                if (objSharePreferenceManage.GetPreference("WaitingUserMasterIdPreference", "WaitingUserMasterId", SignInActivity.this) == null) {
+                    objSharePreferenceManage.CreatePreference("WaitingUserMasterIdPreference", "WaitingUserMasterId", String.valueOf(objUserMaster.getUserMasterId()), SignInActivity.this);
                 }
 
                 ClearControls();
