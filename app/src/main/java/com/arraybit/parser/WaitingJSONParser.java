@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class WaitingJSONParser
-{
+public class WaitingJSONParser {
     public String InsertWaitingMaster = "InsertWaitingMaster";
     public String UpdateWaitingMaster = "UpdateWaitingMaster";
     public String SelectWaitingMaster = "SelectWaitingMaster";
@@ -37,11 +36,11 @@ public class WaitingJSONParser
                 objWaitingMaster.setWaitingMasterId(jsonObject.getLong("WaitingMasterId"));
                 objWaitingMaster.setPersonName(jsonObject.getString("PersonName"));
                 objWaitingMaster.setPersonMobile(jsonObject.getString("PersonMobile"));
-                objWaitingMaster.setNoOfPersons((short)jsonObject.getInt("NoOfPersons"));
-                objWaitingMaster.setlinktoWaitingStatusMasterId((short)jsonObject.getInt("linktoWaitingStatusMasterId"));
+                objWaitingMaster.setNoOfPersons((short) jsonObject.getInt("NoOfPersons"));
+                objWaitingMaster.setlinktoWaitingStatusMasterId((short) jsonObject.getInt("linktoWaitingStatusMasterId"));
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
                 objWaitingMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
-                objWaitingMaster.setlinktoUserMasterIdCreatedBy((short)jsonObject.getInt("linktoUserMasterIdCreatedBy"));
+                objWaitingMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
 
                 /// Extra
                 objWaitingMaster.setWaitingStatus(jsonObject.getString("WaitingStatus"));
@@ -63,11 +62,11 @@ public class WaitingJSONParser
                 objWaitingMaster.setWaitingMasterId(jsonArray.getJSONObject(i).getLong("WaitingMasterId"));
                 objWaitingMaster.setPersonName(jsonArray.getJSONObject(i).getString("PersonName"));
                 objWaitingMaster.setPersonMobile(jsonArray.getJSONObject(i).getString("PersonMobile"));
-                objWaitingMaster.setNoOfPersons((short)jsonArray.getJSONObject(i).getInt("NoOfPersons"));
-                objWaitingMaster.setlinktoWaitingStatusMasterId((short)jsonArray.getJSONObject(i).getInt("linktoWaitingStatusMasterId"));
+                objWaitingMaster.setNoOfPersons((short) jsonArray.getJSONObject(i).getInt("NoOfPersons"));
+                objWaitingMaster.setlinktoWaitingStatusMasterId((short) jsonArray.getJSONObject(i).getInt("linktoWaitingStatusMasterId"));
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
                 objWaitingMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
-                objWaitingMaster.setlinktoUserMasterIdCreatedBy((short)jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
+                objWaitingMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
 
                 /// Extra
                 objWaitingMaster.setWaitingStatus(jsonArray.getJSONObject(i).getString("WaitingStatus"));
@@ -86,6 +85,7 @@ public class WaitingJSONParser
     //region Insert
 
     public String InsertWaitingMaster(WaitingMaster objWaitingMaster) {
+        dt = new Date();
         try {
             JSONStringer stringer = new JSONStringer();
             stringer.object();
@@ -97,7 +97,6 @@ public class WaitingJSONParser
             stringer.key("PersonMobile").value(objWaitingMaster.getPersonMobile());
             stringer.key("NoOfPersons").value(objWaitingMaster.getNoOfPersons());
             stringer.key("linktoWaitingStatusMasterId").value(objWaitingMaster.getlinktoWaitingStatusMasterId());
-            dt = sdfControlDateFormat.parse(objWaitingMaster.getCreateDateTime());
             stringer.key("CreateDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoUserMasterIdCreatedBy").value(objWaitingMaster.getlinktoUserMasterIdCreatedBy());
 
@@ -106,10 +105,14 @@ public class WaitingJSONParser
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertWaitingMaster, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertWaitingMaster + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
-        }
-        catch (Exception ex) {
+            if (jsonResponse != null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertWaitingMaster + "Result");
+                if (jsonObject != null) {
+                    return String.valueOf(jsonObject.getInt("ErrorCode"));
+                }
+            }
+            return "-1";
+        } catch (Exception ex) {
             return "-1";
         }
     }
@@ -139,8 +142,7 @@ public class WaitingJSONParser
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateWaitingMaster, stringer);
             JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateWaitingMaster + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return "-1";
         }
     }
@@ -158,8 +160,7 @@ public class WaitingJSONParser
                 }
             }
             return null;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -178,8 +179,7 @@ public class WaitingJSONParser
                 }
             }
             return lstWaitingMaster;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }

@@ -1,4 +1,5 @@
 package com.arraybit.parser;
+import com.arraybit.global.Service;
 import com.arraybit.modal.UserMaster;
 
 import org.json.JSONArray;
@@ -8,6 +9,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class UserMasterJSONParser {
+
+    public String SelectRegisteredUserMasterUserName = "SelectUserName";
 
     //region Class Methods
 
@@ -50,5 +53,23 @@ public class UserMasterJSONParser {
         }
     }
 
+    //endregion
+
+    //region Select
+    public UserMaster SelectRegisteredUserName(String username,String password)
+    {
+        try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectRegisteredUserMasterUserName + "/" + username + "/" + password);
+            if (jsonResponse != null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectRegisteredUserMasterUserName + "Result");
+                if (jsonObject != null) {
+                    return SetClassPropertiesFromJSONObject(jsonObject);
+                }
+            }
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
     //endregion
 }
