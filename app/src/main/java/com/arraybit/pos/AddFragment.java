@@ -170,7 +170,7 @@ public class AddFragment extends Fragment {
             objSharePreferenceManage=new SharePreferenceManage();
             if(objSharePreferenceManage.GetPreference("AddPreference","linktoUserMasterIdCreatedBy",getActivity())!=null)
             {
-                objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference","WaitingUserMasterId",getActivity())));
+                objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity())));
             }
             objWaitingJSONParser = new WaitingJSONParser();
         }
