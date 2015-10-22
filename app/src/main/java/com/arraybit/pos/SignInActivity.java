@@ -229,9 +229,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
+            pDialog.dismiss();
             if (result == null) {
                 Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginFailedMsg), Toast.LENGTH_LONG).show();
-                pDialog.dismiss();
+
             } else {
                 objSharePreferenceManage = new SharePreferenceManage();
                 if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SignInActivity.this) == null) {
