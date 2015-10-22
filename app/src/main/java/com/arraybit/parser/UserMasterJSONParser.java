@@ -1,4 +1,5 @@
 package com.arraybit.parser;
+
 import com.arraybit.global.Service;
 import com.arraybit.modal.UserMaster;
 
@@ -18,7 +19,7 @@ public class UserMasterJSONParser {
         try {
             if (jsonObject != null) {
                 objUserMaster = new UserMaster();
-                objUserMaster.setUserMasterId((short)jsonObject.getInt("UserMasterId"));
+                objUserMaster.setUserMasterId((short) jsonObject.getInt("UserMasterId"));
                 objUserMaster.setUsername(jsonObject.getString("Username"));
                 objUserMaster.setPassword(jsonObject.getString("Password"));
             }
