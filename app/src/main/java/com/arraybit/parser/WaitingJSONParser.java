@@ -96,7 +96,6 @@ public class WaitingJSONParser {
             stringer.key("PersonMobile").value(objWaitingMaster.getPersonMobile());
             stringer.key("NoOfPersons").value(objWaitingMaster.getNoOfPersons());
             stringer.key("linktoWaitingStatusMasterId").value(objWaitingMaster.getlinktoWaitingStatusMasterId());
-
             stringer.key("CreateDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoUserMasterIdCreatedBy").value(objWaitingMaster.getlinktoUserMasterIdCreatedBy());
 

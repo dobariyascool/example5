@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.global.Service;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.Button;
@@ -30,7 +30,6 @@ public class AddFragment extends Fragment {
     Context context;
     WaitingMaster objWaitingMaster;
     WaitingJSONParser objWaitingJSONParser;
-    SharePreferenceManage objSharePreferenceManage;
     String status;
 
     public AddFragment() {
@@ -70,17 +69,15 @@ public class AddFragment extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // getActivity().getSupportFragmentManager().popBackStack();
                 if (!ValidateControls()) {
-                    Toast.makeText(getActivity(), "Please correct the errors", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
                     return;
                 }
-                new AddLodingTask().execute();
-               /* if (Service.CheckNet(getActivity())) {
+                if (Service.CheckNet(getActivity())) {
                     new AddLodingTask().execute();
                 } else {
-                    Toast.makeText(getActivity(), "Please check internet connection", Toast.LENGTH_LONG).show();
-                }*/
+                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+                }
 
             }
         });
@@ -125,27 +122,27 @@ public class AddFragment extends Fragment {
         if (etName.getText().toString().equals("")
                 && !etMobileNo.getText().toString().equals("")
                 && !etPersons.getText().toString().equals("")) {
-            etName.setError("Enter " + "Person Name");
+            etName.setError("Enter " + getResources().getString(R.string.afName));
             etMobileNo.setError("");
             etPersons.setError("");
             IsValid = false;
         }
         if (etMobileNo.getText().toString().equals("")) {
-            etMobileNo.setError("Enter " + "Mobile No.");
+            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
             etPersons.setError("");
             IsValid = false;
         }
         if (etName.getText().toString().equals("")
                 && etMobileNo.getText().toString().equals("")
                 && etPersons.getText().toString().equals("")) {
-            etName.setError("Enter " + "Person Name");
-            etMobileNo.setError("Enter " + "Mobile No.");
-            etPersons.setError("Enter " + "No. of Persons");
+            etName.setError("Enter " + getResources().getString(R.string.afName));
+            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
+            etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
             IsValid = false;
         }
         if (!etMobileNo.getText().toString().equals("")) {
             if (etMobileNo.getText().length() != 10) {
-                etMobileNo.setError("Enter 10 digit " + "Mobile Number" + "number");
+                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo) + "number");
                 IsValid = false;
             }
         }
@@ -159,7 +156,7 @@ public class AddFragment extends Fragment {
             super.onPreExecute();
 
             pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Loading...");
+            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
             pDialog.setIndeterminate(true);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -187,15 +184,9 @@ public class AddFragment extends Fragment {
             super.onPostExecute(o);
 
             if (status.equals("-1")) {
-                Toast.makeText(getActivity(), "Server not responding,Try again later", Toast.LENGTH_LONG).show();
-            } else if (status.equals("-2")) {
-                Toast.makeText(getActivity(), "Record already exist", Toast.LENGTH_LONG).show();
-                ClearControls();
-            } else if (!status.equals("0")) {
-                objSharePreferenceManage = new SharePreferenceManage();
-                objSharePreferenceManage.CreatePreference("AddPreference", "PersonName", objWaitingMaster.getPersonName(), getActivity());
-
-                Toast.makeText(getActivity(), "Record added successfully", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
+            } else if (status.equals("0")) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
                 ClearControls();
 
                 getActivity().getSupportFragmentManager().popBackStack();
