@@ -2,6 +2,8 @@ package com.arraybit.pos;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.Menu;

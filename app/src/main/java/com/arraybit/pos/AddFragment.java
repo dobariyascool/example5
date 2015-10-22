@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.Button;
@@ -27,9 +28,9 @@ public class AddFragment extends Fragment {
     EditText etName, etMobileNo, etPersons;
     Button btnAdd;
     ProgressDialog pDialog;
-    Context context;
     WaitingMaster objWaitingMaster;
     WaitingJSONParser objWaitingJSONParser;
+    SharePreferenceManage objSharePreferenceManage;
     String status;
 
     public AddFragment() {
@@ -161,14 +162,17 @@ public class AddFragment extends Fragment {
             pDialog.setCancelable(false);
             pDialog.show();
 
-            short i = 1;
             objWaitingMaster = new WaitingMaster();
             objWaitingMaster.setPersonName(etName.getText().toString());
             objWaitingMaster.setPersonMobile(etMobileNo.getText().toString());
             objWaitingMaster.setNoOfPersons(Short.valueOf(etPersons.getText().toString()));
-            objWaitingMaster.setlinktoWaitingStatusMasterId(i);
-            objWaitingMaster.setlinktoUserMasterIdCreatedBy(i);
+            objWaitingMaster.setlinktoWaitingStatusMasterId((short) 1);
 
+            objSharePreferenceManage=new SharePreferenceManage();
+            if(objSharePreferenceManage.GetPreference("AddPreference","linktoUserMasterIdCreatedBy",getActivity())!=null)
+            {
+                objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("AddPreference","linktoUserMasterIdCreatedBy",getActivity())));
+            }
             objWaitingJSONParser = new WaitingJSONParser();
         }
 
@@ -186,6 +190,7 @@ public class AddFragment extends Fragment {
             if (status.equals("-1")) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
             } else if (status.equals("0")) {
+
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
                 ClearControls();
 
