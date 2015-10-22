@@ -1,5 +1,4 @@
 package com.arraybit.parser;
-
 import com.arraybit.global.Service;
 import com.arraybit.modal.UserMaster;
 
@@ -19,10 +18,9 @@ public class UserMasterJSONParser {
         try {
             if (jsonObject != null) {
                 objUserMaster = new UserMaster();
-                objUserMaster.setUserMasterId((short) jsonObject.getInt("UserMasterId"));
+                objUserMaster.setUserMasterId((short)jsonObject.getInt("UserMasterId"));
                 objUserMaster.setUsername(jsonObject.getString("Username"));
                 objUserMaster.setPassword(jsonObject.getString("Password"));
-                objUserMaster.setLinktoUserTypeMasterId((short) jsonObject.getInt("linktoUserTypeMasterId"));
             }
             return objUserMaster;
         } catch (JSONException e) {
@@ -40,7 +38,6 @@ public class UserMasterJSONParser {
                 objUserMaster.setUserMasterId((short) jsonArray.getJSONObject(i).getInt("UserMasterId"));
                 objUserMaster.setUsername(jsonArray.getJSONObject(i).getString("Username"));
                 objUserMaster.setPassword(jsonArray.getJSONObject(i).getString("Password"));
-                objUserMaster.setLinktoUserTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoUserTypeMasterId"));
                 lstUserMaster.add(objUserMaster);
             }
             return lstUserMaster;
@@ -51,7 +48,8 @@ public class UserMasterJSONParser {
     //endregion
 
     //region Select
-    public UserMaster SelectRegisteredUserName(String username, String password) {
+    public UserMaster SelectRegisteredUserName(String username,String password)
+    {
         try {
             JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectRegisteredUserMasterUserName + "/" + username + "/" + password);
             if (jsonResponse != null) {
