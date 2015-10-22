@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -171,7 +170,7 @@ public class AddFragment extends Fragment {
             objSharePreferenceManage=new SharePreferenceManage();
             if(objSharePreferenceManage.GetPreference("AddPreference","linktoUserMasterIdCreatedBy",getActivity())!=null)
             {
-                objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("AddPreference","linktoUserMasterIdCreatedBy",getActivity())));
+                objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference","WaitingUserMasterId",getActivity())));
             }
             objWaitingJSONParser = new WaitingJSONParser();
         }
