@@ -168,7 +168,7 @@ public class AddFragment extends Fragment {
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) 1);
 
             objSharePreferenceManage=new SharePreferenceManage();
-            if(objSharePreferenceManage.GetPreference("AddPreference","linktoUserMasterIdCreatedBy",getActivity())!=null)
+            if(objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity())!=null)
             {
                 objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity())));
             }
