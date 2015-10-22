@@ -32,7 +32,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
         btnServe = (Button) view.findViewById(R.id.btnServe);
         btnNot = (Button) view.findViewById(R.id.btnNot);
-        btnCancel = (Button) view.findViewById(R.id.btnCancle);
+        btnCancel = (Button) view.findViewById(R.id.btnCancel);
 
         btnServe.setOnClickListener(this);
         btnNot.setOnClickListener(this);
