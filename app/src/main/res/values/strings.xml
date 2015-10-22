@@ -20,6 +20,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="clear_text">Clear Text</string>
 
     <!-- Loader Message -->
     <string name="MsgLoading">Loading…</string>

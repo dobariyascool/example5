@@ -57,7 +57,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         Button btnSignIn = (Button) findViewById(R.id.btnSignIn);
         btnPasswordShow = (ToggleButton) findViewById(R.id.btnPasswordShow);
         ibClear = (ImageButton) findViewById(R.id.ibClear);
-        //btnSignIn.setVisibility(View.GONE);
         //end
 
         //event
@@ -65,24 +64,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         btnPasswordShow.setOnClickListener(this);
         ibClear.setOnClickListener(this);
         //end
-
-        /*btnSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(v.getId() == R.id.btnSignIn) {
-                    if (!ValidateControls()) {
-                        Toast.makeText(SignInActivity.this, getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    if (Service.CheckNet(SignInActivity.this)) {
-                        new SignInLodingTask().execute();
-
-                    } else {
-                        Toast.makeText(SignInActivity.this, getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        });*/
 
         etName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -124,24 +105,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        /*btnPasswordShow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (btnPasswordShow.isChecked()) {
-                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
-                } else {
-                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                }
-            }
-        });*/
-
-        /*ibClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etName.setText("");
-                ibClear.setVisibility(View.GONE);
-            }
-        });*/
     }
 
     @Override
@@ -158,11 +121,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(SignInActivity.this, getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
             }
         }
-        if(v.getId() == R.id.ibClear){
+        if (v.getId() == R.id.ibClear) {
             etName.setText("");
             ibClear.setVisibility(View.GONE);
         }
-        if(v.getId() == R.id.btnPasswordShow){
+        if (v.getId() == R.id.btnPasswordShow) {
             if (btnPasswordShow.isChecked()) {
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
             } else {
@@ -175,7 +138,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         boolean IsValid = true;
 
         if (etName.getText().toString().equals("")) {
-            etName.setError(getResources().getString(R.string.siUserName));
+            etName.setError("Enter "+getResources().getString(R.string.siUserName));
             IsValid = false;
         }
         if (etPassword.getText().toString().equals("")) {
@@ -282,20 +245,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 ClearControls();
                 Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_LONG).show();
 
-                /*Intent intent = getIntent();
-                if (intent.getStringExtra("WelcomeActivity") != null) {*/
-
-                    Intent i = new Intent(SignInActivity.this, WelcomeActivity.class);
-                    startActivity(i);
-                    finish();
-                /*} else {
-
-                    Intent i = new Intent(SignInActivity.this, .class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
-                }*/
+                Intent i = new Intent(SignInActivity.this, WelcomeActivity.class);
+                startActivity(i);
+                finish();
             }
         }
     }
