@@ -229,22 +229,23 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
+            pDialog.dismiss();
             if (result == null) {
                 Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginFailedMsg), Toast.LENGTH_LONG).show();
-                pDialog.dismiss();
+
             } else {
                 objSharePreferenceManage = new SharePreferenceManage();
-                if (objSharePreferenceManage.GetPreference("WaitingPreference", "WaitingUserName", SignInActivity.this) == null) {
-                    objSharePreferenceManage.CreatePreference("WaitingPreference", "WaitingUserName", etName.getText().toString(), SignInActivity.this);
+                if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SignInActivity.this) == null) {
+                    objSharePreferenceManage.CreatePreference("WaitingPreference", "UserName", etName.getText().toString(), SignInActivity.this);
                 }
 
-                if (objSharePreferenceManage.GetPreference("WaitingPreference", "WaitingUserMasterId", SignInActivity.this) == null) {
-                    objSharePreferenceManage.CreatePreference("WaitingPreference", "WaitingUserMasterId", String.valueOf(objUserMaster.getUserMasterId()), SignInActivity.this);
+                if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", SignInActivity.this) == null) {
+                    objSharePreferenceManage.CreatePreference("WaitingPreference", "UserMasterId", String.valueOf(objUserMaster.getUserMasterId()), SignInActivity.this);
                 }
 
-//                if (objSharePreferenceManage.GetPreference("WaitingPreference", "WaitingUserTypeMasterId", SignInActivity.this) == null) {
-//                    objSharePreferenceManage.CreatePreference("WaitingPreference", "WaitingUserTypeMasterId", String.valueOf(objUserMaster.getLinktoUserTypeMasterId()), SignInActivity.this);
-//                }
+                if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserTypeMasterId", SignInActivity.this) == null) {
+                    objSharePreferenceManage.CreatePreference("WaitingPreference", "UserTypeMasterId", String.valueOf(objUserMaster.getLinktoUserTypeMasterId()), SignInActivity.this);
+                }
 
                 ClearControls();
                 Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_LONG).show();
