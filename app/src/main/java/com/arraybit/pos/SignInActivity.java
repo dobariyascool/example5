@@ -32,7 +32,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     UserMasterJSONParser objUserMasterJSONParser = null;
     UserMaster objUserMaster = null;
-    SharePreferenceManage objSharePreferenceManage = null;
+    SharePreferenceManage objSharePreferenceManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +138,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         boolean IsValid = true;
 
         if (etName.getText().toString().equals("")) {
-            etName.setError("Enter "+getResources().getString(R.string.siUserName));
+            etName.setError("Enter " + getResources().getString(R.string.siUserName));
             IsValid = false;
         }
         if (etPassword.getText().toString().equals("")) {
@@ -234,12 +234,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 pDialog.dismiss();
             } else {
                 objSharePreferenceManage = new SharePreferenceManage();
-                if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SignInActivity.this) == null) {
-                    objSharePreferenceManage.CreatePreference("WaitingPreference", "UserName", etName.getText().toString(), SignInActivity.this);
+                if (objSharePreferenceManage.GetPreference("WaitingPreference", "WaitingUserName", SignInActivity.this) == null) {
+                    objSharePreferenceManage.CreatePreference("WaitingPreference", "WaitingUserName", etName.getText().toString(), SignInActivity.this);
                 }
 
-                if (objSharePreferenceManage.GetPreference("WaitingUserMasterIdPreference", "WaitingUserMasterId", SignInActivity.this) == null) {
-                    objSharePreferenceManage.CreatePreference("WaitingUserMasterIdPreference", "WaitingUserMasterId", String.valueOf(objUserMaster.getUserMasterId()), SignInActivity.this);
+                if (objSharePreferenceManage.GetPreference("WaitingPreference", "WaitingUserMasterId", SignInActivity.this) == null) {
+                    objSharePreferenceManage.CreatePreference("WaitingPreference", "WaitingUserMasterId", String.valueOf(objUserMaster.getUserMasterId()), SignInActivity.this);
+                }
+
+                if (objSharePreferenceManage.GetPreference("WaitingPreference", "WaitingUserTypeMasterId", SignInActivity.this) == null) {
+                    objSharePreferenceManage.CreatePreference("WaitingPreference", "WaitingUserTypeMasterId", String.valueOf(objUserMaster.getLinktoUserTypeMasterId()), SignInActivity.this);
                 }
 
                 ClearControls();
