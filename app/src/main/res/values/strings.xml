@@ -20,7 +20,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="clear_text">Clear Text</string>
+
 
     <!-- Loader Message -->
     <string name="MsgLoading">Loading…</string>
@@ -64,6 +64,7 @@
     <string name="siSignupHere">Sign Up</string>
     <string name="siLoginFailedMsg">Username or Password are invalid.</string>
     <string name="siLoginSucessMsg">Successfully logged in.</string>
+    <string name="clear_text">Clear Text</string>
     <!-- end -->
 
 
