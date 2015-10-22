@@ -101,14 +101,13 @@
     <!-- feedback dialog -->
     <string name="fdFeedback">Feedback</string>
     <string name="fdPost">Post</string>
-\    <string name="fdCancel">Cancel</string>
+    <string name="fdCancel">Cancel</string>
     <!-- end -->
 
 
     <!-- waiter menu -->
     <string name="wmMyAccount">My Account</string>
     <string name="wmLogout">Logout</string>
-
     <!-- end -->
 
 
@@ -139,8 +138,8 @@
 
     <!-- waiting status dialog -->
     <string name="wsdTitle">Change Status</string>
-    <string name="wsdServe">Serve</string>
-    <string name="wsdNot">No available</string>
+    <string name="wsdServe">Served</string>
+    <string name="wsdNot">Not available</string>
     <string name="wsdCancel">Cancel</string>
     <!-- end -->
 
@@ -153,6 +152,12 @@
     <!-- profile fragment -->
     <string name="pfUpdate">Update Profile</string>
     <!-- end -->
-    <string name="title_activity_main_activity2">MainActivity2</string>
+
+    <!-- fragment waiting list -->
+    <string name="wlfNo">No</string>
+    <string name="wlfName">Name</string>
+    <string name="wlfMobile">Mobile</string>
+    <string name="wlfPerson">Persons</string>
+    <!-- end -->
 
 </resources>

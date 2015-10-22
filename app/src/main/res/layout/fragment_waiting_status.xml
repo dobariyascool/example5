@@ -34,6 +34,7 @@
             android:textAllCaps="false"
             android:textSize="@dimen/control_TextSmall" />
 
+
         <com.rey.material.widget.Button
             android:id="@+id/btnNot"
             android:layout_width="0dp"
@@ -42,20 +43,20 @@
             android:background="@android:color/white"
             android:drawableTop="@mipmap/not_available"
             android:padding="@dimen/control_SpecingSmall"
-            android:textAllCaps="false"
             android:text="@string/wsdNot"
+            android:textAllCaps="false"
             android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.Button
-            android:id="@+id/btnCancle"
+            android:id="@+id/btnCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/white"
             android:drawableTop="@mipmap/cancel"
             android:padding="@dimen/control_SpecingSmall"
-            android:textAlignment="viewEnd"
             android:text="@string/wsdCancel"
+            android:textAlignment="viewEnd"
             android:textAllCaps="false"
             android:textSize="@dimen/control_TextSmall" />
 

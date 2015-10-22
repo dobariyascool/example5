@@ -31,8 +31,10 @@ public class WaitingListFragment extends Fragment {
     TabLayout waitingTabLayout;
     ViewPager viewPager;
     LinearLayout error_layout;
-    ArrayList<WaitingMaster> alWaitingMaster;
+
     ArrayList<WaitingStatusMaster> alWaitingStatusMaster;
+    PagerAdapter pagerAdapter;
+    String[] WaitingStatus;
 
     public WaitingListFragment() {
         // Required empty public constructor
@@ -61,39 +63,6 @@ public class WaitingListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
-
-    void AddTab(){
-
-        ArrayList<WaitingMaster> alWaiting=null;
-        WaitingMaster objWaitingMaster;
-        PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager());
-        for (int i = 0; i < alWaitingStatusMaster.size(); i++) {
-
-            alWaiting=new ArrayList<>();
-            for(int j=0;j<alWaitingMaster.size();j++) {
-
-
-                if(alWaitingMaster.get(j).getlinktoWaitingStatusMasterId()==alWaitingStatusMaster.get(i).getWaitingStatusMasterId())
-                {
-                    objWaitingMaster=new WaitingMaster();
-                    objWaitingMaster.setWaitingMasterId(alWaitingMaster.get(j).getWaitingMasterId());
-                    objWaitingMaster.setPersonName(alWaitingMaster.get(j).getPersonName());
-                    objWaitingMaster.setPersonMobile(alWaitingMaster.get(j).getPersonMobile());
-                    objWaitingMaster.setNoOfPersons(alWaitingMaster.get(j).getNoOfPersons());
-                    alWaiting.add(objWaitingMaster);
-                }
-
-            }
-
-            pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaiting), alWaitingStatusMaster.get(i).getWaitingStatus());
-        }
-
-        viewPager.setAdapter(pagerAdapter);
-        waitingTabLayout.setupWithViewPager(viewPager);
-
-    }
-
-    //region LoadingTask
 
     static class PagerAdapter extends FragmentStatePagerAdapter {
 
@@ -124,6 +93,8 @@ public class WaitingListFragment extends Fragment {
             return fragmentTitleList.get(position);
         }
     }
+
+    //region LoadingTask
 
     class WaitingStatusLoadingTask extends AsyncTask {
 
@@ -157,6 +128,8 @@ public class WaitingListFragment extends Fragment {
             } else {
                 Globals.SetErrorLayout(error_layout, false, null);
 
+                pagerAdapter = new PagerAdapter(getChildFragmentManager());
+
                 new WaitingMasterLoadingTask().execute();
             }
 
@@ -164,11 +137,10 @@ public class WaitingListFragment extends Fragment {
         }
     }
 
-    //endregion
-
     class WaitingMasterLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
+        ArrayList<WaitingMaster>[] alWaitingMaster;
 
         @Override
         protected void onPreExecute() {
@@ -178,13 +150,22 @@ public class WaitingListFragment extends Fragment {
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
+
+            alWaitingMaster = new ArrayList[alWaitingStatusMaster.size()];
+            WaitingStatus = new String[alWaitingStatusMaster.size()];
+
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
 
             WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
-            alWaitingMaster = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(1);
+            for(int j=0;j<alWaitingStatusMaster.size();j++) {
+
+                WaitingStatus[j] = alWaitingStatusMaster.get(j).getWaitingStatus();
+                alWaitingMaster[j] = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(1, alWaitingStatusMaster.get(j).getWaitingStatusMasterId());
+
+            }
             return null;
         }
 
@@ -193,13 +174,23 @@ public class WaitingListFragment extends Fragment {
 
             if (alWaitingMaster == null) {
                 Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgSelectFail));
-            } else if (alWaitingMaster.size() == 0) {
+            } else if (alWaitingMaster.length == 0) {
                 Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgNoRecord));
             } else {
                 Globals.SetErrorLayout(error_layout, false, null);
-                AddTab();
+
+                for(int k=0;k<alWaitingMaster.length;k++) {
+                    pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]),WaitingStatus[k]);
+                }
             }
+            viewPager.setAdapter(pagerAdapter);
+            waitingTabLayout.setupWithViewPager(viewPager);
             progressDialog.dismiss();
         }
+
     }
+
+    //endregion
+
+
 }

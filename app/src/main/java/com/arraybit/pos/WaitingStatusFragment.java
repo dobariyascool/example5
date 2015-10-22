@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -10,13 +11,15 @@ import android.view.Window;
 
 import com.rey.material.widget.Button;
 
-
+@SuppressLint("ValidFragment")
 public class WaitingStatusFragment extends DialogFragment implements View.OnClickListener {
 
-    Button btnServe, btnNot, btnCancle, btn;
+    Button btnServe, btnNot, btnCancel;
+    String waitingStatus;
 
-    public WaitingStatusFragment() {
-        // Required empty public constructor
+
+    public WaitingStatusFragment(String waitingStatus) {
+        this.waitingStatus = waitingStatus;
     }
 
 
@@ -29,13 +32,32 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
         btnServe = (Button) view.findViewById(R.id.btnServe);
         btnNot = (Button) view.findViewById(R.id.btnNot);
-        btnCancle = (Button) view.findViewById(R.id.btnCancle);
-
+        btnCancel = (Button) view.findViewById(R.id.btnCancle);
 
         btnServe.setOnClickListener(this);
         btnNot.setOnClickListener(this);
-        btnCancle.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
 
+        if(waitingStatus.equals("Waiting")) {
+            btnServe.setVisibility(View.VISIBLE);
+            btnNot.setVisibility(View.VISIBLE);
+            btnCancel.setVisibility(View.VISIBLE);
+        }
+        else if(waitingStatus.equals("Served")){
+            btnServe.setVisibility(View.GONE);
+            btnNot.setVisibility(View.VISIBLE);
+            btnCancel.setVisibility(View.VISIBLE);
+        }
+        else if(waitingStatus.equals("Cancel")){
+            btnServe.setVisibility(View.VISIBLE);
+            btnNot.setVisibility(View.VISIBLE);
+            btnCancel.setVisibility(View.GONE);
+        }
+        else{
+            btnServe.setVisibility(View.VISIBLE);
+            btnNot.setVisibility(View.GONE);
+            btnCancel.setVisibility(View.VISIBLE);
+        }
 
         return view;
     }

@@ -147,10 +147,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
-    public void ChangeStatus() {
-        // TabLayout waitingTabLayout = (TabLayout) getSupportFragmentManager().findViewById(R.id.waitingTabLayout);
-        //System.out.println("waitingTabLayout"+waitingTabLayout.getSelectedTabPosition());
-        WaitingStatusFragment waitingStatusFragment = new WaitingStatusFragment();
+    public void ChangeStatus(String waitingStatus) {
+        WaitingStatusFragment waitingStatusFragment = new WaitingStatusFragment(waitingStatus);
         waitingStatusFragment.show(getSupportFragmentManager(), "");
     }
 
