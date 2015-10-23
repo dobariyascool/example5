@@ -9,21 +9,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import com.arraybit.global.Globals;
+import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.Button;
+
+import java.util.ArrayList;
 
 @SuppressLint("ValidFragment")
 public class WaitingStatusFragment extends DialogFragment implements View.OnClickListener {
 
     Button btnServe, btnNot, btnCancel;
     String waitingStatus;
+    short WaitingMasterId;
+    ArrayList<WaitingMaster> alwWaitingMaster;
 
+    WaitingMaster objWaitingMaster = null;
     WaitingJSONParser objWaitingJSONParser = null;
 
-    public WaitingStatusFragment(String waitingStatus) {
+    public WaitingStatusFragment(short WaitingMasterId,String waitingStatus) {
+        this.WaitingMasterId = WaitingMasterId;
         this.waitingStatus = waitingStatus;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,36 +47,39 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         btnNot.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
-        if(waitingStatus.equals("Waiting")) {
+        if (waitingStatus.equals("Waiting")) {
             btnServe.setVisibility(View.VISIBLE);
             btnNot.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);
-        }
-        else if(waitingStatus.equals("Served")){
+        } else if (waitingStatus.equals("Served")) {
             btnServe.setVisibility(View.GONE);
             btnNot.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);
-        }
-        else if(waitingStatus.equals("Cancel")){
+        } else if (waitingStatus.equals("Cancel")) {
             btnServe.setVisibility(View.VISIBLE);
             btnNot.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             btnServe.setVisibility(View.VISIBLE);
             btnNot.setVisibility(View.GONE);
             btnCancel.setVisibility(View.VISIBLE);
         }
-
         return view;
     }
 
     @Override
     public void onClick(View v) {
 
+        objWaitingMaster = new WaitingMaster();
         if (v.getId() == R.id.btnServe) {
+            objWaitingJSONParser = new WaitingJSONParser();
+//            Globals.WaitingStatus.valueOf("Waiting").getValue();
+            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Served").getValue());
+            objWaitingMaster.setWaitingMasterId(WaitingMasterId);
 
+            objWaitingJSONParser.UpdateWaitingStatus(objWaitingMaster);
             dismiss();
+            alwWaitingMaster
         } else if (v.getId() == R.id.btnNot) {
             dismiss();
         } else if (v.getId() == R.id.btnCancle) {

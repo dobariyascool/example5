@@ -80,7 +80,8 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
                 public void onClick(View v) {
 
                     waitingList = (WaitingList) context;
-                    waitingList.ChangeStatus((short) alWaitingMaster.get(1).getWaitingMasterId(), alWaitingMaster.get(0).getWaitingStatus());
+                    waitingList.ChangeStatus((short) childLayout.getId(), alWaitingMaster.get(0).getWaitingStatus());
+                    alWaitingMaster.remove(txtIndex);
                 }
             });
         }

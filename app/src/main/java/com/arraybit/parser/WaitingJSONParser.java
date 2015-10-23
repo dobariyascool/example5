@@ -149,7 +149,6 @@ public class WaitingJSONParser {
     }
 
     public String UpdateWaitingStatus(WaitingMaster objWaitingMaster){
-
         try{
             JSONStringer stringer = new JSONStringer();
             stringer.object();
@@ -163,6 +162,7 @@ public class WaitingJSONParser {
             stringer.endObject();
 
             stringer.endObject();
+
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateWaitingStatus, stringer);
             JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateWaitingStatus + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
