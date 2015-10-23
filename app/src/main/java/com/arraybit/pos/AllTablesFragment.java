@@ -31,6 +31,7 @@ public class AllTablesFragment extends Fragment {
     ViewPager tableViewPager;
     ArrayList<SectionMaster> alSectionMaster;
     PagerAdapter pagerAdapter;
+    ProgressDialog progressDialog;
 
     public AllTablesFragment() {
         // Required empty public constructor
@@ -108,7 +109,7 @@ public class AllTablesFragment extends Fragment {
 
     class TableSectionLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        //ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
@@ -133,8 +134,10 @@ public class AllTablesFragment extends Fragment {
 
             if (alSectionMaster == null) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             } else if (alSectionMaster.size() == 0) {
                 Toast.makeText(getActivity(),getResources().getString(R.string.MsgNoRecord),Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             } else {
 
                 pagerAdapter = new PagerAdapter(getChildFragmentManager());
@@ -148,18 +151,18 @@ public class AllTablesFragment extends Fragment {
 
     class TableMasterLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        //ProgressDialog progressDialog;
         ArrayList<TableMaster>[] alTableMaster;
         String[] SectionName;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+//            progressDialog = new ProgressDialog(getActivity());
+//            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setCancelable(false);
+//            progressDialog.show();
 
             alTableMaster = new ArrayList[alSectionMaster.size()];
             SectionName = new String[alSectionMaster.size()];
@@ -194,7 +197,7 @@ public class AllTablesFragment extends Fragment {
             }
             tableViewPager.setAdapter(pagerAdapter);
             tableTabLayout.setupWithViewPager(tableViewPager);
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
         }
 
     }

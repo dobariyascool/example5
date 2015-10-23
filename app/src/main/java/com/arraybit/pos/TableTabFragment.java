@@ -94,11 +94,13 @@ public class TableTabFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
+            if(currentPage > 2) {
                 progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
                 progressDialog.setIndeterminate(true);
                 progressDialog.setCancelable(false);
                 progressDialog.show();
+            }
 
         }
 
@@ -112,7 +114,9 @@ public class TableTabFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Object result) {
-            progressDialog.dismiss();
+            if(currentPage > 2) {
+                progressDialog.dismiss();
+            }
             if(alTableMaster!=null){
                 tablesAdapter.TableDataChanged(alTableMaster);
             }

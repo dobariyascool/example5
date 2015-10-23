@@ -93,12 +93,15 @@ public class WaitingTabFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-
+            if(currentPage > 2) {
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+                System.out.println(rvWaiting.getId());
+            }
+            System.out.println(rvWaiting.getId());
             alWaitingMaster = new ArrayList<>();
         }
 
@@ -113,7 +116,9 @@ public class WaitingTabFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Object result) {
+            if(currentPage > 2){
             progressDialog.dismiss();
+            }
             if(alWaitingMaster!=null)
             {
 //                if(alWaitingMaster.size() > 10){

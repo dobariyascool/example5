@@ -67,7 +67,6 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             txtPersons = (TextView) itemView.findViewById(R.id.txtPersons);
             txtTableStatus = (TextView) itemView.findViewById(R.id.txtTableStatus);
             cvTable = (CardView) itemView.findViewById(R.id.cvTable);
-
         }
     }
 }
