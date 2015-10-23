@@ -39,7 +39,8 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
 
         WaitingMaster objWaitingMaster = alWaitingMaster.get(position);
 
-        holder.txtIndex.setText(String.valueOf(position+1));
+        holder.childLayout.setId((short) objWaitingMaster.getWaitingMasterId());
+        holder.txtIndex.setText(String.valueOf(position + 1));
         holder.txtName.setText(String.valueOf(objWaitingMaster.getPersonName()));
         holder.txtMobileNo.setText(String.valueOf(objWaitingMaster.getPersonMobile()));
         holder.txtPersons.setText(String.valueOf(objWaitingMaster.getNoOfPersons()));
@@ -56,7 +57,7 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
     }
 
     public interface WaitingList {
-        void ChangeStatus(String waitingStatus);
+        void ChangeStatus(short WaitingMasterId, String waitingStatus);
     }
 
     class WaitingListViewHolder extends RecyclerView.ViewHolder {
@@ -79,7 +80,7 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
                 public void onClick(View v) {
 
                     waitingList = (WaitingList) context;
-                    waitingList.ChangeStatus(alWaitingMaster.get(0).getWaitingStatus());
+                    waitingList.ChangeStatus((short) alWaitingMaster.get(1).getWaitingMasterId(), alWaitingMaster.get(0).getWaitingStatus());
                 }
             });
         }

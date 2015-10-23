@@ -147,7 +147,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
-    public void ChangeStatus(String waitingStatus) {
+    public void ChangeStatus(short WaitingMasterId, String waitingStatus) {
         WaitingStatusFragment waitingStatusFragment = new WaitingStatusFragment(waitingStatus);
         waitingStatusFragment.show(getSupportFragmentManager(), "");
     }

@@ -18,6 +18,7 @@ import java.util.Locale;
 public class WaitingJSONParser {
     public String InsertWaitingMaster = "InsertWaitingMaster";
     public String UpdateWaitingMaster = "UpdateWaitingMaster";
+    public String UpdateWaitingStatus = "UpdateWaitingStatus";
     public String SelectWaitingMaster = "SelectWaitingMaster";
     public String SelectAllWaitingMaster = "SelectAllWaitingMaster";
     public String SelectAllWaitingMasterByWaitingStatusId = "SelectAllWaitingMasterByWaitingStatusMasterId";
@@ -143,6 +144,30 @@ public class WaitingJSONParser {
             JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateWaitingMaster + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
         } catch (Exception ex) {
+            return "-1";
+        }
+    }
+
+    public String UpdateWaitingStatus(WaitingMaster objWaitingMaster){
+
+        try{
+            JSONStringer stringer = new JSONStringer();
+            stringer.object();
+
+            stringer.key("waitingMaster");
+            stringer.object();
+
+            stringer.key("WaitingMasterId").value(objWaitingMaster.getWaitingMasterId());
+            stringer.key("linktoWaitingStatusMasterId").value(objWaitingMaster.getlinktoWaitingStatusMasterId());
+
+            stringer.endObject();
+
+            stringer.endObject();
+            JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateWaitingStatus, stringer);
+            JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateWaitingStatus + "Result");
+            return String.valueOf(jsonObject.getInt("ErrorCode"));
+
+        }catch (Exception ex) {
             return "-1";
         }
     }

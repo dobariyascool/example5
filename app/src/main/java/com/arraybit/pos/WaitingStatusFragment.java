@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.Button;
 
 @SuppressLint("ValidFragment")
@@ -17,6 +18,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
     Button btnServe, btnNot, btnCancel;
     String waitingStatus;
 
+    WaitingJSONParser objWaitingJSONParser = null;
 
     public WaitingStatusFragment(String waitingStatus) {
         this.waitingStatus = waitingStatus;
@@ -66,6 +68,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
     public void onClick(View v) {
 
         if (v.getId() == R.id.btnServe) {
+
             dismiss();
         } else if (v.getId() == R.id.btnNot) {
             dismiss();
