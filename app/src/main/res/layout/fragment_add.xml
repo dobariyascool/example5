@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/offwhite"
+    android:orientation="vertical"
     tools:context="com.arraybit.pos.AddFragment">
 
-    <include layout="@layout/app_bar"
-        android:id="@+id/app_bar"/>
+    <include android:id="@+id/app_bar"
+        layout="@layout/app_bar"/>
 
     <com.rey.material.widget.EditText
         android:id="@+id/etName"
@@ -15,36 +15,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/afName"
-        android:paddingTop="@dimen/control_SpecingSmall"
-        android:paddingStart="@dimen/control_SpecingSmall"
+        android:inputType="text"
         android:paddingEnd="@dimen/control_SpecingSmall"
-        android:inputType="text" />
+        android:paddingStart="@dimen/control_SpecingSmall"
+        android:paddingTop="@dimen/control_SpecingSmall" />
 
     <com.rey.material.widget.EditText
         android:id="@+id/etMobileNo"
         style="@style/EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/control_SpecingSmall"
-        android:paddingEnd="@dimen/control_SpecingSmall"
         android:hint="@string/afMobileNo"
-        android:inputType="textPassword" />
+        android:inputType="phone"
+        android:paddingEnd="@dimen/control_SpecingSmall"
+        android:paddingStart="@dimen/control_SpecingSmall" />
 
     <com.rey.material.widget.EditText
         android:id="@+id/etPersons"
         style="@style/EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/control_SpecingSmall"
-        android:paddingEnd="@dimen/control_SpecingSmall"
         android:hint="@string/afPerson"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:paddingEnd="@dimen/control_SpecingSmall"
+        android:paddingStart="@dimen/control_SpecingSmall" />
 
     <com.rey.material.widget.Button
         android:id="@+id/btnAdd"
         style="@style/Button"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/control_SpecingSmall"
         android:text="@string/afSubmit" />
 

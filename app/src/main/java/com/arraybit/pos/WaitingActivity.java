@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 
 import com.arraybit.adapter.WaitingListAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 import com.github.clans.fab.FloatingActionButton;
 
 public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, WaitingListAdapter.WaitingList {
@@ -26,6 +28,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     ActionBarDrawerToggle actionBarDrawerToggle;
     FragmentTransaction fragmentTransaction;
     RelativeLayout waitingMainLayout;
+    SharePreferenceManage objSharePreferenceManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             }
         });
         //end
+
+
     }
 
     @Override
@@ -87,11 +92,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //}
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        System.out.println("destroy call");
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -122,6 +122,20 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
                 item.setIcon(R.mipmap.view_table);
                 ReplaceFragment(new WaitingListFragment());
             }
+        }
+
+        if(id==R.id.logout)
+        {
+            Intent intent=new Intent(WaitingActivity.this,SignInActivity.class);
+            startActivity(intent);
+            finish();
+
+            objSharePreferenceManage = new SharePreferenceManage();
+            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserName", WaitingActivity.this);
+            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserMasterId",WaitingActivity.this);
+            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserTypeMasterId",WaitingActivity.this);
+
+            objSharePreferenceManage.ClearPreference("WaitingPreference",WaitingActivity.this);
         }
         return super.onOptionsItemSelected(item);
     }

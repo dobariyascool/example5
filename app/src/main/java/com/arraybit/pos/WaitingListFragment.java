@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.modal.WaitingStatusMaster;
@@ -36,6 +35,7 @@ public class WaitingListFragment extends Fragment {
     ArrayList<WaitingStatusMaster> alWaitingStatusMaster;
     PagerAdapter pagerAdapter;
     String[] WaitingStatus;
+    ProgressDialog progressDialog;
 
     public WaitingListFragment() {
         // Required empty public constructor
@@ -52,10 +52,12 @@ public class WaitingListFragment extends Fragment {
         waitingTabLayout = (TabLayout) view.findViewById(R.id.waitingTabLayout);
         waitingViewPager = (ViewPager) view.findViewById(R.id.waitingViewPager);
 
+
         if (Service.CheckNet(getActivity())) {
             new WaitingStatusLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgCheckConnection));
+            Toast.makeText(getActivity(),getResources().getString(R.string.MsgCheckConnection),Toast.LENGTH_LONG).show();
+            //Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgCheckConnection));
         }
         return view;
     }
@@ -99,15 +101,15 @@ public class WaitingListFragment extends Fragment {
 
     class WaitingStatusLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
+
             progressDialog.show();
         }
 
@@ -124,8 +126,10 @@ public class WaitingListFragment extends Fragment {
 
             if (alWaitingStatusMaster == null) {
                 Toast.makeText(getActivity(),getResources().getString(R.string.MsgSelectFail),Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             } else if (alWaitingStatusMaster.size() == 0) {
                 Toast.makeText(getActivity(),getResources().getString(R.string.MsgNoRecord),Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             } else {
 
                 pagerAdapter = new PagerAdapter(getChildFragmentManager());
@@ -139,18 +143,11 @@ public class WaitingListFragment extends Fragment {
 
     class WaitingMasterLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
         ArrayList<WaitingMaster>[] alWaitingMaster;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-
             alWaitingMaster = new ArrayList[alWaitingStatusMaster.size()];
             WaitingStatus = new String[alWaitingStatusMaster.size()];
 
@@ -184,7 +181,7 @@ public class WaitingListFragment extends Fragment {
             }
             waitingViewPager.setAdapter(pagerAdapter);
             waitingTabLayout.setupWithViewPager(waitingViewPager);
-            progressDialog.dismiss();
+
         }
 
     }

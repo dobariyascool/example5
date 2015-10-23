@@ -1,6 +1,8 @@
 package com.arraybit.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,7 @@ import com.arraybit.pos.R;
 
 import java.util.ArrayList;
 
-public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewHolder>{
+public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewHolder> {
 
     Context context;
     ArrayList<TableMaster> alTableMaster;
@@ -36,7 +38,11 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     public void onBindViewHolder(TableViewHolder holder, int position) {
         TableMaster objTableMaster = alTableMaster.get(position);
 
-        holder.ItemTextView.setText(objTableMaster.getTableName());
+        holder.cvTable.setCardBackgroundColor(Color.parseColor("#" + objTableMaster.getTableColor()));
+        holder.txtTableName.setText(objTableMaster.getTableName());
+        holder.txtPersons.setText(objTableMaster.getMinPerson() + " | " + objTableMaster.getMaxPerson());
+        holder.txtTableStatus.setText(objTableMaster.getTableStatus());
+        holder.txtTableStatus.setTextColor(Color.parseColor("#" + objTableMaster.getStatusColor()));
     }
 
     @Override
@@ -44,13 +50,23 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         return alTableMaster.size();
     }
 
+    public void TableDataChanged(ArrayList<TableMaster> result) {
+        alTableMaster.addAll(result);
+        notifyDataSetChanged();
+    }
+
     class TableViewHolder extends RecyclerView.ViewHolder {
 
-        TextView ItemTextView;
+        TextView txtTableName, txtPersons, txtTableStatus;
+        CardView cvTable;
 
         public TableViewHolder(View itemView) {
             super(itemView);
-            ItemTextView = (TextView)itemView.findViewById(R.id.textView);
+
+            txtTableName = (TextView) itemView.findViewById(R.id.txtTableName);
+            txtPersons = (TextView) itemView.findViewById(R.id.txtPersons);
+            txtTableStatus = (TextView) itemView.findViewById(R.id.txtTableStatus);
+            cvTable = (CardView) itemView.findViewById(R.id.cvTable);
         }
     }
 }
