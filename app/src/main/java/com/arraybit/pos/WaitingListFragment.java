@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -29,7 +30,7 @@ import java.util.List;
 public class WaitingListFragment extends Fragment {
 
     TabLayout waitingTabLayout;
-    ViewPager viewPager;
+    ViewPager waitingViewPager;
     LinearLayout error_layout;
 
     ArrayList<WaitingStatusMaster> alWaitingStatusMaster;
@@ -47,9 +48,9 @@ public class WaitingListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_waiting_list, container, false);
 
-        error_layout = (LinearLayout) view.findViewById(R.id.error_layout);
+        //error_layout = (LinearLayout) view.findViewById(R.id.error_layout);
         waitingTabLayout = (TabLayout) view.findViewById(R.id.waitingTabLayout);
-        viewPager = (ViewPager) view.findViewById(R.id.waitingViewPager);
+        waitingViewPager = (ViewPager) view.findViewById(R.id.waitingViewPager);
 
         if (Service.CheckNet(getActivity())) {
             new WaitingStatusLoadingTask().execute();
@@ -122,11 +123,10 @@ public class WaitingListFragment extends Fragment {
         protected void onPostExecute(Object result) {
 
             if (alWaitingStatusMaster == null) {
-                Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgSelectFail));
+                Toast.makeText(getActivity(),getResources().getString(R.string.MsgSelectFail),Toast.LENGTH_LONG).show();
             } else if (alWaitingStatusMaster.size() == 0) {
-                Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgNoRecord));
+                Toast.makeText(getActivity(),getResources().getString(R.string.MsgNoRecord),Toast.LENGTH_LONG).show();
             } else {
-                Globals.SetErrorLayout(error_layout, false, null);
 
                 pagerAdapter = new PagerAdapter(getChildFragmentManager());
 
@@ -173,18 +173,17 @@ public class WaitingListFragment extends Fragment {
         protected void onPostExecute(Object result) {
 
             if (alWaitingMaster == null) {
-                Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgSelectFail));
+                Toast.makeText(getActivity(),getResources().getString(R.string.MsgSelectFail),Toast.LENGTH_LONG).show();
             } else if (alWaitingMaster.length == 0) {
-                Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgNoRecord));
+                Toast.makeText(getActivity(),getResources().getString(R.string.MsgNoRecord),Toast.LENGTH_LONG).show();
             } else {
-                Globals.SetErrorLayout(error_layout, false, null);
 
                 for(int k=0;k<alWaitingMaster.length;k++) {
                     pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]),WaitingStatus[k]);
                 }
             }
-            viewPager.setAdapter(pagerAdapter);
-            waitingTabLayout.setupWithViewPager(viewPager);
+            waitingViewPager.setAdapter(pagerAdapter);
+            waitingTabLayout.setupWithViewPager(waitingViewPager);
             progressDialog.dismiss();
         }
 

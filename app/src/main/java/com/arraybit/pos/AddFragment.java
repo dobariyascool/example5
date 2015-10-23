@@ -106,8 +106,9 @@ public class AddFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
 
         MenuItem mWaiting = menu.findItem(R.id.mWaiting);
+        MenuItem mSettings = menu.findItem(R.id.action_settings);
         mWaiting.setVisible(false);
-
+        mSettings.setVisible(false);
 
     }
 

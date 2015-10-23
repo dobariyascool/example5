@@ -50,8 +50,8 @@ public class TableJSONParser {
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
                 objTableMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objTableMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
-                dt = sdfDateTimeFormat.parse(jsonObject.getString("UpdateDateTime"));
-                objTableMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
+//                dt = sdfDateTimeFormat.parse(jsonObject.getString("UpdateDateTime"));
+//                objTableMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
                 if (!jsonObject.getString("linktoUserMasterIdUpdatedBy").equals("null")) {
                     objTableMaster.setlinktoUserMasterIdUpdatedBy((short) jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
                 }
@@ -94,8 +94,8 @@ public class TableJSONParser {
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
                 objTableMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objTableMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
-                dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("UpdateDateTime"));
-                objTableMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
+//                dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("UpdateDateTime"));
+//                objTableMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
                 if (!jsonArray.getJSONObject(i).getString("linktoUserMasterIdUpdatedBy").equals("null")) {
                     objTableMaster.setlinktoUserMasterIdUpdatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
                 }
@@ -229,7 +229,7 @@ public class TableJSONParser {
     public ArrayList<TableMaster> SelectAllTableMasterBySectionMasterId(int currentPage,int linktoSectionMasterId) {
         ArrayList<TableMaster> lstTableMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId +"/"+currentPage+"/"+linktoSectionMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllTableMasterBySectionId + "Result");
                 if (jsonArray != null) {

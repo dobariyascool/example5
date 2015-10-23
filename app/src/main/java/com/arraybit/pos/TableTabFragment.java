@@ -2,14 +2,15 @@ package com.arraybit.pos;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.arraybit.adapter.TablesAdapter;
+import com.arraybit.modal.TableMaster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +20,18 @@ public class TableTabFragment extends Fragment {
 
     public final static String ITEMS_COUNT_KEY = "TableTabFragment$ItemsCount";
     RecyclerView rvTables;
+    TablesAdapter tablesAdapter;
+    ArrayList<TableMaster> alTableMaster;
 
     public TableTabFragment() {
         // Required empty public constructor
     }
 
-    public static TableTabFragment createInstance(int itemsCount) {
+    public static TableTabFragment createInstance(ArrayList<TableMaster> alTableMaster) {
 
         TableTabFragment tableTabFragment = new TableTabFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(ITEMS_COUNT_KEY, itemsCount);
+        bundle.putParcelableArrayList(ITEMS_COUNT_KEY, alTableMaster);
         tableTabFragment.setArguments(bundle);
         return tableTabFragment;
     }
@@ -39,6 +42,9 @@ public class TableTabFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_table_tab, container, false);
         rvTables = (RecyclerView) view.findViewById(R.id.rvTables);
 
+        Bundle bundle = getArguments();
+        alTableMaster = bundle.getParcelableArrayList(ITEMS_COUNT_KEY);
+
         setupRecyclerView(rvTables);
         return view;
     }
@@ -47,7 +53,7 @@ public class TableTabFragment extends Fragment {
 
     private void setupRecyclerView(RecyclerView recyclerView) {
 
-        TablesAdapter tablesAdapter = new TablesAdapter(createItemList());
+        tablesAdapter = new TablesAdapter(getActivity(),alTableMaster);
         recyclerView.setAdapter(tablesAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
     }

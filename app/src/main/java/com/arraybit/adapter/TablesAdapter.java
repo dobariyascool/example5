@@ -1,73 +1,56 @@
 package com.arraybit.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.arraybit.pos.GuestOrderActivity;
+import com.arraybit.modal.TableMaster;
 import com.arraybit.pos.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class TablesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewHolder>{
 
-    private List<String> ItemList;
+    Context context;
+    ArrayList<TableMaster> alTableMaster;
+    LayoutInflater layoutInflater;
+    View view;
 
-    public TablesAdapter(List<String> itemList) {
-        ItemList = itemList;
+    // Constructor
+    public TablesAdapter(Context context, ArrayList<TableMaster> result) {
+        this.context = context;
+        this.alTableMaster = result;
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final Context context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.row_tables, parent, false);
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent=new Intent(context, GuestOrderActivity.class);
-                context.startActivity(intent);
-
-            }
-        });
-
-        return TableViewHolder.newInstance(view);
+    public TableViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        view = layoutInflater.inflate(R.layout.row_tables, parent, false);
+        return new TableViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        TableViewHolder holder1 = (TableViewHolder) holder;
-        String itemText = ItemList.get(position);
-        holder1.setItemText(itemText);
+    public void onBindViewHolder(TableViewHolder holder, int position) {
+        TableMaster objTableMaster = alTableMaster.get(position);
+
+        holder.ItemTextView.setText(objTableMaster.getTableName());
     }
 
     @Override
     public int getItemCount() {
-        return ItemList.size();
+        return alTableMaster.size();
     }
 
-    public static class TableViewHolder extends RecyclerView.ViewHolder {
+    class TableViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView ItemTextView;
+        TextView ItemTextView;
 
-        public TableViewHolder(final View parent, TextView itemTextView) {
-            super(parent);
-            ItemTextView = itemTextView;
+        public TableViewHolder(View itemView) {
+            super(itemView);
+            ItemTextView = (TextView)itemView.findViewById(R.id.textView);
         }
-
-        public static TableViewHolder newInstance(View parent) {
-            TextView itemTextView = (TextView) parent.findViewById(R.id.textView);
-            return new TableViewHolder(parent, itemTextView);
-        }
-
-        public void setItemText(CharSequence text) {
-            ItemTextView.setText(text);
-        }
-
     }
 }
