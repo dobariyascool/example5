@@ -4,15 +4,17 @@
     tools:context="com.arraybit.pos.WaitingActivity"
     tools:ignore="HardcodedText">
 
-    <item android:id="@+id/mWaiting"
+    <item
+        android:id="@+id/mWaiting"
         android:icon="@mipmap/view_table"
         android:orderInCategory="200"
         android:title="T"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/logout"
+    <item
+        android:id="@+id/logout"
         android:orderInCategory="300"
         android:title="@string/wmLogout"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
 </menu>

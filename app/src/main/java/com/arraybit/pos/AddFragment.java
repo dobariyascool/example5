@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.WaitingMaster;
@@ -105,11 +106,8 @@ public class AddFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        MenuItem mWaiting = menu.findItem(R.id.mWaiting);
-        MenuItem mSettings = menu.findItem(R.id.action_settings);
-        mWaiting.setVisible(false);
-        mSettings.setVisible(false);
-
+        menu.findItem(R.id.mWaiting).setVisible(false);
+        menu.findItem(R.id.logout).setVisible(false);
     }
 
     void ClearControls() {
@@ -166,7 +164,7 @@ public class AddFragment extends Fragment {
             objWaitingMaster.setPersonName(etName.getText().toString());
             objWaitingMaster.setPersonMobile(etMobileNo.getText().toString());
             objWaitingMaster.setNoOfPersons(Short.valueOf(etPersons.getText().toString()));
-            objWaitingMaster.setlinktoWaitingStatusMasterId((short) 1);
+            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Waiting").getValue());
 
             objSharePreferenceManage=new SharePreferenceManage();
             if(objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity())!=null)

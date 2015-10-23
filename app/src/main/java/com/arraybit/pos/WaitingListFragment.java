@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.modal.WaitingStatusMaster;
@@ -55,7 +54,8 @@ public class WaitingListFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new WaitingStatusLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgCheckConnection));
+            Toast.makeText(getActivity(),getResources().getString(R.string.MsgCheckConnection),Toast.LENGTH_LONG).show();
+            //Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgCheckConnection));
         }
         return view;
     }

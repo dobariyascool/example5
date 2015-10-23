@@ -36,7 +36,11 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     public void onBindViewHolder(TableViewHolder holder, int position) {
         TableMaster objTableMaster = alTableMaster.get(position);
 
-        holder.ItemTextView.setText(objTableMaster.getTableName());
+        holder.txtTableName.setText(objTableMaster.getTableName());
+        holder.txtMinPerson.setText("Min Person "+objTableMaster.getMinPerson());
+        holder.txtMaxPerson.setText("Max Person "+objTableMaster.getMaxPerson());
+        holder.txtTableStatus.setText(objTableMaster.getTableStatus());
+        holder.txtDescription.setText(objTableMaster.getDescription());
     }
 
     @Override
@@ -44,13 +48,23 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         return alTableMaster.size();
     }
 
+    public void TableDataChanged(ArrayList<TableMaster> result){
+        alTableMaster.addAll(result);
+        notifyDataSetChanged();
+    }
+
     class TableViewHolder extends RecyclerView.ViewHolder {
 
-        TextView ItemTextView;
+        TextView txtTableName,txtMinPerson,txtMaxPerson,txtTableStatus,txtDescription;
 
         public TableViewHolder(View itemView) {
             super(itemView);
-            ItemTextView = (TextView)itemView.findViewById(R.id.textView);
+
+            txtTableName = (TextView)itemView.findViewById(R.id.txtTableName);
+            txtMinPerson = (TextView)itemView.findViewById(R.id.txtMinPerson);
+            txtMaxPerson = (TextView)itemView.findViewById(R.id.txtMaxPerson);
+            txtTableStatus = (TextView)itemView.findViewById(R.id.txtTableStatus);
+            txtDescription = (TextView)itemView.findViewById(R.id.txtDescription);
         }
     }
 }

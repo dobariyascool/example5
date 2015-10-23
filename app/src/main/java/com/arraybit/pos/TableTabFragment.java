@@ -1,7 +1,10 @@
 package com.arraybit.pos;
 
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.arraybit.adapter.TablesAdapter;
+import com.arraybit.global.EndlessRecyclerOnScrollListener;
+import com.arraybit.global.Service;
 import com.arraybit.modal.TableMaster;
+import com.arraybit.parser.TableJSONParser;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class TableTabFragment extends Fragment {
@@ -22,6 +27,8 @@ public class TableTabFragment extends Fragment {
     RecyclerView rvTables;
     TablesAdapter tablesAdapter;
     ArrayList<TableMaster> alTableMaster;
+    GridLayoutManager gridLayoutManager;
+    int currentPage;
 
     public TableTabFragment() {
         // Required empty public constructor
@@ -45,29 +52,71 @@ public class TableTabFragment extends Fragment {
         Bundle bundle = getArguments();
         alTableMaster = bundle.getParcelableArrayList(ITEMS_COUNT_KEY);
 
+        gridLayoutManager=new GridLayoutManager(getActivity(),2);
+
         setupRecyclerView(rvTables);
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        rvTables.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
 
+                if (current_page > currentPage) {
+                    currentPage = current_page;
+                    if (Service.CheckNet(getActivity())) {
+                        new TableMasterLoadingTask().execute();
+                    }
+                }
+            }
+        });
+    }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
+    private void setupRecyclerView(RecyclerView rvTables) {
 
         tablesAdapter = new TablesAdapter(getActivity(),alTableMaster);
-        recyclerView.setAdapter(tablesAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        rvTables.setAdapter(tablesAdapter);
+        rvTables.setLayoutManager(gridLayoutManager);
+        if(rvTables.getAdapter().getItemCount()>0)
+        {
+            rvTables.setId((int) alTableMaster.get(0).getlinktoSectionMasterId());
+        }
     }
 
-    private List<String> createItemList() {
-        List<String> itemList = new ArrayList<>();
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            int itemsCount = bundle.getInt(ITEMS_COUNT_KEY);
-            for (int i = 0; i < itemsCount; i++) {
-                itemList.add("Item " + i);
+    class TableMasterLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            TableJSONParser objTableJSONParser = new TableJSONParser();
+            alTableMaster = objTableJSONParser.SelectAllTableMasterBySectionMasterId(currentPage,rvTables.getId());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            progressDialog.dismiss();
+            if(alTableMaster!=null){
+                tablesAdapter.TableDataChanged(alTableMaster);
             }
         }
-        return itemList;
-    }
 
+    }
 }

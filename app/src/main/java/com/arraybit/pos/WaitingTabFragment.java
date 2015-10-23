@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.arraybit.adapter.WaitingListAdapter;
 import com.arraybit.global.EndlessRecyclerOnScrollListener;
+import com.arraybit.global.Service;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.WaitingJSONParser;
 
@@ -68,7 +69,9 @@ public class WaitingTabFragment extends Fragment {
 
                 if (current_page > currentPage) {
                     currentPage = current_page;
-                    new WaitingMasterLoadingTask().execute();
+                    if (Service.CheckNet(getActivity())) {
+                        new WaitingMasterLoadingTask().execute();
+                    }
                 }
             }
         });
@@ -79,7 +82,7 @@ public class WaitingTabFragment extends Fragment {
         rvWaiting.setAdapter(waitingListAdapter);
         rvWaiting.setLayoutManager(linearLayoutManager);
         if(rvWaiting.getAdapter().getItemCount()>0) {
-            rvWaiting.setTag(alWaitingMaster.get(0).getlinktoWaitingStatusMasterId());
+            rvWaiting.setId((int) alWaitingMaster.get(0).getlinktoWaitingStatusMasterId());
         }
     }
 
@@ -103,7 +106,7 @@ public class WaitingTabFragment extends Fragment {
         protected Object doInBackground(Object[] objects) {
 
             WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
-            alWaitingMaster = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(currentPage,1);
+            alWaitingMaster = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(currentPage,rvWaiting.getId());
 
             return null;
         }

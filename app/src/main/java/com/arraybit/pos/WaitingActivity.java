@@ -88,11 +88,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //}
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        System.out.println("destroy call");
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

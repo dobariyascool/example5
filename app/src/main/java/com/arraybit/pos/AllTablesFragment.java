@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.arraybit.global.Service;
 import com.arraybit.modal.SectionMaster;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.parser.SectionJSONParser;
@@ -45,7 +46,13 @@ public class AllTablesFragment extends Fragment {
         tableTabLayout=(TabLayout)view.findViewById(R.id.tableTabLayout);
         tableViewPager=(ViewPager)view.findViewById(R.id.tableViewPager);
 
-        new TableSectionLoadingTask().execute();
+        if (Service.CheckNet(getActivity())) {
+            new TableSectionLoadingTask().execute();
+        } else {
+            Toast.makeText(getActivity(),getResources().getString(R.string.MsgCheckConnection),Toast.LENGTH_LONG).show();
+            //Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgCheckConnection));
+        }
+
         return view;
     }
 

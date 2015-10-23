@@ -247,12 +247,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     objSharePreferenceManage.CreatePreference("WaitingPreference", "UserTypeMasterId", String.valueOf(objUserMaster.getLinktoUserTypeMasterId()), SignInActivity.this);
                 }
 
-                ClearControls();
                 Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(SignInActivity.this, WelcomeActivity.class);
                 startActivity(i);
                 finish();
+
+                ClearControls();
+
             }
         }
     }
