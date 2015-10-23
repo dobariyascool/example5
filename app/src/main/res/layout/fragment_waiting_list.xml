@@ -6,9 +6,9 @@
     android:orientation="vertical"
     tools:context="com.arraybit.pos.WaitingListFragment">
 
-    <include
-        android:id="@+id/error_layout"
-        layout="@layout/error_layout" />
+    <!--<include-->
+        <!--android:id="@+id/error_layout"-->
+        <!--layout="@layout/error_layout" />-->
 
     <android.support.design.widget.TabLayout
         android:id="@+id/waitingTabLayout"
@@ -31,28 +31,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:text="No"
+            android:text="@string/wlfNo"
             android:textColor="@android:color/black"/>
 
         <com.rey.material.widget.TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Name"
+            android:text="@string/wlfName"
             android:textColor="@android:color/black"/>
 
         <com.rey.material.widget.TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:text="Mobile"
+            android:text="@string/wlfMobile"
             android:textColor="@android:color/black"/>
 
         <com.rey.material.widget.TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.14"
-            android:text="Persons"
+            android:text="@string/wlfPerson"
             android:textColor="@android:color/black"/>
 
     </LinearLayout>

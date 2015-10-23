@@ -141,6 +141,28 @@ public class Globals {
         }
     }
 
+    //region Enum
+
+    public enum WaitingStatus{
+        Waiting(1),
+        Served(2),
+        Cancel(3),
+        Not(4);
+
+        private int intValue;
+
+        private WaitingStatus(int value) {
+            intValue = value;
+
+        }
+
+        public int getValue() {
+            return intValue;
+        }
+    }
+
+    //endregion
+
     //region CommentCode
 
     //load image
