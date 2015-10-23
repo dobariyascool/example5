@@ -60,6 +60,7 @@ public class TableJSONParser {
 
                 /// Extra
                 objTableMaster.setTableStatus(jsonObject.getString("TableStatus"));
+                objTableMaster.setStatusColor(jsonObject.getString("StatusColor"));
                 objTableMaster.setSection(jsonObject.getString("Section"));
                 objTableMaster.setBusiness(jsonObject.getString("Business"));
             }
@@ -104,6 +105,7 @@ public class TableJSONParser {
 
                 /// Extra
                 objTableMaster.setTableStatus(jsonArray.getJSONObject(i).getString("TableStatus"));
+                objTableMaster.setStatusColor(jsonArray.getJSONObject(i).getString("StatusColor"));
                 objTableMaster.setSection(jsonArray.getJSONObject(i).getString("Section"));
                 objTableMaster.setBusiness(jsonArray.getJSONObject(i).getString("Business"));
                 lstTableMaster.add(objTableMaster);

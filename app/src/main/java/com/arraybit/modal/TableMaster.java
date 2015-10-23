@@ -29,6 +29,7 @@ public class TableMaster implements Parcelable {
     boolean IsEnabled;
     /// Extra
     String TableStatus;
+    String StatusColor;
     String Section;
     String Business;
     public static final Parcelable.Creator<TableMaster> CREATOR = new Creator<TableMaster>() {
@@ -57,6 +58,7 @@ public class TableMaster implements Parcelable {
 
             /// Extra
             objTableMaster.TableStatus = source.readString();
+            objTableMaster.StatusColor = source.readString();
             objTableMaster.Section = source.readString();
             objTableMaster.Business = source.readString();
             return objTableMaster;
@@ -157,9 +159,15 @@ public class TableMaster implements Parcelable {
 
     public String getBusiness() { return this.Business; }
 
+    public void setBusiness(String business) { this.Business = business; }
+
+    public String getStatusColor() { return StatusColor; }
+
     //endregion
 
-    public void setBusiness(String business) { this.Business = business; }
+    public void setStatusColor(String statusColor) {
+        StatusColor = statusColor;
+    }
 
     public int describeContents() {
         return 0;
@@ -187,10 +195,11 @@ public class TableMaster implements Parcelable {
         parcel.writeString(UpdateDateTime);
         parcel.writeInt(linktoUserMasterIdUpdatedBy);
         parcel.writeInt(linktoBusinessMasterId);
-        parcel.writeByte((byte)(IsEnabled ? 1 : 0));
+        parcel.writeByte((byte) (IsEnabled ? 1 : 0));
 
         /// Extra
         parcel.writeString(TableStatus);
+        parcel.writeString(StatusColor);
         parcel.writeString(Section);
         parcel.writeString(Business);
     }
