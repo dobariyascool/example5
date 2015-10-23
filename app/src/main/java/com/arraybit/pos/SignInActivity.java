@@ -196,6 +196,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getSupportFragmentManager().popBackStack();
         }
+        else {
+            super.onBackPressed();
+        }
     }
     //end
 
