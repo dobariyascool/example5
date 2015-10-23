@@ -81,7 +81,6 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
 
                     waitingList = (WaitingList) context;
                     waitingList.ChangeStatus((short) childLayout.getId(), alWaitingMaster.get(0).getWaitingStatus());
-                    alWaitingMaster.remove(txtIndex);
                 }
             });
         }

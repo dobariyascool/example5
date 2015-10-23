@@ -20,7 +20,6 @@ import com.arraybit.adapter.WaitingListAdapter;
 import com.arraybit.global.Globals;
 import com.github.clans.fab.FloatingActionButton;
 
-
 public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, WaitingListAdapter.WaitingList {
 
     LinearLayout fragmentLayout;

@@ -73,19 +73,26 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         objWaitingMaster = new WaitingMaster();
         if (v.getId() == R.id.btnServe) {
             objWaitingJSONParser = new WaitingJSONParser();
-//            Globals.WaitingStatus.valueOf("Waiting").getValue();
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Served").getValue());
             objWaitingMaster.setWaitingMasterId(WaitingMasterId);
 
             objWaitingJSONParser.UpdateWaitingStatus(objWaitingMaster);
             dismiss();
-            alwWaitingMaster
         } else if (v.getId() == R.id.btnNot) {
+            objWaitingJSONParser = new WaitingJSONParser();
+            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Not").getValue());
+            objWaitingMaster.setWaitingMasterId(WaitingMasterId);
+
+            objWaitingJSONParser.UpdateWaitingStatus(objWaitingMaster);
             dismiss();
         } else if (v.getId() == R.id.btnCancle) {
+            objWaitingJSONParser = new WaitingJSONParser();
+            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Cancel").getValue());
+            objWaitingMaster.setWaitingMasterId(WaitingMasterId);
+
+            objWaitingJSONParser.UpdateWaitingStatus(objWaitingMaster);
             dismiss();
         }
-
     }
 
     //    @NonNull
