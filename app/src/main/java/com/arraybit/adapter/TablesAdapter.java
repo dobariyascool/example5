@@ -37,10 +37,8 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         TableMaster objTableMaster = alTableMaster.get(position);
 
         holder.txtTableName.setText(objTableMaster.getTableName());
-        holder.txtMinPerson.setText("Min Person "+objTableMaster.getMinPerson());
-        holder.txtMaxPerson.setText("Max Person "+objTableMaster.getMaxPerson());
+        holder.txtPersons.setText(objTableMaster.getMinPerson()+" | "+objTableMaster.getMaxPerson());
         holder.txtTableStatus.setText(objTableMaster.getTableStatus());
-        holder.txtDescription.setText(objTableMaster.getDescription());
     }
 
     @Override
@@ -55,16 +53,14 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
 
     class TableViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtTableName,txtMinPerson,txtMaxPerson,txtTableStatus,txtDescription;
+        TextView txtTableName,txtPersons,txtTableStatus;
 
         public TableViewHolder(View itemView) {
             super(itemView);
 
             txtTableName = (TextView)itemView.findViewById(R.id.txtTableName);
-            txtMinPerson = (TextView)itemView.findViewById(R.id.txtMinPerson);
-            txtMaxPerson = (TextView)itemView.findViewById(R.id.txtMaxPerson);
+            txtPersons = (TextView)itemView.findViewById(R.id.txtPersons);
             txtTableStatus = (TextView)itemView.findViewById(R.id.txtTableStatus);
-            txtDescription = (TextView)itemView.findViewById(R.id.txtDescription);
         }
     }
 }
