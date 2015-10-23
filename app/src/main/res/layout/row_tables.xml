@@ -44,7 +44,7 @@
                     android:id="@+id/txtTableStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/control_SpecingSmall"
+                    android:padding="@dimen/control_SpecingTiny"
                     android:textColor="@color/orange" />
             </LinearLayout>
         </LinearLayout>
