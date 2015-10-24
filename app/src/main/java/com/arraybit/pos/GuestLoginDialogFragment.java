@@ -148,52 +148,6 @@ public class GuestLoginDialogFragment extends DialogFragment {
         return IsValid;
     }
 
-    public class SignInLodingTask extends AsyncTask {
-
-        ProgressDialog pDialog;
-        String strUserName, strPassword;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-//            pDialog = new ProgressDialog(getActivity());
-//            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
-//            pDialog.setIndeterminate(false);
-//            pDialog.setCancelable(false);
-//            pDialog.show();
-
-            strUserName = etUserName.getText().toString();
-            strPassword = etPassword.getText().toString();
-            objRegisteredUserJSONParser = new RegisteredUserJSONParser();
-        }
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-
-            objRegisteredUserMaster = objRegisteredUserJSONParser.SelectRegisteredUserMasterUserName(strUserName, strPassword);
-            return objRegisteredUserMaster;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
-            if (result == null) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.siLoginFailedMsg), Toast.LENGTH_LONG).show();
-                //pDialog.dismiss();
-
-            } else {
-
-                CreateGuestPreference();
-
-                ClearControls();
-                Toast.makeText(getActivity(), getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_LONG).show();
-                dismiss();
-            }
-            //pDialog.dismiss();
-        }
-    }
-
     public void CreateGuestPreference(){
         objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) == null) {
@@ -208,6 +162,11 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
     }
 
+    void ClearControls() {
+        etUserName.setText("");
+        etPassword.setText("");
+    }
+
     public class SignInLodingTask extends AsyncTask {
 
         ProgressDialog pDialog;
@@ -252,9 +211,6 @@ public class GuestLoginDialogFragment extends DialogFragment {
             }
             //pDialog.dismiss();
         }
-    }    void ClearControls() {
-        etUserName.setText("");
-        etPassword.setText("");
     }
 
 }
