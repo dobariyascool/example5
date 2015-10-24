@@ -25,8 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arraybit.pos.GuestLoginDialogFragment;
-import com.arraybit.pos.GuestRegistrationDialogFragment;
 import com.arraybit.pos.R;
+import com.arraybit.pos.SignUpFragment;
 
 public class Globals {
 
@@ -34,8 +34,9 @@ public class Globals {
     public static String activityName;
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "HH:mm";
+    public static int sourceMasterId = 2;
+    public static int WaitingStatusMasterId = 1;
     static FragmentManager fragmentManager;
-
     //public static Bitmap bitmap1;
 
     public static float ConvertDp(float dp, Context context) {
@@ -102,8 +103,10 @@ public class Globals {
             guestLoginDialogFragment.show(fragmentManager, "");
 
         } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
-            GuestRegistrationDialogFragment guestRegistrationDialogFragment = new GuestRegistrationDialogFragment();
-            guestRegistrationDialogFragment.show(fragmentManager, "");
+            SignUpFragment signUpFragment = new SignUpFragment();
+            Globals.initializeFragment(signUpFragment,fragmentManager);
+//            GuestRegistrationDialogFragment guestRegistrationDialogFragment = new GuestRegistrationDialogFragment();
+//            guestRegistrationDialogFragment.show(fragmentManager, "");
         }
     }
 
