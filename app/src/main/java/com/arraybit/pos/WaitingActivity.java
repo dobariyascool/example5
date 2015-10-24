@@ -17,12 +17,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.arraybit.adapter.WaitingListAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.github.clans.fab.FloatingActionButton;
 
-public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, WaitingListAdapter.WaitingList {
+public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     LinearLayout fragmentLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -159,12 +158,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         return false;
     }
 
-    @Override
-    public void ChangeStatus(short WaitingMasterId, String waitingStatus) {
-        WaitingStatusFragment waitingStatusFragment = new WaitingStatusFragment(WaitingMasterId,waitingStatus);
-        waitingStatusFragment.show(getSupportFragmentManager(), "");
-    }
-
     //prevent backPressed
     @Override
     public void onBackPressed() {
@@ -173,5 +166,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             getSupportFragmentManager().popBackStack();
         }
     }
+
     //end
 }
