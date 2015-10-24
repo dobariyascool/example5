@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.WaitingMaster;
@@ -42,9 +41,6 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         btnNot = (Button) view.findViewById(R.id.btnNot);
         btnCancel = (Button) view.findViewById(R.id.btnCancel);
 
-        btnServe.setOnClickListener(this);
-        btnNot.setOnClickListener(this);
-        btnCancel.setOnClickListener(this);
 
         if (waitingStatus.equals("Waiting")) {
             btnServe.setVisibility(View.VISIBLE);
@@ -63,6 +59,11 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             btnNot.setVisibility(View.GONE);
             btnCancel.setVisibility(View.VISIBLE);
         }
+
+        btnServe.setOnClickListener(this);
+        btnNot.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
+
         return view;
     }
 
@@ -73,19 +74,21 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         if (v.getId() == R.id.btnServe) {
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Served").getValue());
             objWaitingMaster.setWaitingMasterId(WaitingMasterId);
-            dismiss();
-            new UpdateWaitingStatusLoadingTask().execute();
 
-        } else if (v.getId() == R.id.btnNot) {
+            new UpdateWaitingStatusLoadingTask().execute();
+            dismiss();
+
+        } if (v.getId() == R.id.btnNot) {
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Not").getValue());
             objWaitingMaster.setWaitingMasterId(WaitingMasterId);
-            dismiss();
+
 
             new UpdateWaitingStatusLoadingTask().execute();
-        } else if (v.getId() == R.id.btnCancle) {
+            dismiss();
+        } if (v.getId() == R.id.btnCancle) {
+
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Cancel").getValue());
             objWaitingMaster.setWaitingMasterId(WaitingMasterId);
-
 
             new UpdateWaitingStatusLoadingTask().execute();
             dismiss();
@@ -119,12 +122,11 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
         @Override
         protected void onPostExecute(Object result) {
-
-            if (status.equals("-1")) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
-            } else if (status.equals("0")) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgUpdateSuccess), Toast.LENGTH_LONG).show();
-            }
+//            if (status.equals("-1")) {
+//                Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
+//            } else if (status.equals("0")) {
+//                Toast.makeText(getActivity(), getResources().getString(R.string.MsgUpdateSuccess), Toast.LENGTH_LONG).show();
+//            }
             progressDialog.dismiss();
         }
 
