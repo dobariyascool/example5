@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.RegisteredUserMaster;
 import com.arraybit.parser.RegisteredUserJSONParser;
@@ -105,9 +105,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
             }
 
-            Intent intent = new Intent(getActivity(), SignInActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            // Intent intent = new Intent(getActivity(), SignInActivity.class);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //startActivity(intent);
         } else if (v.getId() == R.id.cbSignIn) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
@@ -130,15 +130,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         boolean IsValid = true;
 
         if (etFirstName.getText().toString().equals("")
-                && !etLastName.getText().toString().equals("")
                 && !etEmail.getText().toString().equals("")
-                && !etPassword.getText().toString().equals("")
-                && !etPhone.getText().toString().equals("")) {
+                && !etPassword.getText().toString().equals("")) {
             etFirstName.setError("Enter " + getResources().getString(R.string.suFirstName));
-            etLastName.setError("");
             etEmail.setError("");
             etPassword.setError("");
-            etPhone.setError("");
             IsValid = false;
         }
 
@@ -146,28 +142,31 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             etPassword.setError("Enter " + getResources().getString(R.string.suPassword));
             etEmail.setError("");
             etFirstName.setError("");
-            etLastName.setError("");
-            etPhone.setError("");
+            IsValid = false;
+        }
+        if (etFirstName.getText().toString().equals("")
+                && etEmail.getText().toString().equals("")
+                && etPassword.getText().toString().equals("")) {
+            etFirstName.setError("Enter " + getResources().getString(R.string.suFirstName));
+            etPassword.setError("Enter " + getResources().getString(R.string.suPassword));
+            etEmail.setError("Enter" + getResources().getString(R.string.suEmail));
+
             IsValid = false;
         }
 
-//        if (!Globals.IsValidEmail(etEmail.getText().toString())) {
-//            if (etFirstName.getText().toString().equals("")
-//                    && !etLastName.getText().toString().equals("")
-//                    && !etEmail.getText().toString().equals("")
-//                    && !etPassword.getText().toString().equals("")
-//                    && !etPhone.getText().toString().equals("")) {
-//                etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
-//                etPhone.setError("");
-//                etFirstName.setError("");
-//                etLastName.setError("");
-//                etPassword.setError("");
-//                IsValid = false;
-//            } else {
-//                etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
-//                IsValid = false;
-//            }
-//        }
+        if (!Globals.IsValidEmail(etEmail.getText().toString())) {
+            if (etFirstName.getText().toString().equals("")
+                    && !etEmail.getText().toString().equals("")
+                    && !etPassword.getText().toString().equals("")) {
+                etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
+                etFirstName.setError("");
+                etPassword.setError("");
+                IsValid = false;
+            } else {
+                etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
+                IsValid = false;
+            }
+        }
 
         if (!etPhone.getText().toString().equals("")) {
             if (etPhone.getText().length() != 10) {
@@ -185,7 +184,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         etPassword.setText("");
         etEmail.setText("");
         etPhone.setText("");
-
     }
 
     public class SignUpLoadingTask extends AsyncTask {
@@ -213,20 +211,18 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             objRegisteredUserMaster.setEmail(etEmail.getText().toString());
             objRegisteredUserMaster.setPhone(etPhone.getText().toString());
             objRegisteredUserMaster.setlinktoAreaMasterId(i);
-            objRegisteredUserMaster.setlinktoSourceMasterId(i);
+            objRegisteredUserMaster.setlinktoSourceMasterId((short) Globals.sourceMasterId);
             objRegisteredUserMaster.setlinktoUserMasterIdCreatedBy(i);
             objRegisteredUserMaster.setlinktoUserMasterIdUpdatedBy(i);
             objRegisteredUserMaster.setIsEnabled(true);
 
             objRegisteredUserJSONParser = new RegisteredUserJSONParser();
-
         }
 
         @Override
         protected Object doInBackground(Object[] params) {
 
             status = objRegisteredUserJSONParser.InsertRegisteredUserMaster(objRegisteredUserMaster);
-
             return null;
         }
 
@@ -242,12 +238,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             } else if (status.equals("0")) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
                 ClearControls();
+
+                getActivity().getSupportFragmentManager().popBackStack();
             }
             pDialog.dismiss();
-
         }
-
-
     }
 
 }

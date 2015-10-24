@@ -124,6 +124,7 @@ public class RegisteredUserJSONParser {
     //region Insert
 
     public String InsertRegisteredUserMaster(RegisteredUserMaster objRegisteredUserMaster) {
+        dt = new Date();
         try {
             JSONStringer stringer = new JSONStringer();
             stringer.object();
@@ -137,13 +138,10 @@ public class RegisteredUserJSONParser {
             stringer.key("FirstName").value(objRegisteredUserMaster.getFirstName());
             stringer.key("LastName").value(objRegisteredUserMaster.getLastName());
             stringer.key("Gender").value(objRegisteredUserMaster.getGender());
-            dt = sdfControlDateFormat.parse(objRegisteredUserMaster.getBirthDate());
             stringer.key("BirthDate").value(sdfDateFormat.format(dt));
             stringer.key("linktoAreaMasterId").value(objRegisteredUserMaster.getlinktoAreaMasterId());
-            dt = sdfControlDateFormat.parse(objRegisteredUserMaster.getCreateDateTime());
             stringer.key("CreateDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoUserMasterIdCreatedBy").value(objRegisteredUserMaster.getlinktoUserMasterIdCreatedBy());
-            dt = sdfControlDateFormat.parse(objRegisteredUserMaster.getLastLoginDateTime());
             stringer.key("LastLoginDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoSourceMasterId").value(objRegisteredUserMaster.getlinktoSourceMasterId());
             stringer.key("Comment").value(objRegisteredUserMaster.getComment());
