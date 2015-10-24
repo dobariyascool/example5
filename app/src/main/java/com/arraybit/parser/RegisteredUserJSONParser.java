@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class RegisteredUserJSONParser {
     public String UpdateRegisteredUserMaster = "UpdateRegisteredUserMaster";
     public String SelectRegisteredUserMaster = "SelectRegisteredUserMaster";
     public String SelectAllRegisteredUserMaster = "SelectAllRegisteredUserMasterPageWise";
+    public String SelectRegisteredUserMasterUserName = "GetRegisteredUserMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     Date dt = null;
@@ -41,8 +43,8 @@ public class RegisteredUserJSONParser {
                 objRegisteredUserMaster.setFirstName(jsonObject.getString("FirstName"));
                 objRegisteredUserMaster.setLastName(jsonObject.getString("LastName"));
                 objRegisteredUserMaster.setGender(jsonObject.getString("Gender"));
-                dt = sdfDateFormat.parse(jsonObject.getString("BirthDate"));
-                objRegisteredUserMaster.setBirthDate(sdfControlDateFormat.format(dt));
+                //dt = sdfDateFormat.parse(jsonObject.getString("BirthDate"));
+                //objRegisteredUserMaster.setBirthDate(sdfControlDateFormat.format(dt));
                 if (!jsonObject.getString("linktoAreaMasterId").equals("null")) {
                     objRegisteredUserMaster.setlinktoAreaMasterId((short) jsonObject.getInt("linktoAreaMasterId"));
                 }
@@ -51,13 +53,9 @@ public class RegisteredUserJSONParser {
                 if (!jsonObject.getString("linktoUserMasterIdCreatedBy").equals("null")) {
                     objRegisteredUserMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
                 }
-                dt = sdfDateTimeFormat.parse(jsonObject.getString("UpdateDateTime"));
-                objRegisteredUserMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
                 if (!jsonObject.getString("linktoUserMasterIdUpdatedBy").equals("null")) {
                     objRegisteredUserMaster.setlinktoUserMasterIdUpdatedBy((short) jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
                 }
-                dt = sdfDateTimeFormat.parse(jsonObject.getString("LastLoginDateTime"));
-                objRegisteredUserMaster.setLastLoginDateTime(sdfControlDateFormat.format(dt));
                 objRegisteredUserMaster.setlinktoSourceMasterId((short) jsonObject.getInt("linktoSourceMasterId"));
                 objRegisteredUserMaster.setComment(jsonObject.getString("Comment"));
                 objRegisteredUserMaster.setIsEnabled(jsonObject.getBoolean("IsEnabled"));
@@ -86,8 +84,8 @@ public class RegisteredUserJSONParser {
                 objRegisteredUserMaster.setFirstName(jsonArray.getJSONObject(i).getString("FirstName"));
                 objRegisteredUserMaster.setLastName(jsonArray.getJSONObject(i).getString("LastName"));
                 objRegisteredUserMaster.setGender(jsonArray.getJSONObject(i).getString("Gender"));
-                dt = sdfDateFormat.parse(jsonArray.getJSONObject(i).getString("BirthDate"));
-                objRegisteredUserMaster.setBirthDate(sdfControlDateFormat.format(dt));
+                //dt = sdfDateFormat.parse(jsonArray.getJSONObject(i).getString("BirthDate"));
+                //objRegisteredUserMaster.setBirthDate(sdfControlDateFormat.format(dt));
                 if (!jsonArray.getJSONObject(i).getString("linktoAreaMasterId").equals("null")) {
                     objRegisteredUserMaster.setlinktoAreaMasterId((short) jsonArray.getJSONObject(i).getInt("linktoAreaMasterId"));
                 }
@@ -96,13 +94,9 @@ public class RegisteredUserJSONParser {
                 if (!jsonArray.getJSONObject(i).getString("linktoUserMasterIdCreatedBy").equals("null")) {
                     objRegisteredUserMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
                 }
-                dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("UpdateDateTime"));
-                objRegisteredUserMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
                 if (!jsonArray.getJSONObject(i).getString("linktoUserMasterIdUpdatedBy").equals("null")) {
                     objRegisteredUserMaster.setlinktoUserMasterIdUpdatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
                 }
-                dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("LastLoginDateTime"));
-                objRegisteredUserMaster.setLastLoginDateTime(sdfControlDateFormat.format(dt));
                 objRegisteredUserMaster.setlinktoSourceMasterId((short) jsonArray.getJSONObject(i).getInt("linktoSourceMasterId"));
                 objRegisteredUserMaster.setComment(jsonArray.getJSONObject(i).getString("Comment"));
                 objRegisteredUserMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
@@ -213,6 +207,21 @@ public class RegisteredUserJSONParser {
             JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectRegisteredUserMaster + "/" + registeredUserMasterId);
             if (jsonResponse != null) {
                 JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectRegisteredUserMaster + "Result");
+                if (jsonObject != null) {
+                    return SetClassPropertiesFromJSONObject(jsonObject);
+                }
+            }
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public RegisteredUserMaster SelectRegisteredUserMasterUserName(String name, String password) {
+        try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectRegisteredUserMasterUserName + "/" + URLEncoder.encode(name, "utf-8").replace(".", "2E") + "/" + URLEncoder.encode(password, "utf-8").replace(".", "2E"));
+            if (jsonResponse != null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectRegisteredUserMasterUserName + "Result");
                 if (jsonObject != null) {
                     return SetClassPropertiesFromJSONObject(jsonObject);
                 }
