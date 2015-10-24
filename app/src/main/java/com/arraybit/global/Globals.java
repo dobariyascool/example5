@@ -28,6 +28,9 @@ import com.arraybit.pos.GuestLoginDialogFragment;
 import com.arraybit.pos.R;
 import com.arraybit.pos.SignUpFragment;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Globals {
 
 
@@ -52,6 +55,13 @@ public class Globals {
         } else if (Build.VERSION.SDK_INT >= 21) {
             app_bar.setPadding(0, 50, 0, 0);
         }
+    }
+
+    public static boolean IsValidEmail(String email) {
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     public static void SetNavigationDrawer(ActionBarDrawerToggle actionBarDrawerToggle, Context context, DrawerLayout drawerLayout, Toolbar app_bar) {
