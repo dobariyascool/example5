@@ -25,8 +25,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arraybit.pos.GuestLoginDialogFragment;
-import com.arraybit.pos.GuestRegistrationDialogFragment;
 import com.arraybit.pos.R;
+import com.arraybit.pos.SignUpFragment;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Globals {
 
@@ -34,8 +37,9 @@ public class Globals {
     public static String activityName;
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "HH:mm";
+    public static int sourceMasterId = 2;
+    public static int WaitingStatusMasterId = 1;
     static FragmentManager fragmentManager;
-
     //public static Bitmap bitmap1;
 
     public static float ConvertDp(float dp, Context context) {
@@ -51,6 +55,13 @@ public class Globals {
         } else if (Build.VERSION.SDK_INT >= 21) {
             app_bar.setPadding(0, 50, 0, 0);
         }
+    }
+
+    public static boolean IsValidEmail(String email) {
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     public static void SetNavigationDrawer(ActionBarDrawerToggle actionBarDrawerToggle, Context context, DrawerLayout drawerLayout, Toolbar app_bar) {
@@ -102,8 +113,10 @@ public class Globals {
             guestLoginDialogFragment.show(fragmentManager, "");
 
         } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
-            GuestRegistrationDialogFragment guestRegistrationDialogFragment = new GuestRegistrationDialogFragment();
-            guestRegistrationDialogFragment.show(fragmentManager, "");
+            SignUpFragment signUpFragment = new SignUpFragment();
+            Globals.initializeFragment(signUpFragment,fragmentManager);
+//            GuestRegistrationDialogFragment guestRegistrationDialogFragment = new GuestRegistrationDialogFragment();
+//            guestRegistrationDialogFragment.show(fragmentManager, "");
         }
     }
 

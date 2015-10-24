@@ -3,7 +3,7 @@ package com.arraybit.modal;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class UserMaster implements Parcelable {
+public class  UserMaster implements Parcelable {
 
     //region Properties
     short UserMasterId;
