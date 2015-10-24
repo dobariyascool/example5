@@ -2,19 +2,20 @@ package com.arraybit.pos;
 
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.Button;
-
-import java.util.ArrayList;
 
 @SuppressLint("ValidFragment")
 public class WaitingStatusFragment extends DialogFragment implements View.OnClickListener {
@@ -22,10 +23,8 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
     Button btnServe, btnNot, btnCancel;
     String waitingStatus;
     short WaitingMasterId;
-    ArrayList<WaitingMaster> alwWaitingMaster;
 
     WaitingMaster objWaitingMaster = null;
-    WaitingJSONParser objWaitingJSONParser = null;
 
     public WaitingStatusFragment(short WaitingMasterId,String waitingStatus) {
         this.WaitingMasterId = WaitingMasterId;
@@ -72,28 +71,65 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
         objWaitingMaster = new WaitingMaster();
         if (v.getId() == R.id.btnServe) {
-            objWaitingJSONParser = new WaitingJSONParser();
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Served").getValue());
             objWaitingMaster.setWaitingMasterId(WaitingMasterId);
-
-            objWaitingJSONParser.UpdateWaitingStatus(objWaitingMaster);
             dismiss();
+            new UpdateWaitingStatusLoadingTask().execute();
+
         } else if (v.getId() == R.id.btnNot) {
-            objWaitingJSONParser = new WaitingJSONParser();
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Not").getValue());
             objWaitingMaster.setWaitingMasterId(WaitingMasterId);
-
-            objWaitingJSONParser.UpdateWaitingStatus(objWaitingMaster);
             dismiss();
+
+            new UpdateWaitingStatusLoadingTask().execute();
         } else if (v.getId() == R.id.btnCancle) {
-            objWaitingJSONParser = new WaitingJSONParser();
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Cancel").getValue());
             objWaitingMaster.setWaitingMasterId(WaitingMasterId);
 
-            objWaitingJSONParser.UpdateWaitingStatus(objWaitingMaster);
+
+            new UpdateWaitingStatusLoadingTask().execute();
             dismiss();
         }
     }
+
+    class UpdateWaitingStatusLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
+        String status;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
+            status=objWaitingJSONParser.UpdateWaitingStatus(objWaitingMaster);
+
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+
+            if (status.equals("-1")) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
+            } else if (status.equals("0")) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgUpdateSuccess), Toast.LENGTH_LONG).show();
+            }
+            progressDialog.dismiss();
+        }
+
+    }
+
 
     //    @NonNull
 //    @Override
