@@ -22,12 +22,13 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
     Button btnServe, btnNot, btnCancel;
     String waitingStatus;
     short WaitingMasterId;
+    UpdateStatusListener objUpdateStatusListener;
 
     WaitingMaster objWaitingMaster = null;
 
-    public WaitingStatusFragment(short WaitingMasterId,String waitingStatus) {
-        this.WaitingMasterId = WaitingMasterId;
-        this.waitingStatus = waitingStatus;
+    public WaitingStatusFragment(WaitingMaster objWaitingMaster) {
+        WaitingMasterId = (short) objWaitingMaster.getWaitingMasterId();
+        waitingStatus = objWaitingMaster.getWaitingStatus();
     }
 
     @Override
@@ -41,28 +42,13 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         btnNot = (Button) view.findViewById(R.id.btnNot);
         btnCancel = (Button) view.findViewById(R.id.btnCancel);
 
-
-        if (waitingStatus.equals("Waiting")) {
-            btnServe.setVisibility(View.VISIBLE);
-            btnNot.setVisibility(View.VISIBLE);
-            btnCancel.setVisibility(View.VISIBLE);
-        } else if (waitingStatus.equals("Served")) {
-            btnServe.setVisibility(View.GONE);
-            btnNot.setVisibility(View.VISIBLE);
-            btnCancel.setVisibility(View.VISIBLE);
-        } else if (waitingStatus.equals("Cancel")) {
-            btnServe.setVisibility(View.VISIBLE);
-            btnNot.setVisibility(View.VISIBLE);
-            btnCancel.setVisibility(View.GONE);
-        } else {
-            btnServe.setVisibility(View.VISIBLE);
-            btnNot.setVisibility(View.GONE);
-            btnCancel.setVisibility(View.VISIBLE);
-        }
+        SetButtonVisibility();
 
         btnServe.setOnClickListener(this);
         btnNot.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+
+        objUpdateStatusListener = (UpdateStatusListener) getTargetFragment();
 
         return view;
     }
@@ -72,27 +58,53 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
         objWaitingMaster = new WaitingMaster();
         if (v.getId() == R.id.btnServe) {
-            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Served").getValue());
+            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnServe.getText().toString()).getValue());
             objWaitingMaster.setWaitingMasterId(WaitingMasterId);
 
             new UpdateWaitingStatusLoadingTask().execute();
             dismiss();
 
-        } if (v.getId() == R.id.btnNot) {
+        }
+        if (v.getId() == R.id.btnNot) {
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Not").getValue());
             objWaitingMaster.setWaitingMasterId(WaitingMasterId);
 
 
             new UpdateWaitingStatusLoadingTask().execute();
             dismiss();
-        } if (v.getId() == R.id.btnCancle) {
+        }
+        if (v.getId() == R.id.btnCancel) {
 
-            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Cancel").getValue());
+            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnCancel.getText().toString()).getValue());
             objWaitingMaster.setWaitingMasterId(WaitingMasterId);
 
             new UpdateWaitingStatusLoadingTask().execute();
             dismiss();
         }
+    }
+
+    void SetButtonVisibility() {
+        if (waitingStatus.equals(btnServe.getText().toString())) {
+            btnServe.setVisibility(View.GONE);
+            btnNot.setVisibility(View.VISIBLE);
+            btnCancel.setVisibility(View.VISIBLE);
+        } else if (waitingStatus.equals(btnCancel.getText().toString())) {
+            btnServe.setVisibility(View.VISIBLE);
+            btnNot.setVisibility(View.VISIBLE);
+            btnCancel.setVisibility(View.GONE);
+        } else if (waitingStatus.equals("Not")) {
+            btnServe.setVisibility(View.VISIBLE);
+            btnNot.setVisibility(View.GONE);
+            btnCancel.setVisibility(View.VISIBLE);
+        } else {
+            btnServe.setVisibility(View.VISIBLE);
+            btnNot.setVisibility(View.VISIBLE);
+            btnCancel.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public interface UpdateStatusListener {
+        void UpdateStatus(boolean flag);
     }
 
     class UpdateWaitingStatusLoadingTask extends AsyncTask {
@@ -104,57 +116,32 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         protected void onPreExecute() {
             super.onPreExecute();
 
-                progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-                progressDialog.setIndeterminate(true);
-                progressDialog.setCancelable(false);
-                progressDialog.show();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
 
             WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
-            status=objWaitingJSONParser.UpdateWaitingStatus(objWaitingMaster);
+            status = objWaitingJSONParser.UpdateWaitingStatus(objWaitingMaster);
 
             return status;
         }
 
         @Override
         protected void onPostExecute(Object result) {
-//            if (status.equals("-1")) {
-//                Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
-//            } else if (status.equals("0")) {
-//                Toast.makeText(getActivity(), getResources().getString(R.string.MsgUpdateSuccess), Toast.LENGTH_LONG).show();
-//            }
+            if (status.equals("-1")) {
+                objUpdateStatusListener.UpdateStatus(false);
+            } else if (status.equals("0")) {
+                objUpdateStatusListener.UpdateStatus(true);
+            }
             progressDialog.dismiss();
         }
 
     }
-
-
-    //    @NonNull
-//    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setView(R.layout.fragment_waiting_status);
-
-//        builder.setPositiveButton("done", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dismiss();
-//            }
-//        });
-//
-//        builder.setNegativeButton(getResources().getString(R.string.fdCancel), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dismiss();
-//
-//            }
-//        });
-
-//        return builder.create();
-//    }
 
 }

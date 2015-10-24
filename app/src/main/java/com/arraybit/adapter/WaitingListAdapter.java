@@ -19,13 +19,14 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
     ArrayList<WaitingMaster> alWaitingMaster;
     LayoutInflater layoutInflater;
     View view;
-    WaitingList waitingList;
+    childLayoutClickListener objChildLayoutClickListener;
 
     // Constructor
-    public WaitingListAdapter(Context context, ArrayList<WaitingMaster> result) {
+    public WaitingListAdapter(Context context, ArrayList<WaitingMaster> result, childLayoutClickListener objChildLayoutClickListener) {
         this.context = context;
         this.alWaitingMaster = result;
         this.layoutInflater = LayoutInflater.from(context);
+        this.objChildLayoutClickListener = objChildLayoutClickListener;
     }
 
     @Override
@@ -33,6 +34,7 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
         view = layoutInflater.inflate(R.layout.row_waiting_list, parent, false);
         return new WaitingListViewHolder(view);
     }
+
 
     @Override
     public void onBindViewHolder(WaitingListViewHolder holder, int position) {
@@ -56,10 +58,18 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
         notifyDataSetChanged();
     }
 
-    public interface WaitingList {
-        void ChangeStatus(short WaitingMasterId, String waitingStatus);
+    public void WaitingListDataRemove(int position) {
+        alWaitingMaster.remove(position);
+        notifyItemRemoved(position);
     }
 
+    //region interface
+    public interface childLayoutClickListener {
+        void ChangeStatusClick(WaitingMaster objWaitingMaster, int position);
+    }
+    //endregion
+
+    //region ViewHolder
     class WaitingListViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtIndex, txtName, txtMobileNo, txtPersons;
@@ -79,12 +89,15 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
                 @Override
                 public void onClick(View v) {
 
-                    waitingList = (WaitingList) context;
-                    waitingList.ChangeStatus((short) alWaitingMaster.get(v.getId()).getWaitingMasterId(), alWaitingMaster.get(0).getWaitingStatus());
-                    //alWaitingMaster.remove(v.getId());
-                    //notifyItemRemoved(v.getId());
+                    WaitingMaster objWaitingMaster = new WaitingMaster();
+
+                    objWaitingMaster.setWaitingMasterId(alWaitingMaster.get(v.getId()).getWaitingMasterId());
+                    objWaitingMaster.setWaitingStatus(alWaitingMaster.get(v.getId()).getWaitingStatus());
+
+                    objChildLayoutClickListener.ChangeStatusClick(objWaitingMaster, v.getId());
                 }
             });
         }
     }
+    //endregion
 }

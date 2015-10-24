@@ -21,13 +21,13 @@ import com.arraybit.parser.WaitingJSONParser;
 import java.util.ArrayList;
 
 
-public class WaitingTabFragment extends Fragment {
+public class WaitingTabFragment extends Fragment implements WaitingListAdapter.childLayoutClickListener, WaitingStatusFragment.UpdateStatusListener {
 
     public final static String ITEMS_COUNT_KEY = "WaitingTabFragment$ItemsCount";
     RecyclerView rvWaiting;
     ArrayList<WaitingMaster> alWaitingMaster;
     LinearLayoutManager linearLayoutManager;
-    int currentPage = 1;
+    int currentPage = 1, position;
     WaitingListAdapter waitingListAdapter;
 
 
@@ -78,14 +78,30 @@ public class WaitingTabFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView rvWaiting) {
-        waitingListAdapter = new WaitingListAdapter(getActivity(),alWaitingMaster);
+        waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
         rvWaiting.setAdapter(waitingListAdapter);
         rvWaiting.setLayoutManager(linearLayoutManager);
-        if(rvWaiting.getAdapter().getItemCount()>0) {
+        if (rvWaiting.getAdapter().getItemCount() > 0) {
             rvWaiting.setId((int) alWaitingMaster.get(0).getlinktoWaitingStatusMasterId());
         }
     }
 
+    @Override
+    public void ChangeStatusClick(WaitingMaster objWaitingMaster, int position) {
+        this.position = position;
+        WaitingStatusFragment waitingStatusFragment = new WaitingStatusFragment(objWaitingMaster);
+        waitingStatusFragment.setTargetFragment(this, 0);
+        waitingStatusFragment.show(getActivity().getSupportFragmentManager(), "");
+    }
+
+    @Override
+    public void UpdateStatus(boolean flag) {
+        if (flag) {
+            waitingListAdapter.WaitingListDataRemove(this.position);
+        }
+    }
+
+    @SuppressWarnings("ResourceType")
     class WaitingMasterLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
@@ -93,15 +109,15 @@ public class WaitingTabFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(currentPage > 2) {
+            if (currentPage > 2) {
                 progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
                 progressDialog.setIndeterminate(true);
                 progressDialog.setCancelable(false);
                 progressDialog.show();
-                System.out.println(rvWaiting.getId());
+
             }
-            System.out.println(rvWaiting.getId());
+
             alWaitingMaster = new ArrayList<>();
         }
 
@@ -109,18 +125,17 @@ public class WaitingTabFragment extends Fragment {
         protected Object doInBackground(Object[] objects) {
 
             WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
-            alWaitingMaster = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(currentPage,rvWaiting.getId());
+            alWaitingMaster = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(currentPage, rvWaiting.getId());
 
             return null;
         }
 
         @Override
         protected void onPostExecute(Object result) {
-            if(currentPage > 2){
-            progressDialog.dismiss();
+            if (currentPage > 2) {
+                progressDialog.dismiss();
             }
-            if(alWaitingMaster!=null)
-            {
+            if (alWaitingMaster != null) {
 //                if(alWaitingMaster.size() > 10){
 //
 //                    currentPage +=1;

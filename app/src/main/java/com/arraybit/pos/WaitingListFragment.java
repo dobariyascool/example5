@@ -56,7 +56,7 @@ public class WaitingListFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new WaitingStatusLoadingTask().execute();
         } else {
-            Toast.makeText(getActivity(),getResources().getString(R.string.MsgCheckConnection),Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
             //Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgCheckConnection));
         }
         return view;
@@ -125,10 +125,10 @@ public class WaitingListFragment extends Fragment {
         protected void onPostExecute(Object result) {
 
             if (alWaitingStatusMaster == null) {
-                Toast.makeText(getActivity(),getResources().getString(R.string.MsgSelectFail),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             } else if (alWaitingStatusMaster.size() == 0) {
-                Toast.makeText(getActivity(),getResources().getString(R.string.MsgNoRecord),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             } else {
 
@@ -157,7 +157,7 @@ public class WaitingListFragment extends Fragment {
         protected Object doInBackground(Object[] objects) {
 
             WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
-            for(int j=0;j<alWaitingStatusMaster.size();j++) {
+            for (int j = 0; j < alWaitingStatusMaster.size(); j++) {
 
                 WaitingStatus[j] = alWaitingStatusMaster.get(j).getWaitingStatus();
                 alWaitingMaster[j] = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(1, alWaitingStatusMaster.get(j).getWaitingStatusMasterId());
@@ -170,13 +170,13 @@ public class WaitingListFragment extends Fragment {
         protected void onPostExecute(Object result) {
 
             if (alWaitingMaster == null) {
-                Toast.makeText(getActivity(),getResources().getString(R.string.MsgSelectFail),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
             } else if (alWaitingMaster.length == 0) {
-                Toast.makeText(getActivity(),getResources().getString(R.string.MsgNoRecord),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
             } else {
 
-                for(int k=0;k<alWaitingMaster.length;k++) {
-                    pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]),WaitingStatus[k]);
+                for (int k = 0; k < alWaitingMaster.length; k++) {
+                    pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]);
                 }
             }
             waitingViewPager.setAdapter(pagerAdapter);
