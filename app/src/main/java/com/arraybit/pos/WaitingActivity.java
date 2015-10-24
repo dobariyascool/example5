@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -125,16 +124,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
         if(id==R.id.logout)
         {
-            Intent intent=new Intent(WaitingActivity.this,SignInActivity.class);
-            startActivity(intent);
-            finish();
-
-            objSharePreferenceManage = new SharePreferenceManage();
-            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserName", WaitingActivity.this);
-            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserMasterId",WaitingActivity.this);
-            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserTypeMasterId",WaitingActivity.this);
-
-            objSharePreferenceManage.ClearPreference("WaitingPreference",WaitingActivity.this);
+            Globals.ClearPreference(WaitingActivity.this);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.pos.R;
+import com.arraybit.pos.WaitingActivity;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -91,12 +92,18 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
                 @Override
                 public void onClick(View v) {
 
-                    WaitingMaster objWaitingMaster = new WaitingMaster();
+                    WaitingActivity activity = (WaitingActivity) context;
 
-                    objWaitingMaster.setWaitingMasterId(alWaitingMaster.get(v.getId()).getWaitingMasterId());
-                    objWaitingMaster.setWaitingStatus(alWaitingMaster.get(v.getId()).getWaitingStatus());
+                    //fragment outside click not show the dialog
+                    if(activity.getSupportFragmentManager().getBackStackEntryCount() == 0) {
 
-                    objChildLayoutClickListener.ChangeStatusClick(objWaitingMaster, v.getId());
+                        WaitingMaster objWaitingMaster = new WaitingMaster();
+
+                        objWaitingMaster.setWaitingMasterId(alWaitingMaster.get(v.getId()).getWaitingMasterId());
+                        objWaitingMaster.setWaitingStatus(alWaitingMaster.get(v.getId()).getWaitingStatus());
+
+                        objChildLayoutClickListener.ChangeStatusClick(objWaitingMaster, v.getId());
+                    }
                 }
             });
 

@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/afName"
-        android:inputType="text"
+        android:inputType="textCapWords|textCapSentences"
         android:paddingEnd="@dimen/control_SpecingSmall"
         android:paddingStart="@dimen/control_SpecingSmall"
         android:paddingTop="@dimen/control_SpecingSmall" />

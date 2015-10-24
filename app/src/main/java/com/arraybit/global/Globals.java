@@ -3,6 +3,7 @@ package com.arraybit.global;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +20,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 
 import com.arraybit.pos.GuestLoginDialogFragment;
 import com.arraybit.pos.R;
+import com.arraybit.pos.SignInActivity;
 import com.arraybit.pos.SignUpFragment;
 
 import java.util.regex.Matcher;
@@ -38,7 +41,6 @@ public class Globals {
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "HH:mm";
     public static int sourceMasterId = 2;
-    public static int WaitingStatusMasterId = 1;
     static FragmentManager fragmentManager;
     //public static Bitmap bitmap1;
 
@@ -110,11 +112,13 @@ public class Globals {
         activityName = activity.getTitle().toString();
         if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
             GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+            //dialog show when orientation is change
+            guestLoginDialogFragment.setRetainInstance(true);
             guestLoginDialogFragment.show(fragmentManager, "");
 
         } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
             SignUpFragment signUpFragment = new SignUpFragment();
-            Globals.initializeFragment(signUpFragment,fragmentManager);
+            Globals.initializeFragment(signUpFragment, fragmentManager);
 //            GuestRegistrationDialogFragment guestRegistrationDialogFragment = new GuestRegistrationDialogFragment();
 //            guestRegistrationDialogFragment.show(fragmentManager, "");
         }
@@ -151,6 +155,44 @@ public class Globals {
         } else {
             layout.setVisibility(View.GONE);
 
+        }
+    }
+
+    public static void HideKeyBoard(Context context, View view) {
+
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static void ClearPreference(Activity activity){
+
+        activityName = activity.getTitle().toString();
+
+        if(activityName.equals(activity.getResources().getString(R.string.title_activity_waiting)))
+        {
+            Intent intent=new Intent(activity,SignInActivity.class);
+            activity.startActivity(intent);
+            activity.finish();
+
+            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserName", activity);
+            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserMasterId",activity);
+            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserTypeMasterId",activity);
+
+            objSharePreferenceManage.ClearPreference("WaitingPreference",activity);
+        }
+        else if(activityName.equals(activity.getResources().getString(R.string.title_activity_waiter_home)))
+        {
+            Intent intent=new Intent(activity,SignInActivity.class);
+            activity.startActivity(intent);
+            activity.finish();
+
+            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserName", activity);
+            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserMasterId",activity);
+            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId",activity);
+
+            objSharePreferenceManage.ClearPreference("WaiterPreference",activity);
         }
     }
 

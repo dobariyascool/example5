@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -70,6 +71,9 @@ public class AddFragment extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Globals.HideKeyBoard(getActivity(),v);
+
                 if (!ValidateControls()) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
                     return;
@@ -176,8 +180,8 @@ public class AddFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            status = objWaitingJSONParser.InsertWaitingMaster(objWaitingMaster);
 
+            status = objWaitingJSONParser.InsertWaitingMaster(objWaitingMaster);
             return status;
         }
 
@@ -192,7 +196,9 @@ public class AddFragment extends Fragment {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
                 ClearControls();
 
-                getActivity().getSupportFragmentManager().popBackStack();
+                Intent intent=new Intent(getActivity(),WaitingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                getActivity().startActivity(intent);
             }
             pDialog.dismiss();
         }

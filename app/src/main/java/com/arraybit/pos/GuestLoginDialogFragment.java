@@ -73,6 +73,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
 //        });
 //    }
 
+
     @NonNull
 
 
@@ -81,6 +82,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(R.layout.fragment_guest_login_dialog);
+        setRetainInstance(true);
 
         builder.setPositiveButton(getResources().getString(R.string.ldLogin), new DialogInterface.OnClickListener() {
             @Override
@@ -103,7 +105,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }*/
-
+//
                 if (!ValidateControls()) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
                     return;
@@ -114,8 +116,6 @@ public class GuestLoginDialogFragment extends DialogFragment {
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
                 }
-
-
             }
         });
 
@@ -146,11 +146,6 @@ public class GuestLoginDialogFragment extends DialogFragment {
         }
 
         return IsValid;
-    }
-
-    void ClearControls() {
-        etUserName.setText("");
-        etPassword.setText("");
     }
 
     public class SignInLodingTask extends AsyncTask {
@@ -188,18 +183,8 @@ public class GuestLoginDialogFragment extends DialogFragment {
                 //pDialog.dismiss();
 
             } else {
-                objSharePreferenceManage = new SharePreferenceManage();
-                if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) == null) {
-                    objSharePreferenceManage.CreatePreference("RegistrationPreference", "UserName", etUserName.getText().toString(), getActivity());
-                }
 
-
-                if (objSharePreferenceManage.GetPreference("RegisteredUserMasterIdPreference", "RegisteredUserMasterId", getActivity()) == null) {
-                    objSharePreferenceManage.CreatePreference("RegisteredUserMasterIdPreference", "RegisteredUserMasterId", String.valueOf(objRegisteredUserMaster.getRegisteredUserMasterId()), getActivity());
-                }
-                if (objSharePreferenceManage.GetPreference("RegistrationPreferenceFullName", "FullName", getActivity()) == null) {
-                    objSharePreferenceManage.CreatePreference("RegistrationPreferenceFullName", "FullName", String.valueOf(objRegisteredUserMaster.getFirstName()) + " " + String.valueOf(objRegisteredUserMaster.getLastName()), getActivity());
-                }
+                CreateGuestPreference();
 
                 ClearControls();
                 Toast.makeText(getActivity(), getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_LONG).show();
@@ -208,4 +193,68 @@ public class GuestLoginDialogFragment extends DialogFragment {
             //pDialog.dismiss();
         }
     }
+
+    public void CreateGuestPreference(){
+        objSharePreferenceManage = new SharePreferenceManage();
+        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) == null) {
+            objSharePreferenceManage.CreatePreference("RegistrationPreference", "UserName", etUserName.getText().toString(), getActivity());
+        }
+        if (objSharePreferenceManage.GetPreference("RegisteredUserMasterIdPreference", "RegisteredUserMasterId", getActivity()) == null) {
+            objSharePreferenceManage.CreatePreference("RegisteredUserMasterIdPreference", "RegisteredUserMasterId", String.valueOf(objRegisteredUserMaster.getRegisteredUserMasterId()), getActivity());
+        }
+        if (objSharePreferenceManage.GetPreference("RegistrationPreferenceFullName", "FullName", getActivity()) == null) {
+            objSharePreferenceManage.CreatePreference("RegistrationPreferenceFullName", "FullName", String.valueOf(objRegisteredUserMaster.getFirstName()) + " " + String.valueOf(objRegisteredUserMaster.getLastName()), getActivity());
+        }
+
+    }
+
+    public class SignInLodingTask extends AsyncTask {
+
+        ProgressDialog pDialog;
+        String strUserName, strPassword;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+//            pDialog = new ProgressDialog(getActivity());
+//            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
+//            pDialog.setIndeterminate(false);
+//            pDialog.setCancelable(false);
+//            pDialog.show();
+
+            strUserName = etUserName.getText().toString();
+            strPassword = etPassword.getText().toString();
+            objRegisteredUserJSONParser = new RegisteredUserJSONParser();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            objRegisteredUserMaster = objRegisteredUserJSONParser.SelectRegisteredUserMasterUserName(strUserName, strPassword);
+            return objRegisteredUserMaster;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            if (result == null) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.siLoginFailedMsg), Toast.LENGTH_LONG).show();
+                //pDialog.dismiss();
+
+            } else {
+
+                CreateGuestPreference();
+
+                ClearControls();
+                Toast.makeText(getActivity(), getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_LONG).show();
+                dismiss();
+            }
+            //pDialog.dismiss();
+        }
+    }    void ClearControls() {
+        etUserName.setText("");
+        etPassword.setText("");
+    }
+
 }

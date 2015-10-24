@@ -18,7 +18,7 @@ import java.net.URL;
 public class Service {
 
     public static String Url = "http://10.0.3.2:9852/Service.svc/";
-    //public static String Url = "http://10.0.0.100/pos/service/Service.svc/";
+   //public static String Url = "http://10.0.0.100/pos/service/Service.svc/";
 
     public static Boolean CheckNet(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
