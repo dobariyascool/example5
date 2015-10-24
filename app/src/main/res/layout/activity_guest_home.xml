@@ -23,7 +23,7 @@
             tools:ignore="DisableBaselineAlignment">
 
             <LinearLayout
-                android:layout_width="@dimen/navWidth"
+                android:layout_width="180dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:weightSum="1"
@@ -114,8 +114,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:background="@color/primary">
+                    android:background="@color/primary"
+                    android:orientation="horizontal">
 
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tabLayout"
@@ -129,8 +129,8 @@
                         android:id="@+id/ibViewChange"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.2"
                         android:layout_margin="@dimen/control_SpecingSmall"
+                        android:layout_weight="0.2"
                         android:padding="@dimen/control_SpecingSmall"
                         android:src="@drawable/view_selector"
                         android:visibility="gone"/>
@@ -196,8 +196,8 @@
         android:layout_width="@dimen/navWidth"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/menu_navigation_drawer"
+        app:headerLayout="@layout/navigation_header"
         app:itemTextColor="@color/navigationdrawerText"
-        app:headerLayout="@layout/navigation_header" />
+        app:menu="@menu/menu_navigation_drawer" />
     <!-- end -->
 </android.support.v4.widget.DrawerLayout>

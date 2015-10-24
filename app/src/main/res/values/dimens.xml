@@ -12,7 +12,7 @@
     <!-- end -->
 
     <!--in mobile (56*5=280) in tablet(64*5=320)-->
-    <dimen name="navWidth">180dp</dimen>
+    <dimen name="navWidth">280dp</dimen>
 
     <!-- logo size -->
     <dimen name="app_logo_height">96dp</dimen>

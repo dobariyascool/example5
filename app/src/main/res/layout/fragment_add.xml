@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/afPerson"
-        android:inputType="textPassword"
+        android:inputType="number"
         android:paddingEnd="@dimen/control_SpecingSmall"
         android:paddingStart="@dimen/control_SpecingSmall" />
 

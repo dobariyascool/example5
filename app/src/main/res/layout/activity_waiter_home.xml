@@ -25,18 +25,18 @@
 
                 <fragment
                     android:id="@+id/fragment_waiter_option_list"
-                    android:layout_width="@dimen/navWidth"
-                    android:layout_height="match_parent"
                     android:name="com.arraybit.pos.WaiterOptionListFragment"
+                    android:layout_width="180dp"
+                    android:layout_height="match_parent"
                     tools:layout="@layout/fragment_waiter_option_list"/>
 
 
                 <fragment
                     android:id="@+id/fragment_all_orders"
+                    android:name="com.arraybit.pos.AllOrdersFragment"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:name="com.arraybit.pos.AllOrdersFragment"
                     tools:layout="@layout/fragment_all_orders"/>
 
 
