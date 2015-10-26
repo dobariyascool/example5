@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.arraybit.global.Globals;
-import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.RegisteredUserMaster;
 import com.arraybit.parser.RegisteredUserJSONParser;
@@ -106,16 +105,16 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     startActivity(intent);
                 }*/
 //
-                if (!ValidateControls()) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (Service.CheckNet(getActivity())) {
-                    new SignInLodingTask().execute();
-
-                } else {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
-                }
+//                if (!ValidateControls()) {
+//                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//                if (Service.CheckNet(getActivity())) {
+//                    new SignInLodingTask().execute();
+//
+//                } else {
+//                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+//                }
             }
         });
 

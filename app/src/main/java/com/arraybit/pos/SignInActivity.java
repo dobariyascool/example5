@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -16,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.UserMaster;
@@ -28,11 +30,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     public static String ServerName;
     EditText etName, etPassword;
-    ToggleButton btnPasswordShow;
-    ImageButton ibClear;
     UserMasterJSONParser objUserMasterJSONParser = null;
     UserMaster objUserMaster = null;
     SharePreferenceManage objSharePreferenceManage;
+    ToggleButton tbPasswordShow;
+    ImageButton ibClear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,19 +57,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         //button
         Button btnSignIn = (Button) findViewById(R.id.btnSignIn);
-        btnPasswordShow = (ToggleButton) findViewById(R.id.btnPasswordShow);
+        tbPasswordShow = (ToggleButton) findViewById(R.id.tbPasswordShow);
         ibClear = (ImageButton) findViewById(R.id.ibClear);
         //end
 
         //event
         btnSignIn.setOnClickListener(this);
-        btnPasswordShow.setOnClickListener(this);
+        tbPasswordShow.setOnClickListener(this);
         ibClear.setOnClickListener(this);
         //end
 
         //get server name
-        objSharePreferenceManage=new SharePreferenceManage();
-        ServerName=objSharePreferenceManage.GetPreference("ServerPreference","ServerName",SignInActivity.this);
+        objSharePreferenceManage = new SharePreferenceManage();
+        ServerName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SignInActivity.this);
         //end
 
         etName.addTextChangedListener(new TextWatcher() {
@@ -98,9 +100,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                btnPasswordShow.setVisibility(View.VISIBLE);
+                tbPasswordShow.setVisibility(View.VISIBLE);
                 if (etPassword.getText().toString().equals("")) {
-                    btnPasswordShow.setVisibility(View.GONE);
+                    tbPasswordShow.setVisibility(View.GONE);
                 }
             }
 
@@ -130,8 +132,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             etName.setText("");
             ibClear.setVisibility(View.GONE);
         }
-        if (v.getId() == R.id.btnPasswordShow) {
-            if (btnPasswordShow.isChecked()) {
+        if (v.getId() == R.id.tbPasswordShow) {
+            if (tbPasswordShow.isChecked()) {
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
             } else {
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -189,6 +191,22 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
             }
             return true;
+        }
+        else if(id == R.id.changeMode){
+
+            Snackbar.make(getCurrentFocus(),"Change Settings",Snackbar.LENGTH_LONG).setAction("done", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+                    if(objSharePreferenceManage.GetPreference("ServerPreference","ServerName",SignInActivity.this)!=null){
+                        objSharePreferenceManage.RemovePreference("ServerPreference","ServerName",SignInActivity.this);
+                        objSharePreferenceManage.ClearPreference("ServerPreference", SignInActivity.this);
+                        Globals.initializeFragment(new ServerNameFragment(),getSupportFragmentManager());
+                    }
+
+                }
+            }).show();
         }
 
         return super.onOptionsItemSelected(item);

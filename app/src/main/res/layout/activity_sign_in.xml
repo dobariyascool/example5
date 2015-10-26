@@ -52,7 +52,7 @@
             android:paddingStart="@dimen/control_SpecingMedium" />
 
         <ToggleButton
-            android:id="@+id/btnPasswordShow"
+            android:id="@+id/tbPasswordShow"
             style="@style/EditTextToogleButton"
             android:layout_alignEnd="@+id/etPassword"
             android:layout_marginEnd="@dimen/control_SpecingMedium"

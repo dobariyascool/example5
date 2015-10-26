@@ -24,8 +24,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 objSharePreferenceManage=new SharePreferenceManage();
                 if(objSharePreferenceManage.GetPreference("ServerPreference","ServerName",SplashScreenActivity.this)==null)
                 {
-                    Globals.initializeFragment(new ServerNameFragment(),getSupportFragmentManager());
-                    finish();
+                    Globals.initializeFragment(new ServerNameFragment(), getSupportFragmentManager());
                 }
                 else {
                     Intent i = new Intent(SplashScreenActivity.this, SignInActivity.class);
@@ -56,5 +55,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

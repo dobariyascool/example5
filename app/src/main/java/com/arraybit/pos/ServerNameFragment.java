@@ -48,14 +48,20 @@ public class ServerNameFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                objSharePreferenceManage=new SharePreferenceManage();
 
-                objSharePreferenceManage.CreatePreference("ServerPreference","ServerName",etServerName.getText().toString(),getActivity());
+                if(etServerName.getText().toString().equals(""))
+                {
+                    etServerName.setError("Enter "+getResources().getString(R.string.sfName));
+                }
+                else {
+                    objSharePreferenceManage = new SharePreferenceManage();
 
-                Intent intent=new Intent(getActivity(),SignInActivity.class);
-                startActivity(intent);
-                getActivity().finish();
+                    objSharePreferenceManage.CreatePreference("ServerPreference", "ServerName", etServerName.getText().toString(), getActivity());
 
+                    Intent intent = new Intent(getActivity(), SignInActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
             }
         });
     }
