@@ -90,7 +90,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //}
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -145,6 +144,15 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+        if(menuItem.getItemId()==R.id.wExit){
+            objSharePreferenceManage=new SharePreferenceManage();
+            objSharePreferenceManage.RemovePreference("ServerPreference","ServerName",WaitingActivity.this);
+            objSharePreferenceManage.ClearPreference("ServerPreference", WaitingActivity.this);
+            System.exit(0);
+            finish();
+        }
+
         return false;
     }
 

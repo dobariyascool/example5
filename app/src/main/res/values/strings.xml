@@ -139,6 +139,11 @@
     <string name="afSubmit">Submit</string>
     <!-- end -->
 
+    <!-- fragment server -->
+    <string name="sfName">Server Name</string>
+    <string name="sfSubmit">Submit</string>
+    <!-- end -->
+
 
     <!-- waiting status dialog -->
     <string name="wsdTitle">Change Status</string>

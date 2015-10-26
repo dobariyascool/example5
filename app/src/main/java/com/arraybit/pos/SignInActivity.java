@@ -26,10 +26,10 @@ import com.rey.material.widget.EditText;
 @SuppressWarnings("ALL")
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static String ServerName;
     EditText etName, etPassword;
     ToggleButton btnPasswordShow;
     ImageButton ibClear;
-
     UserMasterJSONParser objUserMasterJSONParser = null;
     UserMaster objUserMaster = null;
     SharePreferenceManage objSharePreferenceManage;
@@ -63,6 +63,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         btnSignIn.setOnClickListener(this);
         btnPasswordShow.setOnClickListener(this);
         ibClear.setOnClickListener(this);
+        //end
+
+        //get server name
+        objSharePreferenceManage=new SharePreferenceManage();
+        ServerName=objSharePreferenceManage.GetPreference("ServerPreference","ServerName",SignInActivity.this);
         //end
 
         etName.addTextChangedListener(new TextWatcher() {
