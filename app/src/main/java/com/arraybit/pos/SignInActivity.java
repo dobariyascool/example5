@@ -35,6 +35,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     SharePreferenceManage objSharePreferenceManage;
     ToggleButton tbPasswordShow;
     ImageButton ibClear;
+    int i=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +177,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -194,19 +195,28 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
         else if(id == R.id.changeMode){
 
-            Snackbar.make(getCurrentFocus(),"Change Settings",Snackbar.LENGTH_LONG).setAction("done", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            if(i<5)
+            {
+                i++;
+            }
+            else
+            {
+                i=0;
+                Snackbar.make(getCurrentFocus(),"Change Settings",Snackbar.LENGTH_LONG)
+                    .setAction("Done", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-                    if(objSharePreferenceManage.GetPreference("ServerPreference","ServerName",SignInActivity.this)!=null){
-                        objSharePreferenceManage.RemovePreference("ServerPreference","ServerName",SignInActivity.this);
-                        objSharePreferenceManage.ClearPreference("ServerPreference", SignInActivity.this);
-                        Globals.initializeFragment(new ServerNameFragment(),getSupportFragmentManager());
-                    }
+                            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+                            if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SignInActivity.this) != null) {
+                                objSharePreferenceManage.RemovePreference("ServerPreference", "ServerName", SignInActivity.this);
+                                objSharePreferenceManage.ClearPreference("ServerPreference", SignInActivity.this);
+                                Globals.initializeFragment(new ServerNameFragment(), getSupportFragmentManager());
+                            }
 
-                }
-            }).show();
+                        }
+                    }).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);
