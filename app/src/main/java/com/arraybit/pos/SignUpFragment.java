@@ -31,6 +31,7 @@ import com.rey.material.widget.EditText;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("unchecked")
 public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     EditText etFirstName, etLastName, etEmail, etPassword, etPhone;
@@ -256,16 +257,20 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
 
-            if (status.equals("-1")) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
-            } else if (status.equals("-2")) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgAlreadyExist), Toast.LENGTH_LONG).show();
-                ClearControls();
-            } else if (status.equals("0")) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
-                ClearControls();
+            switch (status) {
+                case "-1":
+                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
+                    break;
+                case "-2":
+                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgAlreadyExist), Toast.LENGTH_LONG).show();
+                    ClearControls();
+                    break;
+                case "0":
+                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
+                    ClearControls();
 
-                getActivity().getSupportFragmentManager().popBackStack();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                    break;
             }
             pDialog.dismiss();
         }
