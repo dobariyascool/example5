@@ -158,8 +158,7 @@ public class Globals {
         }
     }
 
-    public static void HideKeyBoard(Context context, View view) {
-
+    public static void HideKeyBoard(Context context,View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
@@ -202,7 +201,7 @@ public class Globals {
         Waiting(1),
         Served(2),
         Cancel(3),
-        Not(4);
+        NA(4);
 
         private int intValue;
 

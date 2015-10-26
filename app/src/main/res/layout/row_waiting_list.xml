@@ -40,7 +40,8 @@
             android:id="@+id/txtPersons"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.14"
+            android:layout_weight="0.16"
+            android:gravity="center"
             android:textColor="@android:color/white"/>
 
     </LinearLayout>

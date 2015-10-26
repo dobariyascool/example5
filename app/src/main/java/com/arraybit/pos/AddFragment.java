@@ -100,6 +100,7 @@ public class AddFragment extends Fragment {
 
         if (id == android.R.id.home) {
             getActivity().getSupportFragmentManager().popBackStack();
+            Globals.HideKeyBoard(getActivity(),getView());
             return true;
         }
 
