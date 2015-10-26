@@ -1,5 +1,7 @@
 package com.arraybit.parser;
 
+import com.arraybit.global.Service;
+import com.arraybit.global.SpinnerItem;
 import com.arraybit.modal.AreaMaster;
 
 import org.json.JSONArray;
@@ -9,6 +11,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class AreaJSONParser {
+
+    public String SelectAllAreaMaster = "SelectAllAreaMaster";
 
     //region Class Methods
     private AreaMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
@@ -30,7 +34,6 @@ public class AreaJSONParser {
         }
     }
 
-
     private ArrayList<AreaMaster> SetListPropertiesFromJSONArray(JSONArray jsonArray) {
         ArrayList<AreaMaster> lstAreaMaster = new ArrayList<>();
         AreaMaster objAreaMaster;
@@ -51,7 +54,31 @@ public class AreaJSONParser {
             return null;
         }
     }
-
     //endregion
 
+    //region SelectAll
+    public ArrayList<SpinnerItem> SelectAllAreaMaster() {
+        ArrayList<SpinnerItem> lstSpinnerItem = new ArrayList<SpinnerItem>();
+        SpinnerItem objSpinnerItem = null;
+
+        try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllAreaMaster);
+            if (jsonResponse != null) {
+                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllAreaMaster + "Result");
+                if (jsonArray != null) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        objSpinnerItem = new SpinnerItem();
+                        objSpinnerItem.setValue(jsonArray.getJSONObject(i).getInt("AreaMasterId"));
+                        objSpinnerItem.setText(jsonArray.getJSONObject(i).getString("AreaName"));
+
+                        lstSpinnerItem.add(objSpinnerItem);
+                    }
+                }
+            }
+            return lstSpinnerItem;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    //endregion
 }

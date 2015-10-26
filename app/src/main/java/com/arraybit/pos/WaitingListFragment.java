@@ -181,12 +181,9 @@ public class WaitingListFragment extends Fragment {
             }
             waitingViewPager.setAdapter(pagerAdapter);
             waitingTabLayout.setupWithViewPager(waitingViewPager);
-
         }
-
     }
 
     //endregion
-
 
 }
