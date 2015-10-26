@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.arraybit.adapter.SpinnerAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.global.SpinnerItem;
 import com.arraybit.modal.RegisteredUserMaster;
 import com.arraybit.parser.AreaJSONParser;
@@ -41,11 +42,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     RegisteredUserJSONParser objRegisteredUserJSONParser;
     RegisteredUserMaster objRegisteredUserMaster;
     AreaJSONParser objAreaJSONParser;
+    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
     String status;
     int AreaMasterId;
 
     SpinnerAdapter adapter;
-    ArrayList<SpinnerItem> lstSpinnerItem = new ArrayList<SpinnerItem>();
+    ArrayList<SpinnerItem> lstSpinnerItem = new ArrayList<>();
 
     public SignUpFragment() {
         // Required empty public constructor
@@ -135,10 +137,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             } else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
             }
-
-            // Intent intent = new Intent(getActivity(), SignInActivity.class);
-            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //startActivity(intent);
         } else if (v.getId() == R.id.cbSignIn) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
@@ -227,7 +225,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             pDialog.setCancelable(false);
             pDialog.show();
 
-            short i = 1;
             objRegisteredUserMaster = new RegisteredUserMaster();
             objRegisteredUserMaster.setFirstName(etFirstName.getText().toString());
             objRegisteredUserMaster.setLastName(etLastName.getText().toString());
@@ -242,8 +239,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             objRegisteredUserMaster.setPhone(etPhone.getText().toString());
             objRegisteredUserMaster.setlinktoAreaMasterId((short) AreaMasterId);
             objRegisteredUserMaster.setlinktoSourceMasterId((short) Globals.sourceMasterId);
-            objRegisteredUserMaster.setlinktoUserMasterIdCreatedBy(i);
-            objRegisteredUserMaster.setlinktoUserMasterIdUpdatedBy(i);
+            objRegisteredUserMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
             objRegisteredUserMaster.setIsEnabled(true);
 
             objRegisteredUserJSONParser = new RegisteredUserJSONParser();
