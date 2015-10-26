@@ -1,14 +1,17 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class SplashScreenActivity extends AppCompatActivity {
+import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 
+public class SplashScreenActivity extends AppCompatActivity {
+    SharePreferenceManage objSharePreferenceManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,11 +21,17 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
-                Intent i = new Intent(SplashScreenActivity.this, SignInActivity.class);
-                startActivity(i);
-                SplashScreenActivity.this.finish();
-
+                objSharePreferenceManage=new SharePreferenceManage();
+                if(objSharePreferenceManage.GetPreference("ServerPreference","ServerName",SplashScreenActivity.this)==null)
+                {
+                    Globals.initializeFragment(new ServerNameFragment(),getSupportFragmentManager());
+                    finish();
+                }
+                else {
+                    Intent i = new Intent(SplashScreenActivity.this, SignInActivity.class);
+                    startActivity(i);
+                    finish();
+                }
             }
         }, 800);
     }

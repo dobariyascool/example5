@@ -1,8 +1,6 @@
 package com.arraybit.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,21 +99,13 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
 
                         objWaitingMaster.setWaitingMasterId(alWaitingMaster.get(v.getId()).getWaitingMasterId());
                         objWaitingMaster.setWaitingStatus(alWaitingMaster.get(v.getId()).getWaitingStatus());
+                        objWaitingMaster.setPersonMobile(alWaitingMaster.get(v.getId()).getPersonMobile());
 
                         objChildLayoutClickListener.ChangeStatusClick(objWaitingMaster, v.getId());
                     }
                 }
             });
 
-            txtMobileNo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.parse("tel:"+alWaitingMaster.get(childLayout.getId()).getPersonMobile()));
-                    context.startActivity(intent);
-                }
-            });
         }
     }
     //endregion

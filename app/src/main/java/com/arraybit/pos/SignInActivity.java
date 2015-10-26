@@ -26,10 +26,10 @@ import com.rey.material.widget.EditText;
 @SuppressWarnings("ALL")
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static String ServerName;
     EditText etName, etPassword;
     ToggleButton btnPasswordShow;
     ImageButton ibClear;
-
     UserMasterJSONParser objUserMasterJSONParser = null;
     UserMaster objUserMaster = null;
     SharePreferenceManage objSharePreferenceManage;
@@ -63,6 +63,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         btnSignIn.setOnClickListener(this);
         btnPasswordShow.setOnClickListener(this);
         ibClear.setOnClickListener(this);
+        //end
+
+        //get server name
+        objSharePreferenceManage=new SharePreferenceManage();
+        ServerName=objSharePreferenceManage.GetPreference("ServerPreference","ServerName",SignInActivity.this);
         //end
 
         etName.addTextChangedListener(new TextWatcher() {
@@ -195,17 +200,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //fragment backPressed
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getSupportFragmentManager().popBackStack();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
     //end
 
-    public void CreateUserPreference()
-    {
+    public void CreateUserPreference() {
         objSharePreferenceManage = new SharePreferenceManage();
-        if(objUserMaster.getLinktoUserTypeMasterId()==1){
+        if (objUserMaster.getLinktoUserTypeMasterId() == 1) {
 
             if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", SignInActivity.this) == null) {
                 objSharePreferenceManage.CreatePreference("WaiterPreference", "UserName", etName.getText().toString(), SignInActivity.this);
@@ -219,9 +222,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 objSharePreferenceManage.CreatePreference("WaiterPreference", "UserTypeMasterId", String.valueOf(objUserMaster.getLinktoUserTypeMasterId()), SignInActivity.this);
             }
 
-        }
-        else
-        {
+        } else {
             if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SignInActivity.this) == null) {
                 objSharePreferenceManage.CreatePreference("WaitingPreference", "UserName", etName.getText().toString(), SignInActivity.this);
             }

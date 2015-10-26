@@ -2,6 +2,8 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -18,16 +20,16 @@ import com.rey.material.widget.Button;
 @SuppressLint("ValidFragment")
 public class WaitingStatusFragment extends DialogFragment implements View.OnClickListener {
 
-    Button btnServe, btnNot, btnCancel;
-    String waitingStatus;
+    Button btnServe, btnNot, btnCancel, btnCall;
+    String waitingStatus, mobileNo;
     short WaitingMasterId;
     UpdateStatusListener objUpdateStatusListener;
 
-    WaitingMaster objWaitingMaster = null;
+    WaitingMaster objWaitingMaster = null, objWaiting;
 
     public WaitingStatusFragment(WaitingMaster objWaitingMaster) {
-        WaitingMasterId = (short) objWaitingMaster.getWaitingMasterId();
-        waitingStatus = objWaitingMaster.getWaitingStatus();
+        objWaiting = new WaitingMaster();
+        objWaiting = objWaitingMaster;
     }
 
     @Override
@@ -40,12 +42,14 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         btnServe = (Button) view.findViewById(R.id.btnServe);
         btnNot = (Button) view.findViewById(R.id.btnNot);
         btnCancel = (Button) view.findViewById(R.id.btnCancel);
+        btnCall = (Button) view.findViewById(R.id.btnCall);
 
         SetButtonVisibility();
 
         btnServe.setOnClickListener(this);
         btnNot.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+        btnCall.setOnClickListener(this);
 
         objUpdateStatusListener = (UpdateStatusListener) getTargetFragment();
 
@@ -58,15 +62,15 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         objWaitingMaster = new WaitingMaster();
         if (v.getId() == R.id.btnServe) {
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnServe.getText().toString()).getValue());
-            objWaitingMaster.setWaitingMasterId(WaitingMasterId);
+            objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
             new UpdateWaitingStatusLoadingTask().execute();
             dismiss();
 
         }
         if (v.getId() == R.id.btnNot) {
-            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Not").getValue());
-            objWaitingMaster.setWaitingMasterId(WaitingMasterId);
+            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("NA").getValue());
+            objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
 
             new UpdateWaitingStatusLoadingTask().execute();
@@ -75,23 +79,31 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         if (v.getId() == R.id.btnCancel) {
 
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnCancel.getText().toString()).getValue());
-            objWaitingMaster.setWaitingMasterId(WaitingMasterId);
+            objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
             new UpdateWaitingStatusLoadingTask().execute();
+            dismiss();
+        }
+        if (v.getId() == R.id.btnCall) {
+
+            //call the calling interface
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:" + objWaiting.getPersonMobile()));
+            startActivity(intent);
             dismiss();
         }
     }
 
     void SetButtonVisibility() {
-        if (waitingStatus.equals(btnServe.getText().toString())) {
+        if (objWaiting.getWaitingStatus().equals(btnServe.getText().toString())) {
             btnServe.setVisibility(View.GONE);
             btnNot.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);
-        } else if (waitingStatus.equals(btnCancel.getText().toString())) {
+        } else if (objWaiting.getWaitingStatus().equals(btnCancel.getText().toString())) {
             btnServe.setVisibility(View.VISIBLE);
             btnNot.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.GONE);
-        } else if (waitingStatus.equals("Not")) {
+        } else if (objWaiting.getWaitingStatus().equals(btnNot.getText().toString())) {
             btnServe.setVisibility(View.VISIBLE);
             btnNot.setVisibility(View.GONE);
             btnCancel.setVisibility(View.VISIBLE);
