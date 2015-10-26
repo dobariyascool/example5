@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -153,7 +152,5 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             }
             progressDialog.dismiss();
         }
-
     }
-
 }
