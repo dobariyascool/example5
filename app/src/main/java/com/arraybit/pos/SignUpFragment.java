@@ -42,7 +42,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     RegisteredUserJSONParser objRegisteredUserJSONParser;
     RegisteredUserMaster objRegisteredUserMaster;
     AreaJSONParser objAreaJSONParser;
-    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+    SharePreferenceManage objSharePreferenceManage;
     String status;
     int AreaMasterId;
 
@@ -67,7 +67,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         app_bar.setTitle(getResources().getString(R.string.title_fragment_signup));
-        //app_bar.setLogo(R.mipmap.home);
         //end
 
         //EditText
@@ -226,6 +225,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             pDialog.show();
 
             objRegisteredUserMaster = new RegisteredUserMaster();
+            objSharePreferenceManage = new SharePreferenceManage();
             objRegisteredUserMaster.setFirstName(etFirstName.getText().toString());
             objRegisteredUserMaster.setLastName(etLastName.getText().toString());
             objRegisteredUserMaster.setPassword(etPassword.getText().toString());
