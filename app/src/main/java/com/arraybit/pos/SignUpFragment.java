@@ -10,17 +10,24 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.arraybit.adapter.SpinnerAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.global.SpinnerItem;
 import com.arraybit.modal.RegisteredUserMaster;
+import com.arraybit.parser.AreaJSONParser;
 import com.arraybit.parser.RegisteredUserJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
+
+import java.util.ArrayList;
 
 
 public class SignUpFragment extends Fragment implements View.OnClickListener {
@@ -29,11 +36,16 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     RadioGroup rgMain;
     RadioButton rbMale, rbFemale;
     Button btnSignUp;
+    Spinner spnrArea;
     ProgressDialog pDialog;
     RegisteredUserJSONParser objRegisteredUserJSONParser;
     RegisteredUserMaster objRegisteredUserMaster;
+    AreaJSONParser objAreaJSONParser;
     String status;
+    int AreaMasterId;
 
+    SpinnerAdapter adapter;
+    ArrayList<SpinnerItem> lstSpinnerItem = new ArrayList<SpinnerItem>();
 
     public SignUpFragment() {
         // Required empty public constructor
@@ -77,6 +89,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         btnSignUp = (Button) view.findViewById(R.id.btnSignUp);
         //end
 
+        //Spinner
+        spnrArea = (Spinner) view.findViewById(R.id.spnrArea);
+        //
+
         //compound button
         CompoundButton cbSignIn = (CompoundButton) view.findViewById(R.id.cbSignIn);
         //end
@@ -87,6 +103,21 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         //end
 
         setHasOptionsMenu(true);
+
+        spnrArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                View v = parent.getAdapter().getView(position, view, parent);
+                AreaMasterId = v.getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        new SpinnerLoadingTask().execute();
 
         return view;
     }
@@ -112,7 +143,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             getActivity().getSupportFragmentManager().popBackStack();
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -210,7 +240,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             }
             objRegisteredUserMaster.setEmail(etEmail.getText().toString());
             objRegisteredUserMaster.setPhone(etPhone.getText().toString());
-            objRegisteredUserMaster.setlinktoAreaMasterId(i);
+            objRegisteredUserMaster.setlinktoAreaMasterId((short) AreaMasterId);
             objRegisteredUserMaster.setlinktoSourceMasterId((short) Globals.sourceMasterId);
             objRegisteredUserMaster.setlinktoUserMasterIdCreatedBy(i);
             objRegisteredUserMaster.setlinktoUserMasterIdUpdatedBy(i);
@@ -245,4 +275,26 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public class SpinnerLoadingTask extends AsyncTask {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            objAreaJSONParser = new AreaJSONParser();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            lstSpinnerItem = objAreaJSONParser.SelectAllAreaMaster();
+            return lstSpinnerItem;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
+            adapter = new SpinnerAdapter(getActivity(), lstSpinnerItem);
+            spnrArea.setAdapter(adapter);
+        }
+    }
 }

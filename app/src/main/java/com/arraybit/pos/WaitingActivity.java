@@ -161,9 +161,10 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     public void onBackPressed() {
         //fragment backPressed
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            Globals.HideKeyBoard(WaitingActivity.this,getCurrentFocus());
             getSupportFragmentManager().popBackStack();
+
         }
     }
-
     //end
 }

@@ -48,6 +48,7 @@ public class SpinnerAdapter extends BaseAdapter {
         if (view == null) {
             view1 = L_Inflater.inflate(R.layout.row_spinner, viewGroup, false);
         }
+        view1.setId(lstSpinnerItem.get(i).getValue());
         TextView txtview = (TextView) view1.findViewById(R.id.txtSpinnerItem);
         txtview.setText(lstSpinnerItem.get(i).getText());
         return view1;

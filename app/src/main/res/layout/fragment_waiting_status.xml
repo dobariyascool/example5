@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
-        android:text="@string/wsdTitle"
         android:textAllCaps="false" />
+    <!--android:text="@string/wsdTitle"-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +34,6 @@
             android:textAllCaps="false"
             android:textSize="@dimen/control_TextSmall" />
 
-
         <com.rey.material.widget.Button
             android:id="@+id/btnNot"
             android:layout_width="0dp"
@@ -47,42 +46,120 @@
             android:textAllCaps="false"
             android:textSize="@dimen/control_TextSmall" />
 
+
         <com.rey.material.widget.Button
             android:id="@+id/btnCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/white"
-            android:drawableTop="@mipmap/cancel"
+            android:drawableTop="@mipmap/close"
             android:padding="@dimen/control_SpecingSmall"
             android:text="@string/wsdCancel"
             android:textAlignment="viewEnd"
             android:textAllCaps="false"
             android:textSize="@dimen/control_TextSmall" />
 
+        <com.rey.material.widget.Button
+            android:id="@+id/btnCall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:drawableTop="@mipmap/call"
+            android:padding="@dimen/control_SpecingSmall"
+            android:text="@string/wsdCall"
+            android:textAlignment="viewEnd"
+            android:textAllCaps="false"
+            android:textSize="@dimen/control_TextSmall" />
 
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:gravity="center">-->
+
+        <!--<com.rey.material.widget.Button-->
+        <!--android:id="@+id/btnServe"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@android:color/white"-->
+        <!--android:drawableTop="@mipmap/serve"-->
+        <!--android:padding="@dimen/control_SpecingSmall"-->
+        <!--android:text="@string/wsdServe"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:textSize="@dimen/control_TextSmall" />-->
+
+        <!--<com.rey.material.widget.Button-->
+        <!--android:id="@+id/btnCall"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@android:color/white"-->
+        <!--android:drawableTop="@mipmap/cancel"-->
+        <!--android:padding="@dimen/control_SpecingSmall"-->
+        <!--android:text="@string/wsdCancel"-->
+        <!--android:textAlignment="viewEnd"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:textSize="@dimen/control_TextSmall" />-->
+
+        <!--</LinearLayout>-->
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:gravity="center">-->
+
+        <!--<com.rey.material.widget.Button-->
+        <!--android:id="@+id/btnCancel"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@android:color/white"-->
+        <!--android:drawableTop="@mipmap/cancel"-->
+        <!--android:padding="@dimen/control_SpecingSmall"-->
+        <!--android:text="@string/wsdCancel"-->
+        <!--android:textAlignment="viewEnd"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:textSize="@dimen/control_TextSmall" />-->
+
+        <!--<com.rey.material.widget.Button-->
+        <!--android:id="@+id/btnNot"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@android:color/white"-->
+        <!--android:drawableTop="@mipmap/not_available"-->
+        <!--android:padding="@dimen/control_SpecingSmall"-->
+        <!--android:text="@string/wsdNot"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:textSize="@dimen/control_TextSmall" />-->
+
+        <!--</LinearLayout>-->
     </LinearLayout>
 
     <!--<LinearLayout-->
-        <!--android:layout_width="300dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/control_SpecingSmall"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="horizontal">-->
+    <!--android:layout_width="300dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="@dimen/control_SpecingSmall"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="horizontal">-->
 
-        <!-- -->
+    <!-- -->
 
-        <!--<com.rey.material.widget.Button-->
-            <!--android:id="@+id/btn"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@android:color/white"-->
-            <!--android:drawableTop="@mipmap/ic_launcher"-->
-            <!--android:padding="@dimen/control_SpecingSmall"-->
-            <!--android:textAllCaps="false"-->
-            <!--android:text="Not available"-->
-            <!--android:textSize="@dimen/control_TextSmall" />-->
+    <!--<com.rey.material.widget.Button-->
+    <!--android:id="@+id/btn"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@android:color/white"-->
+    <!--android:drawableTop="@mipmap/ic_launcher"-->
+    <!--android:padding="@dimen/control_SpecingSmall"-->
+    <!--android:textAllCaps="false"-->
+    <!--android:text="Not available"-->
+    <!--android:textSize="@dimen/control_TextSmall" />-->
 
     <!--</LinearLayout>-->
 </LinearLayout>
