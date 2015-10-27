@@ -112,8 +112,6 @@ public class Globals {
         activityName = activity.getTitle().toString();
         if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
             GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
-            //dialog show when orientation is change
-            guestLoginDialogFragment.setRetainInstance(true);
             guestLoginDialogFragment.show(fragmentManager, "");
 
         } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
