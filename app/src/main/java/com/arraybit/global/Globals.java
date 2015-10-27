@@ -149,6 +149,7 @@ public class Globals {
         fragmentTransaction.replace(android.R.id.content, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+
     }
 
     public static void InitializeAnimatedFragment(Fragment fragment, FragmentManager fragmentManager){
