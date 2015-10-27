@@ -140,7 +140,7 @@ public class Globals {
 
     public static void initializeFragment(Fragment fragment, FragmentManager fragmentManager) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.animator.slide_up,R.animator.slide_down,R.animator.slide_up,R.animator.slide_down);
+        //fragmentTransaction.setCustomAnimations(R.animator.slide_up,R.animator.slide_down,R.animator.slide_up,R.animator.slide_down);
         //fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out,android.R.anim.fade_in,android.R.anim.fade_out);
         //fragmentTransaction.setCustomAnimations(R.anim.slide_up,R.anim.slide_down,R.anim.slide_up,R.anim.slide_down);
         //fragmentTransaction.setCustomAnimations(R.anim.jump_from_down,R.anim.jump_to_down,R.anim.jump_from_down,R.anim.jump_to_down);
