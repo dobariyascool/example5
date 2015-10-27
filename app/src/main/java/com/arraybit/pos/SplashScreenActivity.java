@@ -27,9 +27,17 @@ public class SplashScreenActivity extends AppCompatActivity {
                     Globals.initializeFragment(new ServerNameFragment(), getSupportFragmentManager());
                 }
                 else {
-                    Intent i = new Intent(SplashScreenActivity.this, SignInActivity.class);
-                    startActivity(i);
-                    finish();
+                    if((objSharePreferenceManage.GetPreference("WaitingPreference", "UserName",SplashScreenActivity.this)==null)&&(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName",SplashScreenActivity.this)==null))
+                    {
+                        Intent intent=new Intent(SplashScreenActivity.this,SignInActivity.class);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent=new Intent(SplashScreenActivity.this,WelcomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             }
         }, 800);

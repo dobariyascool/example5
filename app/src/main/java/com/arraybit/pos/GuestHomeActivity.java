@@ -28,9 +28,10 @@ import java.util.List;
 
 public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    public static boolean isCheck=false;
     ActionBarDrawerToggle actionBarDrawerToggle;
     String userName;
-    public static boolean isCheck=false;
+    LinearLayout guestHomeMainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         //end
 
         //linearlayout
-        LinearLayout guestHomeMainLayout=(LinearLayout)findViewById(R.id.guestHomeMainLayout);
+        guestHomeMainLayout=(LinearLayout)findViewById(R.id.guestHomeMainLayout);
         Globals.SetScaleImageBackground(GuestHomeActivity.this,guestHomeMainLayout,null);
         //end
 
@@ -107,6 +108,14 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         btnConfirm.setOnClickListener(this);
         ibViewChange.setOnClickListener(this);
         //end
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
+        Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null);
+        //}
     }
 
     @Override

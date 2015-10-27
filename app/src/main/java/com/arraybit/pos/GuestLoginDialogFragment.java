@@ -22,7 +22,7 @@ import com.rey.material.widget.EditText;
 @SuppressWarnings("unchecked")
 public class GuestLoginDialogFragment extends DialogFragment {
 
-    EditText etUserName, etPassword;
+    EditText etUserName=null, etPassword=null;
     View view;
     SharePreferenceManage objSharePreferenceManage;
 
@@ -38,12 +38,11 @@ public class GuestLoginDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
         builder.setView(R.layout.fragment_guest_login_dialog);
         builder.setPositiveButton(getResources().getString(R.string.ldLogin), null);
         builder.setNegativeButton(getResources().getString(R.string.ldCancel), null);
         builder.setCancelable(false);
-        setRetainInstance(true);
+        //setRetainInstance(false);
 
         final AlertDialog alertDialog = builder.create();
 

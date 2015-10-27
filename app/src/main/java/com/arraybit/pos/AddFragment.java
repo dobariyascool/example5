@@ -52,7 +52,6 @@ public class AddFragment extends Fragment {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         app_bar.setTitle(getResources().getString(R.string.title_fragment_add));
-        app_bar.setLogo(R.mipmap.app_logo);
 
         setHasOptionsMenu(true);
 

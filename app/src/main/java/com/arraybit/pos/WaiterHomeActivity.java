@@ -1,5 +1,6 @@
 package com.arraybit.pos;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +17,7 @@ import com.arraybit.global.Globals;
 public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,OptionListAdapter.OptionListClickListener {
 
     ActionBarDrawerToggle actionBarDrawerToggle;
+    LinearLayout waiterHomeMainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         //end
 
         //linearlayout
-        LinearLayout waiterHomeMainLayout=(LinearLayout)findViewById(R.id.waiterHomeMainLayout);
+        waiterHomeMainLayout=(LinearLayout)findViewById(R.id.waiterHomeMainLayout);
         Globals.SetScaleImageBackground(WaiterHomeActivity.this,waiterHomeMainLayout,null);
         //end
 
@@ -48,6 +50,14 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         Globals.SetNavigationDrawer(actionBarDrawerToggle,WaiterHomeActivity.this,drawerLayout,app_bar);
         //end
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
+        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null);
+        //}
     }
 
     @Override

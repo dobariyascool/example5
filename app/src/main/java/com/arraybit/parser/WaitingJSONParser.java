@@ -229,7 +229,6 @@ public class WaitingJSONParser {
         ArrayList<WaitingMaster> lstWaitingMaster = null;
         try {
             Date date = new Date();
-            System.out.println(sdfControlDateFormat.format(date));
             JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMasterByWaitingStatusId + "/" + currentPage + "/" + linktoWaitingStatusMasterId + "/" + sdfControlDateFormat.format(date));
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllWaitingMasterByWaitingStatusId + "Result");
