@@ -83,7 +83,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Globals.initializeFragment(new AddFragment(), getSupportFragmentManager());
+                Globals.InitializeAnimatedFragment(new AddFragment(), getSupportFragmentManager());
+                //Globals.initializeFragment(new AddFragment(), getSupportFragmentManager());
             }
         });
         //end
