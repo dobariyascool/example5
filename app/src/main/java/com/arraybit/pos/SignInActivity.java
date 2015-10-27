@@ -45,10 +45,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //app_bar
         Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
         //end
 
         //edittext
