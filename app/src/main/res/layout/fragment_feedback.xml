@@ -1,0 +1,107 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/offwhite"
+    android:orientation="vertical"
+    tools:context="com.arraybit.pos.FeedbackFragment">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+
+            <RadioGroup
+                android:id="@+id/rgMain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbSuggestion"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/fbSuggestion" />
+
+                <RadioButton
+                    android:id="@+id/rbBug"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fbBug" />
+
+
+                <RadioButton
+                    android:id="@+id/rbOther"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fbOther" />
+            </RadioGroup>
+
+            <com.rey.material.widget.EditText
+                android:id="@+id/etName"
+                style="@style/EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/fbName"
+                android:inputType="textCapWords|textCapSentences"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall"
+                android:paddingTop="@dimen/control_SpecingSmall" />
+
+            <com.rey.material.widget.EditText
+                android:id="@+id/etEmail"
+                style="@style/EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/fbEmail"
+                android:inputType="textEmailAddress"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall" />
+
+            <com.rey.material.widget.EditText
+                android:id="@+id/etMobileNo"
+                style="@style/EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/fbMobileNo"
+                android:inputType="number"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall" />
+
+            <com.rey.material.widget.EditText
+                android:id="@+id/etFeedback"
+                style="@style/EditText"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:hint="@string/fbFeedback"
+                android:inputType="textMultiLine"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnAdd"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/control_SpecingSmall"
+                android:text="@string/fbSubmit" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

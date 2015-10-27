@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -27,12 +28,20 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     FragmentTransaction fragmentTransaction;
     RelativeLayout waitingMainLayout;
     SharePreferenceManage objSharePreferenceManage;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting);
 
+        objSharePreferenceManage=new SharePreferenceManage();
+       /*if(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName",WaitingActivity.this)==null)
+        {
+            Intent intent=new Intent(WaitingActivity.this,SignInActivity.class);
+            startActivity(intent);
+        }*/
         //app_bar
         Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
@@ -43,7 +52,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //end
 
         //naviagtionview
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
+        navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
 
@@ -57,7 +66,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //end
 
         //drawerlayout and actionbardrawertoggle
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         Globals.SetNavigationDrawer(actionBarDrawerToggle, WaitingActivity.this, drawerLayout, app_bar);
         //end
 
@@ -125,6 +134,10 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if(id==R.id.logout)
         {
             Globals.ClearPreference(WaitingActivity.this);
+
+           /* objSharePreferenceManage=new SharePreferenceManage();
+            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserName",WaitingActivity.this);
+            objSharePreferenceManage.ClearPreference("WaitingPreference",WaitingActivity.this);*/
         }
         return super.onOptionsItemSelected(item);
     }
@@ -149,11 +162,24 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if(menuItem.getItemId()==R.id.wExit){
             objSharePreferenceManage=new SharePreferenceManage();
             objSharePreferenceManage.RemovePreference("ServerPreference","ServerName",WaitingActivity.this);
+            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserName",WaitingActivity.this);
             objSharePreferenceManage.ClearPreference("ServerPreference", WaitingActivity.this);
+            objSharePreferenceManage.ClearPreference("WaiterPreference",WaitingActivity.this);
             System.exit(0);
             finish();
         }
+        if(menuItem.getItemId()==R.id.wChangeMode)
+        {
+            Intent intent=new Intent(WaitingActivity.this,SignInActivity.class);
+            startActivity(intent);
+        }
 
+        if(menuItem.getItemId()==R.id.wFeedback){
+            drawerLayout.closeDrawer(navigationView);
+            navigationView.setVisibility(View.INVISIBLE);
+            Globals.initializeFragment(new FeedbackFragment(), getSupportFragmentManager());
+
+        }
         return false;
     }
 

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.rey.material.widget.Button;
 
 
@@ -33,8 +34,8 @@ public class ThankYouFragment extends Fragment {
             public void onClick(View v) {
 
                 FragmentManager fragmentManager=getFragmentManager();
-                FeedbackDialogFragment feedbackDialogFragment=new FeedbackDialogFragment();
-                feedbackDialogFragment.show(fragmentManager,"");
+                /*FeedbackFragment feedbackDialogFragment=new FeedbackFragment();
+                feedbackDialogFragment.show(fragmentManager,"");*/
 
             }
         });

@@ -106,6 +106,7 @@ public class FeedbackJSONParser
     }
 
     public String InsertFeedbackMaster(FeedbackMaster objFeedbackMaster) {
+        dt=new Date();
         try {
             JSONStringer stringer = new JSONStringer();
             stringer.object();
@@ -117,11 +118,9 @@ public class FeedbackJSONParser
             stringer.key("Email").value(objFeedbackMaster.getEmail());
             stringer.key("Phone").value(objFeedbackMaster.getPhone());
             stringer.key("Feedback").value(objFeedbackMaster.getFeedback());
-            dt = sdfControlDateFormat.parse(objFeedbackMaster.getFeedbackDateTime());
             stringer.key("FeedbackDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoFeedbackTypeMasterId").value(objFeedbackMaster.getlinktoFeedbackTypeMasterId());
             stringer.key("linktoRegisteredUserMasterId").value(objFeedbackMaster.getlinktoRegisteredUserMasterId());
-            dt = sdfControlDateFormat.parse(objFeedbackMaster.getReplyDateTime());
             stringer.key("ReplyDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("Reply").value(objFeedbackMaster.getReply());
             stringer.key("linktoUserMasterIdRepliedBy").value(objFeedbackMaster.getlinktoUserMasterIdRepliedBy());
