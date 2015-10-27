@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -22,7 +23,7 @@ import com.rey.material.widget.EditText;
 @SuppressWarnings("unchecked")
 public class GuestLoginDialogFragment extends DialogFragment {
 
-    EditText etUserName, etPassword;
+    EditText etUserName=null, etPassword=null;
     View view;
     SharePreferenceManage objSharePreferenceManage;
 
@@ -34,16 +35,29 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (getDialog() != null && getRetainInstance()) {
+            getDialog().setDismissMessage(null);
+        }
+        super.onDestroyView();
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
         builder.setView(R.layout.fragment_guest_login_dialog);
         builder.setPositiveButton(getResources().getString(R.string.ldLogin), null);
         builder.setNegativeButton(getResources().getString(R.string.ldCancel), null);
         builder.setCancelable(false);
-        setRetainInstance(true);
+        //setRetainInstance(false);
 
         final AlertDialog alertDialog = builder.create();
 

@@ -42,19 +42,19 @@
         </activity>
         <activity
             android:name=".GuestHomeActivity"
-            android:configChanges="orientation"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_home"
             android:theme="@style/FullScreenTheme" >
         </activity>
         <activity
             android:name=".GuestOrderActivity"
-            android:configChanges="orientation"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_guest_order"
             android:theme="@style/FullScreenTheme" >
         </activity>
         <activity
             android:name=".WaiterHomeActivity"
-            android:configChanges="orientation"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_waiter_home"
             android:theme="@style/FullScreenTheme" >
         </activity>
