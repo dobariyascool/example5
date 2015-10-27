@@ -148,8 +148,8 @@ public class WaitingJSONParser {
         }
     }
 
-    public String UpdateWaitingStatus(WaitingMaster objWaitingMaster){
-        try{
+    public String UpdateWaitingStatus(WaitingMaster objWaitingMaster) {
+        try {
             JSONStringer stringer = new JSONStringer();
             stringer.object();
 
@@ -167,7 +167,7 @@ public class WaitingJSONParser {
             JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateWaitingStatus + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
 
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             return "-1";
         }
     }
@@ -212,7 +212,7 @@ public class WaitingJSONParser {
     public ArrayList<WaitingMaster> SelectAllWaitingMaster(int currentPage) {
         ArrayList<WaitingMaster> lstWaitingMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMaster +"/"+currentPage);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMaster + "/" + currentPage);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllWaitingMaster + "Result");
                 if (jsonArray != null) {
@@ -220,16 +220,17 @@ public class WaitingJSONParser {
                 }
             }
             return lstWaitingMaster;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
 
-    public ArrayList<WaitingMaster> SelectAllWaitingMasterByWaitingStatusMasterId(int currentPage,int linktoWaitingStatusMasterId) {
+    public ArrayList<WaitingMaster> SelectAllWaitingMasterByWaitingStatusMasterId(int currentPage, int linktoWaitingStatusMasterId) {
         ArrayList<WaitingMaster> lstWaitingMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMasterByWaitingStatusId +"/"+currentPage+"/"+linktoWaitingStatusMasterId);
+            Date date = new Date();
+            System.out.println(sdfControlDateFormat.format(date));
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMasterByWaitingStatusId + "/" + currentPage + "/" + linktoWaitingStatusMasterId + "/" + sdfControlDateFormat.format(date));
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllWaitingMasterByWaitingStatusId + "Result");
                 if (jsonArray != null) {
@@ -237,8 +238,7 @@ public class WaitingJSONParser {
                 }
             }
             return lstWaitingMaster;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }

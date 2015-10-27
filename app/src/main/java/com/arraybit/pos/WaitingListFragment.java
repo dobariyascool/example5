@@ -161,7 +161,6 @@ public class WaitingListFragment extends Fragment {
 
                 WaitingStatus[j] = alWaitingStatusMaster.get(j).getWaitingStatus();
                 alWaitingMaster[j] = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(1, alWaitingStatusMaster.get(j).getWaitingStatusMasterId());
-
             }
             return null;
         }
@@ -175,8 +174,16 @@ public class WaitingListFragment extends Fragment {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
             } else {
 
-                for (int k = 0; k < alWaitingMaster.length; k++) {
-                    pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]);
+                if(alWaitingMaster.length > 0) {
+                    for (int k = 0; k < alWaitingMaster.length; k++) {
+                        if(alWaitingMaster[k]==null) {
+                            pagerAdapter.addFragment(WaitingTabFragment.createInstance(null),WaitingStatus[k]);
+                        }
+                        else
+                        {
+                            pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]);
+                        }
+                    }
                 }
             }
             waitingViewPager.setAdapter(pagerAdapter);

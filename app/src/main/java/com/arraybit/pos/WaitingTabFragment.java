@@ -78,11 +78,13 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
     }
 
     private void setupRecyclerView(RecyclerView rvWaiting) {
-        waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
-        rvWaiting.setAdapter(waitingListAdapter);
-        rvWaiting.setLayoutManager(linearLayoutManager);
-        if (rvWaiting.getAdapter().getItemCount() > 0) {
-            rvWaiting.setId((int) alWaitingMaster.get(0).getlinktoWaitingStatusMasterId());
+        if(alWaitingMaster!=null) {
+            waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
+            rvWaiting.setAdapter(waitingListAdapter);
+            rvWaiting.setLayoutManager(linearLayoutManager);
+            if (rvWaiting.getAdapter().getItemCount() > 0) {
+                rvWaiting.setId((int) alWaitingMaster.get(0).getlinktoWaitingStatusMasterId());
+            }
         }
     }
 
