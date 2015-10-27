@@ -139,6 +139,18 @@
     <string name="afSubmit">Submit</string>
     <!-- end -->
 
+    <!-- fragment feedback -->
+    <string name="fbName">Name</string>
+    <string name="fbEmail">Email</string>
+    <string name="fbMobileNo">Mobile No</string>
+    <string name="fbFeedback">Feedback</string>
+    <string name="fbSubmit">Submit</string>
+    <string name="fbOther">Other Query</string>
+    <string name="fbBug">Bug Report</string>
+    <string name="fbSuggestion">Suggestion</string>
+
+    <!-- end -->
+
     <!-- fragment server -->
     <string name="sfName">Server Name</string>
     <string name="sfSubmit">Submit</string>

@@ -1,49 +1,53 @@
 package com.arraybit.pos;
 
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
-import com.arraybit.modal.WaitingMaster;
-import com.arraybit.parser.WaitingJSONParser;
+import com.arraybit.modal.FeedbackMaster;
+import com.arraybit.parser.FeedbackJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
-public class AddFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class FeedbackFragment extends Fragment {
 
-    EditText etName, etMobileNo, etPersons;
+    EditText etName, etEmail, etMobileNo, etFeedback;
+    RadioGroup rgMain;
+    RadioButton rbBug, rbSuggestion, rbOther;
     Button btnAdd;
     ProgressDialog pDialog;
-    WaitingMaster objWaitingMaster;
-    WaitingJSONParser objWaitingJSONParser;
-    SharePreferenceManage objSharePreferenceManage;
     String status;
 
-    public AddFragment() {
+    FeedbackJSONParser objFeedbackJSONParser;
+    FeedbackMaster objFeedbackMaster;
+    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+
+    public FeedbackFragment() {
         // Required empty public constructor
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add, container, false);
+        View view = inflater.inflate(R.layout.fragment_feedback, container, false);
 
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
 
@@ -52,93 +56,75 @@ public class AddFragment extends Fragment {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         app_bar.setTitle(getResources().getString(R.string.title_fragment_add));
+        app_bar.setLogo(R.mipmap.app_logo);
 
         setHasOptionsMenu(true);
 
         etName = (EditText) view.findViewById(R.id.etName);
+        etEmail = (EditText) view.findViewById(R.id.etEmail);
         etMobileNo = (EditText) view.findViewById(R.id.etMobileNo);
-        etPersons = (EditText) view.findViewById(R.id.etPersons);
+        etFeedback = (EditText) view.findViewById(R.id.etFeedback);
+        rgMain = (RadioGroup) view.findViewById(R.id.rgMain);
+        rbBug = (RadioButton) view.findViewById(R.id.rbBug);
+        rbSuggestion = (RadioButton) view.findViewById(R.id.rbSuggestion);
+        rbOther = (RadioButton) view.findViewById(R.id.rbOther);
+
         btnAdd = (Button) view.findViewById(R.id.btnAdd);
+
+        etName.setText(objSharePreferenceManage.GetPreference("WaitingPreference","UserName",getActivity()));
 
         return view;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Globals.HideKeyBoard(getActivity(),v);
+
+                Globals.HideKeyBoard(getActivity(), v);
 
                 if (!ValidateControls()) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
                     return;
                 }
                 if (Service.CheckNet(getActivity())) {
+
                     new AddLodingTask().execute();
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
                 }
+
             }
         });
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            getActivity().getSupportFragmentManager().popBackStack();
-            Globals.HideKeyBoard(getActivity(),getView());
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-
-        menu.findItem(R.id.mWaiting).setVisible(false);
-        menu.findItem(R.id.logout).setVisible(false);
     }
 
     void ClearControls() {
         etName.setText("");
         etMobileNo.setText("");
-        etPersons.setText("");
+        etEmail.setText("");
+        etFeedback.setText("");
     }
 
     boolean ValidateControls() {
         boolean IsValid = true;
-        if (etName.getText().toString().equals("")
-                && !etMobileNo.getText().toString().equals("")
-                && !etPersons.getText().toString().equals("")) {
-            etName.setError("Enter " + getResources().getString(R.string.afName));
+        if (etEmail.getText().toString().equals("")
+                && !etFeedback.getText().toString().equals("")) {
             etMobileNo.setError("");
-            etPersons.setError("");
+            etEmail.setError("");
+            etFeedback.setError("");
             IsValid = false;
         }
-        if (etMobileNo.getText().toString().equals("")) {
-            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
-            etPersons.setError("");
+        if (etEmail.getText().toString().equals("")) {
+            etEmail.setError("Enter " + getResources().getString(R.string.fbEmail));
+            etFeedback.setError("");
             IsValid = false;
         }
-        if (etName.getText().toString().equals("")
-                && etMobileNo.getText().toString().equals("")
-                && etPersons.getText().toString().equals("")) {
-            etName.setError("Enter " + getResources().getString(R.string.afName));
-            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
-            etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
+        if (etEmail.getText().toString().equals("")) {
+            etEmail.setError("Enter " + getResources().getString(R.string.fbEmail));
+            etFeedback.setError("Enter " + getResources().getString(R.string.fbFeedback));
             IsValid = false;
         }
         if (!etMobileNo.getText().toString().equals("")) {
@@ -162,23 +148,30 @@ public class AddFragment extends Fragment {
             pDialog.setCancelable(false);
             pDialog.show();
 
-            objWaitingMaster = new WaitingMaster();
-            objWaitingMaster.setPersonName(etName.getText().toString());
-            objWaitingMaster.setPersonMobile(etMobileNo.getText().toString());
-            objWaitingMaster.setNoOfPersons(Short.valueOf(etPersons.getText().toString()));
-            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Waiting").getValue());
+            short i = 1;
+            objFeedbackMaster = new FeedbackMaster();
+            objFeedbackMaster.setName(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", getActivity()));
+            objFeedbackMaster.setEmail(etEmail.getText().toString());
+            objFeedbackMaster.setPhone(etMobileNo.getText().toString());
+            objFeedbackMaster.setFeedback(etFeedback.getText().toString());
 
-            objSharePreferenceManage=new SharePreferenceManage();
-            if(objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity())!=null)
-            {
-                objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity())));
+            if (rbBug.isChecked() == true) {
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbakcType.BugReport.getValue());
+            } else if (rbSuggestion.isChecked() == true) {
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbakcType.Suggestion.getValue());
+            } else if (rbOther.isChecked() == true) {
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbakcType.OtherQuery.getValue());
             }
-            objWaitingJSONParser = new WaitingJSONParser();
+
+            objFeedbackMaster.setlinktoRegisteredUserMasterId(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity())));
+            objFeedbackMaster.setlinktoBusinessTypeMasterId(i);
+            objFeedbackMaster.setIsDeleted(false);
+            objFeedbackJSONParser = new FeedbackJSONParser();
         }
 
         @Override
-        protected Object doInBackground(Object[] objects) {
-            status = objWaitingJSONParser.InsertWaitingMaster(objWaitingMaster);
+        protected Object doInBackground(Object[] params) {
+            status = objFeedbackJSONParser.InsertFeedbackMaster(objFeedbackMaster);
             return status;
         }
 
@@ -193,11 +186,13 @@ public class AddFragment extends Fragment {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
                 ClearControls();
 
-                Intent intent=new Intent(getActivity(),WaitingActivity.class);
+                Intent intent = new Intent(getActivity(), WaitingActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 getActivity().startActivity(intent);
             }
             pDialog.dismiss();
         }
+
     }
 }
+

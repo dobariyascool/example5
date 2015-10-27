@@ -28,6 +28,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     FragmentTransaction fragmentTransaction;
     RelativeLayout waitingMainLayout;
     SharePreferenceManage objSharePreferenceManage;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //end
 
         //naviagtionview
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
+        navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
 
@@ -64,7 +66,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //end
 
         //drawerlayout and actionbardrawertoggle
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         Globals.SetNavigationDrawer(actionBarDrawerToggle, WaitingActivity.this, drawerLayout, app_bar);
         //end
 
@@ -169,6 +171,13 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         {
             Intent intent=new Intent(WaitingActivity.this,SignInActivity.class);
             startActivity(intent);
+        }
+
+        if(menuItem.getItemId()==R.id.wFeedback){
+            drawerLayout.closeDrawer(navigationView);
+            navigationView.setVisibility(View.INVISIBLE);
+            Globals.initializeFragment(new FeedbackFragment(), getSupportFragmentManager());
+
         }
         return false;
     }

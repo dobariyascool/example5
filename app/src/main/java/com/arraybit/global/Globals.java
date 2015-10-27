@@ -213,6 +213,24 @@ public class Globals {
         }
     }
 
+    public enum FeedbakcType{
+        OtherQuery(1),
+        BugReport(2),
+        Suggestion(3);
+
+        private int intValue;
+
+        private FeedbakcType(int value) {
+            intValue = value;
+
+        }
+
+        public int getValue() {
+            return intValue;
+        }
+
+    }
+
     //endregion
 
     //region CommentCode
