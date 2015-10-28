@@ -31,7 +31,7 @@ public class FeedbackFragment extends Fragment {
     EditText etName, etEmail, etMobileNo, etFeedback;
     RadioGroup rgMain;
     RadioButton rbBug, rbSuggestion, rbOther;
-    Button btnAdd;
+    Button btnSubmit;
     ProgressDialog pDialog;
     String status;
 
@@ -68,7 +68,7 @@ public class FeedbackFragment extends Fragment {
         rbSuggestion = (RadioButton) view.findViewById(R.id.rbSuggestion);
         rbOther = (RadioButton) view.findViewById(R.id.rbOther);
 
-        btnAdd = (Button) view.findViewById(R.id.btnAdd);
+        btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
 
         etName.setText(objSharePreferenceManage.GetPreference("WaitingPreference","UserName",getActivity()));
 
@@ -79,7 +79,7 @@ public class FeedbackFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
