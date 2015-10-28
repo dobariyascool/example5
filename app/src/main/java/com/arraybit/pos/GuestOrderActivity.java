@@ -134,7 +134,7 @@ public class GuestOrderActivity extends AppCompatActivity implements NavigationV
             finish();
         } else if (v.getId() == R.id.btnCheckOut) {
             ThankYouFragment thankYouFragment = new ThankYouFragment();
-            Globals.initializeFragment(thankYouFragment, getSupportFragmentManager());
+            Globals.InitializeFragment(thankYouFragment, getSupportFragmentManager());
         } else if (v.getId() == R.id.fabAddMore) {
             finish();
         }

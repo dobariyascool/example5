@@ -90,14 +90,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-//        if(menuItem.isChecked())
-//        {
-//            menuItem.setChecked(false);
-//        }
-//        else
-//        {
-//            menuItem.setChecked(true);
-//        }
         switch(menuItem.getItemId()){
 
             case R.id.home:

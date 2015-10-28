@@ -16,16 +16,11 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
-    private List<String> mItemList;
     OrderItemDetail orderItemDetail;
     FragmentManager fragmentManager;
     boolean isViewChange;
     View view;
-
-    public interface OrderItemDetail
-    {
-        public void ItemDetail();
-    }
+    private List<String> mItemList;
 
     public RecyclerAdapter(List<String> itemList,FragmentManager fragmentManager,boolean isViewChange) {
         mItemList = itemList;
@@ -54,7 +49,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 //orderItemDetail=(OrderItemDetail)context;
                 //orderItemDetail.ItemDetail();
                 DetailFragment detailFragment=new DetailFragment();
-                Globals.initializeFragment(detailFragment, fragmentManager);
+                Globals.InitializeFragment(detailFragment, fragmentManager);
 
             }
         });
@@ -73,6 +68,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return mItemList == null ? 0 : mItemList.size();
+    }
+
+    public interface OrderItemDetail
+    {
+        public void ItemDetail();
     }
 
     public static class RecyclerItemViewHolder extends RecyclerView.ViewHolder {

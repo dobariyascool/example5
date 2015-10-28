@@ -24,7 +24,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 objSharePreferenceManage=new SharePreferenceManage();
                 if(objSharePreferenceManage.GetPreference("ServerPreference","ServerName",SplashScreenActivity.this)==null)
                 {
-                    Globals.initializeFragment(new ServerNameFragment(), getSupportFragmentManager());
+                    Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
                 }
                 else {
 

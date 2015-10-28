@@ -21,6 +21,7 @@ import com.arraybit.parser.WaitingJSONParser;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("unchecked")
 public class WaitingTabFragment extends Fragment implements WaitingListAdapter.childLayoutClickListener, WaitingStatusFragment.UpdateStatusListener {
 
     public final static String ITEMS_COUNT_KEY = "WaitingTabFragment$ItemsCount";

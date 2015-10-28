@@ -86,6 +86,7 @@ public class TableTabFragment extends Fragment {
         }
     }
 
+    @SuppressWarnings("ResourceType")
     class TableMasterLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;

@@ -117,7 +117,7 @@ public class Globals {
 
         } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
             SignUpFragment signUpFragment = new SignUpFragment();
-            Globals.initializeFragment(signUpFragment, fragmentManager);
+            Globals.InitializeFragment(signUpFragment, fragmentManager);
 //            GuestRegistrationDialogFragment guestRegistrationDialogFragment = new GuestRegistrationDialogFragment();
 //            guestRegistrationDialogFragment.show(fragmentManager, "");
         }
@@ -138,7 +138,7 @@ public class Globals {
         }
     }
 
-    public static void initializeFragment(Fragment fragment, FragmentManager fragmentManager) {
+    public static void InitializeFragment(Fragment fragment, FragmentManager fragmentManager) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         //fragmentTransaction.setCustomAnimations(R.animator.slide_up,R.animator.slide_down,R.animator.slide_up,R.animator.slide_down);
         //fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out,android.R.anim.fade_in,android.R.anim.fade_out);

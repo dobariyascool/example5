@@ -173,7 +173,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if(menuItem.getItemId()==R.id.wFeedback){
             drawerLayout.closeDrawer(navigationView);
             navigationView.setVisibility(View.INVISIBLE);
-            Globals.initializeFragment(new FeedbackFragment(), getSupportFragmentManager());
+            Globals.InitializeFragment(new FeedbackFragment(), getSupportFragmentManager());
 
         }
         return false;
