@@ -24,6 +24,11 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        //get server name
+        objSharePreferenceManage = new SharePreferenceManage();
+        SignInActivity.ServerName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", WelcomeActivity.this);
+        //end
+
         gestureDetector = new GestureDetector(this, this);
     }
 

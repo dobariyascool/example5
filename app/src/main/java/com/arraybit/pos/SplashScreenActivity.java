@@ -27,6 +27,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     Globals.initializeFragment(new ServerNameFragment(), getSupportFragmentManager());
                 }
                 else {
+
                     if((objSharePreferenceManage.GetPreference("WaitingPreference", "UserName",SplashScreenActivity.this)==null)&&(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName",SplashScreenActivity.this)==null))
                     {
                         Intent intent=new Intent(SplashScreenActivity.this,SignInActivity.class);

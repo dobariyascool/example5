@@ -28,7 +28,7 @@ import com.rey.material.widget.EditText;
 @SuppressWarnings("ALL")
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static String ServerName;
+    public static String ServerName=null;
     EditText etName, etPassword;
     UserMasterJSONParser objUserMasterJSONParser = null;
     UserMaster objUserMaster = null;
