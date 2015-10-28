@@ -143,7 +143,7 @@ public class AddFragment extends Fragment {
         }
         if (!etMobileNo.getText().toString().equals("")) {
             if (etMobileNo.getText().length() != 10) {
-                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo) + "number");
+                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
                 IsValid = false;
             }
         }
