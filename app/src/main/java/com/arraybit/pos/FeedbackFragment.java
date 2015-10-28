@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
@@ -55,8 +57,7 @@ public class FeedbackFragment extends Fragment {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        app_bar.setTitle(getResources().getString(R.string.title_fragment_add));
-        app_bar.setLogo(R.mipmap.app_logo);
+        app_bar.setTitle(getResources().getString(R.string.title_fragment_feedback));
 
         setHasOptionsMenu(true);
 
@@ -193,6 +194,85 @@ public class FeedbackFragment extends Fragment {
             pDialog.dismiss();
         }
 
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        menu.findItem(R.id.mWaiting).setVisible(false);
+        menu.findItem(R.id.logout).setVisible(false);
+    }
+
+    public class AddLodingTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(getActivity());
+            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            pDialog.setIndeterminate(true);
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+            short i = 1;
+            objFeedbackMaster = new FeedbackMaster();
+            objFeedbackMaster.setName(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", getActivity()));
+            objFeedbackMaster.setEmail(etEmail.getText().toString());
+            objFeedbackMaster.setPhone(etMobileNo.getText().toString());
+            objFeedbackMaster.setFeedback(etFeedback.getText().toString());
+
+            if (rbBug.isChecked() == true) {
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbakcType.BugReport.getValue());
+            } else if (rbSuggestion.isChecked() == true) {
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbakcType.Suggestion.getValue());
+            } else if (rbOther.isChecked() == true) {
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbakcType.OtherQuery.getValue());
+            }
+
+            objFeedbackMaster.setlinktoRegisteredUserMasterId(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity())));
+            objFeedbackMaster.setlinktoBusinessTypeMasterId(i);
+            objFeedbackMaster.setIsDeleted(false);
+            objFeedbackJSONParser = new FeedbackJSONParser();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            status = objFeedbackJSONParser.InsertFeedbackMaster(objFeedbackMaster);
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+
+            if (status.equals("-1")) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
+            } else if (status.equals("0")) {
+
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
+                ClearControls();
+
+                Intent intent = new Intent(getActivity(), WaitingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                getActivity().startActivity(intent);
+            }
+            pDialog.dismiss();
+        }
+
+    }    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            getActivity().getSupportFragmentManager().popBackStack();
+            Globals.HideKeyBoard(getActivity(),getView());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 

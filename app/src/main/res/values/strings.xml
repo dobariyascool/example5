@@ -16,6 +16,7 @@
     <string name="title_activity_waiting">Waiting List</string>
     <string name="title_fragment_add">Add</string>
     <string name="title_fragment_profile">My Profile</string>
+    <string name="title_fragment_feedback">Feedback</string>
     <!-- end -->
 
     <string name="hello_world">Hello world!</string>

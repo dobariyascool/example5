@@ -160,11 +160,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
         if(menuItem.getItemId()==R.id.wExit){
-            objSharePreferenceManage=new SharePreferenceManage();
-            objSharePreferenceManage.RemovePreference("ServerPreference","ServerName",WaitingActivity.this);
-            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserName",WaitingActivity.this);
-            objSharePreferenceManage.ClearPreference("ServerPreference", WaitingActivity.this);
-            objSharePreferenceManage.ClearPreference("WaiterPreference",WaitingActivity.this);
             System.exit(0);
             finish();
         }
@@ -172,6 +167,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         {
             Intent intent=new Intent(WaitingActivity.this,SignInActivity.class);
             startActivity(intent);
+            Globals.ClearPreference(WaitingActivity.this);
+            finish();
         }
 
         if(menuItem.getItemId()==R.id.wFeedback){
