@@ -167,7 +167,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         {
             Intent intent=new Intent(WaitingActivity.this,SignInActivity.class);
             startActivity(intent);
-            Globals.ClearPreference(WaitingActivity.this);
             finish();
         }
 
