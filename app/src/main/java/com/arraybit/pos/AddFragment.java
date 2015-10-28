@@ -24,6 +24,7 @@ import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
+@SuppressWarnings("unchecked")
 public class AddFragment extends Fragment {
 
     EditText etName, etMobileNo, etPersons;
