@@ -59,6 +59,7 @@ public class WaitingListFragment extends Fragment {
             Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
             //Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgCheckConnection));
         }
+
         return view;
     }
 
@@ -174,13 +175,11 @@ public class WaitingListFragment extends Fragment {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
             } else {
 
-                if(alWaitingMaster.length > 0) {
+                if (alWaitingMaster.length > 0) {
                     for (int k = 0; k < alWaitingMaster.length; k++) {
-                        if(alWaitingMaster[k]==null) {
-                            pagerAdapter.addFragment(WaitingTabFragment.createInstance(null),WaitingStatus[k]);
-                        }
-                        else
-                        {
+                        if (alWaitingMaster[k] == null) {
+                            pagerAdapter.addFragment(WaitingTabFragment.createInstance(null), WaitingStatus[k]);
+                        } else {
                             pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]);
                         }
                     }

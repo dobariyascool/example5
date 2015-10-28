@@ -211,7 +211,7 @@ public class Globals {
 
     public enum WaitingStatus{
         Waiting(1),
-        Served(2),
+        Serve(2),
         Cancel(3),
         NA(4);
 

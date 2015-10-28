@@ -62,6 +62,8 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
     public void WaitingListDataRemove(int position) {
         alWaitingMaster.remove(position);
         notifyItemRemoved(position);
+        //change the index
+        notifyDataSetChanged();
     }
 
     //region interface
