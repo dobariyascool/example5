@@ -28,14 +28,14 @@ import com.rey.material.widget.EditText;
 @SuppressWarnings("ALL")
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static String ServerName=null;
+    public static String ServerName = null;
     EditText etName, etPassword;
     UserMasterJSONParser objUserMasterJSONParser = null;
     UserMaster objUserMaster = null;
     SharePreferenceManage objSharePreferenceManage;
     ToggleButton tbPasswordShow;
     ImageButton ibClear;
-    int i=0;
+    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,30 +188,26 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
             }
             return true;
-        }
-        else if(id == R.id.changeMode){
+        } else if (id == R.id.changeMode) {
 
-            if(i<5)
-            {
+            if (i < 5) {
                 i++;
-            }
-            else
-            {
-                i=0;
-                Snackbar.make(getCurrentFocus(),"Change Settings",Snackbar.LENGTH_LONG)
-                    .setAction("Done", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+            } else {
+                i = 0;
+                Snackbar.make(getCurrentFocus(), "Change Settings", Snackbar.LENGTH_LONG)
+                        .setAction("Done", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-                            if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SignInActivity.this) != null) {
-                                objSharePreferenceManage.RemovePreference("ServerPreference", "ServerName", SignInActivity.this);
-                                objSharePreferenceManage.ClearPreference("ServerPreference", SignInActivity.this);
-                                Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
+                                SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+                                if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SignInActivity.this) != null) {
+                                    objSharePreferenceManage.RemovePreference("ServerPreference", "ServerName", SignInActivity.this);
+                                    objSharePreferenceManage.ClearPreference("ServerPreference", SignInActivity.this);
+                                    Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
+                                }
+
                             }
-
-                        }
-                    }).show();
+                        }).show();
             }
         }
 
