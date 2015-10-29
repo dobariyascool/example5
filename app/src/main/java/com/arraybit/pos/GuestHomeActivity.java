@@ -159,6 +159,10 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             case R.id.home:
                 return true;
 
+            case R.id.profile:
+                Intent intent=new Intent(GuestHomeActivity.this,HotelFragment.class);
+                startActivity(intent);
+
         }
 
         return false;

@@ -5,8 +5,14 @@
 
         <item
             android:id="@+id/home"
-            android:title="@string/navHome"
-            android:icon="@mipmap/home"/>
+            android:icon="@mipmap/home"
+            android:title="@string/navHome"/>
+
+        <item
+            android:id="@+id/profile"
+            android:icon="@mipmap/plus"
+            android:title="Profile"
+            />
 
         <!--<item-->
             <!--android:id="@+id/login"-->
@@ -22,14 +28,14 @@
 
         <item
             android:id="@+id/offers"
-            android:title="@string/navOffers"
-            android:icon="@mipmap/offers"/>
+            android:icon="@mipmap/offers"
+            android:title="@string/navOffers"/>
 
 
         <item
             android:id="@+id/changeMode"
-            android:title="@string/navChangeMode"
-            android:icon="@mipmap/change_mode"/>
+            android:icon="@mipmap/change_mode"
+            android:title="@string/navChangeMode"/>
 
         <item
             android:id="@+id/rate"
