@@ -1,20 +1,56 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.arraybit.pos.AllTablesFragment">
 
-    <android.support.design.widget.TabLayout
-        style="@style/TabLayout"
-        android:id="@+id/tableTabLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:tabMode="scrollable" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tableTabLayout"
+            style="@style/TabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:tabMode="scrollable" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/tableViewPager"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/tableViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <com.github.clans.fab.FloatingActionMenu xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/famRoot"
+        style="@style/FloatingMenu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:padding="@dimen/control_SpecingSmall"
+        app:menu_icon="@mipmap/fmenu">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabVacant"
+            style="@style/FloatingButtonWithTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_label="@string/tsVacant" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabBusy"
+            style="@style/FloatingButtonWithTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_label="@string/tsBusy" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabAll"
+            style="@style/FloatingButtonWithTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_label="@string/tsAll" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+</RelativeLayout>
