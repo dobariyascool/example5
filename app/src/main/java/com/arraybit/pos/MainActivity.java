@@ -1,31 +1,39 @@
 package com.arraybit.pos;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.view.View;
+
+import com.arraybit.global.Globals;
+import com.rey.material.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout layout1;
+  //  LinearLayout layout1;
+    Button btnA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       layout1 = (LinearLayout) findViewById(R.id.layout1);
+        btnA=(Button) findViewById(R.id.btnA);
+        btnA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int i=1;
+                Globals.InitializeFragment(new GalleryFragment(i), getSupportFragmentManager());
+            }
+        });
+
+      /* layout1 = (LinearLayout) findViewById(R.id.layout1);
 
        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
        Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground), displayMetrics.widthPixels, displayMetrics.heightPixels);
-       layout1.setBackground(new BitmapDrawable(getResources(),bitmap));
+       layout1.setBackground(new BitmapDrawable(getResources(),bitmap));*/
        //DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 //
 //        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground);
