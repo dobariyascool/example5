@@ -227,14 +227,16 @@ public class Globals {
         }
     }
 
-    public enum FeedbakcType{
+
+
+    public enum FeedbackType{
         OtherQuery(1),
         BugReport(2),
         Suggestion(3);
 
         private int intValue;
 
-        private FeedbakcType(int value) {
+        private FeedbackType(int value) {
             intValue = value;
 
         }
