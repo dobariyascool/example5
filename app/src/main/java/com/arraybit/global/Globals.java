@@ -150,9 +150,9 @@ public class Globals {
         fragmentTransaction.commit();
     }
 
-    public static void InitializeAnimatedFragment(Fragment fragment, FragmentManager fragmentManager){
+    public static void InitializeAnimatedFragment(Fragment fragment, FragmentManager fragmentManager) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_up,R.anim.slide_down,R.anim.slide_up,R.anim.slide_down);
+        fragmentTransaction.setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down);
         fragmentTransaction.replace(android.R.id.content, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -170,46 +170,43 @@ public class Globals {
         }
     }
 
-    public static void HideKeyBoard(Context context,View view) {
+    public static void HideKeyBoard(Context context, View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static void ClearPreference(Activity activity){
+    public static void ClearPreference(Activity activity) {
 
         activityName = activity.getTitle().toString();
 
-        if(activityName.equals(activity.getResources().getString(R.string.title_activity_waiting)))
-        {
-            Intent intent=new Intent(activity,SignInActivity.class);
+        if (activityName.equals(activity.getResources().getString(R.string.title_activity_waiting))) {
+            Intent intent = new Intent(activity, SignInActivity.class);
             activity.startActivity(intent);
             activity.finish();
 
             SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
             objSharePreferenceManage.RemovePreference("WaitingPreference", "UserName", activity);
-            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserMasterId",activity);
-            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserTypeMasterId",activity);
+            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserMasterId", activity);
+            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserTypeMasterId", activity);
 
-            objSharePreferenceManage.ClearPreference("WaitingPreference",activity);
-        }
-        else if(activityName.equals(activity.getResources().getString(R.string.title_activity_waiter_home)))
-        {
-            Intent intent=new Intent(activity,SignInActivity.class);
+            objSharePreferenceManage.ClearPreference("WaitingPreference", activity);
+        } else if (activityName.equals(activity.getResources().getString(R.string.title_activity_waiter_home))) {
+            Intent intent = new Intent(activity, SignInActivity.class);
             activity.startActivity(intent);
             activity.finish();
 
             SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
             objSharePreferenceManage.RemovePreference("WaiterPreference", "UserName", activity);
-            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserMasterId",activity);
-            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId",activity);
+            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserMasterId", activity);
+            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId", activity);
 
-            objSharePreferenceManage.ClearPreference("WaiterPreference",activity);
+            objSharePreferenceManage.ClearPreference("WaiterPreference", activity);
         }
     }
 
     //region Enum
 
-    public enum WaitingStatus{
+    public enum WaitingStatus {
         Waiting(1),
         Serve(2),
         Cancel(3),
@@ -227,9 +224,29 @@ public class Globals {
         }
     }
 
+    public enum Days {
+        Day0("Sunday"),
+        Day1("Monday"),
+        Day2("Tuesday"),
+        Day3("Wednesday"),
+        Day4("Thursday"),
+        Day5("Friday"),
+        Day6("Saturday");
+
+        private String intValue;
+
+        private Days(String value) {
+            intValue = value;
+
+        }
+
+        public String getValue() {
+            return intValue;
+        }
+    }
 
 
-    public enum FeedbackType{
+    public enum FeedbackType {
         OtherQuery(1),
         BugReport(2),
         Suggestion(3);
