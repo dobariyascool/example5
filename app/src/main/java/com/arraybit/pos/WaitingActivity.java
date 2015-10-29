@@ -15,19 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.arraybit.global.Globals;
-import com.arraybit.global.SharePreferenceManage;
-import com.github.clans.fab.FloatingActionButton;
 
-public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    LinearLayout fragmentLayout;
+    LinearLayout fragmentLayout, waitingMainLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     FragmentTransaction fragmentTransaction;
-    RelativeLayout waitingMainLayout;
-    SharePreferenceManage objSharePreferenceManage;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
 
@@ -36,12 +31,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting);
 
-        objSharePreferenceManage=new SharePreferenceManage();
-       /*if(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName",WaitingActivity.this)==null)
-        {
-            Intent intent=new Intent(WaitingActivity.this,SignInActivity.class);
-            startActivity(intent);
-        }*/
         //app_bar
         Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
@@ -57,12 +46,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //end
 
         //relativelayout
-        waitingMainLayout = (RelativeLayout) findViewById(R.id.waitingMainLayout);
-        Globals.SetScaleImageBackground(WaitingActivity.this, null, waitingMainLayout);
-        //end
-
-        //floating action button
-        FloatingActionButton fabAdd = (FloatingActionButton) findViewById(R.id.fabAdd);
+        waitingMainLayout = (LinearLayout) findViewById(R.id.waitingMainLayout);
+        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null);
         //end
 
         //drawerlayout and actionbardrawertoggle
@@ -78,26 +63,13 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         AddFragment(new WaitingListFragment());
         //end
 
-
-        //click event
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Globals.InitializeAnimatedFragment(new AddFragment(), getSupportFragmentManager());
-                //Globals.initializeFragment(new AddFragment(), getSupportFragmentManager());
-            }
-        });
-        //end
-
-
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        Globals.SetScaleImageBackground(WaitingActivity.this, null, waitingMainLayout);
-        //}
+        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null);
     }
 
     @Override
@@ -131,8 +103,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             }
         }
 
-        if(id==R.id.logout)
-        {
+        if (id == R.id.logout) {
             Globals.ClearPreference(WaitingActivity.this);
 
            /* objSharePreferenceManage=new SharePreferenceManage();
@@ -159,18 +130,17 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-        if(menuItem.getItemId()==R.id.wExit){
+        if (menuItem.getItemId() == R.id.wExit) {
             System.exit(0);
             finish();
         }
-        if(menuItem.getItemId()==R.id.wChangeMode)
-        {
-            Intent intent=new Intent(WaitingActivity.this,SignInActivity.class);
+        if (menuItem.getItemId() == R.id.wChangeMode) {
+            Intent intent = new Intent(WaitingActivity.this, SignInActivity.class);
             startActivity(intent);
             finish();
         }
 
-        if(menuItem.getItemId()==R.id.wFeedback){
+        if (menuItem.getItemId() == R.id.wFeedback) {
             drawerLayout.closeDrawer(navigationView);
             navigationView.setVisibility(View.INVISIBLE);
             Globals.InitializeFragment(new FeedbackFragment(), getSupportFragmentManager());
@@ -184,7 +154,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     public void onBackPressed() {
         //fragment backPressed
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            Globals.HideKeyBoard(WaitingActivity.this,getCurrentFocus());
+            Globals.HideKeyBoard(WaitingActivity.this, getCurrentFocus());
             getSupportFragmentManager().popBackStack();
 
         }
