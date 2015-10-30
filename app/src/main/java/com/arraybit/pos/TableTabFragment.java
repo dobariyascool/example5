@@ -22,6 +22,7 @@ import com.arraybit.parser.TableJSONParser;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("unchecked")
 public class TableTabFragment extends Fragment {
 
     public final static String ITEMS_COUNT_KEY = "TableTabFragment$ItemsCount";
