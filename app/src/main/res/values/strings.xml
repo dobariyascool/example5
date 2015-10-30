@@ -121,6 +121,11 @@
     <string name="ldCancel">Cancel</string>
     <!-- end -->
 
+    <!-- row_workinghours-->
+    <string name="rDayOfWeek">DayOfWeek</string>
+    <string name="rClosingTime">ClosingTime</string>
+    <string name="rOpeningTime">OpeningTime</string>
+    <!-- End -->
 
     <!-- signup dailog -->
     <string name="sdSignup">Sign Up</string>

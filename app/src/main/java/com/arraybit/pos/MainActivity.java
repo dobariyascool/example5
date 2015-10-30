@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
        Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground), displayMetrics.widthPixels, displayMetrics.heightPixels);
-       layout1.setBackground(new BitmapDrawable(getResources(),bitmap));
+      layout1.setBackground(new BitmapDrawable(getResources(),bitmap));
        //DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 //
 //        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground);
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 //        layout1.setBackground(d);
 
 //
-//        layout1 = (LinearLayout) findViewById(R.id.layout1);
+          layout1 = (LinearLayout) findViewById(R.id.layout1);
 ////
 ////
 //        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();

@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.arraybit.pos.GallaryFragment">
+
+    <TextView
+        android:id="@+id/txtMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/control_SpecingSmall"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvGallery"
+        android:name="android.support.v7.widget.RecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/control_SpecingSmall"
+        android:paddingLeft="@dimen/control_SpecingSmall"
+        android:paddingRight="@dimen/control_SpecingSmall"
+        android:paddingTop="@dimen/control_SpecingSmall" />
+</LinearLayout>
