@@ -31,8 +31,9 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     TabLayout tableTabLayout;
     ViewPager tableViewPager;
     ArrayList<SectionMaster> alSectionMaster;
-    PagerAdapter pagerAdapter;
+    TablePagerAdapter tablePagerAdapter;
     ProgressDialog progressDialog;
+    FloatingActionMenu famRoot;
 
     public AllTablesFragment() {
         // Required empty public constructor
@@ -49,7 +50,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         tableViewPager=(ViewPager)view.findViewById(R.id.tableViewPager);
 
         //floating action menu
-        FloatingActionMenu famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
+        famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
         famRoot.setClosedOnTouchOutside(true);
         //end
 
@@ -77,15 +78,21 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.fabAll){
 
+        TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(tableTabLayout.getSelectedTabPosition());
+        SectionMaster objSectionMaster = tablePagerAdapter.GetCurrentSection(tableTabLayout.getSelectedTabPosition());
+
+        if(v.getId()==R.id.fabAll){
+            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),null);
+            famRoot.close(true);
         }
         else if(v.getId()==R.id.fabVacant){
-
+            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),"1");
+            famRoot.close(true);
         }
         else if(v.getId()==R.id.fabBusy){
-            TableTabFragment fragment = new TableTabFragment();
-            fragment.TableDataFilter(1,"1");
+            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),"2");
+            famRoot.close(true);
         }
     }
 
@@ -94,32 +101,41 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         super.onDestroy();
     }
 
-    static class PagerAdapter extends FragmentStatePagerAdapter {
+    static class TablePagerAdapter extends FragmentStatePagerAdapter {
 
-        private final List<Fragment> fragmentList1 = new ArrayList<>();
-        private final List<String> fragmentTitleList1 = new ArrayList<>();
+        private final List<Fragment> tableFragmentList = new ArrayList<>();
+        private final List<SectionMaster> tableFragmentTitleList = new ArrayList<>();
 
-        public PagerAdapter(FragmentManager fragmentManager) {
+        public TablePagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
 
-        public void addFragment(Fragment fragment, String title) {
-            fragmentList1.add(fragment);
-            fragmentTitleList1.add(title);
+        public void AddFragment(Fragment fragment, SectionMaster title) {
+            tableFragmentList.add(fragment);
+            tableFragmentTitleList.add(title);
+        }
+
+        public Fragment GetCurrentFragment(int position){
+            Fragment fragment=tableFragmentList.get(position);
+            return fragment;
+        }
+
+        public SectionMaster GetCurrentSection(int position){
+            return tableFragmentTitleList.get(position);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return fragmentList1.get(position);
+            return tableFragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return fragmentList1.size();
+            return tableFragmentList.size();
         }
         @Override
         public CharSequence getPageTitle(int position) {
-            return fragmentTitleList1.get(position);
+            return tableFragmentTitleList.get(position).getSectionName();
         }
     }
 
@@ -158,7 +174,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
                 progressDialog.dismiss();
             } else {
 
-                pagerAdapter = new PagerAdapter(getChildFragmentManager());
+                tablePagerAdapter = new TablePagerAdapter(getChildFragmentManager());
 
                 new TableMasterLoadingTask().execute();
             }
@@ -193,7 +209,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             TableJSONParser objTableJSONParser = new TableJSONParser();
             for(int j=0;j<alSectionMaster.size();j++) {
 
-                SectionName[j] = alSectionMaster.get(j).getSectionName();
+                //SectionName[j] = alSectionMaster.get(j).getSectionName();
                 alTableMaster[j] = objTableJSONParser.SelectAllTableMasterBySectionMasterId(1, alSectionMaster.get(j).getSectionMasterId(),null);
 
             }
@@ -210,10 +226,10 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             } else {
 
                 for(int k=0;k<alTableMaster.length;k++) {
-                    pagerAdapter.addFragment(TableTabFragment.createInstance(alTableMaster[k]),SectionName[k]);
+                    tablePagerAdapter.AddFragment(TableTabFragment.createInstance(alTableMaster[k]),alSectionMaster.get(k));
                 }
             }
-            tableViewPager.setAdapter(pagerAdapter);
+            tableViewPager.setAdapter(tablePagerAdapter);
             tableTabLayout.setupWithViewPager(tableViewPager);
             //progressDialog.dismiss();
         }

@@ -24,8 +24,8 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     // Constructor
     public TablesAdapter(Context context, ArrayList<TableMaster> result) {
         this.context = context;
-        this.alTableMaster = result;
-        this.layoutInflater = LayoutInflater.from(context);
+        alTableMaster = result;
+        layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -41,9 +41,11 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         if(objTableMaster.getTableColor()==null){
             holder.cvTable.setCardBackgroundColor(R.color.transparent_orange);
         }
-        holder.cvTable.setCardBackgroundColor(Color.parseColor("#" + objTableMaster.getTableColor()));
+        else {
+            holder.cvTable.setCardBackgroundColor(Color.parseColor("#" + objTableMaster.getTableColor()));
+        }
         holder.txtTableName.setText(objTableMaster.getTableName());
-        holder.txtPersons.setText(objTableMaster.getMinPerson() + " | " + objTableMaster.getMaxPerson());
+        holder.txtPersons.setText(String.valueOf(objTableMaster.getMaxPerson()));
         holder.txtTableStatus.setText(objTableMaster.getTableStatus());
         holder.txtTableStatus.setTextColor(Color.parseColor("#" + objTableMaster.getStatusColor()));
     }

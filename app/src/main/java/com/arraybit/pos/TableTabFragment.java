@@ -2,6 +2,7 @@ package com.arraybit.pos;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,8 +29,9 @@ public class TableTabFragment extends Fragment {
     TablesAdapter tablesAdapter;
     ArrayList<TableMaster> alTableMaster;
     GridLayoutManager gridLayoutManager;
-    int currentPage;
-    String tableStatusMasterId=null;
+    int currentPage, sectionMasterId;
+    String tableStatusMasterId = null;
+    Context context;
 
     public TableTabFragment() {
         // Required empty public constructor
@@ -48,14 +50,15 @@ public class TableTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_table_tab, container, false);
+
         rvTables = (RecyclerView) view.findViewById(R.id.rvTables);
 
         Bundle bundle = getArguments();
         alTableMaster = bundle.getParcelableArrayList(ITEMS_COUNT_KEY);
 
-        gridLayoutManager=new GridLayoutManager(getActivity(),2);
+        gridLayoutManager = new GridLayoutManager(getActivity(), 2);
 
-        setupRecyclerView(rvTables);
+        setupRecyclerView(rvTables, alTableMaster);
         return view;
     }
 
@@ -76,25 +79,27 @@ public class TableTabFragment extends Fragment {
         });
     }
 
-    private void setupRecyclerView(RecyclerView rvTables) {
+    private void setupRecyclerView(RecyclerView rvTables, ArrayList<TableMaster> alTableMaster) {
 
-        tablesAdapter = new TablesAdapter(getActivity(),alTableMaster);
+        tablesAdapter = new TablesAdapter(getActivity(), alTableMaster);
         rvTables.setAdapter(tablesAdapter);
         rvTables.setLayoutManager(gridLayoutManager);
-        if(rvTables.getAdapter().getItemCount()>0)
-        {
+        if (rvTables.getAdapter().getItemCount() > 0) {
             rvTables.setId((int) alTableMaster.get(0).getlinktoSectionMasterId());
         }
-    }
-
-    public void TableDataFilter(int sectionMasterId,String tableStatusMasterId){
-            this.tableStatusMasterId = tableStatusMasterId;
-            new TableMasterLoadingTask().execute();
 
     }
+
+    public void TableDataFilter(int sectionMasterId, String tableStatusMasterId) {
+        this.tableStatusMasterId = tableStatusMasterId;
+        this.sectionMasterId = sectionMasterId;
+        new TableMasterFilterLoadingTask().execute();
+
+    }
+
 
     @SuppressWarnings("ResourceType")
-    class TableMasterLoadingTask extends AsyncTask {
+    class TableMasterFilterLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
 
@@ -102,7 +107,45 @@ public class TableTabFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            if(currentPage > 2) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            TableJSONParser objTableJSONParser = new TableJSONParser();
+
+            alTableMaster = objTableJSONParser.SelectAllTableMasterBySectionMasterId(1, sectionMasterId, tableStatusMasterId);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+
+            progressDialog.dismiss();
+
+            if (alTableMaster != null) {
+                setupRecyclerView(rvTables, alTableMaster);
+            }
+        }
+    }
+
+    @SuppressWarnings("ResourceType")
+    public class TableMasterLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            if (currentPage > 2) {
                 progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
                 progressDialog.setIndeterminate(true);
@@ -116,19 +159,19 @@ public class TableTabFragment extends Fragment {
         protected Object doInBackground(Object[] objects) {
 
             TableJSONParser objTableJSONParser = new TableJSONParser();
-            alTableMaster = objTableJSONParser.SelectAllTableMasterBySectionMasterId(currentPage,rvTables.getId(),tableStatusMasterId);
+            alTableMaster = objTableJSONParser.SelectAllTableMasterBySectionMasterId(currentPage, rvTables.getId(), tableStatusMasterId);
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Object result) {
-            if(currentPage > 2) {
+            if (currentPage > 2) {
                 progressDialog.dismiss();
             }
-            if(alTableMaster!=null){
+            if (alTableMaster != null) {
                 tablesAdapter.TableDataChanged(alTableMaster);
             }
         }
-
     }
 }
