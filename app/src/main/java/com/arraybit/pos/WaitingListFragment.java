@@ -13,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.arraybit.global.Globals;
@@ -30,12 +29,10 @@ public class WaitingListFragment extends Fragment {
 
     TabLayout waitingTabLayout;
     ViewPager waitingViewPager;
-    LinearLayout error_layout;
     FloatingActionButton fabAdd;
 
     ArrayList<WaitingStatusMaster> alWaitingStatusMaster;
     WaitingListPagerAdapter waitingListPagerAdapter;
-    String[] WaitingStatus;
     ProgressDialog progressDialog;
 
     public WaitingListFragment() {
@@ -146,7 +143,7 @@ public class WaitingListFragment extends Fragment {
 
                 waitingListPagerAdapter = new WaitingListPagerAdapter(getChildFragmentManager());
 
-                for(int i=0;i<alWaitingStatusMaster.size();i++){
+                for (int i = 0; i < alWaitingStatusMaster.size(); i++) {
                     waitingListPagerAdapter.AddFragment(WaitingTabFragment.createInstance((WaitingStatusMaster) alWaitingStatusMaster.get(i)), alWaitingStatusMaster.get(i).getWaitingStatus());
                 }
                 waitingViewPager.setAdapter(waitingListPagerAdapter);
@@ -155,68 +152,6 @@ public class WaitingListFragment extends Fragment {
             }
         }
     }
-
-//    class WaitingMasterLoadingTask extends AsyncTask {
-//
-//        ArrayList<WaitingMaster>[] alWaitingMaster;
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            alWaitingMaster = new ArrayList[alWaitingStatusMaster.size()];
-//            WaitingStatus = new String[alWaitingStatusMaster.size()];
-//
-//        }
-//
-//        @Override
-//        protected Object doInBackground(Object[] objects) {
-//
-//            WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
-//            for (int j = 0; j < alWaitingStatusMaster.size(); j++) {
-//
-//                WaitingStatus[j] = alWaitingStatusMaster.get(j).getWaitingStatus();
-//                alWaitingMaster[j] = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(1, alWaitingStatusMaster.get(j).getWaitingStatusMasterId());
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Object result) {
-//
-//            if (alWaitingMaster == null) {
-//                Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
-//            } else if (alWaitingMaster.length == 0) {
-//                Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
-//            } else {
-//
-//                if (alWaitingMaster.length > 0) {
-//                    for (int k = 0; k < alWaitingMaster.length; k++) {
-//                        if (alWaitingMaster[k] == null) {
-//                            pagerAdapter.addFragment(WaitingTabFragment.createInstance(null), WaitingStatus[k]);
-//                        } else {
-//
-//                            if(WaitingStatus[k].equals(Globals.WaitingStatus.Serve.toString())){
-//                                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]+"d");
-//                            }
-//                            else if(WaitingStatus[k].equals(Globals.WaitingStatus.Cancel.toString()))
-//                            {
-//                                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]+"led");
-//                            }
-//
-//                            else
-//                            {
-//                                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]);
-//                            }
-//
-//
-//                        }
-//                    }
-//                }
-//            }
-//            waitingViewPager.setAdapter(pagerAdapter);
-//            waitingTabLayout.setupWithViewPager(waitingViewPager);
-//        }
-//    }
 
     //endregion
 
