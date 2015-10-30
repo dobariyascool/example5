@@ -101,7 +101,7 @@ public class GalleryFragment extends Fragment {
             progressDialog.setCancelable(false);
 
             progressDialog.show();
-            SignInActivity.ServerName="10.0.3.2:6122";
+            SignInActivity.ServerName = "10.0.3.2:6122";
         }
 
         @Override
@@ -120,8 +120,10 @@ public class GalleryFragment extends Fragment {
 
             progressDialog.dismiss();
             ArrayList<BusinessGalleryTran> lstBusinessGalleryTran = (ArrayList<BusinessGalleryTran>) result;
-            if (currentPage == 1) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
+            if (lstBusinessGalleryTran == null) {
+                if (currentPage == 1) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
+                }
             } else if (lstBusinessGalleryTran.size() == 0) {
                 if (currentPage == 1) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
