@@ -18,9 +18,7 @@ import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
-import com.arraybit.modal.WaitingMaster;
 import com.arraybit.modal.WaitingStatusMaster;
-import com.arraybit.parser.WaitingJSONParser;
 import com.arraybit.parser.WaitingStatusJSONParser;
 import com.github.clans.fab.FloatingActionButton;
 
@@ -36,7 +34,7 @@ public class WaitingListFragment extends Fragment {
     FloatingActionButton fabAdd;
 
     ArrayList<WaitingStatusMaster> alWaitingStatusMaster;
-    PagerAdapter pagerAdapter;
+    WaitingListPagerAdapter waitingListPagerAdapter;
     String[] WaitingStatus;
     ProgressDialog progressDialog;
 
@@ -78,35 +76,36 @@ public class WaitingListFragment extends Fragment {
                 Globals.InitializeAnimatedFragment(new AddFragment(), getFragmentManager());
             }
         });
+
     }
 
-    static class PagerAdapter extends FragmentStatePagerAdapter {
+    static class WaitingListPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final List<Fragment> fragmentList = new ArrayList<>();
-        private final List<String> fragmentTitleList = new ArrayList<>();
+        private final List<Fragment> WaitingFragmentList = new ArrayList<>();
+        private final List<String> WaitingTitleList = new ArrayList<>();
 
-        public PagerAdapter(FragmentManager fragmentManager) {
+        public WaitingListPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
 
-        public void addFragment(Fragment fragment, String title) {
-            fragmentList.add(fragment);
-            fragmentTitleList.add(title);
+        public void AddFragment(Fragment fragment, String title) {
+            WaitingFragmentList.add(fragment);
+            WaitingTitleList.add(title);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return fragmentList.get(position);
+            return WaitingFragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return fragmentList.size();
+            return WaitingFragmentList.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return fragmentTitleList.get(position);
+            return WaitingTitleList.get(position);
         }
     }
 
@@ -145,76 +144,79 @@ public class WaitingListFragment extends Fragment {
                 progressDialog.dismiss();
             } else {
 
-                pagerAdapter = new PagerAdapter(getChildFragmentManager());
+                waitingListPagerAdapter = new WaitingListPagerAdapter(getChildFragmentManager());
 
-                new WaitingMasterLoadingTask().execute();
-            }
-
-            progressDialog.dismiss();
-        }
-    }
-
-    class WaitingMasterLoadingTask extends AsyncTask {
-
-        ArrayList<WaitingMaster>[] alWaitingMaster;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            alWaitingMaster = new ArrayList[alWaitingStatusMaster.size()];
-            WaitingStatus = new String[alWaitingStatusMaster.size()];
-
-        }
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-
-            WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
-            for (int j = 0; j < alWaitingStatusMaster.size(); j++) {
-
-                WaitingStatus[j] = alWaitingStatusMaster.get(j).getWaitingStatus();
-                alWaitingMaster[j] = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(1, alWaitingStatusMaster.get(j).getWaitingStatusMasterId());
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-
-            if (alWaitingMaster == null) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
-            } else if (alWaitingMaster.length == 0) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
-            } else {
-
-                if (alWaitingMaster.length > 0) {
-                    for (int k = 0; k < alWaitingMaster.length; k++) {
-                        if (alWaitingMaster[k] == null) {
-                            pagerAdapter.addFragment(WaitingTabFragment.createInstance(null), WaitingStatus[k]);
-                        } else {
-
-                            if(WaitingStatus[k].equals(Globals.WaitingStatus.Serve.toString())){
-                                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]+"d");
-                            }
-                            else if(WaitingStatus[k].equals(Globals.WaitingStatus.Cancel.toString()))
-                            {
-                                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]+"led");
-                            }
-
-                            else
-                            {
-                                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]);
-                            }
-
-
-                        }
-                    }
+                for(int i=0;i<alWaitingStatusMaster.size();i++){
+                    waitingListPagerAdapter.AddFragment(WaitingTabFragment.createInstance((WaitingStatusMaster) alWaitingStatusMaster.get(i)), alWaitingStatusMaster.get(i).getWaitingStatus());
                 }
+                waitingViewPager.setAdapter(waitingListPagerAdapter);
+                waitingTabLayout.setupWithViewPager(waitingViewPager);
+                progressDialog.dismiss();
             }
-            waitingViewPager.setAdapter(pagerAdapter);
-            waitingTabLayout.setupWithViewPager(waitingViewPager);
         }
     }
+
+//    class WaitingMasterLoadingTask extends AsyncTask {
+//
+//        ArrayList<WaitingMaster>[] alWaitingMaster;
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            alWaitingMaster = new ArrayList[alWaitingStatusMaster.size()];
+//            WaitingStatus = new String[alWaitingStatusMaster.size()];
+//
+//        }
+//
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//
+//            WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
+//            for (int j = 0; j < alWaitingStatusMaster.size(); j++) {
+//
+//                WaitingStatus[j] = alWaitingStatusMaster.get(j).getWaitingStatus();
+//                alWaitingMaster[j] = objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(1, alWaitingStatusMaster.get(j).getWaitingStatusMasterId());
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Object result) {
+//
+//            if (alWaitingMaster == null) {
+//                Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
+//            } else if (alWaitingMaster.length == 0) {
+//                Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
+//            } else {
+//
+//                if (alWaitingMaster.length > 0) {
+//                    for (int k = 0; k < alWaitingMaster.length; k++) {
+//                        if (alWaitingMaster[k] == null) {
+//                            pagerAdapter.addFragment(WaitingTabFragment.createInstance(null), WaitingStatus[k]);
+//                        } else {
+//
+//                            if(WaitingStatus[k].equals(Globals.WaitingStatus.Serve.toString())){
+//                                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]+"d");
+//                            }
+//                            else if(WaitingStatus[k].equals(Globals.WaitingStatus.Cancel.toString()))
+//                            {
+//                                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]+"led");
+//                            }
+//
+//                            else
+//                            {
+//                                pagerAdapter.addFragment(WaitingTabFragment.createInstance(alWaitingMaster[k]), WaitingStatus[k]);
+//                            }
+//
+//
+//                        }
+//                    }
+//                }
+//            }
+//            waitingViewPager.setAdapter(pagerAdapter);
+//            waitingTabLayout.setupWithViewPager(waitingViewPager);
+//        }
+//    }
 
     //endregion
 
