@@ -38,6 +38,9 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     public void onBindViewHolder(TableViewHolder holder, int position) {
         TableMaster objTableMaster = alTableMaster.get(position);
 
+        if(objTableMaster.getTableColor()==null){
+            holder.cvTable.setCardBackgroundColor(R.color.transparent_orange);
+        }
         holder.cvTable.setCardBackgroundColor(Color.parseColor("#" + objTableMaster.getTableColor()));
         holder.txtTableName.setText(objTableMaster.getTableName());
         holder.txtPersons.setText(objTableMaster.getMinPerson() + " | " + objTableMaster.getMaxPerson());

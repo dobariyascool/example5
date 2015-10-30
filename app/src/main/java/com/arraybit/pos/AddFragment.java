@@ -71,7 +71,7 @@ public class AddFragment extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Globals.HideKeyBoard(getActivity(),v);
+                Globals.HideKeyBoard(getActivity(), v);
 
                 if (!ValidateControls()) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
@@ -98,7 +98,7 @@ public class AddFragment extends Fragment {
 
         if (id == android.R.id.home) {
             getActivity().getSupportFragmentManager().popBackStack();
-            Globals.HideKeyBoard(getActivity(),getView());
+            Globals.HideKeyBoard(getActivity(), getView());
             return true;
         }
 
@@ -124,29 +124,65 @@ public class AddFragment extends Fragment {
         if (etName.getText().toString().equals("")
                 && !etMobileNo.getText().toString().equals("")
                 && !etPersons.getText().toString().equals("")) {
-            etName.setError("Enter " + getResources().getString(R.string.afName));
-            etMobileNo.setError("");
-            etPersons.setError("");
-            IsValid = false;
-        }
-        if (etMobileNo.getText().toString().equals("")) {
-            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
-            etPersons.setError("");
-            IsValid = false;
-        }
-        if (etName.getText().toString().equals("")
-                && etMobileNo.getText().toString().equals("")
-                && etPersons.getText().toString().equals("")) {
-            etName.setError("Enter " + getResources().getString(R.string.afName));
-            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
-            etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
-            IsValid = false;
-        }
-        if (!etMobileNo.getText().toString().equals("")) {
             if (etMobileNo.getText().length() != 10) {
                 etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
-                IsValid = false;
+            } else {
+                etMobileNo.clearError();
             }
+            etName.setError("Enter " + getResources().getString(R.string.afName));
+            etMobileNo.clearError();
+            etPersons.clearError();
+            IsValid = false;
+        } else if (etMobileNo.getText().toString().equals("")
+                && !etName.getText().toString().equals("")
+                && !etPersons.getText().toString().equals("")) {
+            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
+            etPersons.clearError();
+            etName.clearError();
+            IsValid = false;
+        } else if (etPersons.getText().toString().equals("")
+                && !etName.getText().toString().equals("")
+                && !etMobileNo.getText().toString().equals("")) {
+            if (etMobileNo.getText().length() != 10) {
+                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
+            } else {
+                etMobileNo.clearError();
+            }
+            etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
+            etName.clearError();
+            IsValid = false;
+        } else if (etName.getText().toString().equals("")
+                && etMobileNo.getText().toString().equals("")
+                && etPersons.getText().toString().equals("")) {
+            etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
+            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
+            etName.setError("Enter " + getResources().getString(R.string.afName));
+            IsValid = false;
+        } else if (etName.getText().toString().equals("")
+                && etMobileNo.getText().toString().equals("")
+                && !etPersons.getText().toString().equals("")) {
+            etPersons.clearError();
+            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
+            etName.setError("Enter " + getResources().getString(R.string.afName));
+            IsValid = false;
+        } else if (etName.getText().toString().equals("")
+                && !etMobileNo.getText().toString().equals("")
+                && etPersons.getText().toString().equals("")) {
+            if (etMobileNo.getText().length() != 10) {
+                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
+            } else {
+                etMobileNo.clearError();
+            }
+            etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
+            etName.setError("Enter " + getResources().getString(R.string.afName));
+            IsValid = false;
+        } else if (etMobileNo.getText().toString().equals("")
+                && !etName.getText().toString().equals("")
+                && etPersons.getText().toString().equals("")) {
+            etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
+            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
+            etName.clearError();
+            IsValid = false;
         }
         return IsValid;
     }
@@ -169,10 +205,9 @@ public class AddFragment extends Fragment {
             objWaitingMaster.setNoOfPersons(Short.valueOf(etPersons.getText().toString()));
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Waiting").getValue());
 
-            objSharePreferenceManage=new SharePreferenceManage();
-            if(objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity())!=null)
-            {
-                objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity())));
+            objSharePreferenceManage = new SharePreferenceManage();
+            if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity()) != null) {
+                objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity())));
             }
             objWaitingJSONParser = new WaitingJSONParser();
         }
@@ -194,7 +229,7 @@ public class AddFragment extends Fragment {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
                 ClearControls();
 
-                Intent intent=new Intent(getActivity(),WaitingActivity.class);
+                Intent intent = new Intent(getActivity(), WaitingActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 getActivity().startActivity(intent);
             }

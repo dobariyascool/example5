@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.arraybit.pos.WaitingActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/waitingMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,19 +20,9 @@
             android:id="@+id/fragmentLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/app_bar"
             android:orientation="vertical" />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fabAdd"
-            style="@style/FloatingButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="@dimen/control_SpecingSmall" />
-
-    </RelativeLayout>
+    </LinearLayout>
     <!-- it is navigation drawer -->
     <android.support.design.widget.NavigationView
         android:id="@+id/navigationView"
