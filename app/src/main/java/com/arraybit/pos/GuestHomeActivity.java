@@ -157,12 +157,10 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         switch (menuItem.getItemId()) {
 
             case R.id.home:
-                return true;
+                break;
 
             case R.id.profile:
-                Intent intent=new Intent(GuestHomeActivity.this,HotelFragment.class);
-                startActivity(intent);
-
+                Globals.InitializeFragment(new HotelFragment(), getSupportFragmentManager());
         }
 
         return false;

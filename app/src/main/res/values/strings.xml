@@ -91,6 +91,7 @@
     <!-- navigation drawer menu -->
     <string name="navLogin">Login</string>
     <string name="navHome">Home</string>
+    <string name="navProfile">Profile</string>
     <string name="navRegistration">Registration</string>
     <string name="navChangeMode">Change Mode</string>
     <string name="navOffers">Offer</string>

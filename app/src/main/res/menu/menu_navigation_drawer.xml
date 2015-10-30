@@ -11,8 +11,7 @@
         <item
             android:id="@+id/profile"
             android:icon="@mipmap/plus"
-            android:title="Profile"
-            />
+            android:title="@string/navProfile" />
 
         <!--<item-->
             <!--android:id="@+id/login"-->
