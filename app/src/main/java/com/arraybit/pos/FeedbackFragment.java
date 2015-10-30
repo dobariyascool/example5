@@ -177,11 +177,11 @@ public class FeedbackFragment extends Fragment {
             objFeedbackMaster.setFeedback(etFeedback.getText().toString());
 
             if (rbBug.isChecked()) {
-                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbakcType.BugReport.getValue());
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.BugReport.getValue());
             } else if (rbSuggestion.isChecked()) {
-                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbakcType.Suggestion.getValue());
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.Suggestion.getValue());
             } else if (rbOther.isChecked()) {
-                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbakcType.OtherQuery.getValue());
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.OtherQuery.getValue());
             }
 
             objFeedbackMaster.setlinktoRegisteredUserMasterId(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity())));

@@ -29,6 +29,7 @@ public class TableTabFragment extends Fragment {
     ArrayList<TableMaster> alTableMaster;
     GridLayoutManager gridLayoutManager;
     int currentPage;
+    String tableStatusMasterId=null;
 
     public TableTabFragment() {
         // Required empty public constructor
@@ -86,6 +87,12 @@ public class TableTabFragment extends Fragment {
         }
     }
 
+    public void TableDataFilter(int sectionMasterId,String tableStatusMasterId){
+            this.tableStatusMasterId = tableStatusMasterId;
+            new TableMasterLoadingTask().execute();
+
+    }
+
     @SuppressWarnings("ResourceType")
     class TableMasterLoadingTask extends AsyncTask {
 
@@ -109,7 +116,7 @@ public class TableTabFragment extends Fragment {
         protected Object doInBackground(Object[] objects) {
 
             TableJSONParser objTableJSONParser = new TableJSONParser();
-            alTableMaster = objTableJSONParser.SelectAllTableMasterBySectionMasterId(currentPage,rvTables.getId());
+            alTableMaster = objTableJSONParser.SelectAllTableMasterBySectionMasterId(currentPage,rvTables.getId(),tableStatusMasterId);
             return null;
         }
 

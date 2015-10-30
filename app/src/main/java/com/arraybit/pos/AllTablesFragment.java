@@ -4,7 +4,6 @@ package com.arraybit.pos;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,12 +19,14 @@ import com.arraybit.modal.SectionMaster;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.parser.SectionJSONParser;
 import com.arraybit.parser.TableJSONParser;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"unchecked"})
-public class AllTablesFragment extends Fragment {
+public class AllTablesFragment extends Fragment implements View.OnClickListener {
 
     TabLayout tableTabLayout;
     ViewPager tableViewPager;
@@ -47,6 +48,23 @@ public class AllTablesFragment extends Fragment {
         tableTabLayout=(TabLayout)view.findViewById(R.id.tableTabLayout);
         tableViewPager=(ViewPager)view.findViewById(R.id.tableViewPager);
 
+        //floating action menu
+        FloatingActionMenu famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
+        famRoot.setClosedOnTouchOutside(true);
+        //end
+
+        //floating action button
+        FloatingActionButton fabVacant=(FloatingActionButton)view.findViewById(R.id.fabVacant);
+        FloatingActionButton fabBusy=(FloatingActionButton)view.findViewById(R.id.fabBusy);
+        FloatingActionButton fabAll=(FloatingActionButton)view.findViewById(R.id.fabAll);
+        //end
+
+        //event
+        fabVacant.setOnClickListener(this);
+        fabBusy.setOnClickListener(this);
+        fabAll.setOnClickListener(this);
+        //end
+
         if (Service.CheckNet(getActivity())) {
             new TableSectionLoadingTask().execute();
         } else {
@@ -57,19 +75,19 @@ public class AllTablesFragment extends Fragment {
         return view;
     }
 
-
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onClick(View v) {
+        if(v.getId()==R.id.fabAll){
 
-//        PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager());
-//        pagerAdapter.addFragment(TableTabFragment.createInstance(20),"All");
-//        pagerAdapter.addFragment(TableTabFragment.createInstance(10), "Non AC");
-//        pagerAdapter.addFragment(TableTabFragment.createInstance(5), "AC");
-//        tableViewPager.setAdapter(pagerAdapter);
-//        tableTabLayout.setupWithViewPager(tableViewPager);
+        }
+        else if(v.getId()==R.id.fabVacant){
+
+        }
+        else if(v.getId()==R.id.fabBusy){
+            TableTabFragment fragment = new TableTabFragment();
+            fragment.TableDataFilter(1,"1");
+        }
     }
-
 
     @Override
     public void onDestroy() {
@@ -176,7 +194,7 @@ public class AllTablesFragment extends Fragment {
             for(int j=0;j<alSectionMaster.size();j++) {
 
                 SectionName[j] = alSectionMaster.get(j).getSectionName();
-                alTableMaster[j] = objTableJSONParser.SelectAllTableMasterBySectionMasterId(1, alSectionMaster.get(j).getSectionMasterId());
+                alTableMaster[j] = objTableJSONParser.SelectAllTableMasterBySectionMasterId(1, alSectionMaster.get(j).getSectionMasterId(),null);
 
             }
             return null;

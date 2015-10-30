@@ -17,7 +17,6 @@ public class BusinessGalleryJSONParser
 {
     public String SelectAllBusinessGalleryTran = "SelectAllBusinessGalleryTranPageWise";
 
-
     private BusinessGalleryTran SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
         BusinessGalleryTran objBusinessGalleryTran = null;
         try {
@@ -68,12 +67,12 @@ public class BusinessGalleryJSONParser
         }
     }
 
-    public ArrayList<BusinessGalleryTran> SelectAllBusinessGalleryTranPageWise(int currentPage) {
+    public ArrayList<BusinessGalleryTran> SelectAllBusinessGalleryTranPageWise(int currentPage,int BusinessMasterId) {
         ArrayList<BusinessGalleryTran> lstBusinessGalleryTran = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllBusinessGalleryTran);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllBusinessGalleryTran+"/"+currentPage+"/"+BusinessMasterId);
             if (jsonResponse != null) {
-                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllBusinessGalleryTran + "PageWiseResult");
+                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllBusinessGalleryTran + "Result");
                 if (jsonArray != null) {
                     lstBusinessGalleryTran = SetListPropertiesFromJSONArray(jsonArray);
                 }
@@ -84,5 +83,4 @@ public class BusinessGalleryJSONParser
             return null;
         }
     }
-
 }

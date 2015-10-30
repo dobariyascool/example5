@@ -122,6 +122,11 @@
     <string name="ldCancel">Cancel</string>
     <!-- end -->
 
+    <!-- row_workinghours-->
+    <string name="rDayOfWeek">DayOfWeek</string>
+    <string name="rClosingTime">ClosingTime</string>
+    <string name="rOpeningTime">OpeningTime</string>
+    <!-- End -->
 
     <!-- signup dailog -->
     <string name="sdSignup">Sign Up</string>
@@ -136,8 +141,8 @@
 
     <!-- fragment add -->
     <string name="afName">Name</string>
-    <string name="afMobileNo">Mobile No</string>
-    <string name="afPerson">No of persons</string>
+    <string name="afMobileNo">Mobile</string>
+    <string name="afPerson">Persons</string>
     <string name="afSubmit">Submit</string>
     <!-- end -->
 
@@ -182,6 +187,12 @@
     <string name="wlfName">Name</string>
     <string name="wlfMobile">Mobile</string>
     <string name="wlfPerson">Persons</string>
+    <!-- end -->
+
+    <!-- table status-->
+    <string name="tsAll">All</string>
+    <string name="tsVacant">Vacant</string>
+    <string name="tsBusy">Busy</string>
     <!-- end -->
 
 </resources>
