@@ -25,6 +25,7 @@ public class BusinessJSONParser
     public String UpdateBusinessMaster = "UpdateBusinessMaster";
     public String SelectBusinessMaster = "SelectBusinessMaster";
     public String SelectAllBusinessMaster = "SelectAllBusinessMasterPageWise";
+    public String SelectBusinessMasterByUniqueId="SelectBusinessMasterByUniqueId";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     Date dt = null;
@@ -221,6 +222,26 @@ public class BusinessJSONParser
             return null;
         }
         catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public BusinessMaster SelectBusinessMasterByUniqueId(String uniqueId)
+    {
+        try {
+            JSONObject jsonResponse=Service.HttpGetService(Service.Url+this.SelectBusinessMasterByUniqueId+"/"+uniqueId);
+            if(jsonResponse!=null)
+            {
+                JSONObject jsonObject=jsonResponse.getJSONObject(this.SelectBusinessMasterByUniqueId+"Result");
+                if(jsonObject!=null)
+                {
+                    return SetClassPropertiesFromJSONObject(jsonObject);
+                }
+            }
+            return null;
+        }
+        catch (Exception ex)
+        {
             return null;
         }
     }

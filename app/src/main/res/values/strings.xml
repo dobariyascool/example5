@@ -146,6 +146,10 @@
     <string name="afSubmit">Submit</string>
     <!-- end -->
 
+    <!-- fragment hotel -->
+    <string name="hfProfile">Profile</string>
+    <!-- end -->
+
     <!-- fragment feedback -->
     <string name="fbName">Name</string>
     <string name="fbEmail">Email</string>

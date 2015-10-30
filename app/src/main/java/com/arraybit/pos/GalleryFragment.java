@@ -95,12 +95,14 @@ public class GalleryFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
+            if (currentPage > 1) {
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
 
-            progressDialog.show();
+                progressDialog.show();
+            }
             SignInActivity.ServerName = "10.0.3.2:6122";
         }
 
@@ -118,16 +120,18 @@ public class GalleryFragment extends Fragment {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
-            progressDialog.dismiss();
+            if (currentPage > 1) {
+                progressDialog.dismiss();
+            }
             ArrayList<BusinessGalleryTran> lstBusinessGalleryTran = (ArrayList<BusinessGalleryTran>) result;
             if (lstBusinessGalleryTran == null) {
                 if (currentPage == 1) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
+                    txtMsg.setText(getResources().getString(R.string.MsgSelectFail));
                 }
             } else if (lstBusinessGalleryTran.size() == 0) {
                 if (currentPage == 1) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
-                    alBusinessGalleryTran = lstBusinessGalleryTran;
+
+                    txtMsg.setText(getResources().getString(R.string.MsgSelectFail));
                     return;
                 }
             } else {

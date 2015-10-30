@@ -32,6 +32,8 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     ActionBarDrawerToggle actionBarDrawerToggle;
     String userName;
     LinearLayout guestHomeMainLayout;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +55,12 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         //end
 
         //navigationView
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
+        navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
 
         //drawerlayout and actionbardrawertoggle
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         Globals.SetNavigationDrawer(actionBarDrawerToggle, GuestHomeActivity.this, drawerLayout, app_bar);
         //end
 
@@ -161,6 +163,9 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
             case R.id.profile:
                 Globals.InitializeFragment(new HotelFragment(), getSupportFragmentManager());
+                drawerLayout.closeDrawer(navigationView);
+                navigationView.setVisibility(View.INVISIBLE);
+                break;
         }
 
         return false;
@@ -174,17 +179,14 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             startActivity(intent);
         }
         else if(v.getId() == R.id.ibViewChange){
-            if(isCheck)
-            {
+            if(isCheck) {
                 v.setSelected(false);
                 isCheck=false;
             }
-            else
-            {
+            else {
                 v.setSelected(true);
                 isCheck=true;
             }
-
         }
     }
     //end
