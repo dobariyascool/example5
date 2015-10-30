@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
+
 
 public class TableJSONParser {
     public String InsertTableMaster = "InsertTableMaster";
@@ -91,7 +93,9 @@ public class TableJSONParser {
                 objTableMaster.setOriginY(jsonArray.getJSONObject(i).getInt("OriginY"));
                 objTableMaster.setHeight(jsonArray.getJSONObject(i).getDouble("Height"));
                 objTableMaster.setWidth(jsonArray.getJSONObject(i).getDouble("Width"));
-                objTableMaster.setTableColor(jsonArray.getJSONObject(i).getString("TableColor"));
+                if(!Objects.equals(jsonArray.getJSONObject(i).getString("TableColor"), null)){
+                    objTableMaster.setTableColor(jsonArray.getJSONObject(i).getString("TableColor"));
+                }
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
                 objTableMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objTableMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
