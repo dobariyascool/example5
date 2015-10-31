@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 
 public class TableJSONParser {
@@ -48,7 +47,13 @@ public class TableJSONParser {
                 objTableMaster.setOriginY(jsonObject.getInt("OriginY"));
                 objTableMaster.setHeight(jsonObject.getDouble("Height"));
                 objTableMaster.setWidth(jsonObject.getDouble("Width"));
-                objTableMaster.setTableColor(jsonObject.getString("TableColor"));
+                if(jsonObject.getString("TableColor").equals("")){
+                    objTableMaster.setTableColor(null);
+                }
+                else
+                {
+                    objTableMaster.setTableColor(jsonObject.getString("TableColor"));
+                }
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
                 objTableMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objTableMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
@@ -93,7 +98,11 @@ public class TableJSONParser {
                 objTableMaster.setOriginY(jsonArray.getJSONObject(i).getInt("OriginY"));
                 objTableMaster.setHeight(jsonArray.getJSONObject(i).getDouble("Height"));
                 objTableMaster.setWidth(jsonArray.getJSONObject(i).getDouble("Width"));
-                if(!Objects.equals(jsonArray.getJSONObject(i).getString("TableColor"), null)){
+                if(jsonArray.getJSONObject(i).getString("TableColor").equals("")){
+                    objTableMaster.setTableColor(null);
+                }
+                else
+                {
                     objTableMaster.setTableColor(jsonArray.getJSONObject(i).getString("TableColor"));
                 }
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
@@ -158,8 +167,11 @@ public class TableJSONParser {
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertTableMaster, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertTableMaster + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
+            if(jsonResponse!=null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertTableMaster + "Result");
+                return String.valueOf(jsonObject.getInt("ErrorCode"));
+            }
+            return "-1";
         } catch (Exception ex) {
             return "-1";
         }

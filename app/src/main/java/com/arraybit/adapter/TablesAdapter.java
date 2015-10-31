@@ -2,6 +2,7 @@ package com.arraybit.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,10 +40,9 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     public void onBindViewHolder(TableViewHolder holder, int position) {
         TableMaster objTableMaster = alTableMaster.get(position);
 
-        if(Objects.equals(objTableMaster.getTableColor(), null)){
-            holder.cvTable.setCardBackgroundColor(R.color.transparent_orange);
-        }
-        else {
+        if (Objects.equals(objTableMaster.getTableColor(), null)) {
+            holder.cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+        } else {
             holder.cvTable.setCardBackgroundColor(Color.parseColor("#" + objTableMaster.getTableColor()));
         }
         holder.txtTableName.setText(objTableMaster.getTableName());
