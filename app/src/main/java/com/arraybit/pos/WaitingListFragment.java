@@ -33,7 +33,6 @@ public class WaitingListFragment extends Fragment {
 
     ArrayList<WaitingStatusMaster> alWaitingStatusMaster;
     WaitingListPagerAdapter waitingListPagerAdapter;
-    ProgressDialog progressDialog;
 
     public WaitingListFragment() {
         // Required empty public constructor
@@ -109,6 +108,8 @@ public class WaitingListFragment extends Fragment {
     //region LoadingTask
 
     class WaitingStatusLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
