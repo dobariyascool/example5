@@ -119,12 +119,13 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-
+            if (currentPage > 2 && alWaitingMaster.size() != 0){
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            }
         }
 
         @Override
@@ -139,8 +140,9 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
 
         @Override
         protected void onPostExecute(Object result) {
-            progressDialog.dismiss();
-
+            if(currentPage > 2) {
+                progressDialog.dismiss();
+            }
             ArrayList<WaitingMaster> lstWaitingMaster = (ArrayList<WaitingMaster>) result;
             if (lstWaitingMaster == null) {
                 if (currentPage == 1) {

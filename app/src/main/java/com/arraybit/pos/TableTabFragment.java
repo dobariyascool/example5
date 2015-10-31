@@ -112,7 +112,6 @@ public class TableTabFragment extends Fragment {
         this.tableStatusMasterId = tableStatusMasterId;
         this.sectionMasterId = sectionMasterId;
         alTableMaster = new ArrayList<>();
-
         new TableMasterLoadingTask().execute();
 
         rvTables.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
@@ -133,17 +132,19 @@ public class TableTabFragment extends Fragment {
     class TableMasterLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
+        boolean isShow;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-
+            if(currentPage > 2 && alTableMaster.size() != 0) {
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            }
         }
 
         @Override
@@ -159,7 +160,9 @@ public class TableTabFragment extends Fragment {
         @Override
         protected void onPostExecute(Object result) {
 
-            progressDialog.dismiss();
+            if(currentPage > 2) {
+                progressDialog.dismiss();
+            }
 
             ArrayList<TableMaster> lstTableMaster = (ArrayList<TableMaster>) result;
             if (lstTableMaster == null) {
