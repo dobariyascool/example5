@@ -78,6 +78,7 @@
     <string name="suSignIn">Sign In</string>
     <string name="suAlreadyRegistered">Already Registered?</string>
     <string name="suFirstName">First Name</string>
+    <string name="suValidEmail">Valid Email</string>
     <string name="suLastName">Last Name</string>
     <string name="suEmail">Email</string>
     <string name="suPhone">Phone Number</string>
