@@ -103,7 +103,7 @@ public class GalleryFragment extends Fragment {
 
                 progressDialog.show();
             }
-            SignInActivity.ServerName = "10.0.3.2:6122";
+            /*SignInActivity.ServerName = "10.0.3.2:6122";*/
         }
 
         @Override
@@ -128,14 +128,14 @@ public class GalleryFragment extends Fragment {
                 if (currentPage == 1) {
                     txtMsg.setText(getResources().getString(R.string.MsgSelectFail));
                 }
-            } else if (lstBusinessGalleryTran.size() == 0) {
-                if (currentPage == 1) {
-
-                    txtMsg.setText(getResources().getString(R.string.MsgSelectFail));
-                    return;
-                }
             } else {
-                SetGalleryRecyclerView(lstBusinessGalleryTran);
+                if (lstBusinessGalleryTran.size() == 0) {
+                    if (currentPage == 1) {
+                        txtMsg.setText(getResources().getString(R.string.MsgSelectFail));
+                    }
+                } else {
+                    SetGalleryRecyclerView(lstBusinessGalleryTran);
+                }
             }
         }
     }
