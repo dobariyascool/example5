@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -106,7 +105,6 @@ public class HotelFragment extends Fragment {
     }
 
     private class HotelLoadingTask extends AsyncTask {
-        ProgressDialog pDialog;
 
         @Override
         protected void onPreExecute() {
