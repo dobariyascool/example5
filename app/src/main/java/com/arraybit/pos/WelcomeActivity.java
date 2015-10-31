@@ -8,7 +8,6 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 import com.arraybit.global.SharePreferenceManage;
 
@@ -32,25 +31,25 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
         //end
 
         gestureDetector = new GestureDetectorCompat(this, this);
-        gestureDetector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {
-                Toast.makeText(WelcomeActivity.this,"Single Tap Confirm",Toast.LENGTH_LONG).show();
-                return false;
-            }
-
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                Toast.makeText(WelcomeActivity.this,"Double Tap",Toast.LENGTH_LONG).show();
-                return false;
-            }
-
-            @Override
-            public boolean onDoubleTapEvent(MotionEvent e) {
-                Toast.makeText(WelcomeActivity.this,"Double Tap Event",Toast.LENGTH_LONG).show();
-                return false;
-            }
-        });
+//        gestureDetector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
+//            @Override
+//            public boolean onSingleTapConfirmed(MotionEvent e) {
+//                Toast.makeText(WelcomeActivity.this,"Single Tap Confirm",Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onDoubleTap(MotionEvent e) {
+//                Toast.makeText(WelcomeActivity.this,"Double Tap",Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onDoubleTapEvent(MotionEvent e) {
+//                Toast.makeText(WelcomeActivity.this,"Double Tap Event",Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        });
     }
 
     @Override
@@ -109,7 +108,6 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-        Toast.makeText(WelcomeActivity.this,"filing",Toast.LENGTH_LONG).show();
         //if (e1.getX() > e2.getX() && velocityY < 1000) {
 
             objSharePreferenceManage = new SharePreferenceManage();
