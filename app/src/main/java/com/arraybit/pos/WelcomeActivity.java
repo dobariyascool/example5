@@ -3,10 +3,12 @@ package com.arraybit.pos;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.arraybit.global.SharePreferenceManage;
 
@@ -15,7 +17,7 @@ import java.util.Objects;
 
 public class WelcomeActivity extends Activity implements GestureDetector.OnGestureListener {
 
-    GestureDetector gestureDetector;
+    GestureDetectorCompat gestureDetector;
 
     SharePreferenceManage objSharePreferenceManage;
 
@@ -29,7 +31,26 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
         SignInActivity.ServerName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", WelcomeActivity.this);
         //end
 
-        gestureDetector = new GestureDetector(this, this);
+        gestureDetector = new GestureDetectorCompat(this, this);
+        gestureDetector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                Toast.makeText(WelcomeActivity.this,"Single Tap Confirm",Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                Toast.makeText(WelcomeActivity.this,"Double Tap",Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            @Override
+            public boolean onDoubleTapEvent(MotionEvent e) {
+                Toast.makeText(WelcomeActivity.this,"Double Tap Event",Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });
     }
 
     @Override
@@ -87,7 +108,9 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if (e1.getX() > e2.getX() && velocityY < 1000) {
+
+        Toast.makeText(WelcomeActivity.this,"filing",Toast.LENGTH_LONG).show();
+        //if (e1.getX() > e2.getX() && velocityY < 1000) {
 
             objSharePreferenceManage = new SharePreferenceManage();
             if (Objects.equals(objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this), "1")) {
@@ -102,8 +125,8 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
                 startActivity(i);
                 finish();
             }
-            return true;
-        }
+          //  return true;
+        //}
         return false;
     }
 }

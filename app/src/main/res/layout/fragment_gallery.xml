@@ -21,5 +21,6 @@
         android:paddingBottom="@dimen/control_SpecingSmall"
         android:paddingLeft="@dimen/control_SpecingSmall"
         android:paddingRight="@dimen/control_SpecingSmall"
-        android:paddingTop="@dimen/control_SpecingSmall" />
+        android:paddingTop="@dimen/control_SpecingSmall"
+        />
 </LinearLayout>

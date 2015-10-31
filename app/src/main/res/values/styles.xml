@@ -13,7 +13,6 @@
 
     <style name="ImageView">
         <item name="android:scaleType">centerInside</item>
-        <item name="android:background">@drawable/image_border</item>
         <item name="android:padding">@dimen/control_SpecingTiny</item>
     </style>
     <style name="FullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
