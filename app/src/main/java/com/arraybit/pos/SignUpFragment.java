@@ -161,50 +161,112 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 && !etEmail.getText().toString().equals("")
                 && !etPassword.getText().toString().equals("")) {
             etFirstName.setError("Enter " + getResources().getString(R.string.suFirstName));
-            etEmail.setError("");
-            etPassword.setError("");
+            etPassword.clearError();
+            etEmail.clearError();
+            IsValid = false;
+        } else if (etEmail.getText().toString().equals("")
+                && !etFirstName.getText().toString().equals("")
+                && !etPassword.getText().toString().equals("")) {
+            etEmail.setError("Enter" + getResources().getString(R.string.suEmail));
+            etPassword.clearError();
+            etFirstName.clearError();
+            IsValid = false;
+        }  else if (etPassword.getText().toString().equals("")
+                && !etFirstName.getText().toString().equals("")
+                && !etEmail.getText().toString().equals("")) {
+            etPassword.setError("Enter" + getResources().getString(R.string.suPassword));
+            etFirstName.clearError();
+            etEmail.clearError();
             IsValid = false;
         }
-
-        if (etPassword.getText().toString().equals("")) {
+        if (!etEmail.getText().toString().equals("")) {
+            if (Globals.IsValidEmail(etEmail.getText().toString())) {
+                etEmail.clearError();
+            } else {
+                etEmail.setError("Enter" + getResources().getString(R.string.suValidEmail));
+                IsValid = false;
+            }
+        }
+        if (!etPhone.getText().toString().equals("")) {
+            if (etPhone.getText().length() != 10) {
+                etPhone.setError("Enter 10 digit " + getResources().getString(R.string.suPhone));
+            } else {
+                etPhone.clearError();
+            }
+            IsValid = false;
+        }
+        if (etFirstName.getText().toString().equals("")
+                && etEmail.getText().toString().equals("")
+                && !etPassword.getText().toString().equals("")) {
+            etPassword.clearError();
+            etFirstName.setError("Enter " + getResources().getString(R.string.suFirstName));
+            etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
+            IsValid = false;
+        }
+        else if (etFirstName.getText().toString().equals("")
+                && !etEmail.getText().toString().equals("")
+                && etPassword.getText().toString().equals("")) {
+            etFirstName.setError("Enter " + getResources().getString(R.string.suFirstName));
             etPassword.setError("Enter " + getResources().getString(R.string.suPassword));
-            etEmail.setError("");
-            etFirstName.setError("");
+            etEmail.clearError();
+            IsValid = false;
+        }
+        else if (etEmail.getText().toString().equals("")
+                && !etFirstName.getText().toString().equals("")
+                && etPassword.getText().toString().equals("")) {
+            etPassword.setError("Enter " + getResources().getString(R.string.suPassword));
+            etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
+            etFirstName.clearError();
             IsValid = false;
         }
         if (etFirstName.getText().toString().equals("")
                 && etEmail.getText().toString().equals("")
                 && etPassword.getText().toString().equals("")) {
             etFirstName.setError("Enter " + getResources().getString(R.string.suFirstName));
+            etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
             etPassword.setError("Enter " + getResources().getString(R.string.suPassword));
-            etEmail.setError("Enter" + getResources().getString(R.string.suEmail));
-
             IsValid = false;
         }
-
-        if (!Globals.IsValidEmail(etEmail.getText().toString())) {
-            if (etFirstName.getText().toString().equals("")
-                    && !etEmail.getText().toString().equals("")
-                    && !etPassword.getText().toString().equals("")) {
-                etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
-                etFirstName.setError("");
-                etPassword.setError("");
-                IsValid = false;
-            } else {
-                etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
-                IsValid = false;
-            }
-        }
-
-        if (!etPhone.getText().toString().equals("")) {
-            if (etPhone.getText().length() != 10) {
-                etPhone.setError("Enter 10 digit " + getResources().getString(R.string.suPhone) + "number");
-                IsValid = false;
-            }
-        }
-
         return IsValid;
     }
+//        if (etPassword.getText().toString().equals("")) {
+//            etPassword.setError("Enter " + getResources().getString(R.string.suPassword));
+//            etEmail.setError("");
+//            etFirstName.setError("");
+//            IsValid = false;
+//        }
+//        if (etFirstName.getText().toString().equals("")
+//                && etEmail.getText().toString().equals("")
+//                && etPassword.getText().toString().equals("")) {
+//            etFirstName.setError("Enter " + getResources().getString(R.string.suFirstName));
+//            etPassword.setError("Enter " + getResources().getString(R.string.suPassword));
+//            etEmail.setError("Enter" + getResources().getString(R.string.suEmail));
+//
+//            IsValid = false;
+//        }
+//
+//        if (!Globals.IsValidEmail(etEmail.getText().toString())) {
+//            if (etFirstName.getText().toString().equals("")
+//                    && !etEmail.getText().toString().equals("")
+//                    && !etPassword.getText().toString().equals("")) {
+//                etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
+//                etFirstName.setError("");
+//                etPassword.setError("");
+//                IsValid = false;
+//            } else {
+//                etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
+//                IsValid = false;
+//            }
+//        }
+//
+//        if (!etPhone.getText().toString().equals("")) {
+//            if (etPhone.getText().length() != 10) {
+//                etPhone.setError("Enter 10 digit " + getResources().getString(R.string.suPhone) + "number");
+//                IsValid = false;
+//            }
+//        }
+//
+//        return IsValid;
 
     void ClearControls() {
         etFirstName.setText("");
