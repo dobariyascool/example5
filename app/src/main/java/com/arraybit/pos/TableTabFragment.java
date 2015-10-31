@@ -41,14 +41,14 @@ public class TableTabFragment extends Fragment {
         // Required empty public constructor
     }
 
-//    public static TableTabFragment createInstance(ArrayList<TableMaster> alTableMaster) {
-//
-//        TableTabFragment tableTabFragment = new TableTabFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelableArrayList(ITEMS_COUNT_KEY, alTableMaster);
-//        tableTabFragment.setArguments(bundle);
-//        return tableTabFragment;
-//    }
+    public static TableTabFragment createInstance(ArrayList<TableMaster> alTableMaster) {
+
+        TableTabFragment tableTabFragment = new TableTabFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(ITEMS_COUNT_KEY, alTableMaster);
+        tableTabFragment.setArguments(bundle);
+        return tableTabFragment;
+    }
 
     public static TableTabFragment createInstance(SectionMaster objSectionMaster) {
 
@@ -64,7 +64,7 @@ public class TableTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_table_tab, container, false);
 
-        txtMsg=(TextView)view.findViewById(R.id.txtMsg);
+        txtMsg = (TextView) view.findViewById(R.id.txtMsg);
 
         rvTables = (RecyclerView) view.findViewById(R.id.rvTables);
         rvTables.setVisibility(View.GONE);
@@ -85,6 +85,7 @@ public class TableTabFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         rvTables.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
@@ -110,10 +111,23 @@ public class TableTabFragment extends Fragment {
     public void TableDataFilter(int sectionMasterId, String tableStatusMasterId) {
         this.tableStatusMasterId = tableStatusMasterId;
         this.sectionMasterId = sectionMasterId;
-        currentPage=1;
-        new TableMasterLoadingTask().execute();
-    }
+        alTableMaster = new ArrayList<>();
 
+        new TableMasterLoadingTask().execute();
+
+        rvTables.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+
+                if (current_page > currentPage) {
+                    currentPage = current_page;
+                    if (Service.CheckNet(getActivity())) {
+                        new TableMasterLoadingTask().execute();
+                    }
+                }
+            }
+        });
+    }
 
     @SuppressWarnings("ResourceType")
     class TableMasterLoadingTask extends AsyncTask {
@@ -150,7 +164,7 @@ public class TableTabFragment extends Fragment {
             ArrayList<TableMaster> lstTableMaster = (ArrayList<TableMaster>) result;
             if (lstTableMaster == null) {
                 if (currentPage == 1) {
-                    Globals.SetError(txtMsg,rvTables, getResources().getString(R.string.MsgSelectFail), true);
+                    Globals.SetError(txtMsg, rvTables, getResources().getString(R.string.MsgSelectFail), true);
                 }
             } else if (lstTableMaster.size() == 0) {
                 if (currentPage == 1) {
@@ -171,42 +185,4 @@ public class TableTabFragment extends Fragment {
         }
     }
 }
-//    @SuppressWarnings("ResourceType")
-//    public class TableMasterLoadingTask extends AsyncTask {
-//
-//        ProgressDialog progressDialog;
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//
-//            if (currentPage > 2) {
-//                progressDialog = new ProgressDialog(getActivity());
-//                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-//                progressDialog.setIndeterminate(true);
-//                progressDialog.setCancelable(false);
-//                progressDialog.show();
-//            }
-//
-//        }
-//
-//        @Override
-//        protected Object doInBackground(Object[] objects) {
-//
-//            TableJSONParser objTableJSONParser = new TableJSONParser();
-//            alTableMaster = objTableJSONParser.SelectAllTableMasterBySectionMasterId(currentPage, rvTables.getId(), tableStatusMasterId);
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Object result) {
-//            if (currentPage > 2) {
-//                progressDialog.dismiss();
-//            }
-//            if (alTableMaster != null) {
-//                tablesAdapter.TableDataChanged(alTableMaster);
-//            }
-//        }
-//    }
 
