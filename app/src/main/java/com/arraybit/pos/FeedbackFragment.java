@@ -70,7 +70,8 @@ public class FeedbackFragment extends Fragment {
 
         btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
 
-        etName.setText(objSharePreferenceManage.GetPreference("WaitingPreference","UserName",getActivity()));
+        etName.setText(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", getActivity()));
+        etName.setEnabled(false);
 
         return view;
     }
@@ -111,25 +112,86 @@ public class FeedbackFragment extends Fragment {
         boolean IsValid = true;
         if (etEmail.getText().toString().equals("")
                 && !etFeedback.getText().toString().equals("")) {
-            etMobileNo.setError("");
-            etEmail.setError("");
-            etFeedback.setError("");
-            IsValid = false;
-        }
-        if (etEmail.getText().toString().equals("")) {
             etEmail.setError("Enter " + getResources().getString(R.string.fbEmail));
-            etFeedback.setError("");
+            if (!etMobileNo.getText().toString().equals("")) {
+                if (etMobileNo.getText().length() != 10) {
+                    etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.fbMobileNo));
+                    IsValid = false;
+                } else {
+                    etMobileNo.clearError();
+                }
+            }
+            etFeedback.clearError();
             IsValid = false;
-        }
-        if (etEmail.getText().toString().equals("")) {
+        } else if (etEmail.getText().toString().equals("")
+                && !etMobileNo.getText().toString().equals("")
+                && etFeedback.getText().toString().equals("")) {
             etEmail.setError("Enter " + getResources().getString(R.string.fbEmail));
             etFeedback.setError("Enter " + getResources().getString(R.string.fbFeedback));
-            IsValid = false;
-        }
-        if (!etMobileNo.getText().toString().equals("")) {
             if (etMobileNo.getText().length() != 10) {
-                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
+                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.fbMobileNo));
                 IsValid = false;
+            } else {
+                etMobileNo.clearError();
+            }
+        } else if (!etEmail.getText().toString().equals("")
+                && !etMobileNo.getText().toString().equals("")
+                && etFeedback.getText().toString().equals("")) {
+            if (!Globals.IsValidEmail(etEmail.getText().toString())) {
+                etEmail.setError("Enter Valid " + getResources().getString(R.string.fbEmail));
+            } else {
+                etEmail.clearError();
+            }
+            etFeedback.setError("Enter " + getResources().getString(R.string.fbFeedback));
+            if (etMobileNo.getText().length() != 10) {
+                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.fbMobileNo));
+            } else {
+                etMobileNo.clearError();
+            }
+            IsValid = false;
+        } else if (etEmail.getText().toString().equals("")
+                && !etMobileNo.getText().toString().equals("")
+                && !etFeedback.getText().toString().equals("")) {
+            etEmail.setError("Enter " + getResources().getString(R.string.fbEmail));
+            if (etMobileNo.getText().length() != 10) {
+                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.fbMobileNo));
+            } else {
+                etMobileNo.clearError();
+            }
+            etFeedback.clearError();
+            IsValid = false;
+        } else if (etFeedback.getText().toString().equals("")
+                && !etEmail.getText().toString().equals("")) {
+            if (!Globals.IsValidEmail(etEmail.getText().toString())) {
+                etEmail.setError("Enter Valid " + getResources().getString(R.string.fbEmail));
+            } else {
+                etEmail.clearError();
+            }
+            if (!etMobileNo.getText().toString().equals("")) {
+                if (etMobileNo.getText().length() != 10) {
+                    etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.fbMobileNo));
+                    IsValid = false;
+                } else {
+                    etMobileNo.clearError();
+                }
+            }
+            etFeedback.setError("Enter " + getResources().getString(R.string.fbFeedback));
+            IsValid = false;
+        } else if (etEmail.getText().toString().equals("")
+                && etFeedback.getText().toString().equals("")) {
+            etEmail.setError("Enter " + getResources().getString(R.string.fbEmail));
+            etFeedback.setError("Enter " + getResources().getString(R.string.fbFeedback));
+            etMobileNo.clearError();
+            IsValid = false;
+        } else {
+            if (!Globals.IsValidEmail(etEmail.getText().toString())) {
+                etEmail.setError("Enter Valid " + getResources().getString(R.string.fbEmail));
+                etFeedback.setError("Enter " + getResources().getString(R.string.fbFeedback));
+                if (etMobileNo.getText().length() != 10 || etMobileNo.getText().length() > 0) {
+                    etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.fbMobileNo));
+                } else {
+                    etMobileNo.clearError();
+                }
             }
         }
         return IsValid;
@@ -150,7 +212,7 @@ public class FeedbackFragment extends Fragment {
 
         if (id == android.R.id.home) {
             getActivity().getSupportFragmentManager().popBackStack();
-            Globals.HideKeyBoard(getActivity(),getView());
+            Globals.HideKeyBoard(getActivity(), getView());
             return true;
         }
 
