@@ -36,7 +36,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     public void onBindViewHolder(GalleryViewHolder holder, int position) {
         BusinessGalleryTran current = alBusinessGalleryTran.get(position);
         holder.txtGalleryTitle.setText(current.getImageTitle());
-        if (current.getImagePhysicalName() == null) {
+        if (current.getImagePhysicalName() != null) {
             Picasso.with(holder.ivGalleryImage.getContext()).load(current.getImagePhysicalName()).into(holder.ivGalleryImage);
         }
     }
