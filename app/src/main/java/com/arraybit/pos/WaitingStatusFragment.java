@@ -17,12 +17,11 @@ import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.Button;
 
+@SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
 public class WaitingStatusFragment extends DialogFragment implements View.OnClickListener {
 
     Button btnServe, btnNot, btnCancel, btnCall;
-    String waitingStatus, mobileNo;
-    short WaitingMasterId;
     UpdateStatusListener objUpdateStatusListener;
 
     WaitingMaster objWaitingMaster = null, objWaiting;
