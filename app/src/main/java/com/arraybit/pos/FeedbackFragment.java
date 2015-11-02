@@ -133,6 +133,7 @@ public class FeedbackFragment extends Fragment {
                 IsValid = false;
             } else {
                 etMobileNo.clearError();
+                IsValid = false;
             }
         } else if (!etEmail.getText().toString().equals("")
                 && !etMobileNo.getText().toString().equals("")
