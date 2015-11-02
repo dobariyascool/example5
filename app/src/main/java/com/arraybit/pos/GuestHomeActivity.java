@@ -1,7 +1,9 @@
 package com.arraybit.pos;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -19,6 +21,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.modal.CategoryMaster;
+import com.arraybit.parser.CategoryJSONParser;
 import com.github.clans.fab.FloatingActionMenu;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.ImageButton;
@@ -28,12 +32,15 @@ import java.util.List;
 
 public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    public static boolean isCheck=false;
+    public static boolean isCheck = false;
     ActionBarDrawerToggle actionBarDrawerToggle;
     String userName;
     LinearLayout guestHomeMainLayout;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
+    ArrayList<CategoryMaster> objCategoryMaster;
+    CategoryJSONParser objCategoryJSONParser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +57,8 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         //end
 
         //linearlayout
-        guestHomeMainLayout=(LinearLayout)findViewById(R.id.guestHomeMainLayout);
-        Globals.SetScaleImageBackground(GuestHomeActivity.this,guestHomeMainLayout,null);
+        guestHomeMainLayout = (LinearLayout) findViewById(R.id.guestHomeMainLayout);
+        Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null);
         //end
 
         //navigationView
@@ -88,7 +95,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         //end
 
         //imagebutton
-        ImageButton ibViewChange=(ImageButton)findViewById(R.id.ibViewChange);
+        ImageButton ibViewChange = (ImageButton) findViewById(R.id.ibViewChange);
         //end
 
         //get username
@@ -177,15 +184,13 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             Intent intent = new Intent(GuestHomeActivity.this, GuestOrderActivity.class);
             intent.putExtra("username", userName);
             startActivity(intent);
-        }
-        else if(v.getId() == R.id.ibViewChange){
-            if(isCheck) {
+        } else if (v.getId() == R.id.ibViewChange) {
+            if (isCheck) {
                 v.setSelected(false);
-                isCheck=false;
-            }
-            else {
+                isCheck = false;
+            } else {
                 v.setSelected(true);
-                isCheck=true;
+                isCheck = true;
             }
         }
     }
@@ -232,4 +237,34 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         }
     }
     //end
+
+    public class GuestHomeLodingTask extends AsyncTask {
+        ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(GuestHomeActivity.this);
+            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+            objCategoryJSONParser = new CategoryJSONParser();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            objCategoryMaster = objCategoryJSONParser.SelectAllCategoryMaster();
+            return objCategoryMaster;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+        }
+
+
+    }
 }
