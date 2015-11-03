@@ -2,19 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/offwhite"
+    android:orientation="vertical"
     tools:context="com.arraybit.pos.DetailFragment">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <TextView
+    <com.rey.material.widget.TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Detail Page"
         android:padding="@dimen/control_SpecingSmall"
+        android:text="Detail Page"
         tools:ignore="HardcodedText" />
 
 </LinearLayout>

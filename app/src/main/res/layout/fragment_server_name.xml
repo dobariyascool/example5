@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:background="@color/offwhite"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <com.rey.material.widget.EditText
             android:id="@+id/etServerName"

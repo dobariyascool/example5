@@ -2,23 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.arraybit.pos.WaiterOptionListFragment">
-    
-    <TextView
+
+    <com.rey.material.widget.TextView
         style="@style/TextView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
-        android:text="@string/olOption"/>
+        android:text="@string/olOption" />
 
     <com.rey.material.widget.ListView
-        style="@style/ListView"
         android:id="@android:id/list"
-        android:paddingTop="@dimen/control_SpecingSmall"
-        android:paddingBottom="0dp"
-        android:layout_marginBottom="@dimen/control_SpecingSmall"
+        style="@style/ListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/control_SpecingSmall"
+        android:paddingBottom="0dp"
+        android:paddingTop="@dimen/control_SpecingSmall" />
+
 </LinearLayout>

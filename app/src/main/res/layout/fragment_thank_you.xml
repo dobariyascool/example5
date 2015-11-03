@@ -2,20 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     android:background="@color/offwhite"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.arraybit.pos.ThankYouFragment">
 
     <ImageView
-        android:scaleType="fitXY"
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:contentDescription="@string/action_settings"
+        android:scaleType="fitXY"
         android:src="@drawable/my_account" />
 
-    <TextView
+    <com.rey.material.widget.TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

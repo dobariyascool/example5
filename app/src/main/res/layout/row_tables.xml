@@ -19,7 +19,7 @@
             android:orientation="vertical"
             android:padding="@dimen/control_SpecingTiny">
 
-            <TextView
+            <com.rey.material.widget.TextView
                 android:id="@+id/txtTableName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <TextView
+                <com.rey.material.widget.TextView
                     android:id="@+id/txtTableStatus"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                     android:padding="@dimen/control_SpecingTiny"
                     android:textColor="@color/orange" />
 
-                <TextView
+                <com.rey.material.widget.TextView
                     android:id="@+id/txtPersons"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

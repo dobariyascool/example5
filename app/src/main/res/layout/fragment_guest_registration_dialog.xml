@@ -12,109 +12,85 @@
     <com.rey.material.widget.TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_fragment_signup"
-        android:paddingTop="@dimen/control_SpecingMedium"
         android:paddingBottom="@dimen/control_SpecingMedium"
+        android:paddingTop="@dimen/control_SpecingMedium"
+        android:text="@string/title_fragment_signup"
         android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:textSize="@dimen/control_TextMedium"/>
+        android:textSize="@dimen/control_TextMedium"
+        android:textStyle="bold" />
 
+
+    <com.rey.material.widget.EditText
+        android:id="@+id/etFirstName"
+        style="@style/EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/suFirstName"
+        android:inputType="textPersonName" />
+
+    <com.rey.material.widget.EditText
+        android:id="@+id/etLastName"
+        style="@style/EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/suLastName"
+        android:inputType="textPersonName" />
+
+
+    <com.rey.material.widget.EditText
+        android:id="@+id/etEmail"
+        style="@style/EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/suEmail"
+        android:inputType="textWebEmailAddress" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <com.rey.material.widget.EditText
-            android:id="@+id/etFirstName"
+            android:id="@+id/etPassword"
             style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/suFirstName"
-            android:inputType="textPersonName" />
+            android:hint="@string/suPassword"
+            android:inputType="textWebPassword" />
 
-        <com.rey.material.widget.EditText
-            android:id="@+id/etLastName"
-            style="@style/EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/suLastName"
-            android:inputType="textPersonName" />
+    </RelativeLayout>
+
+    <com.rey.material.widget.EditText
+        android:id="@+id/etPhone"
+        style="@style/EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/suPhone"
+        android:inputType="phone"
+        android:maxLength="10" />
 
 
-        <com.rey.material.widget.EditText
-            android:id="@+id/etEmail"
-            style="@style/EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/suEmail"
-            android:inputType="textWebEmailAddress" />
+    <RadioGroup
+        android:id="@+id/rgMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <RelativeLayout
+        <RadioButton
+            android:id="@+id/rbMale"
+            style="@style/RadioButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <com.rey.material.widget.EditText
-                android:id="@+id/etPassword"
-                style="@style/EditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/suPassword"
-                android:inputType="textWebPassword" />
-
-        </RelativeLayout>
-
-        <com.rey.material.widget.EditText
-            android:id="@+id/etPhone"
-            style="@style/EditText"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/suPhone"
-            android:inputType="phone"
-            android:maxLength="10" />
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/suMale" />
 
-
-        <RadioGroup
-            android:id="@+id/rgMain"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/rbFemale"
+            style="@style/RadioButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rbMale"
-                style="@style/RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:gravity="center"
-                android:text="@string/suMale" />
-
-            <RadioButton
-                android:id="@+id/rbFemale"
-                style="@style/RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/control_SpecingMedium"
-                android:gravity="center"
-                android:text="@string/suFemale" />
-        </RadioGroup>
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="end"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<com.rey.material.widget.Button-->
-                <!--android:id="@+id/btnCancel"-->
-                <!--style="?android:buttonBarButtonStyle"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="@dimen/control_SpecingSmall"-->
-                <!--android:text="@string/sdCancel" />-->
-
-            <!--<com.rey.material.widget.Button-->
-                <!--android:id="@+id/btnSignUp"-->
-                <!--style="?android:buttonBarButtonStyle"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="@dimen/control_SpecingSmall"-->
-                <!--android:text="@string/sdSignup" />-->
-
-        <!--</LinearLayout>-->
+            android:layout_marginStart="@dimen/control_SpecingMedium"
+            android:gravity="center"
+            android:text="@string/suFemale" />
+    </RadioGroup>
 </LinearLayout>

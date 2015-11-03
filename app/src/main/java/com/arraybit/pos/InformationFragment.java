@@ -11,23 +11,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.arraybit.adapter.WorkingHoursAdapter;
 import com.arraybit.modal.BusinessHoursTran;
 import com.arraybit.parser.BusinessHoursJSONParser;
+import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
 
+@SuppressWarnings("unchecked")
 public class InformationFragment extends Fragment {
 
     static ArrayList<BusinessHoursTran> lstBusinessHoursTran;
     RecyclerView rvWorkingHours;
     TextView txtDescription;
     LinearLayoutManager linearLayoutManager;
-    String description;
-    int BusinessMasterId;
     WorkingHoursAdapter adapter;
 
     public InformationFragment() {
@@ -52,9 +51,6 @@ public class InformationFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (description == null) {
-            txtDescription.setText(description);
-        }
         if (lstBusinessHoursTran == null) {
             new WorkingHoursLoadingTask().execute();
         } else {
@@ -102,10 +98,8 @@ public class InformationFragment extends Fragment {
             lstBusinessHoursTran = (ArrayList<BusinessHoursTran>) o;
             if (lstBusinessHoursTran == null) {
                 rvWorkingHours.setVisibility(View.GONE);
-                return;
             } else if (lstBusinessHoursTran.size() == 0) {
                 rvWorkingHours.setVisibility(View.GONE);
-                return;
             } else {
                 SetWorkingHoursRecyclerView(lstBusinessHoursTran);
             }

@@ -5,10 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.arraybit.global.SpinnerItem;
 import com.arraybit.pos.R;
+import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 

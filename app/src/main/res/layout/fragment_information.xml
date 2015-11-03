@@ -5,13 +5,13 @@
     android:orientation="vertical"
     tools:context="com.arraybit.pos.InformationFragment">
 
-    <TextView
+    <com.rey.material.widget.TextView
         android:id="@+id/txtDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:maxLines="1"
-        android:padding="8dp" />
+        android:padding="@dimen/control_SpecingSmall" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,10 +21,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvWorkingHours"
             android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp" />
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/control_SpecingSmall"
+            android:paddingRight="@dimen/control_SpecingSmall" />
 
     </LinearLayout>
-
 </LinearLayout>
