@@ -9,7 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,12 +23,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       layout1 = (LinearLayout) findViewById(R.id.layout1);
+        layout1 = (LinearLayout) findViewById(R.id.layout1);
 
-       DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
-       Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground), displayMetrics.widthPixels, displayMetrics.heightPixels);
-      layout1.setBackground(new BitmapDrawable(getResources(),bitmap));
+        Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground), displayMetrics.widthPixels, displayMetrics.heightPixels);
+        layout1.setBackground(new BitmapDrawable(getResources(), bitmap));
+
+        Button btn=(Button)findViewById(R.id.btnAdd);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "btn click", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+//        new CountDownTimer(100000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+//                System.out.println("seconds remaining: " + millisUntilFinished / 1000);
+//            }
+//
+//            public void onFinish() {
+//                System.out.println("done!");
+//                Toast.makeText(MainActivity.this,"Task is done",Toast.LENGTH_LONG).show();
+//            }
+//        }.start();
+
        //DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 //
 //        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground);

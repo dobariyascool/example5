@@ -67,7 +67,6 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
         rvWaiting.setAdapter(waitingListAdapter);
         rvWaiting.setLayoutManager(linearLayoutManager);
-
     }
 
     public void LoadWaitingListData() {

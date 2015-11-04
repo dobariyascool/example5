@@ -2,6 +2,7 @@ package com.arraybit.pos;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -23,7 +26,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"ConstantConditions","unchecked"})
+@SuppressWarnings({"ConstantConditions", "unchecked"})
 public class HotelFragment extends Fragment {
 
     Toolbar app_bar;
@@ -71,6 +74,32 @@ public class HotelFragment extends Fragment {
         ivLogo = (ImageView) view.findViewById(R.id.ivLogo);
 
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            getActivity().getSupportFragmentManager().popBackStack();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        menu.findItem(R.id.login).setVisible(false);
+        menu.findItem(R.id.registration).setVisible(false);
     }
 
     static class PageAdapter extends FragmentStatePagerAdapter {
@@ -124,6 +153,7 @@ public class HotelFragment extends Fragment {
             if (objBusinessMaster == null) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
             } else {
+
                 Picasso.with(ivLogo.getContext()).load(objBusinessMaster.getImageName()).into(ivLogo);
 
                 pageAdapter.addFragment(new GalleryFragment(objBusinessMaster.getBusinessMasterId()), "Gallery");

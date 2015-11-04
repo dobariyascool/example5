@@ -34,6 +34,7 @@ public class WaitingListFragment extends Fragment {
     ArrayList<WaitingStatusMaster> alWaitingStatusMaster;
     WaitingListPagerAdapter waitingListPagerAdapter;
 
+
     public WaitingListFragment() {
         // Required empty public constructor
     }
@@ -114,7 +115,6 @@ public class WaitingListFragment extends Fragment {
 
             }
         });
-
     }
 
     //region LoadingTask
@@ -199,5 +199,4 @@ public class WaitingListFragment extends Fragment {
         }
     }
     //endregion
-
 }
