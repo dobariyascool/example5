@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arraybit.adapter.GalleryAdapter;
@@ -19,6 +18,7 @@ import com.arraybit.global.EndlessRecyclerOnScrollListener;
 import com.arraybit.global.Service;
 import com.arraybit.modal.BusinessGalleryTran;
 import com.arraybit.parser.BusinessGalleryJSONParser;
+import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 

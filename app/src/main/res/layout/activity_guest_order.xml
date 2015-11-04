@@ -43,7 +43,7 @@
                         android:orientation="vertical"
                         tools:ignore="NestedWeights">
 
-                        <TextView
+                        <com.rey.material.widget.TextView
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:background="@color/primary"
@@ -53,28 +53,28 @@
                             android:textColor="@android:color/white"
                             android:textStyle="bold"/>
 
-                        <TextView
+                        <com.rey.material.widget.TextView
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:gravity="center"
                             android:text="Order No"
                             android:textColor="@android:color/white"/>
 
-                        <TextView
+                        <com.rey.material.widget.TextView
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:gravity="center"
                             android:text="Total Item"
                             android:textColor="@android:color/white"/>
 
-                        <TextView
+                        <com.rey.material.widget.TextView
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:gravity="center"
                             android:text="Item Point"
                             android:textColor="@android:color/white"/>
 
-                        <TextView
+                        <com.rey.material.widget.TextView
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:gravity="center"
@@ -126,7 +126,7 @@
                         android:orientation="vertical"
                         tools:ignore="NestedWeights,HardcodedText">
 
-                    <TextView
+                    <com.rey.material.widget.TextView
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="@color/primary"
@@ -136,7 +136,7 @@
                         android:textColor="@android:color/white"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <com.rey.material.widget.TextView
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_margin="@dimen/control_SpecingSmall"
@@ -146,7 +146,7 @@
                         android:textColor="@android:color/white"
                         />
 
-                    <TextView
+                    <com.rey.material.widget.TextView
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginEnd="@dimen/control_SpecingSmall"
@@ -157,7 +157,7 @@
                         android:textColor="@android:color/white"
                         />
 
-                    <TextView
+                    <com.rey.material.widget.TextView
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_margin="@dimen/control_SpecingSmall"

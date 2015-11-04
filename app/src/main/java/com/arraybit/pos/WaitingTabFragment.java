@@ -4,7 +4,6 @@ package com.arraybit.pos;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,9 +37,8 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
 
     public WaitingTabFragment() {
     }
-    
-    public static WaitingTabFragment createInstance(WaitingStatusMaster objStatusMaster) {
 
+    public static WaitingTabFragment createInstance(WaitingStatusMaster objStatusMaster) {
         WaitingTabFragment waitingTabFragment = new WaitingTabFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ITEMS_COUNT_KEY, objStatusMaster);
@@ -62,19 +60,23 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
 
+        return view;
+    }
+
+    private void setupRecyclerView(RecyclerView rvWaiting) {
+        waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
+        rvWaiting.setAdapter(waitingListAdapter);
+        rvWaiting.setLayoutManager(linearLayoutManager);
+
+    }
+
+    public void LoadWaitingListData() {
+
         Bundle bundle = getArguments();
         objWaitingStatusMaster = bundle.getParcelable(ITEMS_COUNT_KEY);
         alWaitingMaster = new ArrayList<>();
 
         new WaitingMasterLoadingTask().execute();
-
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
         rvWaiting.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
@@ -86,12 +88,6 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
                 }
             }
         });
-    }
-
-    private void setupRecyclerView(RecyclerView rvWaiting) {
-        waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
-        rvWaiting.setAdapter(waitingListAdapter);
-        rvWaiting.setLayoutManager(linearLayoutManager);
     }
 
     @Override
@@ -119,7 +115,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         protected void onPreExecute() {
             super.onPreExecute();
 
-            if (currentPage > 2 && alWaitingMaster.size() != 0){
+            if (currentPage > 2 && alWaitingMaster.size() != 0) {
                 progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
                 progressDialog.setIndeterminate(true);
@@ -140,7 +136,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
 
         @Override
         protected void onPostExecute(Object result) {
-            if(currentPage > 2) {
+            if (currentPage > 2) {
                 progressDialog.dismiss();
             }
             ArrayList<WaitingMaster> lstWaitingMaster = (ArrayList<WaitingMaster>) result;

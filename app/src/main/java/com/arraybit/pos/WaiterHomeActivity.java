@@ -1,8 +1,11 @@
 package com.arraybit.pos;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +17,11 @@ import android.widget.LinearLayout;
 import com.arraybit.adapter.OptionListAdapter;
 import com.arraybit.global.Globals;
 
-public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,OptionListAdapter.OptionListClickListener {
+public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OptionListAdapter.OptionListClickListener {
 
     ActionBarDrawerToggle actionBarDrawerToggle;
-    LinearLayout waiterHomeMainLayout;
+    LinearLayout waiterHomeMainLayout, waiterFragmentLayout;
+    boolean isDualPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +29,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         setContentView(R.layout.activity_waiter_home);
 
         //app_bar
-        Toolbar app_bar=(Toolbar)findViewById(R.id.app_bar);
+        Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -35,20 +39,29 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         //end
 
         //linearlayout
-        waiterHomeMainLayout=(LinearLayout)findViewById(R.id.waiterHomeMainLayout);
-        Globals.SetScaleImageBackground(WaiterHomeActivity.this,waiterHomeMainLayout,null);
+        waiterHomeMainLayout = (LinearLayout) findViewById(R.id.waiterHomeMainLayout);
+        waiterFragmentLayout = (LinearLayout) findViewById(R.id.waiterFragmentLayout);
+        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null);
         //end
 
         //navigationView
-        NavigationView  navigationView=(NavigationView)findViewById(R.id.navigationView);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
 
 
         //drawerlayout and actionbardrawertoggle
-        DrawerLayout drawerLayout=(DrawerLayout)findViewById(R.id.drawerLayout);
-        Globals.SetNavigationDrawer(actionBarDrawerToggle,WaiterHomeActivity.this,drawerLayout,app_bar);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        Globals.SetNavigationDrawer(actionBarDrawerToggle, WaiterHomeActivity.this, drawerLayout, app_bar);
         //end
+
+        if (waiterHomeMainLayout.findViewById(R.id.fragment_waiter_option_list) == null) {
+
+            isDualPanel = false;
+            AddFragmentInLayout(new WaiterOptionListFragment());
+        } else {
+            isDualPanel = true;
+        }
 
     }
 
@@ -79,7 +92,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             return true;
         }
 
-        if(id == R.id.logout){
+        if (id == R.id.logout) {
             Globals.ClearPreference(WaiterHomeActivity.this);
         }
 
@@ -90,7 +103,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-        switch(menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
 
             case R.id.home:
                 //Toast.makeText(getApplicationContext(), "Home Selected", Toast.LENGTH_SHORT).show();
@@ -105,14 +118,43 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public void onClick(int position) {
-        AllOrdersFragment ordersFragment=(AllOrdersFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_all_orders);
-        //AllOrdersFragment ordersFragment=new AllOrdersFragment();
-        ordersFragment.setFragment(position);
+        if (isDualPanel) {
+            AllOrdersFragment ordersFragment = (AllOrdersFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_all_orders);
+            //AllOrdersFragment ordersFragment=new AllOrdersFragment();
+            ordersFragment.setFragment(position);
+        } else {
+            if (position == 0) {
+                AddFragmentInLayout(new AllOrdersFragment());
+            } else if (position == 1) {
+                AddFragmentInLayout(new AllTablesFragment());
+            } else {
+                Intent intent = new Intent(WaiterHomeActivity.this, GuestHomeActivity.class);
+                startActivity(intent);
+            }
+        }
+    }
+    //end
+
+    //add fragment
+    void AddFragmentInLayout(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.waiterFragmentLayout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
     //end
 
     //prevent backPressed
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed() {
+        if (!isDualPanel) {
+            if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                    getSupportFragmentManager().popBackStack();
+                }
+            }
+
+        }
+    }
     //end
 }

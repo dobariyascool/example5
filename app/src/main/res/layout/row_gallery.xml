@@ -16,7 +16,7 @@
             android:layout_height="150dp"
             android:orientation="vertical">
 
-            <TextView
+            <com.rey.material.widget.TextView
                 android:id="@+id/txtGalleryTitle"
                 style="@style/PrimaryTextView"
                 android:layout_width="match_parent"

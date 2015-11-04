@@ -75,6 +75,50 @@ public class WaitingListFragment extends Fragment {
 
     }
 
+    //region Method
+    public void SetTabLayout(ArrayList<WaitingStatusMaster> alWaitingStatusMaster, final WaitingListPagerAdapter waitingListPagerAdapter) {
+
+        for (int i = 0; i < alWaitingStatusMaster.size(); i++) {
+            if (alWaitingStatusMaster.get(i).getWaitingStatus().equals(Globals.WaitingStatus.Serve.toString())) {
+                waitingListPagerAdapter.AddFragment(WaitingTabFragment.createInstance(alWaitingStatusMaster.get(i)), alWaitingStatusMaster.get(i).getWaitingStatus() + "d");
+            } else if (alWaitingStatusMaster.get(i).getWaitingStatus().equals(Globals.WaitingStatus.Cancel.toString())) {
+                waitingListPagerAdapter.AddFragment(WaitingTabFragment.createInstance(alWaitingStatusMaster.get(i)), alWaitingStatusMaster.get(i).getWaitingStatus() + "led");
+            } else {
+                waitingListPagerAdapter.AddFragment(WaitingTabFragment.createInstance(alWaitingStatusMaster.get(i)), alWaitingStatusMaster.get(i).getWaitingStatus());
+            }
+        }
+        waitingViewPager.setAdapter(waitingListPagerAdapter);
+        waitingTabLayout.setupWithViewPager(waitingViewPager);
+
+        //set first tab
+        WaitingTabFragment waitingTabFragment = (WaitingTabFragment) waitingListPagerAdapter.GetCurrentFragment(0);
+        waitingTabFragment.LoadWaitingListData();
+        //end
+
+        waitingViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                waitingViewPager.setCurrentItem(position);
+                //load data when tab is change
+                WaitingTabFragment waitingTabFragment = (WaitingTabFragment) waitingListPagerAdapter.GetCurrentFragment(position);
+                waitingTabFragment.LoadWaitingListData();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+    }
+
+    //region LoadingTask
+
     static class WaitingListPagerAdapter extends FragmentStatePagerAdapter {
 
         private final List<Fragment> WaitingFragmentList = new ArrayList<>();
@@ -87,6 +131,10 @@ public class WaitingListFragment extends Fragment {
         public void AddFragment(Fragment fragment, String title) {
             WaitingFragmentList.add(fragment);
             WaitingTitleList.add(title);
+        }
+
+        public Fragment GetCurrentFragment(int position) {
+            return WaitingFragmentList.get(position);
         }
 
         @Override
@@ -105,7 +153,7 @@ public class WaitingListFragment extends Fragment {
         }
     }
 
-    //region LoadingTask
+    //endregion
 
     class WaitingStatusLoadingTask extends AsyncTask {
 
@@ -144,16 +192,12 @@ public class WaitingListFragment extends Fragment {
 
                 waitingListPagerAdapter = new WaitingListPagerAdapter(getChildFragmentManager());
 
-                for (int i = 0; i < alWaitingStatusMaster.size(); i++) {
-                    waitingListPagerAdapter.AddFragment(WaitingTabFragment.createInstance((WaitingStatusMaster) alWaitingStatusMaster.get(i)), alWaitingStatusMaster.get(i).getWaitingStatus());
-                }
-                waitingViewPager.setAdapter(waitingListPagerAdapter);
-                waitingTabLayout.setupWithViewPager(waitingViewPager);
+                SetTabLayout(alWaitingStatusMaster, waitingListPagerAdapter);
+
                 progressDialog.dismiss();
             }
         }
     }
-
     //endregion
 
 }

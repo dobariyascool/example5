@@ -8,12 +8,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.arraybit.modal.BusinessMaster;
 import com.arraybit.modal.UserMaster;
@@ -23,9 +23,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+@SuppressWarnings({"ConstantConditions","unchecked"})
 public class HotelFragment extends Fragment {
 
     Toolbar app_bar;
@@ -58,7 +56,7 @@ public class HotelFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_hotel, container, false);
 
-        android.support.v7.widget.Toolbar app_bar = (android.support.v7.widget.Toolbar) view.findViewById(R.id.app_bar);
+        app_bar = (Toolbar) view.findViewById(R.id.app_bar);
 
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);

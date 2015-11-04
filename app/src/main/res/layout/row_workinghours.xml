@@ -11,21 +11,21 @@
         android:gravity="center"
         android:visibility="gone">
 
-        <TextView
+        <com.rey.material.widget.TextView
             style="@style/PrimaryTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/rDayOfWeek" />
 
-        <TextView
+        <com.rey.material.widget.TextView
             style="@style/PrimaryTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/rOpeningTime" />
 
-        <TextView
+        <com.rey.material.widget.TextView
             style="@style/PrimaryTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -40,19 +40,19 @@
         android:layout_height="wrap_content"
         android:gravity="center">
 
-        <TextView
+        <com.rey.material.widget.TextView
             android:id="@+id/txtDayOfWeek"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <TextView
+        <com.rey.material.widget.TextView
             android:id="@+id/txtOpeningTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <TextView
+        <com.rey.material.widget.TextView
             android:id="@+id/txtClosingTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
