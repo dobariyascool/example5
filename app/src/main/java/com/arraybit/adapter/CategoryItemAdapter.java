@@ -24,7 +24,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     Context context;
     ArrayList<ItemMaster> alItemMaster;
 
-    public CategoryItemAdapter(Context context,ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange) {
+    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange) {
         this.context = context;
         alItemMaster = result;
         this.fragmentManager = fragmentManager;
@@ -60,6 +60,8 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         ItemMaster objItemMaster = alItemMaster.get(position);
 
         holder.mItemTextView.setText(objItemMaster.getItemName());
+        holder.mItemTextView1.setText(objItemMaster.getShortDescription());
+        holder.mItemTextView2.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
     }
 
 
@@ -90,10 +92,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             mItemTextView = (TextView) itemView.findViewById(R.id.itemTextView);
             mItemTextView1 = (TextView) itemView.findViewById(R.id.itemTextView1);
             mItemTextView2 = (TextView) itemView.findViewById(R.id.itemTextView2);
-
         }
-
-
     }
 
 }
