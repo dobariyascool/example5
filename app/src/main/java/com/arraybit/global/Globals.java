@@ -32,6 +32,7 @@ import com.arraybit.pos.R;
 import com.arraybit.pos.SignInActivity;
 import com.arraybit.pos.SignUpFragment;
 
+import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,6 +44,7 @@ public class Globals {
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "HH:mm";
     public static int sourceMasterId = 2;
+    public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
     static FragmentManager fragmentManager;
     //public static Bitmap bitmap1;
 
@@ -171,13 +173,12 @@ public class Globals {
         }
     }
 
-    public static void SetError(TextView txtMsg,RecyclerView recyclerView,String errorMsg,boolean isErrorShow){
-        if(isErrorShow){
+    public static void SetError(TextView txtMsg, RecyclerView recyclerView, String errorMsg, boolean isErrorShow) {
+        if (isErrorShow) {
             txtMsg.setVisibility(View.VISIBLE);
             txtMsg.setText(errorMsg);
             recyclerView.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             txtMsg.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
         }

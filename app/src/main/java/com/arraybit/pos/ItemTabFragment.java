@@ -109,20 +109,21 @@ public class ItemTabFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-
+            if (currentPage > 2 && alItemMaster.size() != 0) {
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            }
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-//            if (linearLayoutManager.canScrollVertically() && alItemMaster.size() == 0) {
-//                currentPage = 1;
-//            }
+            if (linearLayoutManager.canScrollVertically() && alItemMaster.size() == 0) {
+                currentPage = 1;
+            }
             return objItemJSONParser.SelectAllItemMasterPageWise(currentPage, objCategoryMaster.getCategoryMasterId());
         }
 
@@ -130,7 +131,9 @@ public class ItemTabFragment extends Fragment {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
-            progressDialog.dismiss();
+            if (currentPage > 2) {
+                progressDialog.dismiss();
+            }
 
             ArrayList<ItemMaster> lstItemMaster = (ArrayList<ItemMaster>) result;
             if (lstItemMaster == null) {
@@ -152,9 +155,7 @@ public class ItemTabFragment extends Fragment {
                 Globals.SetError(txtMsg, rvItem, null, false);
                 alItemMaster = lstItemMaster;
                 setupRecyclerView();
-
             }
-
         }
     }
 }
