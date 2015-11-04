@@ -75,6 +75,7 @@ public class WaitingListFragment extends Fragment {
         });
 
     }
+    //region LoadingTask
 
     //region Method
     public void SetTabLayout(ArrayList<WaitingStatusMaster> alWaitingStatusMaster, final WaitingListPagerAdapter waitingListPagerAdapter) {
@@ -117,7 +118,7 @@ public class WaitingListFragment extends Fragment {
         });
     }
 
-    //region LoadingTask
+    //endregion
 
     static class WaitingListPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -152,7 +153,6 @@ public class WaitingListFragment extends Fragment {
             return WaitingTitleList.get(position);
         }
     }
-
     //endregion
 
     class WaitingStatusLoadingTask extends AsyncTask {
@@ -183,11 +183,11 @@ public class WaitingListFragment extends Fragment {
         protected void onPostExecute(Object result) {
 
             if (alWaitingStatusMaster == null) {
+                progressDialog.dismiss();
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
             } else if (alWaitingStatusMaster.size() == 0) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
             } else {
 
                 waitingListPagerAdapter = new WaitingListPagerAdapter(getChildFragmentManager());
@@ -198,5 +198,5 @@ public class WaitingListFragment extends Fragment {
             }
         }
     }
-    //endregion
+    //end
 }
