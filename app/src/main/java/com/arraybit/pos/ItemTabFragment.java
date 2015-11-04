@@ -130,6 +130,8 @@ public class ItemTabFragment extends Fragment {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
+            progressDialog.dismiss();
+
             ArrayList<ItemMaster> lstItemMaster = (ArrayList<ItemMaster>) result;
             if (lstItemMaster == null) {
                 if (currentPage == 1) {
@@ -152,7 +154,7 @@ public class ItemTabFragment extends Fragment {
                 setupRecyclerView();
 
             }
-            progressDialog.dismiss();
+
         }
     }
 }
