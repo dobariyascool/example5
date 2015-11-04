@@ -118,7 +118,7 @@
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TabLayout
-                        android:id="@+id/tabLayout"
+                        android:id="@+id/itemTabLayout"
                         style="@style/TabLayout"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -137,7 +137,7 @@
 
                 </LinearLayout>
                 <android.support.v4.view.ViewPager
-                    android:id="@+id/viewPager"
+                    android:id="@+id/itemViewPager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="visible" />

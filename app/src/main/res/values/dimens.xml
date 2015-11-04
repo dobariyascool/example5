@@ -158,5 +158,4 @@
 
     <!-- orderplace panel row size-->
     <dimen name="leftHeight">40dp</dimen>
-
 </resources>

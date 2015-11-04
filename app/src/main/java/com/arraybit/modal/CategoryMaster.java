@@ -11,7 +11,7 @@ public class CategoryMaster implements Parcelable {
 
     short CategoryMasterId;
     String CategoryName;
-    short linktoCategoryMasterId;
+    short linktoCategoryMasterIdParent;
     String ImagelNameBytes;
     String ImagelName;
     String CategoryColor;
@@ -27,7 +27,7 @@ public class CategoryMaster implements Parcelable {
             CategoryMaster objCategoryMaster = new CategoryMaster();
             objCategoryMaster.CategoryMasterId = (short)source.readInt();
             objCategoryMaster.CategoryName = source.readString();
-            objCategoryMaster.linktoCategoryMasterId = (short)source.readInt();
+            objCategoryMaster.linktoCategoryMasterIdParent = (short)source.readInt();
             objCategoryMaster.ImagelNameBytes = source.readString();
             objCategoryMaster.ImagelName = source.readString();
             objCategoryMaster.CategoryColor = source.readString();
@@ -55,9 +55,9 @@ public class CategoryMaster implements Parcelable {
 
     public void setCategoryName(String categoryName) { this.CategoryName = categoryName; }
 
-    public short getlinktoCategoryMasterId() { return this.linktoCategoryMasterId; }
+    public short getlinktoCategoryMasterIdParent() { return this.linktoCategoryMasterIdParent; }
 
-    public void setlinktoCategoryMasterId(short linktoCategoryMasterId) { this.linktoCategoryMasterId = linktoCategoryMasterId; }
+    public void setlinktoCategoryMasterIdParent(short linktoCategoryMasterIdParent) { this.linktoCategoryMasterIdParent = linktoCategoryMasterIdParent; }
 
     public String getImagelNameBytes() { return this.ImagelNameBytes; }
 
@@ -104,7 +104,7 @@ public class CategoryMaster implements Parcelable {
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(CategoryMasterId);
         parcel.writeString(CategoryName);
-        parcel.writeInt(linktoCategoryMasterId);
+        parcel.writeInt(linktoCategoryMasterIdParent);
         parcel.writeString(ImagelNameBytes);
         parcel.writeString(ImagelName);
         parcel.writeString(CategoryColor);

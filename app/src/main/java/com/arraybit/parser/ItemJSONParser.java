@@ -51,8 +51,8 @@ public class ItemJSONParser {
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
                 objItemMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objItemMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
-                dt = sdfDateTimeFormat.parse(jsonObject.getString("UpdateDateTime"));
-                objItemMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
+                //dt = sdfDateTimeFormat.parse(jsonObject.getString("UpdateDateTime"));
+                //objItemMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
                 if (!jsonObject.getString("linktoUserMasterIdUpdatedBy").equals("null")) {
                     objItemMaster.setlinktoUserMasterIdUpdatedBy((short) jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
                 }
@@ -99,8 +99,8 @@ public class ItemJSONParser {
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
                 objItemMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objItemMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
-                dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("UpdateDateTime"));
-                objItemMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
+//                dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("UpdateDateTime"));
+//                objItemMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
                 if (!jsonArray.getJSONObject(i).getString("linktoUserMasterIdUpdatedBy").equals("null")) {
                     objItemMaster.setlinktoUserMasterIdUpdatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
                 }
@@ -122,12 +122,12 @@ public class ItemJSONParser {
         }
     }
 
-    public ArrayList<ItemMaster> SelectAllItemMasterPageWise(int currentPage) {
+    public ArrayList<ItemMaster> SelectAllItemMasterPageWise(int currentPage,int linktoCategoryMasterId) {
         ArrayList<ItemMaster> lstItemMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMaster);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMaster +"/"+currentPage+"/"+linktoCategoryMasterId);
             if (jsonResponse != null) {
-                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemMaster + "PageWiseResult");
+                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemMaster + "Result");
                 if (jsonArray != null) {
                     lstItemMaster = SetListPropertiesFromJSONArray(jsonArray);
                 }

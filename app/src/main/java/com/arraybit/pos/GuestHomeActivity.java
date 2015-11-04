@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -38,9 +37,11 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     LinearLayout guestHomeMainLayout;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    ArrayList<CategoryMaster> objCategoryMaster;
     CategoryJSONParser objCategoryJSONParser;
+    ItemPagerAdapter itemPagerAdapter;
 
+    ViewPager itemViewPager;
+    TabLayout itemTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,22 +78,11 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         //end
 
         //tab layout
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        itemTabLayout = (TabLayout) findViewById(R.id.itemTabLayout);
         //end
 
         //view page
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(TabFragment.createInstance(20), "Fast Food");
-        pagerAdapter.addFragment(TabFragment.createInstance(10), "South Indian");
-        pagerAdapter.addFragment(TabFragment.createInstance(5), "Chinese");
-        pagerAdapter.addFragment(TabFragment.createInstance(9), "Gujarati");
-        pagerAdapter.addFragment(TabFragment.createInstance(2), "Punjabi");
-        pagerAdapter.addFragment(TabFragment.createInstance(10), "Sweets");
-        viewPager.setAdapter(pagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-        //end
+        itemViewPager = (ViewPager) findViewById(R.id.itemViewPager);
 
         //imagebutton
         ImageButton ibViewChange = (ImageButton) findViewById(R.id.ibViewChange);
@@ -117,6 +107,8 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         btnConfirm.setOnClickListener(this);
         ibViewChange.setOnClickListener(this);
         //end
+
+        new GuestHomeCategoryLodingTask().execute();
     }
 
     @Override
@@ -180,6 +172,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public void onClick(View v) {
+
         if (v.getId() == R.id.btnConfirm) {
             Intent intent = new Intent(GuestHomeActivity.this, GuestOrderActivity.class);
             intent.putExtra("username", userName);
@@ -207,16 +200,16 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     //end
 
     //pager adapter
-    static class PagerAdapter extends FragmentStatePagerAdapter {
+    static class ItemPagerAdapter extends FragmentStatePagerAdapter {
 
         private final List<Fragment> fragmentList = new ArrayList<>();
         private final List<String> fragmentTitleList = new ArrayList<>();
 
-        public PagerAdapter(FragmentManager fragmentManager) {
+        public ItemPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        public void AddFragment(Fragment fragment, String title) {
             fragmentList.add(fragment);
             fragmentTitleList.add(title);
         }
@@ -238,33 +231,36 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     }
     //end
 
-    public class GuestHomeLodingTask extends AsyncTask {
-        ProgressDialog pDialog;
+    public class GuestHomeCategoryLodingTask extends AsyncTask {
+        ArrayList<CategoryMaster> alCategoryMaster;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            pDialog = new ProgressDialog(GuestHomeActivity.this);
-            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-
             objCategoryJSONParser = new CategoryJSONParser();
         }
 
         @Override
         protected Object doInBackground(Object[] params) {
-            objCategoryMaster = objCategoryJSONParser.SelectAllCategoryMaster();
-            return objCategoryMaster;
+            alCategoryMaster = new ArrayList<CategoryMaster>();
+
+            alCategoryMaster = objCategoryJSONParser.SelectAllCategoryMaster();
+            return alCategoryMaster;
         }
 
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
+
+            itemPagerAdapter = new ItemPagerAdapter(getSupportFragmentManager());
+
+            for (int i = 0; i < alCategoryMaster.size(); i++) {
+                itemPagerAdapter.AddFragment(com.arraybit.pos.ItemTabFragment.createInstance((CategoryMaster) alCategoryMaster.get(i)), alCategoryMaster.get(i).getCategoryName());
+            }
+
+            itemViewPager.setAdapter(itemPagerAdapter);
+            itemTabLayout.setupWithViewPager(itemViewPager);
         }
-
-
     }
+
 }
