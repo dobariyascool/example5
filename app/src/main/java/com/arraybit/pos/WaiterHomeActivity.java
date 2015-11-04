@@ -20,7 +20,7 @@ import com.arraybit.global.Globals;
 public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OptionListAdapter.OptionListClickListener {
 
     ActionBarDrawerToggle actionBarDrawerToggle;
-    LinearLayout waiterHomeMainLayout, waiterFragmentLayout;
+    LinearLayout waiterHomeMainLayout;
     boolean isDualPanel;
 
     @Override
@@ -40,7 +40,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
         //linearlayout
         waiterHomeMainLayout = (LinearLayout) findViewById(R.id.waiterHomeMainLayout);
-        waiterFragmentLayout = (LinearLayout) findViewById(R.id.waiterFragmentLayout);
+        LinearLayout waiterFragmentLayout = (LinearLayout) findViewById(R.id.waiterFragmentLayout);
         Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null);
         //end
 

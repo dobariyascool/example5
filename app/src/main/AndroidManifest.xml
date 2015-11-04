@@ -57,5 +57,6 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_waiting"
             android:theme="@style/FullScreenTheme" />
+        <receiver android:name="com.arraybit.global.TimeScheduler"/>
     </application>
 </manifest>

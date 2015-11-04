@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 
+
 public class SplashScreenActivity extends AppCompatActivity {
     SharePreferenceManage objSharePreferenceManage;
 
