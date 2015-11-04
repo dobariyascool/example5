@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unchecked")
 public class ItemTabFragment extends Fragment {
 
     public final static String ITEMS_COUNT_KEY = "ItemTabFragment$ItemsCount";
@@ -56,6 +56,7 @@ public class ItemTabFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_item_tab, container, false);
         rvItem = (RecyclerView) view.findViewById(R.id.rvItem);
         rvItem.setVisibility(View.GONE);
+
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -70,15 +71,15 @@ public class ItemTabFragment extends Fragment {
         return view;
     }
 
-    public void setupRecyclerView(RecyclerView rvItem) {
+    public void setupRecyclerView() {
 
-        categoryItemAdapter = new CategoryItemAdapter(getActivity(),alItemMaster, getFragmentManager(), GuestHomeActivity.isCheck);
+        categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), GuestHomeActivity.isCheck);
         rvItem.setVisibility(View.VISIBLE);
         rvItem.setAdapter(categoryItemAdapter);
         if (GuestHomeActivity.isCheck) {
             rvItem.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         } else {
-            rvItem.setLayoutManager(new LinearLayoutManager(getActivity()));
+            rvItem.setLayoutManager(linearLayoutManager);
         }
 
     }
@@ -87,12 +88,17 @@ public class ItemTabFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
-
-    }
-
-    @SuppressLint("CommitTransaction")
-    public void SetFragment() {
+        rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                if (current_page > currentPage) {
+                    currentPage = current_page;
+                    if (Service.CheckNet(getActivity())) {
+                        new GuestHomeItemLoadingTask().execute();
+                    }
+                }
+            }
+        });
     }
 
     public class GuestHomeItemLoadingTask extends AsyncTask {
@@ -113,7 +119,7 @@ public class ItemTabFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            ItemJSONParser  objItemJSONParser = new ItemJSONParser();
+            ItemJSONParser objItemJSONParser = new ItemJSONParser();
 //            if (linearLayoutManager.canScrollVertically() && alItemMaster.size() == 0) {
 //                currentPage = 1;
 //            }
@@ -143,21 +149,10 @@ public class ItemTabFragment extends Fragment {
 
                 Globals.SetError(txtMsg, rvItem, null, false);
                 alItemMaster = lstItemMaster;
-                setupRecyclerView(rvItem);
+                setupRecyclerView();
 
             }
             progressDialog.dismiss();
-            rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
-                @Override
-                public void onLoadMore(int current_page) {
-                    if (current_page > currentPage) {
-                        currentPage = current_page;
-                        if (Service.CheckNet(getActivity())) {
-                            new GuestHomeItemLoadingTask().execute();
-                        }
-                    }
-                }
-            });
         }
     }
 }
