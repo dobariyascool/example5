@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.WaitingJSONParser;
@@ -76,11 +77,11 @@ public class AddFragment extends Fragment {
                     Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
                     return;
                 }
-//                if (Service.CheckNet(getActivity())) {
-//                    new AddLodingTask().execute();
-//                } else {
-//                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
-//                }
+                if (Service.CheckNet(getActivity())) {
+                    new AddLodingTask().execute();
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
