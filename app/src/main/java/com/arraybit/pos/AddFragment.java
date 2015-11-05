@@ -186,12 +186,13 @@ public class AddFragment extends Fragment {
                 && !etName.getText().toString().equals("") && !etPersons.getText().toString().equals("")){
             if (etMobileNo.getText().length() != 10) {
                 etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
+                IsValid = false;
             } else {
                 etMobileNo.clearError();
             }
             etName.clearError();
             etPersons.clearError();
-            IsValid = false;
+
         }
         return IsValid;
     }
