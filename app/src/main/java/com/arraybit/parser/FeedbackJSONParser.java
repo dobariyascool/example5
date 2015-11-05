@@ -51,12 +51,12 @@ public class FeedbackJSONParser
                 if (!jsonObject.getString("linktoUserMasterIdRepliedBy").equals("null")) {
                     objFeedbackMaster.setlinktoUserMasterIdRepliedBy((short)jsonObject.getInt("linktoUserMasterIdRepliedBy"));
                 }
-                objFeedbackMaster.setlinktoBusinessTypeMasterId((short)jsonObject.getInt("linktoBusinessTypeMasterId"));
+                objFeedbackMaster.setlinktoBusinessMasterId((short)jsonObject.getInt("linktoBusinessMasterId"));
                 objFeedbackMaster.setIsDeleted(jsonObject.getBoolean("IsDeleted"));
 
                 /// Extra
                 objFeedbackMaster.setFeedbackType(jsonObject.getString("FeedbackType"));
-                objFeedbackMaster.setBusinessType(jsonObject.getString("BusinessType"));
+                objFeedbackMaster.setBusiness(jsonObject.getString("Business"));
             }
             return objFeedbackMaster;
         } catch (JSONException e) {
@@ -89,12 +89,12 @@ public class FeedbackJSONParser
                 if (!jsonArray.getJSONObject(i).getString("linktoUserMasterIdRepliedBy").equals("null")) {
                     objFeedbackMaster.setlinktoUserMasterIdRepliedBy((short)jsonArray.getJSONObject(i).getInt("linktoUserMasterIdRepliedBy"));
                 }
-                objFeedbackMaster.setlinktoBusinessTypeMasterId((short)jsonArray.getJSONObject(i).getInt("linktoBusinessTypeMasterId"));
+                objFeedbackMaster.setlinktoBusinessMasterId((short)jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 objFeedbackMaster.setIsDeleted(jsonArray.getJSONObject(i).getBoolean("IsDeleted"));
 
                 /// Extra
                 objFeedbackMaster.setFeedbackType(jsonArray.getJSONObject(i).getString("FeedbackType"));
-                objFeedbackMaster.setBusinessType(jsonArray.getJSONObject(i).getString("BusinessType"));
+                objFeedbackMaster.setBusiness(jsonArray.getJSONObject(i).getString("Business"));
                 lstFeedbackMaster.add(objFeedbackMaster);
             }
             return lstFeedbackMaster;
@@ -124,7 +124,7 @@ public class FeedbackJSONParser
             stringer.key("ReplyDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("Reply").value(objFeedbackMaster.getReply());
             stringer.key("linktoUserMasterIdRepliedBy").value(objFeedbackMaster.getlinktoUserMasterIdRepliedBy());
-            stringer.key("linktoBusinessTypeMasterId").value(objFeedbackMaster.getlinktoBusinessTypeMasterId());
+            stringer.key("linktoBusinessMasterId").value(objFeedbackMaster.getlinktoBusinesseMasterId());
             stringer.key("IsDeleted").value(objFeedbackMaster.getIsDeleted());
 
             stringer.endObject();
@@ -161,7 +161,7 @@ public class FeedbackJSONParser
             stringer.key("ReplyDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("Reply").value(objFeedbackMaster.getReply());
             stringer.key("linktoUserMasterIdRepliedBy").value(objFeedbackMaster.getlinktoUserMasterIdRepliedBy());
-            stringer.key("linktoBusinessTypeMasterId").value(objFeedbackMaster.getlinktoBusinessTypeMasterId());
+            stringer.key("linktoBusinessMasterId").value(objFeedbackMaster.getlinktoBusinesseMasterId());
             stringer.key("IsDeleted").value(objFeedbackMaster.getIsDeleted());
 
             stringer.endObject();

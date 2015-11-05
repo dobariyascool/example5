@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.WaitingJSONParser;
@@ -76,11 +77,11 @@ public class AddFragment extends Fragment {
                     Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
                     return;
                 }
-//                if (Service.CheckNet(getActivity())) {
-//                    new AddLodingTask().execute();
-//                } else {
-//                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
-//                }
+                if (Service.CheckNet(getActivity())) {
+                    new AddLodingTask().execute();
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -186,12 +187,12 @@ public class AddFragment extends Fragment {
                 && !etName.getText().toString().equals("") && !etPersons.getText().toString().equals("")){
             if (etMobileNo.getText().length() != 10) {
                 etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
+                IsValid = false;
             } else {
                 etMobileNo.clearError();
             }
             etName.clearError();
             etPersons.clearError();
-            IsValid = false;
         }
         return IsValid;
     }

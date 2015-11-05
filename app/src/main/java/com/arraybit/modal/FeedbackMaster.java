@@ -20,11 +20,11 @@ public class FeedbackMaster implements Parcelable {
     String ReplyDateTime;
     String Reply;
     short linktoUserMasterIdRepliedBy;
-    short linktoBusinessTypeMasterId;
+    short linktoBusinessMasterId;
     boolean IsDeleted;
     /// Extra
     String FeedbackType;
-    String BusinessType;
+    String Business;
     public static final Parcelable.Creator<FeedbackMaster> CREATOR = new Creator<FeedbackMaster>() {
         public FeedbackMaster createFromParcel(Parcel source) {
             FeedbackMaster objFeedbackMaster = new FeedbackMaster();
@@ -39,12 +39,12 @@ public class FeedbackMaster implements Parcelable {
             objFeedbackMaster.ReplyDateTime = source.readString();
             objFeedbackMaster.Reply = source.readString();
             objFeedbackMaster.linktoUserMasterIdRepliedBy = (short)source.readInt();
-            objFeedbackMaster.linktoBusinessTypeMasterId = (short)source.readInt();
+            objFeedbackMaster.linktoBusinessMasterId = (short)source.readInt();
             objFeedbackMaster.IsDeleted = source.readByte() != 0;
 
             /// Extra
             objFeedbackMaster.FeedbackType = source.readString();
-            objFeedbackMaster.BusinessType = source.readString();
+            objFeedbackMaster.Business = source.readString();
             return objFeedbackMaster;
         }
 
@@ -97,9 +97,9 @@ public class FeedbackMaster implements Parcelable {
 
     public void setlinktoUserMasterIdRepliedBy(short linktoUserMasterIdRepliedBy) { this.linktoUserMasterIdRepliedBy = linktoUserMasterIdRepliedBy; }
 
-    public short getlinktoBusinessTypeMasterId() { return this.linktoBusinessTypeMasterId; }
+    public short getlinktoBusinesseMasterId() { return this.linktoBusinessMasterId; }
 
-    public void setlinktoBusinessTypeMasterId(short linktoBusinessTypeMasterId) { this.linktoBusinessTypeMasterId = linktoBusinessTypeMasterId; }
+    public void setlinktoBusinessMasterId(short linktoBusinessMasterId) { this.linktoBusinessMasterId = linktoBusinessMasterId; }
 
     public boolean getIsDeleted() { return this.IsDeleted; }
 
@@ -109,11 +109,11 @@ public class FeedbackMaster implements Parcelable {
 
     public void setFeedbackType(String feedbackType) { this.FeedbackType = feedbackType; }
 
-    public String getBusinessType() { return this.BusinessType; }
+    public String getBusiness() { return this.Business; }
 
     //endregion
 
-    public void setBusinessType(String businessType) { this.BusinessType = businessType; }
+    public void setBusiness(String business) { this.Business = business; }
 
     public int describeContents() {
         return 0;
@@ -131,11 +131,11 @@ public class FeedbackMaster implements Parcelable {
         parcel.writeString(ReplyDateTime);
         parcel.writeString(Reply);
         parcel.writeInt(linktoUserMasterIdRepliedBy);
-        parcel.writeInt(linktoBusinessTypeMasterId);
+        parcel.writeInt(linktoBusinessMasterId);
         parcel.writeByte((byte)(IsDeleted ? 1 : 0));
 
         /// Extra
         parcel.writeString(FeedbackType);
-        parcel.writeString(BusinessType);
+        parcel.writeString(Business);
     }
 }
