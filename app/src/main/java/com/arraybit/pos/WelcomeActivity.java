@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import com.arraybit.global.SharePreferenceManage;
 
 
+@SuppressWarnings("ConstantConditions")
 public class WelcomeActivity extends Activity implements GestureDetector.OnGestureListener {
 
     GestureDetectorCompat gestureDetector;
@@ -107,8 +108,8 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             objSharePreferenceManage = new SharePreferenceManage();
-            String userTypeMasterId=objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
-            if(userTypeMasterId.equals("1")){
+            String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
+            if(userTypeMasterId != null && userTypeMasterId.equals("1")){
                 Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
