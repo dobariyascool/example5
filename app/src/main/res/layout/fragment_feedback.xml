@@ -74,7 +74,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/fbMobileNo"
-                android:inputType="number" />
+                android:inputType="phone"
+                android:maxLength="10" />
 
             <com.rey.material.widget.EditText
                 android:id="@+id/etFeedback"
