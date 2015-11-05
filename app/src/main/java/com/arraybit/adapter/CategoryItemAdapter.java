@@ -1,5 +1,6 @@
 package com.arraybit.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
@@ -55,13 +56,14 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         return new ItemViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         ItemMaster objItemMaster = alItemMaster.get(position);
 
-        holder.mItemTextView.setText(objItemMaster.getItemName());
-        holder.mItemTextView1.setText(objItemMaster.getShortDescription());
-        holder.mItemTextView2.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
+        holder.txtItemName.setText(objItemMaster.getItemName());
+        holder.txtItemDescription.setText(objItemMaster.getShortDescription());
+        holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
     }
 
 
@@ -81,17 +83,17 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        TextView mItemTextView, mItemTextView1, mItemTextView2;
-        CardView mItemCardView;
+        TextView txtItemName, txtItemDescription, txtItemPrice;
+        CardView cvItem;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
 
-            mItemCardView = (CardView) itemView.findViewById(R.id.itemCardView);
+            cvItem = (CardView) itemView.findViewById(R.id.cvItem);
 
-            mItemTextView = (TextView) itemView.findViewById(R.id.itemTextView);
-            mItemTextView1 = (TextView) itemView.findViewById(R.id.itemTextView1);
-            mItemTextView2 = (TextView) itemView.findViewById(R.id.itemTextView2);
+            txtItemName = (TextView) itemView.findViewById(R.id.txtItemName);
+            txtItemDescription = (TextView) itemView.findViewById(R.id.txtItemDescription);
+            txtItemPrice = (TextView) itemView.findViewById(R.id.txtItemPrice);
         }
     }
 

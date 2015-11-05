@@ -1,0 +1,55 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.arraybit.pos.GuestHomeActivity">
+
+    <LinearLayout
+        android:id="@+id/guestHomeMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
+
+        <LinearLayout
+            android:id="@+id/guestFragmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            tools:ignore="DisableBaselineAlignment">
+
+            <fragment
+                android:id="@+id/fragment_guest_order_list"
+                android:name="com.arraybit.pos.GuestOrderListFragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                tools:layout="@layout/fragment_guest_order_list" />
+
+
+            <fragment
+                android:id="@+id/fragment_category_item"
+                android:name="com.arraybit.pos.CategoryItemFragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                tools:layout="@layout/fragment_category_item" />
+
+        </LinearLayout>
+    </LinearLayout>
+    <!-- it is navigation drawer -->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="@dimen/navWidth"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/navigation_header"
+        app:itemTextColor="@color/navigationdrawerText"
+        app:menu="@menu/menu_navigation_drawer" />
+    <!-- end -->
+</android.support.v4.widget.DrawerLayout>

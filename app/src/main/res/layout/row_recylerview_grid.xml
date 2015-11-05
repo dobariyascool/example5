@@ -1,6 +1,6 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/itemCardView"
+    android:id="@+id/cvItem"
     style="@style/CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             android:padding="@dimen/control_SpecingTiny">
 
             <com.rey.material.widget.TextView
-                android:id="@+id/itemTextView"
+                android:id="@+id/txtItemName"
                 style="@style/Base.TextAppearance.AppCompat.Body2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
 
 
             <com.rey.material.widget.TextView
-                android:id="@+id/itemTextView1"
+                android:id="@+id/txtItemDescription"
                 style="@style/Base.TextAppearance.AppCompat.Body2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
 
 
             <com.rey.material.widget.TextView
-                android:id="@+id/itemTextView2"
+                android:id="@+id/txtItemPrice"
                 style="@style/Base.TextAppearance.AppCompat.Body2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
