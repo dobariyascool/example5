@@ -30,6 +30,7 @@ public class ItemTabFragment extends Fragment {
     RecyclerView rvItem;
     LinearLayoutManager linearLayoutManager;
     ArrayList<ItemMaster> alItemMaster;
+    String itemTypeMasterId = null;
     //ItemJSONParser objItemJSONParser;
     CategoryMaster objCategoryMaster;
     CategoryItemAdapter categoryItemAdapter;
@@ -71,19 +72,6 @@ public class ItemTabFragment extends Fragment {
         return view;
     }
 
-    public void setupRecyclerView() {
-
-        categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), GuestHomeActivity.isCheck);
-        rvItem.setVisibility(View.VISIBLE);
-        rvItem.setAdapter(categoryItemAdapter);
-        if (GuestHomeActivity.isCheck) {
-            rvItem.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        } else {
-            rvItem.setLayoutManager(linearLayoutManager);
-        }
-
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -101,6 +89,35 @@ public class ItemTabFragment extends Fragment {
         });
     }
 
+    public void SetupRecyclerView() {
+
+        categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(),CategoryItemFragment.isViewChange);
+        rvItem.setVisibility(View.VISIBLE);
+        rvItem.setAdapter(categoryItemAdapter);
+        if (CategoryItemFragment.isViewChange) {
+            rvItem.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        } else {
+            rvItem.setLayoutManager(linearLayoutManager);
+        }
+    }
+
+    public void ItemDataFilter(String itemTypeMasterId) {
+        this.itemTypeMasterId = itemTypeMasterId;
+        alItemMaster = new ArrayList<>();
+        new GuestHomeItemLoadingTask().execute();
+
+        rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                if (current_page > currentPage) {
+                    currentPage = current_page;
+                    if (Service.CheckNet(getActivity())) {
+                        new GuestHomeItemLoadingTask().execute();
+                    }
+                }
+            }
+        });
+    }
     public class GuestHomeItemLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
@@ -109,8 +126,9 @@ public class ItemTabFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
+            progressDialog = new ProgressDialog(getActivity());
+
             if (currentPage > 2 && alItemMaster.size() != 0) {
-                progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
                 progressDialog.setIndeterminate(true);
                 progressDialog.setCancelable(false);
@@ -124,7 +142,7 @@ public class ItemTabFragment extends Fragment {
             if (linearLayoutManager.canScrollVertically() && alItemMaster.size() == 0) {
                 currentPage = 1;
             }
-            return objItemJSONParser.SelectAllItemMasterPageWise(currentPage, objCategoryMaster.getCategoryMasterId());
+            return objItemJSONParser.SelectAllItemMasterPageWise(currentPage, objCategoryMaster.getCategoryMasterId(),itemTypeMasterId);
         }
 
         @Override
@@ -134,7 +152,6 @@ public class ItemTabFragment extends Fragment {
             if (currentPage > 2) {
                 progressDialog.dismiss();
             }
-
             ArrayList<ItemMaster> lstItemMaster = (ArrayList<ItemMaster>) result;
             if (lstItemMaster == null) {
                 if (currentPage == 1) {
@@ -154,7 +171,7 @@ public class ItemTabFragment extends Fragment {
 
                 Globals.SetError(txtMsg, rvItem, null, false);
                 alItemMaster = lstItemMaster;
-                setupRecyclerView();
+                SetupRecyclerView();
             }
         }
     }

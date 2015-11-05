@@ -14,8 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.arraybit.global.Globals;
 import com.arraybit.modal.CategoryMaster;
 import com.arraybit.parser.CategoryJSONParser;
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.rey.material.widget.ImageButton;
 
@@ -24,11 +26,15 @@ import java.util.List;
 
 
 @SuppressWarnings("unchecked")
-public class CategoryItemFragment extends Fragment {
+public class CategoryItemFragment extends Fragment implements View.OnClickListener {
 
+    public static boolean isViewChange = false;
     ViewPager itemViewPager;
     TabLayout itemTabLayout;
     ItemPagerAdapter itemPagerAdapter;
+    FloatingActionMenu famRoot;
+    StringBuilder sb = new StringBuilder();
+    boolean isForceToChange=false;
 
     public CategoryItemFragment() {
         // Required empty public constructor
@@ -42,54 +48,97 @@ public class CategoryItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_category_item, container, false);
 
         //floating action menu
-        FloatingActionMenu famRoot = (FloatingActionMenu)view.findViewById(R.id.famRoot);
+        famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
         famRoot.setClosedOnTouchOutside(true);
         //end
 
+        //floating action button
+        FloatingActionButton fabVeg = (FloatingActionButton) view.findViewById(R.id.fabVeg);
+        FloatingActionButton fabNonVeg = (FloatingActionButton) view.findViewById(R.id.fabNonVeg);
+        FloatingActionButton fabJain = (FloatingActionButton) view.findViewById(R.id.fabJain);
+        //end
+
         //tab layout
-        itemTabLayout = (TabLayout)view.findViewById(R.id.itemTabLayout);
+        itemTabLayout = (TabLayout) view.findViewById(R.id.itemTabLayout);
         //end
 
         //view page
-        itemViewPager = (ViewPager)view.findViewById(R.id.itemViewPager);
+        itemViewPager = (ViewPager) view.findViewById(R.id.itemViewPager);
         //end
 
         //imagebutton
-        ImageButton ibViewChange = (ImageButton)view.findViewById(R.id.ibViewChange);
+        ImageButton ibViewChange = (ImageButton) view.findViewById(R.id.ibViewChange);
+        //end
+
+        //event
+        fabVeg.setOnClickListener(this);
+        fabNonVeg.setOnClickListener(this);
+        fabJain.setOnClickListener(this);
+        ibViewChange.setOnClickListener(this);
         //end
 
         new GuestHomeCategoryLodingTask().execute();
         return view;
     }
 
+    @Override
+    public void onClick(View v) {
+        ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
+        if (v.getId() == R.id.fabVeg) {
+            itemTabFragment.ItemDataFilter(String.valueOf(Globals.ItemType.Veg.getValue()));
+            famRoot.close(true);
+        } else if (v.getId() == R.id.fabNonVeg) {
+            itemTabFragment.ItemDataFilter(String.valueOf(Globals.ItemType.NonVeg.getValue()));
+            famRoot.close(true);
+        } else if (v.getId() == R.id.fabJain) {
+            itemTabFragment.ItemDataFilter(String.valueOf(Globals.ItemType.Jain.getValue()));
+            famRoot.close(true);
+        } else if (v.getId() == R.id.ibViewChange) {
+            if (isViewChange) {
+                v.setSelected(false);
+                isViewChange = false;
+                isForceToChange = true;
+            } else {
+                v.setSelected(true);
+                isViewChange = true;
+                isForceToChange = true;
+            }
+            itemTabFragment.SetupRecyclerView();
+        }
+    }
+
     //pager adapter
     static class ItemPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final List<Fragment> fragmentList = new ArrayList<>();
-        private final List<String> fragmentTitleList = new ArrayList<>();
+        private final List<Fragment> itemFragmentList = new ArrayList<>();
+        private final List<CategoryMaster> itemFragmentTitleList = new ArrayList<>();
 
         public ItemPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
 
-        public void AddFragment(Fragment fragment, String title) {
-            fragmentList.add(fragment);
-            fragmentTitleList.add(title);
+        public void AddFragment(Fragment fragment, CategoryMaster title) {
+            itemFragmentList.add(fragment);
+            itemFragmentTitleList.add(title);
+        }
+
+        public Fragment GetCurrentFragment(int position) {
+            return itemFragmentList.get(position);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return fragmentList.get(position);
+            return itemFragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return fragmentList.size();
+            return itemFragmentList.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return fragmentTitleList.get(position);
+            return itemFragmentTitleList.get(position).getCategoryName();
         }
     }
     //end
@@ -112,7 +161,7 @@ public class CategoryItemFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            CategoryJSONParser objCategoryJSONParser=new CategoryJSONParser();
+            CategoryJSONParser objCategoryJSONParser = new CategoryJSONParser();
             alCategoryMaster = objCategoryJSONParser.SelectAllCategoryMaster();
             return alCategoryMaster;
         }
@@ -131,11 +180,35 @@ public class CategoryItemFragment extends Fragment {
 
                 itemPagerAdapter = new ItemPagerAdapter(getFragmentManager());
                 for (int i = 0; i < alCategoryMaster.size(); i++) {
-                    itemPagerAdapter.AddFragment(com.arraybit.pos.ItemTabFragment.createInstance((CategoryMaster) alCategoryMaster.get(i)), alCategoryMaster.get(i).getCategoryName());
+                    itemPagerAdapter.AddFragment(com.arraybit.pos.ItemTabFragment.createInstance((CategoryMaster) alCategoryMaster.get(i)), alCategoryMaster.get(i));
                 }
 
                 itemViewPager.setAdapter(itemPagerAdapter);
                 itemTabLayout.setupWithViewPager(itemViewPager);
+
+                itemTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
+                        if (isForceToChange) {
+                            itemTabFragment.SetupRecyclerView();
+                            isForceToChange = false;
+                        } else {
+                            isForceToChange = false;
+                        }
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+
+                    }
+                });
+
                 progressDialog.dismiss();
             }
         }
