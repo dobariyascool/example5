@@ -40,7 +40,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     public void onBindViewHolder(TableViewHolder holder, int position) {
         TableMaster objTableMaster = alTableMaster.get(position);
 
-        if (Objects.equals(objTableMaster.getTableColor(), null)) {
+        if (Objects.equals(objTableMaster.getTableColor(),null)) {
             holder.cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
         } else {
             holder.cvTable.setCardBackgroundColor(Color.parseColor("#" + objTableMaster.getTableColor()));
