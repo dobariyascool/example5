@@ -132,6 +132,8 @@ public class FeedbackFragment extends Fragment {
         if (!etMobileNo.getText().toString().equals("") && etMobileNo.getText().length() != 10) {
             etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.fbMobileNo));
             IsValid = false;
+        } else {
+            etMobileNo.clearError();
         }
         return IsValid;
     }
