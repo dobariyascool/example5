@@ -63,7 +63,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         return view;
     }
 
-    private void setupRecyclerView(RecyclerView rvWaiting) {
+    private void SetupRecyclerView(RecyclerView rvWaiting) {
         waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
         rvWaiting.setAdapter(waitingListAdapter);
         rvWaiting.setLayoutManager(linearLayoutManager);
@@ -157,7 +157,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
 
                 Globals.SetError(txtMsg, rvWaiting, null, false);
                 alWaitingMaster = lstWaitingMaster;
-                setupRecyclerView(rvWaiting);
+                SetupRecyclerView(rvWaiting);
             }
         }
     }

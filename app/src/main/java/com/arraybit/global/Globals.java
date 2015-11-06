@@ -278,6 +278,40 @@ public class Globals {
 
     }
 
+    public enum TableStatus {
+        Vacant(1),
+        Busy(2);
+
+        private int intValue;
+
+        private TableStatus(int value) {
+            intValue = value;
+
+        }
+
+        public int getValue() {
+            return intValue;
+        }
+
+    }
+
+    public enum ItemType{
+        Veg(1),
+        NonVeg(2),
+        Jain(3);
+
+        private int intValue;
+
+        private ItemType(int value) {
+            intValue = value;
+
+        }
+
+        public int getValue() {
+            return intValue;
+        }
+    }
+
     //endregion
 
     //region CommentCode

@@ -10,11 +10,119 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <com.rey.material.widget.TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/control_SpecingSmall"
-        android:text="Detail Page"
-        tools:ignore="HardcodedText" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/control_SpecingSmall">
+
+            <ImageView
+                android:id="@+id/ivItemImage"
+                style="@style/ImageView"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_margin="@dimen/control_SpecingSmall"
+                android:contentDescription="@string/dfApp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/control_SpecingSmall">
+
+                <com.rey.material.widget.TextView
+                    style="@style/PrimaryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dfItemName" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtItemName"
+                    style="@style/SecondaryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/control_SpecingSmall">
+
+                <com.rey.material.widget.TextView
+                    style="@style/PrimaryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dfDescription" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtDescription"
+                    style="@style/SecondaryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/control_SpecingSmall">
+
+                <com.rey.material.widget.TextView
+                    style="@style/PrimaryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dfPrice" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtItemPrice"
+                    style="@style/SecondaryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/control_SpecingSmall">
+
+                <com.rey.material.widget.TextView
+                    style="@style/PrimaryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dfQuantity" />
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnPlus"
+                    android:layout_width="@dimen/button_TouchableHeight"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dfPlus" />
+
+                <com.rey.material.widget.EditText
+                    android:id="@+id/etQuantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="1"/>
+
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnMinus"
+                    android:layout_width="@dimen/button_TouchableHeight"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dfMinus" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

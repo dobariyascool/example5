@@ -100,7 +100,7 @@ public class TableTabFragment extends Fragment {
         });
     }
 
-    private void setupRecyclerView(RecyclerView rvTables) {
+    private void SetupRecyclerView(RecyclerView rvTables) {
 
         tablesAdapter = new TablesAdapter(getActivity(), alTableMaster);
         rvTables.setAdapter(tablesAdapter);
@@ -183,7 +183,7 @@ public class TableTabFragment extends Fragment {
 
                 Globals.SetError(txtMsg, rvTables, null, false);
                 alTableMaster = lstTableMaster;
-                setupRecyclerView(rvTables);
+                SetupRecyclerView(rvTables);
             }
         }
     }
