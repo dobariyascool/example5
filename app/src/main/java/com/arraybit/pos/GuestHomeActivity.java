@@ -17,7 +17,8 @@ import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 
-public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     ActionBarDrawerToggle actionBarDrawerToggle;
     String userName;
@@ -42,7 +43,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
         //linearlayout
         guestHomeMainLayout = (LinearLayout) findViewById(R.id.guestHomeMainLayout);
-        LinearLayout guestFragmentLayout = (LinearLayout) findViewById(R.id.guestFragmentLayout);
+        //LinearLayout guestFragmentLayout = (LinearLayout) findViewById(R.id.guestFragmentLayout);
         Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null);
         //end
 
@@ -62,10 +63,9 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             userName = intent.getStringExtra("username");
         }
 
-        if (guestFragmentLayout.findViewById(R.id.fragment_guest_order_list) == null) {
+        if(findViewById(R.id.fragment_guest_order_list) == null) {
             isDualPanel = false;
-            AddFragmentInLayout(new CategoryItemFragment());
-        } else {
+        }else {
             isDualPanel = true;
         }
 
@@ -124,25 +124,6 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         return false;
     }
 
-    @Override
-    public void onClick(View v) {
-
-//        if (v.getId() == R.id.btnConfirm) {
-//            Intent intent = new Intent(GuestHomeActivity.this, GuestOrderActivity.class);
-//            intent.putExtra("username", userName);
-//            startActivity(intent);
-//        }
-//        else if (v.getId() == R.id.ibViewChange) {
-//            if (isCheck) {
-//                v.setSelected(false);
-//                isCheck = false;
-//            } else {
-//                v.setSelected(true);
-//                isCheck = true;
-//            }
-//        }
-    }
-    //end
 
     //add fragment
     void AddFragmentInLayout(Fragment fragment) {
@@ -158,9 +139,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     public void onBackPressed() {
         //fragment backPressed
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                 getSupportFragmentManager().popBackStack();
-            }
         }
     }
     //end
