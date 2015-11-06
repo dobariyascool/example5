@@ -31,7 +31,6 @@ public class ItemTabFragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
     ArrayList<ItemMaster> alItemMaster;
     String itemTypeMasterId = null;
-    //ItemJSONParser objItemJSONParser;
     CategoryMaster objCategoryMaster;
     CategoryItemAdapter categoryItemAdapter;
 
@@ -142,7 +141,7 @@ public class ItemTabFragment extends Fragment {
             if (linearLayoutManager.canScrollVertically() && alItemMaster.size() == 0) {
                 currentPage = 1;
             }
-            return objItemJSONParser.SelectAllItemMasterPageWise(currentPage, objCategoryMaster.getCategoryMasterId(),itemTypeMasterId);
+            return objItemJSONParser.SelectAllItemMaster(currentPage, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
         }
 
         @Override

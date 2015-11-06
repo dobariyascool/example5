@@ -123,7 +123,7 @@ public class ItemJSONParser {
         }
     }
 
-    public ArrayList<ItemMaster> SelectAllItemMasterPageWise(int currentPage,int linktoCategoryMasterId,String linktoItemTypeMasterId) {
+    public ArrayList<ItemMaster> SelectAllItemMaster(int currentPage,int linktoCategoryMasterId,String linktoItemTypeMasterId) {
         ArrayList<ItemMaster> lstItemMaster = null;
         try {
             JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCategoryMasterId+"/"+linktoItemTypeMasterId);

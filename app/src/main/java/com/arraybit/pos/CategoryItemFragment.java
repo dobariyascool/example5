@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,11 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     TabLayout itemTabLayout;
     ItemPagerAdapter itemPagerAdapter;
     FloatingActionMenu famRoot;
-    StringBuilder sb = new StringBuilder();
-    boolean isForceToChange=false;
+    FloatingActionButton fabVeg, fabNonVeg, fabJain;
+    StringBuilder sbItemTypeMasterId = new StringBuilder();
+    ImageButton ibViewChange;
+    boolean isForceToChange = false;
+    short isVegCheck = 0, isNonVegCheck = 0, isJainCheck = 0;
 
     public CategoryItemFragment() {
         // Required empty public constructor
@@ -53,13 +57,14 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         //end
 
         //floating action button
-        FloatingActionButton fabVeg = (FloatingActionButton) view.findViewById(R.id.fabVeg);
-        FloatingActionButton fabNonVeg = (FloatingActionButton) view.findViewById(R.id.fabNonVeg);
-        FloatingActionButton fabJain = (FloatingActionButton) view.findViewById(R.id.fabJain);
+        fabVeg = (FloatingActionButton) view.findViewById(R.id.fabVeg);
+        fabNonVeg = (FloatingActionButton) view.findViewById(R.id.fabNonVeg);
+        fabJain = (FloatingActionButton) view.findViewById(R.id.fabJain);
         //end
 
         //tab layout
         itemTabLayout = (TabLayout) view.findViewById(R.id.itemTabLayout);
+        itemTabLayout.setClickable(true);
         //end
 
         //view page
@@ -67,7 +72,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         //end
 
         //imagebutton
-        ImageButton ibViewChange = (ImageButton) view.findViewById(R.id.ibViewChange);
+        ibViewChange = (ImageButton) view.findViewById(R.id.ibViewChange);
         //end
 
         //event
@@ -78,6 +83,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         //end
 
         new GuestHomeCategoryLodingTask().execute();
+
         return view;
     }
 
@@ -85,14 +91,59 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
         if (v.getId() == R.id.fabVeg) {
-            itemTabFragment.ItemDataFilter(String.valueOf(Globals.ItemType.Veg.getValue()));
+            if (isVegCheck == 0) {
+                fabVeg.setSelected(true);
+                fabVeg.setColorNormal(ContextCompat.getColor(getActivity(), R.color.transparent_orange));
+                isVegCheck += 1;
+            } else {
+                fabVeg.setSelected(false);
+                fabVeg.setColorNormal(ContextCompat.getColor(getActivity(), R.color.accent_dark));
+                isVegCheck = 0;
+            }
+            CheckSelected();
+            if (sbItemTypeMasterId.toString().equals("")) {
+                itemTabFragment.ItemDataFilter(null);
+            } else {
+                itemTabFragment.ItemDataFilter(sbItemTypeMasterId.toString());
+            }
             famRoot.close(true);
+
         } else if (v.getId() == R.id.fabNonVeg) {
-            itemTabFragment.ItemDataFilter(String.valueOf(Globals.ItemType.NonVeg.getValue()));
+            if (isNonVegCheck == 0) {
+                fabNonVeg.setSelected(true);
+                fabNonVeg.setColorNormal(ContextCompat.getColor(getActivity(), R.color.transparent_orange));
+                isNonVegCheck += 1;
+            } else {
+                fabNonVeg.setSelected(false);
+                fabNonVeg.setColorNormal(ContextCompat.getColor(getActivity(), R.color.accent_dark));
+                isNonVegCheck = 0;
+            }
+            CheckSelected();
+            if (sbItemTypeMasterId.toString().equals("")) {
+                itemTabFragment.ItemDataFilter(null);
+            } else {
+                itemTabFragment.ItemDataFilter(sbItemTypeMasterId.toString());
+            }
             famRoot.close(true);
+
         } else if (v.getId() == R.id.fabJain) {
-            itemTabFragment.ItemDataFilter(String.valueOf(Globals.ItemType.Jain.getValue()));
+            if (isJainCheck == 0) {
+                fabJain.setSelected(true);
+                fabJain.setColorNormal(ContextCompat.getColor(getActivity(), R.color.transparent_orange));
+                isJainCheck += 1;
+            } else {
+                fabJain.setSelected(false);
+                fabJain.setColorNormal(ContextCompat.getColor(getActivity(), R.color.accent_dark));
+                isJainCheck = 0;
+            }
+            CheckSelected();
+            if (sbItemTypeMasterId.toString().equals("")) {
+                itemTabFragment.ItemDataFilter(null);
+            } else {
+                itemTabFragment.ItemDataFilter(sbItemTypeMasterId.toString());
+            }
             famRoot.close(true);
+
         } else if (v.getId() == R.id.ibViewChange) {
             if (isViewChange) {
                 v.setSelected(false);
@@ -104,6 +155,20 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 isForceToChange = true;
             }
             itemTabFragment.SetupRecyclerView();
+        }
+    }
+
+    @SuppressWarnings("StringConcatenationInsideStringBufferAppend")
+    void CheckSelected() {
+        sbItemTypeMasterId = new StringBuilder();
+        if (fabVeg.isSelected()) {
+            sbItemTypeMasterId.append(Globals.ItemType.Veg.getValue() + ",");
+        }
+        if (fabNonVeg.isSelected()) {
+            sbItemTypeMasterId.append(Globals.ItemType.NonVeg.getValue() + ",");
+        }
+        if (fabJain.isSelected()) {
+            sbItemTypeMasterId.append(Globals.ItemType.Jain.getValue() + ",");
         }
     }
 
@@ -178,9 +243,10 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
             } else {
 
+                ibViewChange.setVisibility(View.VISIBLE);
                 itemPagerAdapter = new ItemPagerAdapter(getFragmentManager());
                 for (int i = 0; i < alCategoryMaster.size(); i++) {
-                    itemPagerAdapter.AddFragment(com.arraybit.pos.ItemTabFragment.createInstance((CategoryMaster) alCategoryMaster.get(i)), alCategoryMaster.get(i));
+                    itemPagerAdapter.AddFragment(ItemTabFragment.createInstance((CategoryMaster) alCategoryMaster.get(i)), alCategoryMaster.get(i));
                 }
 
                 itemViewPager.setAdapter(itemPagerAdapter);
@@ -189,6 +255,10 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 itemTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                     @Override
                     public void onTabSelected(TabLayout.Tab tab) {
+                        //set the current view on tab click
+                        itemViewPager.setCurrentItem(tab.getPosition());
+
+                        //change next layout
                         ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
                         if (isForceToChange) {
                             itemTabFragment.SetupRecyclerView();
