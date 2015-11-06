@@ -21,6 +21,7 @@ import java.util.Locale;
 
 public class ItemJSONParser {
     public String SelectAllItemMasterByCategoryMasterId = "SelectAllItemMasterByCategoryMasterId";
+    public String SelectItemMaster = "SelectItemMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     Date dt = null;
@@ -136,6 +137,22 @@ public class ItemJSONParser {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    public ItemMaster SelectItemMaster(int itemMasterId) {
+       try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectItemMaster + "/" + itemMasterId);
+            if (jsonResponse != null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectItemMaster + "Result");
+                if (jsonObject != null) {
+                    return SetClassPropertiesFromJSONObject(jsonObject);
+                }
+            }
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+
     }
 
 }
