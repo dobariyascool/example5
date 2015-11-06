@@ -168,6 +168,16 @@
     <string name="sfSubmit">Submit</string>
     <!-- end -->
 
+    <!--fragment detail-->
+    <string name="dfApp">About This</string>
+    <string name="dfItemName">Item Name:</string>
+    <string name="dfDescription">Description:</string>
+    <string name="dfPrice">Price:</string>
+    <string name="dfQuantity">Quantity:</string>
+    <string name="dfPlus">+</string>
+    <string name="dfMinus">-</string>
+    <!--end-->
+
 
     <!-- waiting status dialog -->
     <string name="wsdTitle">Change Status</string>

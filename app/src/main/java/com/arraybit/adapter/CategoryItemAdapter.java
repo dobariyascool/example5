@@ -24,6 +24,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     View view;
     Context context;
     ArrayList<ItemMaster> alItemMaster;
+    ItemMaster objItemMaster;
 
     public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange) {
         this.context = context;
@@ -42,30 +43,19 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         }
 
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //orderItemDetail=(OrderItemDetail)context;
-                //orderItemDetail.ItemDetail();
-                DetailFragment detailFragment = new DetailFragment();
-                Globals.InitializeFragment(detailFragment, fragmentManager);
-
-            }
-        });
         return new ItemViewHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        ItemMaster objItemMaster = alItemMaster.get(position);
+        objItemMaster = alItemMaster.get(position);
 
+        holder.cvItem.setId(objItemMaster.getItemMasterId());
         holder.txtItemName.setText(objItemMaster.getItemName());
         holder.txtItemDescription.setText(objItemMaster.getShortDescription());
         holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
     }
-
 
     @Override
     public int getItemCount() {
@@ -81,7 +71,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         public void ItemDetail();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    class ItemViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtItemName, txtItemDescription, txtItemPrice;
         CardView cvItem;
@@ -94,6 +84,19 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             txtItemName = (TextView) itemView.findViewById(R.id.txtItemName);
             txtItemDescription = (TextView) itemView.findViewById(R.id.txtItemDescription);
             txtItemPrice = (TextView) itemView.findViewById(R.id.txtItemPrice);
+
+            cvItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //orderItemDetail=(OrderItemDetail)context;
+                    //orderItemDetail.ItemDetail();
+                    DetailFragment detailFragment = new DetailFragment(v.getId());
+                    Globals.InitializeFragment(detailFragment, fragmentManager);
+
+                }
+            });
+
         }
     }
 
