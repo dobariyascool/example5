@@ -14,7 +14,6 @@ import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewHolder> {
 
@@ -40,7 +39,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     public void onBindViewHolder(TableViewHolder holder, int position) {
         TableMaster objTableMaster = alTableMaster.get(position);
 
-        if (Objects.equals(objTableMaster.getTableColor(),null)) {
+        if (objTableMaster.getTableColor()==null) {
             holder.cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
         } else {
             holder.cvTable.setCardBackgroundColor(Color.parseColor("#" + objTableMaster.getTableColor()));

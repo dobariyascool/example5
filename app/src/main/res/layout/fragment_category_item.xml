@@ -33,7 +33,7 @@
                 android:layout_weight="0.2"
                 android:padding="@dimen/control_SpecingSmall"
                 android:src="@drawable/view_selector"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
         </LinearLayout>
 
@@ -53,6 +53,7 @@
         app:menu_icon="@mipmap/fmenu">
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabVeg"
             style="@style/FloatingButtonWithTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,6 +61,7 @@
             fab:fab_label="@string/ghVeg" />
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabNonVeg"
             style="@style/FloatingButtonWithTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,6 +69,7 @@
             fab:fab_label="@string/ghNonVeg" />
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabJain"
             style="@style/FloatingButtonWithTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

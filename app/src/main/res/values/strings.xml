@@ -81,7 +81,7 @@
     <string name="suValidEmail">Valid Email</string>
     <string name="suLastName">Last Name</string>
     <string name="suEmail">Email</string>
-    <string name="suPhone">Phone Number</string>
+    <string name="suPhone">Mobile</string>
     <string name="suPassword">Password</string>
     <string name="suMale">Male</string>
     <string name="suFemale">Female</string>
@@ -154,7 +154,7 @@
     <!-- fragment feedback -->
     <string name="fbName">Name</string>
     <string name="fbEmail">Email</string>
-    <string name="fbMobileNo">Mobile No</string>
+    <string name="fbMobileNo">Mobile</string>
     <string name="fbFeedback">Feedback</string>
     <string name="fbSubmit">Submit</string>
     <string name="fbOther">Other Query</string>

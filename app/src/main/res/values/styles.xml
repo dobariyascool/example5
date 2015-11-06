@@ -205,6 +205,8 @@
         <item name="android:layout_marginBottom">@dimen/fbutton_MarginBottomEndTablet</item>
         <item name="fab_size">mini</item>
         <item name="fab_colorPressed">@color/accent</item>
+        <item name="fab_colorRipple">@color/accent</item>
+        fab_colorRipple
     </style>
 
     <style name="FloatingButton" parent="FloatingActionButton">

@@ -11,9 +11,8 @@ import android.view.MotionEvent;
 
 import com.arraybit.global.SharePreferenceManage;
 
-import java.util.Objects;
 
-
+@SuppressWarnings("ConstantConditions")
 public class WelcomeActivity extends Activity implements GestureDetector.OnGestureListener {
 
     GestureDetectorCompat gestureDetector;
@@ -105,26 +104,24 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
 
     }
 
+    @SuppressWarnings("StringEquality")
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-        //if (e1.getX() > e2.getX() && velocityY < 1000) {
-
             objSharePreferenceManage = new SharePreferenceManage();
-            if (Objects.equals(objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this),"1")) {
+            String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
+            if(userTypeMasterId != null && userTypeMasterId.equals("1")){
                 Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
-
-            } else {
+            }
+            else
+            {
                 Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
             }
-          //  return true;
-        //}
         return false;
     }
 }

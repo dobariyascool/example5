@@ -20,7 +20,7 @@ import java.util.Locale;
 /// </summary>
 
 public class ItemJSONParser {
-    public String SelectAllItemMaster = "SelectAllItemMasterPageWise";
+    public String SelectAllItemMasterByCategoryMasterId = "SelectAllItemMasterByCategoryMasterId";
     public String SelectItemMaster = "SelectItemMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
@@ -123,12 +123,12 @@ public class ItemJSONParser {
         }
     }
 
-    public ArrayList<ItemMaster> SelectAllItemMasterPageWise(int currentPage, int linktoCategoryMasterId) {
+    public ArrayList<ItemMaster> SelectAllItemMasterPageWise(int currentPage,int linktoCategoryMasterId,String linktoItemTypeMasterId) {
         ArrayList<ItemMaster> lstItemMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMaster + "/" + currentPage + "/" + linktoCategoryMasterId);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCategoryMasterId+"/"+linktoItemTypeMasterId);
             if (jsonResponse != null) {
-                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemMaster + "Result");
+                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemMasterByCategoryMasterId + "Result");
                 if (jsonArray != null) {
                     lstItemMaster = SetListPropertiesFromJSONArray(jsonArray);
                 }

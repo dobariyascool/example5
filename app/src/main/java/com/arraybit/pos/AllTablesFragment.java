@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.SectionMaster;
 import com.arraybit.parser.SectionJSONParser;
@@ -84,11 +85,11 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             famRoot.close(true);
         }
         else if(v.getId()==R.id.fabVacant){
-            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),"1");
+            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),String.valueOf(Globals.TableStatus.Vacant.getValue()));
             famRoot.close(true);
         }
         else if(v.getId()==R.id.fabBusy){
-            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),"2");
+            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),String.valueOf(Globals.TableStatus.Busy.getValue()));
             famRoot.close(true);
         }
     }
@@ -113,8 +114,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         }
 
         public Fragment GetCurrentFragment(int position){
-            Fragment fragment=tableFragmentList.get(position);
-            return fragment;
+            return tableFragmentList.get(position);
         }
 
         public SectionMaster GetCurrentSection(int position){
@@ -182,60 +182,4 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             }
         }
     }
-
-//    class TableMasterLoadingTask extends AsyncTask {
-//
-//        //ProgressDialog progressDialog;
-//        ArrayList<TableMaster>[] alTableMaster;
-//        String[] SectionName;
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-////            progressDialog = new ProgressDialog(getActivity());
-////            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-////            progressDialog.setIndeterminate(true);
-////            progressDialog.setCancelable(false);
-////            progressDialog.show();
-//
-//            alTableMaster = new ArrayList[alSectionMaster.size()];
-//            SectionName = new String[alSectionMaster.size()];
-//
-//        }
-//
-//        @Override
-//        protected Object doInBackground(Object[] objects) {
-//
-//            TableJSONParser objTableJSONParser = new TableJSONParser();
-//            for(int j=0;j<alSectionMaster.size();j++) {
-//
-//                //SectionName[j] = alSectionMaster.get(j).getSectionName();
-//                alTableMaster[j] = objTableJSONParser.SelectAllTableMasterBySectionMasterId(1, alSectionMaster.get(j).getSectionMasterId(),null);
-//
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Object result) {
-//
-//            if (alTableMaster == null) {
-//                Toast.makeText(getActivity(),getResources().getString(R.string.MsgSelectFail),Toast.LENGTH_LONG).show();
-//            } else if (alTableMaster.length == 0) {
-//                Toast.makeText(getActivity(),getResources().getString(R.string.MsgNoRecord),Toast.LENGTH_LONG).show();
-//            } else {
-//
-//                for(int k=0;k<alTableMaster.length;k++) {
-//                    tablePagerAdapter.AddFragment(TableTabFragment.createInstance(alTableMaster[k]),alSectionMaster.get(k));
-//                }
-//            }
-//            tableViewPager.setAdapter(tablePagerAdapter);
-//            tableTabLayout.setupWithViewPager(tableViewPager);
-//            //progressDialog.dismiss();
-//        }
-//
-//    }
-
-    //endregion
-
 }
