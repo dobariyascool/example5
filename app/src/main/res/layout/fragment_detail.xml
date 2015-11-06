@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,13 +7,14 @@
     android:orientation="vertical"
     tools:context="com.arraybit.pos.DetailFragment">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+    <!--<include-->
+    <!--android:id="@+id/app_bar"-->
+    <!--layout="@layout/app_bar" />-->
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:layout_margin="@dimen/control_SpecingSmall"
-                android:contentDescription="@string/dfApp" />
+                android:src="@drawable/vada_paav" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,35 +96,35 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/control_SpecingSmall">
 
-                <com.rey.material.widget.TextView
-                    style="@style/PrimaryTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dfQuantity" />
+                <!--<com.rey.material.widget.TextView-->
+                    <!--style="@style/PrimaryTextView"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/dfQuantity" />-->
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnPlus"
                     android:layout_width="@dimen/button_TouchableHeight"
                     android:layout_height="wrap_content"
-                    android:text="@string/dfPlus" />
+                    android:background="@drawable/qtyselector"
+                    android:text="@string/dfPlus"/>
 
                 <com.rey.material.widget.EditText
                     android:id="@+id/etQuantity"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="1"/>
-
+                    android:text="1"
+                    tools:ignore="HardcodedText" />
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnMinus"
                     android:layout_width="@dimen/button_TouchableHeight"
                     android:layout_height="wrap_content"
-                    android:text="@string/dfMinus" />
+                    android:background="@drawable/qtyselector"
+                    android:text="@string/dfMinus"/>
 
             </LinearLayout>
-
         </LinearLayout>
-    </ScrollView>
-
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

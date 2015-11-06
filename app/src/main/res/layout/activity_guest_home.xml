@@ -16,11 +16,18 @@
             android:id="@+id/app_bar"
             layout="@layout/app_bar" />
 
-        <LinearLayout
-            android:id="@+id/guestFragmentLayout"
+        <fragment
+            android:id="@+id/fragment_category_item"
+            android:name="com.arraybit.pos.CategoryItemFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" />
+            tools:layout="@layout/fragment_category_item" />
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/guestFragmentLayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical" />-->
 
     </LinearLayout>
     <!-- it is navigation drawer -->

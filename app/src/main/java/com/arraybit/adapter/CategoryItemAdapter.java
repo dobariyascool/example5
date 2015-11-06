@@ -3,6 +3,7 @@ package com.arraybit.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -92,9 +93,12 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     //orderItemDetail=(OrderItemDetail)context;
                     //orderItemDetail.ItemDetail();
                     DetailFragment detailFragment = new DetailFragment(v.getId());
-                    Globals.InitializeFragment(detailFragment, fragmentManager);
-
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_category_item, detailFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 }
+
             });
 
         }

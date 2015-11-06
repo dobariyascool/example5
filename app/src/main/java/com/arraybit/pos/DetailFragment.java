@@ -1,14 +1,12 @@
 package com.arraybit.pos;
 
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,7 +19,8 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-
+@SuppressWarnings("unchecked")
+@SuppressLint("ValidFragment")
 public class DetailFragment extends Fragment {
 
     public static int value = 1;
@@ -34,6 +33,7 @@ public class DetailFragment extends Fragment {
     ItemJSONParser objItemJSONParser;
     ItemMaster objItemMaster;
     ArrayList<ItemMaster> alItemMaster;
+
 
     public DetailFragment(int ItemMasterId) {
         this.ItemMasterId = ItemMasterId;
@@ -61,17 +61,20 @@ public class DetailFragment extends Fragment {
         btnMinus = (Button) view.findViewById(R.id.btnMinus);
         //end
 
-        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
+//        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
+//
+//        if (app_bar != null) {
+//            ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            value = 1;
+//        }
+//        app_bar.setTitle(getResources().getString(R.string.title_fragment_detail));
+//        app_bar.setLogo(R.mipmap.app_logo);
 
-        if (app_bar != null) {
-            ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            value = 1;
-        }
-        app_bar.setTitle(getResources().getString(R.string.title_fragment_detail));
-        app_bar.setLogo(R.mipmap.app_logo);
+        //setHasOptionsMenu(true);
 
-        setHasOptionsMenu(true);
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.title_fragment_detail));
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(false);
 
         new DetailLoadingTask().execute();
 
@@ -105,32 +108,32 @@ public class DetailFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            getActivity().getSupportFragmentManager().popBackStack();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        int id = item.getItemId();
+//
+//        if (id == android.R.id.home) {
+//            getActivity().getSupportFragmentManager().popBackStack();
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public class DetailLoadingTask extends AsyncTask {
 
-        ProgressDialog pDialog;
+        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(false);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
 
             objItemJSONParser = new ItemJSONParser();
         }
@@ -145,7 +148,7 @@ public class DetailFragment extends Fragment {
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
 
-            pDialog.dismiss();
+            progressDialog.dismiss();
 
             txtItemName.setText(objItemMaster.getItemName());
             txtDescription.setText(objItemMaster.getShortDescription());
