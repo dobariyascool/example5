@@ -30,6 +30,7 @@ import java.util.List;
 public class CategoryItemFragment extends Fragment implements View.OnClickListener {
 
     public static boolean isViewChange = false;
+    public static short i = 0;
     ViewPager itemViewPager;
     TabLayout itemTabLayout;
     ItemPagerAdapter itemPagerAdapter;
@@ -145,16 +146,25 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             famRoot.close(true);
 
         } else if (v.getId() == R.id.ibViewChange) {
-            if (isViewChange) {
-                v.setSelected(false);
-                isViewChange = false;
-                isForceToChange = true;
-            } else {
+            i = (short) (i + 1);
+            if (i == 1) {
                 v.setSelected(true);
                 isViewChange = true;
                 isForceToChange = true;
+                itemTabFragment.SetupRecyclerView();
+            } else if (i == 2) {
+                v.setSelected(false);
+                v.setActivated(true);
+                isViewChange = true;
+                isForceToChange = true;
+                itemTabFragment.SetupRecyclerView();
+            } else {
+                i = 0;
+                v.setActivated(false);
+                isViewChange = false;
+                isForceToChange = true;
+                itemTabFragment.SetupRecyclerView();
             }
-            itemTabFragment.SetupRecyclerView();
         }
     }
 
@@ -209,6 +219,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     //end
 
     //region Loading Task
+
     public class GuestHomeCategoryLodingTask extends AsyncTask {
         ArrayList<CategoryMaster> alCategoryMaster;
         ProgressDialog progressDialog;
@@ -283,5 +294,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             }
         }
     }
+
     //endregion
 }

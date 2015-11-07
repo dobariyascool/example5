@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
+import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.DetailFragment;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
@@ -38,9 +39,15 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (isViewChange) {
-            view = LayoutInflater.from(context).inflate(R.layout.row_recylerview_grid, parent, false);
+            if(CategoryItemFragment.i==1) {
+                view = LayoutInflater.from(context).inflate(R.layout.row_category_item_grid, parent, false);
+            }
+            else
+            {
+                view = LayoutInflater.from(context).inflate(R.layout.row_waiter_category_item_grid,parent,false);
+            }
         } else {
-            view = LayoutInflater.from(context).inflate(R.layout.row_recyclerview, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.row_category_item, parent, false);
         }
 
 

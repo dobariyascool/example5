@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import com.arraybit.global.Globals;
 
 
+@SuppressWarnings("RedundantIfStatement")
 public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -63,12 +64,12 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             userName = intent.getStringExtra("username");
         }
 
+        //check layout run in mobile or tablet
         if(findViewById(R.id.fragment_guest_order_list) == null) {
             isDualPanel = false;
         }else {
             isDualPanel = true;
         }
-
     }
 
     @Override
