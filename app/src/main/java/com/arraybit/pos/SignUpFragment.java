@@ -228,6 +228,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 etEmail.setError("Enter " + getResources().getString(R.string.suValidEmail));
                 IsValid = false;
             }
+            etFirstName.clearError();
+            etPassword.clearError();
         }
         if (!etPhone.getText().toString().equals("") && etPhone.getText().length() != 10) {
             etPhone.setError("Enter 10 digit " + getResources().getString(R.string.suPhone));
