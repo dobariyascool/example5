@@ -22,21 +22,16 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                objSharePreferenceManage=new SharePreferenceManage();
-                if(objSharePreferenceManage.GetPreference("ServerPreference","ServerName",SplashScreenActivity.this)==null)
-                {
+                objSharePreferenceManage = new SharePreferenceManage();
+                if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this) == null) {
                     Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
-                }
-                else {
+                } else {
 
-                    if((objSharePreferenceManage.GetPreference("WaitingPreference", "UserName",SplashScreenActivity.this)==null)&&(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName",SplashScreenActivity.this)==null))
-                    {
-                        Intent intent=new Intent(SplashScreenActivity.this,SignInActivity.class);
+                    if ((objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SplashScreenActivity.this) == null) && (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", SplashScreenActivity.this) == null)) {
+                        Intent intent = new Intent(SplashScreenActivity.this, SignInActivity.class);
                         startActivity(intent);
-                    }
-                    else
-                    {
-                        Intent intent=new Intent(SplashScreenActivity.this,WelcomeActivity.class);
+                    } else {
+                        Intent intent = new Intent(SplashScreenActivity.this, WelcomeActivity.class);
                         startActivity(intent);
                         finish();
                     }
