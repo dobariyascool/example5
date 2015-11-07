@@ -23,7 +23,7 @@ import java.util.ArrayList;
 @SuppressLint("ValidFragment")
 public class DetailFragment extends Fragment {
 
-    public static int value = 1;
+    public int value = 1;
     ImageView ivItemImage;
     TextView txtItemName, txtDescription, txtItemPrice;
     EditText etQuantity;
@@ -84,10 +84,10 @@ public class DetailFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
-
         btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                quantityValue();
                 value++;
                 String _stringValue = Integer.toString(value);
                 etQuantity.setText(_stringValue);
@@ -97,6 +97,7 @@ public class DetailFragment extends Fragment {
         btnMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                quantityValue();
                 if (value > 1) {
                     value--;
                 }
@@ -106,6 +107,11 @@ public class DetailFragment extends Fragment {
         });
 
         super.onActivityCreated(savedInstanceState);
+    }
+
+    private int quantityValue(){
+        value = Integer.parseInt(etQuantity.getText().toString());
+        return value;
     }
 
 //    @Override

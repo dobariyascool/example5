@@ -46,13 +46,7 @@ public class FeedbackJSONParser
                     objFeedbackMaster.setlinktoRegisteredUserMasterId(jsonObject.getInt("linktoRegisteredUserMasterId"));
                 }
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("ReplyDateTime"));
-                objFeedbackMaster.setReplyDateTime(sdfControlDateFormat.format(dt));
-                objFeedbackMaster.setReply(jsonObject.getString("Reply"));
-                if (!jsonObject.getString("linktoUserMasterIdRepliedBy").equals("null")) {
-                    objFeedbackMaster.setlinktoUserMasterIdRepliedBy((short)jsonObject.getInt("linktoUserMasterIdRepliedBy"));
-                }
                 objFeedbackMaster.setlinktoBusinessMasterId((short)jsonObject.getInt("linktoBusinessMasterId"));
-                objFeedbackMaster.setIsDeleted(jsonObject.getBoolean("IsDeleted"));
 
                 /// Extra
                 objFeedbackMaster.setFeedbackType(jsonObject.getString("FeedbackType"));
@@ -84,13 +78,7 @@ public class FeedbackJSONParser
                     objFeedbackMaster.setlinktoRegisteredUserMasterId(jsonArray.getJSONObject(i).getInt("linktoRegisteredUserMasterId"));
                 }
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("ReplyDateTime"));
-                objFeedbackMaster.setReplyDateTime(sdfControlDateFormat.format(dt));
-                objFeedbackMaster.setReply(jsonArray.getJSONObject(i).getString("Reply"));
-                if (!jsonArray.getJSONObject(i).getString("linktoUserMasterIdRepliedBy").equals("null")) {
-                    objFeedbackMaster.setlinktoUserMasterIdRepliedBy((short)jsonArray.getJSONObject(i).getInt("linktoUserMasterIdRepliedBy"));
-                }
                 objFeedbackMaster.setlinktoBusinessMasterId((short)jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
-                objFeedbackMaster.setIsDeleted(jsonArray.getJSONObject(i).getBoolean("IsDeleted"));
 
                 /// Extra
                 objFeedbackMaster.setFeedbackType(jsonArray.getJSONObject(i).getString("FeedbackType"));
@@ -122,10 +110,7 @@ public class FeedbackJSONParser
             stringer.key("linktoFeedbackTypeMasterId").value(objFeedbackMaster.getlinktoFeedbackTypeMasterId());
             stringer.key("linktoRegisteredUserMasterId").value(objFeedbackMaster.getlinktoRegisteredUserMasterId());
             stringer.key("ReplyDateTime").value(sdfDateTimeFormat.format(dt));
-            stringer.key("Reply").value(objFeedbackMaster.getReply());
-            stringer.key("linktoUserMasterIdRepliedBy").value(objFeedbackMaster.getlinktoUserMasterIdRepliedBy());
             stringer.key("linktoBusinessMasterId").value(objFeedbackMaster.getlinktoBusinesseMasterId());
-            stringer.key("IsDeleted").value(objFeedbackMaster.getIsDeleted());
 
             stringer.endObject();
 
@@ -157,12 +142,7 @@ public class FeedbackJSONParser
             stringer.key("FeedbackDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoFeedbackTypeMasterId").value(objFeedbackMaster.getlinktoFeedbackTypeMasterId());
             stringer.key("linktoRegisteredUserMasterId").value(objFeedbackMaster.getlinktoRegisteredUserMasterId());
-            dt = sdfControlDateFormat.parse(objFeedbackMaster.getReplyDateTime());
-            stringer.key("ReplyDateTime").value(sdfDateTimeFormat.format(dt));
-            stringer.key("Reply").value(objFeedbackMaster.getReply());
-            stringer.key("linktoUserMasterIdRepliedBy").value(objFeedbackMaster.getlinktoUserMasterIdRepliedBy());
             stringer.key("linktoBusinessMasterId").value(objFeedbackMaster.getlinktoBusinesseMasterId());
-            stringer.key("IsDeleted").value(objFeedbackMaster.getIsDeleted());
 
             stringer.endObject();
 

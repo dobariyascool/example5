@@ -17,11 +17,7 @@ public class FeedbackMaster implements Parcelable {
     String FeedbackDateTime;
     short linktoFeedbackTypeMasterId;
     int linktoRegisteredUserMasterId;
-    String ReplyDateTime;
-    String Reply;
-    short linktoUserMasterIdRepliedBy;
     short linktoBusinessMasterId;
-    boolean IsDeleted;
     /// Extra
     String FeedbackType;
     String Business;
@@ -36,11 +32,7 @@ public class FeedbackMaster implements Parcelable {
             objFeedbackMaster.FeedbackDateTime = source.readString();
             objFeedbackMaster.linktoFeedbackTypeMasterId = (short)source.readInt();
             objFeedbackMaster.linktoRegisteredUserMasterId = source.readInt();
-            objFeedbackMaster.ReplyDateTime = source.readString();
-            objFeedbackMaster.Reply = source.readString();
-            objFeedbackMaster.linktoUserMasterIdRepliedBy = (short)source.readInt();
             objFeedbackMaster.linktoBusinessMasterId = (short)source.readInt();
-            objFeedbackMaster.IsDeleted = source.readByte() != 0;
 
             /// Extra
             objFeedbackMaster.FeedbackType = source.readString();
@@ -85,25 +77,9 @@ public class FeedbackMaster implements Parcelable {
 
     public void setlinktoRegisteredUserMasterId(int linktoRegisteredUserMasterId) { this.linktoRegisteredUserMasterId = linktoRegisteredUserMasterId; }
 
-    public String getReplyDateTime() { return this.ReplyDateTime; }
-
-    public void setReplyDateTime(String replyDateTime) { this.ReplyDateTime = replyDateTime; }
-
-    public String getReply() { return this.Reply; }
-
-    public void setReply(String reply) { this.Reply = reply; }
-
-    public short getlinktoUserMasterIdRepliedBy() { return this.linktoUserMasterIdRepliedBy; }
-
-    public void setlinktoUserMasterIdRepliedBy(short linktoUserMasterIdRepliedBy) { this.linktoUserMasterIdRepliedBy = linktoUserMasterIdRepliedBy; }
-
     public short getlinktoBusinesseMasterId() { return this.linktoBusinessMasterId; }
 
     public void setlinktoBusinessMasterId(short linktoBusinessMasterId) { this.linktoBusinessMasterId = linktoBusinessMasterId; }
-
-    public boolean getIsDeleted() { return this.IsDeleted; }
-
-    public void setIsDeleted(boolean isDeleted) { this.IsDeleted = isDeleted; }
 
     public String getFeedbackType() { return this.FeedbackType; }
 
@@ -128,11 +104,7 @@ public class FeedbackMaster implements Parcelable {
         parcel.writeString(FeedbackDateTime);
         parcel.writeInt(linktoFeedbackTypeMasterId);
         parcel.writeInt(linktoRegisteredUserMasterId);
-        parcel.writeString(ReplyDateTime);
-        parcel.writeString(Reply);
-        parcel.writeInt(linktoUserMasterIdRepliedBy);
         parcel.writeInt(linktoBusinessMasterId);
-        parcel.writeByte((byte)(IsDeleted ? 1 : 0));
 
         /// Extra
         parcel.writeString(FeedbackType);

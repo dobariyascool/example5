@@ -189,7 +189,6 @@ public class FeedbackFragment extends Fragment {
 
             objFeedbackMaster.setlinktoRegisteredUserMasterId(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity())));
             objFeedbackMaster.setlinktoBusinessMasterId(i);
-            objFeedbackMaster.setIsDeleted(false);
             objFeedbackJSONParser = new FeedbackJSONParser();
         }
 
