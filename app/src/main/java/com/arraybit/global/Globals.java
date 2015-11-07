@@ -239,7 +239,7 @@ public class Globals {
 
         private int intValue;
 
-        private WaitingStatus(int value) {
+        WaitingStatus(int value) {
             intValue = value;
 
         }
@@ -260,7 +260,7 @@ public class Globals {
 
         private String intValue;
 
-        private Days(String value) {
+        Days(String value) {
             intValue = value;
 
         }
@@ -278,7 +278,7 @@ public class Globals {
 
         private int intValue;
 
-        private FeedbackType(int value) {
+        FeedbackType(int value) {
             intValue = value;
 
         }
@@ -295,7 +295,7 @@ public class Globals {
 
         private int intValue;
 
-        private TableStatus(int value) {
+        TableStatus(int value) {
             intValue = value;
 
         }
@@ -313,7 +313,7 @@ public class Globals {
 
         private int intValue;
 
-        private ItemType(int value) {
+        ItemType(int value) {
             intValue = value;
 
         }
