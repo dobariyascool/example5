@@ -141,13 +141,24 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     boolean ValidateControls() {
         boolean IsValid = true;
 
-        if (etName.getText().toString().equals("")) {
+        if (etName.getText().toString().equals("") && etPassword.getText().toString().equals("")) {
             etName.setError("Enter " + getResources().getString(R.string.siUserName));
-            IsValid = false;
-        }
-        if (etPassword.getText().toString().equals("")) {
             etPassword.setError("Enter " + getResources().getString(R.string.siPassword));
             IsValid = false;
+        }
+        else if (etName.getText().toString().equals("") && !etPassword.getText().toString().equals("")) {
+            etName.setError("Enter " + getResources().getString(R.string.siUserName));
+            etPassword.clearError();
+            IsValid = false;
+        }
+        else if (etPassword.getText().toString().equals("") && !etName.getText().toString().equals("")) {
+            etPassword.setError("Enter " + getResources().getString(R.string.siPassword));
+            etName.clearError();
+            IsValid = false;
+        }
+        else {
+            etName.clearError();
+            etPassword.clearError();
         }
 
         return IsValid;
