@@ -233,7 +233,7 @@ public class Globals {
 
     public enum WaitingStatus {
         Waiting(1),
-        Serve(2),
+        Assign(2),
         Cancel(3),
         NA(4);
 

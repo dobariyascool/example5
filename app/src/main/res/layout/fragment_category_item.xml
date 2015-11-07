@@ -54,6 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/control_SpecingSmall"
+        app:layout_behavior="com.support.android.designlibdemo.ScrollAwareFABBehavior"
         app:menu_icon="@mipmap/fmenu">
 
         <com.github.clans.fab.FloatingActionButton

@@ -181,7 +181,7 @@
 
     <!-- waiting status dialog -->
     <string name="wsdTitle">Change Status</string>
-    <string name="wsdServe">Serve</string>
+    <string name="wsdServe">Assign</string>
     <string name="wsdNot">N/A</string>
     <string name="wsdCancel">Cancel</string>
     <string name="wsdCall">Call</string>

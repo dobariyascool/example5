@@ -81,8 +81,8 @@ public class WaitingListFragment extends Fragment {
     public void SetTabLayout(ArrayList<WaitingStatusMaster> alWaitingStatusMaster, final WaitingListPagerAdapter waitingListPagerAdapter) {
 
         for (int i = 0; i < alWaitingStatusMaster.size(); i++) {
-            if (alWaitingStatusMaster.get(i).getWaitingStatus().equals(Globals.WaitingStatus.Serve.toString())) {
-                waitingListPagerAdapter.AddFragment(WaitingTabFragment.createInstance(alWaitingStatusMaster.get(i)), alWaitingStatusMaster.get(i).getWaitingStatus() + "d");
+            if (alWaitingStatusMaster.get(i).getWaitingStatus().equals(Globals.WaitingStatus.Assign.toString())) {
+                waitingListPagerAdapter.AddFragment(WaitingTabFragment.createInstance(alWaitingStatusMaster.get(i)), alWaitingStatusMaster.get(i).getWaitingStatus() + "ed");
             } else if (alWaitingStatusMaster.get(i).getWaitingStatus().equals(Globals.WaitingStatus.Cancel.toString())) {
                 waitingListPagerAdapter.AddFragment(WaitingTabFragment.createInstance(alWaitingStatusMaster.get(i)), alWaitingStatusMaster.get(i).getWaitingStatus() + "led");
             } else {
