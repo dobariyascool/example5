@@ -22,6 +22,7 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
 public class GalleryFragment extends Fragment {
 
@@ -89,6 +90,7 @@ public class GalleryFragment extends Fragment {
         rvGallery.setLayoutManager(linearLayoutManager);
     }
 
+    @SuppressWarnings("unchecked")
     public class GalleryLoadingTask extends AsyncTask {
         ProgressDialog progressDialog;
 
@@ -103,7 +105,6 @@ public class GalleryFragment extends Fragment {
 
                 progressDialog.show();
             }
-            /*SignInActivity.ServerName = "10.0.3.2:6122";*/
         }
 
         @Override
