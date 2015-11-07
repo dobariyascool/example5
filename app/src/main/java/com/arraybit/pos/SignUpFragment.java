@@ -221,6 +221,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             etEmail.setError("Enter " + getResources().getString(R.string.suEmail));
             etPassword.setError("Enter " + getResources().getString(R.string.suPassword));
             IsValid = false;
+        } else if(!etFirstName.getText().toString().equals("") && !etEmail.getText().toString().equals("") && !etPassword.getText().toString().equals("")){
+            if (Globals.IsValidEmail(etEmail.getText().toString())) {
+                etEmail.clearError();
+            } else {
+                etEmail.setError("Enter " + getResources().getString(R.string.suValidEmail));
+                IsValid = false;
+            }
         }
         if (!etPhone.getText().toString().equals("") && etPhone.getText().length() != 10) {
             etPhone.setError("Enter 10 digit " + getResources().getString(R.string.suPhone));
@@ -228,7 +235,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         } else {
             etPhone.clearError();
         }
-
         return IsValid;
     }
 
