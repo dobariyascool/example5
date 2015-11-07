@@ -4,6 +4,7 @@ package com.arraybit.global;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -215,6 +216,16 @@ public class Globals {
             objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId", activity);
 
             objSharePreferenceManage.ClearPreference("WaiterPreference", activity);
+        }
+    }
+
+    //set runtime orientation for mobile and tablet
+    public static void RuntimeChangeOrientation(Activity activity){
+        if (activity.getResources().getBoolean(R.bool.isTablet)) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        }
+        else{
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
 

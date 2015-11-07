@@ -31,7 +31,6 @@
                 android:layout_weight="0.5"
                 tools:layout="@layout/fragment_guest_order_list" />
 
-
             <fragment
                 android:id="@+id/fragment_category_item"
                 android:name="com.arraybit.pos.CategoryItemFragment"
