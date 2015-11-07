@@ -139,6 +139,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             }
         } else if (v.getId() == R.id.cbSignIn) {
             getActivity().getSupportFragmentManager().popBackStack();
+            GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+            guestLoginDialogFragment.show(getFragmentManager(), "");
         }
     }
 
