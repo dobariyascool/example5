@@ -29,10 +29,12 @@ public class CategoryJSONParser {
                 if (!jsonObject.getString("linktoCategoryMasterIdParent").equals("null")) {
                     objCategoryMaster.setlinktoCategoryMasterIdParent((short) jsonObject.getInt("linktoCategoryMasterIdParent"));
                 }
-                objCategoryMaster.setImagelName(jsonObject.getString("ImagelName"));
+                if(!jsonObject.getString("ImageName").equals("")) {
+                    objCategoryMaster.setImagelName(jsonObject.getString("ImageName"));
+                }
                 objCategoryMaster.setCategoryColor(jsonObject.getString("CategoryColor"));
                 objCategoryMaster.setDescription(jsonObject.getString("Description"));
-                objCategoryMaster.setIsNew(jsonObject.getBoolean("IsNew"));
+                //objCategoryMaster.setIsNew(jsonObject.getBoolean("IsNew"));
                 objCategoryMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
                 if (!jsonObject.getString("SortOrder").equals("null")) {
                     objCategoryMaster.setSortOrder((short) jsonObject.getInt("SortOrder"));
@@ -40,7 +42,7 @@ public class CategoryJSONParser {
                 objCategoryMaster.setIsEnabled(jsonObject.getBoolean("IsEnabled"));
 
                 /// Extra
-                objCategoryMaster.setCategory(jsonObject.getString("Category"));
+                //objCategoryMaster.setCategory(jsonObject.getString("Category"));
             }
             return objCategoryMaster;
         } catch (JSONException e) {
@@ -59,10 +61,12 @@ public class CategoryJSONParser {
                 if (!jsonArray.getJSONObject(i).getString("linktoCategoryMasterIdParent").equals("null")) {
                     objCategoryMaster.setlinktoCategoryMasterIdParent((short) jsonArray.getJSONObject(i).getInt("linktoCategoryMasterIdParent"));
                 }
-                objCategoryMaster.setImagelName(jsonArray.getJSONObject(i).getString("ImagelName"));
+                if(!jsonArray.getJSONObject(i).getString("ImageName").equals("")){
+                    objCategoryMaster.setImagelName(jsonArray.getJSONObject(i).getString("ImageName"));
+                }
                 objCategoryMaster.setCategoryColor(jsonArray.getJSONObject(i).getString("CategoryColor"));
                 objCategoryMaster.setDescription(jsonArray.getJSONObject(i).getString("Description"));
-                objCategoryMaster.setIsNew(jsonArray.getJSONObject(i).getBoolean("IsNew"));
+                //objCategoryMaster.setIsNew(jsonArray.getJSONObject(i).getBoolean("IsNew"));
                 objCategoryMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 if (!jsonArray.getJSONObject(i).getString("SortOrder").equals("null")) {
                     objCategoryMaster.setSortOrder((short) jsonArray.getJSONObject(i).getInt("SortOrder"));
@@ -70,7 +74,7 @@ public class CategoryJSONParser {
                 objCategoryMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
 
                 /// Extra
-                objCategoryMaster.setCategory(jsonArray.getJSONObject(i).getString("Category"));
+                //objCategoryMaster.setCategory(jsonArray.getJSONObject(i).getString("Category"));
                 lstCategoryMaster.add(objCategoryMaster);
             }
             return lstCategoryMaster;
