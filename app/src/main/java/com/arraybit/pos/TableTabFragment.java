@@ -33,7 +33,7 @@ public class TableTabFragment extends Fragment {
     ArrayList<TableMaster> alTableMaster;
     SectionMaster objSectionMaster;
     GridLayoutManager gridLayoutManager;
-    int currentPage = 1, sectionMasterId;
+    int currentPage = 1,sectionMasterId;
     String tableStatusMasterId = null;
     TextView txtMsg;
 
@@ -85,66 +85,50 @@ public class TableTabFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        rvTables.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-
-                if (current_page > currentPage) {
-                    currentPage = current_page;
-                    if (Service.CheckNet(getActivity())) {
-                        new TableMasterLoadingTask().execute();
-                    }
-                }
-            }
-        });
+//        rvTables.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+//            @Override
+//            public void onLoadMore(int current_page) {
+//
+//                if (current_page > currentPage) {
+//                    currentPage = current_page;
+//                    if (Service.CheckNet(getActivity())) {
+//                        new TableMasterLoadingTask().execute();
+//                    }
+//                }
+//            }
+//        });
     }
 
     private void SetupRecyclerView(RecyclerView rvTables) {
-
         tablesAdapter = new TablesAdapter(getActivity(), alTableMaster);
         rvTables.setAdapter(tablesAdapter);
         rvTables.setLayoutManager(gridLayoutManager);
-
     }
 
     public void TableDataFilter(int sectionMasterId, String tableStatusMasterId) {
         this.tableStatusMasterId = tableStatusMasterId;
         this.sectionMasterId = sectionMasterId;
         alTableMaster = new ArrayList<>();
+
         new TableMasterLoadingTask().execute();
-
-        rvTables.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-
-                if (current_page > currentPage) {
-                    currentPage = current_page;
-                    if (Service.CheckNet(getActivity())) {
-                        new TableMasterLoadingTask().execute();
-                    }
-                }
-            }
-        });
     }
 
-    @SuppressWarnings("ResourceType")
     class TableMasterLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
-        boolean isShow;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            if(currentPage > 2 && alTableMaster.size() != 0) {
-                progressDialog = new ProgressDialog(getActivity());
+            progressDialog = new ProgressDialog(getActivity());
+            if (currentPage > 2 && alTableMaster.size() != 0) {
                 progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
                 progressDialog.setIndeterminate(true);
                 progressDialog.setCancelable(false);
                 progressDialog.show();
             }
+
         }
 
         @Override
@@ -160,7 +144,7 @@ public class TableTabFragment extends Fragment {
         @Override
         protected void onPostExecute(Object result) {
 
-            if(currentPage > 2) {
+            if (currentPage > 2) {
                 progressDialog.dismiss();
             }
 
@@ -184,6 +168,19 @@ public class TableTabFragment extends Fragment {
                 Globals.SetError(txtMsg, rvTables, null, false);
                 alTableMaster = lstTableMaster;
                 SetupRecyclerView(rvTables);
+
+                rvTables.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+                    @Override
+                    public void onLoadMore(int current_page) {
+
+                        if (current_page > currentPage) {
+                            currentPage = current_page;
+                            if (Service.CheckNet(getActivity())) {
+                                new TableMasterLoadingTask().execute();
+                            }
+                        }
+                    }
+                });
             }
         }
     }

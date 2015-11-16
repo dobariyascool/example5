@@ -26,7 +26,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     public TablesAdapter(Context context, ArrayList<TableMaster> result) {
         this.context = context;
         alTableMaster = result;
-        layoutInflater = LayoutInflater.from(context);
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     @Override

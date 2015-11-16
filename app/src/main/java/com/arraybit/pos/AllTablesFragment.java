@@ -80,16 +80,16 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(tableTabLayout.getSelectedTabPosition());
         SectionMaster objSectionMaster = tablePagerAdapter.GetCurrentSection(tableTabLayout.getSelectedTabPosition());
 
-        if(v.getId()==R.id.fabAll){
-            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),null);
-            famRoot.close(true);
-        }
-        else if(v.getId()==R.id.fabVacant){
+        if(v.getId()==R.id.fabVacant){
             tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),String.valueOf(Globals.TableStatus.Vacant.getValue()));
             famRoot.close(true);
         }
         else if(v.getId()==R.id.fabBusy){
             tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),String.valueOf(Globals.TableStatus.Busy.getValue()));
+            famRoot.close(true);
+        }
+        else if(v.getId()==R.id.fabAll){
+            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),null);
             famRoot.close(true);
         }
     }
