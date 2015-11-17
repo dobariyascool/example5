@@ -24,7 +24,7 @@ import com.arraybit.parser.TableJSONParser;
 import java.util.ArrayList;
 
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class TableTabFragment extends Fragment {
 
     public final static String ITEMS_COUNT_KEY = "TableTabFragment$ItemsCount";
@@ -33,21 +33,12 @@ public class TableTabFragment extends Fragment {
     ArrayList<TableMaster> alTableMaster;
     SectionMaster objSectionMaster;
     GridLayoutManager gridLayoutManager;
-    int currentPage = 1,sectionMasterId;
+    int currentPage = 1, sectionMasterId;
     String tableStatusMasterId = null;
     TextView txtMsg;
 
     public TableTabFragment() {
         // Required empty public constructor
-    }
-
-    public static TableTabFragment createInstance(ArrayList<TableMaster> alTableMaster) {
-
-        TableTabFragment tableTabFragment = new TableTabFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(ITEMS_COUNT_KEY, alTableMaster);
-        tableTabFragment.setArguments(bundle);
-        return tableTabFragment;
     }
 
     public static TableTabFragment createInstance(SectionMaster objSectionMaster) {
@@ -85,18 +76,6 @@ public class TableTabFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        rvTables.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
-//            @Override
-//            public void onLoadMore(int current_page) {
-//
-//                if (current_page > currentPage) {
-//                    currentPage = current_page;
-//                    if (Service.CheckNet(getActivity())) {
-//                        new TableMasterLoadingTask().execute();
-//                    }
-//                }
-//            }
-//        });
     }
 
     private void SetupRecyclerView(RecyclerView rvTables) {
@@ -143,6 +122,7 @@ public class TableTabFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
 
             if (currentPage > 2) {
                 progressDialog.dismiss();
