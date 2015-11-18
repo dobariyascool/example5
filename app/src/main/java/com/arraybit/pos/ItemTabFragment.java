@@ -29,6 +29,7 @@ public class ItemTabFragment extends Fragment {
     TextView txtMsg;
     RecyclerView rvItem;
     LinearLayoutManager linearLayoutManager;
+    GridLayoutManager gridLayoutManager;
     ArrayList<ItemMaster> alItemMaster;
     String itemTypeMasterId = null;
     CategoryMaster objCategoryMaster;
@@ -60,6 +61,9 @@ public class ItemTabFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
+        gridLayoutManager = new GridLayoutManager(getActivity(),2);
+        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
 
         Bundle bundle = getArguments();
@@ -74,18 +78,6 @@ public class ItemTabFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-                if (current_page > currentPage) {
-                    currentPage = current_page;
-                    if (Service.CheckNet(getActivity())) {
-                        new GuestHomeItemLoadingTask().execute();
-                    }
-                }
-            }
-        });
     }
 
     public void SetupRecyclerView() {
@@ -94,9 +86,37 @@ public class ItemTabFragment extends Fragment {
         rvItem.setVisibility(View.VISIBLE);
         rvItem.setAdapter(categoryItemAdapter);
         if (CategoryItemFragment.isViewChange) {
-            rvItem.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            rvItem.setLayoutManager(gridLayoutManager);
         } else {
             rvItem.setLayoutManager(linearLayoutManager);
+        }
+
+        if(CategoryItemFragment.isViewChange) {
+            rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+                @Override
+                public void onLoadMore(int current_page) {
+                    if (current_page > currentPage) {
+                        currentPage = current_page;
+                        if (Service.CheckNet(getActivity())) {
+                            new GuestHomeItemLoadingTask().execute();
+                        }
+                    }
+                }
+            });
+        }
+        else
+        {
+            rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+                @Override
+                public void onLoadMore(int current_page) {
+                    if (current_page > currentPage) {
+                        currentPage = current_page;
+                        if (Service.CheckNet(getActivity())) {
+                            new GuestHomeItemLoadingTask().execute();
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -104,18 +124,6 @@ public class ItemTabFragment extends Fragment {
         this.itemTypeMasterId = itemTypeMasterId;
         alItemMaster = new ArrayList<>();
         new GuestHomeItemLoadingTask().execute();
-
-        rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-                if (current_page > currentPage) {
-                    currentPage = current_page;
-                    if (Service.CheckNet(getActivity())) {
-                        new GuestHomeItemLoadingTask().execute();
-                    }
-                }
-            }
-        });
     }
     public class GuestHomeItemLoadingTask extends AsyncTask {
 
@@ -138,7 +146,7 @@ public class ItemTabFragment extends Fragment {
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-            if (linearLayoutManager.canScrollVertically() && alItemMaster.size() == 0) {
+            if ((linearLayoutManager.canScrollVertically() || gridLayoutManager.canScrollVertically()) && alItemMaster.size() == 0) {
                 currentPage = 1;
             }
             return objItemJSONParser.SelectAllItemMaster(currentPage, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);

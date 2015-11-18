@@ -37,6 +37,7 @@ public class TableTabFragment extends Fragment {
     String tableStatusMasterId = null;
     TextView txtMsg;
 
+
     public TableTabFragment() {
         // Required empty public constructor
     }
