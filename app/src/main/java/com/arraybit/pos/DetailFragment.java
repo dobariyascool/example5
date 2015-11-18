@@ -158,7 +158,7 @@ public class DetailFragment extends Fragment {
 
             txtItemName.setText(objItemMaster.getItemName());
             txtDescription.setText(objItemMaster.getShortDescription());
-            txtItemPrice.setText((String.valueOf(objItemMaster.getMRP())));
+            //txtItemPrice.setText((String.valueOf(objItemMaster.getMRP())));
 
         }
     }

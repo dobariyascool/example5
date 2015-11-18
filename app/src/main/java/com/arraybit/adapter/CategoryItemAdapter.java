@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.DetailFragment;
@@ -25,7 +24,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
     FragmentManager fragmentManager;
     boolean isViewChange;
-    boolean isWaiterGrid=false;
+    boolean isWaiterGrid = false;
     View view;
     Context context;
     ArrayList<ItemMaster> alItemMaster;
@@ -42,13 +41,11 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (isViewChange) {
-            if(CategoryItemFragment.i==1) {
+            if (CategoryItemFragment.i == 1) {
                 view = LayoutInflater.from(context).inflate(R.layout.row_category_item_grid, parent, false);
-            }
-            else
-            {
+            } else {
                 isWaiterGrid = true;
-                view = LayoutInflater.from(context).inflate(R.layout.row_waiter_category_item_grid,parent,false);
+                view = LayoutInflater.from(context).inflate(R.layout.row_waiter_category_item_grid, parent, false);
             }
         } else {
             view = LayoutInflater.from(context).inflate(R.layout.row_category_item, parent, false);
@@ -65,13 +62,13 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
         holder.cvItem.setId(objItemMaster.getItemMasterId());
 
-        if(!isWaiterGrid) {
+        if (!isWaiterGrid) {
             Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).into(holder.ivItem);
-            System.out.println("Image"+objItemMaster.getImageName());
         }
+
         holder.txtItemName.setText(objItemMaster.getItemName());
         holder.txtItemDescription.setText(objItemMaster.getShortDescription());
-        holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
+        //holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
     }
 
     @Override
@@ -99,7 +96,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
             cvItem = (CardView) itemView.findViewById(R.id.cvItem);
 
-            ivItem = (ImageView)itemView.findViewById(R.id.ivItem);
+            ivItem = (ImageView) itemView.findViewById(R.id.ivItem);
 
             txtItemName = (TextView) itemView.findViewById(R.id.txtItemName);
             txtItemDescription = (TextView) itemView.findViewById(R.id.txtItemDescription);

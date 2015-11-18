@@ -15,10 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-/// <summary>
-/// JSONParser for ItemMaster
-/// </summary>
-
 public class ItemJSONParser {
     public String SelectAllItemMasterByCategoryMasterId = "SelectAllItemMasterByCategoryMasterId";
     public String SelectItemMaster = "SelectItemMaster";
@@ -37,11 +33,11 @@ public class ItemJSONParser {
                 objItemMaster.setShortName(jsonObject.getString("ShortName"));
                 objItemMaster.setItemCode(jsonObject.getString("ItemCode"));
                 objItemMaster.setShortDescription(jsonObject.getString("ShortDescription"));
-                objItemMaster.setMRP(jsonObject.getDouble("MRP"));
-                objItemMaster.setSellPrice(jsonObject.getDouble("SellPrice"));
+                //objItemMaster.setMRP(jsonObject.getDouble("MRP"));
+                //objItemMaster.setSellPrice(jsonObject.getDouble("SellPrice"));
                 objItemMaster.setItemPoint((short) jsonObject.getInt("ItemPoint"));
                 objItemMaster.setPriceByPoint((short) jsonObject.getInt("PriceByPoint"));
-                objItemMaster.setlinktoItemTypeMasterId((short) jsonObject.getInt("linktoItemTypeMasterId"));
+                //objItemMaster.setlinktoItemTypeMasterId((short) jsonObject.getInt("linktoItemTypeMasterId"));
                 objItemMaster.setlinktoUnitMasterId((short) jsonObject.getInt("linktoUnitMasterId"));
                 objItemMaster.setSearchWords(jsonObject.getString("SearchWords"));
                 objItemMaster.setImageName(jsonObject.getString("ImageName"));
@@ -56,11 +52,12 @@ public class ItemJSONParser {
                     objItemMaster.setlinktoUserMasterIdUpdatedBy((short) jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
                 }
                 objItemMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
-                objItemMaster.setIsEnabled(jsonObject.getBoolean("IsEnabled"));
-                objItemMaster.setIsDeleted(jsonObject.getBoolean("IsDeleted"));
+                objItemMaster.setIsFavourite(jsonObject.getBoolean("IsFavourite"));
+                objItemMaster.setIsRowMaterial(jsonObject.getBoolean("IsRowMaterial"));
+                objItemMaster.setBarCode(jsonObject.getString("BarCode"));
 
                 /// Extra
-                objItemMaster.setItemType(jsonObject.getString("ItemType"));
+                //objItemMaster.setItemType(jsonObject.getString("ItemType"));
                 objItemMaster.setUnit(jsonObject.getString("Unit"));
                 objItemMaster.setItemStatus(jsonObject.getString("ItemStatus"));
             }
@@ -83,11 +80,11 @@ public class ItemJSONParser {
                 objItemMaster.setShortName(jsonArray.getJSONObject(i).getString("ShortName"));
                 objItemMaster.setItemCode(jsonArray.getJSONObject(i).getString("ItemCode"));
                 objItemMaster.setShortDescription(jsonArray.getJSONObject(i).getString("ShortDescription"));
-                objItemMaster.setMRP(jsonArray.getJSONObject(i).getDouble("MRP"));
-                objItemMaster.setSellPrice(jsonArray.getJSONObject(i).getDouble("SellPrice"));
+                //objItemMaster.setMRP(jsonArray.getJSONObject(i).getDouble("MRP"));
+                //objItemMaster.setSellPrice(jsonArray.getJSONObject(i).getDouble("SellPrice"));
                 objItemMaster.setItemPoint((short) jsonArray.getJSONObject(i).getInt("ItemPoint"));
                 objItemMaster.setPriceByPoint((short) jsonArray.getJSONObject(i).getInt("PriceByPoint"));
-                objItemMaster.setlinktoItemTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoItemTypeMasterId"));
+                //objItemMaster.setlinktoItemTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoItemTypeMasterId"));
                 objItemMaster.setlinktoUnitMasterId((short) jsonArray.getJSONObject(i).getInt("linktoUnitMasterId"));
                 objItemMaster.setSearchWords(jsonArray.getJSONObject(i).getString("SearchWords"));
                 objItemMaster.setImageName(jsonArray.getJSONObject(i).getString("ImageName"));
@@ -102,11 +99,12 @@ public class ItemJSONParser {
                     objItemMaster.setlinktoUserMasterIdUpdatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
                 }
                 objItemMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
-                objItemMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
-                objItemMaster.setIsDeleted(jsonArray.getJSONObject(i).getBoolean("IsDeleted"));
+                objItemMaster.setIsFavourite(jsonArray.getJSONObject(i).getBoolean("IsFavourite"));
+                objItemMaster.setIsRowMaterial(jsonArray.getJSONObject(i).getBoolean("IsRowMaterial"));
+                objItemMaster.setBarCode(jsonArray.getJSONObject(i).getString("BarCode"));
 
                 /// Extra
-                objItemMaster.setItemType(jsonArray.getJSONObject(i).getString("ItemType"));
+                //objItemMaster.setItemType(jsonArray.getJSONObject(i).getString("ItemType"));
                 objItemMaster.setUnit(jsonArray.getJSONObject(i).getString("Unit"));
                 objItemMaster.setItemStatus(jsonArray.getJSONObject(i).getString("ItemStatus"));
                 lstItemMaster.add(objItemMaster);

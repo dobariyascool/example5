@@ -14,11 +14,11 @@ public class ItemMaster implements Parcelable {
     String ShortName;
     String ItemCode;
     String ShortDescription;
-    double MRP;
-    double SellPrice;
+    //double MRP;
+    //double SellPrice;
     short ItemPoint;
     short PriceByPoint;
-    short linktoItemTypeMasterId;
+    //short linktoItemTypeMasterId;
     short linktoUnitMasterId;
     String SearchWords;
     String ImageNameBytes;
@@ -32,8 +32,11 @@ public class ItemMaster implements Parcelable {
     short linktoBusinessMasterId;
     boolean IsEnabled;
     boolean IsDeleted;
+    boolean IsFavourite;
+    boolean IsRowMaterial;
+    String BarCode;
     /// Extra
-    String ItemType;
+    //String ItemType;
     String Unit;
     String ItemStatus;
     public static final Parcelable.Creator<ItemMaster> CREATOR = new Creator<ItemMaster>() {
@@ -44,27 +47,30 @@ public class ItemMaster implements Parcelable {
             objItemMaster.ShortName = source.readString();
             objItemMaster.ItemCode = source.readString();
             objItemMaster.ShortDescription = source.readString();
-            objItemMaster.MRP = source.readDouble();
-            objItemMaster.SellPrice = source.readDouble();
-            objItemMaster.ItemPoint = (short)source.readInt();
-            objItemMaster.PriceByPoint = (short)source.readInt();
-            objItemMaster.linktoItemTypeMasterId = (short)source.readInt();
-            objItemMaster.linktoUnitMasterId = (short)source.readInt();
+            //objItemMaster.MRP = source.readDouble();
+            //objItemMaster.SellPrice = source.readDouble();
+            objItemMaster.ItemPoint = (short) source.readInt();
+            objItemMaster.PriceByPoint = (short) source.readInt();
+            //objItemMaster.linktoItemTypeMasterId = (short)source.readInt();
+            objItemMaster.linktoUnitMasterId = (short) source.readInt();
             objItemMaster.SearchWords = source.readString();
             objItemMaster.ImageNameBytes = source.readString();
             objItemMaster.ImageName = source.readString();
-            objItemMaster.linktoItemStatusMasterId = (short)source.readInt();
+            objItemMaster.linktoItemStatusMasterId = (short) source.readInt();
             objItemMaster.SortOrder = source.readInt();
             objItemMaster.CreateDateTime = source.readString();
-            objItemMaster.linktoUserMasterIdCreatedBy = (short)source.readInt();
+            objItemMaster.linktoUserMasterIdCreatedBy = (short) source.readInt();
             objItemMaster.UpdateDateTime = source.readString();
-            objItemMaster.linktoUserMasterIdUpdatedBy = (short)source.readInt();
-            objItemMaster.linktoBusinessMasterId = (short)source.readInt();
+            objItemMaster.linktoUserMasterIdUpdatedBy = (short) source.readInt();
+            objItemMaster.linktoBusinessMasterId = (short) source.readInt();
             objItemMaster.IsEnabled = source.readByte() != 0;
             objItemMaster.IsDeleted = source.readByte() != 0;
+            objItemMaster.IsRowMaterial = source.readByte() != 0;
+            objItemMaster.IsFavourite = source.readByte() != 0;
+            objItemMaster.BarCode = source.readString();
 
             /// Extra
-            objItemMaster.ItemType = source.readString();
+            //objItemMaster.ItemType = source.readString();
             objItemMaster.Unit = source.readString();
             objItemMaster.ItemStatus = source.readString();
             return objItemMaster;
@@ -75,112 +81,223 @@ public class ItemMaster implements Parcelable {
         }
     };
 
-    public int getItemMasterId() { return this.ItemMasterId; }
+    public int getItemMasterId() {
+        return this.ItemMasterId;
+    }
 
-    public void setItemMasterId(int itemMasterId) { this.ItemMasterId = itemMasterId; }
+    public void setItemMasterId(int itemMasterId) {
+        this.ItemMasterId = itemMasterId;
+    }
 
-    public String getItemName() { return this.ItemName; }
+    public String getItemName() {
+        return this.ItemName;
+    }
 
-    public void setItemName(String itemName) { this.ItemName = itemName; }
+    public void setItemName(String itemName) {
+        this.ItemName = itemName;
+    }
 
-    public String getShortName() { return this.ShortName; }
+    public String getShortName() {
+        return this.ShortName;
+    }
 
-    public void setShortName(String shortName) { this.ShortName = shortName; }
+    public void setShortName(String shortName) {
+        this.ShortName = shortName;
+    }
 
-    public String getItemCode() { return this.ItemCode; }
+    public String getItemCode() {
+        return this.ItemCode;
+    }
 
-    public void setItemCode(String itemCode) { this.ItemCode = itemCode; }
+    public void setItemCode(String itemCode) {
+        this.ItemCode = itemCode;
+    }
 
-    public String getShortDescription() { return this.ShortDescription; }
+    public String getShortDescription() {
+        return this.ShortDescription;
+    }
 
-    public void setShortDescription(String shortDescription) { this.ShortDescription = shortDescription; }
+    public void setShortDescription(String shortDescription) {
+        this.ShortDescription = shortDescription;
+    }
 
-    public double getMRP() { return this.MRP; }
+//    public double getMRP() { return this.MRP; }
+//
+//    public void setMRP(double mRP) { this.MRP = mRP; }
+//
+//    public double getSellPrice() { return this.SellPrice; }
+//
+//    public void setSellPrice(double sellPrice) { this.SellPrice = sellPrice; }
 
-    public void setMRP(double mRP) { this.MRP = mRP; }
+    public short getItemPoint() {
+        return this.ItemPoint;
+    }
 
-    public double getSellPrice() { return this.SellPrice; }
+    public void setItemPoint(short itemPoint) {
+        this.ItemPoint = itemPoint;
+    }
 
-    public void setSellPrice(double sellPrice) { this.SellPrice = sellPrice; }
+    public short getPriceByPoint() {
+        return this.PriceByPoint;
+    }
 
-    public short getItemPoint() { return this.ItemPoint; }
+    public void setPriceByPoint(short priceByPoint) {
+        this.PriceByPoint = priceByPoint;
+    }
 
-    public void setItemPoint(short itemPoint) { this.ItemPoint = itemPoint; }
+//    public short getlinktoItemTypeMasterId() { return this.linktoItemTypeMasterId; }
+//
+//    public void setlinktoItemTypeMasterId(short linktoItemTypeMasterId) { this.linktoItemTypeMasterId = linktoItemTypeMasterId; }
 
-    public short getPriceByPoint() { return this.PriceByPoint; }
+    public short getlinktoUnitMasterId() {
+        return this.linktoUnitMasterId;
+    }
 
-    public void setPriceByPoint(short priceByPoint) { this.PriceByPoint = priceByPoint; }
+    public void setlinktoUnitMasterId(short linktoUnitMasterId) {
+        this.linktoUnitMasterId = linktoUnitMasterId;
+    }
 
-    public short getlinktoItemTypeMasterId() { return this.linktoItemTypeMasterId; }
+    public String getSearchWords() {
+        return this.SearchWords;
+    }
 
-    public void setlinktoItemTypeMasterId(short linktoItemTypeMasterId) { this.linktoItemTypeMasterId = linktoItemTypeMasterId; }
+    public void setSearchWords(String searchWords) {
+        this.SearchWords = searchWords;
+    }
 
-    public short getlinktoUnitMasterId() { return this.linktoUnitMasterId; }
+    public String getImageNameBytes() {
+        return this.ImageNameBytes;
+    }
 
-    public void setlinktoUnitMasterId(short linktoUnitMasterId) { this.linktoUnitMasterId = linktoUnitMasterId; }
+    public void setImageNameBytes(String imageNameBytes) {
+        this.ImageNameBytes = imageNameBytes;
+    }
 
-    public String getSearchWords() { return this.SearchWords; }
+    public String getImageName() {
+        return this.ImageName;
+    }
 
-    public void setSearchWords(String searchWords) { this.SearchWords = searchWords; }
+    public void setImageName(String imageName) {
+        this.ImageName = imageName;
+    }
 
-    public String getImageNameBytes() { return this.ImageNameBytes; }
+    public short getlinktoItemStatusMasterId() {
+        return this.linktoItemStatusMasterId;
+    }
 
-    public void setImageNameBytes(String imageNameBytes) { this.ImageNameBytes = imageNameBytes; }
+    public void setlinktoItemStatusMasterId(short linktoItemStatusMasterId) {
+        this.linktoItemStatusMasterId = linktoItemStatusMasterId;
+    }
 
-    public String getImageName() { return this.ImageName; }
+    public int getSortOrder() {
+        return this.SortOrder;
+    }
 
-    public void setImageName(String imageName) { this.ImageName = imageName; }
+    public void setSortOrder(int sortOrder) {
+        this.SortOrder = sortOrder;
+    }
 
-    public short getlinktoItemStatusMasterId() { return this.linktoItemStatusMasterId; }
+    public String getCreateDateTime() {
+        return this.CreateDateTime;
+    }
 
-    public void setlinktoItemStatusMasterId(short linktoItemStatusMasterId) { this.linktoItemStatusMasterId = linktoItemStatusMasterId; }
+    public void setCreateDateTime(String createDateTime) {
+        this.CreateDateTime = createDateTime;
+    }
 
-    public int getSortOrder() { return this.SortOrder; }
+    public short getlinktoUserMasterIdCreatedBy() {
+        return this.linktoUserMasterIdCreatedBy;
+    }
 
-    public void setSortOrder(int sortOrder) { this.SortOrder = sortOrder; }
+    public void setlinktoUserMasterIdCreatedBy(short linktoUserMasterIdCreatedBy) {
+        this.linktoUserMasterIdCreatedBy = linktoUserMasterIdCreatedBy;
+    }
 
-    public String getCreateDateTime() { return this.CreateDateTime; }
+    public String getUpdateDateTime() {
+        return this.UpdateDateTime;
+    }
 
-    public void setCreateDateTime(String createDateTime) { this.CreateDateTime = createDateTime; }
+    public void setUpdateDateTime(String updateDateTime) {
+        this.UpdateDateTime = updateDateTime;
+    }
 
-    public short getlinktoUserMasterIdCreatedBy() { return this.linktoUserMasterIdCreatedBy; }
+    public short getlinktoUserMasterIdUpdatedBy() {
+        return this.linktoUserMasterIdUpdatedBy;
+    }
 
-    public void setlinktoUserMasterIdCreatedBy(short linktoUserMasterIdCreatedBy) { this.linktoUserMasterIdCreatedBy = linktoUserMasterIdCreatedBy; }
+    public void setlinktoUserMasterIdUpdatedBy(short linktoUserMasterIdUpdatedBy) {
+        this.linktoUserMasterIdUpdatedBy = linktoUserMasterIdUpdatedBy;
+    }
 
-    public String getUpdateDateTime() { return this.UpdateDateTime; }
+    public short getlinktoBusinessMasterId() {
+        return this.linktoBusinessMasterId;
+    }
 
-    public void setUpdateDateTime(String updateDateTime) { this.UpdateDateTime = updateDateTime; }
+    public void setlinktoBusinessMasterId(short linktoBusinessMasterId) {
+        this.linktoBusinessMasterId = linktoBusinessMasterId;
+    }
 
-    public short getlinktoUserMasterIdUpdatedBy() { return this.linktoUserMasterIdUpdatedBy; }
+    public boolean getIsEnabled() {
+        return this.IsEnabled;
+    }
 
-    public void setlinktoUserMasterIdUpdatedBy(short linktoUserMasterIdUpdatedBy) { this.linktoUserMasterIdUpdatedBy = linktoUserMasterIdUpdatedBy; }
+    public void setIsEnabled(boolean isEnabled) {
+        this.IsEnabled = isEnabled;
+    }
 
-    public short getlinktoBusinessMasterId() { return this.linktoBusinessMasterId; }
+    public boolean getIsDeleted() {
+        return this.IsDeleted;
+    }
 
-    public void setlinktoBusinessMasterId(short linktoBusinessMasterId) { this.linktoBusinessMasterId = linktoBusinessMasterId; }
+    public void setIsDeleted(boolean isDeleted) {
+        this.IsDeleted = isDeleted;
+    }
 
-    public boolean getIsEnabled() { return this.IsEnabled; }
+//    public String getItemType() { return this.ItemType; }
+//
+//    public void setItemType(String itemType) { this.ItemType = itemType; }
 
-    public void setIsEnabled(boolean isEnabled) { this.IsEnabled = isEnabled; }
+    public String getUnit() {
+        return this.Unit;
+    }
 
-    public boolean getIsDeleted() { return this.IsDeleted; }
+    public void setUnit(String unit) {
+        this.Unit = unit;
+    }
 
-    public void setIsDeleted(boolean isDeleted) { this.IsDeleted = isDeleted; }
+    public String getItemStatus() {
+        return this.ItemStatus;
+    }
 
-    public String getItemType() { return this.ItemType; }
+    public void setItemStatus(String itemStatus) {
+        this.ItemStatus = itemStatus;
+    }
 
-    public void setItemType(String itemType) { this.ItemType = itemType; }
+    public boolean isFavourite() {
+        return IsFavourite;
+    }
 
-    public String getUnit() { return this.Unit; }
+    public void setIsFavourite(boolean isFavourite) {
+        IsFavourite = isFavourite;
+    }
 
-    public void setUnit(String unit) { this.Unit = unit; }
+    public boolean isRowMaterial() {
+        return IsRowMaterial;
+    }
 
-    public String getItemStatus() { return this.ItemStatus; }
+    public void setIsRowMaterial(boolean isRowMaterial) {
+        IsRowMaterial = isRowMaterial;
+    }
+
+    public String getBarCode() {
+        return BarCode;
+    }
+
+    public void setBarCode(String barCode) {
+        BarCode = barCode;
+    }
 
     //endregion
-
-    public void setItemStatus(String itemStatus) { this.ItemStatus = itemStatus; }
-
     public int describeContents() {
         return 0;
     }
@@ -191,11 +308,11 @@ public class ItemMaster implements Parcelable {
         parcel.writeString(ShortName);
         parcel.writeString(ItemCode);
         parcel.writeString(ShortDescription);
-        parcel.writeDouble(MRP);
-        parcel.writeDouble(SellPrice);
+        //parcel.writeDouble(MRP);
+        //parcel.writeDouble(SellPrice);
         parcel.writeInt(ItemPoint);
         parcel.writeInt(PriceByPoint);
-        parcel.writeInt(linktoItemTypeMasterId);
+        //parcel.writeInt(linktoItemTypeMasterId);
         parcel.writeInt(linktoUnitMasterId);
         parcel.writeString(SearchWords);
         parcel.writeString(ImageNameBytes);
@@ -207,11 +324,14 @@ public class ItemMaster implements Parcelable {
         parcel.writeString(UpdateDateTime);
         parcel.writeInt(linktoUserMasterIdUpdatedBy);
         parcel.writeInt(linktoBusinessMasterId);
-        parcel.writeByte((byte)(IsEnabled ? 1 : 0));
-        parcel.writeByte((byte)(IsDeleted ? 1 : 0));
+        parcel.writeByte((byte) (IsEnabled ? 1 : 0));
+        parcel.writeByte((byte) (IsDeleted ? 1 : 0));
+        parcel.writeByte((byte) (IsFavourite ? 1 : 0));
+        parcel.writeByte((byte) (IsRowMaterial ? 1 : 0));
+        parcel.writeString(BarCode);
 
         /// Extra
-        parcel.writeString(ItemType);
+        //parcel.writeString(ItemType);
         parcel.writeString(Unit);
         parcel.writeString(ItemStatus);
     }
