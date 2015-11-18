@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
@@ -16,6 +17,7 @@ import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.DetailFragment;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
     FragmentManager fragmentManager;
     boolean isViewChange;
+    boolean isWaiterGrid=false;
     View view;
     Context context;
     ArrayList<ItemMaster> alItemMaster;
@@ -44,6 +47,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             }
             else
             {
+                isWaiterGrid = true;
                 view = LayoutInflater.from(context).inflate(R.layout.row_waiter_category_item_grid,parent,false);
             }
         } else {
@@ -60,6 +64,11 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         objItemMaster = alItemMaster.get(position);
 
         holder.cvItem.setId(objItemMaster.getItemMasterId());
+
+        if(!isWaiterGrid) {
+            Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).into(holder.ivItem);
+            System.out.println("Image"+objItemMaster.getImageName());
+        }
         holder.txtItemName.setText(objItemMaster.getItemName());
         holder.txtItemDescription.setText(objItemMaster.getShortDescription());
         holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
@@ -82,12 +91,15 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtItemName, txtItemDescription, txtItemPrice;
+        ImageView ivItem;
         CardView cvItem;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
 
             cvItem = (CardView) itemView.findViewById(R.id.cvItem);
+
+            ivItem = (ImageView)itemView.findViewById(R.id.ivItem);
 
             txtItemName = (TextView) itemView.findViewById(R.id.txtItemName);
             txtItemDescription = (TextView) itemView.findViewById(R.id.txtItemDescription);

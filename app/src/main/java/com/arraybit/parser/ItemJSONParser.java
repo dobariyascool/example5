@@ -52,8 +52,6 @@ public class ItemJSONParser {
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
                 objItemMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objItemMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
-                //dt = sdfDateTimeFormat.parse(jsonObject.getString("UpdateDateTime"));
-                //objItemMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
                 if (!jsonObject.getString("linktoUserMasterIdUpdatedBy").equals("null")) {
                     objItemMaster.setlinktoUserMasterIdUpdatedBy((short) jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
                 }
@@ -100,8 +98,6 @@ public class ItemJSONParser {
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
                 objItemMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objItemMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
-//                dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("UpdateDateTime"));
-//                objItemMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
                 if (!jsonArray.getJSONObject(i).getString("linktoUserMasterIdUpdatedBy").equals("null")) {
                     objItemMaster.setlinktoUserMasterIdUpdatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
                 }
