@@ -1,5 +1,6 @@
 package com.arraybit.parser;
 
+import com.arraybit.global.Service;
 import com.arraybit.modal.CounterMaster;
 
 import org.json.JSONArray;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 public class CounterJSONParser {
 
-    public String SelectAllCounterMaster = "SelectAllCategoryMaster";
+    public String SelectAllCounterMaster = "SelectAllCounterMaster";
 
     private CounterMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
         CounterMaster objCounterMaster = null;
@@ -29,6 +30,7 @@ public class CounterJSONParser {
         } catch (JSONException e) {
             return null;
         }
+
     }
 
     private ArrayList<CounterMaster> SetListPropertiesFromJSONArray(JSONArray jsonArray) {
@@ -48,6 +50,22 @@ public class CounterJSONParser {
             }
             return lstCounterMaster;
         } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public ArrayList<CounterMaster> SelectAllCounterMaster() {
+        ArrayList<CounterMaster> lstCounterMaster = null;
+        try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllCounterMaster);
+            if (jsonResponse != null) {
+                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllCounterMaster + "Result");
+                if (jsonArray != null) {
+                    lstCounterMaster = SetListPropertiesFromJSONArray(jsonArray);
+                }
+            }
+            return lstCounterMaster;
+        } catch (Exception ex) {
             return null;
         }
     }
