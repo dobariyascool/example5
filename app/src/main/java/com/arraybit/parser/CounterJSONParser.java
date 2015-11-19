@@ -30,7 +30,6 @@ public class CounterJSONParser {
         } catch (JSONException e) {
             return null;
         }
-
     }
 
     private ArrayList<CounterMaster> SetListPropertiesFromJSONArray(JSONArray jsonArray) {

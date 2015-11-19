@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -145,18 +144,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             etName.setError("Enter " + getResources().getString(R.string.siUserName));
             etPassword.setError("Enter " + getResources().getString(R.string.siPassword));
             IsValid = false;
-        }
-        else if (etName.getText().toString().equals("") && !etPassword.getText().toString().equals("")) {
+        } else if (etName.getText().toString().equals("") && !etPassword.getText().toString().equals("")) {
             etName.setError("Enter " + getResources().getString(R.string.siUserName));
             etPassword.clearError();
             IsValid = false;
-        }
-        else if (etPassword.getText().toString().equals("") && !etName.getText().toString().equals("")) {
+        } else if (etPassword.getText().toString().equals("") && !etName.getText().toString().equals("")) {
             etPassword.setError("Enter " + getResources().getString(R.string.siPassword));
             etName.clearError();
             IsValid = false;
-        }
-        else {
+        } else {
             etName.clearError();
             etPassword.clearError();
         }
@@ -310,10 +306,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_SHORT).show();
                 ClearControls();
 
-                Intent i = new Intent(SignInActivity.this, WelcomeActivity.class);
-                startActivity(i);
-                finish();
-
+                Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
             }
         }
     }
