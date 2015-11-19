@@ -10,10 +10,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/// <summary>
-/// JSONParser for CategoryMaster
-/// </summary>
-
 public class CategoryJSONParser {
     public String SelectAllCategoryMaster = "SelectAllCategoryMaster";
     public String SelectAllCategoryMasterCategoryName = "SelectAllCategoryMasterCategoryName";
