@@ -63,7 +63,12 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         holder.cvItem.setId(objItemMaster.getItemMasterId());
 
         if (!isWaiterGrid) {
-            Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).into(holder.ivItem);
+            if(objItemMaster.getImageName().equals("null")){
+                Picasso.with(holder.ivItem.getContext()).load(R.drawable.vada_paav).into(holder.ivItem);
+            }
+            else {
+                Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).into(holder.ivItem);
+            }
         }
 
         holder.txtItemName.setText(objItemMaster.getItemName());

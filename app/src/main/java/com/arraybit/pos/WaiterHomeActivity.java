@@ -157,4 +157,11 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         }
     }
     //end
+
+//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//    public void WindowAnimation(){
+//        Fade fade = new Fade();
+//        fade.setDuration(1000);
+//        getWindow().setEnterTransition(fade);
+//    }
 }

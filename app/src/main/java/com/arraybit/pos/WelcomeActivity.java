@@ -1,13 +1,18 @@
 package com.arraybit.pos;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.transition.Slide;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.arraybit.global.SharePreferenceManage;
 
@@ -19,6 +24,7 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
 
     SharePreferenceManage objSharePreferenceManage;
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +35,31 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
         SignInActivity.ServerName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", WelcomeActivity.this);
         //end
 
-        gestureDetector = new GestureDetectorCompat(this, this);
+        DrawerLayout mainLayout = (DrawerLayout) findViewById(R.id.mainLayout);
+        mainLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                objSharePreferenceManage = new SharePreferenceManage();
+                String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
+                if (userTypeMasterId != null && userTypeMasterId.equals("1")) {
+                    Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
+                    //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    finish();
+                } else {
+                    Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
+                    //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    finish();
+                }
+                return true;
+            }
+        });
+
+
+        //gestureDetector = new GestureDetectorCompat(this, this);
 //        gestureDetector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
 //            @Override
 //            public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -56,6 +86,14 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
         //Registering TouchEvent with GestureDetector
         return gestureDetector.onTouchEvent(event);
     }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setupWindowAnimations() {
+        Slide slide = new Slide();
+        slide.setDuration(1000);
+        getWindow().setExitTransition(slide);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -107,21 +145,19 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
     @SuppressWarnings("StringEquality")
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            objSharePreferenceManage = new SharePreferenceManage();
-            String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
-            if(userTypeMasterId != null && userTypeMasterId.equals("1")){
-                Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
-            }
-            else
-            {
-                Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
-            }
+        objSharePreferenceManage = new SharePreferenceManage();
+        String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
+        if (userTypeMasterId != null && userTypeMasterId.equals("1")) {
+            Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+            finish();
+        } else {
+            Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+            finish();
+        }
         return false;
     }
 }
