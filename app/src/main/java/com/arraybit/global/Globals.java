@@ -45,6 +45,7 @@ public class Globals {
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "HH:mm";
     public static int sourceMasterId = 2;
+    public static short BusinessMasterId = 1;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
     static FragmentManager fragmentManager;
     //public static Bitmap bitmap1;
@@ -220,11 +221,10 @@ public class Globals {
     }
 
     //set runtime orientation for mobile and tablet
-    public static void RuntimeChangeOrientation(Activity activity){
+    public static void RuntimeChangeOrientation(Activity activity) {
         if (activity.getResources().getBoolean(R.bool.isTablet)) {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        }
-        else{
+        } else {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
@@ -270,7 +270,6 @@ public class Globals {
         }
     }
 
-
     public enum FeedbackType {
         OtherQuery(1),
         BugReport(2),
@@ -306,7 +305,7 @@ public class Globals {
 
     }
 
-    public enum ItemType{
+    public enum ItemType {
         Veg(1),
         NonVeg(2),
         Jain(3);
