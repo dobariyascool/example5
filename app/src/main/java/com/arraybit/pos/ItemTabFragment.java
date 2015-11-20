@@ -15,7 +15,9 @@ import com.arraybit.adapter.CategoryItemAdapter;
 import com.arraybit.global.EndlessRecyclerOnScrollListener;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CategoryMaster;
+import com.arraybit.modal.CounterMaster;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.parser.ItemJSONParser;
 import com.rey.material.widget.TextView;
@@ -32,9 +34,12 @@ public class ItemTabFragment extends Fragment {
     GridLayoutManager gridLayoutManager;
     ArrayList<ItemMaster> alItemMaster;
     String itemTypeMasterId = null;
-    CategoryMaster objCategoryMaster;
-    CategoryItemAdapter categoryItemAdapter;
+    SharePreferenceManage objSharePreferenceManage;
 
+    CategoryItemAdapter categoryItemAdapter;
+    CategoryMaster objCategoryMaster;
+    CounterMaster objCounterMaster;
+    int counterMasterId;
     int currentPage = 1;
 
     public ItemTabFragment() {
@@ -69,6 +74,13 @@ public class ItemTabFragment extends Fragment {
         Bundle bundle = getArguments();
         objCategoryMaster = bundle.getParcelable(ITEMS_COUNT_KEY);
         alItemMaster = new ArrayList<>();
+
+        //get counterMasterId
+        objSharePreferenceManage = new SharePreferenceManage();
+        if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()) != null) {
+            counterMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()));
+        }
+        //end
 
         new GuestHomeItemLoadingTask().execute();
 
@@ -129,6 +141,7 @@ public class ItemTabFragment extends Fragment {
 
         ProgressDialog progressDialog;
 
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -149,7 +162,9 @@ public class ItemTabFragment extends Fragment {
             if ((linearLayoutManager.canScrollVertically() || gridLayoutManager.canScrollVertically()) && alItemMaster.size() == 0) {
                 currentPage = 1;
             }
-            return objItemJSONParser.SelectAllItemMaster(currentPage, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
+
+            return objItemJSONParser.SelectAllItemMaster(currentPage,counterMasterId, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
+
         }
 
         @Override
