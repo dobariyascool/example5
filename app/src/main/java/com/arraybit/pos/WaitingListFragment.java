@@ -70,10 +70,11 @@ public class WaitingListFragment extends Fragment {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Globals.InitializeAnimatedFragment(new AddFragment(), getFragmentManager());
+                if (getFragmentManager().getBackStackEntryCount() == 0) {
+                    Globals.InitializeAnimatedFragment(new AddFragment(), getFragmentManager());
+                }
             }
         });
-
     }
     //region LoadingTask
 

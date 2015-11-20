@@ -122,66 +122,19 @@ public class AddFragment extends Fragment {
     boolean ValidateControls() {
         boolean IsValid = true;
         if (etName.getText().toString().equals("")
-                && !etMobileNo.getText().toString().equals("")
                 && !etPersons.getText().toString().equals("")) {
-            if (etMobileNo.getText().length() != 10) {
-                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
-            } else {
-                etMobileNo.clearError();
-            }
             etName.setError("Enter " + getResources().getString(R.string.afName));
-            etMobileNo.clearError();
             etPersons.clearError();
             IsValid = false;
-        } else if (etMobileNo.getText().toString().equals("")
-                && !etName.getText().toString().equals("")
-                && !etPersons.getText().toString().equals("")) {
-            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
-            etPersons.clearError();
-            etName.clearError();
-            IsValid = false;
-        } else if (etPersons.getText().toString().equals("")
-                && !etName.getText().toString().equals("")
-                && !etMobileNo.getText().toString().equals("")) {
-            if (etMobileNo.getText().length() != 10) {
-                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
-            } else {
-                etMobileNo.clearError();
-            }
+        }  else if (etPersons.getText().toString().equals("")
+                && !etName.getText().toString().equals("")) {
             etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
             etName.clearError();
             IsValid = false;
         } else if (etName.getText().toString().equals("")
-                && etMobileNo.getText().toString().equals("")
                 && etPersons.getText().toString().equals("")) {
             etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
-            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
             etName.setError("Enter " + getResources().getString(R.string.afName));
-            IsValid = false;
-        } else if (etName.getText().toString().equals("")
-                && etMobileNo.getText().toString().equals("")
-                && !etPersons.getText().toString().equals("")) {
-            etPersons.clearError();
-            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
-            etName.setError("Enter " + getResources().getString(R.string.afName));
-            IsValid = false;
-        } else if (etName.getText().toString().equals("")
-                && !etMobileNo.getText().toString().equals("")
-                && etPersons.getText().toString().equals("")) {
-            if (etMobileNo.getText().length() != 10) {
-                etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
-            } else {
-                etMobileNo.clearError();
-            }
-            etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
-            etName.setError("Enter " + getResources().getString(R.string.afName));
-            IsValid = false;
-        } else if (etMobileNo.getText().toString().equals("")
-                && !etName.getText().toString().equals("")
-                && etPersons.getText().toString().equals("")) {
-            etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
-            etMobileNo.setError("Enter " + getResources().getString(R.string.afMobileNo));
-            etName.clearError();
             IsValid = false;
         } else if(!etMobileNo.getText().toString().equals("")
                 && !etName.getText().toString().equals("") && !etPersons.getText().toString().equals("")){

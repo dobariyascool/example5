@@ -14,7 +14,6 @@
         android:id="@+id/rvCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/control_SpecingMedium"
-        android:paddingRight="@dimen/control_SpecingMedium" />
+        android:layout_margin="@dimen/control_SpecingSmall" />
 
 </LinearLayout>
