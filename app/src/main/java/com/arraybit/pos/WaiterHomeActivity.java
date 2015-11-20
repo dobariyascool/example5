@@ -16,12 +16,14 @@ import android.widget.LinearLayout;
 
 import com.arraybit.adapter.OptionListAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 
 public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OptionListAdapter.OptionListClickListener {
 
     ActionBarDrawerToggle actionBarDrawerToggle;
     LinearLayout waiterHomeMainLayout;
     boolean isDualPanel;
+    SharePreferenceManage objSharePreferenceManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
-
 
         //drawerlayout and actionbardrawertoggle
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -103,15 +104,20 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-        switch (menuItem.getItemId()) {
+        if (menuItem.getItemId() == R.id.home) {
+            return true;
+        }
+        if (menuItem.getItemId() == R.id.login) {
+            return true;
+        }
+        if (menuItem.getItemId() == R.id.wChangeCounter) {
+            objSharePreferenceManage = new SharePreferenceManage();
+            if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaiterHomeActivity.this) != null) {
+                objSharePreferenceManage.RemovePreference("CounterPreference", "CounterMasterId", WaiterHomeActivity.this);
+                objSharePreferenceManage.ClearPreference("CounterPreference", WaiterHomeActivity.this);
 
-            case R.id.home:
-                //Toast.makeText(getApplicationContext(), "Home Selected", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.login:
-                //Toast.makeText(getApplicationContext(), "Starred Selected", Toast.LENGTH_SHORT).show();
-                return true;
-
+                Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
+            }
         }
         return false;
     }

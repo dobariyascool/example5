@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 
 public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -25,6 +26,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     FragmentTransaction fragmentTransaction;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
+    SharePreferenceManage objSharePreferenceManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,12 +141,20 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             startActivity(intent);
             finish();
         }
+        if (menuItem.getItemId() == R.id.wChangeCounter) {
+            objSharePreferenceManage = new SharePreferenceManage();
+            if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaitingActivity.this) != null) {
+                objSharePreferenceManage.RemovePreference("CounterPreference", "CounterMasterId", WaitingActivity.this);
+                objSharePreferenceManage.ClearPreference("CounterPreference", WaitingActivity.this);
 
+                Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
+            }
+        }
         if (menuItem.getItemId() == R.id.wFeedback) {
             drawerLayout.closeDrawer(navigationView);
             navigationView.setVisibility(View.INVISIBLE);
-            Globals.InitializeFragment(new FeedbackFragment(), getSupportFragmentManager());
 
+            Globals.InitializeFragment(new FeedbackFragment(), getSupportFragmentManager());
         }
         return false;
     }

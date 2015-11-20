@@ -96,6 +96,7 @@
     <string name="navProfile">Profile</string>
     <string name="navRegistration">Registration</string>
     <string name="navChangeMode">Change Mode</string>
+    <string name="navChangeCounter">Change Counter</string>
     <string name="navOffers">Offer</string>
     <string name="navFeedback">Feedback</string>
     <string name="navAboutUs">About Us</string>
