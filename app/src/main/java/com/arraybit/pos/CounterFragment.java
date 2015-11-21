@@ -7,12 +7,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.arraybit.adapter.CounterAdapter;
 import com.arraybit.global.Globals;
@@ -30,6 +32,7 @@ public class CounterFragment extends Fragment {
     RecyclerView rvCounter;
     ArrayList<CounterMaster> alCounterMaster;
     LinearLayoutManager linearLayoutManager;
+    GridLayoutManager gridLayoutManager;
     SharePreferenceManage objSharePreferenceManage;
     CounterJSONParser objCounterJSONParser;
 
@@ -51,8 +54,13 @@ public class CounterFragment extends Fragment {
         }
         app_bar.setTitle(getResources().getString(R.string.title_fragment_counter));
 
+        LinearLayout counterLayout=(LinearLayout)view.findViewById(R.id.counterLayout);
+        Globals.SetScaleImageBackground(getActivity(),counterLayout, null);
+
         rvCounter = (RecyclerView) view.findViewById(R.id.rvCounter);
         linearLayoutManager = new LinearLayoutManager(getActivity());
+
+        gridLayoutManager = new GridLayoutManager(getActivity(),2);
 
         new CounterLoadingTask().execute();
         return view;
@@ -89,9 +97,8 @@ public class CounterFragment extends Fragment {
                 adapter = new CounterAdapter(getActivity(), alCounterMaster);
                 rvCounter.setAdapter(adapter);
                 rvCounter.setLayoutManager(linearLayoutManager);
+                //rvCounter.setLayoutManager(gridLayoutManager);
             }
-
-
         }
     }
 }

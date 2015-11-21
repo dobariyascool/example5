@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:maxLines="1"
-        android:padding="@dimen/control_SpecingTiny" />
+        android:padding="@dimen/control_SpecingTiny"
+        android:textColor="@android:color/white" />
 
 </android.support.v7.widget.CardView>
