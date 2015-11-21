@@ -92,6 +92,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
         if (v.getId() == R.id.fabVeg) {
+            famRoot.close(true);
             if (isVegCheck == 0) {
                 fabVeg.setSelected(true);
                 fabVeg.setColorNormal(ContextCompat.getColor(getActivity(), R.color.transparent_orange));
@@ -107,9 +108,10 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             } else {
                 itemTabFragment.ItemDataFilter(sbItemTypeMasterId.toString());
             }
-            famRoot.close(true);
+
 
         } else if (v.getId() == R.id.fabNonVeg) {
+            famRoot.close(true);
             if (isNonVegCheck == 0) {
                 fabNonVeg.setSelected(true);
                 fabNonVeg.setColorNormal(ContextCompat.getColor(getActivity(), R.color.transparent_orange));
@@ -125,9 +127,9 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             } else {
                 itemTabFragment.ItemDataFilter(sbItemTypeMasterId.toString());
             }
-            famRoot.close(true);
 
         } else if (v.getId() == R.id.fabJain) {
+            famRoot.close(true);
             if (isJainCheck == 0) {
                 fabJain.setSelected(true);
                 fabJain.setColorNormal(ContextCompat.getColor(getActivity(), R.color.transparent_orange));
@@ -143,7 +145,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             } else {
                 itemTabFragment.ItemDataFilter(sbItemTypeMasterId.toString());
             }
-            famRoot.close(true);
+
 
         } else if (v.getId() == R.id.ibViewChange) {
             i = (short) (i + 1);
