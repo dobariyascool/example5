@@ -16,6 +16,7 @@ import com.arraybit.parser.CounterJSONParser;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("unchecked")
 public class SplashScreenActivity extends AppCompatActivity {
     public static short counter = 0;
     SharePreferenceManage objSharePreferenceManage;
