@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
     public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
     public static boolean isFirstScreen = false;
-    int firstVisibleItem, visibleItemCount, totalItemCount, lastVisibleItem;
+    int firstVisibleItem, visibleItemCount, totalItemCount ,lastVisibleItem;
     private int previousTotal = 0; // The total number of items in the dataset after the last load
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
     private int visibleThreshold = 2; // The minimum amount of items to have below your current scroll position before loading more.
@@ -33,13 +33,14 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         }
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
             // End has been reached
-            if (firstVisibleItem == 0 && (visibleItemCount >= 10 && totalItemCount >= 10)) {
+            if (firstVisibleItem == 0 && visibleItemCount >= 10 && totalItemCount >= 10) {
                 current_page++;
                 onLoadMore(current_page);
                 loading = true;
-            } else if (visibleItemCount == totalItemCount) {
+            } else if(visibleItemCount == totalItemCount){
                 loading = false;
-            } else {
+            }
+            else{
                 current_page++;
                 onLoadMore(current_page);
                 loading = true;

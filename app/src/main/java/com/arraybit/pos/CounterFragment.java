@@ -58,6 +58,7 @@ public class CounterFragment extends Fragment {
         Globals.SetScaleImageBackground(getActivity(),counterLayout, null);
 
         rvCounter = (RecyclerView) view.findViewById(R.id.rvCounter);
+        rvCounter.setVisibility(View.GONE);
         linearLayoutManager = new LinearLayoutManager(getActivity());
 
         gridLayoutManager = new GridLayoutManager(getActivity(),2);
@@ -94,6 +95,7 @@ public class CounterFragment extends Fragment {
 
             if(alCounterMaster != null && alCounterMaster.size()!=0) {
 
+                rvCounter.setVisibility(View.VISIBLE);
                 adapter = new CounterAdapter(getActivity(), alCounterMaster);
                 rvCounter.setAdapter(adapter);
                 rvCounter.setLayoutManager(linearLayoutManager);

@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.transition.Slide;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +38,7 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
         mainLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
                 objSharePreferenceManage = new SharePreferenceManage();
                 String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
                 if (userTypeMasterId != null && userTypeMasterId.equals("1")) {
@@ -85,13 +85,6 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
     public boolean onTouchEvent(MotionEvent event) {
         //Registering TouchEvent with GestureDetector
         return gestureDetector.onTouchEvent(event);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setupWindowAnimations() {
-        Slide slide = new Slide();
-        slide.setDuration(1000);
-        getWindow().setExitTransition(slide);
     }
 
 
@@ -160,4 +153,13 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
         }
         return false;
     }
+
+//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//    private void setupWindowAnimations() {
+//        Slide slideTransition = new Slide();
+//        slideTransition.setSlideEdge(Gravity.LEFT);
+//        slideTransition.setDuration(1000);
+//        getWindow().setReenterTransition(slideTransition);
+//        getWindow().setExitTransition(slideTransition);
+//    }
 }

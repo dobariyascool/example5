@@ -40,7 +40,6 @@ public class TableTabFragment extends Fragment {
     SharePreferenceManage objSharePreferenceManage;
     int counterMasterId;
 
-
     public TableTabFragment() {
         // Required empty public constructor
     }
