@@ -17,6 +17,7 @@ import com.arraybit.adapter.TablesAdapter;
 import com.arraybit.global.EndlessRecyclerOnScrollListener;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.SectionMaster;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.parser.TableJSONParser;
@@ -36,6 +37,8 @@ public class TableTabFragment extends Fragment {
     int currentPage = 1, sectionMasterId;
     String tableStatusMasterId = null;
     TextView txtMsg;
+    SharePreferenceManage objSharePreferenceManage;
+    int counterMasterId;
 
 
     public TableTabFragment() {
@@ -68,6 +71,13 @@ public class TableTabFragment extends Fragment {
 
         gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+
+        //get counterMasterId
+        objSharePreferenceManage = new SharePreferenceManage();
+        if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()) != null) {
+            counterMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()));
+        }
+        //end
 
         new TableMasterLoadingTask().execute();
 
@@ -118,7 +128,7 @@ public class TableTabFragment extends Fragment {
             if (gridLayoutManager.canScrollVertically() && alTableMaster.size() == 0) {
                 currentPage = 1;
             }
-            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(currentPage, sectionMasterId, tableStatusMasterId);
+            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(currentPage, counterMasterId, sectionMasterId, tableStatusMasterId);
         }
 
         @Override

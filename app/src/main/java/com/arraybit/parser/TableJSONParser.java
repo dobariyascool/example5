@@ -244,10 +244,10 @@ public class TableJSONParser {
 
     //region  SelectAll
 
-    public ArrayList<TableMaster> SelectAllTableMasterBySectionMasterId(int currentPage,int linktoSectionMasterId,String linktoTableStatusMasterId) {
+    public ArrayList<TableMaster> SelectAllTableMasterBySectionMasterId(int currentPage,int linktoCounterMasterId,int linktoSectionMasterId,String linktoTableStatusMasterId) {
         ArrayList<TableMaster> lstTableMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId +"/"+currentPage+"/"+linktoSectionMasterId+"/"+linktoTableStatusMasterId);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+linktoSectionMasterId+"/"+linktoTableStatusMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllTableMasterBySectionId + "Result");
                 if (jsonArray != null) {
