@@ -259,7 +259,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 ibViewChange.setVisibility(View.VISIBLE);
                 itemPagerAdapter = new ItemPagerAdapter(getFragmentManager());
                 for (int i = 0; i < alCategoryMaster.size(); i++) {
-                    itemPagerAdapter.AddFragment(ItemTabFragment.createInstance((CategoryMaster) alCategoryMaster.get(i)), alCategoryMaster.get(i));
+                    itemPagerAdapter.AddFragment(ItemTabFragment.createInstance(alCategoryMaster.get(i)), alCategoryMaster.get(i));
                 }
 
                 itemViewPager.setAdapter(itemPagerAdapter);
