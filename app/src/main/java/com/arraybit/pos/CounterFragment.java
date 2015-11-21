@@ -31,9 +31,6 @@ public class CounterFragment extends Fragment {
     ArrayList<CounterMaster> alCounterMaster;
     LinearLayoutManager linearLayoutManager;
     SharePreferenceManage objSharePreferenceManage;
-
-
-    CounterMaster objCounterMaster;
     CounterJSONParser objCounterJSONParser;
 
     public CounterFragment() {
