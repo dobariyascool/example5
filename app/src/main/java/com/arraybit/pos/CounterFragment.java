@@ -3,7 +3,6 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +22,7 @@ import com.arraybit.parser.CounterJSONParser;
 
 import java.util.ArrayList;
 
+@SuppressWarnings({"ConstantConditions", "unchecked"})
 @SuppressLint("ValidFragment")
 public class CounterFragment extends Fragment {
 
@@ -86,18 +86,15 @@ public class CounterFragment extends Fragment {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             progressDialog.dismiss();
-            if (alCounterMaster.size() == 1) {
-                objSharePreferenceManage = new SharePreferenceManage();
-                objSharePreferenceManage.CreatePreference("CounterPreference", "CounterMasterId", String.valueOf(objCounterMaster.getCounterMasterId()), getActivity());
 
-                Intent intent = new Intent(getActivity(), WelcomeActivity.class);
-                getActivity().startActivity(intent);
-            } else {
+            if(alCounterMaster != null && alCounterMaster.size()!=0) {
+
                 adapter = new CounterAdapter(getActivity(), alCounterMaster);
                 rvCounter.setAdapter(adapter);
                 rvCounter.setLayoutManager(linearLayoutManager);
-
             }
+
+
         }
     }
 }

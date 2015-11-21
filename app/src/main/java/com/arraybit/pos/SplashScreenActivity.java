@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +10,14 @@ import android.view.MenuItem;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.modal.CounterMaster;
+import com.arraybit.parser.CounterJSONParser;
+
+import java.util.ArrayList;
 
 
 public class SplashScreenActivity extends AppCompatActivity {
+    public static short counter = 0;
     SharePreferenceManage objSharePreferenceManage;
 
     @Override
@@ -35,7 +41,11 @@ public class SplashScreenActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
+
                 }
+
+                new CounterLoadingTask().execute();
+
             }
         }, 800);
     }
@@ -65,5 +75,23 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    public class CounterLoadingTask extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            CounterJSONParser objCounterJSONParser = new CounterJSONParser();
+            return objCounterJSONParser.SelectAllCounterMaster(Globals.BusinessMasterId);
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
+            ArrayList<CounterMaster> alCounter=(ArrayList<CounterMaster>) result;
+
+            counter = (short) alCounter.size();
+        }
     }
 }

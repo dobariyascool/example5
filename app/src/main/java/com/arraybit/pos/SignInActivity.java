@@ -29,7 +29,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     public static String ServerName = null;
     EditText etName, etPassword;
-    UserMasterJSONParser objUserMasterJSONParser = null;
     UserMaster objUserMaster = null;
     SharePreferenceManage objSharePreferenceManage;
     ToggleButton tbPasswordShow;
@@ -282,11 +281,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             strName = etName.getText().toString();
             strPassword = etPassword.getText().toString();
-            objUserMasterJSONParser = new UserMasterJSONParser();
+
         }
 
         @Override
         protected Object doInBackground(Object[] params) {
+            UserMasterJSONParser objUserMasterJSONParser = new UserMasterJSONParser();
             objUserMaster = objUserMasterJSONParser.SelectRegisteredUserName(strName, strPassword);
             return objUserMaster;
         }
@@ -306,7 +306,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_SHORT).show();
                 ClearControls();
 
-                Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
+                if(SplashScreenActivity.counter > 1) {
+                    Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
+                }
             }
         }
     }
