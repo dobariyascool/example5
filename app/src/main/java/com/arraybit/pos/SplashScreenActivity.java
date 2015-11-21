@@ -45,6 +45,11 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                 }
 
+                //get server name
+                objSharePreferenceManage = new SharePreferenceManage();
+                SignInActivity.ServerName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this);
+                //end
+
                 new CounterLoadingTask().execute();
 
             }
@@ -92,7 +97,9 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             ArrayList<CounterMaster> alCounter=(ArrayList<CounterMaster>) result;
 
-            counter = (short) alCounter.size();
+            if(alCounter!=null) {
+                counter = (short) alCounter.size();
+            }
         }
     }
 }

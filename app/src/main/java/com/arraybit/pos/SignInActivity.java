@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -308,6 +309,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                 if(SplashScreenActivity.counter > 1) {
                     Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
+                }
+                else
+                {
+                    Intent intent=new Intent(SignInActivity.this,WelcomeActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
         }
