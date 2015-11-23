@@ -13,37 +13,17 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-            <include
-                android:id="@+id/app_bar"
-                layout="@layout/app_bar" />
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
 
-            <LinearLayout
-                android:id="@+id/waiterFragmentLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                tools:ignore="DisableBaselineAlignment">
-
-                <fragment
-                    android:id="@+id/fragment_waiter_option_list"
-                    android:name="com.arraybit.pos.WaiterOptionListFragment"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    tools:layout="@layout/fragment_waiter_option_list"/>
-
-
-                <fragment
-                    android:id="@+id/fragment_all_orders"
-                    android:name="com.arraybit.pos.AllOrdersFragment"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    tools:layout="@layout/fragment_all_orders"/>
-
-
-            </LinearLayout>
+        <LinearLayout
+            android:id="@+id/waiterFragmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
     </LinearLayout>
+
 
     <!-- it is navigation drawer -->
     <android.support.design.widget.NavigationView

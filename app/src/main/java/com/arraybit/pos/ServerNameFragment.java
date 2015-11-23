@@ -17,7 +17,7 @@ import com.rey.material.widget.EditText;
 public class ServerNameFragment extends Fragment {
     EditText etServerName;
     Button btnSave;
-    SharePreferenceManage objSharePreferenceManage;
+
 
     public ServerNameFragment() {
         // Required empty public constructor
@@ -54,7 +54,7 @@ public class ServerNameFragment extends Fragment {
                     etServerName.setError("Enter "+getResources().getString(R.string.sfName));
                 }
                 else {
-                    objSharePreferenceManage = new SharePreferenceManage();
+                    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
 
                     objSharePreferenceManage.CreatePreference("ServerPreference", "ServerName", etServerName.getText().toString(), getActivity());
 

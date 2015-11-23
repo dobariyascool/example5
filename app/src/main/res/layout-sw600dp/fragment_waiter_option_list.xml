@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="120dp"
+    android:layout_marginStart="120dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="com.arraybit.pos.WaiterOptionListFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvOptions"
+        android:layout_width="match_parent"
+        android:layout_height="166dp"/>
+
+</LinearLayout>

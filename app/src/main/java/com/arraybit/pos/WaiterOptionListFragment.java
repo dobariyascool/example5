@@ -1,18 +1,19 @@
 package com.arraybit.pos;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.arraybit.adapter.OptionListAdapter;
-import com.rey.material.widget.ListView;
 
 import java.util.ArrayList;
 
 public class WaiterOptionListFragment extends Fragment {
 
-    ListView listView;
     ArrayList<String> alString;
 
     public WaiterOptionListFragment() {
@@ -26,11 +27,19 @@ public class WaiterOptionListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_waiter_option_list, container, false);
 
-        listView=(ListView)view.findViewById(android.R.id.list);
+        RecyclerView rvOptions=(RecyclerView)view.findViewById(R.id.rvOptions);
 
         setArrayList();
 
-        listView.setAdapter(new OptionListAdapter(getActivity(),alString));
+        rvOptions.setAdapter(new OptionListAdapter(getActivity(), alString));
+        if(getActivity().getResources().getBoolean(R.bool.isTablet)){
+            rvOptions.setLayoutManager(new GridLayoutManager(getActivity(),4));
+        }
+        else
+        {
+            rvOptions.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        }
+
 
         return view;
     }
@@ -42,6 +51,6 @@ public class WaiterOptionListFragment extends Fragment {
         alString.add(0,"Orders");
         alString.add(1,"Tables");
         alString.add(2,"Menu");
-
+        alString.add(3,"Offers");
     }
 }

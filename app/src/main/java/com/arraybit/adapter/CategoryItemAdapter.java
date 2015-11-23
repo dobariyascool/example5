@@ -73,6 +73,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
         holder.txtItemName.setText(objItemMaster.getItemName());
         holder.txtItemDescription.setText(objItemMaster.getShortDescription());
+        holder.txtItemPrice.setVisibility(View.GONE);
         //holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
     }
 

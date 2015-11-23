@@ -56,13 +56,13 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         Globals.SetNavigationDrawer(actionBarDrawerToggle, WaiterHomeActivity.this, drawerLayout, app_bar);
         //end
 
-        if (waiterHomeMainLayout.findViewById(R.id.fragment_waiter_option_list) == null) {
+       // if (waiterHomeMainLayout.findViewById(R.id.fragment_waiter_option_list) == null) {
 
-            isDualPanel = false;
+           // isDualPanel = false;
             AddFragmentInLayout(new WaiterOptionListFragment());
-        } else {
-            isDualPanel = true;
-        }
+       // } else {
+          //  isDualPanel = true;
+        //}
 
     }
 
@@ -124,20 +124,20 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public void onClick(int position) {
-        if (isDualPanel) {
-            AllOrdersFragment ordersFragment = (AllOrdersFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_all_orders);
+        //if (isDualPanel) {
+        //    AllOrdersFragment ordersFragment = (AllOrdersFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_all_orders);
             //AllOrdersFragment ordersFragment=new AllOrdersFragment();
-            ordersFragment.setFragment(position);
-        } else {
+         //   ordersFragment.setFragment(position);
+        //} else {
             if (position == 0) {
                 AddFragmentInLayout(new AllOrdersFragment());
             } else if (position == 1) {
                 AddFragmentInLayout(new AllTablesFragment());
-            } else {
+            } else if(position == 2) {
                 Intent intent = new Intent(WaiterHomeActivity.this, GuestHomeActivity.class);
                 startActivity(intent);
             }
-        }
+       //}
     }
     //end
 
@@ -153,14 +153,14 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     //prevent backPressed
     @Override
     public void onBackPressed() {
-        if (!isDualPanel) {
+        //if (!isDualPanel) {
             if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     getSupportFragmentManager().popBackStack();
                 }
             }
 
-        }
+        //}
     }
     //end
 

@@ -210,6 +210,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                 if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SignInActivity.this) != null) {
                                     objSharePreferenceManage.RemovePreference("ServerPreference", "ServerName", SignInActivity.this);
                                     objSharePreferenceManage.ClearPreference("ServerPreference", SignInActivity.this);
+                                    finish();
                                     Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
                                 }
 

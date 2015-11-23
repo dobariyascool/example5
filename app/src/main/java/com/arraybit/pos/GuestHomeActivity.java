@@ -138,6 +138,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     //prevent backPressed
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         //fragment backPressed
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
                 getSupportFragmentManager().popBackStack();
