@@ -183,11 +183,10 @@ public class WaitingListFragment extends Fragment {
         @Override
         protected void onPostExecute(Object result) {
 
+            progressDialog.dismiss();
             if (alWaitingStatusMaster == null) {
-                progressDialog.dismiss();
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
             } else if (alWaitingStatusMaster.size() == 0) {
-                progressDialog.dismiss();
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
             } else {
 
@@ -195,7 +194,6 @@ public class WaitingListFragment extends Fragment {
 
                 SetTabLayout(alWaitingStatusMaster, waitingListPagerAdapter);
 
-                progressDialog.dismiss();
             }
         }
     }
