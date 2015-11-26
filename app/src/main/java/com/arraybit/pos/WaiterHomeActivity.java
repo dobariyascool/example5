@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,10 +16,11 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.OptionListAdapter;
+import com.arraybit.adapter.OrdersAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 
-public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OptionListAdapter.OptionListClickListener {
+public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,OptionListAdapter.OptionListClickListener,OrdersAdapter.OrderLayoutClickListener {
 
     ActionBarDrawerToggle actionBarDrawerToggle;
     LinearLayout waiterHomeMainLayout;
@@ -59,11 +61,10 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
        // if (waiterHomeMainLayout.findViewById(R.id.fragment_waiter_option_list) == null) {
 
            // isDualPanel = false;
-            AddFragmentInLayout(new WaiterOptionListFragment());
+        AddFragmentInLayout(new WaiterOptionListFragment());
        // } else {
           //  isDualPanel = true;
         //}
-
     }
 
     @Override
@@ -122,6 +123,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         return false;
     }
 
+    //all options list click event
     @Override
     public void onClick(int position) {
         //if (isDualPanel) {
@@ -144,7 +146,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     //add fragment
     void AddFragmentInLayout(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.waiterFragmentLayout, fragment);
+        fragmentTransaction.replace(R.id.waiterFragmentLayout,fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -156,12 +158,31 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         //if (!isDualPanel) {
             if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                    getSupportFragmentManager().popBackStack();
+
+                    if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null){
+
+                        if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_order_detail)))
+                        {
+                            getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        }
+                    }
+                    else
+                    {
+                        getSupportFragmentManager().popBackStack();
+                    }
                 }
             }
+        }
 
-        //}
+    //particular order click event
+    @Override
+    public void OrderLayoutClick(int orderMasterId) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.allOrderFragment,new OrderDetailFragment(),getResources().getString(R.string.title_fragment_order_detail));
+        fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_order_detail));
+        fragmentTransaction.commit();
     }
+}
     //end
 
 //    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -170,4 +191,4 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 //        fade.setDuration(1000);
 //        getWindow().setEnterTransition(fade);
 //    }
-}
+

@@ -1,11 +1,17 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/allOrderFragment"
+    android:name="com.arraybit.pos.CategoryItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.arraybit.pos.AllOrdersFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/orderTabLayout"
@@ -25,5 +31,5 @@
         <!--android:layout_height="match_parent"-->
         <!--android:orientation="vertical"-->
         <!--android:visibility="gone"/>-->
-
-</LinearLayout>
+    </LinearLayout>
+</FrameLayout>

@@ -1,7 +1,6 @@
 package com.arraybit.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import com.arraybit.global.Globals;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.pos.R;
-import com.arraybit.pos.WaiterOrderDetailActivity;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -91,8 +89,16 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                 public void onClick(View v) {
 
                     orderMasterId = v.getId();
-                    Intent intent = new Intent(context,WaiterOrderDetailActivity.class);
-                    context.startActivity(intent);
+
+                    objOrderLayoutClickListener = (OrderLayoutClickListener)context;
+                    objOrderLayoutClickListener.OrderLayoutClick(orderMasterId);
+                    //OrderDetailFragment detailFragment = new  OrderDetailFragment();
+                    //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    //fragmentTransaction.replace(R.id.allOrderFragment,detailFragment,"detailFragment");
+                    //fragmentTransaction.addToBackStack("detailFragment");
+                    //fragmentTransaction.commit();
+                    //Intent intent = new Intent(context,WaiterOrderDetailActivity.class);
+                   // context.startActivity(intent);
                     //objOrderLayoutClickListener = (OrderLayoutClickListener) context;
                     //objOrderLayoutClickListener.OrderLayoutClick(v.getId());
                     //Globals.InitializeFragment(new OrderDetailFragment(v.getId()),fragmentManager);

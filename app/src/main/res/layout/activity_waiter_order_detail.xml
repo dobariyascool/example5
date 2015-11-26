@@ -19,7 +19,6 @@
             layout="@layout/app_bar" />
 
         <fragment
-            android:id="@+id/fragment_order_detail"
             android:name="com.arraybit.pos.OrderDetailFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

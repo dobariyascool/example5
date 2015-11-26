@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.arraybit.adapter.OrderDetailAdapter;
 import com.arraybit.adapter.OrdersAdapter;
+import com.arraybit.global.Globals;
 import com.arraybit.modal.OrderItemTran;
 import com.arraybit.parser.OrderItemJSONParser;
 
@@ -25,6 +26,7 @@ public class OrderDetailFragment extends Fragment {
     RecyclerView rvOrderItem;
     LinearLayout headerLayout;
     int orderMasterId;
+    LinearLayout orderDetailLayout;
 
     public OrderDetailFragment() {
         // Required empty public constructor
@@ -40,6 +42,8 @@ public class OrderDetailFragment extends Fragment {
         rvOrderItem.setVisibility(View.GONE);
 
         headerLayout = (LinearLayout)view.findViewById(R.id.headerLayout);
+        orderDetailLayout = (LinearLayout)view.findViewById(R.id.orderDetailLayout);
+        Globals.SetScaleImageBackground(getActivity(),orderDetailLayout,null);
 
         this.orderMasterId = OrdersAdapter.orderMasterId;
 

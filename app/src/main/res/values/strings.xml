@@ -19,6 +19,7 @@
     <string name="title_fragment_feedback">Feedback</string>
     <string name="title_fragment_counter">Counter</string>
     <string name="title_activity_waiter_order_detail">Home</string>
+    <string name="title_fragment_order_detail">Order Detail</string>
     <!-- end -->
 
     <string name="hello_world">Hello world!</string>
