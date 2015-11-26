@@ -28,13 +28,14 @@ import com.rey.material.widget.EditText;
 @SuppressWarnings("ALL")
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static String ServerName = null;
+    //public static String ServerName = null;
     EditText etName, etPassword;
     UserMaster objUserMaster = null;
     SharePreferenceManage objSharePreferenceManage;
     ToggleButton tbPasswordShow;
     ImageButton ibClear;
     int i = 0;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +64,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         ibClear.setOnClickListener(this);
         //end
 
-        //get server name
-        objSharePreferenceManage = new SharePreferenceManage();
-        ServerName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SignInActivity.this);
-        //end
+//        //get server name
+//        objSharePreferenceManage = new SharePreferenceManage();
+//        Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SignInActivity.this);
+//        Globals.ChangeUrl();
+//        //end
 
         etName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -107,7 +109,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             }
         });
-
     }
 
     @Override
@@ -210,7 +211,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                 if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SignInActivity.this) != null) {
                                     objSharePreferenceManage.RemovePreference("ServerPreference", "ServerName", SignInActivity.this);
                                     objSharePreferenceManage.ClearPreference("ServerPreference", SignInActivity.this);
-                                    finish();
                                     Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
                                 }
 
@@ -227,8 +227,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void onBackPressed() {
         //fragment backPressed
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            getSupportFragmentManager().popBackStack();
-        } else {
+            //getSupportFragmentManager().popBackStack();
+        }
+        else {
             super.onBackPressed();
         }
     }

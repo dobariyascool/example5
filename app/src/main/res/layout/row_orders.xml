@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardView"
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/cvOrder"
         style="@style/CardView"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/control_SpecingTiny"
         android:layout_marginEnd="@dimen/control_SpecingTiny"
         android:layout_marginStart="@dimen/control_SpecingTiny"
@@ -16,14 +12,45 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/control_SpecingSmall">
 
             <com.rey.material.widget.TextView
-                android:id="@+id/textView"
+                android:id="@+id/txtTableName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/control_SpecingTiny"
                 android:textColor="@android:color/white"/>
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtOrderNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/control_SpecingTiny"
+                android:textColor="@android:color/white"/>
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtOrderType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/control_SpecingTiny"
+                android:textColor="@android:color/white"/>
+
+            <LinearLayout
+                android:id="@+id/productLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/control_SpecingTiny"/>
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtTotalAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:paddingBottom="@dimen/control_SpecingTiny"
+                android:textColor="@android:color/white"/>
+
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+</android.support.v7.widget.CardView>

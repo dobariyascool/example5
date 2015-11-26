@@ -18,6 +18,7 @@
     <string name="title_fragment_profile">My Profile</string>
     <string name="title_fragment_feedback">Feedback</string>
     <string name="title_fragment_counter">Counter</string>
+    <string name="title_activity_waiter_order_detail">Home</string>
     <!-- end -->
 
     <string name="hello_world">Hello world!</string>
@@ -210,6 +211,14 @@
     <string name="tsAll">All</string>
     <string name="tsVacant">Vacant</string>
     <string name="tsBusy">Busy</string>
+    <!-- end -->
+
+    <!-- fragment order detail -->
+    <string name="odfNo">No</string>
+    <string name="odfName">Name</string>
+    <string name="odfPrice">Price</string>
+    <string name="odfQty">Qty</string>
+
     <!-- end -->
 
 </resources>

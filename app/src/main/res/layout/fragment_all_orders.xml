@@ -1,28 +1,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/allOrderFragment"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.arraybit.pos.AllOrdersFragment">
 
         <android.support.design.widget.TabLayout
+            android:id="@+id/orderTabLayout"
             style="@style/TabLayout"
-            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             app:tabMode="scrollable"/>
 
             <android.support.v4.view.ViewPager
-                android:id="@+id/viewPager"
+                android:id="@+id/orderViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-    <LinearLayout
-        android:id="@+id/fragmentLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"/>
+    <!--<LinearLayout-->
+        <!--android:id="@+id/fragmentLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical"-->
+        <!--android:visibility="gone"/>-->
 
 </LinearLayout>

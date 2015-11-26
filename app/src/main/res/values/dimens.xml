@@ -158,4 +158,5 @@
 
     <!-- orderplace panel row size-->
     <dimen name="leftHeight">40dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

@@ -58,9 +58,13 @@ public class ServerNameFragment extends Fragment {
 
                     objSharePreferenceManage.CreatePreference("ServerPreference", "ServerName", etServerName.getText().toString(), getActivity());
 
+                    Globals.serverName = etServerName.getText().toString();
+                    Globals.ChangeUrl();
+
                     Intent intent = new Intent(getActivity(), SignInActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    getActivity().finish();
+                    //getActivity().finish();
                 }
             }
         });

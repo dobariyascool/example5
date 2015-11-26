@@ -12,6 +12,7 @@ public class WaitingMaster implements Parcelable {
     String PersonMobile;
     short NoOfPersons;
     short linktoWaitingStatusMasterId;
+    short linktoBusinessMasterId;
     String CreateDateTime;
     short linktoUserMasterIdCreatedBy;
     /// Extra
@@ -26,6 +27,7 @@ public class WaitingMaster implements Parcelable {
             objWaitingMaster.linktoWaitingStatusMasterId = (short)source.readInt();
             objWaitingMaster.CreateDateTime = source.readString();
             objWaitingMaster.linktoUserMasterIdCreatedBy = (short)source.readInt();
+            objWaitingMaster.linktoBusinessMasterId =(short) source.readInt();
 
             /// Extra
             objWaitingMaster.WaitingStatus = source.readString();
@@ -67,9 +69,14 @@ public class WaitingMaster implements Parcelable {
 
     public String getWaitingStatus() { return this.WaitingStatus; }
 
+    public void setWaitingStatus(String waitingStatus) { this.WaitingStatus = waitingStatus; }
+
+    public short getlinktoBusinessMasterId() { return linktoBusinessMasterId; }
+
+
     //endregion
 
-    public void setWaitingStatus(String waitingStatus) { this.WaitingStatus = waitingStatus; }
+    public void setlinktoBusinessMasterId(short linktoBusinessMasterId) { this.linktoBusinessMasterId = linktoBusinessMasterId; }
 
     public int describeContents() {
         return 0;
@@ -85,6 +92,7 @@ public class WaitingMaster implements Parcelable {
         parcel.writeInt(linktoWaitingStatusMasterId);
         parcel.writeString(CreateDateTime);
         parcel.writeInt(linktoUserMasterIdCreatedBy);
+        parcel.writeInt(linktoBusinessMasterId);
 
         /// Extra
         parcel.writeString(WaitingStatus);

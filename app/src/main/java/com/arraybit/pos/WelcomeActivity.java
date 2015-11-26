@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 
 
@@ -22,6 +23,7 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
     GestureDetectorCompat gestureDetector;
 
     SharePreferenceManage objSharePreferenceManage;
+    short count=0;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -31,7 +33,7 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
 
         //get server name
         objSharePreferenceManage = new SharePreferenceManage();
-        SignInActivity.ServerName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", WelcomeActivity.this);
+        Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", WelcomeActivity.this);
         //end
 
         DrawerLayout mainLayout = (DrawerLayout) findViewById(R.id.mainLayout);
@@ -39,22 +41,26 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                objSharePreferenceManage = new SharePreferenceManage();
-                String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
-                if (userTypeMasterId != null && userTypeMasterId.equals("1")) {
-                    Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
-                    //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
-                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                    finish();
-                } else {
-                    Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
-                    //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
-                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                    finish();
+                if(count==0) {
+                    count++;
+                    objSharePreferenceManage = new SharePreferenceManage();
+                    String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
+                    if (userTypeMasterId != null && userTypeMasterId.equals("1")) {
+                        Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
+                        //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                        overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                        finish();
+                    } else {
+                        Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
+                        //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                        overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                        finish();
+                    }
                 }
-                return true;
+                return false;
             }
         });
 

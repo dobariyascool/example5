@@ -41,7 +41,7 @@ public class TableJSONParser {
                 objTableMaster.setMinPerson((short) jsonObject.getInt("MinPerson"));
                 objTableMaster.setMaxPerson((short) jsonObject.getInt("MaxPerson"));
                 objTableMaster.setlinktoTableStatusMasterId((short) jsonObject.getInt("linktoTableStatusMasterId"));
-                objTableMaster.setlinktoTableTypeMasterId((short) jsonObject.getInt("linktoTableTypeMasterId"));
+                objTableMaster.setlinktoOrderTypeMasterId((short) jsonObject.getInt("linktoOrderTypeMasterId"));
                 objTableMaster.setlinktoSectionMasterId((short) jsonObject.getInt("linktoSectionMasterId"));
                 objTableMaster.setOriginX(jsonObject.getInt("OriginX"));
                 objTableMaster.setOriginY(jsonObject.getInt("OriginY"));
@@ -92,7 +92,7 @@ public class TableJSONParser {
                 objTableMaster.setMinPerson((short) jsonArray.getJSONObject(i).getInt("MinPerson"));
                 objTableMaster.setMaxPerson((short) jsonArray.getJSONObject(i).getInt("MaxPerson"));
                 objTableMaster.setlinktoTableStatusMasterId((short) jsonArray.getJSONObject(i).getInt("linktoTableStatusMasterId"));
-                objTableMaster.setlinktoTableTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoTableTypeMasterId"));
+                objTableMaster.setlinktoOrderTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoOrderTypeMasterId"));
                 objTableMaster.setlinktoSectionMasterId((short) jsonArray.getJSONObject(i).getInt("linktoSectionMasterId"));
                 objTableMaster.setOriginX(jsonArray.getJSONObject(i).getInt("OriginX"));
                 objTableMaster.setOriginY(jsonArray.getJSONObject(i).getInt("OriginY"));
@@ -149,7 +149,7 @@ public class TableJSONParser {
             stringer.key("MinPerson").value(objTableMaster.getMinPerson());
             stringer.key("MaxPerson").value(objTableMaster.getMaxPerson());
             stringer.key("linktoTableStatusMasterId").value(objTableMaster.getlinktoTableStatusMasterId());
-            stringer.key("linktoTableTypeMasterId").value(objTableMaster.getlinktoTableTypeMasterId());
+            stringer.key("linktoOrderTypeMasterId").value(objTableMaster.getlinktoOrderTypeMasterId());
             stringer.key("linktoSectionMasterId").value(objTableMaster.getlinktoSectionMasterId());
             stringer.key("OriginX").value(objTableMaster.getOriginX());
             stringer.key("OriginY").value(objTableMaster.getOriginY());
@@ -196,7 +196,7 @@ public class TableJSONParser {
             stringer.key("MinPerson").value(objTableMaster.getMinPerson());
             stringer.key("MaxPerson").value(objTableMaster.getMaxPerson());
             stringer.key("linktoTableStatusMasterId").value(objTableMaster.getlinktoTableStatusMasterId());
-            stringer.key("linktoTableTypeMasterId").value(objTableMaster.getlinktoTableTypeMasterId());
+            stringer.key("linktoOrderTypeMasterId").value(objTableMaster.getlinktoOrderTypeMasterId());
             stringer.key("linktoSectionMasterId").value(objTableMaster.getlinktoSectionMasterId());
             stringer.key("OriginX").value(objTableMaster.getOriginX());
             stringer.key("OriginY").value(objTableMaster.getOriginY());

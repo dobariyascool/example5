@@ -2,71 +2,111 @@ package com.arraybit.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arraybit.pos.GuestOrderActivity;
+import com.arraybit.global.Globals;
+import com.arraybit.modal.OrderMaster;
 import com.arraybit.pos.R;
+import com.arraybit.pos.WaiterOrderDetailActivity;
 import com.rey.material.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class OrdersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewHolder> {
 
-    private List<String> mItemList;
+    public static int orderMasterId;
+    ArrayList<OrderMaster> alOrderMaster;
+    LayoutInflater layoutInflater;
+    Context context;
+    View view;
+    OrderLayoutClickListener objOrderLayoutClickListener;
+    FragmentManager fragmentManager;
 
-    public OrdersAdapter(List<String> itemList) {
-        mItemList = itemList;
+
+    public OrdersAdapter(Context context, ArrayList<OrderMaster> result ,FragmentManager fragmentManager) {
+        this.context = context;
+        alOrderMaster = result;
+        this.layoutInflater = LayoutInflater.from(context);
+        this.objOrderLayoutClickListener = objOrderLayoutClickListener;
+        this.fragmentManager = fragmentManager;
+    }
+
+
+    @Override
+    public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        view = layoutInflater.inflate(R.layout.row_orders, parent, false);
+        return new OrderViewHolder(view);
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final Context context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.row_orders, parent, false);
+    public void onBindViewHolder(OrderViewHolder holder, int position) {
+        OrderMaster objOrderMaster = alOrderMaster.get(position);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.cvOrder.setId((int) objOrderMaster.getOrderMasterId());
+        holder.txtTableName.setText(objOrderMaster.getTableName());
+        holder.txtOrderNumber.setText(objOrderMaster.getOrderNumber());
+        holder.txtOrderType.setText(objOrderMaster.getOrderType());
 
-                Intent intent=new Intent(context, GuestOrderActivity.class);
-                context.startActivity(intent);
-            }
-        });
-
-        return RecyclerItemViewHolder.newInstance(view);
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        RecyclerItemViewHolder holder1 = (RecyclerItemViewHolder) holder;
-        String itemText = mItemList.get(position);
-        holder1.setItemText(itemText);
+        holder.txtTotalAmount.setText("Rs. "+Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
     }
 
     @Override
     public int getItemCount() {
-        return mItemList.size();
+        return alOrderMaster.size();
     }
 
-    public static class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
+    public void OrderDataChanged(ArrayList<OrderMaster> result) {
+        alOrderMaster.addAll(result);
+        notifyDataSetChanged();
+    }
 
-        private final TextView mItemTextView;
+    //region interface
+    public interface OrderLayoutClickListener {
+        void OrderLayoutClick(int orderMasterId);
+    }
+    //endregion
 
-        public RecyclerItemViewHolder(final View parent, TextView itemTextView) {
-            super(parent);
-            mItemTextView = itemTextView;
+    class OrderViewHolder extends RecyclerView.ViewHolder {
+
+        TextView txtTableName, txtOrderNumber, txtOrderType, txtTotalAmount;
+        CardView cvOrder;
+
+        public OrderViewHolder(View itemView) {
+            super(itemView);
+
+            txtTableName = (TextView) itemView.findViewById(R.id.txtTableName);
+            txtOrderNumber = (TextView) itemView.findViewById(R.id.txtOrderNumber);
+            txtOrderType = (TextView) itemView.findViewById(R.id.txtOrderType);
+            txtTotalAmount = (TextView) itemView.findViewById(R.id.txtTotalAmount);
+
+            cvOrder = (CardView) itemView.findViewById(R.id.cvOrder);
+
+            cvOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    orderMasterId = v.getId();
+                    Intent intent = new Intent(context,WaiterOrderDetailActivity.class);
+                    context.startActivity(intent);
+                    //objOrderLayoutClickListener = (OrderLayoutClickListener) context;
+                    //objOrderLayoutClickListener.OrderLayoutClick(v.getId());
+                    //Globals.InitializeFragment(new OrderDetailFragment(v.getId()),fragmentManager);
+                    //objOrderLayoutClickListener = (OrderLayoutClickListener) context;
+                    //objOrderLayoutClickListener.OrderLayoutClick(v.getId());
+
+//                    OrderDetailFragment detailFragment = new  OrderDetailFragment(v.getId());
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.replace(R.id.allOrderFragment, detailFragment);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
+
+                }
+            });
         }
-
-        public static RecyclerItemViewHolder newInstance(View parent) {
-            TextView itemTextView = (TextView) parent.findViewById(R.id.textView);
-            return new RecyclerItemViewHolder(parent, itemTextView);
-        }
-
-        public void setItemText(CharSequence text) {
-            mItemTextView.setText(text);
-        }
-
     }
 }

@@ -42,10 +42,11 @@ public class Globals {
 
 
     public static String activityName;
+    public static String serverName=null;
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "HH:mm";
     public static int sourceMasterId = 2;
-    public static short BusinessMasterId = 1;
+    public static short businessMasterId = 1;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
     static FragmentManager fragmentManager;
     //public static Bitmap bitmap1;
@@ -55,6 +56,10 @@ public class Globals {
         DisplayMetrics dm = resources.getDisplayMetrics();
         float pixel = dp * (dm.densityDpi) / 160.0F;
         return pixel;
+    }
+
+    public static void ChangeUrl(){
+        Service.Url = "http://"+Globals.serverName+"/Service.svc/";
     }
 
     public static void SetAppBarPadding(Toolbar app_bar) {
@@ -197,6 +202,7 @@ public class Globals {
 
         if (activityName.equals(activity.getResources().getString(R.string.title_activity_waiting))) {
             Intent intent = new Intent(activity, SignInActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
             activity.finish();
 
@@ -206,8 +212,9 @@ public class Globals {
             objSharePreferenceManage.RemovePreference("WaitingPreference", "UserTypeMasterId", activity);
 
             objSharePreferenceManage.ClearPreference("WaitingPreference", activity);
-        } else if (activityName.equals(activity.getResources().getString(R.string.title_activity_waiter_home))) {
+        } else if (activityName.equals((activity.getResources().getString(R.string.title_activity_waiter_home)))) {
             Intent intent = new Intent(activity, SignInActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
             activity.finish();
 
@@ -313,6 +320,24 @@ public class Globals {
         private int intValue;
 
         ItemType(int value) {
+            intValue = value;
+
+        }
+
+        public int getValue() {
+            return intValue;
+        }
+    }
+
+    public enum OrderStatus {
+        Cooking(1),
+        Ready(2),
+        Served(3),
+        Cancelled(4);
+
+        private int intValue;
+
+        OrderStatus(int value) {
             intValue = value;
 
         }

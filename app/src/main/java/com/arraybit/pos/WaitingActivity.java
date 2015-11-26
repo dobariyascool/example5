@@ -13,13 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 
-public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     LinearLayout fragmentLayout, waitingMainLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -129,19 +128,20 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         fragmentTransaction.commit();
     }
 
+
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
         if (menuItem.getItemId() == R.id.wExit) {
             System.exit(0);
-            finish();
         }
         if (menuItem.getItemId() == R.id.wChangeMode) {
+            drawerLayout.closeDrawer(navigationView);
             Intent intent = new Intent(WaitingActivity.this, SignInActivity.class);
             startActivity(intent);
-            finish();
         }
         if (menuItem.getItemId() == R.id.wChangeCounter) {
+            drawerLayout.closeDrawer(navigationView);
             objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaitingActivity.this) != null) {
                 objSharePreferenceManage.RemovePreference("CounterPreference", "CounterMasterId", WaitingActivity.this);
@@ -152,8 +152,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         }
         if (menuItem.getItemId() == R.id.wFeedback) {
             drawerLayout.closeDrawer(navigationView);
-            navigationView.setVisibility(View.INVISIBLE);
-
+            //navigationView.setVisibility(View.INVISIBLE);
             Globals.InitializeFragment(new FeedbackFragment(), getSupportFragmentManager());
         }
         return false;
@@ -168,6 +167,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             getSupportFragmentManager().popBackStack();
 
         }
+        //end
     }
     //end
 }

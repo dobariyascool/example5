@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <!-- <uses-permission android:name="android.permission.CALL_PHONE"/> -->
     <application
         android:allowBackup="true"
@@ -57,6 +56,17 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_waiting"
             android:theme="@style/FullScreenTheme" />
-        <receiver android:name="com.arraybit.global.TimeScheduler"/>
+
+        <activity
+            android:name=".WaiterOrderDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_waiter_order_detail"
+            android:theme="@style/FullScreenTheme" />
+
+
+        <receiver android:name="com.arraybit.global.TimeScheduler" />
+
+
     </application>
+
 </manifest>

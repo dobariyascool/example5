@@ -167,6 +167,7 @@ public class AddFragment extends Fragment {
             objWaitingMaster.setPersonMobile(etMobileNo.getText().toString());
             objWaitingMaster.setNoOfPersons(Short.valueOf(etPersons.getText().toString()));
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Waiting").getValue());
+            objWaitingMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
 
             objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity()) != null) {

@@ -14,7 +14,7 @@ public class TableMaster implements Parcelable {
     short MinPerson;
     short MaxPerson;
     short linktoTableStatusMasterId;
-    short linktoTableTypeMasterId;
+    short linktoOrderTypeMasterId;
     short linktoSectionMasterId;
     int OriginX;
     int OriginY;
@@ -42,7 +42,7 @@ public class TableMaster implements Parcelable {
             objTableMaster.MinPerson = (short)source.readInt();
             objTableMaster.MaxPerson = (short)source.readInt();
             objTableMaster.linktoTableStatusMasterId = (short)source.readInt();
-            objTableMaster.linktoTableTypeMasterId = (short)source.readInt();
+            objTableMaster.linktoOrderTypeMasterId = (short)source.readInt();
             objTableMaster.linktoSectionMasterId = (short)source.readInt();
             objTableMaster.OriginX = source.readInt();
             objTableMaster.OriginY = source.readInt();
@@ -97,9 +97,9 @@ public class TableMaster implements Parcelable {
 
     public void setlinktoTableStatusMasterId(short linktoTableStatusMasterId) { this.linktoTableStatusMasterId = linktoTableStatusMasterId; }
 
-    public short getlinktoTableTypeMasterId() { return this.linktoTableTypeMasterId; }
+    public short getlinktoOrderTypeMasterId() { return this.linktoOrderTypeMasterId; }
 
-    public void setlinktoTableTypeMasterId(short linktoTableTypeMasterId) { this.linktoTableTypeMasterId = linktoTableTypeMasterId; }
+    public void setlinktoOrderTypeMasterId(short linktoTableTypeMasterId) { this.linktoOrderTypeMasterId = linktoTableTypeMasterId; }
 
     public short getlinktoSectionMasterId() { return this.linktoSectionMasterId; }
 
@@ -183,7 +183,7 @@ public class TableMaster implements Parcelable {
         parcel.writeInt(MinPerson);
         parcel.writeInt(MaxPerson);
         parcel.writeInt(linktoTableStatusMasterId);
-        parcel.writeInt(linktoTableTypeMasterId);
+        parcel.writeInt(linktoOrderTypeMasterId);
         parcel.writeInt(linktoSectionMasterId);
         parcel.writeInt(OriginX);
         parcel.writeInt(OriginY);

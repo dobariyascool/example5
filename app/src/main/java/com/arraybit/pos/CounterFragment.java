@@ -84,7 +84,7 @@ public class CounterFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            alCounterMaster = objCounterJSONParser.SelectAllCounterMaster(Globals.BusinessMasterId);
+            alCounterMaster = objCounterJSONParser.SelectAllCounterMaster(Globals.businessMasterId);
             return alCounterMaster;
         }
 

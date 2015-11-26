@@ -141,7 +141,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         super.onBackPressed();
         //fragment backPressed
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-                getSupportFragmentManager().popBackStack();
+            getSupportFragmentManager().popBackStack();
         }
     }
     //end

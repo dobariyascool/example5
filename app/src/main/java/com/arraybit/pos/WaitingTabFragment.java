@@ -55,6 +55,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
 
         rvWaiting = (RecyclerView) view.findViewById(R.id.rvWaiting);
         rvWaiting.setVisibility(View.GONE);
+
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 

@@ -1,5 +1,7 @@
 package com.arraybit.parser;
 
+import android.content.Context;
+
 import com.arraybit.global.Service;
 import com.arraybit.modal.UserMaster;
 
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 public class UserMasterJSONParser {
 
     public String SelectRegisteredUserMasterUserName = "SelectUserName";
+    Context context;
 
     //region Class Methods
     private UserMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {

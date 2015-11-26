@@ -81,7 +81,6 @@ public class InformationFragment extends Fragment {
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
-            SignInActivity.ServerName = "10.0.3.2:6122";
         }
 
         @Override
@@ -92,10 +91,10 @@ public class InformationFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(Object o) {
+        protected void onPostExecute(Object result) {
 
             progressDialog.dismiss();
-            lstBusinessHoursTran = (ArrayList<BusinessHoursTran>) o;
+            lstBusinessHoursTran = (ArrayList<BusinessHoursTran>) result;
             if (lstBusinessHoursTran == null) {
                 rvWorkingHours.setVisibility(View.GONE);
             } else if (lstBusinessHoursTran.size() == 0) {

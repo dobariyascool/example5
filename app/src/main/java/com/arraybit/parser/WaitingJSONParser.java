@@ -100,6 +100,7 @@ public class WaitingJSONParser {
             stringer.key("linktoWaitingStatusMasterId").value(objWaitingMaster.getlinktoWaitingStatusMasterId());
             stringer.key("CreateDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoUserMasterIdCreatedBy").value(objWaitingMaster.getlinktoUserMasterIdCreatedBy());
+            stringer.key("linktoBusinessMasterId").value(objWaitingMaster.getlinktoBusinessMasterId());
 
             stringer.endObject();
 

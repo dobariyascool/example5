@@ -32,25 +32,27 @@ public class SplashScreenActivity extends AppCompatActivity {
                 objSharePreferenceManage = new SharePreferenceManage();
                 if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this) == null) {
                     Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
+                    finish();
                 } else {
 
                     if ((objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SplashScreenActivity.this) == null) && (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", SplashScreenActivity.this) == null)) {
                         Intent intent = new Intent(SplashScreenActivity.this, SignInActivity.class);
                         startActivity(intent);
+                        finish();
                     } else {
                         Intent intent = new Intent(SplashScreenActivity.this, WelcomeActivity.class);
                         startActivity(intent);
                         finish();
                     }
 
+                    //get server name
+                    objSharePreferenceManage = new SharePreferenceManage();
+                    Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this);
+                    //end
+
+                    new CounterLoadingTask().execute();
+
                 }
-
-                //get server name
-                objSharePreferenceManage = new SharePreferenceManage();
-                SignInActivity.ServerName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this);
-                //end
-
-                new CounterLoadingTask().execute();
 
             }
         }, 800);
@@ -88,7 +90,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             CounterJSONParser objCounterJSONParser = new CounterJSONParser();
-            return objCounterJSONParser.SelectAllCounterMaster(Globals.BusinessMasterId);
+            return objCounterJSONParser.SelectAllCounterMaster(Globals.businessMasterId);
         }
 
         @Override
