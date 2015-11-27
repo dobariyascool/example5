@@ -87,6 +87,12 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         notifyDataSetChanged();
     }
 
+    public void SetSearchFilter(ArrayList<ItemMaster> result){
+        alItemMaster = new ArrayList<>();
+        alItemMaster.addAll(result);
+        notifyDataSetChanged();
+    }
+
     public interface OrderItemDetail {
         public void ItemDetail();
     }
@@ -116,7 +122,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     //orderItemDetail.ItemDetail();
                     DetailFragment detailFragment = new DetailFragment(v.getId());
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_category_item, detailFragment);
+                    fragmentTransaction.replace(R.id.fragment_category_item,detailFragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }

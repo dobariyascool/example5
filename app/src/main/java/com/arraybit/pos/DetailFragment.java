@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -71,7 +73,8 @@ public class DetailFragment extends Fragment {
 //        app_bar.setTitle(getResources().getString(R.string.title_fragment_detail));
 //        app_bar.setLogo(R.mipmap.app_logo);
 
-        //setHasOptionsMenu(true);
+
+        setHasOptionsMenu(true);
 
 //        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.title_fragment_detail));
 //        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(false);
@@ -79,6 +82,13 @@ public class DetailFragment extends Fragment {
         new DetailLoadingTask().execute();
 
         return view;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem mLogin = menu.findItem(R.id.action_search);
+        mLogin.setVisible(false);
     }
 
     @Override

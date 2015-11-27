@@ -4,10 +4,15 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -25,7 +30,7 @@ import com.rey.material.widget.TextView;
 import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
-public class ItemTabFragment extends Fragment {
+public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     public final static String ITEMS_COUNT_KEY = "ItemTabFragment$ItemsCount";
     TextView txtMsg;
@@ -41,6 +46,7 @@ public class ItemTabFragment extends Fragment {
     CounterMaster objCounterMaster;
     int counterMasterId;
     int currentPage = 1;
+    ArrayList<ItemMaster> filteredList=new ArrayList<>();
 
     public ItemTabFragment() {
 
@@ -62,6 +68,8 @@ public class ItemTabFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_item_tab, container, false);
         rvItem = (RecyclerView) view.findViewById(R.id.rvItem);
         rvItem.setVisibility(View.GONE);
+
+        setHasOptionsMenu(true);
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -137,6 +145,61 @@ public class ItemTabFragment extends Fragment {
         alItemMaster = new ArrayList<>();
         new GuestHomeItemLoadingTask().execute();
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        //mSearchView.setIconifiedByDefault(false);
+        mSearchView.setIconified(false);
+       // mSearchView.setQueryHint("Item Name");
+        //mSearchView.setMaxWidth(500);
+        mSearchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(searchItem,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        // Do something when collapsed
+                        categoryItemAdapter.SetSearchFilter(alItemMaster);
+                        return true; // Return true to collapse action view
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        // Do something when expanded
+                        return true; // Return true to expand action view
+                    }
+                });
+
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, newText);
+        categoryItemAdapter.SetSearchFilter(filteredList);
+        return false;
+    }
+
+    private ArrayList<ItemMaster> Filter(ArrayList<ItemMaster> lstItemMaster, String filterName) {
+        filterName = filterName.toLowerCase();
+        final ArrayList<ItemMaster> filteredList = new ArrayList<>();
+        for (ItemMaster objItemMaster : lstItemMaster) {
+            final String strItem = objItemMaster.getItemName().toLowerCase();
+            if (strItem.contains(filterName)) {
+                filteredList.add(objItemMaster);
+            }
+        }
+        return filteredList;
+    }
+
     public class GuestHomeItemLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;

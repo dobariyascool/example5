@@ -119,8 +119,14 @@ public class ItemJSONParser {
 
     public ArrayList<ItemMaster> SelectAllItemMaster(int currentPage,int linktoCounterMasterId, int linktoCategoryMasterId,String linktoItemTypeMasterId) {
         ArrayList<ItemMaster> lstItemMaster = null;
+        JSONObject jsonResponse;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+linktoCategoryMasterId+"/"+linktoItemTypeMasterId);
+            if(linktoCategoryMasterId==0){
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+null+"/"+linktoItemTypeMasterId);
+            }
+            else{
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+linktoCategoryMasterId+"/"+linktoItemTypeMasterId);
+            }
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemMasterByCategoryMasterId + "Result");
                 if (jsonArray != null) {
