@@ -309,12 +309,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_SHORT).show();
                 ClearControls();
 
-                if(SplashScreenActivity.counter > 1) {
+                if(SplashScreenActivity.counter > 1 || SplashScreenActivity.counter == 0) {
                     Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
                 }
                 else
                 {
                     Intent intent=new Intent(SignInActivity.this,WelcomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 }
