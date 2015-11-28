@@ -9,9 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,24 +21,18 @@ import com.arraybit.global.Globals;
 @SuppressWarnings("RedundantIfStatement")
 public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    static short cnt=0;
-    //,SearchView.OnQueryTextListener
+    static short cnt = 0;
     ActionBarDrawerToggle actionBarDrawerToggle;
     String userName;
     LinearLayout guestHomeMainLayout;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     boolean isDualPanel;
-    SearchView mSearchView;
-    DisplayMetrics dm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_home);
-
-        dm = getResources().getDisplayMetrics();
-        System.out.println("width "+dm.widthPixels);
 
         //app_bar
         Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
@@ -74,9 +66,9 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         }
 
         //check layout run in mobile or tablet
-        if(findViewById(R.id.fragment_guest_order_list) == null) {
+        if (findViewById(R.id.fragment_guest_order_list) == null) {
             isDualPanel = false;
-        }else {
+        } else {
             isDualPanel = true;
         }
     }
@@ -94,10 +86,6 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
 
-//        MenuItem searchItem = menu.findItem(R.id.action_search);
-//        mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-//        mSearchView.setMaxWidth(dm.widthPixels);
-//        mSearchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -154,29 +142,10 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     public void onBackPressed() {
         super.onBackPressed();
         //fragment backPressed
-        cnt=0;
-        if (getSupportFragmentManager().getBackStackEntryCount()!=0) {
+        cnt = 0;
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getSupportFragmentManager().popBackStack();
         }
     }
-
-//    @Override
-//    public boolean onQueryTextSubmit(String query) {
-//        Toast.makeText(GuestHomeActivity.this,query,Toast.LENGTH_LONG).show();
-//        if(cnt==0) {
-//            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.fragment_category_item,new SearchFragment());
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//            mSearchView.clearFocus();
-//            cnt++;
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean onQueryTextChange(String newText) {
-//        return false;
-//    }
     //end
 }

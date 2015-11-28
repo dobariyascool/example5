@@ -98,6 +98,7 @@
     <string name="navProfile">Profile</string>
     <string name="navRegistration">Registration</string>
     <string name="navChangeMode">Change Mode</string>
+    <string name="navSearch">Search</string>
     <string name="navChangeCounter">Change Counter</string>
     <string name="navOffers">Offer</string>
     <string name="navFeedback">Feedback</string>
@@ -219,7 +220,6 @@
     <string name="odfName">Name</string>
     <string name="odfPrice">Price</string>
     <string name="odfQty">Qty</string>
-
     <!-- end -->
 
 </resources>

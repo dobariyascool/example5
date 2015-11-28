@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:layout_margin="@dimen/control_SpecingSmall"
-                android:src="@drawable/vada_paav" />
+                tools:ignore="ContentDescription" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,9 +92,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:orientation="horizontal"
-                android:padding="@dimen/control_SpecingSmall">
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall">
 
                 <!--<com.rey.material.widget.TextView-->
                     <!--style="@style/PrimaryTextView"-->
@@ -102,27 +103,28 @@
                     <!--android:layout_height="wrap_content"-->
                     <!--android:text="@string/dfQuantity" />-->
 
-                <com.rey.material.widget.Button
+                <com.rey.material.widget.ImageButton
                     android:id="@+id/btnPlus"
-                    android:layout_width="@dimen/button_TouchableHeight"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
                     android:background="@drawable/qtyselector"
-                    android:text="@string/dfPlus"/>
+                    android:src="@mipmap/plus_small" />
 
                 <com.rey.material.widget.EditText
                     android:id="@+id/etQuantity"
-                    android:layout_width="50dp"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:gravity="center"
                     android:text="1"
                     tools:ignore="HardcodedText" />
 
-                <com.rey.material.widget.Button
+                <com.rey.material.widget.ImageButton
                     android:id="@+id/btnMinus"
-                    android:layout_width="@dimen/button_TouchableHeight"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
                     android:background="@drawable/qtyselector"
-                    android:text="@string/dfMinus"/>
+                    android:src="@mipmap/minus"/>
 
             </LinearLayout>
         </LinearLayout>

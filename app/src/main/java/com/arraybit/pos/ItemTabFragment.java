@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,12 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.arraybit.adapter.CategoryItemAdapter;
-import com.arraybit.global.EndlessRecyclerOnScrollListener;
 import com.arraybit.global.Globals;
-import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CategoryMaster;
-import com.arraybit.modal.CounterMaster;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.parser.ItemJSONParser;
 import com.rey.material.widget.TextView;
@@ -33,6 +31,7 @@ import java.util.ArrayList;
 public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     public final static String ITEMS_COUNT_KEY = "ItemTabFragment$ItemsCount";
+    static short cnt = 0;
     TextView txtMsg;
     RecyclerView rvItem;
     LinearLayoutManager linearLayoutManager;
@@ -40,13 +39,11 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     ArrayList<ItemMaster> alItemMaster;
     String itemTypeMasterId = null;
     SharePreferenceManage objSharePreferenceManage;
-
     CategoryItemAdapter categoryItemAdapter;
     CategoryMaster objCategoryMaster;
-    CounterMaster objCounterMaster;
     int counterMasterId;
     int currentPage = 1;
-    ArrayList<ItemMaster> filteredList=new ArrayList<>();
+    DisplayMetrics displayMetrics;
 
     public ItemTabFragment() {
 
@@ -71,11 +68,13 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
         setHasOptionsMenu(true);
 
+        displayMetrics = getActivity().getResources().getDisplayMetrics();
+
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        //linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         gridLayoutManager = new GridLayoutManager(getActivity(),2);
-        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        //gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
 
@@ -111,33 +110,33 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             rvItem.setLayoutManager(linearLayoutManager);
         }
 
-        if(CategoryItemFragment.isViewChange) {
-            rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
-                @Override
-                public void onLoadMore(int current_page) {
-                    if (current_page > currentPage) {
-                        currentPage = current_page;
-                        if (Service.CheckNet(getActivity())) {
-                            new GuestHomeItemLoadingTask().execute();
-                        }
-                    }
-                }
-            });
-        }
-        else
-        {
-            rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
-                @Override
-                public void onLoadMore(int current_page) {
-                    if (current_page > currentPage) {
-                        currentPage = current_page;
-                        if (Service.CheckNet(getActivity())) {
-                            new GuestHomeItemLoadingTask().execute();
-                        }
-                    }
-                }
-            });
-        }
+//        if(CategoryItemFragment.isViewChange) {
+//            rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+//                @Override
+//                public void onLoadMore(int current_page) {
+//                    if (current_page > currentPage) {
+//                        currentPage = current_page;
+//                        if (Service.CheckNet(getActivity())) {
+//                            new GuestHomeItemLoadingTask().execute();
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//        else
+//        {
+//            rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+//                @Override
+//                public void onLoadMore(int current_page) {
+//                    if (current_page > currentPage) {
+//                        currentPage = current_page;
+//                        if (Service.CheckNet(getActivity())) {
+//                            new GuestHomeItemLoadingTask().execute();
+//                        }
+//                    }
+//                }
+//            });
+//        }
     }
 
     public void ItemDataFilter(String itemTypeMasterId) {
@@ -152,8 +151,10 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.setMaxWidth(displayMetrics.widthPixels);
+        //mSearchView.setInputType(View.DRAWING_CACHE_QUALITY_HIGH);
         //mSearchView.setIconifiedByDefault(false);
-        mSearchView.setIconified(false);
+        //mSearchView.setIconified(false);
        // mSearchView.setQueryHint("Item Name");
         //mSearchView.setMaxWidth(500);
         mSearchView.setOnQueryTextListener(this);
@@ -201,6 +202,60 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     }
 
     public class GuestHomeItemLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new ProgressDialog(getActivity());
+
+            if(objCategoryMaster.getCategoryName().equals("All") && cnt == 0) {
+                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            }
+
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            ItemJSONParser objItemJSONParser = new ItemJSONParser();
+//            if ((linearLayoutManager.canScrollVertically() || gridLayoutManager.canScrollVertically()) && alItemMaster.size() == 0) {
+//                currentPage = 1;
+//            }
+
+            return objItemJSONParser.SelectAllItemMaster(currentPage,counterMasterId, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
+
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
+            if(objCategoryMaster.getCategoryName().equals("All") && cnt == 0) {
+                progressDialog.dismiss();
+            }
+
+            ArrayList<ItemMaster> lstItemMaster = (ArrayList<ItemMaster>) result;
+            if (lstItemMaster == null) {
+                Globals.SetError(txtMsg, rvItem, getResources().getString(R.string.MsgSelectFail), true);
+            } else if (lstItemMaster.size() == 0) {
+                Globals.SetError(txtMsg, rvItem, getResources().getString(R.string.MsgNoRecord), true);
+            } else {
+                Globals.SetError(txtMsg, rvItem, null, false);
+                alItemMaster = lstItemMaster;
+                SetupRecyclerView();
+                cnt = 1;
+            }
+        }
+    }
+
+    //region CommentCode
+    /*public class GuestHomeItemLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
 
@@ -259,5 +314,6 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 SetupRecyclerView();
             }
         }
-    }
+    }*/
+    //endregion
 }

@@ -15,21 +15,21 @@ import android.widget.ImageView;
 
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.parser.ItemJSONParser;
-import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
+import com.rey.material.widget.ImageButton;
 import com.rey.material.widget.TextView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements View.OnClickListener {
 
-    public int value = 1;
     ImageView ivItemImage;
     TextView txtItemName, txtDescription, txtItemPrice;
     EditText etQuantity;
-    Button btnPlus, btnMinus;
+    ImageButton btnPlus, btnMinus;
     int ItemMasterId;
 
     ItemJSONParser objItemJSONParser;
@@ -59,25 +59,14 @@ public class DetailFragment extends Fragment {
         //end
 
         //Button
-        btnPlus = (Button) view.findViewById(R.id.btnPlus);
-        btnMinus = (Button) view.findViewById(R.id.btnMinus);
+        btnPlus = (ImageButton) view.findViewById(R.id.btnPlus);
+        btnMinus = (ImageButton) view.findViewById(R.id.btnMinus);
         //end
 
-//        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
-//
-//        if (app_bar != null) {
-//            ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
-//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            value = 1;
-//        }
-//        app_bar.setTitle(getResources().getString(R.string.title_fragment_detail));
-//        app_bar.setLogo(R.mipmap.app_logo);
-
+        btnMinus.setOnClickListener(this);
+        btnPlus.setOnClickListener(this);
 
         setHasOptionsMenu(true);
-
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.title_fragment_detail));
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(false);
 
         new DetailLoadingTask().execute();
 
@@ -93,35 +82,34 @@ public class DetailFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-
-        btnPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                quantityValue();
-                value++;
-                String _stringValue = Integer.toString(value);
-                etQuantity.setText(_stringValue);
-            }
-        });
-
-        btnMinus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                quantityValue();
-                if (value > 1) {
-                    value--;
-                }
-                String _stringValue = Integer.toString(value); //for converting integer value into string
-                etQuantity.setText(_stringValue);
-            }
-        });
-
         super.onActivityCreated(savedInstanceState);
     }
 
-    private int quantityValue(){
-        value = Integer.parseInt(etQuantity.getText().toString());
+    private int IncrementDecrementValue(int id,int value){
+        if(id==R.id.btnPlus){
+            value++;
+            etQuantity.setText(String.valueOf(value));
+        }
+        else
+        {
+            if (value > 1) {
+                value--;
+            }
+            etQuantity.setText(String.valueOf(value));
+        }
         return value;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.btnPlus)
+        {
+            IncrementDecrementValue(v.getId(),Integer.valueOf(etQuantity.getText().toString()));
+        }
+        if(v.getId()==R.id.btnMinus)
+        {
+            IncrementDecrementValue(v.getId(),Integer.valueOf(etQuantity.getText().toString()));
+        }
     }
 
 //    @Override
@@ -169,7 +157,12 @@ public class DetailFragment extends Fragment {
             txtItemName.setText(objItemMaster.getItemName());
             txtDescription.setText(objItemMaster.getShortDescription());
             //txtItemPrice.setText((String.valueOf(objItemMaster.getMRP())));
-
+            if(!objItemMaster.getImageName().equals("null")){
+                Picasso.with(ivItemImage.getContext()).load(objItemMaster.getImageName()).into(ivItemImage);
+            }
+            else{
+                ivItemImage.setImageResource(R.drawable.vada_paav);
+            }
         }
     }
 }
