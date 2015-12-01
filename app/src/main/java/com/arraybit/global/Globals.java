@@ -127,9 +127,10 @@ public class Globals {
 
         } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
             SignUpFragment signUpFragment = new SignUpFragment();
-            Globals.InitializeFragment(signUpFragment, fragmentManager);
-//            GuestRegistrationDialogFragment guestRegistrationDialogFragment = new GuestRegistrationDialogFragment();
-//            guestRegistrationDialogFragment.show(fragmentManager, "");
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(android.R.id.content,signUpFragment,activity.getResources().getString(R.string.title_fragment_signup));
+            fragmentTransaction.addToBackStack(activity.getResources().getString(R.string.title_fragment_signup));
+            fragmentTransaction.commit();
         }
     }
 

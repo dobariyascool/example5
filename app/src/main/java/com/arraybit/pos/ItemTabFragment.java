@@ -30,7 +30,8 @@ import java.util.ArrayList;
 @SuppressWarnings("unchecked")
 public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextListener {
 
-    public final static String ITEMS_COUNT_KEY = "ItemTabFragment$ItemsCount";
+    //public final static String ITEMS_COUNT_KEY = "ItemTabFragment$ItemsCount";
+    public final static String ITEMS_COUNT_KEY ="ItemTabFragment";
     static short cnt = 0;
     TextView txtMsg;
     RecyclerView rvItem;

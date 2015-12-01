@@ -3,10 +3,12 @@ package com.arraybit.pos;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +54,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     public SignUpFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //setHasOptionsMenu(true);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -145,6 +154,16 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        menu.findItem(R.id.login).setVisible(false);
+        menu.findItem(R.id.registration).setVisible(false);
+        menu.findItem(R.id.action_search).setVisible(false);
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -159,6 +178,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     boolean ValidateControls() {
         boolean IsValid = true;
 
+        if(spnrArea.getSelectedItemId() == 0){
+            Toast.makeText(getActivity(),"Select Area",Toast.LENGTH_LONG).show();
+        }
         if (etFirstName.getText().toString().equals("")
                 && !etEmail.getText().toString().equals("")
                 && !etPassword.getText().toString().equals("")) {
@@ -328,8 +350,18 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
-            adapter = new SpinnerAdapter(getActivity(), lstSpinnerItem);
-            spnrArea.setAdapter(adapter);
+            if(lstSpinnerItem!=null) {
+                SpinnerItem objSpinnerItem = new SpinnerItem();
+                objSpinnerItem.setText("--------SELECT--------");
+                objSpinnerItem.setValue(0);
+
+                ArrayList<SpinnerItem> alSpinnerItem=new ArrayList<>();
+                alSpinnerItem.add(objSpinnerItem);
+                lstSpinnerItem.addAll(0, alSpinnerItem);
+
+                adapter = new SpinnerAdapter(getActivity(), lstSpinnerItem);
+                spnrArea.setAdapter(adapter);
+            }
         }
     }
 }

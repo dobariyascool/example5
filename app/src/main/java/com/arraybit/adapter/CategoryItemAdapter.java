@@ -120,10 +120,10 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
                     //orderItemDetail=(OrderItemDetail)context;
                     //orderItemDetail.ItemDetail();
-                    DetailFragment detailFragment = new DetailFragment(v.getId());
+                    //DetailFragment detailFragment = new DetailFragment(v.getId());
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_category_item,detailFragment);
-                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.replace(R.id.fragment_category_item,new DetailFragment(v.getId()),context.getResources().getString(R.string.title_fragment_detail));
+                    fragmentTransaction.addToBackStack(context.getResources().getString(R.string.title_fragment_detail));
                     fragmentTransaction.commit();
                 }
 

@@ -7,8 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,8 +17,6 @@ import com.rey.material.widget.EditText;
 import com.rey.material.widget.ImageButton;
 import com.rey.material.widget.TextView;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
@@ -34,8 +30,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
     ItemJSONParser objItemJSONParser;
     ItemMaster objItemMaster;
-    ArrayList<ItemMaster> alItemMaster;
-
 
     public DetailFragment(int ItemMasterId) {
         this.ItemMasterId = ItemMasterId;
@@ -74,24 +68,15 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        MenuItem mLogin = menu.findItem(R.id.action_search);
-        mLogin.setVisible(false);
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
-    private int IncrementDecrementValue(int id,int value){
-        if(id==R.id.btnPlus){
+    private int IncrementDecrementValue(int id, int value) {
+        if (id == R.id.btnPlus) {
             value++;
             etQuantity.setText(String.valueOf(value));
-        }
-        else
-        {
+        } else {
             if (value > 1) {
                 value--;
             }
@@ -102,28 +87,13 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.btnPlus)
-        {
-            IncrementDecrementValue(v.getId(),Integer.valueOf(etQuantity.getText().toString()));
+        if (v.getId() == R.id.btnPlus) {
+            IncrementDecrementValue(v.getId(), Integer.valueOf(etQuantity.getText().toString()));
         }
-        if(v.getId()==R.id.btnMinus)
-        {
-            IncrementDecrementValue(v.getId(),Integer.valueOf(etQuantity.getText().toString()));
+        if (v.getId() == R.id.btnMinus) {
+            IncrementDecrementValue(v.getId(), Integer.valueOf(etQuantity.getText().toString()));
         }
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        int id = item.getItemId();
-//
-//        if (id == android.R.id.home) {
-//            getActivity().getSupportFragmentManager().popBackStack();
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     public class DetailLoadingTask extends AsyncTask {
 
@@ -157,10 +127,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             txtItemName.setText(objItemMaster.getItemName());
             txtDescription.setText(objItemMaster.getShortDescription());
             //txtItemPrice.setText((String.valueOf(objItemMaster.getMRP())));
-            if(!objItemMaster.getImageName().equals("null")){
+            if (!objItemMaster.getImageName().equals("null")) {
                 Picasso.with(ivItemImage.getContext()).load(objItemMaster.getImageName()).into(ivItemImage);
-            }
-            else{
+            } else {
                 ivItemImage.setImageResource(R.drawable.vada_paav);
             }
         }

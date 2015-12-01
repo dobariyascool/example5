@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,13 +22,13 @@ import com.arraybit.global.Globals;
 @SuppressWarnings("RedundantIfStatement")
 public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    static short cnt = 0;
     ActionBarDrawerToggle actionBarDrawerToggle;
     String userName;
     LinearLayout guestHomeMainLayout;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     boolean isDualPanel;
+    Toolbar app_bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         setContentView(R.layout.activity_guest_home);
 
         //app_bar
-        Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
+        app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -85,14 +86,23 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
-
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         Globals.SetOptionMenu(userName, GuestHomeActivity.this, menu);
+        if(getSupportFragmentManager().getBackStackEntryCount()!=0){
+            if(getSupportFragmentManager().getBackStackEntryAt(0).getName()!=null) {
+                if (getSupportFragmentManager().getBackStackEntryAt(0).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
+                    app_bar.getMenu().findItem(R.id.action_search).setVisible(false);
+                }
+            }
+        }
+        else
+        {
+            app_bar.getMenu().findItem(R.id.action_search).setVisible(true);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -142,9 +152,19 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     public void onBackPressed() {
         super.onBackPressed();
         //fragment backPressed
-        cnt = 0;
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            getSupportFragmentManager().popBackStack();
+            if(getSupportFragmentManager().getBackStackEntryCount() >= 1){
+                if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null){
+
+                    if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_signup)))
+                    {
+                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_signup), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    }
+                }
+            }
+            else {
+                getSupportFragmentManager().popBackStack();
+            }
         }
     }
     //end

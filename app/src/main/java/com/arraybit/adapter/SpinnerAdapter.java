@@ -53,4 +53,5 @@ public class SpinnerAdapter extends BaseAdapter {
         txtview.setText(lstSpinnerItem.get(i).getText());
         return view1;
     }
+
 }

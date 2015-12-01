@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
+        android:gravity="center"
         android:padding="@dimen/control_SpecingSmall"
         android:textColor="@color/primary_dark" />
 
