@@ -7,9 +7,9 @@
     android:orientation="vertical"
     tools:context="com.arraybit.pos.DetailFragment">
 
-    <!--<include-->
-    <!--android:id="@+id/app_bar"-->
-    <!--layout="@layout/app_bar" />-->
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -98,10 +98,10 @@
                 android:paddingStart="@dimen/control_SpecingSmall">
 
                 <!--<com.rey.material.widget.TextView-->
-                    <!--style="@style/PrimaryTextView"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/dfQuantity" />-->
+                <!--style="@style/PrimaryTextView"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/dfQuantity" />-->
 
                 <com.rey.material.widget.ImageButton
                     android:id="@+id/btnPlus"
@@ -124,7 +124,7 @@
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/qtyselector"
-                    android:src="@mipmap/minus"/>
+                    android:src="@mipmap/minus" />
 
             </LinearLayout>
         </LinearLayout>

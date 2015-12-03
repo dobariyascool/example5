@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -8,20 +9,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.arraybit.global.Globals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllOrdersFragment extends Fragment{
+@SuppressWarnings("ALL")
+public class AllOrdersFragment extends Fragment {
 
     TabLayout orderTabLayout;
     ViewPager orderViewPager;
     OrderPagerAdapter orderPagerAdapter;
+    FrameLayout allOrdersFragment;
 
     public AllOrdersFragment() {
         // Required empty public constructor
@@ -34,6 +41,18 @@ public class AllOrdersFragment extends Fragment{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_all_orders, container, false);
 
+        //app_bar
+        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
+        if (app_bar != null) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_all_orders));
+        }
+        //end
+
+        allOrdersFragment = (FrameLayout) view.findViewById(R.id.allOrdersFragment);
+        Globals.SetScaleImageBackground(getActivity(),null,null,allOrdersFragment);
+
         orderTabLayout = (TabLayout) view.findViewById(R.id.orderTabLayout);
         orderViewPager = (ViewPager) view.findViewById(R.id.orderViewPager);
 
@@ -42,12 +61,29 @@ public class AllOrdersFragment extends Fragment{
 
         SetTabLayout();
 
+        setHasOptionsMenu(true);
+
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Globals.SetScaleImageBackground(getActivity(),null,null,allOrdersFragment);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

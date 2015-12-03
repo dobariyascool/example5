@@ -3,6 +3,7 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,7 @@ public class CounterFragment extends Fragment {
     GridLayoutManager gridLayoutManager;
     SharePreferenceManage objSharePreferenceManage;
     CounterJSONParser objCounterJSONParser;
+    LinearLayout counterLayout;
 
     public CounterFragment() {
         // Required empty public constructor
@@ -54,8 +56,8 @@ public class CounterFragment extends Fragment {
         }
         app_bar.setTitle(getResources().getString(R.string.title_fragment_counter));
 
-        LinearLayout counterLayout=(LinearLayout)view.findViewById(R.id.counterLayout);
-        Globals.SetScaleImageBackground(getActivity(),counterLayout, null);
+        counterLayout =(LinearLayout)view.findViewById(R.id.counterLayout);
+        Globals.SetScaleImageBackground(getActivity(),counterLayout, null,null);
 
         rvCounter = (RecyclerView) view.findViewById(R.id.rvCounter);
         rvCounter.setVisibility(View.GONE);
@@ -65,6 +67,12 @@ public class CounterFragment extends Fragment {
 
         new CounterLoadingTask().execute();
         return view;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Globals.SetScaleImageBackground(getActivity(), counterLayout, null, null);
     }
 
     public class CounterLoadingTask extends AsyncTask {

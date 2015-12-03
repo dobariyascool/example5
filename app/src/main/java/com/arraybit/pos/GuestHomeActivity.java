@@ -47,7 +47,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         //linearlayout
         guestHomeMainLayout = (LinearLayout) findViewById(R.id.guestHomeMainLayout);
         //LinearLayout guestFragmentLayout = (LinearLayout) findViewById(R.id.guestFragmentLayout);
-        Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null);
+        Globals.SetScaleImageBackground(GuestHomeActivity.this,guestHomeMainLayout,null,null);
         //end
 
         //navigationView
@@ -78,7 +78,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null);
+        Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null,null);
         //}
     }
 

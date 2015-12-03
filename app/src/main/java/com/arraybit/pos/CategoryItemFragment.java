@@ -1,7 +1,9 @@
 package com.arraybit.pos;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,9 +12,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.arraybit.global.Globals;
@@ -26,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class CategoryItemFragment extends Fragment implements View.OnClickListener {
 
     public static boolean isViewChange = false;
@@ -40,9 +47,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     ImageButton ibViewChange;
     boolean isForceToChange = false;
     short isVegCheck = 0, isNonVegCheck = 0, isJainCheck = 0;
+    FrameLayout categoryItemFragment;
+    Activity activityName;
 
-    public CategoryItemFragment() {
+    public CategoryItemFragment(Activity activityName) {
         // Required empty public constructor
+        this.activityName = activityName;
     }
 
 
@@ -51,6 +61,18 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_category_item, container, false);
+
+        //app_bar
+        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
+        if (app_bar != null) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_category_item));
+        }
+        //end
+
+        categoryItemFragment = (FrameLayout)view.findViewById(R.id.categoryItemFragment);
+        Globals.SetScaleImageBackground(getActivity(),null,null,categoryItemFragment);
 
         //floating action menu
         famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
@@ -83,9 +105,46 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         ibViewChange.setOnClickListener(this);
         //end
 
+        ViewChange();
+
         new GuestHomeCategoryLodingTask().execute();
 
+        setHasOptionsMenu(true);
+
         return view;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Globals.SetScaleImageBackground(getActivity(),null,null,categoryItemFragment);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_search).setVisible(true);
+    }
+
+    public void ViewChange(){
+        if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))){
+            i = 2;
+            isViewChange = true;
+            isForceToChange = false;
+            ibViewChange.setVisibility(View.GONE);
+        }
+        else
+        {
+            ibViewChange.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -256,7 +315,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
             } else {
 
-                ibViewChange.setVisibility(View.VISIBLE);
+                //ibViewChange.setVisibility(View.VISIBLE);
                 itemPagerAdapter = new ItemPagerAdapter(getFragmentManager());
 
                 CategoryMaster objCategoryMaster =  new CategoryMaster();

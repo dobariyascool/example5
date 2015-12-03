@@ -48,7 +48,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
         //relativelayout
         waitingMainLayout = (LinearLayout) findViewById(R.id.waitingMainLayout);
-        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null);
+        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null,null);
         //end
 
         //drawerlayout and actionbardrawertoggle
@@ -70,7 +70,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null);
+        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null,null);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             if (item.getTitle().equals("T")) {
                 item.setTitle("W");
                 item.setIcon(R.mipmap.waiting_person);
-                ReplaceFragment(new AllTablesFragment());
+                ReplaceFragment(new AllTablesFragment(WaitingActivity.this));
             } else {
                 item.setTitle("T");
                 item.setIcon(R.mipmap.view_table);

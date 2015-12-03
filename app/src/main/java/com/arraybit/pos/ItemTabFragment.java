@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     //public final static String ITEMS_COUNT_KEY = "ItemTabFragment$ItemsCount";
-    public final static String ITEMS_COUNT_KEY ="ItemTabFragment";
+    public final static String ITEMS_COUNT_KEY = "ItemTabFragment";
     static short cnt = 0;
     TextView txtMsg;
     RecyclerView rvItem;
@@ -74,7 +74,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         linearLayoutManager = new LinearLayoutManager(getActivity());
         //linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        gridLayoutManager = new GridLayoutManager(getActivity(),2);
+        gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         //gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
@@ -102,7 +102,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
     public void SetupRecyclerView() {
 
-        categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(),CategoryItemFragment.isViewChange);
+        categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange);
         rvItem.setVisibility(View.VISIBLE);
         rvItem.setAdapter(categoryItemAdapter);
         if (CategoryItemFragment.isViewChange) {
@@ -156,7 +156,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         //mSearchView.setInputType(View.DRAWING_CACHE_QUALITY_HIGH);
         //mSearchView.setIconifiedByDefault(false);
         //mSearchView.setIconified(false);
-       // mSearchView.setQueryHint("Item Name");
+        // mSearchView.setQueryHint("Item Name");
         //mSearchView.setMaxWidth(500);
         mSearchView.setOnQueryTextListener(this);
 
@@ -213,7 +213,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
             progressDialog = new ProgressDialog(getActivity());
 
-            if(objCategoryMaster.getCategoryName().equals("All") && cnt == 0) {
+            if (objCategoryMaster.getCategoryName().equals("All") && cnt == 0) {
                 progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
                 progressDialog.setIndeterminate(true);
                 progressDialog.setCancelable(false);
@@ -229,7 +229,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 //                currentPage = 1;
 //            }
 
-            return objItemJSONParser.SelectAllItemMaster(currentPage,counterMasterId, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
+            return objItemJSONParser.SelectAllItemMaster(currentPage, counterMasterId, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
 
         }
 
@@ -237,7 +237,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
-            if(objCategoryMaster.getCategoryName().equals("All") && cnt == 0) {
+            if (objCategoryMaster.getCategoryName().equals("All") && cnt == 0) {
                 progressDialog.dismiss();
             }
 

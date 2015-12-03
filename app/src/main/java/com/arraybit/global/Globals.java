@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,7 +43,7 @@ public class Globals {
 
 
     public static String activityName;
-    public static String serverName=null;
+    public static String serverName = null;
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "HH:mm";
     public static int sourceMasterId = 2;
@@ -58,8 +59,8 @@ public class Globals {
         return pixel;
     }
 
-    public static void ChangeUrl(){
-        Service.Url = "http://"+Globals.serverName+"/Service.svc/";
+    public static void ChangeUrl() {
+        Service.Url = "http://" + Globals.serverName + "/Service.svc/";
     }
 
     public static void SetAppBarPadding(Toolbar app_bar) {
@@ -128,24 +129,25 @@ public class Globals {
         } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
             SignUpFragment signUpFragment = new SignUpFragment();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(android.R.id.content,signUpFragment,activity.getResources().getString(R.string.title_fragment_signup));
+            fragmentTransaction.replace(android.R.id.content, signUpFragment, activity.getResources().getString(R.string.title_fragment_signup));
             fragmentTransaction.addToBackStack(activity.getResources().getString(R.string.title_fragment_signup));
             fragmentTransaction.commit();
         }
     }
 
-    public static void SetScaleImageBackground(final Context context, final LinearLayout linearLayout, final RelativeLayout relativeLayout) {
+    public static void SetScaleImageBackground(final Context context, final LinearLayout linearLayout, final RelativeLayout relativeLayout, final FrameLayout frameLayout) {
 
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
         Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mainbackground);
         Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
 
-        if (relativeLayout == null) {
-            linearLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
-
-        } else {
+        if (relativeLayout != null) {
             relativeLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
+        } else if (frameLayout != null) {
+            frameLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
+        } else if (linearLayout != null) {
+            linearLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
         }
     }
 

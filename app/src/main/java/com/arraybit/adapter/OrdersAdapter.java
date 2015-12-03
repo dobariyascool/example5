@@ -88,10 +88,11 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                 @Override
                 public void onClick(View v) {
 
-                    orderMasterId = v.getId();
+
 
                     objOrderLayoutClickListener = (OrderLayoutClickListener)context;
-                    objOrderLayoutClickListener.OrderLayoutClick(orderMasterId);
+                    objOrderLayoutClickListener.OrderLayoutClick(v.getId());
+
                     //OrderDetailFragment detailFragment = new  OrderDetailFragment();
                     //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     //fragmentTransaction.replace(R.id.allOrderFragment,detailFragment,"detailFragment");

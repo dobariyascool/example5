@@ -36,7 +36,7 @@ public class WaiterOrderDetailActivity extends AppCompatActivity implements Navi
 
         //linearlayout
         waiterOrderMainLayout = (LinearLayout) findViewById(R.id.waiterOrderMainLayout);
-        Globals.SetScaleImageBackground(WaiterOrderDetailActivity.this, waiterOrderMainLayout, null);
+        Globals.SetScaleImageBackground(WaiterOrderDetailActivity.this, waiterOrderMainLayout, null,null);
         //end
 
         //navigationView
@@ -56,7 +56,7 @@ public class WaiterOrderDetailActivity extends AppCompatActivity implements Navi
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        Globals.SetScaleImageBackground(WaiterOrderDetailActivity.this, waiterOrderMainLayout, null);
+        Globals.SetScaleImageBackground(WaiterOrderDetailActivity.this, waiterOrderMainLayout, null,null);
         //}
     }
 

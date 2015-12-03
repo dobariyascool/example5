@@ -40,6 +40,7 @@ public class WaiterOptionListFragment extends Fragment {
             rvOptions.setLayoutManager(new GridLayoutManager(getActivity(),2));
         }
 
+        setHasOptionsMenu(true);
 
         return view;
     }

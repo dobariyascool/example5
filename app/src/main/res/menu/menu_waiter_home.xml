@@ -1,4 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.arraybit.pos.WaiterHomeActivity">
 
@@ -7,6 +8,15 @@
         android:title="@string/wmMyAccount" />
 
     <item android:id="@+id/logout"
-        android:title="@string/wmLogout"
-        android:orderInCategory="200" />
+        android:orderInCategory="200"
+        android:title="@string/wmLogout" />
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/navSearch"
+        android:visible="false"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
 </menu>

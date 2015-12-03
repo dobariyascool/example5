@@ -1,25 +1,29 @@
 package com.arraybit.pos;
 
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.OrderDetailAdapter;
-import com.arraybit.adapter.OrdersAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.modal.OrderItemTran;
 import com.arraybit.parser.OrderItemJSONParser;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class OrderDetailFragment extends Fragment {
 
 
@@ -28,8 +32,9 @@ public class OrderDetailFragment extends Fragment {
     int orderMasterId;
     LinearLayout orderDetailLayout;
 
-    public OrderDetailFragment() {
+    public OrderDetailFragment(int orderMasterId) {
         // Required empty public constructor
+        this.orderMasterId = orderMasterId;
     }
 
     @Override
@@ -38,18 +43,49 @@ public class OrderDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order_detail, container, false);
 
+        //app_bar
+        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
+        if (app_bar != null) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_order_detail));
+        }
+        //end
+
         rvOrderItem = (RecyclerView)view.findViewById(R.id.rvOrderItem);
         rvOrderItem.setVisibility(View.GONE);
 
         headerLayout = (LinearLayout)view.findViewById(R.id.headerLayout);
         orderDetailLayout = (LinearLayout)view.findViewById(R.id.orderDetailLayout);
-        Globals.SetScaleImageBackground(getActivity(),orderDetailLayout,null);
+        Globals.SetScaleImageBackground(getActivity(),orderDetailLayout,null,null);
 
-        this.orderMasterId = OrdersAdapter.orderMasterId;
+        setHasOptionsMenu(true);
 
         new OrderDetailLoadingTask().execute();
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2) {
+                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null) {
+                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
+
+                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                    }
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Globals.SetScaleImageBackground(getActivity(), orderDetailLayout, null,null);
     }
 
     public class OrderDetailLoadingTask extends AsyncTask {

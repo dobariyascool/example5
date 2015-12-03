@@ -1,7 +1,9 @@
 package com.arraybit.pos;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -9,9 +11,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.arraybit.global.Globals;
@@ -24,7 +30,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class AllTablesFragment extends Fragment implements View.OnClickListener {
 
     TabLayout tableTabLayout;
@@ -32,11 +38,12 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     ArrayList<SectionMaster> alSectionMaster;
     TablePagerAdapter tablePagerAdapter;
     FloatingActionMenu famRoot;
+    Activity activityName;
+    RelativeLayout allTablesFragment;
 
-    public AllTablesFragment() {
-        // Required empty public constructor
+    public AllTablesFragment(Activity activityName) {
+        this.activityName = activityName;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +51,29 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_all_tables, container, false);
+
+        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
+        if(this.activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting)))
+        {
+            app_bar.setVisibility(View.GONE);
+            setHasOptionsMenu(false);
+        }
+        else {
+            app_bar.setVisibility(View.VISIBLE);
+
+            if (app_bar != null) {
+                ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_all_tables));
+            }
+
+            allTablesFragment = (RelativeLayout)view.findViewById(R.id.allTablesFragment);
+            Globals.SetScaleImageBackground(getActivity(),null,allTablesFragment,null);
+
+            setHasOptionsMenu(true);
+        }
+
+
         tableTabLayout=(TabLayout)view.findViewById(R.id.tableTabLayout);
         tableViewPager=(ViewPager)view.findViewById(R.id.tableViewPager);
 
@@ -72,6 +102,20 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         }
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Globals.SetScaleImageBackground(getActivity(), null, allTablesFragment,null);
     }
 
     @Override

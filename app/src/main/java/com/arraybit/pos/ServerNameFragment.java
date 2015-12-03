@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import com.rey.material.widget.EditText;
 public class ServerNameFragment extends Fragment {
     EditText etServerName;
     Button btnSave;
+    LinearLayout mainLayout;
 
 
     public ServerNameFragment() {
@@ -30,8 +32,8 @@ public class ServerNameFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_server_name, container, false);
 
         //linearlayout
-        LinearLayout mainLayout=(LinearLayout)view.findViewById(R.id.mainLayout);
-        Globals.SetScaleImageBackground(getContext(), mainLayout, null);
+        mainLayout =(LinearLayout)view.findViewById(R.id.mainLayout);
+        Globals.SetScaleImageBackground(getContext(), mainLayout, null,null);
         //end
 
         etServerName = (EditText) view.findViewById(R.id.etServerName);
@@ -39,6 +41,12 @@ public class ServerNameFragment extends Fragment {
 
         return view;
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Globals.SetScaleImageBackground(getContext(), mainLayout, null, null);
     }
 
     @Override

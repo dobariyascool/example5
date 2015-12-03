@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -21,6 +22,7 @@ public class GuestOrderActivity extends AppCompatActivity implements NavigationV
 
     ActionBarDrawerToggle actionBarDrawerToggle;
     String userName;
+    LinearLayout guestOrderMainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +39,8 @@ public class GuestOrderActivity extends AppCompatActivity implements NavigationV
         //end
 
         //linearlayout
-        LinearLayout guestOrderMainLayout = (LinearLayout) findViewById(R.id.guestOrderMainLayout);
-        Globals.SetScaleImageBackground(GuestOrderActivity.this, guestOrderMainLayout, null);
+        guestOrderMainLayout = (LinearLayout) findViewById(R.id.guestOrderMainLayout);
+        Globals.SetScaleImageBackground(GuestOrderActivity.this, guestOrderMainLayout, null,null);
         //end
 
         //navigationView
@@ -83,6 +85,12 @@ public class GuestOrderActivity extends AppCompatActivity implements NavigationV
 //        });
         //end
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Globals.SetScaleImageBackground(GuestOrderActivity.this, guestOrderMainLayout, null, null);
     }
 
     @Override

@@ -6,7 +6,12 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -41,6 +46,15 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
+        //app_bar
+        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
+        if (app_bar != null) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_detail));
+        }
+        //end
+
         //ImageView
         ivItemImage = (ImageView) view.findViewById(R.id.ivItemImage);
         //end
@@ -70,6 +84,28 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_search).setVisible(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2) {
+                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null) {
+                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
+
+                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                    }
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private int IncrementDecrementValue(int id, int value) {

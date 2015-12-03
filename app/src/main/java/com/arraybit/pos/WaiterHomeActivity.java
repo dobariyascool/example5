@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -20,7 +19,7 @@ import com.arraybit.adapter.OrdersAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 
-public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,OptionListAdapter.OptionListClickListener,OrdersAdapter.OrderLayoutClickListener {
+public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,OptionListAdapter.OptionListClickListener,OrdersAdapter.OrderLayoutClickListener{
 
     ActionBarDrawerToggle actionBarDrawerToggle;
     LinearLayout waiterHomeMainLayout;
@@ -45,7 +44,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         //linearlayout
         waiterHomeMainLayout = (LinearLayout) findViewById(R.id.waiterHomeMainLayout);
         LinearLayout waiterFragmentLayout = (LinearLayout) findViewById(R.id.waiterFragmentLayout);
-        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null);
+        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null,null);
         //end
 
         //navigationView
@@ -71,7 +70,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null);
+        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null,null);
         //}
     }
 
@@ -131,13 +130,16 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             //AllOrdersFragment ordersFragment=new AllOrdersFragment();
          //   ordersFragment.setFragment(position);
         //} else {
-            if (position == 0) {
-                AddFragmentInLayout(new AllOrdersFragment());
-            } else if (position == 1) {
-                AddFragmentInLayout(new AllTablesFragment());
-            } else if(position == 2) {
-                Intent intent = new Intent(WaiterHomeActivity.this, GuestHomeActivity.class);
-                startActivity(intent);
+            if(getSupportFragmentManager().getBackStackEntryCount() == 1) {
+                if (position == 0) {
+                    Globals.InitializeFragment(new AllOrdersFragment(), getSupportFragmentManager());
+                    //AddFragmentInLayout(new AllOrdersFragment());
+                } else if (position == 1) {
+                    Globals.InitializeFragment(new AllTablesFragment(WaiterHomeActivity.this), getSupportFragmentManager());
+                    //AddFragmentInLayout(new AllTablesFragment());
+                } else if (position == 2) {
+                    Globals.InitializeFragment(new CategoryItemFragment(WaiterHomeActivity.this), getSupportFragmentManager());
+                }
             }
        //}
     }
@@ -156,6 +158,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public void onBackPressed() {
         //if (!isDualPanel) {
+            System.out.println("count "+getSupportFragmentManager().getBackStackEntryCount());
             if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
 
@@ -164,6 +167,10 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                         if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_order_detail)))
                         {
                             getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        }
+                        else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_detail))){
+
+                            getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         }
                     }
                     else
@@ -178,12 +185,14 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public void OrderLayoutClick(int orderMasterId) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.allOrderFragment,new OrderDetailFragment(),getResources().getString(R.string.title_fragment_order_detail));
+        fragmentTransaction.replace(R.id.allOrdersFragment, new OrderDetailFragment(orderMasterId),getResources().getString(R.string.title_fragment_order_detail));
         fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_order_detail));
         fragmentTransaction.commit();
+        //Globals.InitializeFragment(new OrderDetailFragment(),getSupportFragmentManager());
     }
-}
     //end
+}
+
 
 //    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 //    public void WindowAnimation(){

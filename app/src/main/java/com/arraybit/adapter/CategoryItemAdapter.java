@@ -63,10 +63,9 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         holder.cvItem.setId(objItemMaster.getItemMasterId());
 
         if (!isWaiterGrid) {
-            if(objItemMaster.getImageName().equals("null")){
+            if (objItemMaster.getImageName().equals("null")) {
                 Picasso.with(holder.ivItem.getContext()).load(R.drawable.vada_paav).into(holder.ivItem);
-            }
-            else {
+            } else {
                 Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).into(holder.ivItem);
             }
         }
@@ -87,7 +86,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         notifyDataSetChanged();
     }
 
-    public void SetSearchFilter(ArrayList<ItemMaster> result){
+    public void SetSearchFilter(ArrayList<ItemMaster> result) {
         alItemMaster = new ArrayList<>();
         alItemMaster.addAll(result);
         notifyDataSetChanged();
@@ -122,9 +121,10 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     //orderItemDetail.ItemDetail();
                     //DetailFragment detailFragment = new DetailFragment(v.getId());
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_category_item,new DetailFragment(v.getId()),context.getResources().getString(R.string.title_fragment_detail));
+                    fragmentTransaction.replace(R.id.categoryItemFragment, new DetailFragment(v.getId()), context.getResources().getString(R.string.title_fragment_detail));
                     fragmentTransaction.addToBackStack(context.getResources().getString(R.string.title_fragment_detail));
                     fragmentTransaction.commit();
+
                 }
 
             });
