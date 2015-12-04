@@ -20,8 +20,9 @@
             tools:ignore="ContentDescription" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="@dimen/control_SpecingTiny">
@@ -57,5 +58,13 @@
                 android:textColor="@android:color/white"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
+        <com.rey.material.widget.Button
+            android:id="@+id/btnAdd"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:padding="@dimen/control_SpecingTiny"
+            android:text="add"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

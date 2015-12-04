@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.arraybit.adapter.SpinnerAdapter;
@@ -40,7 +40,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     RadioGroup rgMain;
     RadioButton rbMale, rbFemale;
     Button btnSignUp;
-    Spinner spnrArea;
+    AppCompatSpinner spnrArea;
     ProgressDialog pDialog;
     RegisteredUserJSONParser objRegisteredUserJSONParser;
     RegisteredUserMaster objRegisteredUserMaster;
@@ -101,7 +101,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         //end
 
         //Spinner
-        spnrArea = (Spinner) view.findViewById(R.id.spnrArea);
+        spnrArea = (AppCompatSpinner) view.findViewById(R.id.spnrArea);
         //
 
         //compound button

@@ -45,7 +45,8 @@ public class Globals {
     public static String activityName;
     public static String serverName = null;
     public static String DateFormat = "d/M/yyyy";
-    public static String TimeFormat = "HH:mm";
+    public static String TimeFormat = "hh:mm";
+    public static String DisplayTimeFormat="hh:mm a";
     public static int sourceMasterId = 2;
     public static short businessMasterId = 1;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");

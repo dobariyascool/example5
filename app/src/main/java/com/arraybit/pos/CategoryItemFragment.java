@@ -55,6 +55,10 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         this.activityName = activityName;
     }
 
+    public CategoryItemFragment(){
+
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -127,14 +131,21 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     }
 
     public void ViewChange(){
-        if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))){
-            i = 2;
-            isViewChange = true;
-            isForceToChange = false;
-            ibViewChange.setVisibility(View.GONE);
+        if(activityName!=null) {
+            if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+                i = 2;
+                isViewChange = true;
+                isForceToChange = false;
+                ibViewChange.setVisibility(View.GONE);
+            } else {
+                ibViewChange.setVisibility(View.VISIBLE);
+            }
         }
         else
         {
+            i=0;
+            isViewChange = false;
+            isForceToChange = false;
             ibViewChange.setVisibility(View.VISIBLE);
         }
     }

@@ -64,6 +64,9 @@
         <item name="et_labelTextAppearance">@style/TextAppearance.AppCompat.Caption</item>
     </style>
 
+    <style name="AppCompactAutoCompleteTextView">android.support.v7.widget.AppCompatAutoCompleteTextView</style>
+
+
     <style name="Spinner" parent="Material.Widget.Spinner.Light">
         <item name="cet_spanHeight">32dp</item>
         <item name="cet_spanMaxWidth">150dp</item>
@@ -142,6 +145,7 @@
 
     <style name="MaterialTabLayout">android.support.design.widget.TabLayout</style>
     <style name="AppCompactCardView">android.support.v7.cardview</style>
+
     <style name="FloatingActionButton">com.github.clans.fab.FloatingActionButton</style>
     <style name="FloatingActionMenu">com.github.clans.fab.FloatingActionMenu</style>
 

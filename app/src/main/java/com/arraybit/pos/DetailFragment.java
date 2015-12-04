@@ -30,7 +30,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     ImageView ivItemImage;
     TextView txtItemName, txtDescription, txtItemPrice;
     EditText etQuantity;
-    ImageButton btnPlus, btnMinus;
     int ItemMasterId;
 
     ItemJSONParser objItemJSONParser;
@@ -67,12 +66,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         //end
 
         //Button
-        btnPlus = (ImageButton) view.findViewById(R.id.btnPlus);
-        btnMinus = (ImageButton) view.findViewById(R.id.btnMinus);
+        ImageButton ibPlus = (ImageButton) view.findViewById(R.id.ibPlus);
+        ImageButton ibMinus = (ImageButton) view.findViewById(R.id.ibMinus);
         //end
 
-        btnMinus.setOnClickListener(this);
-        btnPlus.setOnClickListener(this);
+        ibMinus.setOnClickListener(this);
+        ibPlus.setOnClickListener(this);
 
         setHasOptionsMenu(true);
 
@@ -109,7 +108,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     }
 
     private int IncrementDecrementValue(int id, int value) {
-        if (id == R.id.btnPlus) {
+        if (id == R.id.ibPlus) {
             value++;
             etQuantity.setText(String.valueOf(value));
         } else {
@@ -123,10 +122,10 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnPlus) {
+        if (v.getId() == R.id.ibPlus) {
             IncrementDecrementValue(v.getId(), Integer.valueOf(etQuantity.getText().toString()));
         }
-        if (v.getId() == R.id.btnMinus) {
+        if (v.getId() == R.id.ibMinus) {
             IncrementDecrementValue(v.getId(), Integer.valueOf(etQuantity.getText().toString()));
         }
     }

@@ -14,6 +14,7 @@ import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewHolder> {
 
@@ -24,6 +25,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     View view;
     OrderLayoutClickListener objOrderLayoutClickListener;
     FragmentManager fragmentManager;
+    Date dt;
 
 
     public OrdersAdapter(Context context, ArrayList<OrderMaster> result ,FragmentManager fragmentManager) {
@@ -44,8 +46,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     @Override
     public void onBindViewHolder(OrderViewHolder holder, int position) {
         OrderMaster objOrderMaster = alOrderMaster.get(position);
-
         holder.cvOrder.setId((int) objOrderMaster.getOrderMasterId());
+
+        holder.txtOrderTime.setText(objOrderMaster.getOrderTime());
         holder.txtTableName.setText(objOrderMaster.getTableName());
         holder.txtOrderNumber.setText(objOrderMaster.getOrderNumber());
         holder.txtOrderType.setText(objOrderMaster.getOrderType());
@@ -71,12 +74,13 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
 
     class OrderViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtTableName, txtOrderNumber, txtOrderType, txtTotalAmount;
+        TextView txtOrderTime, txtTableName, txtOrderNumber, txtOrderType, txtTotalAmount;
         CardView cvOrder;
 
         public OrderViewHolder(View itemView) {
             super(itemView);
 
+            txtOrderTime = (TextView) itemView.findViewById(R.id.txtOrderTime);
             txtTableName = (TextView) itemView.findViewById(R.id.txtTableName);
             txtOrderNumber = (TextView) itemView.findViewById(R.id.txtOrderNumber);
             txtOrderType = (TextView) itemView.findViewById(R.id.txtOrderType);

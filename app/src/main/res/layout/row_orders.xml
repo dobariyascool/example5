@@ -17,6 +17,15 @@
             android:padding="@dimen/control_SpecingSmall">
 
             <com.rey.material.widget.TextView
+                android:id="@+id/txtOrderTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:paddingBottom="@dimen/control_SpecingTiny"
+                android:textColor="@android:color/white"
+                android:visibility="visible"/>
+
+            <com.rey.material.widget.TextView
                 android:id="@+id/txtTableName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,19 +46,11 @@
                 android:paddingBottom="@dimen/control_SpecingTiny"
                 android:textColor="@android:color/white"/>
 
-            <LinearLayout
-                android:id="@+id/productLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/control_SpecingTiny"/>
-
             <com.rey.material.widget.TextView
                 android:id="@+id/txtTotalAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:paddingBottom="@dimen/control_SpecingTiny"
                 android:textColor="@android:color/white"/>
 
         </LinearLayout>

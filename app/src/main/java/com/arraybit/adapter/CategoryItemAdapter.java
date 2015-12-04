@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.arraybit.modal.ItemMaster;
+import com.arraybit.pos.AddItemQtyDialogFragment;
 import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.DetailFragment;
 import com.arraybit.pos.R;
+import com.rey.material.widget.Button;
 import com.rey.material.widget.TextView;
 import com.squareup.picasso.Picasso;
 
@@ -101,6 +103,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         TextView txtItemName, txtItemDescription, txtItemPrice;
         ImageView ivItem;
         CardView cvItem;
+        Button btnAdd;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -113,6 +116,8 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             txtItemDescription = (TextView) itemView.findViewById(R.id.txtItemDescription);
             txtItemPrice = (TextView) itemView.findViewById(R.id.txtItemPrice);
 
+            btnAdd = (Button) itemView.findViewById(R.id.btnAdd);
+
             cvItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,16 +125,29 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     //orderItemDetail=(OrderItemDetail)context;
                     //orderItemDetail.ItemDetail();
                     //DetailFragment detailFragment = new DetailFragment(v.getId());
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.categoryItemFragment, new DetailFragment(v.getId()), context.getResources().getString(R.string.title_fragment_detail));
-                    fragmentTransaction.addToBackStack(context.getResources().getString(R.string.title_fragment_detail));
-                    fragmentTransaction.commit();
+                    if(isWaiterGrid)
+                    {
+                        AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment();
+                        addItemQtyDialogFragment.show(fragmentManager,"");
+                    }
+                    else {
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.categoryItemFragment, new DetailFragment(v.getId()), context.getResources().getString(R.string.title_fragment_detail));
+                        fragmentTransaction.addToBackStack(context.getResources().getString(R.string.title_fragment_detail));
+                        fragmentTransaction.commit();
+                    }
 
                 }
 
             });
 
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment();
+                    addItemQtyDialogFragment.show(fragmentManager,"");
+                }
+            });
         }
     }
-
 }

@@ -225,4 +225,11 @@
     <string name="odfQty">Qty</string>
     <!-- end -->
 
+    <!-- fragment add item qty -->
+    <string name="aiqfRemark">Remark</string>
+    <string name="aiqfCancel">Cancel</string>
+    <string name="aiqfOk">OK</string>
+    <string name="aiqfTitle">Add Quantity</string>
+
+    <!-- end -->
 </resources>

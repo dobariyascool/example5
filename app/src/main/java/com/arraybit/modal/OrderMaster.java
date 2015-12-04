@@ -28,6 +28,7 @@ public class OrderMaster implements Parcelable {
     short linktoUserMasterIdCreatedBy;
     String UpdateDateTime;
     short linktoUserMasterIdUpdatedBy;
+    String OrderTime;
     /// Extra
     String Counter;
     String Waiter;
@@ -65,6 +66,7 @@ public class OrderMaster implements Parcelable {
             objOrderMaster.Customer = source.readString();
             objOrderMaster.OrderType = source.readString();
             objOrderMaster.TableName = source.readString();
+            objOrderMaster.OrderTime = source.readString();
 
             return objOrderMaster;
         }
@@ -279,10 +281,18 @@ public class OrderMaster implements Parcelable {
         return TableName;
     }
 
-    //endregion
-
     public void setTableName(String tableName) {
         TableName = tableName;
+    }
+
+    public String getOrderTime() {
+        return OrderTime;
+    }
+
+    //endregion
+
+    public void setOrderTime(String orderTime) {
+        OrderTime = orderTime;
     }
 
     @Override
@@ -320,6 +330,7 @@ public class OrderMaster implements Parcelable {
         parcel.writeString(Customer);
         parcel.writeString(OrderType);
         parcel.writeString(TableName);
+        parcel.writeString(OrderTime);
     }
 }
 

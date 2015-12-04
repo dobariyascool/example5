@@ -1,0 +1,118 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/control_SpecingSmall"
+    tools:context="com.arraybit.pos.AddItemQtyDialogFragment">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.rey.material.widget.TextView
+            style="@style/TextView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="@string/aiqfTitle"
+            android:textSize="@dimen/control_TextMedium"
+            tools:ignore="HardcodedText" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/aiqfRemark"
+            android:paddingBottom="0dp"
+            android:paddingEnd="@dimen/control_SpecingSmall"
+            android:paddingStart="@dimen/control_SpecingSmall"
+            android:paddingTop="@dimen/control_SpecingSmall"
+            android:textColor="@android:color/black"
+            android:textColorHint="@color/primary_dark"
+            app:et_labelTextColor="@android:color/black">
+
+            <android.support.v7.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/actRemark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/control_SpecingSmall"
+                android:drawableEnd="@drawable/arrow_drop_down"
+                android:singleLine="true"
+                android:textSize="14sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/control_SpecingSmall"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/control_SpecingSmall"
+            android:paddingStart="@dimen/control_SpecingSmall">
+
+            <com.rey.material.widget.ImageButton
+                android:id="@+id/ibMinus"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/qtyselector"
+                android:src="@mipmap/minus" />
+
+            <com.rey.material.widget.EditText
+                android:id="@+id/etQuantity"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="2"
+                android:text="1"
+                tools:ignore="HardcodedText" />
+
+            <com.rey.material.widget.ImageButton
+                android:id="@+id/ibPlus"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/qtyselector"
+                android:src="@mipmap/plus_small" />
+
+        </LinearLayout>
+
+
+        <!--<com.rey.material.widget.EditText-->
+        <!--android:id="@+id/etPhone"-->
+        <!--style="@style/EditText"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="@string/aiqfRemark"-->
+        <!--android:inputType="text"-->
+        <!--android:paddingStart="@dimen/control_SpecingSmall"-->
+        <!--android:paddingEnd="@dimen/control_SpecingSmall"/>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/aiqfCancel"
+                tools:ignore="HardcodedText" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnOk"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/aiqfOk"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

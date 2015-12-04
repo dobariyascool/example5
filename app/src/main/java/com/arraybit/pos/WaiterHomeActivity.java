@@ -139,6 +139,9 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                     //AddFragmentInLayout(new AllTablesFragment());
                 } else if (position == 2) {
                     Globals.InitializeFragment(new CategoryItemFragment(WaiterHomeActivity.this), getSupportFragmentManager());
+                }else if(position == 3){
+//                    Intent intent = new Intent(WaiterHomeActivity.this,GuestHomeActivity.class);
+//                    startActivity(intent);
                 }
             }
        //}

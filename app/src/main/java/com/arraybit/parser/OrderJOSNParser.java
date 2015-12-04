@@ -23,6 +23,7 @@ public class OrderJOSNParser {
     public String SelectAllOrderMaster = "SelectAllOrderMasterByOrderStatusMasterId";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
+    SimpleDateFormat sdfControlDateTimeFormat = new SimpleDateFormat("d/M/yyyy HH:mm", Locale.US);
     Date dt = null;
     SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
@@ -34,7 +35,8 @@ public class OrderJOSNParser {
                 objOrderMaster.setOrderMasterId(jsonObject.getLong("OrderMasterId"));
                 objOrderMaster.setOrderNumber(jsonObject.getString("OrderNumber"));
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("OrderDateTime"));
-                objOrderMaster.setOrderDateTime(sdfControlDateFormat.format(dt));
+                objOrderMaster.setOrderDateTime(sdfControlDateTimeFormat.format(dt));
+                objOrderMaster.setOrderTime(new SimpleDateFormat(Globals.DisplayTimeFormat,Locale.US).format(dt.getTime()));
                 objOrderMaster.setlinktoCounterMasterId((short)jsonObject.getInt("linktoCounterMasterId"));
                 objOrderMaster.setlinktoTableMasterIds(jsonObject.getString("linktoTableMasterIds"));
                 if (!jsonObject.getString("linktoWaiterMasterId").equals("null")) {
@@ -89,7 +91,8 @@ public class OrderJOSNParser {
                 objOrderMaster.setOrderMasterId(jsonArray.getJSONObject(i).getLong("OrderMasterId"));
                 objOrderMaster.setOrderNumber(jsonArray.getJSONObject(i).getString("OrderNumber"));
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("OrderDateTime"));
-                objOrderMaster.setOrderDateTime(sdfControlDateFormat.format(dt));
+                objOrderMaster.setOrderDateTime(sdfControlDateTimeFormat.format(dt));
+                objOrderMaster.setOrderTime(new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).format(dt.getTime()));
                 objOrderMaster.setlinktoCounterMasterId((short)jsonArray.getJSONObject(i).getInt("linktoCounterMasterId"));
                 objOrderMaster.setlinktoTableMasterIds(jsonArray.getJSONObject(i).getString("linktoTableMasterIds"));
                 if (!jsonArray.getJSONObject(i).getString("linktoWaiterMasterId").equals("null")) {

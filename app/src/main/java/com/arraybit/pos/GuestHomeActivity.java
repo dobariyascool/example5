@@ -67,7 +67,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         }
 
         //check layout run in mobile or tablet
-        if (findViewById(R.id.fragment_guest_order_list) == null) {
+        if (findViewById(R.id.categoryItemFragment) == null) {
             isDualPanel = false;
         } else {
             isDualPanel = true;
@@ -101,7 +101,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         }
         else
         {
-            app_bar.getMenu().findItem(R.id.action_search).setVisible(true);
+            //app_bar.getMenu().findItem(R.id.action_search).setVisible(true);
         }
         return super.onPrepareOptionsMenu(menu);
     }
