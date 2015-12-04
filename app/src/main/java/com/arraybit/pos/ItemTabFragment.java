@@ -102,7 +102,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
     public void SetupRecyclerView() {
 
-        categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange);
+        categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster,getActivity().getSupportFragmentManager(), CategoryItemFragment.isViewChange);
         rvItem.setVisibility(View.VISIBLE);
         rvItem.setAdapter(categoryItemAdapter);
         if (CategoryItemFragment.isViewChange) {

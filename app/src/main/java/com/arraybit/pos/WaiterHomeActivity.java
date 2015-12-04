@@ -15,16 +15,16 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.OptionListAdapter;
-import com.arraybit.adapter.OrdersAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 
-public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,OptionListAdapter.OptionListClickListener,OrdersAdapter.OrderLayoutClickListener{
+public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,OptionListAdapter.OptionListClickListener{
 
     ActionBarDrawerToggle actionBarDrawerToggle;
     LinearLayout waiterHomeMainLayout;
     boolean isDualPanel;
     SharePreferenceManage objSharePreferenceManage;
+    //,OrdersAdapter.OrderLayoutClickListener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,18 +125,11 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     //all options list click event
     @Override
     public void onClick(int position) {
-        //if (isDualPanel) {
-        //    AllOrdersFragment ordersFragment = (AllOrdersFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_all_orders);
-            //AllOrdersFragment ordersFragment=new AllOrdersFragment();
-         //   ordersFragment.setFragment(position);
-        //} else {
             if(getSupportFragmentManager().getBackStackEntryCount() == 1) {
                 if (position == 0) {
                     Globals.InitializeFragment(new AllOrdersFragment(), getSupportFragmentManager());
-                    //AddFragmentInLayout(new AllOrdersFragment());
                 } else if (position == 1) {
                     Globals.InitializeFragment(new AllTablesFragment(WaiterHomeActivity.this), getSupportFragmentManager());
-                    //AddFragmentInLayout(new AllTablesFragment());
                 } else if (position == 2) {
                     Globals.InitializeFragment(new CategoryItemFragment(WaiterHomeActivity.this), getSupportFragmentManager());
                 }else if(position == 3){
@@ -144,7 +137,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 //                    startActivity(intent);
                 }
             }
-       //}
     }
     //end
 
@@ -160,8 +152,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     //prevent backPressed
     @Override
     public void onBackPressed() {
-        //if (!isDualPanel) {
-            System.out.println("count "+getSupportFragmentManager().getBackStackEntryCount());
             if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
 
@@ -183,16 +173,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 }
             }
         }
-
-    //particular order click event
-    @Override
-    public void OrderLayoutClick(int orderMasterId) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.allOrdersFragment, new OrderDetailFragment(orderMasterId),getResources().getString(R.string.title_fragment_order_detail));
-        fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_order_detail));
-        fragmentTransaction.commit();
-        //Globals.InitializeFragment(new OrderDetailFragment(),getSupportFragmentManager());
-    }
     //end
 }
 

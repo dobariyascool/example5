@@ -2,6 +2,7 @@ package com.arraybit.adapter;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.OrderMaster;
+import com.arraybit.pos.OrderDetailFragment;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
@@ -18,21 +20,18 @@ import java.util.Date;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewHolder> {
 
-    public static int orderMasterId;
     ArrayList<OrderMaster> alOrderMaster;
     LayoutInflater layoutInflater;
     Context context;
     View view;
-    OrderLayoutClickListener objOrderLayoutClickListener;
     FragmentManager fragmentManager;
     Date dt;
 
 
-    public OrdersAdapter(Context context, ArrayList<OrderMaster> result ,FragmentManager fragmentManager) {
+    public OrdersAdapter(Context context, ArrayList<OrderMaster> result, FragmentManager fragmentManager) {
         this.context = context;
         alOrderMaster = result;
         this.layoutInflater = LayoutInflater.from(context);
-        this.objOrderLayoutClickListener = objOrderLayoutClickListener;
         this.fragmentManager = fragmentManager;
     }
 
@@ -53,7 +52,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         holder.txtOrderNumber.setText(objOrderMaster.getOrderNumber());
         holder.txtOrderType.setText(objOrderMaster.getOrderType());
 
-        holder.txtTotalAmount.setText("Rs. "+Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
+        holder.txtTotalAmount.setText("Rs. " + Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
     }
 
     @Override
@@ -91,31 +90,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             cvOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
-
-                    objOrderLayoutClickListener = (OrderLayoutClickListener)context;
-                    objOrderLayoutClickListener.OrderLayoutClick(v.getId());
-
-                    //OrderDetailFragment detailFragment = new  OrderDetailFragment();
-                    //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    //fragmentTransaction.replace(R.id.allOrderFragment,detailFragment,"detailFragment");
-                    //fragmentTransaction.addToBackStack("detailFragment");
-                    //fragmentTransaction.commit();
-                    //Intent intent = new Intent(context,WaiterOrderDetailActivity.class);
-                   // context.startActivity(intent);
-                    //objOrderLayoutClickListener = (OrderLayoutClickListener) context;
-                    //objOrderLayoutClickListener.OrderLayoutClick(v.getId());
-                    //Globals.InitializeFragment(new OrderDetailFragment(v.getId()),fragmentManager);
-                    //objOrderLayoutClickListener = (OrderLayoutClickListener) context;
-                    //objOrderLayoutClickListener.OrderLayoutClick(v.getId());
-
-//                    OrderDetailFragment detailFragment = new  OrderDetailFragment(v.getId());
-//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                    fragmentTransaction.replace(R.id.allOrderFragment, detailFragment);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
-
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.allOrdersFragment, new OrderDetailFragment(v.getId()), context.getResources().getString(R.string.title_fragment_order_detail));
+                    fragmentTransaction.addToBackStack(context.getResources().getString(R.string.title_fragment_order_detail));
+                    fragmentTransaction.commit();
                 }
             });
         }

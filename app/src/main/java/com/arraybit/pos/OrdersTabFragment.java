@@ -85,7 +85,7 @@ public class OrdersTabFragment extends Fragment {
 
     private void SetupRecyclerView(RecyclerView rvOrder) {
 
-        ordersAdapter = new OrdersAdapter(getActivity(),alOrderMaster,getFragmentManager());
+        ordersAdapter = new OrdersAdapter(getActivity(),alOrderMaster,getActivity().getSupportFragmentManager());
         rvOrder.setAdapter(ordersAdapter);
         rvOrder.setLayoutManager(gridLayoutManager);
     }
