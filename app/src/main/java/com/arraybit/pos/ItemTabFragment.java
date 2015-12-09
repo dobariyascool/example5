@@ -102,7 +102,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
     public void SetupRecyclerView() {
 
-        categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster,getActivity().getSupportFragmentManager(), CategoryItemFragment.isViewChange);
+        categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getActivity().getSupportFragmentManager(), CategoryItemFragment.isViewChange);
         rvItem.setVisibility(View.VISIBLE);
         rvItem.setAdapter(categoryItemAdapter);
         if (CategoryItemFragment.isViewChange) {
@@ -147,17 +147,12 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         mSearchView.setMaxWidth(displayMetrics.widthPixels);
-        //mSearchView.setInputType(View.DRAWING_CACHE_QUALITY_HIGH);
-        //mSearchView.setIconifiedByDefault(false);
-        //mSearchView.setIconified(false);
-        // mSearchView.setQueryHint("Item Name");
-        //mSearchView.setMaxWidth(500);
         mSearchView.setOnQueryTextListener(this);
 
         MenuItemCompat.setOnActionExpandListener(searchItem,
@@ -194,9 +189,11 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         filterName = filterName.toLowerCase();
         final ArrayList<ItemMaster> filteredList = new ArrayList<>();
         for (ItemMaster objItemMaster : lstItemMaster) {
-            final String strItem = objItemMaster.getItemName().toLowerCase();
-            if (strItem.contains(filterName)) {
-                filteredList.add(objItemMaster);
+            if (objItemMaster.getItemName().length() >= filterName.length()) {
+                final String strItem = objItemMaster.getItemName().substring(0, filterName.length()).toLowerCase();
+                if (strItem.contains(filterName)) {
+                    filteredList.add(objItemMaster);
+                }
             }
         }
         return filteredList;
@@ -225,10 +222,6 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-//            if ((linearLayoutManager.canScrollVertically() || gridLayoutManager.canScrollVertically()) && alItemMaster.size() == 0) {
-//                currentPage = 1;
-//            }
-
             return objItemJSONParser.SelectAllItemMaster(currentPage, counterMasterId, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
 
         }

@@ -5,13 +5,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.AppCompatAutoCompleteTextView;
+import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.MultiAutoCompleteTextView;
 
 import com.arraybit.global.Globals;
 import com.arraybit.parser.ItemRemarkJSONParser;
@@ -26,9 +28,12 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
 
     EditText etQuantity;
     ArrayList<String> alString;
-    AppCompatAutoCompleteTextView actRemark;
+    AppCompatMultiAutoCompleteTextView actRemark;
     TextInputLayout textInputLayout;
     ImageButton ibPlus;
+    StringBuilder sb;
+    ArrayList<String> alStringFilter;
+    ArrayAdapter<String> adapter;
 
     public AddItemQtyDialogFragment() {
         // Required empty public constructor
@@ -50,7 +55,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
 
-        actRemark = (AppCompatAutoCompleteTextView) view.findViewById(R.id.actRemark);
+        actRemark = (AppCompatMultiAutoCompleteTextView) view.findViewById(R.id.actRemark);
 
         textInputLayout = (TextInputLayout) view.findViewById(R.id.textInputLayout);
 
@@ -59,12 +64,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         btnCancel.setOnClickListener(this);
         btnOk.setOnClickListener(this);
         textInputLayout.setOnClickListener(this);
-        actRemark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actRemark.showDropDown();
-            }
-        });
+        actRemark.setOnClickListener(this);
 
         new RemarkLoadingTask().execute();
 
@@ -82,6 +82,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             }
             textInputLayout.clearFocus();
             etQuantity.requestFocus();
+            etQuantity.selectAll();
 
         } else if (v.getId() == R.id.ibMinus) {
             if (etQuantity.getText().toString().equals("")) {
@@ -91,6 +92,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             }
             textInputLayout.clearFocus();
             etQuantity.requestFocus();
+            etQuantity.selectAll();
 
         } else if (v.getId() == R.id.btnCancel) {
             dismiss();
@@ -99,11 +101,14 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         } else if (v.getId() == R.id.textInputLayout) {
             textInputLayout.setFocusable(true);
             etQuantity.setFocusable(false);
+        } else if (v.getId() == R.id.actRemark) {
+            if (actRemark.getText().toString().isEmpty()) {
+                SetArrayListAdapter(alString);
+            }
+            actRemark.showDropDown();
         }
     }
     //endregion
-
-    //region Loading Task
 
     //region Private Methods
     private int IncrementDecrementValue(int id, int value) {
@@ -120,6 +125,40 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     }
     //endregion
 
+    private void UpdateArrayListAdapter(String name) {
+        int isRemove = -1;
+        if (alStringFilter.size() == 0) {
+            for (int i = 0; i < alString.size(); i++) {
+                if (!alString.get(i).equals(name)) {
+                    alStringFilter.add(alString.get(i));
+                }
+            }
+            adapter = new ArrayAdapter<String>
+                    (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringFilter);
+            actRemark.setAdapter(adapter);
+
+        } else {
+            for (int j = 0; j < alStringFilter.size(); j++) {
+                if (alStringFilter.get(j).equals(name)) {
+                    isRemove = j;
+                }
+            }
+            if (isRemove != -1) {
+                alStringFilter.remove(isRemove);
+            }
+        }
+        adapter = new ArrayAdapter<String>
+                (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringFilter);
+        actRemark.setAdapter(adapter);
+    }
+
+    private void SetArrayListAdapter(ArrayList<String> alString) {
+        adapter = new ArrayAdapter<String>
+                (getActivity(), android.R.layout.simple_spinner_dropdown_item, alString);
+        actRemark.setAdapter(adapter);
+    }
+
+    //region Loading Task
     class RemarkLoadingTask extends AsyncTask {
 
         @Override
@@ -134,29 +173,43 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         protected void onPostExecute(Object result) {
 
             if (alString == null) {
-                //Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
-                //progressDialog.dismiss();
             } else if (alString.size() == 0) {
-                //Toast.makeText(getActivity(),getResources().getString(R.string.MsgNoRecord),Toast.LENGTH_LONG).show();
-                //progressDialog.dismiss();
             } else {
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                        (getActivity(), android.R.layout.simple_spinner_dropdown_item, alString);
+                alStringFilter = new ArrayList<>();
 
-                actRemark.setThreshold(0);
-                actRemark.setAdapter(adapter);
+                actRemark.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+                SetArrayListAdapter(alString);
+                sb = new StringBuilder();
+
+                actRemark.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_DEL) {
+                            //sb = new StringBuilder();
+                            //if(!sb.toString().isEmpty())
+                            //{
+                            // sb.deleteCharAt((int)sb.toString().length()-1);
+                            //}
+                            if (actRemark.getText().toString().isEmpty()) {
+                                SetArrayListAdapter(alString);
+                            }
+                        }
+                        return false;
+                    }
+                });
 
                 actRemark.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String s = alString.get(position);
+                        UpdateArrayListAdapter((String) parent.getAdapter().getItem(position));
                     }
                 });
             }
         }
     }
     //endregion
+
 }
 
 //    @NonNull

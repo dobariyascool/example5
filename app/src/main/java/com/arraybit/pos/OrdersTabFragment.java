@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,8 @@ public class OrdersTabFragment extends Fragment {
     SharePreferenceManage objSharePreferenceManage;
     OrdersAdapter ordersAdapter;
     int id;
+    DisplayMetrics displayMetrics;
+    StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     public OrdersTabFragment() {
         // Required empty public constructor
@@ -61,6 +65,8 @@ public class OrdersTabFragment extends Fragment {
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
 
+        displayMetrics = getActivity().getResources().getDisplayMetrics();
+
         gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
 
@@ -85,7 +91,7 @@ public class OrdersTabFragment extends Fragment {
 
     private void SetupRecyclerView(RecyclerView rvOrder) {
 
-        ordersAdapter = new OrdersAdapter(getActivity(),alOrderMaster,getActivity().getSupportFragmentManager());
+        ordersAdapter = new OrdersAdapter(getActivity(), alOrderMaster, getActivity().getSupportFragmentManager());
         rvOrder.setAdapter(ordersAdapter);
         rvOrder.setLayoutManager(gridLayoutManager);
     }

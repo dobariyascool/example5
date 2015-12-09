@@ -32,7 +32,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 objSharePreferenceManage = new SharePreferenceManage();
                 if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this) == null) {
                     Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
-                    finish();
                 } else {
 
                     if ((objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SplashScreenActivity.this) == null) && (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", SplashScreenActivity.this) == null)) {

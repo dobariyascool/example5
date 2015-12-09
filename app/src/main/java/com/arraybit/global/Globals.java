@@ -60,6 +60,13 @@ public class Globals {
         return pixel;
     }
 
+    public static float ConvertPixcel(float px, Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        float dp = px * (dm.densityDpi) / 160.0F;
+        return dp;
+    }
+
     public static void ChangeUrl() {
         Service.Url = "http://" + Globals.serverName + "/Service.svc/";
     }

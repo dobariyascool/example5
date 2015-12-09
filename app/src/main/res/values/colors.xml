@@ -5,7 +5,7 @@
     <color name="layoutBackground">#EEEEEE</color>
     <color name="navigationBackground">#EEEEEE</color>
 
-    <color name="transparentBackground">#ccffffff</color>
+    <color name="transparentBackground">#D5000000</color>
 
     <color name="navigationdrawerBackground">#FFFFFF</color>
     <color name="navigationdrawerText">#616161</color>

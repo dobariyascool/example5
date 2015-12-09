@@ -230,6 +230,9 @@
     <string name="aiqfCancel">Cancel</string>
     <string name="aiqfOk">OK</string>
     <string name="aiqfTitle">Add Quantity</string>
+    <!-- end -->
 
+    <!-- row order-->
+    <string name="roTotalItem">Total Item</string>
     <!-- end -->
 </resources>

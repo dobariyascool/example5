@@ -22,8 +22,9 @@
             <com.rey.material.widget.TextView
                 android:id="@+id/txtTableStatus"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="end"
+                android:layout_weight="1"
                 android:paddingEnd="@dimen/control_SpecingTiny"
                 android:paddingStart="0dp"
                 android:textColor="@color/orange" />
@@ -31,8 +32,9 @@
             <com.rey.material.widget.TextView
                 android:id="@+id/txtTableName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="center"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:minLines="1"
                 android:padding="@dimen/control_SpecingTiny"
@@ -42,8 +44,9 @@
             <com.rey.material.widget.TextView
                 android:id="@+id/txtPersons"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="end"
+                android:layout_weight="1"
                 android:paddingEnd="@dimen/control_SpecingTiny"
                 android:paddingStart="0dp"
                 android:textColor="@color/accent_dark" />

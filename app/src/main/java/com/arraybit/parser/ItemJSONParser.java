@@ -53,7 +53,6 @@ public class ItemJSONParser {
                 }
                 objItemMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
                 objItemMaster.setIsFavourite(jsonObject.getBoolean("IsFavourite"));
-                objItemMaster.setIsRowMaterial(jsonObject.getBoolean("IsRowMaterial"));
                 objItemMaster.setBarCode(jsonObject.getString("BarCode"));
 
                 /// Extra
@@ -100,7 +99,6 @@ public class ItemJSONParser {
                 }
                 objItemMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 objItemMaster.setIsFavourite(jsonArray.getJSONObject(i).getBoolean("IsFavourite"));
-                objItemMaster.setIsRowMaterial(jsonArray.getJSONObject(i).getBoolean("IsRowMaterial"));
                 objItemMaster.setBarCode(jsonArray.getJSONObject(i).getString("BarCode"));
 
                 /// Extra

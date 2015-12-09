@@ -35,6 +35,9 @@ public class OrderMaster implements Parcelable {
     String Customer;
     String OrderType;
     String TableName;
+    int TotalItem;
+    String OrderTypeImage;
+
     public static final Parcelable.Creator<OrderMaster> CREATOR = new Creator<OrderMaster>() {
         public OrderMaster createFromParcel(Parcel source) {
             OrderMaster objOrderMaster = new OrderMaster();
@@ -67,6 +70,8 @@ public class OrderMaster implements Parcelable {
             objOrderMaster.OrderType = source.readString();
             objOrderMaster.TableName = source.readString();
             objOrderMaster.OrderTime = source.readString();
+            objOrderMaster.TotalItem = source.readInt();
+            objOrderMaster.OrderTypeImage = source.readString();
 
             return objOrderMaster;
         }
@@ -289,11 +294,26 @@ public class OrderMaster implements Parcelable {
         return OrderTime;
     }
 
-    //endregion
-
     public void setOrderTime(String orderTime) {
         OrderTime = orderTime;
     }
+
+    public int getTotalItem() {
+        return TotalItem;
+    }
+
+    public void setTotalItem(int totalItem) {
+        TotalItem = totalItem;
+    }
+
+    public String getOrderTypeImage() {
+        return OrderTypeImage;
+    }
+
+    public void setOrderTypeImage(String orderTypeImage) {
+        OrderTypeImage = orderTypeImage;
+    }
+    //endregion
 
     @Override
     public int describeContents() {
@@ -331,6 +351,8 @@ public class OrderMaster implements Parcelable {
         parcel.writeString(OrderType);
         parcel.writeString(TableName);
         parcel.writeString(OrderTime);
+        parcel.writeInt(TotalItem);
+        parcel.writeString(OrderTypeImage);
     }
 }
 
