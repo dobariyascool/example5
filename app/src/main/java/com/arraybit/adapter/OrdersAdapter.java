@@ -8,14 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.pos.OrderDetailFragment;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
-import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +29,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     Context context;
     View view;
     FragmentManager fragmentManager;
-    Date dt,date=null;
+    Date currentDate,orderDate=null;
     Calendar calendar;
 
 
@@ -55,44 +53,32 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         holder.cvOrder.setId((int) objOrderMaster.getOrderMasterId());
 
         try {
-            String date1 = new SimpleDateFormat("d/M/yyyy HH:mm",Locale.US).format(new Date());
-            dt = new SimpleDateFormat("d/M/yyyy HH:mm",Locale.US).parse(date1);
-            //calendar = Calendar.getInstance();
-            date = new SimpleDateFormat("d/M/yyyy HH:mm",Locale.US).parse(objOrderMaster.getOrderDateTime());
+            String strCurrentDate = new SimpleDateFormat("d/M/yyyy HH:mm",Locale.US).format(new Date());
+            currentDate = new SimpleDateFormat("d/M/yyyy HH:mm",Locale.US).parse(strCurrentDate);
+            orderDate = new SimpleDateFormat("d/M/yyyy HH:mm",Locale.US).parse(objOrderMaster.getOrderDateTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        long difference = dt.getTime() - date.getTime();
+        long difference = currentDate.getTime() - orderDate.getTime();
         int hour = (int) difference / (60 * 60 * 1000) % 24;
         int min = (int)(difference / (60 * 1000)) % 60;
 
         if(hour!=0 && min!=0){
-            holder.txtOrderTime.setText(String.valueOf(hour + " hours " + min +" minute ago"));
+            holder.txtOrderTimeDifference.setText(String.valueOf(hour + " hours " + min +" minute ago"));
         }
         else if(hour==0 && min!=0){
-            holder.txtOrderTime.setText(String.valueOf(min +" minute ago"));
+            holder.txtOrderTimeDifference.setText(String.valueOf(min +" minute ago"));
         }
         else if(hour!=0 && min==0){
-            holder.txtOrderTime.setText(String.valueOf(hour +" hours ago"));
-        }
-        else if(hour==0 && min==0){
-            holder.txtOrderTime.setText(objOrderMaster.getOrderTime());
+            holder.txtOrderTimeDifference.setText(String.valueOf(hour +" hours ago"));
         }
 
+        holder.txtOrderTime.setText(objOrderMaster.getOrderTime());
         holder.txtTableName.setText(objOrderMaster.getTableName());
         holder.txtOrderNumber.setText(objOrderMaster.getOrderNumber());
-        if(objOrderMaster.getOrderTypeImage().equals("null")){
-            holder.ivOrderType.setVisibility(View.GONE);
-            holder.txtOrderType.setVisibility(View.VISIBLE);
-        }else{
-            holder.txtOrderType.setVisibility(View.GONE);
-            holder.ivOrderType.setVisibility(View.VISIBLE);
-            Picasso.with(holder.ivOrderType.getContext()).load(objOrderMaster.getOrderTypeImage()).fit().into(holder.ivOrderType);
-        }
         holder.txtOrderType.setText(objOrderMaster.getOrderType());
-        holder.txtTotalItem.setText(String.valueOf(objOrderMaster.getTotalItem()));
-
+        holder.txtTotalItem.setText(objOrderMaster.getTotalItem()+" Items");
         holder.txtTotalAmount.setText("Rs. " + Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
 
     }
@@ -107,29 +93,27 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         notifyDataSetChanged();
     }
 
-    //region interface
-    public interface OrderLayoutClickListener {
-        void OrderLayoutClick(int orderMasterId);
+    public void SetSearchFilter(ArrayList<OrderMaster> result) {
+        alOrderMaster = new ArrayList<>();
+        alOrderMaster.addAll(result);
+        notifyDataSetChanged();
     }
-    //endregion
 
     class OrderViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtOrderTime, txtTableName, txtOrderNumber, txtOrderType,txtTotalItem, txtTotalAmount;
-        ImageView ivOrderType;
+        TextView txtOrderTimeDifference,txtOrderTime, txtTableName, txtOrderNumber, txtOrderType,txtTotalItem, txtTotalAmount;
         CardView cvOrder;
 
         public OrderViewHolder(View itemView) {
             super(itemView);
 
+            txtOrderTimeDifference = (TextView) itemView.findViewById(R.id.txtOrderTimeDifference);
             txtOrderTime = (TextView) itemView.findViewById(R.id.txtOrderTime);
             txtTableName = (TextView) itemView.findViewById(R.id.txtTableName);
             txtOrderNumber = (TextView) itemView.findViewById(R.id.txtOrderNumber);
             txtOrderType = (TextView) itemView.findViewById(R.id.txtOrderType);
             txtTotalItem = (TextView) itemView.findViewById(R.id.txtTotalItem);
             txtTotalAmount = (TextView) itemView.findViewById(R.id.txtTotalAmount);
-
-            ivOrderType = (ImageView)itemView.findViewById(R.id.ivOrderType);
 
             cvOrder = (CardView) itemView.findViewById(R.id.cvOrder);
 

@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/control_SpecingSmall"
-    tools:context="com.arraybit.pos.AddItemQtyDialogFragment">
+    tools:context="com.arraybit.pos.AddItemQtyDialogFragment"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
-        android:layout_width="300dp"
+        android:layout_width="270dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <com.rey.material.widget.TextView
             style="@style/TextView"
@@ -18,6 +20,7 @@
             android:gravity="center"
             android:text="@string/aiqfTitle"
             android:textSize="@dimen/control_TextMedium"
+            android:visibility="gone"
             tools:ignore="HardcodedText" />
 
         <android.support.design.widget.TextInputLayout
@@ -37,9 +40,8 @@
                 android:id="@+id/actRemark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/control_SpecingSmall"
                 android:drawableEnd="@drawable/arrow_drop_down"
-                android:dropDownHeight="100dp"
+                android:dropDownHeight="190dp"
                 android:singleLine="true"
                 android:textSize="14sp" />
 
@@ -47,7 +49,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="@dimen/control_SpecingTiny"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingEnd="@dimen/control_SpecingSmall"
@@ -55,16 +58,19 @@
 
             <com.rey.material.widget.ImageButton
                 android:id="@+id/ibMinus"
-                android:layout_width="50dp"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/qtyselector"
+                android:layout_weight="1"
+                android:background="@drawable/btn_selector"
                 android:src="@mipmap/minus" />
 
             <com.rey.material.widget.EditText
                 android:id="@+id/etQuantity"
-                android:layout_width="50dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:inputType="number"
                 android:maxLength="2"
@@ -73,30 +79,144 @@
 
             <com.rey.material.widget.ImageButton
                 android:id="@+id/ibPlus"
-                android:layout_width="50dp"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/qtyselector"
+                android:layout_weight="1"
+                android:background="@drawable/btn_selector"
                 android:src="@mipmap/plus_small" />
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/control_SpecingTiny"
+            android:layout_marginTop="@dimen/control_SpecingTiny"
+            android:orientation="horizontal"
+            android:paddingBottom="0dp"
+            android:paddingEnd="@dimen/control_SpecingTiny"
+            android:paddingStart="@dimen/control_SpecingTiny">
 
-        <!--<com.rey.material.widget.EditText-->
-        <!--android:id="@+id/etPhone"-->
-        <!--style="@style/EditText"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:hint="@string/aiqfRemark"-->
-        <!--android:inputType="text"-->
-        <!--android:paddingStart="@dimen/control_SpecingSmall"-->
-        <!--android:paddingEnd="@dimen/control_SpecingSmall"/>-->
+            <com.rey.material.widget.Button
+                android:id="@+id/btnNum1"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_weight="1"
+                android:text="1" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnNum2"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_weight="1"
+                android:text="2" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnNum3"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_weight="1"
+                android:text="3" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/control_SpecingTiny"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/control_SpecingTiny"
+            android:paddingStart="@dimen/control_SpecingTiny">
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnNum4"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_weight="1"
+                android:text="4" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnNum5"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_weight="1"
+                android:text="5" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnNum6"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_weight="1"
+                android:text="6" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/control_SpecingTiny"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/control_SpecingTiny"
+            android:paddingStart="@dimen/control_SpecingTiny">
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnNum7"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_weight="1"
+                android:text="7" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnNum8"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_weight="1"
+                android:text="8" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnNum9"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_weight="1"
+                android:text="9" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/control_SpecingTiny"
+            android:layout_marginStart="@dimen/control_SpecingTiny"
             android:orientation="horizontal">
 
             <com.rey.material.widget.Button
                 android:id="@+id/btnCancel"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -105,12 +225,12 @@
 
             <com.rey.material.widget.Button
                 android:id="@+id/btnOk"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/aiqfOk"
                 tools:ignore="HardcodedText" />
-
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.arraybit.pos;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -11,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import com.arraybit.parser.OrderItemJSONParser;
 
 import java.util.ArrayList;
 
+@SuppressLint("ValidFragment")
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class OrderDetailFragment extends Fragment {
 
@@ -86,6 +89,12 @@ public class OrderDetailFragment extends Fragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Globals.SetScaleImageBackground(getActivity(), orderDetailLayout, null,null);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_search).setVisible(false);
     }
 
     public class OrderDetailLoadingTask extends AsyncTask {

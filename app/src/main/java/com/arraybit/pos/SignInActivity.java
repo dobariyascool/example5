@@ -237,7 +237,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     public void CreateUserPreference() {
         objSharePreferenceManage = new SharePreferenceManage();
-        if (objUserMaster.getLinktoUserTypeMasterId() == 1) {
+        if (objUserMaster.getLinktoUserTypeMasterId() == Globals.UserType.valueOf("Waiter").getValue()) {
 
             if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", SignInActivity.this) == null) {
                 objSharePreferenceManage.CreatePreference("WaiterPreference", "UserName", etName.getText().toString(), SignInActivity.this);

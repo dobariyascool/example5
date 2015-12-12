@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -27,7 +26,6 @@ import com.arraybit.modal.CategoryMaster;
 import com.arraybit.parser.CategoryJSONParser;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.rey.material.widget.ImageButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,16 +42,9 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     FloatingActionMenu famRoot;
     FloatingActionButton fabVeg, fabNonVeg, fabJain;
     StringBuilder sbItemTypeMasterId = new StringBuilder();
-    ImageButton ibViewChange;
     boolean isForceToChange = false;
     short isVegCheck = 0, isNonVegCheck = 0, isJainCheck = 0;
     FrameLayout categoryItemFragment;
-    Activity activityName;
-
-    public CategoryItemFragment(Activity activityName) {
-        // Required empty public constructor
-        this.activityName = activityName;
-    }
 
     public CategoryItemFragment(){
 
@@ -98,18 +89,11 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         itemViewPager = (ViewPager) view.findViewById(R.id.itemViewPager);
         //end
 
-        //imagebutton
-        ibViewChange = (ImageButton) view.findViewById(R.id.ibViewChange);
-        //end
-
         //event
         fabVeg.setOnClickListener(this);
         fabNonVeg.setOnClickListener(this);
         fabJain.setOnClickListener(this);
-        ibViewChange.setOnClickListener(this);
         //end
-
-        ViewChange();
 
         new GuestHomeCategoryLodingTask().execute();
 
@@ -121,39 +105,53 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(),null,null,categoryItemFragment);
+        Globals.SetScaleImageBackground(getActivity(), null, null, categoryItemFragment);
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_search).setVisible(true);
-    }
+        menu.findItem(R.id.viewChange).setVisible(true);
+        if(i==1){
+            menu.findItem(R.id.viewChange).setIcon(R.drawable.view_grid);
+        }
+        else if(i==2){
+            menu.findItem(R.id.viewChange).setIcon(R.drawable.view_grid_two);
+        }
+        else{
+            menu.findItem(R.id.viewChange).setIcon(R.drawable.view_list);
+        }
 
-    public void ViewChange(){
-        if(activityName!=null) {
-            if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
-                i = 2;
-                isViewChange = true;
-                isForceToChange = false;
-                ibViewChange.setVisibility(View.GONE);
-            } else {
-                ibViewChange.setVisibility(View.VISIBLE);
-            }
-        }
-        else
-        {
-            i=0;
-            isViewChange = false;
-            isForceToChange = false;
-            ibViewChange.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home){
             getActivity().getSupportFragmentManager().popBackStack();
+            CategoryItemFragment.i=0;
+            CategoryItemFragment.isViewChange=false;
+        }
+        else if(item.getItemId()==R.id.viewChange){
+            ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
+            i = (short) (i + 1);
+            if (i == 1) {
+                item.setIcon(R.drawable.view_grid);
+                isViewChange = true;
+                isForceToChange = true;
+                itemTabFragment.SetupRecyclerView();
+            } else if (i == 2) {
+                item.setIcon(R.drawable.view_grid_two);
+                isViewChange = true;
+                isForceToChange = true;
+                itemTabFragment.SetupRecyclerView();
+            } else {
+                i = 0;
+                item.setIcon(R.drawable.view_list);
+                isViewChange = false;
+                isForceToChange = true;
+                itemTabFragment.SetupRecyclerView();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -216,27 +214,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 itemTabFragment.ItemDataFilter(sbItemTypeMasterId.toString());
             }
 
-
-        } else if (v.getId() == R.id.ibViewChange) {
-            i = (short) (i + 1);
-            if (i == 1) {
-                v.setSelected(true);
-                isViewChange = true;
-                isForceToChange = true;
-                itemTabFragment.SetupRecyclerView();
-            } else if (i == 2) {
-                v.setSelected(false);
-                v.setActivated(true);
-                isViewChange = true;
-                isForceToChange = true;
-                itemTabFragment.SetupRecyclerView();
-            } else {
-                i = 0;
-                v.setActivated(false);
-                isViewChange = false;
-                isForceToChange = true;
-                itemTabFragment.SetupRecyclerView();
-            }
         }
     }
 
@@ -253,6 +230,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             sbItemTypeMasterId.append(Globals.ItemType.Jain.getValue() + ",");
         }
     }
+
 
     //pager adapter
     static class ItemPagerAdapter extends FragmentStatePagerAdapter {

@@ -6,17 +6,23 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.arraybit.adapter.TablesAdapter;
-import com.arraybit.global.EndlessRecyclerOnScrollListener;
 import com.arraybit.global.Globals;
-import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.SectionMaster;
 import com.arraybit.modal.TableMaster;
@@ -26,7 +32,7 @@ import java.util.ArrayList;
 
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
-public class TableTabFragment extends Fragment {
+public class TableTabFragment extends Fragment implements SearchView.OnQueryTextListener, TablesAdapter.LayoutClickListener,TableStatusFragment.UpdateTableStatusListener {
 
     public final static String ITEMS_COUNT_KEY = "TableTabFragment$ItemsCount";
     RecyclerView rvTables;
@@ -34,11 +40,14 @@ public class TableTabFragment extends Fragment {
     ArrayList<TableMaster> alTableMaster;
     SectionMaster objSectionMaster;
     GridLayoutManager gridLayoutManager;
-    int currentPage = 1, sectionMasterId;
+    int sectionMasterId;
     String tableStatusMasterId = null;
+    DisplayMetrics displayMetrics;
     TextView txtMsg;
     SharePreferenceManage objSharePreferenceManage;
-    int counterMasterId;
+    int counterMasterId,position;
+    boolean isFilter;
+    TableMaster objTableMaster;
 
     public TableTabFragment() {
         // Required empty public constructor
@@ -62,6 +71,10 @@ public class TableTabFragment extends Fragment {
 
         rvTables = (RecyclerView) view.findViewById(R.id.rvTables);
         rvTables.setVisibility(View.GONE);
+
+        displayMetrics = getActivity().getResources().getDisplayMetrics();
+
+        setHasOptionsMenu(true);
 
         Bundle bundle = getArguments();
         objSectionMaster = bundle.getParcelable(ITEMS_COUNT_KEY);
@@ -88,8 +101,64 @@ public class TableTabFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+            MenuItem searchItem = menu.findItem(R.id.action_search);
+            final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            mSearchView.setInputType(InputType.TYPE_CLASS_TEXT);
+            mSearchView.setMaxWidth(displayMetrics.widthPixels);
+            mSearchView.setOnQueryTextListener(this);
+
+            MenuItemCompat.setOnActionExpandListener(searchItem,
+                    new MenuItemCompat.OnActionExpandListener() {
+                        @Override
+                        public boolean onMenuItemActionCollapse(MenuItem item) {
+                            // Do something when collapsed
+                            tablesAdapter.SetSearchFilter(alTableMaster);
+                            return true; // Return true to collapse action view
+                        }
+
+                        @Override
+                        public boolean onMenuItemActionExpand(MenuItem item) {
+                            // Do something when expanded
+                            return true; // Return true to expand action view
+                        }
+                    });
+        }
+
+    }
+
+    private ArrayList<TableMaster> Filter(ArrayList<TableMaster> lstTableMaster, String filterName) {
+        filterName = filterName.toLowerCase();
+        final ArrayList<TableMaster> filteredList = new ArrayList<>();
+        for (TableMaster objTableMaster : lstTableMaster) {
+            isFilter = false;
+            String[] strArray = objTableMaster.getTableName().split(" ");
+            for (String str : strArray) {
+                if (str.length() >= filterName.length()) {
+                    final String strItem = str.substring(0, filterName.length()).toLowerCase();
+                    if (!isFilter) {
+                        if (strItem.contains(filterName)) {
+                            filteredList.add(objTableMaster);
+                            isFilter = true;
+                        }
+                    }
+
+                }
+            }
+        }
+        return filteredList;
+    }
+
     private void SetupRecyclerView(RecyclerView rvTables) {
-        tablesAdapter = new TablesAdapter(getActivity(), alTableMaster);
+        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
+            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster,false,null);
+        } else {
+            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster,true,this);
+        }
         rvTables.setAdapter(tablesAdapter);
         rvTables.setLayoutManager(gridLayoutManager);
     }
@@ -102,6 +171,51 @@ public class TableTabFragment extends Fragment {
         new TableMasterLoadingTask().execute();
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (alTableMaster.size() != 0 && alTableMaster != null) {
+            final ArrayList<TableMaster> filteredList = Filter(alTableMaster, newText);
+            tablesAdapter.SetSearchFilter(filteredList);
+        }
+        return false;
+    }
+
+    @Override
+    public void ChangeTableStatusClick(TableMaster objTableMaster, int position) {
+        this.position = position;
+        if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Vacant.toString())) {
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.allTablesFragment, new CategoryItemFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Occupied.toString())) {
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.allTablesFragment, new AllOrdersFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Block.toString())) {
+            TableStatusFragment tableStatusFragment = new TableStatusFragment(objTableMaster);
+            tableStatusFragment.setTargetFragment(this,0);
+            tableStatusFragment.show(getFragmentManager(), "");
+        } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Dirty.toString())) {
+            TableStatusFragment tableStatusFragment = new TableStatusFragment(objTableMaster);
+            tableStatusFragment.setTargetFragment(this,0);
+            tableStatusFragment.show(getFragmentManager(), "");
+        }
+    }
+    @Override
+    public void UpdateTableStatus(boolean flag,TableMaster objTableMaster) {
+        if(flag)
+        {
+            tablesAdapter.UpdateData(position,objTableMaster);
+        }
+    }
+
     class TableMasterLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
@@ -111,12 +225,10 @@ public class TableTabFragment extends Fragment {
             super.onPreExecute();
 
             progressDialog = new ProgressDialog(getActivity());
-            if (currentPage > 2 && alTableMaster.size() != 0) {
-                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-                progressDialog.setIndeterminate(true);
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-            }
+            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
 
         }
 
@@ -124,53 +236,25 @@ public class TableTabFragment extends Fragment {
         protected Object doInBackground(Object[] objects) {
 
             TableJSONParser objTableJSONParser = new TableJSONParser();
-            if (gridLayoutManager.canScrollVertically() && alTableMaster.size() == 0) {
-                currentPage = 1;
-            }
-            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(currentPage, counterMasterId, sectionMasterId, tableStatusMasterId);
+            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(counterMasterId, sectionMasterId, tableStatusMasterId);
         }
 
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
-            if (currentPage > 2) {
-                progressDialog.dismiss();
-            }
+            progressDialog.dismiss();
 
             ArrayList<TableMaster> lstTableMaster = (ArrayList<TableMaster>) result;
             if (lstTableMaster == null) {
-                if (currentPage == 1) {
-                    Globals.SetError(txtMsg, rvTables, getResources().getString(R.string.MsgSelectFail), true);
-                }
+                Globals.SetError(txtMsg, rvTables, getResources().getString(R.string.MsgSelectFail), true);
             } else if (lstTableMaster.size() == 0) {
-                if (currentPage == 1) {
-                    Globals.SetError(txtMsg, rvTables, getResources().getString(R.string.MsgNoRecord), true);
-                }
+                Globals.SetError(txtMsg, rvTables, getResources().getString(R.string.MsgNoRecord), true);
             } else {
-                if (currentPage > 1) {
-                    tablesAdapter.TableDataChanged(lstTableMaster);
-                    return;
-                } else if (lstTableMaster.size() < 10) {
-                    currentPage += 1;
-                }
-
                 Globals.SetError(txtMsg, rvTables, null, false);
                 alTableMaster = lstTableMaster;
                 SetupRecyclerView(rvTables);
 
-                rvTables.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
-                    @Override
-                    public void onLoadMore(int current_page) {
-
-                        if (current_page > currentPage) {
-                            currentPage = current_page;
-                            if (Service.CheckNet(getActivity())) {
-                                new TableMasterLoadingTask().execute();
-                            }
-                        }
-                    }
-                });
             }
         }
     }

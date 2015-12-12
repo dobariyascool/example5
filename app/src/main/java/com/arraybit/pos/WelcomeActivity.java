@@ -45,7 +45,7 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
                     count++;
                     objSharePreferenceManage = new SharePreferenceManage();
                     String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
-                    if (userTypeMasterId != null && userTypeMasterId.equals("1")) {
+                    if (userTypeMasterId != null && userTypeMasterId.equals(String.valueOf(Globals.UserType.valueOf("Waiter").getValue()))) {
                         Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
                         //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);

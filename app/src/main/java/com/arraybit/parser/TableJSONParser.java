@@ -19,7 +19,7 @@ import java.util.Locale;
 
 public class TableJSONParser {
     public String InsertTableMaster = "InsertTableMaster";
-    public String UpdateTableMaster = "UpdateTableMaster";
+    public String UpdateTableMaster = "UpdateTableStatus";
     public String SelectTableMaster = "SelectTableMaster";
     public String SelectAllTableMasterBySectionId = "SelectAllTableMasterBySectionMasterId";
 
@@ -181,7 +181,7 @@ public class TableJSONParser {
 
     //region Update
 
-    public String UpdateTableMaster(TableMaster objTableMaster) {
+    public String UpdateTableStatus(TableMaster objTableMaster) {
         try {
             JSONStringer stringer = new JSONStringer();
             stringer.object();
@@ -190,24 +190,7 @@ public class TableJSONParser {
             stringer.object();
 
             stringer.key("TableMasterId").value(objTableMaster.getTableMasterId());
-            stringer.key("TableName").value(objTableMaster.getTableName());
-            stringer.key("ShortName").value(objTableMaster.getShortName());
-            stringer.key("Description").value(objTableMaster.getDescription());
-            stringer.key("MinPerson").value(objTableMaster.getMinPerson());
-            stringer.key("MaxPerson").value(objTableMaster.getMaxPerson());
             stringer.key("linktoTableStatusMasterId").value(objTableMaster.getlinktoTableStatusMasterId());
-            stringer.key("linktoOrderTypeMasterId").value(objTableMaster.getlinktoOrderTypeMasterId());
-            stringer.key("linktoSectionMasterId").value(objTableMaster.getlinktoSectionMasterId());
-            stringer.key("OriginX").value(objTableMaster.getOriginX());
-            stringer.key("OriginY").value(objTableMaster.getOriginY());
-            stringer.key("Height").value(objTableMaster.getHeight());
-            stringer.key("Width").value(objTableMaster.getWidth());
-            stringer.key("TableColor").value(objTableMaster.getTableColor());
-            dt = sdfControlDateFormat.parse(objTableMaster.getUpdateDateTime());
-            stringer.key("UpdateDateTime").value(sdfDateTimeFormat.format(dt));
-            stringer.key("linktoUserMasterIdUpdatedBy").value(objTableMaster.getlinktoUserMasterIdUpdatedBy());
-            stringer.key("linktoBusinessMasterId").value(objTableMaster.getlinktoBusinessMasterId());
-            stringer.key("IsEnabled").value(objTableMaster.getIsEnabled());
 
             stringer.endObject();
 
@@ -216,11 +199,11 @@ public class TableJSONParser {
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateTableMaster, stringer);
             JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateTableMaster + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
+
         } catch (Exception ex) {
             return "-1";
         }
     }
-
     //endregion
 
     //region Select
@@ -244,10 +227,17 @@ public class TableJSONParser {
 
     //region  SelectAll
 
-    public ArrayList<TableMaster> SelectAllTableMasterBySectionMasterId(int currentPage,int linktoCounterMasterId,int linktoSectionMasterId,String linktoTableStatusMasterId) {
+    public ArrayList<TableMaster> SelectAllTableMasterBySectionMasterId(int linktoCounterMasterId,int linktoSectionMasterId,String linktoTableStatusMasterId) {
         ArrayList<TableMaster> lstTableMaster = null;
+        JSONObject jsonResponse;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+linktoSectionMasterId+"/"+linktoTableStatusMasterId);
+            if(linktoSectionMasterId==0){
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId +"/"+linktoCounterMasterId+"/"+null+"/"+linktoTableStatusMasterId);
+            }
+            else
+            {
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId +"/"+linktoCounterMasterId+"/"+linktoSectionMasterId+"/"+linktoTableStatusMasterId);
+            }
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllTableMasterBySectionId + "Result");
                 if (jsonArray != null) {

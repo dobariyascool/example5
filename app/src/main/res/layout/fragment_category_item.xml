@@ -15,35 +15,12 @@
         <include android:id="@+id/app_bar"
             layout="@layout/app_bar"/>
 
-        <LinearLayout
+        <android.support.design.widget.TabLayout
+            android:id="@+id/itemTabLayout"
+            style="@style/TabLayout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/primary"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/itemTabLayout"
-                style="@style/TabLayout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.9"
-                app:tabMode="scrollable" />
-
-            <com.rey.material.widget.ImageButton
-                android:id="@+id/ibViewChange"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/control_SpecingSmall"
-                android:layout_marginEnd="@dimen/control_SpecingTiny"
-                android:layout_marginStart="@dimen/control_SpecingTiny"
-                android:layout_marginTop="@dimen/control_SpecingSmall"
-                android:layout_weight="0.1"
-                android:background="@color/accent"
-                android:src="@drawable/view_selector"
-                android:visibility="gone" />
-
-        </LinearLayout>
+            app:tabMode="scrollable" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/itemViewPager"

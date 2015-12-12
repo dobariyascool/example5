@@ -1,20 +1,17 @@
 package com.arraybit.pos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arraybit.adapter.OptionListAdapter;
+import com.arraybit.global.Globals;
 
-import java.util.ArrayList;
+public class WaiterOptionListFragment extends Fragment implements View.OnClickListener {
 
-public class WaiterOptionListFragment extends Fragment {
-
-    ArrayList<String> alString;
 
     public WaiterOptionListFragment() {
         // Required empty public constructor
@@ -27,31 +24,36 @@ public class WaiterOptionListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_waiter_option_list, container, false);
 
-        RecyclerView rvOptions=(RecyclerView)view.findViewById(R.id.rvOptions);
+        CardView cvOrders=(CardView)view.findViewById(R.id.cvOrders);
+        CardView cvTables=(CardView)view.findViewById(R.id.cvTables);
+        CardView cvMenu=(CardView)view.findViewById(R.id.cvMenu);
+        CardView cvOffers=(CardView)view.findViewById(R.id.cvOffers);
 
-        setArrayList();
-
-        rvOptions.setAdapter(new OptionListAdapter(getActivity(), alString));
-        if(getActivity().getResources().getBoolean(R.bool.isTablet)){
-            rvOptions.setLayoutManager(new GridLayoutManager(getActivity(),4));
-        }
-        else
-        {
-            rvOptions.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        }
+        cvOrders.setOnClickListener(this);
+        cvTables.setOnClickListener(this);
+        cvMenu.setOnClickListener(this);
+        cvOffers.setOnClickListener(this);
 
         setHasOptionsMenu(true);
 
         return view;
     }
 
-    public void setArrayList()
-    {
-        alString=new ArrayList<>();
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.cvOrders){
+            Globals.InitializeFragment(new AllOrdersFragment(), getFragmentManager());
+        }
+        else if(v.getId()==R.id.cvTables){
+            Globals.InitializeFragment(new AllTablesFragment(getActivity()), getFragmentManager());
+        }
+        else if(v.getId()==R.id.cvMenu){
+            Globals.InitializeFragment(new CategoryItemFragment(), getFragmentManager());
+        }
+        else if(v.getId()==R.id.cvOffers){
+            Intent intent = new Intent(getActivity(),GuestHomeActivity.class);
+            startActivity(intent);
+        }
 
-        alString.add(0,"Orders");
-        alString.add(1,"Tables");
-        alString.add(2,"Menu");
-        alString.add(3,"Offers");
     }
 }

@@ -46,7 +46,7 @@ public class Globals {
     public static String serverName = null;
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "hh:mm";
-    public static String DisplayTimeFormat="hh:mm a";
+    public static String DisplayTimeFormat="h:mm a";
     public static int sourceMasterId = 2;
     public static short businessMasterId = 1;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
@@ -308,7 +308,9 @@ public class Globals {
 
     public enum TableStatus {
         Vacant(1),
-        Busy(2);
+        Occupied(2),
+        Block(3),
+        Dirty(4);
 
         private int intValue;
 
@@ -341,6 +343,7 @@ public class Globals {
     }
 
     public enum OrderStatus {
+        All(0),
         Cooking(1),
         Ready(2),
         Served(3),
@@ -357,6 +360,23 @@ public class Globals {
             return intValue;
         }
     }
+
+    public enum UserType {
+        Waiter(2),
+        Waiting(3);
+
+        private int intValue;
+
+        UserType(int value) {
+            intValue = value;
+
+        }
+
+        public int getValue() {
+            return intValue;
+        }
+    }
+
 
     //endregion
 

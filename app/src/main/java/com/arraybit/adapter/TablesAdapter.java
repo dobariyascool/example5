@@ -21,12 +21,16 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     ArrayList<TableMaster> alTableMaster;
     LayoutInflater layoutInflater;
     View view;
+    boolean isClickEnable;
+    LayoutClickListener objLayoutClickListener;
 
     // Constructor
-    public TablesAdapter(Context context, ArrayList<TableMaster> result) {
+    public TablesAdapter(Context context, ArrayList<TableMaster> result,boolean isClickEnable,LayoutClickListener objLayoutClickListener) {
         this.context = context;
         alTableMaster = result;
+        this.isClickEnable = isClickEnable;
         this.layoutInflater = LayoutInflater.from(context);
+        this.objLayoutClickListener = objLayoutClickListener;
     }
 
     @Override
@@ -39,6 +43,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     public void onBindViewHolder(TableViewHolder holder, int position) {
         TableMaster objTableMaster = alTableMaster.get(position);
 
+        holder.cvTable.setId(position);
         if (objTableMaster.getTableColor()==null) {
             holder.cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
         } else {
@@ -59,6 +64,23 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         alTableMaster.addAll(result);
         notifyDataSetChanged();
     }
+    //endregion
+
+    public void UpdateData(int position,TableMaster objTableMaster){
+        alTableMaster.get(position).setTableStatus(objTableMaster.getTableStatus());
+        notifyDataSetChanged();
+    }
+
+    public void SetSearchFilter(ArrayList<TableMaster> result) {
+        alTableMaster = new ArrayList<>();
+        alTableMaster.addAll(result);
+        notifyDataSetChanged();
+    }
+
+    //region interface
+    public interface LayoutClickListener {
+        void ChangeTableStatusClick(TableMaster objTableMaster, int position);
+    }
 
     class TableViewHolder extends RecyclerView.ViewHolder {
 
@@ -72,6 +94,17 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             txtPersons = (TextView) itemView.findViewById(R.id.txtPersons);
             txtTableStatus = (TextView) itemView.findViewById(R.id.txtTableStatus);
             cvTable = (CardView) itemView.findViewById(R.id.cvTable);
+
+            if(isClickEnable) {
+
+                cvTable.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        objLayoutClickListener.ChangeTableStatusClick(alTableMaster.get(v.getId()),v.getId());
+                    }
+                });
+            }
         }
     }
 }

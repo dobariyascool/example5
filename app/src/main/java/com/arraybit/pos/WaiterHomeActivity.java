@@ -10,21 +10,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 
-import com.arraybit.adapter.OptionListAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
+import com.rey.material.widget.TextView;
 
-public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,OptionListAdapter.OptionListClickListener{
+public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     ActionBarDrawerToggle actionBarDrawerToggle;
     LinearLayout waiterHomeMainLayout;
     boolean isDualPanel;
     SharePreferenceManage objSharePreferenceManage;
-    //,OrdersAdapter.OrderLayoutClickListener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,13 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         //end
 
         //navigationView
+        View headerView = LayoutInflater.from(WaiterHomeActivity.this).inflate(R.layout.navigation_header,null);
+        TextView txtLetter = (TextView)headerView.findViewById(R.id.txtLetter);
+        TextView txtName = (TextView)headerView.findViewById(R.id.txtName);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
+        SetWaiterName(txtName,txtLetter,navigationView);
+        navigationView.addHeaderView(headerView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
 
@@ -72,6 +79,12 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
         Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null,null);
         //}
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.viewChange).setVisible(false);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -100,6 +113,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         return super.onOptionsItemSelected(item);
     }
 
+
     //selected event
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -121,24 +135,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         }
         return false;
     }
-
-    //all options list click event
-    @Override
-    public void onClick(int position) {
-            if(getSupportFragmentManager().getBackStackEntryCount() == 1) {
-                if (position == 0) {
-                    Globals.InitializeFragment(new AllOrdersFragment(), getSupportFragmentManager());
-                } else if (position == 1) {
-                    Globals.InitializeFragment(new AllTablesFragment(WaiterHomeActivity.this), getSupportFragmentManager());
-                } else if (position == 2) {
-                    Globals.InitializeFragment(new CategoryItemFragment(WaiterHomeActivity.this), getSupportFragmentManager());
-                }else if(position == 3){
-//                    Intent intent = new Intent(WaiterHomeActivity.this,GuestHomeActivity.class);
-//                    startActivity(intent);
-                }
-            }
-    }
-    //end
 
     //add fragment
     void AddFragmentInLayout(Fragment fragment) {
@@ -168,12 +164,32 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                     }
                     else
                     {
+                        CategoryItemFragment.i=0;
+                        CategoryItemFragment.isViewChange=false;
                         getSupportFragmentManager().popBackStack();
+
                     }
                 }
             }
         }
     //end
+
+    private void SetWaiterName(TextView txtName,TextView txtLetter,NavigationView navigationView){
+        objSharePreferenceManage = new SharePreferenceManage();
+        if(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this)!=null){
+            txtName.setText(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this));
+            txtLetter.setText(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this).substring(0,1));
+        }
+        if(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this)!=null){
+            if(SplashScreenActivity.counter==1){
+                navigationView.getMenu().findItem(R.id.wChangeCounter).setVisible(false);
+            }
+            else {
+                navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this));
+            }
+
+        }
+    }
 }
 
 

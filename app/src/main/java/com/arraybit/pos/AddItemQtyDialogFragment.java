@@ -31,7 +31,6 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     AppCompatMultiAutoCompleteTextView actRemark;
     TextInputLayout textInputLayout;
     ImageButton ibPlus;
-    StringBuilder sb;
     ArrayList<String> alStringFilter;
     ArrayAdapter<String> adapter;
     String[] selectedValue;
@@ -57,6 +56,16 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
 
+        Button btnNum1 = (Button) view.findViewById(R.id.btnNum1);
+        Button btnNum2 = (Button) view.findViewById(R.id.btnNum2);
+        Button btnNum3 = (Button) view.findViewById(R.id.btnNum3);
+        Button btnNum4 = (Button) view.findViewById(R.id.btnNum4);
+        Button btnNum5 = (Button) view.findViewById(R.id.btnNum5);
+        Button btnNum6 = (Button) view.findViewById(R.id.btnNum6);
+        Button btnNum7 = (Button) view.findViewById(R.id.btnNum7);
+        Button btnNum8 = (Button) view.findViewById(R.id.btnNum8);
+        Button btnNum9 = (Button) view.findViewById(R.id.btnNum9);
+
         actRemark = (AppCompatMultiAutoCompleteTextView) view.findViewById(R.id.actRemark);
 
         textInputLayout = (TextInputLayout) view.findViewById(R.id.textInputLayout);
@@ -67,6 +76,16 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         btnOk.setOnClickListener(this);
         textInputLayout.setOnClickListener(this);
         actRemark.setOnClickListener(this);
+
+        btnNum1.setOnClickListener(this);
+        btnNum2.setOnClickListener(this);
+        btnNum3.setOnClickListener(this);
+        btnNum4.setOnClickListener(this);
+        btnNum5.setOnClickListener(this);
+        btnNum6.setOnClickListener(this);
+        btnNum7.setOnClickListener(this);
+        btnNum8.setOnClickListener(this);
+        btnNum9.setOnClickListener(this);
 
         new RemarkLoadingTask().execute();
 
@@ -84,7 +103,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             }
             textInputLayout.clearFocus();
             etQuantity.requestFocus();
-            etQuantity.selectAll();
+            //etQuantity.selectAll();
 
         } else if (v.getId() == R.id.ibMinus) {
             if (etQuantity.getText().toString().equals("")) {
@@ -94,7 +113,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             }
             textInputLayout.clearFocus();
             etQuantity.requestFocus();
-            etQuantity.selectAll();
+            ///etQuantity.selectAll();
 
         } else if (v.getId() == R.id.btnCancel) {
             dismiss();
@@ -108,7 +127,6 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                 SetArrayListAdapter(alString);
             } else {
                 if (isDeleted) {
-                    System.out.println("length " + actRemark.getText().subSequence((int) actRemark.length() - 1, (int) actRemark.length()));
                     if (actRemark.getText().subSequence((int) actRemark.length() - 1, (int) actRemark.length()).toString().equals(",")) {
                         selectedValue = String.valueOf(actRemark.getText().subSequence(0, (int) actRemark.length()) + " ").split(", ");
                     } else if (actRemark.getText().subSequence((int) actRemark.length() - 1, (int) actRemark.length()).toString().equals(" ")) {
@@ -123,6 +141,24 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
 
             }
             actRemark.showDropDown();
+        } else if (v.getId() == R.id.btnNum1) {
+            AddNumber("1");
+        } else if (v.getId() == R.id.btnNum2) {
+            AddNumber("2");
+        } else if (v.getId() == R.id.btnNum3) {
+            AddNumber("3");
+        } else if (v.getId() == R.id.btnNum4) {
+            AddNumber("4");
+        } else if (v.getId() == R.id.btnNum5) {
+            AddNumber("5");
+        } else if (v.getId() == R.id.btnNum6) {
+            AddNumber("6");
+        } else if (v.getId() == R.id.btnNum7) {
+            AddNumber("7");
+        } else if (v.getId() == R.id.btnNum8) {
+            AddNumber("8");
+        } else if (v.getId() == R.id.btnNum9) {
+            AddNumber("9");
         }
     }
     //endregion
@@ -140,8 +176,6 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         }
         return value;
     }
-
-    //endregion
 
     private void UpdateArrayListAdapter(String name) {
         int isRemove = -1;
@@ -200,6 +234,12 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                 (getActivity(), android.R.layout.simple_spinner_dropdown_item, alString);
         actRemark.setAdapter(adapter);
     }
+    private void AddNumber(String number) {
+        textInputLayout.clearFocus();
+        etQuantity.requestFocus();
+        etQuantity.setText(number);
+    }
+    //endregion
 
     //region Loading Task
     class RemarkLoadingTask extends AsyncTask {
@@ -223,7 +263,6 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
 
                 actRemark.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
                 SetArrayListAdapter(alString);
-                sb = new StringBuilder();
 
                 actRemark.setOnKeyListener(new View.OnKeyListener() {
                     @Override

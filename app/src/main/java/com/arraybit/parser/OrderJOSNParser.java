@@ -129,7 +129,6 @@ public class OrderJOSNParser {
                 objOrderMaster.setOrderType(jsonArray.getJSONObject(i).getString("OrderType"));
                 objOrderMaster.setTableName(jsonArray.getJSONObject(i).getString("TableName"));
                 objOrderMaster.setTotalItem(jsonArray.getJSONObject(i).getInt("TotalItem"));
-                objOrderMaster.setOrderTypeImage(jsonArray.getJSONObject(i).getString("OrderTypeImageName"));
 
                 lstOrderMaster.add(objOrderMaster);
             }
@@ -242,12 +241,20 @@ public class OrderJOSNParser {
         }
     }
 
-    public ArrayList<OrderMaster> SelectAllOrderMaster(int currentPage,int linktoCounterMasterId,int linktoOrderStatusMasterId) {
+    public ArrayList<OrderMaster> SelectAllOrderMaster(int linktoCounterMasterId,int linktoOrderStatusMasterId) {
         ArrayList<OrderMaster> lstOrderMaster = null;
+        JSONObject jsonResponse;
         Date date;
         try {
             date = new Date();
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster +"/"+currentPage+"/"+linktoCounterMasterId+"/"+linktoOrderStatusMasterId+"/"+sdfControlDateFormat.format(date));
+            if(linktoOrderStatusMasterId==0){
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster +"/"+linktoCounterMasterId+"/"+null+"/"+sdfControlDateFormat.format(date));
+            }
+            else
+            {
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster +"/"+linktoCounterMasterId+"/"+linktoOrderStatusMasterId+"/"+sdfControlDateFormat.format(date));
+            }
+
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllOrderMaster + "Result");
                 if (jsonArray != null) {

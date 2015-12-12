@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
@@ -14,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
+@SuppressLint("ValidFragment")
 public class AllTablesFragment extends Fragment implements View.OnClickListener {
 
     TabLayout tableTabLayout;
@@ -40,6 +43,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     FloatingActionMenu famRoot;
     Activity activityName;
     RelativeLayout allTablesFragment;
+
 
     public AllTablesFragment(Activity activityName) {
         this.activityName = activityName;
@@ -113,6 +117,14 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+            menu.findItem(R.id.action_search).setVisible(true);
+        }
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Globals.SetScaleImageBackground(getActivity(), null, allTablesFragment,null);
@@ -130,7 +142,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         }
         else if(v.getId()==R.id.fabBusy){
             famRoot.close(true);
-            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(), String.valueOf(Globals.TableStatus.Busy.getValue()));
+            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(), String.valueOf(Globals.TableStatus.Occupied.getValue()));
         }
         else if(v.getId()==R.id.fabAll){
             famRoot.close(true);
@@ -217,6 +229,13 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
 
                 tablePagerAdapter = new TablePagerAdapter(getChildFragmentManager());
 
+                SectionMaster objSectionMaster =  new SectionMaster();
+                objSectionMaster.setSectionMasterId((short) 0);
+                objSectionMaster.setSectionName("All");
+                ArrayList<SectionMaster> alSection = new ArrayList<>();
+                alSection.add(objSectionMaster);
+
+                alSectionMaster.addAll(0,alSection);
                 for(int i=0;i<alSectionMaster.size();i++){
                     tablePagerAdapter.AddFragment(TableTabFragment.createInstance(alSectionMaster.get(i)),alSectionMaster.get(i));
                 }

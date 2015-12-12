@@ -36,7 +36,6 @@ public class OrderMaster implements Parcelable {
     String OrderType;
     String TableName;
     int TotalItem;
-    String OrderTypeImage;
 
     public static final Parcelable.Creator<OrderMaster> CREATOR = new Creator<OrderMaster>() {
         public OrderMaster createFromParcel(Parcel source) {
@@ -71,7 +70,6 @@ public class OrderMaster implements Parcelable {
             objOrderMaster.TableName = source.readString();
             objOrderMaster.OrderTime = source.readString();
             objOrderMaster.TotalItem = source.readInt();
-            objOrderMaster.OrderTypeImage = source.readString();
 
             return objOrderMaster;
         }
@@ -306,13 +304,6 @@ public class OrderMaster implements Parcelable {
         TotalItem = totalItem;
     }
 
-    public String getOrderTypeImage() {
-        return OrderTypeImage;
-    }
-
-    public void setOrderTypeImage(String orderTypeImage) {
-        OrderTypeImage = orderTypeImage;
-    }
     //endregion
 
     @Override
@@ -352,7 +343,6 @@ public class OrderMaster implements Parcelable {
         parcel.writeString(TableName);
         parcel.writeString(OrderTime);
         parcel.writeInt(TotalItem);
-        parcel.writeString(OrderTypeImage);
     }
 }
 

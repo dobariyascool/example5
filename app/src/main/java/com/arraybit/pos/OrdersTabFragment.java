@@ -5,18 +5,20 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.SearchView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.arraybit.adapter.OrdersAdapter;
-import com.arraybit.global.EndlessRecyclerOnScrollListener;
 import com.arraybit.global.Globals;
-import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.parser.OrderJOSNParser;
@@ -26,20 +28,19 @@ import java.util.ArrayList;
 
 
 @SuppressWarnings("unchecked")
-public class OrdersTabFragment extends Fragment {
+public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     public final static String ITEMS_COUNT_KEY = "OrdersTabFragment$ItemsCount";
     RecyclerView rvOrder;
     TextView txtMsg;
     ArrayList<OrderMaster> alOrderMaster;
-    int currentPage = 1, counterMasterId;
+    int counterMasterId;
     String orderStatus;
     GridLayoutManager gridLayoutManager;
     SharePreferenceManage objSharePreferenceManage;
     OrdersAdapter ordersAdapter;
     int id;
     DisplayMetrics displayMetrics;
-    StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     public OrdersTabFragment() {
         // Required empty public constructor
@@ -81,12 +82,54 @@ public class OrdersTabFragment extends Fragment {
         Bundle bundle = getArguments();
         orderStatus = bundle.getString(ITEMS_COUNT_KEY);
 
-        if (orderStatus.equals(Globals.OrderStatus.Cooking.toString())) {
+        if (orderStatus.equals(Globals.OrderStatus.All.toString())) {
             LoadOrderData();
         }
         //end
 
+        setHasOptionsMenu(true);
+
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.setMaxWidth(displayMetrics.widthPixels);
+        mSearchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(searchItem,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        // Do something when collapsed
+                        ordersAdapter.SetSearchFilter(alOrderMaster);
+                        return true; // Return true to collapse action view
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        // Do something when expanded
+                        return true; // Return true to expand action view
+                    }
+                });
+
+    }
+
+    private ArrayList<OrderMaster> Filter(ArrayList<OrderMaster> lstOrderMaster, String filterName) {
+        filterName = filterName.toLowerCase();
+        final ArrayList<OrderMaster> filteredList = new ArrayList<>();
+        for (OrderMaster objOrderMaster : lstOrderMaster) {
+            if (objOrderMaster.getOrderNumber().length() >= filterName.length()) {
+                final String strItem = objOrderMaster.getOrderNumber().substring(0, filterName.length()).toLowerCase();
+                if (strItem.contains(filterName)) {
+                    filteredList.add(objOrderMaster);
+                }
+            }
+        }
+        return filteredList;
     }
 
     private void SetupRecyclerView(RecyclerView rvOrder) {
@@ -97,25 +140,22 @@ public class OrdersTabFragment extends Fragment {
     }
 
     public void LoadOrderData() {
-
         alOrderMaster = new ArrayList<>();
-
         new OrderMasterLoadingTask().execute();
+    }
 
-        if (rvOrder != null) {
-            rvOrder.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
-                @Override
-                public void onLoadMore(int current_page) {
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
 
-                    if (current_page > currentPage) {
-                        currentPage = current_page;
-                        if (Service.CheckNet(getActivity())) {
-                            new OrderMasterLoadingTask().execute();
-                        }
-                    }
-                }
-            });
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if(alOrderMaster.size()!=0 && alOrderMaster!=null) {
+            final ArrayList<OrderMaster> filteredList = Filter(alOrderMaster, newText);
+            ordersAdapter.SetSearchFilter(filteredList);
         }
+        return false;
     }
 
     //region LoadingTask
@@ -127,50 +167,29 @@ public class OrdersTabFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            if (currentPage > 2 && alOrderMaster.size() != 0) {
-                progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-                progressDialog.setIndeterminate(true);
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-            }
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
 
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-            if (currentPage > 1) {
-                if (gridLayoutManager.canScrollVertically() && alOrderMaster.size() == 0) {
-                    currentPage = 1;
-                }
-            }
-            return objOrderJOSNParser.SelectAllOrderMaster(currentPage, counterMasterId, Globals.OrderStatus.valueOf(orderStatus).getValue());
+            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, Globals.OrderStatus.valueOf(orderStatus).getValue());
         }
 
         @Override
         protected void onPostExecute(Object result) {
-            if (currentPage > 2) {
-                progressDialog.dismiss();
-            }
+            progressDialog.dismiss();
             ArrayList<OrderMaster> lstOrderMaster = (ArrayList<OrderMaster>) result;
             if (lstOrderMaster == null) {
-                if (currentPage == 1) {
-                    Globals.SetError(txtMsg, rvOrder, getResources().getString(R.string.MsgSelectFail), true);
-                }
+                Globals.SetError(txtMsg, rvOrder, getResources().getString(R.string.MsgSelectFail), true);
             } else if (lstOrderMaster.size() == 0) {
-                if (currentPage == 1) {
-                    Globals.SetError(txtMsg, rvOrder, getResources().getString(R.string.MsgNoRecord), true);
-                }
+                Globals.SetError(txtMsg, rvOrder, getResources().getString(R.string.MsgNoRecord), true);
             } else {
-                if (currentPage > 1) {
-                    ordersAdapter.OrderDataChanged(lstOrderMaster);
-                    return;
-                } else if (lstOrderMaster.size() < 10) {
-                    currentPage += 1;
-                }
-
                 Globals.SetError(txtMsg, rvOrder, null, false);
                 alOrderMaster = lstOrderMaster;
                 SetupRecyclerView(rvOrder);

@@ -89,6 +89,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_search).setVisible(false);
+        menu.findItem(R.id.viewChange).setVisible(false);
     }
 
     @Override

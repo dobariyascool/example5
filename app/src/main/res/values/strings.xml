@@ -123,6 +123,7 @@
     <!-- waiter menu -->
     <string name="wmMyAccount">My Account</string>
     <string name="wmLogout">Logout</string>
+    <string name="wmViewChange">View Change</string>
     <!-- end -->
 
 
@@ -215,7 +216,9 @@
     <!-- table status-->
     <string name="tsAll">All</string>
     <string name="tsVacant">Vacant</string>
-    <string name="tsBusy">Busy</string>
+    <string name="tsBusy">Occupied</string>
+    <string name="tsBlock">Block</string>
+    <string name="tsDirty">Dirty</string>
     <!-- end -->
 
     <!-- fragment order detail -->
@@ -235,4 +238,13 @@
     <!-- row order-->
     <string name="roTotalItem">Total Item</string>
     <!-- end -->
+
+    <!-- fragment waiter option list-->
+    <string name="wolfOrder">Orders</string>
+    <string name="wolfTable">Tables</string>
+    <string name="wolfMenu">Menu</string>
+    <string name="wolfOffer">Offers</string>
+    <!-- end -->
+
+
 </resources>

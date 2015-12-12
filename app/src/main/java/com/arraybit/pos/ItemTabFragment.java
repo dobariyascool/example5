@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,6 +46,8 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     int counterMasterId;
     int currentPage = 1;
     DisplayMetrics displayMetrics;
+    boolean isFilter = false;
+    String searchText;
 
     public ItemTabFragment() {
 
@@ -105,39 +108,22 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getActivity().getSupportFragmentManager(), CategoryItemFragment.isViewChange);
         rvItem.setVisibility(View.VISIBLE);
         rvItem.setAdapter(categoryItemAdapter);
-        if (CategoryItemFragment.isViewChange) {
+        if(CategoryItemFragment.isViewChange && (searchText==null || searchText.isEmpty()))
+        {
             rvItem.setLayoutManager(gridLayoutManager);
-        } else {
+        }
+        else if(!CategoryItemFragment.isViewChange && (searchText==null || searchText.isEmpty())) {
+            rvItem.setLayoutManager(linearLayoutManager);
+        } else if(CategoryItemFragment.isViewChange && !searchText.isEmpty()){
+            final ArrayList<ItemMaster> filteredList = Filter(alItemMaster,searchText);
+            categoryItemAdapter.SetSearchFilter(filteredList);
+            rvItem.setLayoutManager(gridLayoutManager);
+        }
+        else if(!CategoryItemFragment.isViewChange && !searchText.isEmpty()){
+            final ArrayList<ItemMaster> filteredList = Filter(alItemMaster,searchText);
+            categoryItemAdapter.SetSearchFilter(filteredList);
             rvItem.setLayoutManager(linearLayoutManager);
         }
-
-//        if(CategoryItemFragment.isViewChange) {
-//            rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
-//                @Override
-//                public void onLoadMore(int current_page) {
-//                    if (current_page > currentPage) {
-//                        currentPage = current_page;
-//                        if (Service.CheckNet(getActivity())) {
-//                            new GuestHomeItemLoadingTask().execute();
-//                        }
-//                    }
-//                }
-//            });
-//        }
-//        else
-//        {
-//            rvItem.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
-//                @Override
-//                public void onLoadMore(int current_page) {
-//                    if (current_page > currentPage) {
-//                        currentPage = current_page;
-//                        if (Service.CheckNet(getActivity())) {
-//                            new GuestHomeItemLoadingTask().execute();
-//                        }
-//                    }
-//                }
-//            });
-//        }
     }
 
     public void ItemDataFilter(String itemTypeMasterId) {
@@ -149,11 +135,12 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     @Override
     public void onCreateOptionsMenu(Menu menu, final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.setInputType(InputType.TYPE_CLASS_TEXT);
         mSearchView.setMaxWidth(displayMetrics.widthPixels);
         mSearchView.setOnQueryTextListener(this);
+        searchText = mSearchView.getQuery().toString();
 
         MenuItemCompat.setOnActionExpandListener(searchItem,
                 new MenuItemCompat.OnActionExpandListener() {
@@ -171,6 +158,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                     }
                 });
 
+
     }
 
     @Override
@@ -180,8 +168,11 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, newText);
-        categoryItemAdapter.SetSearchFilter(filteredList);
+        if(alItemMaster.size()!=0 && alItemMaster!=null) {
+            searchText = newText;
+            final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, newText);
+            categoryItemAdapter.SetSearchFilter(filteredList);
+        }
         return false;
     }
 
@@ -189,10 +180,18 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         filterName = filterName.toLowerCase();
         final ArrayList<ItemMaster> filteredList = new ArrayList<>();
         for (ItemMaster objItemMaster : lstItemMaster) {
-            if (objItemMaster.getItemName().length() >= filterName.length()) {
-                final String strItem = objItemMaster.getItemName().substring(0, filterName.length()).toLowerCase();
-                if (strItem.contains(filterName)) {
-                    filteredList.add(objItemMaster);
+            isFilter = false;
+            String[] strArray = objItemMaster.getItemName().split(" ");
+            for (String aStrArray : strArray) {
+                if (aStrArray.length() >= filterName.length()) {
+                    final String strItem = aStrArray.substring(0, filterName.length()).toLowerCase();
+                    if (!isFilter) {
+                        if (strItem.contains(filterName)) {
+                            filteredList.add(objItemMaster);
+                            isFilter = true;
+                        }
+                    }
+
                 }
             }
         }

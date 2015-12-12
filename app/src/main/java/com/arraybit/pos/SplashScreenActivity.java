@@ -100,6 +100,11 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             if(alCounter!=null) {
                 counter = (short) alCounter.size();
+                if(counter==1){
+                    objSharePreferenceManage = new SharePreferenceManage();
+                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterMasterId",String.valueOf(alCounter.get(0).getCounterMasterId()),SplashScreenActivity.this);
+                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterName",String.valueOf(alCounter.get(0).getCounterName()),SplashScreenActivity.this);
+                }
             }
         }
     }

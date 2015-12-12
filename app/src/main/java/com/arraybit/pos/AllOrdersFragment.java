@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,12 @@ public class AllOrdersFragment extends Fragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_search).setVisible(true);
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Globals.SetScaleImageBackground(getActivity(),null,null,allOrdersFragment);
@@ -94,6 +101,7 @@ public class AllOrdersFragment extends Fragment {
     //region Method
     public void SetTabLayout() {
 
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.All.toString()),Globals.OrderStatus.All.toString());
         orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Cooking.toString()), Globals.OrderStatus.Cooking.toString());
         orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Ready.toString()), Globals.OrderStatus.Ready.toString());
         orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Served.toString()), Globals.OrderStatus.Served.toString());

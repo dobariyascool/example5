@@ -18,10 +18,16 @@
 
     <item
         android:id="@+id/action_search"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/search"
         android:title="@string/navSearch"
-        android:visible="true"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView"/>
 
+    <item
+        android:id="@+id/viewChange"
+        android:icon="@drawable/view_list"
+        android:orderInCategory="200"
+        android:title="@string/wmViewChange"
+        android:visible="false"
+        app:showAsAction="always"/>
 </menu>

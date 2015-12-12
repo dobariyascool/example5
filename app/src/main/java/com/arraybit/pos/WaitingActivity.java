@@ -11,12 +11,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
+import com.rey.material.widget.TextView;
 
 public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -42,7 +45,13 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //end
 
         //naviagtionview
+        View headerView = LayoutInflater.from(WaitingActivity.this).inflate(R.layout.navigation_header,null);
+        TextView txtLetter = (TextView)headerView.findViewById(R.id.txtLetter);
+        TextView txtName = (TextView)headerView.findViewById(R.id.txtName);
+
         navigationView = (NavigationView) findViewById(R.id.navigationView);
+        SetWaiterName(txtName,txtLetter,navigationView);
+        navigationView.addHeaderView(headerView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
 
@@ -128,7 +137,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         fragmentTransaction.commit();
     }
 
-
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
@@ -156,6 +164,23 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             Globals.InitializeFragment(new FeedbackFragment(), getSupportFragmentManager());
         }
         return false;
+    }
+
+    private void SetWaiterName(TextView txtName,TextView txtLetter,NavigationView navigationView){
+        objSharePreferenceManage = new SharePreferenceManage();
+        if(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", WaitingActivity.this)!=null){
+            txtName.setText(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", WaitingActivity.this));
+            txtLetter.setText(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", WaitingActivity.this).substring(0,1));
+        }
+        if(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaitingActivity.this)!=null){
+            if(SplashScreenActivity.counter==1){
+                navigationView.getMenu().findItem(R.id.wChangeCounter).setVisible(false);
+            }
+            else {
+                navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaitingActivity.this));
+            }
+
+        }
     }
 
     //prevent backPressed

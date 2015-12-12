@@ -38,7 +38,7 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
     @Override
     public void onBindViewHolder(CounterViewHolder holder, int position) {
         CounterMaster current = alCounterMaster.get(position);
-        holder.cvCounter.setId(current.CounterMasterId);
+        holder.cvCounter.setId(position);
         holder.txtCounterTitle.setText(current.getCounterName());
     }
 
@@ -60,7 +60,8 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
                 @Override
                 public void onClick(View view) {
                     objSharePreferenceManage = new SharePreferenceManage();
-                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterMasterId", String.valueOf(view.getId()), context);
+                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterMasterId", String.valueOf(alCounterMaster.get(view.getId()).getCounterMasterId()), context);
+                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterName", alCounterMaster.get(view.getId()).getCounterName(), context);
 
                     Intent intent = new Intent(context, WelcomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

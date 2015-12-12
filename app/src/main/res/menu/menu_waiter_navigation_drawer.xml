@@ -8,23 +8,29 @@
         android:title="@string/navHome" />
 
     <item
+        android:id="@+id/wHotelProfile"
+        android:icon="@mipmap/hotel"
+        android:title="@string/navProfile" />
+
+    <item
         android:id="@+id/wOffers"
         android:icon="@mipmap/offers"
         android:title="@string/navOffers" />
 
     <item
-        android:id="@+id/wFeedback"
-        android:icon="@mipmap/feedback"
-        android:title="@string/navFeedback" />
+        android:id="@+id/wChangeCounter"
+        android:icon="@mipmap/food"
+        android:title="@string/navChangeCounter" />
 
     <item
         android:id="@+id/wChangeMode"
         android:icon="@mipmap/change_mode"
         android:title="@string/navChangeMode" />
+
     <item
-        android:id="@+id/wChangeCounter"
-        android:icon="@mipmap/food"
-        android:title="@string/navChangeCounter" />
+        android:id="@+id/wFeedback"
+        android:icon="@mipmap/feedback"
+        android:title="@string/navFeedback" />
 
     <item
         android:id="@+id/wRate"
@@ -40,4 +46,5 @@
         android:id="@+id/wExit"
         android:icon="@mipmap/exit"
         android:title="@string/navExit" />
+
 </menu>
