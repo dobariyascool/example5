@@ -1,6 +1,10 @@
 package com.arraybit.pos;
 
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -20,12 +24,15 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.rey.material.widget.TextView;
 
-public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+@SuppressLint("InflateParams")
+public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     ActionBarDrawerToggle actionBarDrawerToggle;
     LinearLayout waiterHomeMainLayout;
     boolean isDualPanel;
     SharePreferenceManage objSharePreferenceManage;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,31 +52,31 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         //linearlayout
         waiterHomeMainLayout = (LinearLayout) findViewById(R.id.waiterHomeMainLayout);
         LinearLayout waiterFragmentLayout = (LinearLayout) findViewById(R.id.waiterFragmentLayout);
-        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null,null);
+        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null, null);
         //end
 
         //navigationView
-        View headerView = LayoutInflater.from(WaiterHomeActivity.this).inflate(R.layout.navigation_header,null);
-        TextView txtLetter = (TextView)headerView.findViewById(R.id.txtLetter);
-        TextView txtName = (TextView)headerView.findViewById(R.id.txtName);
+        View headerView = LayoutInflater.from(WaiterHomeActivity.this).inflate(R.layout.navigation_header, null);
+        TextView txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
+        TextView txtName = (TextView) headerView.findViewById(R.id.txtName);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
-        SetWaiterName(txtName,txtLetter,navigationView);
+        navigationView = (NavigationView) findViewById(R.id.navigationView);
+        SetWaiterName(txtName, txtLetter, navigationView);
         navigationView.addHeaderView(headerView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
 
         //drawerlayout and actionbardrawertoggle
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         Globals.SetNavigationDrawer(actionBarDrawerToggle, WaiterHomeActivity.this, drawerLayout, app_bar);
         //end
 
-       // if (waiterHomeMainLayout.findViewById(R.id.fragment_waiter_option_list) == null) {
+        // if (waiterHomeMainLayout.findViewById(R.id.fragment_waiter_option_list) == null) {
 
-           // isDualPanel = false;
+        // isDualPanel = false;
         AddFragmentInLayout(new WaiterOptionListFragment());
-       // } else {
-          //  isDualPanel = true;
+        // } else {
+        //  isDualPanel = true;
         //}
     }
 
@@ -77,7 +84,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null,null);
+        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null, null);
         //}
     }
 
@@ -117,29 +124,45 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     //selected event
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-        if (menuItem.getItemId() == R.id.home) {
-            return true;
-        }
-        if (menuItem.getItemId() == R.id.login) {
-            return true;
-        }
         if (menuItem.getItemId() == R.id.wChangeCounter) {
             objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaiterHomeActivity.this) != null) {
-                objSharePreferenceManage.RemovePreference("CounterPreference", "CounterMasterId", WaiterHomeActivity.this);
-                objSharePreferenceManage.ClearPreference("CounterPreference", WaiterHomeActivity.this);
-
+                drawerLayout.closeDrawer(navigationView);
                 Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
             }
+        } else if (menuItem.getItemId() == R.id.wChangeMode) {
+            drawerLayout.closeDrawer(navigationView);
+            ChangeModeDialogFragment changeModeDialogFragment = new ChangeModeDialogFragment();
+            changeModeDialogFragment.show(getSupportFragmentManager(), "");
+        } else if (menuItem.getItemId() == R.id.wHotelProfile) {
+            drawerLayout.closeDrawer(navigationView);
+            Globals.InitializeFragment(new HotelProfileFragment(WaiterHomeActivity.this), getSupportFragmentManager());
+        } else if (menuItem.getItemId() == R.id.wOffers) {
+            drawerLayout.closeDrawer(navigationView);
+            Globals.InitializeFragment(new OfferFragment(WaiterHomeActivity.this), getSupportFragmentManager());
+        } else if (menuItem.getItemId() == R.id.wFeedback) {
+            drawerLayout.closeDrawer(navigationView);
+            Globals.InitializeFragment(new FeedbackFragment(WaiterHomeActivity.this), getSupportFragmentManager());
+        } else if (menuItem.getItemId() == R.id.wRate) {
+            Uri uri = Uri.parse("market://details?id=" + getPackageName());
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+
+            }
+        } else if (menuItem.getItemId() == R.id.wExit) {
+            System.exit(0);
         }
         return false;
     }
 
+
     //add fragment
     void AddFragmentInLayout(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.waiterFragmentLayout,fragment);
+        fragmentTransaction.replace(R.id.waiterFragmentLayout, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -148,47 +171,45 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     //prevent backPressed
     @Override
     public void onBackPressed() {
-            if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-                if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
 
-                    if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null){
+                if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_detail))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
 
-                        if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_order_detail)))
-                        {
-                            getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        }
-                        else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_detail))){
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_orders))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                } else {
+                    CategoryItemFragment.i = 0;
+                    CategoryItemFragment.isViewChange = false;
+                    getSupportFragmentManager().popBackStack();
 
-                            getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        }
-                    }
-                    else
-                    {
-                        CategoryItemFragment.i=0;
-                        CategoryItemFragment.isViewChange=false;
-                        getSupportFragmentManager().popBackStack();
-
-                    }
                 }
             }
         }
+    }
     //end
 
-    private void SetWaiterName(TextView txtName,TextView txtLetter,NavigationView navigationView){
+    private void SetWaiterName(TextView txtName, TextView txtLetter, NavigationView navigationView) {
         objSharePreferenceManage = new SharePreferenceManage();
-        if(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this)!=null){
+        if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this) != null) {
             txtName.setText(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this));
-            txtLetter.setText(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this).substring(0,1));
+            txtLetter.setText(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this).substring(0, 1));
         }
-        if(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this)!=null){
-            if(SplashScreenActivity.counter==1){
+        if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this) != null) {
+            if (SplashScreenActivity.counter == 1) {
                 navigationView.getMenu().findItem(R.id.wChangeCounter).setVisible(false);
-            }
-            else {
+            } else {
                 navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this));
             }
 
         }
+        navigationView.getMenu().findItem(R.id.wChangeMode).setVisible(true);
     }
 }
 

@@ -1,5 +1,6 @@
 package com.arraybit.pos;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,13 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+@SuppressLint("ValidFragment")
 public class ProfileFragment extends Fragment {
 
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
 
+    public ProfileFragment() {
+
+    }
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -63,13 +65,7 @@ public class ProfileFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        MenuItem miMyAccount = menu.findItem(R.id.myAccount);
-        MenuItem miLogout = menu.findItem(R.id.logout);
-        MenuItem miWaiting = menu.findItem(R.id.mWaiting);
-
-        miMyAccount.setVisible(false);
-        miLogout.setVisible(false);
-        miWaiting.setVisible(false);
+        menu.findItem(R.id.mWaiting).setVisible(false);
 
     }
 

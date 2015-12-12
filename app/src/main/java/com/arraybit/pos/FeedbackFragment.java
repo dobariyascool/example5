@@ -1,8 +1,9 @@
 package com.arraybit.pos;
 
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
+@SuppressLint("ValidFragment")
 public class FeedbackFragment extends Fragment {
 
     EditText etName, etEmail, etMobileNo, etFeedback;
@@ -34,13 +36,14 @@ public class FeedbackFragment extends Fragment {
     Button btnSubmit;
     ProgressDialog pDialog;
     String status;
-
+    Activity activityName;
+    int userMasterId;
     FeedbackJSONParser objFeedbackJSONParser;
     FeedbackMaster objFeedbackMaster;
-    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+    SharePreferenceManage objSharePreferenceManage;
 
-    public FeedbackFragment() {
-        // Required empty public constructor
+    public FeedbackFragment(Activity activityName) {
+       this.activityName = activityName;
     }
 
     @Override
@@ -70,8 +73,7 @@ public class FeedbackFragment extends Fragment {
 
         btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
 
-        etName.setText(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", getActivity()));
-        etName.setEnabled(false);
+        SetUser();
 
         return view;
     }
@@ -142,8 +144,14 @@ public class FeedbackFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        menu.findItem(R.id.mWaiting).setVisible(false);
-        menu.findItem(R.id.logout).setVisible(false);
+        if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))){
+            menu.findItem(R.id.mWaiting).setVisible(false);
+        }
+        else if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))){
+            menu.findItem(R.id.action_search).setVisible(false);
+            menu.findItem(R.id.viewChange).setVisible(false);
+        }
+
     }
 
     @Override
@@ -160,6 +168,29 @@ public class FeedbackFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void SetUser(){
+        objSharePreferenceManage = new SharePreferenceManage();
+        if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))){
+            if(objSharePreferenceManage.GetPreference("WaitingPreference","UserName",getActivity())!=null
+                    && objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity())!=null)
+            {
+                etName.setText(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", getActivity()));
+                etName.setEnabled(false);
+                userMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity()));
+
+            }
+        }
+        else if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))){
+            if(objSharePreferenceManage.GetPreference("WaiterPreference","UserName",getActivity())!=null
+                    && objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())!=null)
+            {
+                etName.setText(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", getActivity()));
+                etName.setEnabled(false);
+                userMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity()));
+            }
+        }
+    }
+
     class FeedbackLodingTask extends AsyncTask {
 
         @Override
@@ -172,9 +203,8 @@ public class FeedbackFragment extends Fragment {
             pDialog.setCancelable(false);
             pDialog.show();
 
-            short i = 1;
             objFeedbackMaster = new FeedbackMaster();
-            objFeedbackMaster.setName(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", getActivity()));
+            objFeedbackMaster.setName(etName.getText().toString());
             objFeedbackMaster.setEmail(etEmail.getText().toString());
             objFeedbackMaster.setPhone(etMobileNo.getText().toString());
             objFeedbackMaster.setFeedback(etFeedback.getText().toString());
@@ -187,8 +217,8 @@ public class FeedbackFragment extends Fragment {
                 objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.OtherQuery.getValue());
             }
 
-            objFeedbackMaster.setlinktoRegisteredUserMasterId(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity())));
-            objFeedbackMaster.setlinktoBusinessMasterId(i);
+            objFeedbackMaster.setlinktoRegisteredUserMasterId(userMasterId);
+            objFeedbackMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
             objFeedbackJSONParser = new FeedbackJSONParser();
         }
 
@@ -209,9 +239,7 @@ public class FeedbackFragment extends Fragment {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
                 ClearControls();
 
-                Intent intent = new Intent(getActivity(), WaitingActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                getActivity().startActivity(intent);
+                getActivity().getSupportFragmentManager().popBackStack();
             }
             pDialog.dismiss();
         }

@@ -9,6 +9,7 @@
         android:icon="@mipmap/view_table"
         android:orderInCategory="200"
         android:title="T"
+        android:visible="false"
         app:showAsAction="ifRoom" />
 
     <item

@@ -1,5 +1,7 @@
 package com.arraybit.pos;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.arraybit.global.Globals;
 import com.arraybit.modal.BusinessMaster;
 import com.arraybit.modal.UserMaster;
 import com.arraybit.parser.BusinessJSONParser;
@@ -27,7 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
-public class HotelFragment extends Fragment {
+@SuppressLint("ValidFragment")
+public class HotelProfileFragment extends Fragment {
 
     Toolbar app_bar;
     ViewPager viewPager;
@@ -36,11 +40,11 @@ public class HotelFragment extends Fragment {
     BusinessMaster objBusinessMaster;
     PageAdapter pageAdapter;
     UserMaster objUserMaster;
-    String UniqueId = "ABB";
     BusinessJSONParser objBusinessJSONParser;
+    Activity activityName;
 
-    public HotelFragment() {
-        // Required empty public constructor
+    public HotelProfileFragment(Activity activityName) {
+        this.activityName = activityName;
     }
 
     @Override
@@ -57,7 +61,7 @@ public class HotelFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_hotel, container, false);
+        View view = inflater.inflate(R.layout.fragment_hotel_profile, container, false);
 
         app_bar = (Toolbar) view.findViewById(R.id.app_bar);
 
@@ -98,8 +102,16 @@ public class HotelFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        menu.findItem(R.id.login).setVisible(false);
-        menu.findItem(R.id.registration).setVisible(false);
+        if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
+            menu.findItem(R.id.mWaiting).setVisible(false);
+        } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+            menu.findItem(R.id.action_search).setVisible(false);
+            menu.findItem(R.id.viewChange).setVisible(false);
+        } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_home))) {
+            menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.registration).setVisible(false);
+        }
+
     }
 
     static class PageAdapter extends FragmentStatePagerAdapter {
@@ -142,7 +154,7 @@ public class HotelFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            objBusinessMaster = objBusinessJSONParser.SelectBusinessMasterByUniqueId(UniqueId);
+            objBusinessMaster = objBusinessJSONParser.SelectBusinessMasterByUniqueId(Globals.businessMasterId);
             return objBusinessMaster;
         }
 

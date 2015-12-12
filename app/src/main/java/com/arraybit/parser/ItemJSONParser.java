@@ -115,15 +115,15 @@ public class ItemJSONParser {
         }
     }
 
-    public ArrayList<ItemMaster> SelectAllItemMaster(int currentPage,int linktoCounterMasterId, int linktoCategoryMasterId,String linktoItemTypeMasterId) {
+    public ArrayList<ItemMaster> SelectAllItemMaster(int currentPage,int linktoCounterMasterId, int linktoCategoryMasterId,String itemType,String linktoItemTypeMasterId) {
         ArrayList<ItemMaster> lstItemMaster = null;
         JSONObject jsonResponse;
         try {
             if(linktoCategoryMasterId==0){
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+null+"/"+linktoItemTypeMasterId);
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+null+"/"+itemType+"/"+linktoItemTypeMasterId);
             }
             else{
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+linktoCategoryMasterId+"/"+linktoItemTypeMasterId);
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+linktoCategoryMasterId+"/"+itemType+"/"+linktoItemTypeMasterId);
             }
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemMasterByCategoryMasterId + "Result");

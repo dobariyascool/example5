@@ -43,10 +43,12 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     FloatingActionMenu famRoot;
     Activity activityName;
     RelativeLayout allTablesFragment;
+    boolean isChangeMode;
 
 
-    public AllTablesFragment(Activity activityName) {
+    public AllTablesFragment(Activity activityName,boolean isChangeMode) {
         this.activityName = activityName;
+        this.isChangeMode = isChangeMode;
     }
 
     @Override
@@ -56,13 +58,12 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
 
         View view = inflater.inflate(R.layout.fragment_all_tables, container, false);
 
-        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
-        if(this.activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting)))
-        {
-            app_bar.setVisibility(View.GONE);
+        if (this.activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
+            view.findViewById(R.id.app_bar).setVisibility(View.GONE);
             setHasOptionsMenu(false);
-        }
-        else {
+        } else {
+
+            Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
             app_bar.setVisibility(View.VISIBLE);
 
             if (app_bar != null) {
@@ -71,15 +72,15 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_all_tables));
             }
 
-            allTablesFragment = (RelativeLayout)view.findViewById(R.id.allTablesFragment);
-            Globals.SetScaleImageBackground(getActivity(),null,allTablesFragment,null);
+            allTablesFragment = (RelativeLayout) view.findViewById(R.id.allTablesFragment);
+            Globals.SetScaleImageBackground(getActivity(), null, allTablesFragment, null);
 
             setHasOptionsMenu(true);
         }
 
 
-        tableTabLayout=(TabLayout)view.findViewById(R.id.tableTabLayout);
-        tableViewPager=(ViewPager)view.findViewById(R.id.tableViewPager);
+        tableTabLayout = (TabLayout) view.findViewById(R.id.tableTabLayout);
+        tableViewPager = (ViewPager) view.findViewById(R.id.tableViewPager);
 
         //floating action menu
         famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
@@ -87,9 +88,9 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         //end
 
         //floating action button
-        FloatingActionButton fabVacant=(FloatingActionButton)view.findViewById(R.id.fabVacant);
-        FloatingActionButton fabBusy=(FloatingActionButton)view.findViewById(R.id.fabBusy);
-        FloatingActionButton fabAll=(FloatingActionButton)view.findViewById(R.id.fabAll);
+        FloatingActionButton fabVacant = (FloatingActionButton) view.findViewById(R.id.fabVacant);
+        FloatingActionButton fabBusy = (FloatingActionButton) view.findViewById(R.id.fabBusy);
+        FloatingActionButton fabAll = (FloatingActionButton) view.findViewById(R.id.fabAll);
         //end
 
         //event
@@ -101,7 +102,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         if (Service.CheckNet(getActivity())) {
             new TableSectionLoadingTask().execute();
         } else {
-            Toast.makeText(getActivity(),getResources().getString(R.string.MsgCheckConnection),Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
             //Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgCheckConnection));
         }
 
@@ -110,7 +111,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
         return super.onOptionsItemSelected(item);
@@ -119,7 +120,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             menu.findItem(R.id.action_search).setVisible(true);
         }
     }
@@ -127,7 +128,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), null, allTablesFragment,null);
+        Globals.SetScaleImageBackground(getActivity(), null, allTablesFragment, null);
     }
 
     @Override
@@ -136,17 +137,15 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(tableTabLayout.getSelectedTabPosition());
         SectionMaster objSectionMaster = tablePagerAdapter.GetCurrentSection(tableTabLayout.getSelectedTabPosition());
 
-        if(v.getId()==R.id.fabVacant){
+        if (v.getId() == R.id.fabVacant) {
             famRoot.close(true);
             tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(), String.valueOf(Globals.TableStatus.Vacant.getValue()));
-        }
-        else if(v.getId()==R.id.fabBusy){
+        } else if (v.getId() == R.id.fabBusy) {
             famRoot.close(true);
             tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(), String.valueOf(Globals.TableStatus.Occupied.getValue()));
-        }
-        else if(v.getId()==R.id.fabAll){
+        } else if (v.getId() == R.id.fabAll) {
             famRoot.close(true);
-            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(),null);
+            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(), null);
         }
     }
 
@@ -155,6 +154,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         super.onDestroy();
     }
 
+    //region PagerAdapter
     static class TablePagerAdapter extends FragmentStatePagerAdapter {
 
         private final List<Fragment> tableFragmentList = new ArrayList<>();
@@ -169,11 +169,11 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             tableFragmentTitleList.add(title);
         }
 
-        public Fragment GetCurrentFragment(int position){
+        public Fragment GetCurrentFragment(int position) {
             return tableFragmentList.get(position);
         }
 
-        public SectionMaster GetCurrentSection(int position){
+        public SectionMaster GetCurrentSection(int position) {
             return tableFragmentTitleList.get(position);
         }
 
@@ -186,14 +186,15 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         public int getCount() {
             return tableFragmentList.size();
         }
+
         @Override
         public CharSequence getPageTitle(int position) {
             return tableFragmentTitleList.get(position).getSectionName();
         }
     }
+    //endregion
 
     //region Loading Task
-
     class TableSectionLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
@@ -219,30 +220,50 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         @Override
         protected void onPostExecute(Object result) {
 
+            progressDialog.dismiss();
             if (alSectionMaster == null) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             } else if (alSectionMaster.size() == 0) {
-                Toast.makeText(getActivity(),getResources().getString(R.string.MsgNoRecord),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             } else {
 
                 tablePagerAdapter = new TablePagerAdapter(getChildFragmentManager());
 
-                SectionMaster objSectionMaster =  new SectionMaster();
+                SectionMaster objSectionMaster = new SectionMaster();
                 objSectionMaster.setSectionMasterId((short) 0);
                 objSectionMaster.setSectionName("All");
                 ArrayList<SectionMaster> alSection = new ArrayList<>();
                 alSection.add(objSectionMaster);
 
-                alSectionMaster.addAll(0,alSection);
-                for(int i=0;i<alSectionMaster.size();i++){
-                    tablePagerAdapter.AddFragment(TableTabFragment.createInstance(alSectionMaster.get(i)),alSectionMaster.get(i));
+                alSectionMaster.addAll(0, alSection);
+                for (int i = 0; i < alSectionMaster.size(); i++) {
+                    tablePagerAdapter.AddFragment(TableTabFragment.createInstance(alSectionMaster.get(i),true), alSectionMaster.get(i));
                 }
                 tableViewPager.setAdapter(tablePagerAdapter);
                 tableTabLayout.setupWithViewPager(tableViewPager);
-                progressDialog.dismiss();
+
+                tableViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        tableViewPager.setCurrentItem(position);
+                        //load data when tab is change
+                        TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(position);
+                        tableTabFragment.LoadTableData();
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
             }
         }
     }
+    //endregion
 }

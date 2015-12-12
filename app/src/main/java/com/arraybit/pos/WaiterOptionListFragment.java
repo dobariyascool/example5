@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -24,10 +23,10 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_waiter_option_list, container, false);
 
-        CardView cvOrders=(CardView)view.findViewById(R.id.cvOrders);
-        CardView cvTables=(CardView)view.findViewById(R.id.cvTables);
-        CardView cvMenu=(CardView)view.findViewById(R.id.cvMenu);
-        CardView cvOffers=(CardView)view.findViewById(R.id.cvOffers);
+        CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);
+        CardView cvTables = (CardView) view.findViewById(R.id.cvTables);
+        CardView cvMenu = (CardView) view.findViewById(R.id.cvMenu);
+        CardView cvOffers = (CardView) view.findViewById(R.id.cvOffers);
 
         cvOrders.setOnClickListener(this);
         cvTables.setOnClickListener(this);
@@ -41,18 +40,14 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.cvOrders){
+        if (v.getId() == R.id.cvOrders) {
             Globals.InitializeFragment(new AllOrdersFragment(), getFragmentManager());
-        }
-        else if(v.getId()==R.id.cvTables){
-            Globals.InitializeFragment(new AllTablesFragment(getActivity()), getFragmentManager());
-        }
-        else if(v.getId()==R.id.cvMenu){
+        } else if (v.getId() == R.id.cvTables) {
+            Globals.InitializeFragment(new AllTablesFragment(getActivity(), false), getFragmentManager());
+        } else if (v.getId() == R.id.cvMenu) {
             Globals.InitializeFragment(new CategoryItemFragment(), getFragmentManager());
-        }
-        else if(v.getId()==R.id.cvOffers){
-            Intent intent = new Intent(getActivity(),GuestHomeActivity.class);
-            startActivity(intent);
+        } else if (v.getId() == R.id.cvOffers) {
+            Globals.InitializeFragment(new OfferFragment(getActivity()), getFragmentManager());
         }
 
     }

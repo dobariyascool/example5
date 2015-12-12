@@ -76,7 +76,7 @@ public class WaitingListFragment extends Fragment {
             }
         });
     }
-    //region LoadingTask
+
 
     //region Method
     public void SetTabLayout(ArrayList<WaitingStatusMaster> alWaitingStatusMaster, final WaitingListPagerAdapter waitingListPagerAdapter) {
@@ -154,8 +154,8 @@ public class WaitingListFragment extends Fragment {
             return WaitingTitleList.get(position);
         }
     }
-    //endregion
 
+    //region LoadingTask
     class WaitingStatusLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
@@ -197,5 +197,5 @@ public class WaitingListFragment extends Fragment {
             }
         }
     }
-    //end
+    //endregion
 }

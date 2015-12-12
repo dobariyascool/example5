@@ -81,14 +81,23 @@ public class AllOrdersFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(),null,null,allOrdersFragment);
+        Globals.SetScaleImageBackground(getActivity(), null, null, allOrdersFragment);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
-            getActivity().getSupportFragmentManager().popBackStack();
+            if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2){
+                if(getActivity().getSupportFragmentManager().getBackStackEntryAt(1).getName()!=null) {
+                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
+                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    }
+                }
+            }
+            else {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

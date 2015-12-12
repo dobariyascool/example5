@@ -68,6 +68,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
 
     public void UpdateData(int position,TableMaster objTableMaster){
         alTableMaster.get(position).setTableStatus(objTableMaster.getTableStatus());
+        alTableMaster.get(position).setStatusColor(objTableMaster.getStatusColor());
         notifyDataSetChanged();
     }
 

@@ -96,11 +96,16 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home){
             if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2) {
-                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null) {
-                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
+                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
+                        && getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
 
                         getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+                else if(getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
+                        &&getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))){
+                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName() !=null && getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
 
+                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     }
                 }
             }

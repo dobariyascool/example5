@@ -128,9 +128,19 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home){
-            getActivity().getSupportFragmentManager().popBackStack();
             CategoryItemFragment.i=0;
             CategoryItemFragment.isViewChange=false;
+            System.out.println("getActivity " + getActivity().getSupportFragmentManager().getBackStackEntryCount());
+            if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2){
+                if(getActivity().getSupportFragmentManager().getBackStackEntryAt(1).getName()!=null &&
+                        getActivity().getSupportFragmentManager().getBackStackEntryAt(1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
+
+                    getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_category_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+            }
+            else {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
         }
         else if(item.getItemId()==R.id.viewChange){
             ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());

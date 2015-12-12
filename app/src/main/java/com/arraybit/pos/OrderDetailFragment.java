@@ -73,13 +73,18 @@ public class OrderDetailFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home){
             if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2) {
-                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null) {
-                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
+                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null &&
+                            getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
 
                         getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
                     }
-                }
+                    else if(getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
+                            &&getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))){
+                        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName() !=null && getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
+
+                            getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        }
+                    }
             }
         }
         return super.onOptionsItemSelected(item);

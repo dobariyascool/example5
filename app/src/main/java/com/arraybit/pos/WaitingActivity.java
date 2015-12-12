@@ -1,8 +1,10 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -21,7 +23,7 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.rey.material.widget.TextView;
 
-public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     LinearLayout fragmentLayout, waitingMainLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -45,19 +47,19 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //end
 
         //naviagtionview
-        View headerView = LayoutInflater.from(WaitingActivity.this).inflate(R.layout.navigation_header,null);
-        TextView txtLetter = (TextView)headerView.findViewById(R.id.txtLetter);
-        TextView txtName = (TextView)headerView.findViewById(R.id.txtName);
+        View headerView = LayoutInflater.from(WaitingActivity.this).inflate(R.layout.navigation_header, null);
+        TextView txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
+        TextView txtName = (TextView) headerView.findViewById(R.id.txtName);
 
         navigationView = (NavigationView) findViewById(R.id.navigationView);
-        SetWaiterName(txtName,txtLetter,navigationView);
+        SetWaiterName(txtName, txtLetter, navigationView);
         navigationView.addHeaderView(headerView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
 
         //relativelayout
         waitingMainLayout = (LinearLayout) findViewById(R.id.waitingMainLayout);
-        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null,null);
+        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null, null);
         //end
 
         //drawerlayout and actionbardrawertoggle
@@ -79,7 +81,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null,null);
+        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null, null);
     }
 
     @Override
@@ -87,6 +89,12 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_waiting, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.mWaiting).setVisible(true);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -105,7 +113,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             if (item.getTitle().equals("T")) {
                 item.setTitle("W");
                 item.setIcon(R.mipmap.waiting_person);
-                ReplaceFragment(new AllTablesFragment(WaitingActivity.this));
+                ReplaceFragment(new AllTablesFragment(WaitingActivity.this, false));
             } else {
                 item.setTitle("T");
                 item.setIcon(R.mipmap.view_table);
@@ -142,41 +150,48 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
         if (menuItem.getItemId() == R.id.wExit) {
             System.exit(0);
-        }
-        if (menuItem.getItemId() == R.id.wChangeMode) {
+        } else if (menuItem.getItemId() == R.id.wChangeMode) {
             drawerLayout.closeDrawer(navigationView);
             Intent intent = new Intent(WaitingActivity.this, SignInActivity.class);
             startActivity(intent);
-        }
-        if (menuItem.getItemId() == R.id.wChangeCounter) {
+        } else if (menuItem.getItemId() == R.id.wChangeCounter) {
             drawerLayout.closeDrawer(navigationView);
             objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaitingActivity.this) != null) {
-                objSharePreferenceManage.RemovePreference("CounterPreference", "CounterMasterId", WaitingActivity.this);
-                objSharePreferenceManage.ClearPreference("CounterPreference", WaitingActivity.this);
-
                 Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
             }
-        }
-        if (menuItem.getItemId() == R.id.wFeedback) {
+        } else if (menuItem.getItemId() == R.id.wHotelProfile) {
             drawerLayout.closeDrawer(navigationView);
-            //navigationView.setVisibility(View.INVISIBLE);
-            Globals.InitializeFragment(new FeedbackFragment(), getSupportFragmentManager());
+            Globals.InitializeFragment(new HotelProfileFragment(WaitingActivity.this), getSupportFragmentManager());
+        } else if (menuItem.getItemId() == R.id.wFeedback) {
+            drawerLayout.closeDrawer(navigationView);
+            Globals.InitializeFragment(new FeedbackFragment(WaitingActivity.this), getSupportFragmentManager());
+        } else if (menuItem.getItemId() == R.id.wOffers) {
+            drawerLayout.closeDrawer(navigationView);
+            Globals.InitializeFragment(new OfferFragment(WaitingActivity.this), getSupportFragmentManager());
+        } else if (menuItem.getItemId() == R.id.wRate) {
+            Uri uri = Uri.parse("market://details?id=" + getPackageName());
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+
+            }
         }
         return false;
     }
 
-    private void SetWaiterName(TextView txtName,TextView txtLetter,NavigationView navigationView){
+    private void SetWaiterName(TextView txtName, TextView txtLetter, NavigationView navigationView) {
         objSharePreferenceManage = new SharePreferenceManage();
-        if(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", WaitingActivity.this)!=null){
+        if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", WaitingActivity.this) != null) {
             txtName.setText(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", WaitingActivity.this));
-            txtLetter.setText(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", WaitingActivity.this).substring(0,1));
+            txtLetter.setText(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", WaitingActivity.this).substring(0, 1));
         }
-        if(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaitingActivity.this)!=null){
-            if(SplashScreenActivity.counter==1){
+        if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaitingActivity.this) != null) {
+            if (SplashScreenActivity.counter == 1) {
                 navigationView.getMenu().findItem(R.id.wChangeCounter).setVisible(false);
-            }
-            else {
+            } else {
                 navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaitingActivity.this));
             }
 

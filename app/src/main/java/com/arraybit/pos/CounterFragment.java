@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -66,7 +67,23 @@ public class CounterFragment extends Fragment {
         gridLayoutManager = new GridLayoutManager(getActivity(),2);
 
         new CounterLoadingTask().execute();
+
+        setHasOptionsMenu(true);
+
         return view;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))){
+            menu.findItem(R.id.mWaiting).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
+        }
+        else if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))){
+            menu.findItem(R.id.logout).setVisible(false);
+        }
+
     }
 
     @Override

@@ -325,6 +325,24 @@ public class Globals {
 
     }
 
+    public enum TableStatusColor {
+        Vacant("4db6ac"),
+        Occupied("e91e63"),
+        Block("e2e2e2"),
+        Dirty("e8e8e8");
+
+        private String strValue;
+
+        TableStatusColor(String value) {
+            strValue = value;
+
+        }
+        public String getValue() {
+            return strValue;
+        }
+
+    }
+
     public enum ItemType {
         Veg(1),
         NonVeg(2),

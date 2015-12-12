@@ -66,19 +66,21 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             userName = intent.getStringExtra("username");
         }
 
+        AddFragmentInLayout(new GuestOptionListFragment());
+
         //check layout run in mobile or tablet
-        if (findViewById(R.id.categoryItemFragment) == null) {
-            isDualPanel = false;
-        } else {
-            isDualPanel = true;
-        }
+//        if (findViewById(R.id.categoryItemFragment) == null) {
+//            isDualPanel = false;
+//        } else {
+//            isDualPanel = true;
+//        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null,null);
+        Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null, null);
         //}
     }
 
@@ -128,7 +130,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                 break;
 
             case R.id.profile:
-                Globals.InitializeFragment(new HotelFragment(), getSupportFragmentManager());
+                Globals.InitializeFragment(new HotelProfileFragment(GuestHomeActivity.this), getSupportFragmentManager());
                 drawerLayout.closeDrawer(navigationView);
                 navigationView.setVisibility(View.INVISIBLE);
                 break;
@@ -150,20 +152,13 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     //prevent backPressed
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         //fragment backPressed
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            if(getSupportFragmentManager().getBackStackEntryCount() >= 1){
-                if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null){
-
-                    if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_signup)))
-                    {
+            if(getSupportFragmentManager().getBackStackEntryCount() > 1){
+                if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_signup)))
+                {
                         getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_signup), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    }
                 }
-            }
-            else {
-                getSupportFragmentManager().popBackStack();
             }
         }
     }

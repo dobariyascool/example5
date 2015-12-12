@@ -246,5 +246,12 @@
     <string name="wolfOffer">Offers</string>
     <!-- end -->
 
+    <!-- fragment guest option list-->
+    <string name="golfOrder">Orders</string>
+    <string name="golfFeedback">Feedback</string>
+    <string name="golfMenu">Menu</string>
+    <string name="golfOffer">Offers</string>
+    <string name="title_fragment_offer">Offers</string>
+    <!-- end -->
 
 </resources>

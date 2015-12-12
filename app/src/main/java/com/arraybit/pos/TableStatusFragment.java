@@ -76,6 +76,7 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             objTable = new TableMaster();
             objTable.setTableMasterId(objTableMaster.getTableMasterId());
             objTable.setTableStatus(Globals.TableStatus.Vacant.toString());
+            objTable.setStatusColor(Globals.TableStatusColor.Vacant.getValue());
             objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Vacant.getValue());
 
             new UpdateTableStatusLoadingTask().execute();
@@ -85,6 +86,7 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             objTable = new TableMaster();
             objTable.setTableMasterId(objTableMaster.getTableMasterId());
             objTable.setTableStatus(Globals.TableStatus.Occupied.toString());
+            objTable.setStatusColor(Globals.TableStatusColor.Occupied.getValue());
             objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Occupied.getValue());
 
             new UpdateTableStatusLoadingTask().execute();
@@ -93,6 +95,7 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             objTable = new TableMaster();
             objTable.setTableMasterId(objTableMaster.getTableMasterId());
             objTable.setTableStatus(Globals.TableStatus.Block.toString());
+            objTable.setStatusColor(Globals.TableStatusColor.Block.getValue());
             objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Block.getValue());
 
             new UpdateTableStatusLoadingTask().execute();
@@ -101,6 +104,7 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             objTable = new TableMaster();
             objTable.setTableMasterId(objTableMaster.getTableMasterId());
             objTable.setTableStatus(Globals.TableStatus.Dirty.toString());
+            objTable.setStatusColor(Globals.TableStatusColor.Dirty.getValue());
             objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Dirty.getValue());
 
             new UpdateTableStatusLoadingTask().execute();

@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,9 +22,8 @@ public class BusinessJSONParser
 {
     public String InsertBusinessMaster = "InsertBusinessMaster";
     public String UpdateBusinessMaster = "UpdateBusinessMaster";
-    public String SelectBusinessMaster = "SelectBusinessMaster";
     public String SelectAllBusinessMaster = "SelectAllBusinessMasterPageWise";
-    public String SelectBusinessMasterByUniqueId="SelectBusinessMasterByUniqueId";
+    public String SelectBusinessMaster="SelectBusinessMasterByBusinessMasterId";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     Date dt = null;
@@ -52,11 +50,11 @@ public class BusinessJSONParser
                 objBusinessMaster.setImageName(jsonObject.getString("ImageName"));
                 objBusinessMaster.setExtraText(jsonObject.getString("ExtraText"));
                 objBusinessMaster.setTIN(jsonObject.getString("TIN"));
-                dt = sdfDateFormat.parse(jsonObject.getString("TINRegistrationDate"));
-                objBusinessMaster.setTINRegistrationDate(sdfControlDateFormat.format(dt));
+//                dt = sdfDateFormat.parse(jsonObject.getString("TINRegistrationDate"));
+//                objBusinessMaster.setTINRegistrationDate(sdfControlDateFormat.format(dt));
                 objBusinessMaster.setCST(jsonObject.getString("CST"));
-                dt = sdfDateFormat.parse(jsonObject.getString("CSTRegistrationDate"));
-                objBusinessMaster.setCSTRegistrationDate(sdfControlDateFormat.format(dt));
+//                dt = sdfDateFormat.parse(jsonObject.getString("CSTRegistrationDate"));
+//                objBusinessMaster.setCSTRegistrationDate(sdfControlDateFormat.format(dt));
                 objBusinessMaster.setlinktoBusinessTypeMasterId((short)jsonObject.getInt("linktoBusinessTypeMasterId"));
                 objBusinessMaster.setUniqueId(jsonObject.getString("UniqueId"));
                 objBusinessMaster.setIsEnabled(jsonObject.getBoolean("IsEnabled"));
@@ -68,8 +66,6 @@ public class BusinessJSONParser
             }
             return objBusinessMaster;
         } catch (JSONException e) {
-            return null;
-        } catch (ParseException e) {
             return null;
         }
     }
@@ -96,11 +92,11 @@ public class BusinessJSONParser
                 objBusinessMaster.setImageName(jsonArray.getJSONObject(i).getString("ImageName"));
                 objBusinessMaster.setExtraText(jsonArray.getJSONObject(i).getString("ExtraText"));
                 objBusinessMaster.setTIN(jsonArray.getJSONObject(i).getString("TIN"));
-                dt = sdfDateFormat.parse(jsonArray.getJSONObject(i).getString("TINRegistrationDate"));
-                objBusinessMaster.setTINRegistrationDate(sdfControlDateFormat.format(dt));
+//                dt = sdfDateFormat.parse(jsonArray.getJSONObject(i).getString("TINRegistrationDate"));
+//                objBusinessMaster.setTINRegistrationDate(sdfControlDateFormat.format(dt));
                 objBusinessMaster.setCST(jsonArray.getJSONObject(i).getString("CST"));
-                dt = sdfDateFormat.parse(jsonArray.getJSONObject(i).getString("CSTRegistrationDate"));
-                objBusinessMaster.setCSTRegistrationDate(sdfControlDateFormat.format(dt));
+//                dt = sdfDateFormat.parse(jsonArray.getJSONObject(i).getString("CSTRegistrationDate"));
+//                objBusinessMaster.setCSTRegistrationDate(sdfControlDateFormat.format(dt));
                 objBusinessMaster.setlinktoBusinessTypeMasterId((short)jsonArray.getJSONObject(i).getInt("linktoBusinessTypeMasterId"));
                 objBusinessMaster.setUniqueId(jsonArray.getJSONObject(i).getString("UniqueId"));
                 objBusinessMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
@@ -113,8 +109,6 @@ public class BusinessJSONParser
             }
             return lstBusinessMaster;
         } catch (JSONException e) {
-            return null;
-        } catch (ParseException e) {
             return null;
         }
     }
@@ -226,13 +220,13 @@ public class BusinessJSONParser
         }
     }
 
-    public BusinessMaster SelectBusinessMasterByUniqueId(String uniqueId)
+    public BusinessMaster SelectBusinessMasterByUniqueId(int businessMasterId)
     {
         try {
-            JSONObject jsonResponse=Service.HttpGetService(Service.Url+this.SelectBusinessMasterByUniqueId+"/"+uniqueId);
+            JSONObject jsonResponse=Service.HttpGetService(Service.Url+this.SelectBusinessMaster+"/"+businessMasterId);
             if(jsonResponse!=null)
             {
-                JSONObject jsonObject=jsonResponse.getJSONObject(this.SelectBusinessMasterByUniqueId+"Result");
+                JSONObject jsonObject=jsonResponse.getJSONObject(this.SelectBusinessMaster+"Result");
                 if(jsonObject!=null)
                 {
                     return SetClassPropertiesFromJSONObject(jsonObject);

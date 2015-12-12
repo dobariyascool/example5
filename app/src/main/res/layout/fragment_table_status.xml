@@ -1,83 +1,63 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@android:color/white"
-android:orientation="vertical"
-tools:context="com.arraybit.pos.TableStatusFragment"
-tools:ignore="HardcodedText">
-
-<com.rey.material.widget.TextView
-    style="@style/TextView"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:gravity="center"
-    android:text="@string/wsdTitle"
-    android:textAllCaps="false"
-    android:visibility="gone"/>
-
-
-<LinearLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/control_SpecingMedium"
-    android:gravity="center"
-    android:orientation="horizontal">
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context="com.arraybit.pos.TableStatusFragment"
+    tools:ignore="HardcodedText">
 
-    <com.rey.material.widget.Button
-        android:id="@+id/btnVacant"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@android:color/white"
-        android:drawableTop="@mipmap/serve"
-        android:padding="@dimen/control_SpecingSmall"
-        android:text="@string/tsVacant"
+    <com.rey.material.widget.TextView
+        style="@style/TextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="@string/wsdTitle"
         android:textAllCaps="false"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/control_TextSmall" />
+        android:visibility="gone" />
 
-    <com.rey.material.widget.Button
-        android:id="@+id/btnOccupy"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@android:color/white"
-        android:drawableTop="@mipmap/not_available"
-        android:padding="@dimen/control_SpecingSmall"
-        android:text="@string/tsBusy"
-        android:textAllCaps="false"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/control_TextSmall" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/control_SpecingMedium"
+        android:gravity="center"
+        android:orientation="horizontal">
 
+        <com.rey.material.widget.Button
+            android:id="@+id/btnVacant"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/serve"
+            android:text="@string/tsVacant" />
 
-    <com.rey.material.widget.Button
-        android:id="@+id/btnBlock"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@android:color/white"
-        android:drawableTop="@mipmap/close"
-        android:padding="@dimen/control_SpecingSmall"
-        android:text="@string/tsBlock"
-        android:textAlignment="viewEnd"
-        android:textAllCaps="false"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/control_TextSmall" />
+        <com.rey.material.widget.Button
+            android:id="@+id/btnOccupy"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/not_available"
+            android:text="@string/tsBusy" />
 
-    <com.rey.material.widget.Button
-        android:id="@+id/btnDirty"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@android:color/white"
-        android:drawableTop="@mipmap/call"
-        android:padding="@dimen/control_SpecingSmall"
-        android:text="@string/tsDirty"
-        android:textAlignment="viewEnd"
-        android:textAllCaps="false"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/control_TextSmall" />
+        <com.rey.material.widget.Button
+            android:id="@+id/btnBlock"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/close"
+            android:text="@string/tsBlock" />
 
-</LinearLayout>
+        <com.rey.material.widget.Button
+            android:id="@+id/btnDirty"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/call"
+            android:text="@string/tsDirty" />
+
+    </LinearLayout>
 </LinearLayout>
