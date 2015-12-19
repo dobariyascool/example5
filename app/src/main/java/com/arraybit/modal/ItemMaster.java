@@ -3,6 +3,8 @@ package com.arraybit.modal;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /// <summary>
 /// Model for ItemMaster
 /// </summary>
@@ -14,8 +16,8 @@ public class ItemMaster implements Parcelable {
     String ShortName;
     String ItemCode;
     String ShortDescription;
-    //double MRP;
-    //double SellPrice;
+    double MRP;
+    double SellPrice;
     short ItemPoint;
     short PriceByPoint;
     //short linktoItemTypeMasterId;
@@ -47,8 +49,8 @@ public class ItemMaster implements Parcelable {
             objItemMaster.ShortName = source.readString();
             objItemMaster.ItemCode = source.readString();
             objItemMaster.ShortDescription = source.readString();
-            //objItemMaster.MRP = source.readDouble();
-            //objItemMaster.SellPrice = source.readDouble();
+            objItemMaster.MRP = source.readDouble();
+            objItemMaster.SellPrice = source.readDouble();
             objItemMaster.ItemPoint = (short) source.readInt();
             objItemMaster.PriceByPoint = (short) source.readInt();
             //objItemMaster.linktoItemTypeMasterId = (short)source.readInt();
@@ -80,6 +82,10 @@ public class ItemMaster implements Parcelable {
             return new ItemMaster[size];
         }
     };
+    int Quantity;
+    String Remark;
+    String ItemModifierMasterId;
+    ArrayList<ItemMaster> alOrderItemModifierTran;
 
     public int getItemMasterId() {
         return this.ItemMasterId;
@@ -121,13 +127,13 @@ public class ItemMaster implements Parcelable {
         this.ShortDescription = shortDescription;
     }
 
-//    public double getMRP() { return this.MRP; }
+    public double getMRP() { return this.MRP; }
+
+    public void setMRP(double mRP) { this.MRP = mRP; }
 //
-//    public void setMRP(double mRP) { this.MRP = mRP; }
-//
-//    public double getSellPrice() { return this.SellPrice; }
-//
-//    public void setSellPrice(double sellPrice) { this.SellPrice = sellPrice; }
+    public double getSellPrice() { return this.SellPrice; }
+
+    public void setSellPrice(double sellPrice) { this.SellPrice = sellPrice; }
 
     public short getItemPoint() {
         return this.ItemPoint;
@@ -297,6 +303,38 @@ public class ItemMaster implements Parcelable {
         BarCode = barCode;
     }
 
+    public int getQuantity() {
+        return Quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        Quantity = quantity;
+    }
+
+    public String getRemark() {
+        return Remark;
+    }
+
+    public void setRemark(String remark) {
+        Remark = remark;
+    }
+
+    public String getItemModifierMasterId() {
+        return ItemModifierMasterId;
+    }
+
+    public void setItemModifierMasterId(String itemModifierMasterId) {
+        ItemModifierMasterId = itemModifierMasterId;
+    }
+
+    public ArrayList<ItemMaster> getAlOrderItemModifierTran() {
+        return alOrderItemModifierTran;
+    }
+
+    public void setAlOrderItemModifierTran(ArrayList<ItemMaster> alOrderItemModifierTran) {
+        this.alOrderItemModifierTran = alOrderItemModifierTran;
+    }
+
     //endregion
     public int describeContents() {
         return 0;
@@ -308,8 +346,8 @@ public class ItemMaster implements Parcelable {
         parcel.writeString(ShortName);
         parcel.writeString(ItemCode);
         parcel.writeString(ShortDescription);
-        //parcel.writeDouble(MRP);
-        //parcel.writeDouble(SellPrice);
+        parcel.writeDouble(MRP);
+        parcel.writeDouble(SellPrice);
         parcel.writeInt(ItemPoint);
         parcel.writeInt(PriceByPoint);
         //parcel.writeInt(linktoItemTypeMasterId);

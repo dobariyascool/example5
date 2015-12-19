@@ -2,6 +2,7 @@ package com.arraybit.pos;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,11 +42,27 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.cvOrders) {
-            Globals.InitializeFragment(new AllOrdersFragment(), getFragmentManager());
+            Globals.InitializeFragment(new AllOrdersFragment(null), getFragmentManager());
         } else if (v.getId() == R.id.cvTables) {
-            Globals.InitializeFragment(new AllTablesFragment(getActivity(), false), getFragmentManager());
+            //Intent intent = new Intent(getActivity(),MenuActivity.class);
+            //startActivity(intent);
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(android.R.id.content,new AllTablesFragment(getActivity(),false));
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+           //Globals.InitializeFragment(new AllTablesFragment(getActivity(),false), getFragmentManager());
         } else if (v.getId() == R.id.cvMenu) {
-            Globals.InitializeFragment(new CategoryItemFragment(), getFragmentManager());
+
+            AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(),false);
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("IsMenu",true);
+            allTablesFragment.setArguments(bundle);
+
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(android.R.id.content,allTablesFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+            //Globals.InitializeFragment(new CategoryItemFragment(), getFragmentManager());
         } else if (v.getId() == R.id.cvOffers) {
             Globals.InitializeFragment(new OfferFragment(getActivity()), getFragmentManager());
         }

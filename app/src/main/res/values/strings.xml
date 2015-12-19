@@ -20,9 +20,10 @@
     <string name="title_fragment_counter">Counter</string>
     <string name="title_activity_waiter_order_detail">Home</string>
     <string name="title_fragment_all_orders">Orders</string>
-    <string name="title_fragment_order_detail">Order Information</string>
+    <string name="title_fragment_order_detail">Order Summary</string>
     <string name="title_fragment_all_tables">Tables</string>
     <string name="title_fragment_category_item">Menu</string>
+    <string name="title_fragment_cart_item">Order Information</string>
     <!-- end -->
 
     <string name="hello_world">Hello world!</string>
@@ -52,6 +53,8 @@
     <string name="MsgServerNotResponding">Server not responding, Try again later</string>
     <string name="MsgFeedback">Thank you for your feedback, your response will help us to improve the quality of service.</string>
     <string name="MsgVerification">Your Phone Number is Verified.</string>
+    <string name="MsgCart">Cart is empty.</string>
+
     <!-- End -->
 
     <string name="splash_screen">arraybitlogo</string>
@@ -124,6 +127,7 @@
     <string name="wmMyAccount">My Account</string>
     <string name="wmLogout">Logout</string>
     <string name="wmViewChange">View Change</string>
+    <string name="wmCart">Cart</string>
     <!-- end -->
 
 
@@ -183,6 +187,8 @@
     <string name="dfDescription">Description:</string>
     <string name="dfPrice">Price:</string>
     <string name="dfQuantity">Quantity:</string>
+    <string name="dfOrder">Order</string>
+    <string name="dfCancel">Cancel</string>
     <string name="dfPlus">+</string>
     <string name="dfMinus">-</string>
     <!--end-->
@@ -230,6 +236,7 @@
 
     <!-- fragment add item qty -->
     <string name="aiqfRemark">Remark</string>
+    <string name="aiqfModifier">Modifier</string>
     <string name="aiqfCancel">Cancel</string>
     <string name="aiqfOk">OK</string>
     <string name="aiqfTitle">Add Quantity</string>
@@ -252,6 +259,21 @@
     <string name="golfMenu">Menu</string>
     <string name="golfOffer">Offers</string>
     <string name="title_fragment_offer">Offers</string>
+    <!-- end -->
+
+    <!-- fragment cart item -->
+    <string name="cifNo">No</string>
+    <string name="cifItem">Item</string>
+    <string name="cifQty">Quantity</string>
+    <string name="cifClearOrder">Clear Order</string>
+    <string name="cifConfirmOrder">Confirm Order</string>
+    <string name="cifConfirmClear">Are you sure to clear Order?</string>
+    <!-- end -->
+
+    <!-- fragment all orders -->
+    <string name="aofDineIn">Dine In</string>
+    <string name="aofTakeAway">Take Away</string>
+    <string name="aofAll">All</string>
     <!-- end -->
 
 </resources>

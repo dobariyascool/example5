@@ -35,21 +35,23 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     TextView txtMsg;
     ArrayList<OrderMaster> alOrderMaster;
     int counterMasterId;
-    String orderStatus;
+    String orderStatus,linktoTableMasterIds;
     GridLayoutManager gridLayoutManager;
     SharePreferenceManage objSharePreferenceManage;
     OrdersAdapter ordersAdapter;
     int id;
     DisplayMetrics displayMetrics;
+    String orderTypeMasterId;
 
     public OrdersTabFragment() {
         // Required empty public constructor
     }
 
-    public static OrdersTabFragment createInstance(String orderStatus) {
+    public static OrdersTabFragment createInstance(String orderStatus,String linktoTableMasterIds) {
         OrdersTabFragment ordersTabFragment = new OrdersTabFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ITEMS_COUNT_KEY, orderStatus);
+        bundle.putString("TableMasterIds",linktoTableMasterIds);
         ordersTabFragment.setArguments(bundle);
         return ordersTabFragment;
     }
@@ -81,6 +83,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         //first tab load
         Bundle bundle = getArguments();
         orderStatus = bundle.getString(ITEMS_COUNT_KEY);
+        linktoTableMasterIds = bundle.getString("TableMasterIds");
 
         if (orderStatus.equals(Globals.OrderStatus.All.toString())) {
             LoadOrderData();
@@ -90,6 +93,14 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    public void OrderDataFilter(String orderStatus,String orderTypeMasterId) {
+        this.orderTypeMasterId = orderTypeMasterId;
+        this.orderStatus = orderStatus;
+        alOrderMaster = new ArrayList<>();
+
+        new OrderMasterLoadingTask().execute();
     }
 
     @Override
@@ -105,7 +116,9 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         // Do something when collapsed
-                        ordersAdapter.SetSearchFilter(alOrderMaster);
+                        if(alOrderMaster.size()!=0 && alOrderMaster!=null) {
+                            ordersAdapter.SetSearchFilter(alOrderMaster);
+                        }
                         return true; // Return true to collapse action view
                     }
 
@@ -178,7 +191,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         protected Object doInBackground(Object[] objects) {
 
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, Globals.OrderStatus.valueOf(orderStatus).getValue());
+            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, Globals.OrderStatus.valueOf(orderStatus).getValue(),linktoTableMasterIds,orderTypeMasterId);
         }
 
         @Override

@@ -3,25 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.arraybit.pos.WaiterHomeActivity">
 
-    <item android:id="@+id/logout"
+    <item
+        android:id="@+id/logout"
         android:orderInCategory="100"
         android:title="@string/wmLogout" />
 
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/search"
-        android:orderInCategory="100"
+        android:orderInCategory="200"
         android:title="@string/navSearch"
         android:visible="false"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView"/>
+        app:showAsAction="always|collapseActionView"
+        tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/viewChange"
         android:icon="@drawable/view_list"
-        android:orderInCategory="150"
+        android:orderInCategory="300"
         android:title="@string/wmViewChange"
         android:visible="false"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
+    <item
+        android:id="@+id/cart_layout"
+        android:orderInCategory="400"
+        android:title="@string/wmCart"
+        android:visible="false"
+        app:actionLayout="@layout/cart_layout"
+        app:showAsAction="always" />
+    <!--android:icon="@drawable/cart"-->
 </menu>

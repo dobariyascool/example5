@@ -29,4 +29,35 @@
             android:layout_height="match_parent" />
 
     </LinearLayout>
+    <com.github.clans.fab.FloatingActionMenu xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/famRoot"
+        style="@style/FloatingMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/control_SpecingSmall"
+        app:menu_icon="@mipmap/fmenu">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabDineIn"
+            style="@style/FloatingButtonWithTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_label="@string/aofDineIn"
+            />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabTakeAway"
+            style="@style/FloatingButtonWithTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_label="@string/aofTakeAway" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabAll"
+            style="@style/FloatingButtonWithTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_label="@string/aofAll" />
+
+    </com.github.clans.fab.FloatingActionMenu>
 </FrameLayout>

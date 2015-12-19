@@ -255,6 +255,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 objSharePreferenceManage.CreatePreference("WaiterPreference", "UserSecurityCode", String.valueOf(objUserMaster.getPassword()), SignInActivity.this);
             }
 
+            if(objSharePreferenceManage.GetPreference("WaiterPreference","WaiterMasterId",SignInActivity.this)==null){
+                objSharePreferenceManage.CreatePreference("WaiterPreference", "WaiterMasterId", String.valueOf(objUserMaster.getWaiterMasterId()), SignInActivity.this);
+            }
+
         } else {
             if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SignInActivity.this) == null) {
                 objSharePreferenceManage.CreatePreference("WaitingPreference", "UserName", etName.getText().toString(), SignInActivity.this);

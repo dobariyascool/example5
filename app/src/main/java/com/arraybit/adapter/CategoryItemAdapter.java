@@ -3,7 +3,6 @@ package com.arraybit.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.pos.AddItemQtyDialogFragment;
 import com.arraybit.pos.CategoryItemFragment;
-import com.arraybit.pos.DetailFragment;
 import com.arraybit.pos.R;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.TextView;
@@ -31,12 +30,14 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     Context context;
     ArrayList<ItemMaster> alItemMaster;
     ItemMaster objItemMaster;
+    ItemClickListener objItemClickListener;
 
-    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange) {
+    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange,ItemClickListener objItemClickListener) {
         this.context = context;
         alItemMaster = result;
         this.fragmentManager = fragmentManager;
         this.isViewChange = isViewChange;
+        this.objItemClickListener = objItemClickListener;
     }
 
     @Override
@@ -62,7 +63,8 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         objItemMaster = alItemMaster.get(position);
 
-        holder.cvItem.setId(objItemMaster.getItemMasterId());
+        holder.cvItem.setId(position);
+        holder.btnAdd.setId(position);
 
         if (!isWaiterGrid) {
             if (objItemMaster.getImageName().equals("null")) {
@@ -74,8 +76,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
         holder.txtItemName.setText(objItemMaster.getItemName());
         holder.txtItemDescription.setText(objItemMaster.getShortDescription());
-        holder.txtItemPrice.setVisibility(View.GONE);
-        //holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
+        holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
     }
 
     @Override
@@ -94,8 +95,9 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         notifyDataSetChanged();
     }
 
-    public interface OrderItemDetail {
-        public void ItemDetail();
+    public interface ItemClickListener {
+        public void ButtonOnClick(ItemMaster objItemMaster);
+        public void CardViewOnClick(ItemMaster objItemMaster);
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -127,14 +129,11 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     //DetailFragment detailFragment = new DetailFragment(v.getId());
                     if(isWaiterGrid)
                     {
-                        AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment();
+                        AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(alItemMaster.get(v.getId()));
                         addItemQtyDialogFragment.show(fragmentManager,"");
                     }
                     else {
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.categoryItemFragment, new DetailFragment(v.getId()), context.getResources().getString(R.string.title_fragment_detail));
-                        fragmentTransaction.addToBackStack(context.getResources().getString(R.string.title_fragment_detail));
-                        fragmentTransaction.commit();
+                        objItemClickListener.CardViewOnClick(alItemMaster.get(v.getId()));
                     }
 
                 }
@@ -144,8 +143,11 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             btnAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment();
-                    addItemQtyDialogFragment.show(fragmentManager,"");
+
+                    //objItemClickListener = (ItemClickListener)context;
+                    objItemClickListener.ButtonOnClick(alItemMaster.get(v.getId()));
+                    //AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment();
+                    //addItemQtyDialogFragment.show(fragmentManager,"");
                 }
             });
         }

@@ -15,6 +15,7 @@
         <item name="android:scaleType">centerInside</item>
         <item name="android:padding">@dimen/control_SpecingTiny</item>
     </style>
+
     <style name="FullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
@@ -64,7 +65,8 @@
         <item name="et_labelTextAppearance">@style/TextAppearance.AppCompat.Caption</item>
     </style>
 
-    <style name="AppCompactAutoCompleteTextView">android.support.v7.widget.AppCompatAutoCompleteTextView</style>
+    <style name="AppCompactAutoCompleteTextView">
+        android.support.v7.widget.AppCompatAutoCompleteTextView</style>
 
 
     <style name="Spinner" parent="Material.Widget.Spinner.Light">
@@ -144,9 +146,11 @@
     </style>
 
     <style name="MaterialTabLayout">android.support.design.widget.TabLayout</style>
+
     <style name="AppCompactCardView">android.support.v7.cardview</style>
 
     <style name="FloatingActionButton">com.github.clans.fab.FloatingActionButton</style>
+
     <style name="FloatingActionMenu">com.github.clans.fab.FloatingActionMenu</style>
 
     <style name="TabLayout" parent="MaterialTabLayout">
@@ -226,13 +230,16 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
     </style>
+
     <style name="ErrorTextView">
         <item name="android:padding">@dimen/control_SpecingSmall</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="MaterialButton">com.rey.material.widget.Button</style>
+
     <style name="NumberButton" parent="MaterialButton">
         <item name="android:background">@drawable/btn_selector</item>
         <item name="rd_enable">true</item>
@@ -252,5 +259,6 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -24,6 +24,8 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.rey.material.widget.TextView;
 
+import java.util.ArrayList;
+
 @SuppressLint("InflateParams")
 public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -184,11 +186,17 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_orders))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else {
+                } else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() -1).getName() !=null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_cart_item))){
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+                else {
                     CategoryItemFragment.i = 0;
                     CategoryItemFragment.isViewChange = false;
                     getSupportFragmentManager().popBackStack();
-
+                    Globals.counter = 0;
+                    Globals.alOrderItemTran = new ArrayList<>();
+                    CategoryItemFragment.targetFragment=null;
                 }
             }
         }
@@ -212,12 +220,3 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         navigationView.getMenu().findItem(R.id.wChangeMode).setVisible(true);
     }
 }
-
-
-//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-//    public void WindowAnimation(){
-//        Fade fade = new Fade();
-//        fade.setDuration(1000);
-//        getWindow().setEnterTransition(fade);
-//    }
-

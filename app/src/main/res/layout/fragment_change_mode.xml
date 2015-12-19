@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context=".ChangeModeDialogFragment">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/control_SpecingMedium"
+        android:orientation="vertical">
+
+        <com.rey.material.widget.EditText
+            android:id="@+id/etPassword"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/suPassword"
+            android:inputType="textWebPassword"
+            android:padding="@dimen/control_SpecingTiny" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal"
+            tools:ignore="HardcodedText">
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnCancel"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cancel" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnSubmit"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="submit" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

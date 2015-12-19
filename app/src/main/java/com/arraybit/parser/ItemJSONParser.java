@@ -17,6 +17,7 @@ import java.util.Locale;
 
 public class ItemJSONParser {
     public String SelectAllItemMasterByCategoryMasterId = "SelectAllItemMasterByCategoryMasterId";
+    public String SelectAllItemMasterModifier = "SelectAllItemMasterModifier";
     public String SelectItemMaster = "SelectItemMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
@@ -33,8 +34,8 @@ public class ItemJSONParser {
                 objItemMaster.setShortName(jsonObject.getString("ShortName"));
                 objItemMaster.setItemCode(jsonObject.getString("ItemCode"));
                 objItemMaster.setShortDescription(jsonObject.getString("ShortDescription"));
-                //objItemMaster.setMRP(jsonObject.getDouble("MRP"));
-                //objItemMaster.setSellPrice(jsonObject.getDouble("SellPrice"));
+                objItemMaster.setMRP(jsonObject.getDouble("MRP"));
+                objItemMaster.setSellPrice(jsonObject.getDouble("SellPrice"));
                 objItemMaster.setItemPoint((short) jsonObject.getInt("ItemPoint"));
                 objItemMaster.setPriceByPoint((short) jsonObject.getInt("PriceByPoint"));
                 //objItemMaster.setlinktoItemTypeMasterId((short) jsonObject.getInt("linktoItemTypeMasterId"));
@@ -79,8 +80,8 @@ public class ItemJSONParser {
                 objItemMaster.setShortName(jsonArray.getJSONObject(i).getString("ShortName"));
                 objItemMaster.setItemCode(jsonArray.getJSONObject(i).getString("ItemCode"));
                 objItemMaster.setShortDescription(jsonArray.getJSONObject(i).getString("ShortDescription"));
-                //objItemMaster.setMRP(jsonArray.getJSONObject(i).getDouble("MRP"));
-                //objItemMaster.setSellPrice(jsonArray.getJSONObject(i).getDouble("SellPrice"));
+                objItemMaster.setMRP(jsonArray.getJSONObject(i).getDouble("MRP"));
+                objItemMaster.setSellPrice(jsonArray.getJSONObject(i).getDouble("SellPrice"));
                 objItemMaster.setItemPoint((short) jsonArray.getJSONObject(i).getInt("ItemPoint"));
                 objItemMaster.setPriceByPoint((short) jsonArray.getJSONObject(i).getInt("PriceByPoint"));
                 //objItemMaster.setlinktoItemTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoItemTypeMasterId"));
@@ -115,15 +116,15 @@ public class ItemJSONParser {
         }
     }
 
-    public ArrayList<ItemMaster> SelectAllItemMaster(int currentPage,int linktoCounterMasterId, int linktoCategoryMasterId,String itemType,String linktoItemTypeMasterId) {
+    public ArrayList<ItemMaster> SelectAllItemMaster(int currentPage,int linktoCounterMasterId, int linktoCategoryMasterId,String linktoItemTypeMasterId) {
         ArrayList<ItemMaster> lstItemMaster = null;
         JSONObject jsonResponse;
         try {
             if(linktoCategoryMasterId==0){
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+null+"/"+itemType+"/"+linktoItemTypeMasterId);
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+null+"/"+linktoItemTypeMasterId);
             }
             else{
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+linktoCategoryMasterId+"/"+itemType+"/"+linktoItemTypeMasterId);
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId +"/"+currentPage+"/"+linktoCounterMasterId+"/"+linktoCategoryMasterId+"/"+linktoItemTypeMasterId);
             }
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemMasterByCategoryMasterId + "Result");
@@ -137,9 +138,26 @@ public class ItemJSONParser {
         }
     }
 
-    public ItemMaster SelectItemMaster(int itemMasterId) {
+    public ArrayList<ItemMaster> SelectAllItemMasterModifier() {
+        ArrayList<ItemMaster> lstItemMaster = null;
+        try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterModifier +"/"+Globals.itemType);
+            if (jsonResponse != null) {
+                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemMasterModifier + "Result");
+                if (jsonArray != null) {
+                    lstItemMaster = SetListPropertiesFromJSONArray(jsonArray);
+                }
+            }
+            return lstItemMaster;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+
+    public ItemMaster SelectItemMaster(int counterMasterId,int itemMasterId) {
        try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectItemMaster + "/" + itemMasterId);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectItemMaster + "/" + counterMasterId + "/" + itemMasterId);
             if (jsonResponse != null) {
                 JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectItemMaster + "Result");
                 if (jsonObject != null) {

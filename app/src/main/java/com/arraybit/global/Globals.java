@@ -29,12 +29,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.arraybit.modal.ItemMaster;
 import com.arraybit.pos.GuestLoginDialogFragment;
 import com.arraybit.pos.R;
 import com.arraybit.pos.SignInActivity;
 import com.arraybit.pos.SignUpFragment;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,7 +51,11 @@ public class Globals {
     public static String DisplayTimeFormat="h:mm a";
     public static int sourceMasterId = 2;
     public static short businessMasterId = 1;
+    public static short itemType = 2;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
+    public static int counter = 0;
+    public static ArrayList<ItemMaster> alOrderItemTran = new ArrayList<>();
+    public static ArrayList<ItemMaster> alOrderItemModifierTran = new ArrayList<>();
     static FragmentManager fragmentManager;
     //public static Bitmap bitmap1;
 
@@ -246,7 +252,6 @@ public class Globals {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
-
     //region Enum
 
     public enum WaitingStatus {
@@ -371,7 +376,22 @@ public class Globals {
 
         OrderStatus(int value) {
             intValue = value;
+        }
 
+        public int getValue() {
+            return intValue;
+        }
+    }
+
+    public enum OrderType {
+        DineIn(1),
+        TakeAway(2),
+        HomeDelivery(3);
+
+        private int intValue;
+
+        OrderType(int value) {
+            intValue = value;
         }
 
         public int getValue() {

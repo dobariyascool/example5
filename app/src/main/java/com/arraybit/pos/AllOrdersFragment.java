@@ -19,20 +19,24 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.arraybit.global.Globals;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("ALL")
-public class AllOrdersFragment extends Fragment {
+public class AllOrdersFragment extends Fragment implements View.OnClickListener {
 
     TabLayout orderTabLayout;
     ViewPager orderViewPager;
     OrderPagerAdapter orderPagerAdapter;
     FrameLayout allOrdersFragment;
+    String linktoTableMasterIds;
+    FloatingActionMenu famRoot;
 
-    public AllOrdersFragment() {
-        // Required empty public constructor
+    public AllOrdersFragment(String linktoTableMasterIds) {
+        this.linktoTableMasterIds = linktoTableMasterIds;
     }
 
 
@@ -53,6 +57,23 @@ public class AllOrdersFragment extends Fragment {
 
         allOrdersFragment = (FrameLayout) view.findViewById(R.id.allOrdersFragment);
         Globals.SetScaleImageBackground(getActivity(),null,null,allOrdersFragment);
+
+        //floating action menu
+        famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
+        famRoot.setClosedOnTouchOutside(true);
+        //end
+
+        //floating action button
+        FloatingActionButton fabDineIn = (FloatingActionButton) view.findViewById(R.id.fabDineIn);
+        FloatingActionButton fabTakeAway = (FloatingActionButton) view.findViewById(R.id.fabTakeAway);
+        FloatingActionButton fabAll = (FloatingActionButton) view.findViewById(R.id.fabAll);
+        //end
+
+        //event
+        fabDineIn.setOnClickListener(this);
+        fabTakeAway.setOnClickListener(this);
+        fabAll.setOnClickListener(this);
+        //end
 
         orderTabLayout = (TabLayout) view.findViewById(R.id.orderTabLayout);
         orderViewPager = (ViewPager) view.findViewById(R.id.orderViewPager);
@@ -96,7 +117,14 @@ public class AllOrdersFragment extends Fragment {
                 }
             }
             else {
-                getActivity().getSupportFragmentManager().popBackStack();
+                if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+                else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null &&
+                        getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
+                    getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+
             }
         }
         return super.onOptionsItemSelected(item);
@@ -110,11 +138,11 @@ public class AllOrdersFragment extends Fragment {
     //region Method
     public void SetTabLayout() {
 
-        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.All.toString()),Globals.OrderStatus.All.toString());
-        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Cooking.toString()), Globals.OrderStatus.Cooking.toString());
-        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Ready.toString()), Globals.OrderStatus.Ready.toString());
-        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Served.toString()), Globals.OrderStatus.Served.toString());
-        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Cancelled.toString()), Globals.OrderStatus.Cancelled.toString());
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.All.toString(),linktoTableMasterIds),Globals.OrderStatus.All.toString());
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Cooking.toString(),linktoTableMasterIds), Globals.OrderStatus.Cooking.toString());
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Ready.toString(),linktoTableMasterIds), Globals.OrderStatus.Ready.toString());
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Served.toString(),linktoTableMasterIds), Globals.OrderStatus.Served.toString());
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Cancelled.toString(),linktoTableMasterIds), Globals.OrderStatus.Cancelled.toString());
 
         orderViewPager.setAdapter(orderPagerAdapter);
         orderTabLayout.setupWithViewPager(orderViewPager);
@@ -138,6 +166,39 @@ public class AllOrdersFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        OrdersTabFragment ordersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition());
+        String orderStatus = null;
+        if(orderTabLayout.getSelectedTabPosition()==0)
+        {
+            orderStatus = Globals.OrderStatus.All.toString();
+        }
+        else if(orderTabLayout.getSelectedTabPosition()==1){
+            orderStatus = Globals.OrderStatus.Cooking.toString();
+        }
+        else if(orderTabLayout.getSelectedTabPosition()==2){
+            orderStatus = Globals.OrderStatus.Ready.toString();
+        }
+        else if(orderTabLayout.getSelectedTabPosition()==3){
+            orderStatus = Globals.OrderStatus.Served.toString();
+        }
+        else if(orderTabLayout.getSelectedTabPosition()==4){
+            orderStatus = Globals.OrderStatus.Cancelled.toString();
+        }
+
+        if (v.getId() == R.id.fabDineIn) {
+            famRoot.close(true);
+            ordersTabFragment.OrderDataFilter(orderStatus,String.valueOf(Globals.OrderType.DineIn.getValue()));
+        } else if (v.getId() == R.id.fabTakeAway) {
+            famRoot.close(true);
+            ordersTabFragment.OrderDataFilter(orderStatus, String.valueOf(Globals.OrderType.TakeAway.getValue()));
+        } else if (v.getId() == R.id.fabAll) {
+            famRoot.close(true);
+            ordersTabFragment.OrderDataFilter(orderStatus,null);
+        }
     }
     //endregion
 

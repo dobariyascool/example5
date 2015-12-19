@@ -11,6 +11,7 @@ public class  UserMaster implements Parcelable {
     String Password;
     short linktoRoleMasterId;
     short linktoUserTypeMasterId;
+    short WaiterMasterId;
     String Role;
     public static final Creator<UserMaster> CREATOR = new Creator<UserMaster>() {
         @Override
@@ -22,6 +23,7 @@ public class  UserMaster implements Parcelable {
             objUserMaster.linktoUserTypeMasterId = (short) source.readInt();
             objUserMaster.linktoRoleMasterId = (short) source.readInt();
             objUserMaster.Role = source.readString();
+            objUserMaster.WaiterMasterId = (short) source.readInt();
             return objUserMaster;
         }
 
@@ -74,11 +76,19 @@ public class  UserMaster implements Parcelable {
     public String getPassword() {
         return Password;
     }
-    //endregion
 
     public void setPassword(String password) {
         Password = password;
     }
+
+    public short getWaiterMasterId() {
+        return WaiterMasterId;
+    }
+
+    public void setWaiterMasterId(short waiterMasterId) {
+        WaiterMasterId = waiterMasterId;
+    }
+    //endregion
 
     @Override
     public int describeContents() {
@@ -93,5 +103,6 @@ public class  UserMaster implements Parcelable {
         parcel.writeInt(linktoUserTypeMasterId);
         parcel.writeInt(linktoRoleMasterId);
         parcel.writeString(Role);
+        parcel.writeInt(WaiterMasterId);
     }
 }

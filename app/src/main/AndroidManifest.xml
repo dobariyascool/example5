@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.arraybit.pos" >
+    package="com.arraybit.pos">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <!-- <uses-permission android:name="android.permission.CALL_PHONE"/> -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation"
@@ -19,7 +20,7 @@
             android:name=".SplashScreenActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_splash_screen"
-            android:theme="@style/FullScreenTheme" >
+            android:theme="@style/FullScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,13 +57,17 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_waiting"
             android:theme="@style/FullScreenTheme" />
-
         <activity
             android:name=".WaiterOrderDetailActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_waiter_order_detail"
             android:theme="@style/FullScreenTheme" />
 
+        <activity
+            android:name=".MenuActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_fragment_category_item"
+            android:theme="@style/FullScreenTheme"/>
 
         <receiver android:name="com.arraybit.global.TimeScheduler" />
 

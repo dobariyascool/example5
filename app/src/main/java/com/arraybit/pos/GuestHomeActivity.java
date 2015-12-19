@@ -22,6 +22,7 @@ import com.arraybit.global.Globals;
 @SuppressWarnings("RedundantIfStatement")
 public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    static short tableMasterId;
     ActionBarDrawerToggle actionBarDrawerToggle;
     String userName;
     LinearLayout guestHomeMainLayout;
@@ -65,6 +66,8 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         if (intent.getStringExtra("username") != null) {
             userName = intent.getStringExtra("username");
         }
+
+        tableMasterId = intent.getShortExtra("TableMatsterId",(short)0);
 
         AddFragmentInLayout(new GuestOptionListFragment());
 

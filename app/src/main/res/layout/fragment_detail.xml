@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="@color/offwhite"
     android:orientation="vertical"
-    tools:context="com.arraybit.pos.DetailFragment">
+    tools:context="com.arraybit.pos.DetailFragment"
+    tools:ignore="HardcodedText" >
 
     <include
         android:id="@+id/app_bar"
@@ -36,17 +37,21 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/control_SpecingSmall">
 
-                <com.rey.material.widget.TextView
-                    style="@style/PrimaryTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dfItemName" />
+                <!--<com.rey.material.widget.TextView-->
+                    <!--style="@style/PrimaryTextView"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/dfItemName" />-->
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtItemName"
                     style="@style/SecondaryTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:paddingEnd="@dimen/control_SpecingTiny"
+                    android:paddingStart="@dimen/control_SpecingTiny"
+                    android:textColor="@android:color/black" />
 
             </LinearLayout>
 
@@ -56,17 +61,21 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/control_SpecingSmall">
 
-                <com.rey.material.widget.TextView
-                    style="@style/PrimaryTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dfDescription" />
+                <!--<com.rey.material.widget.TextView-->
+                    <!--style="@style/PrimaryTextView"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/dfDescription" />-->
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtDescription"
                     style="@style/SecondaryTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="3"
+                    android:paddingEnd="@dimen/control_SpecingTiny"
+                    android:paddingStart="@dimen/control_SpecingTiny"
+                    android:textColor="@android:color/black" />
 
             </LinearLayout>
 
@@ -76,60 +85,251 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/control_SpecingSmall">
 
-                <com.rey.material.widget.TextView
-                    style="@style/PrimaryTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dfPrice" />
+                <!--<com.rey.material.widget.TextView-->
+                    <!--style="@style/PrimaryTextView"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/dfPrice" />-->
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtItemPrice"
                     style="@style/SecondaryTextView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/control_SpecingTiny"
+                    android:paddingStart="@dimen/control_SpecingTiny"
+                    android:textColor="@android:color/black"/>
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/aiqfRemark"
+                android:paddingBottom="0dp"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall"
+                android:paddingTop="@dimen/control_SpecingSmall"
+                android:textColor="@android:color/black"
+                android:textColorHint="@color/primary_dark"
+                app:et_labelTextColor="@android:color/black">
+
+                <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+                    android:id="@+id/actRemark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/arrow_drop_down"
+                    android:dropDownHeight="190dp"
+                    android:singleLine="true"
+                    android:textSize="14sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutModifier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/aiqfModifier"
+                android:paddingBottom="0dp"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall"
+                android:paddingTop="@dimen/control_SpecingTiny"
+                android:textColor="@android:color/black"
+                android:textColorHint="@color/primary_dark"
+                app:et_labelTextColor="@android:color/black">
+
+                <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+                    android:id="@+id/actModifier"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/arrow_drop_down"
+                    android:dropDownHeight="190dp"
+                    android:singleLine="true"
+                    android:textSize="14sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="@dimen/control_SpecingTiny"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall">
+
+                <com.rey.material.widget.ImageButton
+                    android:id="@+id/ibMinus"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_selector"
+                    android:src="@mipmap/minus" />
+
+                <com.rey.material.widget.EditText
+                    android:id="@+id/etQuantity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:text="1"
+                    tools:ignore="HardcodedText" />
+
+                <com.rey.material.widget.ImageButton
+                    android:id="@+id/ibPlus"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_selector"
+                    android:src="@mipmap/plus_small" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/control_SpecingTiny"
+                android:layout_marginTop="@dimen/control_SpecingTiny"
+                android:orientation="horizontal"
+                android:paddingBottom="0dp"
+                android:paddingEnd="@dimen/control_SpecingTiny"
+                android:paddingStart="@dimen/control_SpecingTiny">
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnNum1"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/control_SpecingTiny"
+                    android:layout_marginEnd="@dimen/control_SpecingTiny"
+                    android:layout_weight="1"
+                    android:text="1" />
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnNum2"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/control_SpecingTiny"
+                    android:layout_marginEnd="@dimen/control_SpecingTiny"
+                    android:layout_weight="1"
+                    android:text="2" />
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnNum3"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/control_SpecingTiny"
+                    android:layout_marginEnd="@dimen/control_SpecingTiny"
+                    android:layout_weight="1"
+                    android:text="3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/control_SpecingTiny"
+                android:orientation="horizontal"
+                android:paddingEnd="@dimen/control_SpecingTiny"
+                android:paddingStart="@dimen/control_SpecingTiny">
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnNum4"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/control_SpecingTiny"
+                    android:layout_marginEnd="@dimen/control_SpecingTiny"
+                    android:layout_weight="1"
+                    android:text="4" />
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnNum5"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/control_SpecingTiny"
+                    android:layout_marginEnd="@dimen/control_SpecingTiny"
+                    android:layout_weight="1"
+                    android:text="5" />
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnNum6"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/control_SpecingTiny"
+                    android:layout_marginEnd="@dimen/control_SpecingTiny"
+                    android:layout_weight="1"
+                    android:text="6" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/control_SpecingTiny"
                 android:orientation="horizontal"
-                android:paddingEnd="@dimen/control_SpecingSmall"
-                android:paddingStart="@dimen/control_SpecingSmall">
+                android:paddingEnd="@dimen/control_SpecingTiny"
+                android:paddingStart="@dimen/control_SpecingTiny">
 
-                <!--<com.rey.material.widget.TextView-->
-                <!--style="@style/PrimaryTextView"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/dfQuantity" />-->
-
-                <com.rey.material.widget.ImageButton
-                    android:id="@+id/ibMinus"
-                    android:layout_width="40dp"
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnNum7"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/qtyselector"
-                    android:src="@mipmap/minus" />
+                    android:layout_marginBottom="@dimen/control_SpecingTiny"
+                    android:layout_marginEnd="@dimen/control_SpecingTiny"
+                    android:layout_weight="1"
+                    android:text="7" />
 
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnNum8"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/control_SpecingTiny"
+                    android:layout_marginEnd="@dimen/control_SpecingTiny"
+                    android:layout_weight="1"
+                    android:text="8" />
 
-                <com.rey.material.widget.EditText
-                    android:id="@+id/etQuantity"
-                    android:layout_width="40dp"
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnNum9"
+                    style="@style/NumberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/control_SpecingTiny"
+                    android:layout_marginEnd="@dimen/control_SpecingTiny"
+                    android:layout_weight="1"
+                    android:text="9" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_marginStart="@dimen/control_SpecingTiny"
+                android:orientation="horizontal">
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:text="1"
-                    tools:ignore="HardcodedText" />
+                    android:layout_weight="1"
+                    android:text="@string/dfCancel" />
 
-
-                <com.rey.material.widget.ImageButton
-                    android:id="@+id/ibPlus"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/qtyselector"
-                    android:src="@mipmap/plus_small" />
-
-
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnOrder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/dfOrder" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

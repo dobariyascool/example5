@@ -2,6 +2,7 @@ package com.arraybit.parser;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderMaster;
 
 import org.json.JSONArray;
@@ -19,7 +20,7 @@ public class OrderJOSNParser {
 
     public String InsertOrderMaster = "InsertOrderMaster";
     public String UpdateOrderMaster = "UpdateOrderMaster";
-    public String SelectOrderMaster = "SelectOrderMaster";
+    public String SelectOrderNumber = "SelectOrderNumber";
     public String SelectAllOrderMaster = "SelectAllOrderMasterByOrderStatusMasterId";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
@@ -140,7 +141,8 @@ public class OrderJOSNParser {
         }
     }
 
-    public String InsertOrderMaster(OrderMaster objOrderMaster) {
+    public String InsertOrderMaster(OrderMaster objOrderMaster,ArrayList<ItemMaster> alOrderItemTran) {
+        dt = new Date();
         try {
             JSONStringer stringer = new JSONStringer();
             stringer.object();
@@ -149,12 +151,11 @@ public class OrderJOSNParser {
             stringer.object();
 
             stringer.key("OrderNumber").value(objOrderMaster.getOrderNumber());
-            dt = sdfControlDateFormat.parse(objOrderMaster.getOrderDateTime());
             stringer.key("OrderDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoCounterMasterId").value(objOrderMaster.getlinktoCounterMasterId());
             stringer.key("linktoTableMasterIds").value(objOrderMaster.getlinktoTableMasterIds());
             stringer.key("linktoWaiterMasterId").value(objOrderMaster.getlinktoWaiterMasterId());
-            stringer.key("linktoCustomerMasterId").value(objOrderMaster.getlinktoCustomerMasterId());
+            //stringer.key("linktoCustomerMasterId").value(1);
             stringer.key("linktoOrderTypeMasterId").value(objOrderMaster.getlinktoOrderTypeMasterId());
             stringer.key("linktoOrderStatusMasterId").value(objOrderMaster.getlinktoOrderStatusMasterId());
             stringer.key("TotalAmount").value(objOrderMaster.getTotalAmount());
@@ -163,13 +164,34 @@ public class OrderJOSNParser {
             stringer.key("ExtraAmount").value(objOrderMaster.getExtraAmount());
             stringer.key("TotalItemPoint").value(objOrderMaster.getTotalItemPoint());
             stringer.key("TotalDeductedPoint").value(objOrderMaster.getTotalDeductedPoint());
-            stringer.key("Remark").value(objOrderMaster.getRemark());
-            stringer.key("linktoSalesMasterId").value(objOrderMaster.getlinktoSalesMasterId());
-            dt = sdfControlDateFormat.parse(objOrderMaster.getCreateDateTime());
+            //stringer.key("Remark").value("test");
+            //stringer.key("linktoSalesMasterId").value(null);
             stringer.key("CreateDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoUserMasterIdCreatedBy").value(objOrderMaster.getlinktoUserMasterIdCreatedBy());
 
             stringer.endObject();
+
+            stringer.key("lstOrderItemTran");
+            stringer.array();
+
+            for(int i=0;i<alOrderItemTran.size();i++) {
+                stringer.object();
+                stringer.key("ItemMasterId").value(alOrderItemTran.get(i).getItemMasterId());
+                stringer.key("Quantity").value(alOrderItemTran.get(i).getQuantity());
+                stringer.key("SellPrice").value(alOrderItemTran.get(i).getSellPrice());
+                stringer.key("Remark").value(alOrderItemTran.get(i).getRemark());
+                stringer.key("lstOrderItemModifierTran");
+                stringer.array();
+                        for(int j=0;j<alOrderItemTran.get(i).getAlOrderItemModifierTran().size();j++){
+                            stringer.object();
+                            stringer.key("ItemModifierMasterIds").value(alOrderItemTran.get(i).getAlOrderItemModifierTran().get(j).getItemModifierMasterId());
+                            stringer.key("MRP").value(alOrderItemTran.get(i).getAlOrderItemModifierTran().get(j).getMRP());
+                            stringer.endObject();
+                        }
+                stringer.endArray();
+                stringer.endObject();
+            }
+            stringer.endArray();
 
             stringer.endObject();
 
@@ -225,13 +247,13 @@ public class OrderJOSNParser {
         }
     }
 
-    public OrderMaster SelectOrderMaster(long orderMasterId) {
+    public String SelectOrderNumber() {
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectOrderMaster + "/" + orderMasterId);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectOrderNumber);
             if (jsonResponse != null) {
-                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectOrderMaster + "Result");
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectOrderNumber + "Result");
                 if (jsonObject != null) {
-                    return SetClassPropertiesFromJSONObject(jsonObject);
+                    return jsonObject.getString("OrderNumber");
                 }
             }
             return null;
@@ -241,20 +263,21 @@ public class OrderJOSNParser {
         }
     }
 
-    public ArrayList<OrderMaster> SelectAllOrderMaster(int linktoCounterMasterId,int linktoOrderStatusMasterId) {
+
+
+    public ArrayList<OrderMaster> SelectAllOrderMaster(int linktoCounterMasterId,int linktoOrderStatusMasterId,String linktoTableMasterIds,String linktoOrderTypeMasterId) {
         ArrayList<OrderMaster> lstOrderMaster = null;
         JSONObject jsonResponse;
         Date date;
         try {
             date = new Date();
             if(linktoOrderStatusMasterId==0){
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster +"/"+linktoCounterMasterId+"/"+null+"/"+sdfControlDateFormat.format(date));
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster +"/"+linktoCounterMasterId+"/"+null+"/"+linktoTableMasterIds+"/"+linktoOrderTypeMasterId+"/"+sdfControlDateFormat.format(date));
             }
             else
             {
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster +"/"+linktoCounterMasterId+"/"+linktoOrderStatusMasterId+"/"+sdfControlDateFormat.format(date));
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster +"/"+linktoCounterMasterId+"/"+linktoOrderStatusMasterId+"/"+linktoTableMasterIds+"/"+linktoOrderTypeMasterId+"/"+sdfControlDateFormat.format(date));
             }
-
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllOrderMaster + "Result");
                 if (jsonArray != null) {
