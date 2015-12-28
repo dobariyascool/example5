@@ -53,8 +53,8 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
         //linearlayout
         waiterHomeMainLayout = (LinearLayout) findViewById(R.id.waiterHomeMainLayout);
-        LinearLayout waiterFragmentLayout = (LinearLayout) findViewById(R.id.waiterFragmentLayout);
-        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null, null);
+        //LinearLayout waiterFragmentLayout = (LinearLayout) findViewById(R.id.waiterFragmentLayout);
+        //Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null, null);
         //end
 
         //navigationView
@@ -86,7 +86,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null, null);
+        //Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null, null);
         //}
     }
 
@@ -121,7 +121,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
         return super.onOptionsItemSelected(item);
     }
-
 
     //selected event
     @Override
@@ -164,8 +163,8 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     //add fragment
     void AddFragmentInLayout(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.waiterFragmentLayout, fragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.waiterFragmentLayout, fragment, getResources().getString(R.string.title_fragment_waiter_options));
+        fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_waiter_options));
         fragmentTransaction.commit();
     }
     //end
@@ -181,22 +180,20 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
-
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_orders))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() -1).getName() !=null
-                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_cart_item))){
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_cart_item))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                else {
+                } else {
                     CategoryItemFragment.i = 0;
                     CategoryItemFragment.isViewChange = false;
                     getSupportFragmentManager().popBackStack();
                     Globals.counter = 0;
                     Globals.alOrderItemTran = new ArrayList<>();
-                    CategoryItemFragment.targetFragment=null;
+                    CategoryItemFragment.targetFragment = null;
                 }
             }
         }

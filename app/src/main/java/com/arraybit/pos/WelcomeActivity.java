@@ -23,6 +23,7 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
     GestureDetectorCompat gestureDetector;
 
     SharePreferenceManage objSharePreferenceManage;
+    boolean isGuestScreen;
     short count=0;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -46,11 +47,23 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
                     objSharePreferenceManage = new SharePreferenceManage();
                     String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
                     if (userTypeMasterId != null && userTypeMasterId.equals(String.valueOf(Globals.UserType.valueOf("Waiter").getValue()))) {
-                        Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
-                        //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                        overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                        finish();
+                        Intent intent= getIntent();
+                        isGuestScreen = intent.getBooleanExtra("GuestScreen",false);
+                        if(isGuestScreen) {
+                            Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
+                            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                            finish();
+                        }
+                        else
+                        {
+                            Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
+                            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                            finish();
+                        }
                     } else {
                         Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
                         //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

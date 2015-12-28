@@ -1,6 +1,5 @@
 package com.arraybit.parser;
 
-
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.TableMaster;
@@ -15,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-
 
 public class TableJSONParser {
     public String InsertTableMaster = "InsertTableMaster";
@@ -47,11 +45,9 @@ public class TableJSONParser {
                 objTableMaster.setOriginY(jsonObject.getInt("OriginY"));
                 objTableMaster.setHeight(jsonObject.getDouble("Height"));
                 objTableMaster.setWidth(jsonObject.getDouble("Width"));
-                if(jsonObject.getString("TableColor").equals("")){
+                if (jsonObject.getString("TableColor").equals("")) {
                     objTableMaster.setTableColor(null);
-                }
-                else
-                {
+                } else {
                     objTableMaster.setTableColor(jsonObject.getString("TableColor"));
                 }
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
@@ -98,11 +94,9 @@ public class TableJSONParser {
                 objTableMaster.setOriginY(jsonArray.getJSONObject(i).getInt("OriginY"));
                 objTableMaster.setHeight(jsonArray.getJSONObject(i).getDouble("Height"));
                 objTableMaster.setWidth(jsonArray.getJSONObject(i).getDouble("Width"));
-                if(jsonArray.getJSONObject(i).getString("TableColor").equals("")){
+                if (jsonArray.getJSONObject(i).getString("TableColor").equals("")) {
                     objTableMaster.setTableColor(null);
-                }
-                else
-                {
+                } else {
                     objTableMaster.setTableColor(jsonArray.getJSONObject(i).getString("TableColor"));
                 }
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
@@ -167,7 +161,7 @@ public class TableJSONParser {
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertTableMaster, stringer);
-            if(jsonResponse!=null) {
+            if (jsonResponse != null) {
                 JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertTableMaster + "Result");
                 return String.valueOf(jsonObject.getInt("ErrorCode"));
             }
@@ -227,16 +221,14 @@ public class TableJSONParser {
 
     //region  SelectAll
 
-    public ArrayList<TableMaster> SelectAllTableMasterBySectionMasterId(int linktoCounterMasterId,int linktoSectionMasterId,String linktoTableStatusMasterId) {
+    public ArrayList<TableMaster> SelectAllTableMasterBySectionMasterId(int linktoCounterMasterId, int linktoSectionMasterId, String linktoTableStatusMasterId, String linktoOrderTypeMasterId) {
         ArrayList<TableMaster> lstTableMaster = null;
         JSONObject jsonResponse;
         try {
-            if(linktoSectionMasterId==0){
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId +"/"+linktoCounterMasterId+"/"+null+"/"+linktoTableStatusMasterId);
-            }
-            else
-            {
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId +"/"+linktoCounterMasterId+"/"+linktoSectionMasterId+"/"+linktoTableStatusMasterId);
+            if (linktoSectionMasterId == 0) {
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId + "/" + linktoCounterMasterId + "/" + null + "/" + linktoTableStatusMasterId+"/"+linktoOrderTypeMasterId);
+            } else {
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId + "/" + linktoCounterMasterId + "/" + linktoSectionMasterId + "/" + linktoTableStatusMasterId+"/"+linktoOrderTypeMasterId);
             }
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllTableMasterBySectionId + "Result");

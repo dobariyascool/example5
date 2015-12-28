@@ -3,10 +3,10 @@
 
     <!--<group android:checkableBehavior="single">-->
 
-        <item
-            android:id="@+id/home"
-            android:icon="@mipmap/home"
-            android:title="@string/navHome"/>
+        <!--<item-->
+            <!--android:id="@+id/home"-->
+            <!--android:icon="@mipmap/home"-->
+            <!--android:title="@string/navHome"/>-->
 
         <item
             android:id="@+id/profile"

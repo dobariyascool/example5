@@ -1,7 +1,7 @@
 package com.arraybit.pos;
 
-
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,7 +34,7 @@ import java.util.List;
 
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
-public class CategoryItemFragment extends Fragment implements View.OnClickListener,ItemTabFragment.CartIconListener {
+public class CategoryItemFragment extends Fragment implements View.OnClickListener, ItemTabFragment.CartIconListener {
 
     public static boolean isViewChange = false;
     public static short i = 0;
@@ -45,11 +45,11 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     FloatingActionMenu famRoot;
     FloatingActionButton fabVeg, fabNonVeg, fabJain;
     StringBuilder sbItemTypeMasterId = new StringBuilder();
-    boolean isForceToChange = false;
+    boolean isForceToChange = false,isPause;
     short isVegCheck = 0, isNonVegCheck = 0, isJainCheck = 0;
     FrameLayout categoryItemFragment;
 
-    public CategoryItemFragment(){
+    public CategoryItemFragment() {
 
     }
 
@@ -69,8 +69,10 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         }
         //end
 
-        categoryItemFragment = (FrameLayout)view.findViewById(R.id.categoryItemFragment);
-        Globals.SetScaleImageBackground(getActivity(),null,null,categoryItemFragment);
+        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
+            categoryItemFragment = (FrameLayout) view.findViewById(R.id.categoryItemFragment);
+            Globals.SetScaleImageBackground(getActivity(), null, null, categoryItemFragment);
+        }
 
         //floating action menu
         famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
@@ -110,7 +112,9 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), null, null, categoryItemFragment);
+        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
+            Globals.SetScaleImageBackground(getActivity(), null, null, categoryItemFragment);
+        }
     }
 
     @Override
@@ -119,13 +123,11 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         menu.findItem(R.id.action_search).setVisible(true);
         menu.findItem(R.id.viewChange).setVisible(true);
         menu.findItem(R.id.cart_layout).setVisible(true);
-        if(i==1){
+        if (i == 1) {
             menu.findItem(R.id.viewChange).setIcon(R.drawable.view_grid);
-        }
-        else if(i==2){
+        } else if (i == 2) {
             menu.findItem(R.id.viewChange).setIcon(R.drawable.view_grid_two);
-        }
-        else{
+        } else {
             menu.findItem(R.id.viewChange).setIcon(R.drawable.view_list);
         }
 
@@ -133,37 +135,26 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home){
-            System.out.println("count"+getActivity().getSupportFragmentManager().getBackStackEntryCount());
-            if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2){
-
-                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(1).getName() != null &&
-                            getActivity().getSupportFragmentManager().getBackStackEntryAt(1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
-                        CategoryItemFragment.i = 0;
-                        CategoryItemFragment.isViewChange = false;
-                        Globals.counter = 0;
-                        Globals.alOrderItemTran = new ArrayList<>();
-                        CategoryItemFragment.targetFragment=null;
-                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_category_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    }
-
+        if (item.getItemId() == android.R.id.home) {
+            if(MenuActivity.parentActivity)
+            {
+                Globals.OptionMenuItemClick(item,getActivity(),getActivity().getSupportFragmentManager());
             }
-            else {
-                if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
-                    CategoryItemFragment.i=0;
-                    CategoryItemFragment.isViewChange=false;
-                    Globals.counter = 0;
-                    Globals.alOrderItemTran = new ArrayList<>();
-                    CategoryItemFragment.targetFragment=null;
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
-                else
-                {
+            if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
+                if (MenuActivity.parentActivity) {
+                    Globals.CategoryItemFragmentResetStaticVariable();
                     getActivity().finish();
+                } else {
+                    Globals.CategoryItemFragmentResetStaticVariable();
+                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
+            } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
+                getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_category_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
-        }
-        else if(item.getItemId()==R.id.viewChange){
+        } else if (item.getItemId() == R.id.viewChange) {
             ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
             i = (short) (i + 1);
             if (i == 1) {
@@ -248,6 +239,23 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        isPause = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(isPause) {
+            if (MenuActivity.parentActivity) {
+                new GuestHomeCategoryLodingTask().execute();
+                isPause = false;
+            }
+        }
+    }
+
     @SuppressWarnings("StringConcatenationInsideStringBufferAppend")
     void CheckSelected() {
         sbItemTypeMasterId = new StringBuilder();
@@ -274,35 +282,33 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     @Override
     public void CardViewOnClick(ItemMaster objItemMaster) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        RemoveFragment(fragmentTransaction,itemTabLayout.getSelectedTabPosition());
+        RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
         fragmentTransaction.replace(android.R.id.content, new DetailFragment(objItemMaster.getItemMasterId()), getResources().getString(R.string.title_fragment_detail));
         fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_detail));
         fragmentTransaction.commit();
     }
 
-    private void RemoveFragment(FragmentTransaction fragmentTransaction,int selectedPosition){
-        if(selectedPosition==0){
-            ItemTabFragment  CurrentItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
-            ItemTabFragment  NextItemTabFragment = (ItemTabFragment)itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition()+1);
+    private void RemoveFragment(FragmentTransaction fragmentTransaction, int selectedPosition) {
+        if (selectedPosition == 0) {
+            ItemTabFragment CurrentItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
+            ItemTabFragment NextItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition() + 1);
             fragmentTransaction.remove(CurrentItemTabFragment);
             fragmentTransaction.remove(NextItemTabFragment);
-        }
-        else if(selectedPosition==itemPagerAdapter.getCount()-1)
-        {
-            ItemTabFragment  CurrentItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
-            ItemTabFragment  PreviousItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition()-1);
+        } else if (selectedPosition == itemPagerAdapter.getCount() - 1) {
+            ItemTabFragment CurrentItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
+            ItemTabFragment PreviousItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition() - 1);
             fragmentTransaction.remove(CurrentItemTabFragment);
             fragmentTransaction.remove(PreviousItemTabFragment);
-        }
-        else {
+        } else {
             ItemTabFragment CurrentItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
-            ItemTabFragment NextItemTabFragment = (ItemTabFragment)itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition()+1);
-            ItemTabFragment PreviousItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition()-1);
+            ItemTabFragment NextItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition() + 1);
+            ItemTabFragment PreviousItemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition() - 1);
             fragmentTransaction.remove(CurrentItemTabFragment);
             fragmentTransaction.remove(NextItemTabFragment);
             fragmentTransaction.remove(PreviousItemTabFragment);
         }
     }
+
 
     //pager adapter
     static class ItemPagerAdapter extends FragmentStatePagerAdapter {
@@ -315,7 +321,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         }
 
         public void AddFragment(Fragment fragment, CategoryMaster title) {
-            fragment.setTargetFragment(targetFragment,0);
+            fragment.setTargetFragment(targetFragment, 0);
             itemFragmentList.add(fragment);
             itemFragmentTitleList.add(title);
         }
@@ -380,7 +386,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 //ibViewChange.setVisibility(View.VISIBLE);
                 itemPagerAdapter = new ItemPagerAdapter(getFragmentManager());
 
-                CategoryMaster objCategoryMaster =  new CategoryMaster();
+                CategoryMaster objCategoryMaster = new CategoryMaster();
                 objCategoryMaster.setCategoryMasterId((short) 0);
                 objCategoryMaster.setCategoryName("All");
                 ArrayList<CategoryMaster> alCategory = new ArrayList<>();

@@ -21,7 +21,9 @@ import android.widget.LinearLayout;
 import com.arraybit.adapter.OrderDetailAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.modal.OrderItemTran;
+import com.arraybit.modal.OrderMaster;
 import com.arraybit.parser.OrderItemJSONParser;
+import com.rey.material.widget.Button;
 
 import java.util.ArrayList;
 
@@ -32,12 +34,13 @@ public class OrderDetailFragment extends Fragment {
 
     RecyclerView rvOrderItem;
     LinearLayout headerLayout;
-    int orderMasterId;
+    OrderMaster objOrderMaster;
     LinearLayout orderDetailLayout;
+    Button btnAddMore,btnCheckOut;
+    ArrayList<OrderItemTran> lstOrderItemTran;
 
-    public OrderDetailFragment(int orderMasterId) {
-        // Required empty public constructor
-        this.orderMasterId = orderMasterId;
+    public OrderDetailFragment(OrderMaster objOrderMaster) {
+        this.objOrderMaster = objOrderMaster;
     }
 
     @Override
@@ -51,16 +54,27 @@ public class OrderDetailFragment extends Fragment {
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_order_detail));
+            if(objOrderMaster!=null && objOrderMaster.getTableName()!=null){
+                app_bar.setTitle(objOrderMaster.getTableName()+" Summary");
+            }
+            else {
+                app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_order_detail));
+            }
         }
         //end
 
         rvOrderItem = (RecyclerView)view.findViewById(R.id.rvOrderItem);
         rvOrderItem.setVisibility(View.GONE);
 
+        btnAddMore = (Button)view.findViewById(R.id.btnAddMore);
+        btnCheckOut = (Button)view.findViewById(R.id.btnCheckOut);
+
         headerLayout = (LinearLayout)view.findViewById(R.id.headerLayout);
         orderDetailLayout = (LinearLayout)view.findViewById(R.id.orderDetailLayout);
         Globals.SetScaleImageBackground(getActivity(),orderDetailLayout,null,null);
+
+        lstOrderItemTran = new ArrayList<>();
+        SetVisibility();
 
         setHasOptionsMenu(true);
 
@@ -90,6 +104,19 @@ public class OrderDetailFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void SetVisibility() {
+        if (lstOrderItemTran.size() == 0) {
+            rvOrderItem.setVisibility(View.GONE);
+            btnAddMore.setVisibility(View.GONE);
+            btnCheckOut.setVisibility(View.GONE);
+        } else {
+            rvOrderItem.setVisibility(View.VISIBLE);
+            btnAddMore.setVisibility(View.VISIBLE);
+            btnCheckOut.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -115,13 +142,12 @@ public class OrderDetailFragment extends Fragment {
             progressDialog.setIndeterminate(false);
             progressDialog.setCancelable(false);
             progressDialog.show();
-
         }
 
         @Override
         protected Object doInBackground(Object[] params) {
             OrderItemJSONParser objOrderItemJSONParser = new OrderItemJSONParser();
-            return objOrderItemJSONParser.SelectAllOrderItemTran(orderMasterId);
+            return objOrderItemJSONParser.SelectAllOrderItemTran((int) objOrderMaster.getOrderMasterId());
         }
 
         @Override
@@ -130,11 +156,11 @@ public class OrderDetailFragment extends Fragment {
 
             progressDialog.dismiss();
 
-            ArrayList<OrderItemTran> lstOrderItemTran = (ArrayList<OrderItemTran>) result;
+            lstOrderItemTran = (ArrayList<OrderItemTran>) result;
 
             if (lstOrderItemTran != null) {
                 OrderDetailAdapter orderDetailAdapter=new OrderDetailAdapter(getActivity(),lstOrderItemTran);
-                rvOrderItem.setVisibility(View.VISIBLE);
+                SetVisibility();
                 rvOrderItem.setAdapter(orderDetailAdapter);
                 rvOrderItem.setLayoutManager(new LinearLayoutManager(getActivity()));
             }

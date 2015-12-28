@@ -94,7 +94,7 @@ public class OrderItemJSONParser {
         }
     }
 
-    public ArrayList<OrderItemTran> SelectAllOrderItemTran(int orderMasterId) {
+    public ArrayList<OrderItemTran> SelectAllOrderItemTran(long orderMasterId) {
         ArrayList<OrderItemTran> lstOrderItemTran = null;
         try {
             JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderItemTran +"/"+orderMasterId);

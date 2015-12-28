@@ -41,6 +41,11 @@ public class ItemMaster implements Parcelable {
     //String ItemType;
     String Unit;
     String ItemStatus;
+    String ItemModifierIds;
+    double ActualSellPrice;
+    int Quantity;
+    String Remark;
+    long linktoOrderMasterId;
     public static final Parcelable.Creator<ItemMaster> CREATOR = new Creator<ItemMaster>() {
         public ItemMaster createFromParcel(Parcel source) {
             ItemMaster objItemMaster = new ItemMaster();
@@ -75,6 +80,10 @@ public class ItemMaster implements Parcelable {
             //objItemMaster.ItemType = source.readString();
             objItemMaster.Unit = source.readString();
             objItemMaster.ItemStatus = source.readString();
+            objItemMaster.ActualSellPrice = source.readDouble();
+            objItemMaster.linktoOrderMasterId = source.readLong();
+            objItemMaster.ItemModifierIds= source.readString();
+            objItemMaster.Quantity = source.readInt();
             return objItemMaster;
         }
 
@@ -82,9 +91,6 @@ public class ItemMaster implements Parcelable {
             return new ItemMaster[size];
         }
     };
-    int Quantity;
-    String Remark;
-    String ItemModifierMasterId;
     ArrayList<ItemMaster> alOrderItemModifierTran;
 
     public int getItemMasterId() {
@@ -319,20 +325,37 @@ public class ItemMaster implements Parcelable {
         Remark = remark;
     }
 
-    public String getItemModifierMasterId() {
-        return ItemModifierMasterId;
-    }
-
-    public void setItemModifierMasterId(String itemModifierMasterId) {
-        ItemModifierMasterId = itemModifierMasterId;
-    }
-
     public ArrayList<ItemMaster> getAlOrderItemModifierTran() {
         return alOrderItemModifierTran;
     }
 
     public void setAlOrderItemModifierTran(ArrayList<ItemMaster> alOrderItemModifierTran) {
         this.alOrderItemModifierTran = alOrderItemModifierTran;
+    }
+
+
+    public String getItemModifierIds() {
+        return ItemModifierIds;
+    }
+
+    public void setItemModifierIds(String itemModifierIds) {
+        ItemModifierIds = itemModifierIds;
+    }
+
+    public double getActualSellPrice() {
+        return ActualSellPrice;
+    }
+
+    public void setActualSellPrice(double actualSellPrice) {
+        ActualSellPrice = actualSellPrice;
+    }
+
+    public long getLinktoOrderMasterId() {
+        return linktoOrderMasterId;
+    }
+
+    public void setLinktoOrderMasterId(long linktoOrderMasterId) {
+        this.linktoOrderMasterId = linktoOrderMasterId;
     }
 
     //endregion
@@ -372,6 +395,10 @@ public class ItemMaster implements Parcelable {
         //parcel.writeString(ItemType);
         parcel.writeString(Unit);
         parcel.writeString(ItemStatus);
+        parcel.writeInt(Quantity);
+        parcel.writeDouble(ActualSellPrice);
+        parcel.writeLong(linktoOrderMasterId);
+        parcel.writeString(ItemModifierIds);
     }
 }
 

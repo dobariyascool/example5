@@ -24,6 +24,10 @@
     <string name="title_fragment_all_tables">Tables</string>
     <string name="title_fragment_category_item">Menu</string>
     <string name="title_fragment_cart_item">Order Information</string>
+    <string name="title_fragment_offer">Offers</string>
+    <string name="title_fragment_order_summary">Order Summary</string>
+    <string name="title_fragment_guest_options">Guest Option</string>
+    <string name="title_fragment_waiter_options">Waiter Option</string>
     <!-- end -->
 
     <string name="hello_world">Hello world!</string>
@@ -101,12 +105,12 @@
     <!-- navigation drawer menu -->
     <string name="navLogin">Login</string>
     <string name="navHome">Home</string>
-    <string name="navProfile">Profile</string>
+    <string name="navProfile">Our Profile</string>
     <string name="navRegistration">Registration</string>
     <string name="navChangeMode">Change Mode</string>
     <string name="navSearch">Search</string>
     <string name="navChangeCounter">Change Counter</string>
-    <string name="navOffers">Offer</string>
+    <string name="navOffers">Offers</string>
     <string name="navFeedback">Feedback</string>
     <string name="navAboutUs">About Us</string>
     <string name="navExit">Exit</string>
@@ -187,7 +191,7 @@
     <string name="dfDescription">Description:</string>
     <string name="dfPrice">Price:</string>
     <string name="dfQuantity">Quantity:</string>
-    <string name="dfOrder">Order</string>
+    <string name="dfAdd">Add</string>
     <string name="dfCancel">Cancel</string>
     <string name="dfPlus">+</string>
     <string name="dfMinus">-</string>
@@ -223,6 +227,7 @@
     <string name="tsAll">All</string>
     <string name="tsVacant">Vacant</string>
     <string name="tsBusy">Occupied</string>
+    <string name="tsOccupy">Occupy</string>
     <string name="tsBlock">Block</string>
     <string name="tsDirty">Dirty</string>
     <!-- end -->
@@ -232,6 +237,8 @@
     <string name="odfName">Name</string>
     <string name="odfPrice">Price</string>
     <string name="odfQty">Qty</string>
+    <string name="odfAddMore">Add More</string>
+    <string name="odfCheckOut">Check Out</string>
     <!-- end -->
 
     <!-- fragment add item qty -->
@@ -248,8 +255,8 @@
 
     <!-- fragment waiter option list-->
     <string name="wolfOrder">Orders</string>
-    <string name="wolfTable">Tables</string>
-    <string name="wolfMenu">Menu</string>
+    <string name="wolfTable">Dine In</string>
+    <string name="wolfMenu">Take Away</string>
     <string name="wolfOffer">Offers</string>
     <!-- end -->
 
@@ -258,16 +265,17 @@
     <string name="golfFeedback">Feedback</string>
     <string name="golfMenu">Menu</string>
     <string name="golfOffer">Offers</string>
-    <string name="title_fragment_offer">Offers</string>
     <!-- end -->
 
     <!-- fragment cart item -->
-    <string name="cifNo">No</string>
+    <string name="cifQty">Qty</string>
     <string name="cifItem">Item</string>
-    <string name="cifQty">Quantity</string>
-    <string name="cifClearOrder">Clear Order</string>
+    <string name="cifAmount">Amount</string>
+    <string name="cifRate">Rate</string>
+    <string name="cifAddMore">Add More</string>
     <string name="cifConfirmOrder">Confirm Order</string>
     <string name="cifConfirmClear">Are you sure to clear Order?</string>
+    <string name="cifMsg">Go to Menu</string>
     <!-- end -->
 
     <!-- fragment all orders -->
@@ -276,4 +284,10 @@
     <string name="aofAll">All</string>
     <!-- end -->
 
+    <!-- fragment change mode -->
+    <string name="cmfWaiterMode">Waiter Mode</string>
+    <string name="cmfGuestMode">Guest Mode</string>
+    <string name="cmfCancel">Cancel</string>
+    <string name="cmfSubmit">Submit</string>
+    <!-- end -->
 </resources>

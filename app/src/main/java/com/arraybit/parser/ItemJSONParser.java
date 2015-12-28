@@ -18,6 +18,7 @@ import java.util.Locale;
 public class ItemJSONParser {
     public String SelectAllItemMasterByCategoryMasterId = "SelectAllItemMasterByCategoryMasterId";
     public String SelectAllItemMasterModifier = "SelectAllItemMasterModifier";
+    public String SelectAllOrderItemByTableMasterIds = "SelectAllOrderItemByTableMasterIds";
     public String SelectItemMaster = "SelectItemMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
@@ -60,6 +61,10 @@ public class ItemJSONParser {
                 //objItemMaster.setItemType(jsonObject.getString("ItemType"));
                 objItemMaster.setUnit(jsonObject.getString("Unit"));
                 objItemMaster.setItemStatus(jsonObject.getString("ItemStatus"));
+                objItemMaster.setActualSellPrice(jsonObject.getDouble("ActualSellPrice"));
+                objItemMaster.setLinktoOrderMasterId(jsonObject.getLong("linktoOrderMasterId"));
+                objItemMaster.setItemModifierIds(jsonObject.getString("ItemModifierMasterIds"));
+                objItemMaster.setQuantity(jsonObject.getInt("Quantity"));
             }
             return objItemMaster;
         } catch (JSONException e) {
@@ -106,6 +111,10 @@ public class ItemJSONParser {
                 //objItemMaster.setItemType(jsonArray.getJSONObject(i).getString("ItemType"));
                 objItemMaster.setUnit(jsonArray.getJSONObject(i).getString("Unit"));
                 objItemMaster.setItemStatus(jsonArray.getJSONObject(i).getString("ItemStatus"));
+                objItemMaster.setActualSellPrice(jsonArray.getJSONObject(i).getDouble("ActualSellPrice"));
+                objItemMaster.setLinktoOrderMasterId(jsonArray.getJSONObject(i).getLong("linktoOrderMasterId"));
+                objItemMaster.setItemModifierIds(jsonArray.getJSONObject(i).getString("ItemModifierMasterIds"));
+                objItemMaster.setQuantity(jsonArray.getJSONObject(i).getInt("Quantity"));
                 lstItemMaster.add(objItemMaster);
             }
             return lstItemMaster;
@@ -169,6 +178,24 @@ public class ItemJSONParser {
             return null;
         }
 
+    }
+
+    public ArrayList<ItemMaster> SelectAllOrderItemByTableMasterIds(String tableMasterId) {
+        ArrayList<ItemMaster> lstItemMaster = null;
+        Date date;
+        try {
+            date = new Date();
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderItemByTableMasterIds +"/"+sdfControlDateFormat.format(date)+"/"+tableMasterId);
+            if (jsonResponse != null) {
+                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllOrderItemByTableMasterIds + "Result");
+                if (jsonArray != null) {
+                    lstItemMaster = SetListPropertiesFromJSONArray(jsonArray);
+                }
+            }
+            return lstItemMaster;
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
 }

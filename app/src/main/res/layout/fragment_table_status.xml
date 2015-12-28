@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@mipmap/not_available"
-            android:text="@string/tsBusy" />
+            android:text="@string/tsOccupy" />
 
         <com.rey.material.widget.Button
             android:id="@+id/btnBlock"

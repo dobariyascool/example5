@@ -41,7 +41,6 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
         holder.txtName.setText(objOrderItemTran.getItem());
         holder.txtPrice.setText(Globals.dfWithPrecision.format(objOrderItemTran.getRate()));
         holder.txtQty.setText(String.valueOf(objOrderItemTran.getQuantity()));
-
     }
 
     @Override

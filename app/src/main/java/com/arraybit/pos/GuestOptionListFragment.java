@@ -2,22 +2,24 @@ package com.arraybit.pos;
 
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 
 public class GuestOptionListFragment extends Fragment implements View.OnClickListener{
 
 
+    LinearLayout guestOptionLayout;
+
     public GuestOptionListFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,15 +27,18 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_guest_option_list, container, false);
 
-        CardView cvOrder = (CardView) view.findViewById(R.id.cvOrder);
-        CardView cvFeedback = (CardView) view.findViewById(R.id.cvFeedback);
-        CardView cvMenu = (CardView) view.findViewById(R.id.cvMenu);
-        CardView cvOffers = (CardView) view.findViewById(R.id.cvOffers);
+        guestOptionLayout = (LinearLayout)view.findViewById(R.id.guestOptionLayout);
+        Globals.SetHomePageBackground(getActivity(),guestOptionLayout,null,null);
 
-        cvOrder.setOnClickListener(this);
-        cvFeedback.setOnClickListener(this);
-        cvMenu.setOnClickListener(this);
-        cvOffers.setOnClickListener(this);
+        LinearLayout layoutMenu = (LinearLayout) view.findViewById(R.id.layoutMenu);
+        LinearLayout layoutOrders = (LinearLayout) view.findViewById(R.id.layoutOrders);
+        LinearLayout layoutOffers = (LinearLayout) view.findViewById(R.id.layoutOffers);
+        LinearLayout layoutFeedback = (LinearLayout) view.findViewById(R.id.layoutFeedback);
+
+        layoutMenu.setOnClickListener(this);
+        layoutOrders.setOnClickListener(this);
+        layoutOffers.setOnClickListener(this);
+        layoutFeedback.setOnClickListener(this);
 
         setHasOptionsMenu(true);
 
@@ -41,18 +46,24 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
+    }
+
+    @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.cvOrder) {
+        if (v.getId() == R.id.layoutOrders) {
             Globals.InitializeFragment(new AllOrdersFragment(null), getFragmentManager());
-        } else if (v.getId() == R.id.cvFeedback) {
+        } else if (v.getId() == R.id.layoutFeedback) {
             Globals.InitializeFragment(new FeedbackFragment(getActivity()),getFragmentManager());
-        } else if (v.getId() == R.id.cvMenu) {
+        } else if (v.getId() == R.id.layoutMenu) {
             Intent intent = new Intent(getActivity(),MenuActivity.class);
-            intent.putExtra("TableMasterId", GuestHomeActivity.tableMasterId);
+            intent.putExtra("ParentActivity",true);
+            intent.putExtra("TableMaster",GuestHomeActivity.objTableMaster);
             startActivity(intent);
-        } else if (v.getId() == R.id.cvOffers) {
+        } else if (v.getId() == R.id.layoutOffers) {
             Globals.InitializeFragment(new OfferFragment(getActivity()), getFragmentManager());
         }
-
     }
 }

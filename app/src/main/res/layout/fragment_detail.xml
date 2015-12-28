@@ -6,7 +6,7 @@
     android:background="@color/offwhite"
     android:orientation="vertical"
     tools:context="com.arraybit.pos.DetailFragment"
-    tools:ignore="HardcodedText" >
+    tools:ignore="HardcodedText">
 
     <include
         android:id="@+id/app_bar"
@@ -18,6 +18,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
+            android:id="@+id/detailMainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -34,14 +35,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/control_SpecingSmall">
-
-                <!--<com.rey.material.widget.TextView-->
-                    <!--style="@style/PrimaryTextView"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/dfItemName" />-->
+                android:orientation="vertical"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall">
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtItemName"
@@ -51,108 +47,98 @@
                     android:maxLines="1"
                     android:paddingEnd="@dimen/control_SpecingTiny"
                     android:paddingStart="@dimen/control_SpecingTiny"
-                    android:textColor="@android:color/black" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/control_SpecingSmall">
-
-                <!--<com.rey.material.widget.TextView-->
-                    <!--style="@style/PrimaryTextView"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/dfDescription" />-->
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/control_TextLarge" />
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtDescription"
                     style="@style/SecondaryTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:maxLines="3"
                     android:paddingEnd="@dimen/control_SpecingTiny"
                     android:paddingStart="@dimen/control_SpecingTiny"
-                    android:textColor="@android:color/black" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/control_SpecingSmall">
-
-                <!--<com.rey.material.widget.TextView-->
-                    <!--style="@style/PrimaryTextView"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/dfPrice" />-->
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/control_TextMedium" />
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtItemPrice"
                     style="@style/SecondaryTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:paddingEnd="@dimen/control_SpecingTiny"
                     android:paddingStart="@dimen/control_SpecingTiny"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/control_TextMedium" />
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayout"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/aiqfRemark"
-                android:paddingBottom="0dp"
-                android:paddingEnd="@dimen/control_SpecingSmall"
-                android:paddingStart="@dimen/control_SpecingSmall"
-                android:paddingTop="@dimen/control_SpecingSmall"
-                android:textColor="@android:color/black"
-                android:textColorHint="@color/primary_dark"
-                app:et_labelTextColor="@android:color/black">
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
-                    android:id="@+id/actRemark"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/arrow_drop_down"
-                    android:dropDownHeight="190dp"
-                    android:singleLine="true"
-                    android:textSize="14sp" />
+                    android:layout_weight="1"
+                    android:hint="@string/aiqfRemark"
+                    android:paddingBottom="0dp"
+                    android:paddingEnd="@dimen/control_SpecingSmall"
+                    android:paddingStart="@dimen/control_SpecingSmall"
+                    android:paddingTop="@dimen/control_SpecingSmall"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/primary_dark"
+                    app:et_labelTextColor="@android:color/black">
 
-            </android.support.design.widget.TextInputLayout>
+                    <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+                        android:id="@+id/actRemark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/arrow_drop_down"
+                        android:dropDownHeight="190dp"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:textSize="14sp" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayoutModifier"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/aiqfModifier"
-                android:paddingBottom="0dp"
-                android:paddingEnd="@dimen/control_SpecingSmall"
-                android:paddingStart="@dimen/control_SpecingSmall"
-                android:paddingTop="@dimen/control_SpecingTiny"
-                android:textColor="@android:color/black"
-                android:textColorHint="@color/primary_dark"
-                app:et_labelTextColor="@android:color/black">
+                </android.support.design.widget.TextInputLayout>
 
-                <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
-                    android:id="@+id/actModifier"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutModifier"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/arrow_drop_down"
-                    android:dropDownHeight="190dp"
-                    android:singleLine="true"
-                    android:textSize="14sp" />
+                    android:layout_weight="1"
+                    android:hint="@string/aiqfModifier"
+                    android:paddingBottom="0dp"
+                    android:paddingEnd="@dimen/control_SpecingSmall"
+                    android:paddingStart="@dimen/control_SpecingSmall"
+                    android:paddingTop="@dimen/control_SpecingSmall"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/primary_dark"
+                    app:et_labelTextColor="@android:color/black">
 
-            </android.support.design.widget.TextInputLayout>
+                    <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+                        android:id="@+id/actModifier"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/arrow_drop_down"
+                        android:dropDownHeight="190dp"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:textSize="14sp" />
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_marginStart="@dimen/control_SpecingTiny"
                 android:layout_marginTop="@dimen/control_SpecingTiny"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -190,6 +176,7 @@
                     android:src="@mipmap/plus_small" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -197,8 +184,8 @@
                 android:layout_marginTop="@dimen/control_SpecingTiny"
                 android:orientation="horizontal"
                 android:paddingBottom="0dp"
-                android:paddingEnd="@dimen/control_SpecingTiny"
-                android:paddingStart="@dimen/control_SpecingTiny">
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall">
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnNum1"
@@ -236,8 +223,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/control_SpecingTiny"
                 android:orientation="horizontal"
-                android:paddingEnd="@dimen/control_SpecingTiny"
-                android:paddingStart="@dimen/control_SpecingTiny">
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall">
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnNum4"
@@ -276,8 +263,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/control_SpecingTiny"
                 android:orientation="horizontal"
-                android:paddingEnd="@dimen/control_SpecingTiny"
-                android:paddingStart="@dimen/control_SpecingTiny">
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall">
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnNum7"
@@ -313,23 +300,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/control_SpecingTiny"
-                android:layout_marginStart="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingSmall"
+                android:layout_marginStart="@dimen/control_SpecingSmall"
                 android:orientation="horizontal">
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnCancel"
+                    style="@style/Button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
                     android:layout_weight="1"
                     android:text="@string/dfCancel" />
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnOrder"
+                    style="@style/Button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/dfOrder" />
+                    android:text="@string/dfAdd" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

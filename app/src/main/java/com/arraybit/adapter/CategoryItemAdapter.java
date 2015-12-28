@@ -5,14 +5,15 @@ import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.ItemMaster;
-import com.arraybit.pos.AddItemQtyDialogFragment;
 import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.R;
 import com.rey.material.widget.Button;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapter.ItemViewHolder> {
 
+    int width, height;
     FragmentManager fragmentManager;
     boolean isViewChange;
     boolean isWaiterGrid = false;
@@ -31,8 +33,9 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     ArrayList<ItemMaster> alItemMaster;
     ItemMaster objItemMaster;
     ItemClickListener objItemClickListener;
+    SharePreferenceManage objSharePreferenceManage;
 
-    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange,ItemClickListener objItemClickListener) {
+    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange, ItemClickListener objItemClickListener) {
         this.context = context;
         alItemMaster = result;
         this.fragmentManager = fragmentManager;
@@ -42,7 +45,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
+        objSharePreferenceManage = new SharePreferenceManage();
         if (isViewChange) {
             if (CategoryItemFragment.i == 1) {
                 view = LayoutInflater.from(context).inflate(R.layout.row_category_item_grid, parent, false);
@@ -60,22 +63,29 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
+    public void onBindViewHolder(final ItemViewHolder holder, int position) {
         objItemMaster = alItemMaster.get(position);
-
         holder.cvItem.setId(position);
         holder.btnAdd.setId(position);
 
         if (!isWaiterGrid) {
-            if (objItemMaster.getImageName().equals("null")) {
-                Picasso.with(holder.ivItem.getContext()).load(R.drawable.vada_paav).into(holder.ivItem);
-            } else {
-                Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).into(holder.ivItem);
+
+            if(width!=-1 && height!=-1) {
+                if (objItemMaster.getImageName().equals("null")) {
+                    Picasso.with(holder.ivItem.getContext()).load(R.drawable.vada_paav).priority(Picasso.Priority.NORMAL).resize(width, height).into(holder.ivItem);
+                } else {
+                    Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).priority(Picasso.Priority.NORMAL).resize(width, height).into(holder.ivItem);
+                }
             }
         }
 
         holder.txtItemName.setText(objItemMaster.getItemName());
-        holder.txtItemDescription.setText(objItemMaster.getShortDescription());
+        if(objItemMaster.getShortDescription().equals("")){
+            holder.txtItemDescription.setVisibility(View.GONE);
+        }else{
+            holder.txtItemDescription.setVisibility(View.VISIBLE);
+            holder.txtItemDescription.setText(objItemMaster.getShortDescription());
+        }
         holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
     }
 
@@ -97,6 +107,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
     public interface ItemClickListener {
         public void ButtonOnClick(ItemMaster objItemMaster);
+
         public void CardViewOnClick(ItemMaster objItemMaster);
     }
 
@@ -120,6 +131,38 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
             btnAdd = (Button) itemView.findViewById(R.id.btnAdd);
 
+            if(!isWaiterGrid)
+            {
+                width = ivItem.getLayoutParams().width;
+                if(width==-1)
+                {
+                    DisplayMetrics displayMetrics = new DisplayMetrics();
+                    width = displayMetrics.widthPixels/2;
+                }
+                height = ivItem.getLayoutParams().height;
+            }
+
+//            if(!isWaiterGrid) {
+//                if(isViewChange) {
+//                    itemView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//                        @Override
+//                        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+//
+//                            final ImageView imageView = (ImageView) v.findViewById(R.id.ivItem);
+//                            imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                                @Override
+//                                public void onGlobalLayout() {
+//
+//                                    objSharePreferenceManage = new SharePreferenceManage();
+//                                    objSharePreferenceManage.CreatePreference("ImagePreference", "Width", String.valueOf(imageView.getWidth()), context);
+//                                    objSharePreferenceManage.CreatePreference("ImagePreference", "Height", String.valueOf(imageView.getHeight()), context);
+//                                    notifyDataSetChanged();
+//                                }
+//                            });
+//                        }
+//                    });
+//                }
+//            }
             cvItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -127,12 +170,9 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     //orderItemDetail=(OrderItemDetail)context;
                     //orderItemDetail.ItemDetail();
                     //DetailFragment detailFragment = new DetailFragment(v.getId());
-                    if(isWaiterGrid)
-                    {
-                        AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(alItemMaster.get(v.getId()));
-                        addItemQtyDialogFragment.show(fragmentManager,"");
-                    }
-                    else {
+                    if (isWaiterGrid) {
+                        objItemClickListener.ButtonOnClick(alItemMaster.get(v.getId()));
+                    } else {
                         objItemClickListener.CardViewOnClick(alItemMaster.get(v.getId()));
                     }
 

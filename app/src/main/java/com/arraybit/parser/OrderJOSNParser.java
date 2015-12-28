@@ -184,7 +184,7 @@ public class OrderJOSNParser {
                 stringer.array();
                         for(int j=0;j<alOrderItemTran.get(i).getAlOrderItemModifierTran().size();j++){
                             stringer.object();
-                            stringer.key("ItemModifierMasterIds").value(alOrderItemTran.get(i).getAlOrderItemModifierTran().get(j).getItemModifierMasterId());
+                            stringer.key("ItemModifierMasterIds").value(alOrderItemTran.get(i).getAlOrderItemModifierTran().get(j).getItemModifierIds());
                             stringer.key("MRP").value(alOrderItemTran.get(i).getAlOrderItemModifierTran().get(j).getMRP());
                             stringer.endObject();
                         }
@@ -196,8 +196,13 @@ public class OrderJOSNParser {
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertOrderMaster, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertOrderMaster + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
+            if(jsonResponse!=null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertOrderMaster + "Result");
+                if (jsonObject.getLong("ErrorNumber") != 0) {
+                    return String.valueOf(jsonObject.getLong("ErrorNumber"));
+                }
+            }
+            return "-1";
         }
         catch (Exception ex) {
             return "-1";

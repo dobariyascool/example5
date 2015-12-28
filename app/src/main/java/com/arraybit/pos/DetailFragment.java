@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -54,6 +55,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     boolean isDeleted;
     boolean isDuplicate = false;
     ArrayList<ItemMaster> alOrderItemModifierTran, alItemMasterModifier;
+    StringBuilder sbModifier;
 
     public DetailFragment(int ItemMasterId) {
         this.ItemMasterId = ItemMasterId;
@@ -165,7 +167,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                 if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
                         && getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
 
+                    //getActivity().getSupportFragmentManager().popBackStack();
                     getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
                 } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
                         && getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
                     if (getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName() != null && getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
@@ -183,6 +187,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.ibPlus) {
@@ -232,12 +237,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                 SetArrayListAdapter(alString, null);
             } else {
                 if (isDeleted) {
-                    if (actRemark.getText().subSequence((int) actRemark.length() - 1, (int) actRemark.length()).toString().equals(",")) {
-                        selectedValue = String.valueOf(actRemark.getText().subSequence(0, (int) actRemark.length()) + " ").split(", ");
-                    } else if (actRemark.getText().subSequence((int) actRemark.length() - 1, (int) actRemark.length()).toString().equals(" ")) {
-                        selectedValue = actRemark.getText().subSequence(0, (int) actRemark.length()).toString().split(", ");
+                    if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(",")) {
+                        selectedValue = String.valueOf(actRemark.getText().subSequence(0, actRemark.length()) + " ").split(", ");
+                    } else if (actRemark.getText().subSequence( actRemark.length() - 1, actRemark.length()).toString().equals(" ")) {
+                        selectedValue = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
                     } else {
-                        selectedValue = actRemark.getText().subSequence(0, (int) actRemark.length()).toString().split(", ");
+                        selectedValue = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
                         actRemark.setText(actRemark.getText() + ", ");
                     }
                     UpdateArrayListAdapter(null, null, false);
@@ -251,12 +256,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                 SetArrayListAdapter(null, alStringModifier);
             } else {
                 if (isDeleted) {
-                    if (actModifier.getText().subSequence((int) actModifier.length() - 1, (int) actModifier.length()).toString().equals(",")) {
-                        modifierSelectedValue = String.valueOf(actModifier.getText().subSequence(0, (int) actModifier.length()) + " ").split(", ");
-                    } else if (actModifier.getText().subSequence((int) actModifier.length() - 1, (int) actModifier.length()).toString().equals(" ")) {
-                        modifierSelectedValue = actModifier.getText().subSequence(0, (int) actModifier.length()).toString().split(", ");
+                    if (actModifier.getText().subSequence(actModifier.length() - 1,actModifier.length()).toString().equals(",")) {
+                        modifierSelectedValue = String.valueOf(actModifier.getText().subSequence(0,actModifier.length()) + " ").split(", ");
+                    } else if (actModifier.getText().subSequence(actModifier.length() - 1,  actModifier.length()).toString().equals(" ")) {
+                        modifierSelectedValue = actModifier.getText().subSequence(0, actModifier.length()).toString().split(", ");
                     } else {
-                        modifierSelectedValue = actModifier.getText().subSequence(0, (int) actModifier.length()).toString().split(", ");
+                        modifierSelectedValue = actModifier.getText().subSequence(0, actModifier.length()).toString().split(", ");
                         actModifier.setText(actModifier.getText() + ", ");
                     }
                     UpdateArrayListAdapter(null, null, true);
@@ -300,6 +305,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
     private void UpdateArrayListAdapter(String name, String modifierName, boolean isModifier) {
         int isRemove = -1;
+        String str;
         if (!isModifier) {
             if (name == null && isDeleted) {
                 alStringFilter = new ArrayList<>();
@@ -313,7 +319,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                             }
                         } else {
                             for (int j = 0; j < alStringFilter.size(); j++) {
-                                String str = strSelectedValue;
+                                str = strSelectedValue;
                                 if (alStringFilter.get(j).equals(str)) {
                                     alStringFilter.remove(j);
                                 }
@@ -321,7 +327,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                 }
-                adapter = new ArrayAdapter<String>
+                adapter = new ArrayAdapter<>
                         (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringFilter);
                 actRemark.setAdapter(adapter);
             } else {
@@ -331,7 +337,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                             alStringFilter.add(alString.get(i));
                         }
                     }
-                    adapter = new ArrayAdapter<String>
+                    adapter = new ArrayAdapter<>
                             (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringFilter);
                     actRemark.setAdapter(adapter);
 
@@ -346,7 +352,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                     }
                 }
             }
-            adapter = new ArrayAdapter<String>
+            adapter = new ArrayAdapter<>
                     (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringFilter);
             actRemark.setAdapter(adapter);
         } else {
@@ -362,7 +368,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                             }
                         } else {
                             for (int j = 0; j < alStringModifierFilter.size(); j++) {
-                                String str = strSelectedValue;
+                                str = strSelectedValue;
                                 if (alStringModifierFilter.get(j).equals(str)) {
                                     alStringModifierFilter.remove(j);
                                 }
@@ -370,7 +376,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                 }
-                adapter = new ArrayAdapter<String>
+                adapter = new ArrayAdapter<>
                         (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringModifierFilter);
                 actModifier.setAdapter(adapter);
             } else {
@@ -380,7 +386,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                             alStringModifierFilter.add(alStringModifier.get(i));
                         }
                     }
-                    adapter = new ArrayAdapter<String>
+                    adapter = new ArrayAdapter<>
                             (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringModifierFilter);
                     actModifier.setAdapter(adapter);
 
@@ -395,7 +401,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                     }
                 }
             }
-            adapter = new ArrayAdapter<String>
+            adapter = new ArrayAdapter<>
                     (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringModifierFilter);
             actModifier.setAdapter(adapter);
         }
@@ -403,11 +409,11 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
     private void SetArrayListAdapter(ArrayList<String> alString, ArrayList<String> alStringModifier) {
         if (alString != null) {
-            adapter = new ArrayAdapter<String>
+            adapter = new ArrayAdapter<>
                     (getActivity(), android.R.layout.simple_spinner_dropdown_item, alString);
             actRemark.setAdapter(adapter);
         } else {
-            adapter = new ArrayAdapter<String>
+            adapter = new ArrayAdapter<>
                     (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringModifier);
             actModifier.setAdapter(adapter);
         }
@@ -420,128 +426,130 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     }
 
     private void SetOrderItemTran() {
-        String[] strNewRemark = new String[0], strOldRemark = new String[0];
-        StringBuilder sb;
+
         objOrderItemTran = new ItemMaster();
-        if (Globals.alOrderItemTran.size() > 0) {
-            for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
-                if (objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId()) {
-                    isDuplicate = true;
-                    sb = new StringBuilder();
-                    Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + objItemMaster.getSellPrice());
-                    Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
-
-                    if (!actRemark.getText().toString().isEmpty()) {
-                        if (actRemark.getText().subSequence((int) actRemark.length() - 1, (int) actRemark.length()).toString().equals(",")) {
-                            strNewRemark = String.valueOf(actRemark.getText().subSequence(0, (int) actRemark.length()) + " ").split(", ");
-                        } else if (actRemark.getText().subSequence((int) actRemark.length() - 1, (int) actRemark.length()).toString().equals(" ")) {
-                            strNewRemark = actRemark.getText().subSequence(0, (int) actRemark.length()).toString().split(", ");
-                        } else {
-                            strNewRemark = actRemark.getText().subSequence(0, (int) actRemark.length()).toString().split(", ");
-                        }
-
-
-                        if (!Globals.alOrderItemTran.get(i).getRemark().isEmpty()) {
-                            String listRemark = Globals.alOrderItemTran.get(i).getRemark();
-                            if (listRemark.subSequence((int) listRemark.length() - 1, (int) listRemark.length()).toString().equals(",")) {
-                                strOldRemark = String.valueOf(listRemark.subSequence(0, (int) listRemark.length()) + " ").split(", ");
-                            } else if (listRemark.subSequence((int) listRemark.length() - 1, (int) listRemark.length()).toString().equals(" ")) {
-                                strOldRemark = listRemark.subSequence(0, (int) listRemark.length()).toString().split(", ");
-                            } else {
-                                strOldRemark = listRemark.subSequence(0, (int) listRemark.length()).toString().split(", ");
-                            }
-
-                            if (strNewRemark.length != 0) {
-                                for (String newRemark : strNewRemark) {
-                                    for (String oldRemark : strOldRemark) {
-                                        if (!newRemark.equals(oldRemark)) {
-                                            sb.append(newRemark).append(",");
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            if (!listRemark.subSequence((int) listRemark.length() - 1, (int) listRemark.length()).toString().equals(",")
-                                    && !listRemark.subSequence((int) listRemark.length() - 1, (int) listRemark.length()).toString().equals(" ")) {
-                                Globals.alOrderItemTran.get(i).setRemark(Globals.alOrderItemTran.get(i).getRemark() + ", " + sb.toString());
-                            } else {
-                                Globals.alOrderItemTran.get(i).setRemark(Globals.alOrderItemTran.get(i).getRemark() + sb.toString());
-                            }
-
-                        } else {
-                            Globals.alOrderItemTran.get(i).setRemark(actRemark.getText().toString());
+        try {
+            if (Globals.alOrderItemTran.size() > 0) {
+                for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
+                    if (Globals.alOrderItemTran.get(i).getItemModifierIds() != null) {
+                        if (objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId() && (!Globals.alOrderItemTran.get(i).getItemModifierIds().equals("null") && !sbModifier.toString().equals("null")) && Globals.alOrderItemTran.get(i).getItemModifierIds().equals(sbModifier.toString())) {
+                            isDuplicate = true;
+                            CheckDuplicateRemark(i);
+                            break;
                         }
                     }
-                    if (alOrderItemModifierTran.size() != 0) {
-                        if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
-                            for (int b = 0; b < alOrderItemModifierTran.size(); b++) {
-                                for (int d = 0; d < Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size(); d++) {
-                                    if (alOrderItemModifierTran.get(b).getItemModifierMasterId().equals(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().get(d).getItemModifierMasterId())) {
-                                        alOrderItemModifierTran.remove(b);
-                                        break;
-                                    }
-                                }
-                                if (alOrderItemModifierTran.size() == 0) {
-                                    break;
-                                }
-                            }
-                            ArrayList<ItemMaster> alModifier = Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran();
-                            alModifier.addAll(alOrderItemModifierTran);
-                            Globals.alOrderItemTran.get(i).setAlOrderItemModifierTran(alModifier);
-                        } else {
-                            ArrayList<ItemMaster> alModifier = Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran();
-                            alModifier.addAll(alOrderItemModifierTran);
-                            Globals.alOrderItemTran.get(i).setAlOrderItemModifierTran(alModifier);
-                        }
-                    }
-                    break;
-                } else {
-                    isDuplicate = false;
                 }
-            }
-            if (!isDuplicate) {
+                if (!isDuplicate) {
+                    objOrderItemTran.setItemMasterId(objItemMaster.getItemMasterId());
+                    objOrderItemTran.setItemName(objItemMaster.getItemName());
+                    objOrderItemTran.setSellPrice(Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+                    objOrderItemTran.setQuantity(Integer.valueOf(etQuantity.getText().toString()));
+                    objOrderItemTran.setRemark(actRemark.getText().toString());
+                    if (!sbModifier.toString().equals("null")) {
+                        objOrderItemTran.setItemModifierIds(sbModifier.toString());
+                    }
+                    objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
+                    Globals.alOrderItemTran.add(objOrderItemTran);
+                    Globals.counter = Globals.counter + 1;
+                }
+            } else {
                 objOrderItemTran.setItemMasterId(objItemMaster.getItemMasterId());
                 objOrderItemTran.setItemName(objItemMaster.getItemName());
-                objOrderItemTran.setSellPrice(objItemMaster.getSellPrice());
+                objOrderItemTran.setSellPrice(Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                 objOrderItemTran.setQuantity(Integer.valueOf(etQuantity.getText().toString()));
                 objOrderItemTran.setRemark(actRemark.getText().toString());
+                if (!sbModifier.toString().equals("null")) {
+                    objOrderItemTran.setItemModifierIds(sbModifier.toString());
+                }
                 objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
                 Globals.alOrderItemTran.add(objOrderItemTran);
                 Globals.counter = Globals.counter + 1;
             }
-        } else {
-            objOrderItemTran.setItemMasterId(objItemMaster.getItemMasterId());
-            objOrderItemTran.setItemName(objItemMaster.getItemName());
-            objOrderItemTran.setSellPrice(objItemMaster.getSellPrice());
-            objOrderItemTran.setQuantity(Integer.valueOf(etQuantity.getText().toString()));
-            objOrderItemTran.setRemark(actRemark.getText().toString());
-            objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
-            Globals.alOrderItemTran.add(objOrderItemTran);
-            Globals.counter = Globals.counter + 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void CheckDuplicateRemark(int i) {
+        String[] strNewRemark, strOldRemark;
+        StringBuilder sb = new StringBuilder();
+        try {
+            Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+            Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+
+            if (!actRemark.getText().toString().isEmpty()) {
+                if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(",")) {
+                    strNewRemark = String.valueOf(actRemark.getText().subSequence(0, actRemark.length()) + " ").split(", ");
+                } else if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(" ")) {
+                    strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
+                } else {
+                    strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
+                }
+
+
+                if (!Globals.alOrderItemTran.get(i).getRemark().isEmpty()) {
+                    String listRemark = Globals.alOrderItemTran.get(i).getRemark();
+                    if (listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(",")) {
+                        strOldRemark = String.valueOf(listRemark.subSequence(0, listRemark.length()) + " ").split(", ");
+                    } else if (listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(" ")) {
+                        strOldRemark = listRemark.subSequence(0, listRemark.length()).toString().split(", ");
+                    } else {
+                        strOldRemark = listRemark.subSequence(0, listRemark.length()).toString().split(", ");
+                    }
+
+                    if (strNewRemark.length != 0) {
+                        for (String newRemark : strNewRemark) {
+                            for (String oldRemark : strOldRemark) {
+                                if (!newRemark.equals(oldRemark)) {
+                                    sb.append(newRemark).append(",");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (!listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(",")
+                            && !listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(" ")) {
+                        Globals.alOrderItemTran.get(i).setRemark(Globals.alOrderItemTran.get(i).getRemark() + ", " + sb.toString());
+                    } else {
+                        Globals.alOrderItemTran.get(i).setRemark(Globals.alOrderItemTran.get(i).getRemark() + sb.toString());
+                    }
+
+                } else {
+                    Globals.alOrderItemTran.get(i).setRemark(actRemark.getText().toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void SetOrderItemModifierTran() {
         ItemMaster objOrderItemModifier;
         alOrderItemModifierTran = new ArrayList<>();
-        if (!actModifier.getText().toString().isEmpty()) {
-            if (actModifier.getText().subSequence((int) actModifier.length() - 1, (int) actModifier.length()).toString().equals(",")) {
-                modifierValue = String.valueOf(actModifier.getText().subSequence(0, (int) actModifier.length()) + " ").split(", ");
-            } else if (actModifier.getText().subSequence((int) actModifier.length() - 1, (int) actModifier.length()).toString().equals(" ")) {
-                modifierValue = actModifier.getText().subSequence(0, (int) actModifier.length()).toString().split(", ");
-            }
+        sbModifier = new StringBuilder();
+        try {
+            if (!actModifier.getText().toString().isEmpty()) {
+                if (actModifier.getText().subSequence(actModifier.length() - 1, actModifier.length()).toString().equals(",")) {
+                    modifierValue = String.valueOf(actModifier.getText().subSequence(0, actModifier.length()) + " ").split(", ");
+                } else if (actModifier.getText().subSequence(actModifier.length() - 1, actModifier.length()).toString().equals(" ")) {
+                    modifierValue = actModifier.getText().subSequence(0, actModifier.length()).toString().split(", ");
+                }
 
-            for (String strModifierValue : modifierValue) {
-                for (int j = 0; j < alItemMasterModifier.size(); j++) {
-                    if (alItemMasterModifier.get(j).getItemName().equals(strModifierValue)) {
-                        objOrderItemModifier = new ItemMaster();
-                        objOrderItemModifier.setItemName(alItemMasterModifier.get(j).getItemName());
-                        objOrderItemModifier.setItemModifierMasterId(String.valueOf(alItemMasterModifier.get(j).getItemMasterId()));
-                        objOrderItemModifier.setMRP(alItemMasterModifier.get(j).getMRP());
-                        alOrderItemModifierTran.add(objOrderItemModifier);
+                for (String strModifierValue : modifierValue) {
+                    for (int j = 0; j < alItemMasterModifier.size(); j++) {
+                        if (alItemMasterModifier.get(j).getItemName().equals(strModifierValue)) {
+                            objOrderItemModifier = new ItemMaster();
+                            objOrderItemModifier.setItemName(alItemMasterModifier.get(j).getItemName());
+                            objOrderItemModifier.setItemModifierIds(String.valueOf(alItemMasterModifier.get(j).getItemMasterId()));
+                            objOrderItemModifier.setMRP(alItemMasterModifier.get(j).getMRP());
+                            sbModifier.append(alItemMasterModifier.get(j).getItemMasterId()).append(",");
+                            alOrderItemModifierTran.add(objOrderItemModifier);
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -576,15 +584,26 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             progressDialog.dismiss();
             if(objItemMaster!=null){
                 txtItemName.setText(objItemMaster.getItemName());
-                txtDescription.setText(objItemMaster.getShortDescription());
-                txtItemPrice.setText((String.valueOf(objItemMaster.getSellPrice())));
-                if (!objItemMaster.getImageName().equals("null")) {
-                    Picasso.with(ivItemImage.getContext()).load(objItemMaster.getImageName()).into(ivItemImage);
-                } else {
-                    ivItemImage.setImageResource(R.drawable.vada_paav);
+                if(!objItemMaster.getShortDescription().equals("")){
+                    txtDescription.setVisibility(View.VISIBLE);
+                    txtDescription.setText(objItemMaster.getShortDescription());
                 }
-            }
+                else{
+                    txtDescription.setVisibility(View.GONE);
+                }
+                txtItemPrice.setText((String.valueOf(objItemMaster.getSellPrice())));
 
+                ivItemImage.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (!objItemMaster.getImageName().equals("null")) {
+                            Picasso.with(ivItemImage.getContext()).load(objItemMaster.getImageName()).priority(Picasso.Priority.NORMAL).resize(ivItemImage.getWidth(), ivItemImage.getHeight()).into(ivItemImage);
+                        } else {
+                            Picasso.with(ivItemImage.getContext()).load(R.drawable.vada_paav).priority(Picasso.Priority.NORMAL).resize(ivItemImage.getWidth(), ivItemImage.getHeight()).into(ivItemImage);
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -601,9 +620,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Object result) {
 
-            if (alString == null) {
-            } else if (alString.size() == 0) {
-            } else {
+            if (alString != null && alString.size() != 0) {
 
                 alStringFilter = new ArrayList<>();
 
@@ -628,6 +645,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                 actRemark.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Globals.HideKeyBoard(getActivity(), textInputLayout);
                         UpdateArrayListAdapter((String) parent.getAdapter().getItem(position), null, false);
                     }
                 });
@@ -648,9 +666,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Object result) {
 
-            if (alItemMasterModifier == null) {
-            } else if (alItemMasterModifier.size() == 0) {
-            } else {
+            if (alItemMasterModifier != null && alItemMasterModifier.size() != 0) {
                 alStringModifier = new ArrayList<>();
                 for (int i = 0; i < alItemMasterModifier.size(); i++) {
                     alStringModifier.add(alItemMasterModifier.get(i).getItemName());
@@ -679,6 +695,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                 actModifier.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Globals.HideKeyBoard(getActivity(), textInputLayoutModifier);
                         UpdateArrayListAdapter(null, (String) parent.getAdapter().getItem(position), true);
                     }
                 });

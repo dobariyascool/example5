@@ -26,6 +26,7 @@
     <dimen name="control_SpecingMedium">16dp</dimen>
     <dimen name="control_SpecingLarge">24dp</dimen>
 
+    <dimen name="control_TextTiny">10sp</dimen>
     <dimen name="control_TextSmall">12sp</dimen>
     <dimen name="control_TextMedium">16sp</dimen>
     <dimen name="control_TextLarge">24sp</dimen>

@@ -30,6 +30,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arraybit.modal.ItemMaster;
+import com.arraybit.modal.OrderItemTran;
+import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.GuestLoginDialogFragment;
 import com.arraybit.pos.R;
 import com.arraybit.pos.SignInActivity;
@@ -55,7 +57,9 @@ public class Globals {
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
     public static int counter = 0;
     public static ArrayList<ItemMaster> alOrderItemTran = new ArrayList<>();
-    public static ArrayList<ItemMaster> alOrderItemModifierTran = new ArrayList<>();
+    public static ArrayList<OrderItemTran> alOrderItemSummery = new ArrayList<>();
+    public static ArrayList<Long> alOrderMasterId = new ArrayList<>();
+    public static short selectTableMasterId;
     static FragmentManager fragmentManager;
     //public static Bitmap bitmap1;
 
@@ -136,6 +140,7 @@ public class Globals {
 
     public static void OptionMenuItemClick(MenuItem menuItem, Activity activity, FragmentManager fragmentManager) {
         activityName = activity.getTitle().toString();
+        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
         if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
             GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
             guestLoginDialogFragment.show(fragmentManager, "");
@@ -147,6 +152,7 @@ public class Globals {
             fragmentTransaction.addToBackStack(activity.getResources().getString(R.string.title_fragment_signup));
             fragmentTransaction.commit();
         }
+
     }
 
     public static void SetScaleImageBackground(final Context context, final LinearLayout linearLayout, final RelativeLayout relativeLayout, final FrameLayout frameLayout) {
@@ -165,13 +171,29 @@ public class Globals {
         }
     }
 
+    public static void SetHomePageBackground(final Context context, final LinearLayout linearLayout, final RelativeLayout relativeLayout, final FrameLayout frameLayout) {
+
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
+        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
+        Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
+
+        if (relativeLayout != null) {
+            relativeLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
+        } else if (frameLayout != null) {
+            frameLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
+        } else if (linearLayout != null) {
+            linearLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
+        }
+    }
+
     public static void InitializeFragment(Fragment fragment, FragmentManager fragmentManager) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         //fragmentTransaction.setCustomAnimations(R.animator.slide_up,R.animator.slide_down,R.animator.slide_up,R.animator.slide_down);
         //fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out,android.R.anim.fade_in,android.R.anim.fade_out);
         //fragmentTransaction.setCustomAnimations(R.anim.slide_up,R.anim.slide_down,R.anim.slide_up,R.anim.slide_down);
         //fragmentTransaction.setCustomAnimations(R.anim.jump_from_down,R.anim.jump_to_down,R.anim.jump_from_down,R.anim.jump_to_down);
-        //fragmentTransaction.setCustomAnimations(android.R.anim.slide_out_right,android.R.anim.slide_in_left,android.R.anim.slide_out_right,android.R.anim.slide_in_left);
+        //fragmentTransaction.setCustomAnimations(android.R.anim.slide_out_right,android.R.anim.slide_out_left,android.R.anim.slide_out_right,android.R.anim.slide_out_left);
         fragmentTransaction.replace(android.R.id.content, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -240,8 +262,37 @@ public class Globals {
             objSharePreferenceManage.RemovePreference("WaiterPreference", "UserMasterId", activity);
             objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId", activity);
 
+            Globals.counter = 0;
+            Globals.alOrderItemTran.clear();
+            Globals.selectTableMasterId = 0;
+
+            objSharePreferenceManage.ClearPreference("WaiterPreference", activity);
+        } else if(activityName.equals(activity.getResources().getString(R.string.title_fragment_category_item)))
+        {
+            Intent intent = new Intent(activity, SignInActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            activity.startActivity(intent);
+            activity.finish();
+
+            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserName", activity);
+            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserMasterId", activity);
+            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId", activity);
+
+            Globals.counter = 0;
+            Globals.alOrderItemTran.clear();
+            Globals.selectTableMasterId = 0;
+
             objSharePreferenceManage.ClearPreference("WaiterPreference", activity);
         }
+    }
+
+    public static void ClearData()
+    {
+        Globals.counter = 0;
+        Globals.alOrderItemTran.clear();
+        Globals.selectTableMasterId = 0;
+        Globals.alOrderItemSummery = new ArrayList<>();
     }
 
     //set runtime orientation for mobile and tablet
@@ -252,6 +303,13 @@ public class Globals {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
+
+    public static void CategoryItemFragmentResetStaticVariable(){
+        CategoryItemFragment.isViewChange = false;
+        CategoryItemFragment.targetFragment = null;
+        CategoryItemFragment.i=0;
+    }
+
     //region Enum
 
     public enum WaitingStatus {

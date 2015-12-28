@@ -1,7 +1,9 @@
 package com.arraybit.pos;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,16 +15,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.modal.TableMaster;
 
 
 @SuppressWarnings("RedundantIfStatement")
 public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    static short tableMasterId;
+    static TableMaster objTableMaster;
     ActionBarDrawerToggle actionBarDrawerToggle;
     String userName;
     LinearLayout guestHomeMainLayout;
@@ -46,9 +48,9 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         //end
 
         //linearlayout
-        guestHomeMainLayout = (LinearLayout) findViewById(R.id.guestHomeMainLayout);
+        //guestHomeMainLayout = (LinearLayout) findViewById(R.id.guestHomeMainLayout);
         //LinearLayout guestFragmentLayout = (LinearLayout) findViewById(R.id.guestFragmentLayout);
-        Globals.SetScaleImageBackground(GuestHomeActivity.this,guestHomeMainLayout,null,null);
+        //Globals.SetScaleImageBackground(GuestHomeActivity.this,guestHomeMainLayout,null,null);
         //end
 
         //navigationView
@@ -67,7 +69,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             userName = intent.getStringExtra("username");
         }
 
-        tableMasterId = intent.getShortExtra("TableMatsterId",(short)0);
+        objTableMaster = intent.getParcelableExtra("TableMaster");
 
         AddFragmentInLayout(new GuestOptionListFragment());
 
@@ -83,7 +85,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null, null);
+        //Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null, null);
         //}
     }
 
@@ -97,17 +99,17 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         Globals.SetOptionMenu(userName, GuestHomeActivity.this, menu);
-        if(getSupportFragmentManager().getBackStackEntryCount()!=0){
-            if(getSupportFragmentManager().getBackStackEntryAt(0).getName()!=null) {
-                if (getSupportFragmentManager().getBackStackEntryAt(0).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
-                    app_bar.getMenu().findItem(R.id.action_search).setVisible(false);
-                }
-            }
-        }
-        else
-        {
-            //app_bar.getMenu().findItem(R.id.action_search).setVisible(true);
-        }
+//        if(getSupportFragmentManager().getBackStackEntryCount()!=0){
+//            if(getSupportFragmentManager().getBackStackEntryAt(0).getName()!=null) {
+//                if (getSupportFragmentManager().getBackStackEntryAt(0).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
+//                    app_bar.getMenu().findItem(R.id.action_search).setVisible(false);
+//                }
+//            }
+//        }
+//        else
+//        {
+//            //app_bar.getMenu().findItem(R.id.action_search).setVisible(true);
+//        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -127,18 +129,31 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     //navigationview event
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-
-            case R.id.home:
-                break;
-
-            case R.id.profile:
-                Globals.InitializeFragment(new HotelProfileFragment(GuestHomeActivity.this), getSupportFragmentManager());
-                drawerLayout.closeDrawer(navigationView);
-                navigationView.setVisibility(View.INVISIBLE);
-                break;
+        if (menuItem.getItemId() == R.id.changeMode) {
+            drawerLayout.closeDrawer(navigationView);
+            ChangeModeDialogFragment changeModeDialogFragment = new ChangeModeDialogFragment();
+            changeModeDialogFragment.show(getSupportFragmentManager(), "");
+        } else if (menuItem.getItemId() == R.id.profile) {
+            drawerLayout.closeDrawer(navigationView);
+            Globals.InitializeFragment(new HotelProfileFragment(GuestHomeActivity.this), getSupportFragmentManager());
+        } else if (menuItem.getItemId() == R.id.offers) {
+            drawerLayout.closeDrawer(navigationView);
+            Globals.InitializeFragment(new OfferFragment(GuestHomeActivity.this), getSupportFragmentManager());
+        } else if (menuItem.getItemId() == R.id.feedback) {
+            drawerLayout.closeDrawer(navigationView);
+            Globals.InitializeFragment(new FeedbackFragment(GuestHomeActivity.this), getSupportFragmentManager());
+        } else if (menuItem.getItemId() == R.id.rate) {
+            Uri uri = Uri.parse("market://details?id=" + getPackageName());
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+            }
         }
-
+//        else if (menuItem.getItemId() == R.id.wExit) {
+//            System.exit(0);
+//        }
         return false;
     }
 
@@ -146,8 +161,8 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     //add fragment
     void AddFragmentInLayout(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.guestFragmentLayout, fragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.guestFragmentLayout, fragment,getResources().getString(R.string.title_fragment_guest_options));
+        fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_guest_options));
         fragmentTransaction.commit();
     }
     //end

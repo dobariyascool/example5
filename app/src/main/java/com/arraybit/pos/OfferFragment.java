@@ -43,8 +43,8 @@ public class OfferFragment extends Fragment {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.title_fragment_offer));
         }
 
-        offerFragment = (LinearLayout)view.findViewById(R.id.offerFragment);
-        Globals.SetScaleImageBackground(getActivity(),offerFragment,null,null);
+        offerFragment = (LinearLayout) view.findViewById(R.id.offerFragment);
+        Globals.SetScaleImageBackground(getActivity(), offerFragment, null, null);
 
         setHasOptionsMenu(true);
         return view;
@@ -54,10 +54,9 @@ public class OfferFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))){
+        if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             menu.findItem(R.id.mWaiting).setVisible(false);
-        }
-        else if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))){
+        } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
         }

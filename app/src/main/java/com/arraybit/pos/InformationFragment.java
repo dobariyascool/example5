@@ -43,6 +43,7 @@ public class InformationFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getActivity());
 
         rvWorkingHours = (RecyclerView) rootView.findViewById(R.id.rvWorkingHours);
+        rvWorkingHours.setNestedScrollingEnabled(false);
         rvWorkingHours.setVisibility(View.GONE);
         return rootView;
     }

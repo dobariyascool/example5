@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.arraybit.global.Globals;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
@@ -102,6 +103,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
                     @Override
                     public void onClick(View v) {
 
+                        Globals.HideKeyBoard(context,v);
                         objLayoutClickListener.ChangeTableStatusClick(alTableMaster.get(v.getId()),v.getId());
                     }
                 });

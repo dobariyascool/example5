@@ -10,9 +10,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/// <summary>
-/// JSONParser for BusinessGalleryTran
-/// </summary>
 public class BusinessGalleryJSONParser
 {
     public String SelectAllBusinessGalleryTran = "SelectAllBusinessGalleryTranPageWise";

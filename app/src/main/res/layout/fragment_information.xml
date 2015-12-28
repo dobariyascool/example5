@@ -5,25 +5,31 @@
     android:orientation="vertical"
     tools:context="com.arraybit.pos.InformationFragment">
 
-    <com.rey.material.widget.TextView
-        android:id="@+id/txtDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:maxLines="1"
-        android:padding="@dimen/control_SpecingSmall" />
-
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvWorkingHours"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/control_SpecingSmall"
-            android:paddingRight="@dimen/control_SpecingSmall" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxLines="1"
+                android:padding="@dimen/control_SpecingSmall" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvWorkingHours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/control_SpecingSmall"
+                android:paddingRight="@dimen/control_SpecingSmall" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

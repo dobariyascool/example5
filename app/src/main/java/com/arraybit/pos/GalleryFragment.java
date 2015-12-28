@@ -5,8 +5,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,9 +28,9 @@ public class GalleryFragment extends Fragment {
     static ArrayList<BusinessGalleryTran> alBusinessGalleryTran;
     RecyclerView rvGallery;
     TextView txtMsg;
-    LinearLayoutManager linearLayoutManager;
     int currentPage = 1, BusinessMasterId;
     GalleryAdapter adapter;
+    GridLayoutManager gridLayoutManager;
 
     @SuppressLint("ValidFragment")
     public GalleryFragment(int BusinessMasterId) {
@@ -44,12 +43,13 @@ public class GalleryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
 
+        gridLayoutManager = new GridLayoutManager(getActivity(),2);
+
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
-        linearLayoutManager = new LinearLayoutManager(getActivity());
         rvGallery = (RecyclerView) view.findViewById(R.id.rvGallery);
         rvGallery.setVisibility(View.GONE);
 
-        rvGallery.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+        rvGallery.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
                 if (current_page > currentPage) {
@@ -82,12 +82,8 @@ public class GalleryFragment extends Fragment {
         rvGallery.setVisibility(View.VISIBLE);
         txtMsg.setVisibility(View.GONE);
         adapter = new GalleryAdapter(getActivity(), lstBusinessGalleryTran);
-        DefaultItemAnimator animator = new DefaultItemAnimator();
-        animator.setAddDuration(1000);
-        animator.setRemoveDuration(1000);
-        rvGallery.setItemAnimator(animator);
         rvGallery.setAdapter(adapter);
-        rvGallery.setLayoutManager(linearLayoutManager);
+        rvGallery.setLayoutManager(gridLayoutManager);
     }
 
     @SuppressWarnings("unchecked")

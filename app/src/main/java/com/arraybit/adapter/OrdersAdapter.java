@@ -50,7 +50,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     @Override
     public void onBindViewHolder(OrderViewHolder holder, int position) {
         OrderMaster objOrderMaster = alOrderMaster.get(position);
-        holder.cvOrder.setId((int) objOrderMaster.getOrderMasterId());
+        holder.cvOrder.setId(position);
 
         try {
             String strCurrentDate = new SimpleDateFormat("d/M/yyyy HH:mm",Locale.US).format(new Date());
@@ -72,6 +72,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         }
         else if(hour!=0 && min==0){
             holder.txtOrderTimeDifference.setText(String.valueOf(hour +" hours ago"));
+        }
+        else if(hour==0 && min==0){
+            holder.txtOrderTimeDifference.setText(String.valueOf("Just Now"));
         }
 
         holder.txtOrderTime.setText(objOrderMaster.getOrderTime());
@@ -121,7 +124,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                 @Override
                 public void onClick(View v) {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.allOrdersFragment, new OrderDetailFragment(v.getId()), context.getResources().getString(R.string.title_fragment_order_detail));
+                    fragmentTransaction.replace(R.id.allOrdersFragment, new OrderDetailFragment(alOrderMaster.get(v.getId())), context.getResources().getString(R.string.title_fragment_order_detail));
                     fragmentTransaction.addToBackStack(context.getResources().getString(R.string.title_fragment_order_detail));
                     fragmentTransaction.commit();
                 }

@@ -1,17 +1,19 @@
 package com.arraybit.pos;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 
 public class WaiterOptionListFragment extends Fragment implements View.OnClickListener {
 
+    LinearLayout waiterOptionLayout;
 
     public WaiterOptionListFragment() {
         // Required empty public constructor
@@ -24,15 +26,18 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_waiter_option_list, container, false);
 
-        CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);
-        CardView cvTables = (CardView) view.findViewById(R.id.cvTables);
-        CardView cvMenu = (CardView) view.findViewById(R.id.cvMenu);
-        CardView cvOffers = (CardView) view.findViewById(R.id.cvOffers);
+        waiterOptionLayout = (LinearLayout) view.findViewById(R.id.waiterOptionLayout);
+        Globals.SetHomePageBackground(getActivity(), waiterOptionLayout, null, null);
 
-        cvOrders.setOnClickListener(this);
-        cvTables.setOnClickListener(this);
-        cvMenu.setOnClickListener(this);
-        cvOffers.setOnClickListener(this);
+        LinearLayout layoutOrders = (LinearLayout) view.findViewById(R.id.layoutOrders);
+        LinearLayout layoutDineIn = (LinearLayout) view.findViewById(R.id.layoutDineIn);
+        LinearLayout layoutTakeAway = (LinearLayout) view.findViewById(R.id.layoutTakeAway);
+        LinearLayout layoutOffers = (LinearLayout) view.findViewById(R.id.layoutOffers);
+
+        layoutOrders.setOnClickListener(this);
+        layoutDineIn.setOnClickListener(this);
+        layoutTakeAway.setOnClickListener(this);
+        layoutOffers.setOnClickListener(this);
 
         setHasOptionsMenu(true);
 
@@ -40,32 +45,29 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Globals.SetHomePageBackground(getActivity(), waiterOptionLayout, null, null);
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.cvOrders) {
+        if (v.getId() == R.id.layoutOrders) {
             Globals.InitializeFragment(new AllOrdersFragment(null), getFragmentManager());
-        } else if (v.getId() == R.id.cvTables) {
+        } else if (v.getId() == R.id.layoutDineIn) {
             //Intent intent = new Intent(getActivity(),MenuActivity.class);
             //startActivity(intent);
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(android.R.id.content,new AllTablesFragment(getActivity(),false));
+            fragmentTransaction.add(android.R.id.content, new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.DineIn.getValue())));
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-           //Globals.InitializeFragment(new AllTablesFragment(getActivity(),false), getFragmentManager());
-        } else if (v.getId() == R.id.cvMenu) {
-
-            AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(),false);
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("IsMenu",true);
-            allTablesFragment.setArguments(bundle);
-
+        } else if (v.getId() == R.id.layoutTakeAway) {
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(android.R.id.content,allTablesFragment);
+            fragmentTransaction.add(android.R.id.content, new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.TakeAway.getValue())));
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-            //Globals.InitializeFragment(new CategoryItemFragment(), getFragmentManager());
-        } else if (v.getId() == R.id.cvOffers) {
+        } else if (v.getId() == R.id.layoutOffers) {
             Globals.InitializeFragment(new OfferFragment(getActivity()), getFragmentManager());
         }
-
     }
 }

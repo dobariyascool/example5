@@ -2,7 +2,6 @@ package com.arraybit.pos;
 
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,18 +48,20 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     int counterMasterId, position;
     boolean isFilter;
     Bundle bundle;
-    Context context;
+    String linktoOrderTypeMasterId;
+    SearchView mSearchView;
 
     public TableTabFragment() {
         // Required empty public constructor
     }
 
-    public static TableTabFragment createInstance(SectionMaster objSectionMaster, boolean isChangeMode) {
+    public static TableTabFragment createInstance(SectionMaster objSectionMaster, boolean isChangeMode, String linktoOrderTypeMasterId) {
 
         TableTabFragment tableTabFragment = new TableTabFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ITEMS_COUNT_KEY, objSectionMaster);
         bundle.putBoolean("ChangeMode", isChangeMode);
+        bundle.putString("OrderTypeMasterId", linktoOrderTypeMasterId);
         tableTabFragment.setArguments(bundle);
         return tableTabFragment;
     }
@@ -85,6 +85,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         bundle = getArguments();
         objSectionMaster = bundle.getParcelable(ITEMS_COUNT_KEY);
         this.sectionMasterId = objSectionMaster.getSectionMasterId();
+        this.linktoOrderTypeMasterId = bundle.getString("OrderTypeMasterId");
 
         gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
@@ -110,9 +111,8 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         super.onCreateOptionsMenu(menu, inflater);
 
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
-            MenuItem searchItem = menu.findItem(R.id.action_search);
-            final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-            mSearchView.setInputType(InputType.TYPE_CLASS_TEXT);
+            final MenuItem searchItem = menu.findItem(R.id.action_search);
+            mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
             mSearchView.setMaxWidth(displayMetrics.widthPixels);
             mSearchView.setOnQueryTextListener(this);
 
@@ -121,8 +121,9 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                         @Override
                         public boolean onMenuItemActionCollapse(MenuItem item) {
                             // Do something when collapsed
-                            if(alTableMaster.size()!=0 && alTableMaster!=null) {
+                            if (alTableMaster.size() != 0 && alTableMaster != null) {
                                 tablesAdapter.SetSearchFilter(alTableMaster);
+                                Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
                             }
                             return true; // Return true to collapse action view
                         }
@@ -167,6 +168,19 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         }
         rvTables.setAdapter(tablesAdapter);
         rvTables.setLayoutManager(gridLayoutManager);
+        rvTables.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Globals.HideKeyBoard(getActivity(), recyclerView);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Globals.HideKeyBoard(getActivity(), recyclerView);
+            }
+        });
     }
 
     public void LoadTableData(String tableStatusMasterId) {
@@ -203,18 +217,29 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Vacant.toString())) {
             if (bundle.getBoolean("ChangeMode")) {
                 Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
-                intent.putExtra("TableMasterId",objTableMaster.getTableMasterId());
+                intent.putExtra("TableMaster", objTableMaster);
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(getActivity(),MenuActivity.class);
-                intent.putExtra("TableMasterId",objTableMaster.getTableMasterId());
+                if (Globals.selectTableMasterId == 0) {
+                    Globals.selectTableMasterId = objTableMaster.getTableMasterId();
+                }
+                Intent intent = new Intent(getActivity(), MenuActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("TableMaster", objTableMaster);
                 startActivity(intent);
             }
         } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Occupied.toString())) {
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("TableMaster", objTableMaster);
+            OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment(null);
+            orderSummaryFragment.setArguments(bundle);
+
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.allTablesFragment, new AllOrdersFragment(String.valueOf(objTableMaster.getTableMasterId())), getActivity().getResources().getString(R.string.title_fragment_all_orders));
-            fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_all_orders));
+            fragmentTransaction.replace(R.id.allTablesFragment, orderSummaryFragment, getActivity().getResources().getString(R.string.title_fragment_order_summary));
+            fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
             fragmentTransaction.commit();
+
         } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Block.toString())) {
             TableStatusFragment tableStatusFragment = new TableStatusFragment(objTableMaster);
             tableStatusFragment.setTargetFragment(this, 0);
@@ -253,7 +278,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         protected Object doInBackground(Object[] objects) {
 
             TableJSONParser objTableJSONParser = new TableJSONParser();
-            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(counterMasterId, sectionMasterId, tableStatusMasterId);
+            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(counterMasterId, sectionMasterId, tableStatusMasterId, linktoOrderTypeMasterId);
         }
 
         @Override

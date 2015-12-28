@@ -113,7 +113,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             if (item.getTitle().equals("T")) {
                 item.setTitle("W");
                 item.setIcon(R.mipmap.waiting_person);
-                ReplaceFragment(new AllTablesFragment(WaitingActivity.this, false));
+                ReplaceFragment(new AllTablesFragment(WaitingActivity.this, false,null));
             } else {
                 item.setTitle("T");
                 item.setIcon(R.mipmap.view_table);

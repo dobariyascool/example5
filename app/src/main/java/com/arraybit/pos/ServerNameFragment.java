@@ -72,7 +72,6 @@ public class ServerNameFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), SignInActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    //getActivity().finish();
                 }
             }
         });

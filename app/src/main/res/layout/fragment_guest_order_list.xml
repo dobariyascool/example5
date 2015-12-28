@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/action_settings"
-                    android:src="@mipmap/fork" />
+                    android:src="@mipmap/food" />
 
                 <com.rey.material.widget.TextView
                     android:layout_width="wrap_content"

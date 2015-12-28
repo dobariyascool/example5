@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:maxLines="1"
-            android:textColor="#EFEBE9"
+            android:textColor="#AFAFAF"
             android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.TextView
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:maxLines="1"
-            android:textColor="#EFEBE9"
+            android:textColor="#AFAFAF"
             android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.TextView
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="#EFEBE9"
+                android:textColor="#AFAFAF"
                 android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.TextView
@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:textColor="#EFEBE9"
+                android:textColor="#AFAFAF"
                 android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.TextView

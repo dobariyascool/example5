@@ -97,6 +97,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_search).setVisible(true);
+        menu.findItem(R.id.home).setVisible(false);
     }
 
     @Override

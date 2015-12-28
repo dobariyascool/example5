@@ -1,18 +1,12 @@
 package com.arraybit.pos;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.ThumbnailUtils;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,21 +16,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        WebView web = (WebView) findViewById(R.id.webview);
+        web.setBackgroundColor(Color.TRANSPARENT); //for gif without background
+        web.loadUrl("file:///android_asset/gifImage.html");
 
-        layout1 = (LinearLayout) findViewById(R.id.layout1);
-
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-
-        Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground), displayMetrics.widthPixels, displayMetrics.heightPixels);
-        layout1.setBackground(new BitmapDrawable(getResources(), bitmap));
-
-        Button btn=(Button)findViewById(R.id.btnAdd);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "btn click", Toast.LENGTH_LONG).show();
-            }
-        });
+//        layout1 = (LinearLayout) findViewById(R.id.layout1);
+//
+//        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+//
+//        Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground), displayMetrics.widthPixels, displayMetrics.heightPixels);
+//        layout1.setBackground(new BitmapDrawable(getResources(), bitmap));
+//
+//        Button btn=(Button)findViewById(R.id.btnAdd);
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(MainActivity.this, "btn click", Toast.LENGTH_LONG).show();
+//            }
+//        });
 
 
 //        new CountDownTimer(100000, 1000) {
@@ -75,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 //        layout1.setBackground(d);
 
 //
-          layout1 = (LinearLayout) findViewById(R.id.layout1);
+//          layout1 = (LinearLayout) findViewById(R.id.layout1);
 ////
 ////
 //        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
