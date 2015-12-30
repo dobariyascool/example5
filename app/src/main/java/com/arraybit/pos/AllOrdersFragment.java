@@ -3,11 +3,11 @@ package com.arraybit.pos;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.arraybit.adapter.OrdersAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.modal.OrderMaster;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("ALL")
-public class AllOrdersFragment extends Fragment implements View.OnClickListener {
+public class AllOrdersFragment extends Fragment implements View.OnClickListener,OrdersAdapter.OrdersClickListener {
 
     TabLayout orderTabLayout;
     ViewPager orderViewPager;
@@ -34,6 +36,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
     FrameLayout allOrdersFragment;
     String linktoTableMasterIds;
     FloatingActionMenu famRoot;
+    boolean isRefresh;
 
     public AllOrdersFragment(String linktoTableMasterIds) {
         this.linktoTableMasterIds = linktoTableMasterIds;
@@ -56,7 +59,11 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
         //end
 
         allOrdersFragment = (FrameLayout) view.findViewById(R.id.allOrdersFragment);
-        Globals.SetScaleImageBackground(getActivity(),null,null,allOrdersFragment);
+        Globals.SetScaleImageBackground(getActivity(), null, null, allOrdersFragment);
+
+        setHasOptionsMenu(true);
+
+        Globals.targetFragment = AllOrdersFragment.this;
 
         //floating action menu
         famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
@@ -79,18 +86,10 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
         orderViewPager = (ViewPager) view.findViewById(R.id.orderViewPager);
 
         //fragmentLayout=(LinearLayout)view.findViewById(R.id.fragmentLayout);
-        orderPagerAdapter = new OrderPagerAdapter(getChildFragmentManager());
 
         SetTabLayout();
 
-        setHasOptionsMenu(true);
-
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -108,42 +107,29 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item.getItemId() == android.R.id.home) {
-            if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2){
-                if(getActivity().getSupportFragmentManager().getBackStackEntryAt(1).getName()!=null) {
-                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
-                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    }
-                }
-            }
-            else {
-                if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
-                else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null &&
-                        getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
-                    getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
+            if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
+                getActivity().finish();
+            } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null &&
+                    getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
+                getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
     //region Method
     public void SetTabLayout() {
 
-        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.All.toString(),linktoTableMasterIds),Globals.OrderStatus.All.toString());
-        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Cooking.toString(),linktoTableMasterIds), Globals.OrderStatus.Cooking.toString());
-        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Ready.toString(),linktoTableMasterIds), Globals.OrderStatus.Ready.toString());
-        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Served.toString(),linktoTableMasterIds), Globals.OrderStatus.Served.toString());
-        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Cancelled.toString(),linktoTableMasterIds), Globals.OrderStatus.Cancelled.toString());
+        orderPagerAdapter = new OrderPagerAdapter(getFragmentManager());
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.All.toString(), linktoTableMasterIds), Globals.OrderStatus.All.toString());
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Cooking.toString(), linktoTableMasterIds), Globals.OrderStatus.Cooking.toString());
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Ready.toString(), linktoTableMasterIds), Globals.OrderStatus.Ready.toString());
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Served.toString(), linktoTableMasterIds), Globals.OrderStatus.Served.toString());
+        orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.Cancelled.toString(), linktoTableMasterIds), Globals.OrderStatus.Cancelled.toString());
 
         orderViewPager.setAdapter(orderPagerAdapter);
         orderTabLayout.setupWithViewPager(orderViewPager);
@@ -173,34 +159,65 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         OrdersTabFragment ordersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition());
         String orderStatus = null;
-        if(orderTabLayout.getSelectedTabPosition()==0)
-        {
+        if (orderTabLayout.getSelectedTabPosition() == 0) {
             orderStatus = Globals.OrderStatus.All.toString();
-        }
-        else if(orderTabLayout.getSelectedTabPosition()==1){
+        } else if (orderTabLayout.getSelectedTabPosition() == 1) {
             orderStatus = Globals.OrderStatus.Cooking.toString();
-        }
-        else if(orderTabLayout.getSelectedTabPosition()==2){
+        } else if (orderTabLayout.getSelectedTabPosition() == 2) {
             orderStatus = Globals.OrderStatus.Ready.toString();
-        }
-        else if(orderTabLayout.getSelectedTabPosition()==3){
+        } else if (orderTabLayout.getSelectedTabPosition() == 3) {
             orderStatus = Globals.OrderStatus.Served.toString();
-        }
-        else if(orderTabLayout.getSelectedTabPosition()==4){
+        } else if (orderTabLayout.getSelectedTabPosition() == 4) {
             orderStatus = Globals.OrderStatus.Cancelled.toString();
         }
 
         if (v.getId() == R.id.fabDineIn) {
             famRoot.close(true);
-            ordersTabFragment.OrderDataFilter(orderStatus,String.valueOf(Globals.OrderType.DineIn.getValue()));
+            ordersTabFragment.OrderDataFilter(orderStatus, String.valueOf(Globals.OrderType.DineIn.getValue()));
         } else if (v.getId() == R.id.fabTakeAway) {
             famRoot.close(true);
             ordersTabFragment.OrderDataFilter(orderStatus, String.valueOf(Globals.OrderType.TakeAway.getValue()));
         } else if (v.getId() == R.id.fabAll) {
             famRoot.close(true);
-            ordersTabFragment.OrderDataFilter(orderStatus,null);
+            ordersTabFragment.OrderDataFilter(orderStatus, null);
         }
     }
+
+    private void RemoveFragment(FragmentTransaction fragmentTransaction, int selectedPosition) {
+        if (selectedPosition == 0) {
+            OrdersTabFragment CurrentOrdersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition());
+            OrdersTabFragment NextOrdersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition() + 1);
+            fragmentTransaction.remove(CurrentOrdersTabFragment);
+            fragmentTransaction.remove(NextOrdersTabFragment);
+        } else if (selectedPosition == orderPagerAdapter.getCount() - 1) {
+            OrdersTabFragment CurrentOrdersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition());
+            OrdersTabFragment PreviousOrdersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition() - 1);
+            fragmentTransaction.remove(CurrentOrdersTabFragment);
+            fragmentTransaction.remove(PreviousOrdersTabFragment);
+        } else {
+            OrdersTabFragment CurrentOrdersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition());
+            OrdersTabFragment NextOrdersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition() + 1);
+            OrdersTabFragment PreviousOrdersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition() - 1);
+            fragmentTransaction.remove(CurrentOrdersTabFragment);
+            fragmentTransaction.remove(NextOrdersTabFragment);
+            fragmentTransaction.remove(PreviousOrdersTabFragment);
+        }
+    }
+
+    private void RefreshCurrentFragment(FragmentTransaction fragmentTransaction, int selectedPosition) {
+        // OrdersTabFragment CurrentOrdersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition());
+        //fragmentTransaction.remove(CurrentOrdersTabFragment);
+    }
+
+    @Override
+    public void OrderDetail(OrderMaster objOrderMaster) {
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        RemoveFragment(fragmentTransaction, orderTabLayout.getSelectedTabPosition());
+        fragmentTransaction.replace(android.R.id.content, new OrderDetailFragment(objOrderMaster), getActivity().getResources().getString(R.string.title_fragment_order_detail));
+        fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail));
+        fragmentTransaction.commit();
+    }
+
     //endregion
 
     static class OrderPagerAdapter extends FragmentStatePagerAdapter {

@@ -1,12 +1,13 @@
 package com.arraybit.pos;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,9 +17,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        WebView web = (WebView) findViewById(R.id.webview);
-        web.setBackgroundColor(Color.TRANSPARENT); //for gif without background
-        web.loadUrl("file:///android_asset/gifImage.html");
+        //WebView web = (WebView) findViewById(R.id.webview);
+        ImageView imageView = (ImageView)findViewById(R.id.image);
+
+        Picasso.with(MainActivity.this).load(R.drawable.arraybit_5).into(imageView);
+        //Picasso.with(MainActivity.this).load(R.drawable.arraybit_5).into(imageView);
+
+//        WebView web = (WebView) findViewById(R.id.webview);
+//        web.setBackgroundColor(Color.TRANSPARENT); //for gif without background
+//        web.loadUrl("file:///android_asset/gifImage.html");
 
 //        layout1 = (LinearLayout) findViewById(R.id.layout1);
 //

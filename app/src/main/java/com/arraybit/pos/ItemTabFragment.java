@@ -31,6 +31,7 @@ import com.arraybit.parser.ItemJSONParser;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @SuppressWarnings({"unchecked", "ObjectEqualsNull"})
 public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextListener, CategoryItemAdapter.ItemClickListener, AddItemQtyDialogFragment.AddToCartListener {
@@ -55,6 +56,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     TextView txtCartNumber;
     RelativeLayout relativeLayout;
     CartIconListener objCartIconListener;
+    MenuItem searchItem;
 
     public ItemTabFragment() {
     }
@@ -106,11 +108,6 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
@@ -133,6 +130,14 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             categoryItemAdapter.SetSearchFilter(filteredList);
             rvItem.setLayoutManager(linearLayoutManager);
         }
+
+        rvItem.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Globals.HideKeyBoard(getActivity(), recyclerView);
+            }
+        });
     }
 
     public void ItemDataFilter(String itemTypeMasterId) {
@@ -156,12 +161,13 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         ivCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                objCartIconListener = (CartIconListener) CategoryItemFragment.targetFragment;
+                Globals.HideKeyBoard(getActivity(), v);
+                objCartIconListener = (CartIconListener) Globals.targetFragment;
                 objCartIconListener.CartIconOnClick();
             }
         });
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem = menu.findItem(R.id.action_search);
         final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         mSearchView.setInputType(InputType.TYPE_CLASS_TEXT);
         mSearchView.setMaxWidth(displayMetrics.widthPixels);
@@ -175,6 +181,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                         // Do something when collapsed
                         if (alItemMaster.size() != 0 && alItemMaster != null) {
                             categoryItemAdapter.SetSearchFilter(alItemMaster);
+                            Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
                         }
                         return true; // Return true to collapse action view
                     }
@@ -207,8 +214,9 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         final ArrayList<ItemMaster> filteredList = new ArrayList<>();
         for (ItemMaster objItemMaster : lstItemMaster) {
             isFilter = false;
-            String[] strArray = objItemMaster.getItemName().split(" ");
-            for (String aStrArray : strArray) {
+            ArrayList<String> alString = new ArrayList<>(Arrays.asList(objItemMaster.getItemName().toLowerCase().split(" ")));
+            alString.add(0, objItemMaster.getItemName().toLowerCase());
+            for (String aStrArray : alString) {
                 if (aStrArray.length() >= filterName.length()) {
                     final String strItem = aStrArray.substring(0, filterName.length()).toLowerCase();
                     if (!isFilter) {
@@ -217,7 +225,6 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                             isFilter = true;
                         }
                     }
-
                 }
             }
         }
@@ -228,6 +235,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     public void ButtonOnClick(ItemMaster objItemMaster) {
         //counter = counter + 1;
         //txtCartNumber.setText(String.valueOf(counter));
+        MenuItemCompat.collapseActionView(searchItem);
         AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
         addItemQtyDialogFragment.setTargetFragment(this, 0);
         addItemQtyDialogFragment.show(getFragmentManager(), "");
@@ -236,7 +244,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     @Override
     public void CardViewOnClick(ItemMaster objItemMaster) {
 
-        objCartIconListener = (CartIconListener) CategoryItemFragment.targetFragment;
+        objCartIconListener = (CartIconListener) Globals.targetFragment;
         objCartIconListener.CardViewOnClick(objItemMaster);
 
     }
@@ -253,7 +261,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         }
     }
 
-    private void SetCartNumber(TextView txtCartNumber){
+    private void SetCartNumber(TextView txtCartNumber) {
         if (Globals.counter > 0) {
             txtCartNumber.setText(String.valueOf(Globals.counter));
             txtCartNumber.setSoundEffectsEnabled(true);

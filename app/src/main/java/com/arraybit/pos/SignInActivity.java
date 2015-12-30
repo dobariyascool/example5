@@ -114,6 +114,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnSignIn) {
+            Globals.HideKeyBoard(this,v);
             if (!ValidateControls()) {
                 Toast.makeText(SignInActivity.this, getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
                 return;

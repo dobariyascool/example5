@@ -2,16 +2,15 @@ package com.arraybit.adapter;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.OrderMaster;
-import com.arraybit.pos.OrderDetailFragment;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
@@ -31,15 +30,15 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     FragmentManager fragmentManager;
     Date currentDate,orderDate=null;
     Calendar calendar;
+    SearchView searchView;
+    OrdersClickListener objOrdersClickListener;
 
 
-    public OrdersAdapter(Context context, ArrayList<OrderMaster> result, FragmentManager fragmentManager) {
+    public OrdersAdapter(Context context, ArrayList<OrderMaster> result) {
         this.context = context;
         alOrderMaster = result;
         this.layoutInflater = LayoutInflater.from(context);
-        this.fragmentManager = fragmentManager;
     }
-
 
     @Override
     public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -102,6 +101,11 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         notifyDataSetChanged();
     }
 
+    //region interface
+    public interface OrdersClickListener {
+        void OrderDetail(OrderMaster objOrderMaster);
+    }
+
     class OrderViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtOrderTimeDifference,txtOrderTime, txtTableName, txtOrderNumber, txtOrderType,txtTotalItem, txtTotalAmount;
@@ -123,10 +127,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             cvOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.allOrdersFragment, new OrderDetailFragment(alOrderMaster.get(v.getId())), context.getResources().getString(R.string.title_fragment_order_detail));
-                    fragmentTransaction.addToBackStack(context.getResources().getString(R.string.title_fragment_order_detail));
-                    fragmentTransaction.commit();
+
+                    Globals.HideKeyBoard(context,v);
+                    objOrdersClickListener = (OrdersClickListener)Globals.targetFragment;
+                    objOrdersClickListener.OrderDetail(alOrderMaster.get(v.getId()));
                 }
             });
         }

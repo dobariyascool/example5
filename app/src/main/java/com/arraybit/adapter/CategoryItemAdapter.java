@@ -170,6 +170,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     //orderItemDetail=(OrderItemDetail)context;
                     //orderItemDetail.ItemDetail();
                     //DetailFragment detailFragment = new DetailFragment(v.getId());
+                    Globals.HideKeyBoard(context,v);
                     if (isWaiterGrid) {
                         objItemClickListener.ButtonOnClick(alItemMaster.get(v.getId()));
                     } else {
@@ -185,6 +186,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 public void onClick(View v) {
 
                     //objItemClickListener = (ItemClickListener)context;
+                    Globals.HideKeyBoard(context,v);
                     objItemClickListener.ButtonOnClick(alItemMaster.get(v.getId()));
                     //AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment();
                     //addItemQtyDialogFragment.show(fragmentManager,"");

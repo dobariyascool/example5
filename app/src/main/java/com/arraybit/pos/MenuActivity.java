@@ -50,7 +50,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
+        //Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
     }
 
     @Override

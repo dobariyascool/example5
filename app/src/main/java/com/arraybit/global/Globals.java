@@ -60,6 +60,7 @@ public class Globals {
     public static ArrayList<OrderItemTran> alOrderItemSummery = new ArrayList<>();
     public static ArrayList<Long> alOrderMasterId = new ArrayList<>();
     public static short selectTableMasterId;
+    public static Fragment targetFragment;
     static FragmentManager fragmentManager;
     //public static Bitmap bitmap1;
 
@@ -267,7 +268,7 @@ public class Globals {
             Globals.selectTableMasterId = 0;
 
             objSharePreferenceManage.ClearPreference("WaiterPreference", activity);
-        } else if(activityName.equals(activity.getResources().getString(R.string.title_fragment_category_item)))
+        } else if(activityName.equals(activity.getResources().getString(R.string.title_fragment_category_item)) || activityName.equals(activity.getResources().getString(R.string.title_fragment_all_orders)))
         {
             Intent intent = new Intent(activity, SignInActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -293,6 +294,7 @@ public class Globals {
         Globals.alOrderItemTran.clear();
         Globals.selectTableMasterId = 0;
         Globals.alOrderItemSummery = new ArrayList<>();
+        Globals.targetFragment = null;
     }
 
     //set runtime orientation for mobile and tablet
@@ -306,7 +308,7 @@ public class Globals {
 
     public static void CategoryItemFragmentResetStaticVariable(){
         CategoryItemFragment.isViewChange = false;
-        CategoryItemFragment.targetFragment = null;
+        Globals.targetFragment = null;
         CategoryItemFragment.i=0;
     }
 

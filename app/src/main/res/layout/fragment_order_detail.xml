@@ -1,10 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id ="@+id/orderDetailLayout"
+    android:id="@+id/orderDetailFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.arraybit.pos.OrderDetailFragment">
+    tools:context=".OrderDetailFragment">
 
     <include android:id="@+id/app_bar"
         layout="@layout/app_bar"/>
@@ -54,8 +54,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
-        android:layout_marginEnd="@dimen/control_SpecingSmall"
-        android:layout_marginStart="@dimen/control_SpecingSmall"
         android:layout_marginTop="@dimen/control_SpecingSmall"
         android:layout_weight="0.9" />
 

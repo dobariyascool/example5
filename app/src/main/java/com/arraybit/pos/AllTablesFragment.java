@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,6 +135,11 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
@@ -168,6 +174,8 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         }
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -184,7 +192,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         } else {
             tableTabFragment.LoadTableData(null);
         }
-
     }
 
     //region PagerAdapter

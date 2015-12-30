@@ -53,21 +53,21 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.layoutOrders) {
-            Globals.InitializeFragment(new AllOrdersFragment(null), getFragmentManager());
+            Globals.InitializeFragment(new AllOrdersFragment(null),getActivity().getSupportFragmentManager());
         } else if (v.getId() == R.id.layoutDineIn) {
             //Intent intent = new Intent(getActivity(),MenuActivity.class);
             //startActivity(intent);
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(android.R.id.content, new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.DineIn.getValue())));
-            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.add(android.R.id.content, new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.DineIn.getValue())),getActivity().getResources().getString(R.string.title_fragment_all_tables));
+            fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_all_tables));
             fragmentTransaction.commit();
         } else if (v.getId() == R.id.layoutTakeAway) {
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(android.R.id.content, new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.TakeAway.getValue())));
-            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.add(android.R.id.content, new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.TakeAway.getValue())),getActivity().getResources().getString(R.string.title_fragment_all_tables));
+            fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_all_tables));
             fragmentTransaction.commit();
         } else if (v.getId() == R.id.layoutOffers) {
-            Globals.InitializeFragment(new OfferFragment(getActivity()), getFragmentManager());
+            Globals.InitializeFragment(new OfferFragment(getActivity()),getActivity().getSupportFragmentManager());
         }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,16 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.layoutOrders) {
-            Globals.InitializeFragment(new AllOrdersFragment(null), getFragmentManager());
+//            Globals.InitializeFragment(new AllOrdersFragment(null), getFragmentManager());
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("TableMaster",GuestHomeActivity.objTableMaster);
+            OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment(null);
+            orderSummaryFragment.setArguments(bundle);
+
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(android.R.id.content, orderSummaryFragment, getActivity().getResources().getString(R.string.title_fragment_order_summary));
+            fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
+            fragmentTransaction.commit();
         } else if (v.getId() == R.id.layoutFeedback) {
             Globals.InitializeFragment(new FeedbackFragment(getActivity()),getFragmentManager());
         } else if (v.getId() == R.id.layoutMenu) {

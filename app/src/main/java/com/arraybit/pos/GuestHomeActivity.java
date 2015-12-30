@@ -175,7 +175,10 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             if(getSupportFragmentManager().getBackStackEntryCount() > 1){
                 if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_signup)))
                 {
-                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_signup), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_signup), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+                else{
+                    getSupportFragmentManager().popBackStack();
                 }
             }
         }

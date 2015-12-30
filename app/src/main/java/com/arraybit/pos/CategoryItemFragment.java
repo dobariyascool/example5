@@ -38,7 +38,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
     public static boolean isViewChange = false;
     public static short i = 0;
-    public static Fragment targetFragment;
     ViewPager itemViewPager;
     TabLayout itemTabLayout;
     ItemPagerAdapter itemPagerAdapter;
@@ -104,7 +103,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
         setHasOptionsMenu(true);
 
-        targetFragment = CategoryItemFragment.this;
+        Globals.targetFragment = CategoryItemFragment.this;
 
         return view;
     }
@@ -321,7 +320,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         }
 
         public void AddFragment(Fragment fragment, CategoryMaster title) {
-            fragment.setTargetFragment(targetFragment, 0);
+            fragment.setTargetFragment(Globals.targetFragment, 0);
             itemFragmentList.add(fragment);
             itemFragmentTitleList.add(title);
         }

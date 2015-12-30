@@ -16,11 +16,13 @@
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:theme="@style/FullScreenTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".SplashScreenActivity"
@@ -66,12 +68,16 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_waiter_order_detail"
             android:theme="@style/FullScreenTheme" />
-
         <activity
             android:name=".MenuActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_fragment_category_item"
             android:theme="@style/FullScreenTheme" />
+
+        <activity
+            android:name=".AllOrdersActivity"
+            android:label="@string/title_fragment_all_orders"
+            android:theme="@style/FullScreenTheme"/>
 
         <receiver android:name="com.arraybit.global.TimeScheduler" />
 

@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,6 +11,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +29,7 @@ import com.arraybit.modal.TableMaster;
 import com.arraybit.parser.TableJSONParser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
@@ -49,7 +50,6 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     boolean isFilter;
     Bundle bundle;
     String linktoOrderTypeMasterId;
-    SearchView mSearchView;
 
     public TableTabFragment() {
         // Required empty public constructor
@@ -107,12 +107,13 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             final MenuItem searchItem = menu.findItem(R.id.action_search);
-            mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            mSearchView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
             mSearchView.setMaxWidth(displayMetrics.widthPixels);
             mSearchView.setOnQueryTextListener(this);
 
@@ -143,8 +144,9 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         final ArrayList<TableMaster> filteredList = new ArrayList<>();
         for (TableMaster objTableMaster : lstTableMaster) {
             isFilter = false;
-            String[] strArray = objTableMaster.getTableName().split(" ");
-            for (String str : strArray) {
+            ArrayList<String> alString = new ArrayList<>(Arrays.asList(objTableMaster.getTableName().toLowerCase().split(" ")));
+            alString.add(0, objTableMaster.getTableName().toLowerCase());
+            for (String str : alString) {
                 if (str.length() >= filterName.length()) {
                     final String strItem = str.substring(0, filterName.length()).toLowerCase();
                     if (!isFilter) {
@@ -153,7 +155,6 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                             isFilter = true;
                         }
                     }
-
                 }
             }
         }
@@ -172,12 +173,6 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                Globals.HideKeyBoard(getActivity(), recyclerView);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
                 Globals.HideKeyBoard(getActivity(), recyclerView);
             }
         });
@@ -230,6 +225,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
             }
         } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Occupied.toString())) {
 
+            AllTablesFragment.isRefresh = true;
             Bundle bundle = new Bundle();
             bundle.putParcelable("TableMaster", objTableMaster);
             OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment(null);

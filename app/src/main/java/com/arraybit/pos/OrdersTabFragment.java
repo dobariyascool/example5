@@ -9,6 +9,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,14 +29,14 @@ import java.util.ArrayList;
 
 
 @SuppressWarnings("unchecked")
-public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTextListener{
 
     public final static String ITEMS_COUNT_KEY = "OrdersTabFragment$ItemsCount";
     RecyclerView rvOrder;
     TextView txtMsg;
     ArrayList<OrderMaster> alOrderMaster;
     int counterMasterId;
-    String orderStatus,linktoTableMasterIds;
+    String orderStatus, linktoTableMasterIds;
     GridLayoutManager gridLayoutManager;
     SharePreferenceManage objSharePreferenceManage;
     OrdersAdapter ordersAdapter;
@@ -47,15 +48,14 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         // Required empty public constructor
     }
 
-    public static OrdersTabFragment createInstance(String orderStatus,String linktoTableMasterIds) {
+    public static OrdersTabFragment createInstance(String orderStatus, String linktoTableMasterIds) {
         OrdersTabFragment ordersTabFragment = new OrdersTabFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ITEMS_COUNT_KEY, orderStatus);
-        bundle.putString("TableMasterIds",linktoTableMasterIds);
+        bundle.putString("TableMasterIds", linktoTableMasterIds);
         ordersTabFragment.setArguments(bundle);
         return ordersTabFragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +65,8 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
 
         rvOrder = (RecyclerView) view.findViewById(R.id.rvOrder);
         rvOrder.setVisibility(View.GONE);
+
+        setHasOptionsMenu(true);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
 
@@ -90,12 +92,10 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         }
         //end
 
-        setHasOptionsMenu(true);
-
         return view;
     }
 
-    public void OrderDataFilter(String orderStatus,String orderTypeMasterId) {
+    public void OrderDataFilter(String orderStatus, String orderTypeMasterId) {
         this.orderTypeMasterId = orderTypeMasterId;
         this.orderStatus = orderStatus;
         alOrderMaster = new ArrayList<>();
@@ -104,10 +104,12 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.setInputType(InputType.TYPE_CLASS_NUMBER);
         mSearchView.setMaxWidth(displayMetrics.widthPixels);
         mSearchView.setOnQueryTextListener(this);
 
@@ -116,8 +118,9 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         // Do something when collapsed
-                        if(alOrderMaster.size()!=0 && alOrderMaster!=null) {
+                        if (alOrderMaster.size() != 0 && alOrderMaster != null) {
                             ordersAdapter.SetSearchFilter(alOrderMaster);
+                            Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
                         }
                         return true; // Return true to collapse action view
                     }
@@ -136,7 +139,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         final ArrayList<OrderMaster> filteredList = new ArrayList<>();
         for (OrderMaster objOrderMaster : lstOrderMaster) {
             if (objOrderMaster.getOrderNumber().length() >= filterName.length()) {
-                final String strItem = objOrderMaster.getOrderNumber().substring(0, filterName.length()).toLowerCase();
+                final String strItem = objOrderMaster.getOrderNumber().substring(0, filterName.length());
                 if (strItem.contains(filterName)) {
                     filteredList.add(objOrderMaster);
                 }
@@ -147,9 +150,16 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
 
     private void SetupRecyclerView(RecyclerView rvOrder) {
 
-        ordersAdapter = new OrdersAdapter(getActivity(), alOrderMaster, getActivity().getSupportFragmentManager());
+        ordersAdapter = new OrdersAdapter(getActivity(), alOrderMaster);
         rvOrder.setAdapter(ordersAdapter);
         rvOrder.setLayoutManager(gridLayoutManager);
+        rvOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Globals.HideKeyBoard(getActivity(), recyclerView);
+            }
+        });
     }
 
     public void LoadOrderData() {
@@ -164,7 +174,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if(alOrderMaster.size()!=0 && alOrderMaster!=null) {
+        if (alOrderMaster.size() != 0 && alOrderMaster != null) {
             final ArrayList<OrderMaster> filteredList = Filter(alOrderMaster, newText);
             ordersAdapter.SetSearchFilter(filteredList);
         }
@@ -172,7 +182,6 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     }
 
     //region LoadingTask
-    @SuppressWarnings("ResourceType")
     class OrderMasterLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
@@ -180,18 +189,20 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setMessage(getActivity().getResources().getString(R.string.MsgLoading));
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
+
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
 
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, Globals.OrderStatus.valueOf(orderStatus).getValue(),linktoTableMasterIds,orderTypeMasterId);
+            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, Globals.OrderStatus.valueOf(orderStatus).getValue(), linktoTableMasterIds, orderTypeMasterId);
         }
 
         @Override
@@ -199,9 +210,9 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
             progressDialog.dismiss();
             ArrayList<OrderMaster> lstOrderMaster = (ArrayList<OrderMaster>) result;
             if (lstOrderMaster == null) {
-                Globals.SetError(txtMsg, rvOrder, getResources().getString(R.string.MsgSelectFail), true);
+                Globals.SetError(txtMsg, rvOrder, getActivity().getResources().getString(R.string.MsgSelectFail), true);
             } else if (lstOrderMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvOrder, getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetError(txtMsg, rvOrder, getActivity().getResources().getString(R.string.MsgNoRecord), true);
             } else {
                 Globals.SetError(txtMsg, rvOrder, null, false);
                 alOrderMaster = lstOrderMaster;

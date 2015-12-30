@@ -20,7 +20,7 @@
     <string name="title_fragment_counter">Counter</string>
     <string name="title_activity_waiter_order_detail">Home</string>
     <string name="title_fragment_all_orders">Orders</string>
-    <string name="title_fragment_order_detail">Order Summary</string>
+    <string name="title_fragment_order_detail">Order Detail</string>
     <string name="title_fragment_all_tables">Tables</string>
     <string name="title_fragment_category_item">Menu</string>
     <string name="title_fragment_cart_item">Order Information</string>
@@ -289,5 +289,6 @@
     <string name="cmfGuestMode">Guest Mode</string>
     <string name="cmfCancel">Cancel</string>
     <string name="cmfSubmit">Submit</string>
+    <string name="title_activity_all_orders">AllOrdersActivity</string>
     <!-- end -->
 </resources>

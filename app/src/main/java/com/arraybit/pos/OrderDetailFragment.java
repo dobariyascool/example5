@@ -35,7 +35,7 @@ public class OrderDetailFragment extends Fragment {
     RecyclerView rvOrderItem;
     LinearLayout headerLayout;
     OrderMaster objOrderMaster;
-    LinearLayout orderDetailLayout;
+    LinearLayout orderDetailFragment;
     Button btnAddMore,btnCheckOut;
     ArrayList<OrderItemTran> lstOrderItemTran;
 
@@ -70,8 +70,8 @@ public class OrderDetailFragment extends Fragment {
         btnCheckOut = (Button)view.findViewById(R.id.btnCheckOut);
 
         headerLayout = (LinearLayout)view.findViewById(R.id.headerLayout);
-        orderDetailLayout = (LinearLayout)view.findViewById(R.id.orderDetailLayout);
-        Globals.SetScaleImageBackground(getActivity(),orderDetailLayout,null,null);
+        orderDetailFragment = (LinearLayout)view.findViewById(R.id.orderDetailFragment);
+        Globals.SetScaleImageBackground(getActivity(),orderDetailFragment,null,null);
 
         lstOrderItemTran = new ArrayList<>();
         SetVisibility();
@@ -86,20 +86,25 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home){
-            if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2) {
-                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null &&
-                            getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
-
-                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    }
-                    else if(getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
-                            &&getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))){
-                        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName() !=null && getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
-
-                            getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        }
-                    }
+            if(getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
+                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail)))
+            {
+                getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
+//            if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2) {
+//                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null &&
+//                            getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
+//
+//                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    }
+//                    else if(getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
+//                            &&getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))){
+//                        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName() !=null && getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
+//
+//                            getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                        }
+//                    }
+//            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -120,7 +125,7 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), orderDetailLayout, null,null);
+        Globals.SetScaleImageBackground(getActivity(), orderDetailFragment, null,null);
     }
 
     @Override
