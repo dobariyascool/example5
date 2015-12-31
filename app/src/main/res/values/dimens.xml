@@ -156,8 +156,11 @@
     <dimen name="sImageHeight">150dp</dimen>
     <dimen name="sImageWidth">150dp</dimen>
     <dimen name="sHeight">35dp</dimen>
+    <dimen name="sMedium">16dp</dimen>
+    <dimen name="sMargin">8dp</dimen>
 
     <!-- orderplace panel row size-->
     <dimen name="leftHeight">40dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
 </resources>

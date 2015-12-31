@@ -58,6 +58,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     CartIconListener objCartIconListener;
     MenuItem searchItem;
 
+
     public ItemTabFragment() {
     }
 
@@ -250,12 +251,11 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     }
 
     @Override
-    public void AddToCart(boolean isAddToCart, ItemMaster objOrderItemTran, ArrayList<ItemMaster> alOrderItemModifierTran) {
+    public void AddToCart(boolean isAddToCart, ItemMaster objOrderItemTran) {
         if (isAddToCart) {
             if (objOrderItemTran.getItemName() != null) {
                 Globals.counter = Globals.counter + 1;
                 SetCartNumber(txtCartNumber);
-                objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
                 Globals.alOrderItemTran.add(objOrderItemTran);
             }
         }

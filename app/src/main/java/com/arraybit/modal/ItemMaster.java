@@ -91,6 +91,8 @@ public class ItemMaster implements Parcelable {
             return new ItemMaster[size];
         }
     };
+    double TotalAmount;
+    double ExtraAmount;
     ArrayList<ItemMaster> alOrderItemModifierTran;
 
     public int getItemMasterId() {
@@ -325,6 +327,16 @@ public class ItemMaster implements Parcelable {
         Remark = remark;
     }
 
+
+    public double getExtraAmount() {
+        return ExtraAmount;
+    }
+
+    public void setExtraAmount(double extraAmount) {
+        ExtraAmount = extraAmount;
+    }
+
+
     public ArrayList<ItemMaster> getAlOrderItemModifierTran() {
         return alOrderItemModifierTran;
     }
@@ -356,6 +368,14 @@ public class ItemMaster implements Parcelable {
 
     public void setLinktoOrderMasterId(long linktoOrderMasterId) {
         this.linktoOrderMasterId = linktoOrderMasterId;
+    }
+
+    public double getTotalAmount() {
+        return TotalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        TotalAmount = totalAmount;
     }
 
     //endregion

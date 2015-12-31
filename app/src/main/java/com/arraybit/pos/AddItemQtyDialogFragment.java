@@ -41,6 +41,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     ArrayList<ItemMaster> alOrderItemModifierTran, alItemMasterModifier;
     boolean isDuplicate;
     StringBuilder sbModifier;
+    double totalModifierAmount, totalAmount;
 
     public AddItemQtyDialogFragment(ItemMaster objItemMaster) {
         this.objItemMaster = objItemMaster;
@@ -130,12 +131,12 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             etQuantity.requestFocus();
 
         } else if (v.getId() == R.id.btnCancel) {
-            objAddToCartListener.AddToCart(false, null, null);
+            objAddToCartListener.AddToCart(false, null);
             dismiss();
         } else if (v.getId() == R.id.btnOk) {
             SetOrderItemModifierTran();
             SetOrderItemTran();
-            objAddToCartListener.AddToCart(true, objOrderItemTran, alOrderItemModifierTran);
+            objAddToCartListener.AddToCart(true, objOrderItemTran);
             dismiss();
         } else if (v.getId() == R.id.textInputLayout) {
             textInputLayout.setFocusable(true);
@@ -345,7 +346,6 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     }
 
     private void SetOrderItemTran() {
-
         objOrderItemTran = new ItemMaster();
         try {
             if (Globals.alOrderItemTran.size() > 0) {
@@ -368,6 +368,10 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                         objOrderItemTran.setItemModifierIds(sbModifier.toString());
                     }
                     objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
+                    if (alOrderItemModifierTran.size() != 0) {
+                        totalAmount = Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice() + alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount();
+                        objOrderItemTran.setTotalAmount(totalAmount);
+                    }
                 }
             } else {
                 objOrderItemTran.setItemMasterId(objItemMaster.getItemMasterId());
@@ -379,6 +383,10 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                     objOrderItemTran.setItemModifierIds(sbModifier.toString());
                 }
                 objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
+                if (alOrderItemModifierTran.size() != 0) {
+                    totalAmount = Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice() + alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount();
+                    objOrderItemTran.setTotalAmount(totalAmount);
+                }
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -391,6 +399,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         try {
 
             Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+            Globals.alOrderItemTran.get(i).setTotalAmount(Globals.alOrderItemTran.get(i).getTotalAmount() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
             Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
 
             if (!actRemark.getText().toString().isEmpty()) {
@@ -401,7 +410,6 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                 } else {
                     strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
                 }
-
 
                 if (!Globals.alOrderItemTran.get(i).getRemark().isEmpty()) {
                     String listRemark = Globals.alOrderItemTran.get(i).getRemark();
@@ -458,6 +466,8 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                             objOrderItemModifier.setItemName(alItemMasterModifier.get(j).getItemName());
                             objOrderItemModifier.setItemModifierIds(String.valueOf(alItemMasterModifier.get(j).getItemMasterId()));
                             objOrderItemModifier.setMRP(alItemMasterModifier.get(j).getMRP());
+                            totalModifierAmount = totalModifierAmount + alItemMasterModifier.get(j).getMRP();
+                            objOrderItemModifier.setTotalAmount(totalModifierAmount);
                             sbModifier.append(alItemMasterModifier.get(j).getItemMasterId()).append(",");
                             alOrderItemModifierTran.add(objOrderItemModifier);
                         }
@@ -471,7 +481,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     //endregion
 
     public interface AddToCartListener {
-        void AddToCart(boolean isAddToCart, ItemMaster objOrderItemTran, ArrayList<ItemMaster> alOrderItemModifierTran);
+        void AddToCart(boolean isAddToCart, ItemMaster objOrderItemTran);
     }
 
     //region Loading Task

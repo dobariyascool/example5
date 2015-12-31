@@ -14,37 +14,29 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:theme="@style/FullScreenTheme">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+            android:label="@string/app_name">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".SplashScreenActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_splash_screen"
-            android:theme="@style/FullScreenTheme">
+            android:label="@string/title_activity_splash_screen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SignInActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_login"
-            android:theme="@style/FullScreenTheme" />
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".WelcomeActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_welcome"
-            android:theme="@style/FullScreenTheme" />
+            android:label="@string/title_activity_welcome" />
         <activity
             android:name=".GuestHomeActivity"
             android:configChanges="orientation|screenSize"
@@ -52,8 +44,7 @@
         <activity
             android:name=".GuestOrderActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_guest_order"
-            android:theme="@style/FullScreenTheme" />
+            android:label="@string/title_activity_guest_order" />
         <activity
             android:name=".WaiterHomeActivity"
             android:configChanges="orientation|screenSize"
@@ -61,23 +52,20 @@
         <activity
             android:name=".WaitingActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_waiting"
-            android:theme="@style/FullScreenTheme" />
+            android:label="@string/title_activity_waiting" />
         <activity
             android:name=".WaiterOrderDetailActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_waiter_order_detail"
-            android:theme="@style/FullScreenTheme" />
+            android:label="@string/title_activity_waiter_order_detail" />
         <activity
             android:name=".MenuActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_fragment_category_item"
-            android:theme="@style/FullScreenTheme" />
+            android:label="@string/title_fragment_category_item" />
 
         <activity
             android:name=".AllOrdersActivity"
-            android:label="@string/title_fragment_all_orders"
-            android:theme="@style/FullScreenTheme"/>
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_fragment_all_orders" />
 
         <receiver android:name="com.arraybit.global.TimeScheduler" />
 

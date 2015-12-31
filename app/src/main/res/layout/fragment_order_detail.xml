@@ -24,28 +24,28 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:text="@string/odfNo"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/primary" />
 
         <com.rey.material.widget.TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/odfName"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/primary" />
 
         <com.rey.material.widget.TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:text="@string/odfPrice"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/primary" />
 
         <com.rey.material.widget.TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.16"
             android:text="@string/odfQty"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/primary" />
 
     </LinearLayout>
 

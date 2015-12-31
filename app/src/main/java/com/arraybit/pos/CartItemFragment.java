@@ -36,7 +36,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
 
     TextView txtMsg;
     CompoundButton cbMenu;
-    LinearLayout headerLayout, cartItemFragment,buttonLayout;
+    LinearLayout headerLayout, cartItemFragment;
     RecyclerView rvCartItem;
     Button btnAddMore, btnConfirmOrder;
     CartItemAdapter adapter;
@@ -44,6 +44,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     String orderNumber;
     SharePreferenceManage objSharePreferenceManage;
     short counterMasterId, userMasterId, waiterMasterId;
+    double totalAmount, extraAmount;
 
     public CartItemFragment() {
         // Required empty public constructor
@@ -60,10 +61,9 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if(MenuActivity.objTableMaster!=null && MenuActivity.objTableMaster.getTableName()!=null){
-                app_bar.setTitle(MenuActivity.objTableMaster.getTableName()+"  Orders");
-            }
-            else {
+            if (MenuActivity.objTableMaster != null && MenuActivity.objTableMaster.getTableName() != null) {
+                app_bar.setTitle(MenuActivity.objTableMaster.getTableName() + "  Orders");
+            } else {
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_cart_item));
             }
         }
@@ -144,7 +144,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         if (Globals.alOrderItemTran.size() == 0) {
             txtMsg.setVisibility(View.VISIBLE);
             cbMenu.setVisibility(View.VISIBLE);
-            rvCartItem.setVisibility(View.INVISIBLE);
+            rvCartItem.setVisibility(View.GONE);
             headerLayout.setVisibility(View.GONE);
             btnAddMore.setVisibility(View.GONE);
             btnConfirmOrder.setVisibility(View.GONE);
@@ -175,18 +175,16 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             }
         } else if (v.getId() == R.id.btnConfirmOrder) {
             System.out.println("count " + getActivity().getSupportFragmentManager().getBackStackEntryAt(1).getName());
-            if(MenuActivity.parentActivity)
-            {
+            if (MenuActivity.parentActivity) {
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 OrderMaster objOrderMaster = new OrderMaster();
                 objOrderMaster.setOrderMasterId(7);
                 fragmentTransaction.replace(android.R.id.content, new OrderSummaryFragment(objOrderMaster), getActivity().getResources().getString(R.string.title_fragment_order_summary));
                 fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
                 fragmentTransaction.commit();
-            }
-            else
-            {
+            } else {
                 GetValueFromSharePreference();
+
                 new OrderLoadingTask().execute();
 
                 if(!AllTablesFragment.isRefresh){
@@ -236,13 +234,23 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             progressDialog.setCancelable(false);
             progressDialog.show();
 
+            if (Globals.alOrderItemTran.size() != 0) {
+                for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
+                    if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() != 0) {
+                        totalAmount = totalAmount + Globals.alOrderItemTran.get(i).getTotalAmount();
+                    } else {
+                        totalAmount = totalAmount + Globals.alOrderItemTran.get(i).getSellPrice();
+                    }
+                }
+            }
+
             objOrderMaster = new OrderMaster();
             objOrderMaster.setOrderNumber(orderNumber);
             objOrderMaster.setlinktoCounterMasterId(counterMasterId);
             objOrderMaster.setlinktoTableMasterIds(String.valueOf(MenuActivity.objTableMaster.getTableMasterId()));
             objOrderMaster.setlinktoOrderTypeMasterId(MenuActivity.objTableMaster.getlinktoOrderTypeMasterId());
             objOrderMaster.setlinktoOrderStatusMasterId((short) Globals.OrderStatus.Cooking.getValue());
-            objOrderMaster.setTotalAmount(0.00);
+            objOrderMaster.setTotalAmount(totalAmount);
             objOrderMaster.setTotalTax(0.00);
             objOrderMaster.setDiscount(0.00);
             objOrderMaster.setExtraAmount(0.00);

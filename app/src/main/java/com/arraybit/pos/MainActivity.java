@@ -1,13 +1,17 @@
 package com.arraybit.pos;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,9 +22,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //WebView web = (WebView) findViewById(R.id.webview);
-        ImageView imageView = (ImageView)findViewById(R.id.image);
+        final ImageView imageView = (ImageView)findViewById(R.id.image);
 
-        Picasso.with(MainActivity.this).load(R.drawable.arraybit_5).into(imageView);
+        //Picasso.with(MainActivity.this).load(R.drawable.arraybit_5).into(imageView);
+        //Glide.with(MainActivity.this).load(R.drawable.arraybit_5).asGif().into(imageView);
+        Glide.with(MainActivity.this).load(R.drawable.vada_paav).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageView) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                imageView.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+
+
         //Picasso.with(MainActivity.this).load(R.drawable.arraybit_5).into(imageView);
 
 //        WebView web = (WebView) findViewById(R.id.webview);

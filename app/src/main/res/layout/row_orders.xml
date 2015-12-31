@@ -13,7 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/control_SpecingSmall">
+        android:paddingBottom="@dimen/control_SpecingTiny"
+        android:paddingEnd="@dimen/control_SpecingSmall"
+        android:paddingStart="@dimen/control_SpecingSmall"
+        android:paddingTop="@dimen/control_SpecingTiny">
 
         <com.rey.material.widget.TextView
             android:id="@+id/txtOrderTimeDifference"
@@ -37,7 +40,7 @@
                 android:id="@+id/txtTableName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/control_SpecingMedium"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@android:color/white"
@@ -56,7 +59,7 @@
                 android:id="@+id/txtOrderType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/control_SpecingMedium"
+                android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="#C0CA33"

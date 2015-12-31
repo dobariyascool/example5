@@ -7,11 +7,13 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CounterMaster;
 import com.arraybit.parser.CounterJSONParser;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -26,10 +28,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        ImageView ivLogo = (ImageView)findViewById(R.id.ivLogo);
+        Glide.with(SplashScreenActivity.this).load(R.drawable.arraybit_logo).asGif().into(ivLogo);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 objSharePreferenceManage = new SharePreferenceManage();
+
                 if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this) == null) {
                     Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
                 } else {
@@ -54,7 +60,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 }
 
             }
-        }, 800);
+        },5000);
     }
 
     @Override

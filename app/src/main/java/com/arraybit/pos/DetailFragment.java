@@ -56,6 +56,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     boolean isDuplicate = false;
     ArrayList<ItemMaster> alOrderItemModifierTran, alItemMasterModifier;
     StringBuilder sbModifier;
+    double totalModifierAmount,totalAmount;
 
     public DetailFragment(int ItemMasterId) {
         this.ItemMasterId = ItemMasterId;
@@ -449,6 +450,10 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                         objOrderItemTran.setItemModifierIds(sbModifier.toString());
                     }
                     objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
+                    if(alOrderItemModifierTran.size()!=0) {
+                        totalAmount = Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice() + alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount();
+                        objOrderItemTran.setTotalAmount(totalAmount);
+                    }
                     Globals.alOrderItemTran.add(objOrderItemTran);
                     Globals.counter = Globals.counter + 1;
                 }
@@ -462,6 +467,10 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                     objOrderItemTran.setItemModifierIds(sbModifier.toString());
                 }
                 objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
+                if(alOrderItemModifierTran.size()!=0) {
+                    totalAmount = Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice() + alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount();
+                    objOrderItemTran.setTotalAmount(totalAmount);
+                }
                 Globals.alOrderItemTran.add(objOrderItemTran);
                 Globals.counter = Globals.counter + 1;
             }
@@ -475,6 +484,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         StringBuilder sb = new StringBuilder();
         try {
             Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+            Globals.alOrderItemTran.get(i).setTotalAmount(Globals.alOrderItemTran.get(i).getTotalAmount() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
             Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
 
             if (!actRemark.getText().toString().isEmpty()) {
@@ -542,6 +552,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                             objOrderItemModifier.setItemName(alItemMasterModifier.get(j).getItemName());
                             objOrderItemModifier.setItemModifierIds(String.valueOf(alItemMasterModifier.get(j).getItemMasterId()));
                             objOrderItemModifier.setMRP(alItemMasterModifier.get(j).getMRP());
+                            totalModifierAmount = totalModifierAmount + alItemMasterModifier.get(j).getMRP();
+                            objOrderItemModifier.setTotalAmount(totalModifierAmount);
                             sbModifier.append(alItemMasterModifier.get(j).getItemMasterId()).append(",");
                             alOrderItemModifierTran.add(objOrderItemModifier);
                         }
