@@ -2,18 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/control_SpecingTiny"
+    android:background="@color/transparent_orange"
+    android:orientation="vertical"
+    android:padding="@dimen/control_SpecingTiny">
 
     <LinearLayout
         android:id="@+id/childLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/control_SpecingTiny"
-        android:background="@color/transparent_orange"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="@dimen/control_SpecingTiny">
+        android:orientation="horizontal">
 
         <com.rey.material.widget.TextView
             android:id="@+id/txtQty"
@@ -107,5 +107,36 @@
                 tools:ignore="ContentDescription" />
 
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/remarkLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.16"
+            android:maxLines="1"
+            android:visibility="invisible" />
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtRemark"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start|center"
+            android:maxLines="2"
+            android:textColor="#FF7043"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.14"
+            android:gravity="center"
+            android:visibility="invisible" />
     </LinearLayout>
 </LinearLayout>

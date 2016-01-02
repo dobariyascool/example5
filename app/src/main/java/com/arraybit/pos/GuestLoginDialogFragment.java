@@ -3,6 +3,7 @@ package com.arraybit.pos;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,7 +23,7 @@ import com.rey.material.widget.EditText;
 @SuppressWarnings("unchecked")
 public class GuestLoginDialogFragment extends DialogFragment {
 
-    EditText etUserName=null, etPassword=null;
+    EditText etUserName = null, etPassword = null;
     View view;
     SharePreferenceManage objSharePreferenceManage;
 
@@ -50,7 +51,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialog) {
 
-                Button positive = ((AlertDialog) alertDialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                Button positive = (alertDialog).getButton(DialogInterface.BUTTON_POSITIVE);
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -69,7 +70,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     }
                 });
 
-                Button negative = ((AlertDialog) alertDialog).getButton(DialogInterface.BUTTON_NEGATIVE);
+                Button negative = (alertDialog).getButton(DialogInterface.BUTTON_NEGATIVE);
                 negative.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -151,6 +152,10 @@ public class GuestLoginDialogFragment extends DialogFragment {
                 ClearControls();
                 Toast.makeText(getActivity(), getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_LONG).show();
                 dismiss();
+                Intent intent = new Intent(getActivity(),GuestHomeActivity.class);
+                intent.putExtra("TableMaster",GuestHomeActivity.objTableMaster);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         }
     }

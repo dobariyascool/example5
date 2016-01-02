@@ -42,6 +42,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     TableMaster objTableMaster;
     SharePreferenceManage objSharePreferenceManage;
     ArrayList<OrderMaster> lstOrderMaster;
+    ArrayList<ItemMaster> alOrderItemTran;
 
     public OrderSummaryFragment(OrderMaster objOrderMaster) {
         this.objOrderMaster = objOrderMaster;
@@ -121,9 +122,18 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.home) {
-            Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            getActivity().startActivity(intent);
+            if(MenuActivity.parentActivity){
+                Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+                intent.putExtra("TableMaster",GuestHomeActivity.objTableMaster);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                getActivity().startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                getActivity().startActivity(intent);
+            }
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -251,7 +261,6 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             ArrayList<ItemMaster> lstOrderItemTran = (ArrayList<ItemMaster>) result;
 
             if (lstOrderItemTran != null) {
-
                 //Globals.alOrderItemSummery.addAll(lstOrderItemTran);
                 OrderSummaryAdapter orderSummeryAdapter = new OrderSummaryAdapter(getActivity(), lstOrderItemTran, lstOrderMaster);
                 SetVisibility();

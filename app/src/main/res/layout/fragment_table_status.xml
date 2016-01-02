@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@mipmap/serve"
+            android:drawableTop="@mipmap/vacant"
             android:text="@string/tsVacant" />
 
         <com.rey.material.widget.Button
@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@mipmap/not_available"
+            android:drawableTop="@mipmap/occupied"
             android:text="@string/tsOccupy" />
 
         <com.rey.material.widget.Button
@@ -47,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@mipmap/close"
+            android:drawableTop="@mipmap/block"
             android:text="@string/tsBlock" />
 
         <com.rey.material.widget.Button
@@ -56,7 +56,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@mipmap/call"
+            android:drawableTop="@mipmap/dirty"
             android:text="@string/tsDirty" />
 
     </LinearLayout>

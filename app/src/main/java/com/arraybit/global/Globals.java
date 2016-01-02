@@ -32,10 +32,12 @@ import android.widget.TextView;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderItemTran;
 import com.arraybit.pos.CategoryItemFragment;
+import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.GuestLoginDialogFragment;
 import com.arraybit.pos.R;
 import com.arraybit.pos.SignInActivity;
 import com.arraybit.pos.SignUpFragment;
+import com.arraybit.pos.WelcomeActivity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -152,6 +154,17 @@ public class Globals {
             fragmentTransaction.replace(android.R.id.content, signUpFragment, activity.getResources().getString(R.string.title_fragment_signup));
             fragmentTransaction.addToBackStack(activity.getResources().getString(R.string.title_fragment_signup));
             fragmentTransaction.commit();
+        }
+        else if(menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)){
+            objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", activity);
+            objSharePreferenceManage.RemovePreference("RegisteredUserMasterIdPreference", "RegisteredUserMasterId", activity);
+            objSharePreferenceManage.RemovePreference("RegistrationPreferenceFullName", "FullName",activity);
+            Intent intent=new Intent(activity,WelcomeActivity.class);
+            intent.putExtra("TableMaster",GuestHomeActivity.objTableMaster);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("GuestScreen", true);
+            activity.startActivity(intent);
+            activity.finish();
         }
 
     }
@@ -374,8 +387,9 @@ public class Globals {
     public enum TableStatus {
         Vacant(1),
         Occupied(2),
-        Block(3),
-        Dirty(4);
+        Dirty(3),
+        Block(4);
+
 
         private int intValue;
 
@@ -391,17 +405,17 @@ public class Globals {
     }
 
     public enum TableStatusColor {
-        Vacant("4db6ac"),
-        Occupied("e91e63"),
-        Block("e2e2e2"),
-        Dirty("e8e8e8");
+        Vacant("4CAF50"),
+        Occupied("2196F3"),
+        Dirty("795548"),
+        Block("F44336");
 
         private String strValue;
 
         TableStatusColor(String value) {
             strValue = value;
-
         }
+
         public String getValue() {
             return strValue;
         }

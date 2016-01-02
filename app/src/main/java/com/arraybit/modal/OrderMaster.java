@@ -3,6 +3,8 @@ package com.arraybit.modal;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 public class OrderMaster implements Parcelable {
 
     //region Properties
@@ -36,7 +38,6 @@ public class OrderMaster implements Parcelable {
     String OrderType;
     String TableName;
     int TotalItem;
-
     public static final Parcelable.Creator<OrderMaster> CREATOR = new Creator<OrderMaster>() {
         public OrderMaster createFromParcel(Parcel source) {
             OrderMaster objOrderMaster = new OrderMaster();
@@ -79,6 +80,7 @@ public class OrderMaster implements Parcelable {
             return new OrderMaster[size];
         }
     };
+    ArrayList<ItemMaster> AlOrderItemTran;
 
     public long getOrderMasterId() {
         return this.OrderMasterId;
@@ -302,6 +304,14 @@ public class OrderMaster implements Parcelable {
 
     public void setTotalItem(int totalItem) {
         TotalItem = totalItem;
+    }
+
+    public ArrayList<ItemMaster> getAlOrderItemTran() {
+        return AlOrderItemTran;
+    }
+
+    public void setAlOrderItemTran(ArrayList<ItemMaster> alOrderItemTran) {
+        AlOrderItemTran = alOrderItemTran;
     }
 
     //endregion

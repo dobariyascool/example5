@@ -95,8 +95,12 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         famRoot.setClosedOnTouchOutside(true);
         //end
 
-        if(isVacant){famRoot.setVisibility(View.GONE);}
-        else{famRoot.setVisibility(View.VISIBLE);}
+        if(isVacant){
+            famRoot.setVisibility(View.GONE);
+        }
+        else{
+            famRoot.setVisibility(View.VISIBLE);
+        }
 
         //floating action button
         FloatingActionButton fabVacant = (FloatingActionButton) view.findViewById(R.id.fabVacant);
@@ -156,6 +160,8 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         Globals.SetScaleImageBackground(getActivity(), null, allTablesFragment, null);
     }
 
+
+
     @Override
     public void onClick(View v) {
 
@@ -173,7 +179,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(), null);
         }
     }
-
 
 
     @Override

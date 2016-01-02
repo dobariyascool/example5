@@ -18,13 +18,14 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.TableMaster;
 
 
 @SuppressWarnings("RedundantIfStatement")
 public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    static TableMaster objTableMaster;
+    public static TableMaster objTableMaster;
     ActionBarDrawerToggle actionBarDrawerToggle;
     String userName;
     LinearLayout guestHomeMainLayout;
@@ -32,6 +33,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     NavigationView navigationView;
     boolean isDualPanel;
     Toolbar app_bar;
+    SharePreferenceManage objSharePreferenceManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,19 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         //end
 
         //get username
-        Intent intent = getIntent();
-        if (intent.getStringExtra("username") != null) {
-            userName = intent.getStringExtra("username");
+        ///Intent intent = getIntent();
+        //if (intent.getStringExtra("username") != null) {
+            //userName = intent.getStringExtra("username");
+        //}
+        objSharePreferenceManage=new SharePreferenceManage();
+        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName",GuestHomeActivity.this) != null){
+            userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName",GuestHomeActivity.this);
+        }
+        else{
+            userName = null;
         }
 
+        Intent intent = getIntent();
         objTableMaster = intent.getParcelableExtra("TableMaster");
 
         AddFragmentInLayout(new GuestOptionListFragment());
@@ -99,6 +109,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         Globals.SetOptionMenu(userName, GuestHomeActivity.this, menu);
+        menu.findItem(R.id.home).setVisible(false);
 //        if(getSupportFragmentManager().getBackStackEntryCount()!=0){
 //            if(getSupportFragmentManager().getBackStackEntryAt(0).getName()!=null) {
 //                if (getSupportFragmentManager().getBackStackEntryAt(0).getName().equals(getResources().getString(R.string.title_fragment_detail))) {

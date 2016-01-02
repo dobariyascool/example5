@@ -2,34 +2,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_screen_bg"
-    android:gravity="bottom"
+    android:background="@android:color/black"
+    android:gravity="center"
     tools:context="com.arraybit.pos.SplashScreenActivity">
-
 
     <ImageView
         android:id="@+id/ivLogo"
-        android:layout_width="@dimen/sImageWidth"
-        android:layout_height="@dimen/sImageHeight"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/sMargin"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:contentDescription="@string/splash_screen"
         android:padding="@dimen/control_SpecingLarge"
         android:scaleType="centerInside" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/sHeight"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/ivLogo"
-        android:layout_marginBottom="@dimen/control_SpecingSmall"
-        android:contentDescription="@string/splash_screen"
-        android:paddingBottom="@dimen/control_SpecingTiny"
-        android:paddingTop="@dimen/sMedium"
-        android:scaleType="centerInside"
-        android:src="@drawable/arraybit_1" />
+
+    <!--<ImageView-->
+        <!--android:id="@+id/ivLogo"-->
+        <!--android:layout_width="@dimen/sImageWidth"-->
+        <!--android:layout_height="@dimen/sImageHeight"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_marginBottom="@dimen/sMargin"-->
+        <!--android:contentDescription="@string/splash_screen"-->
+        <!--android:padding="@dimen/control_SpecingLarge"-->
+        <!--android:scaleType="centerInside" />-->
+
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/sHeight"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignStart="@+id/ivLogo"-->
+        <!--android:layout_marginBottom="@dimen/control_SpecingSmall"-->
+        <!--android:contentDescription="@string/splash_screen"-->
+        <!--android:paddingBottom="@dimen/control_SpecingTiny"-->
+        <!--android:paddingTop="@dimen/sMedium"-->
+        <!--android:scaleType="centerInside"-->
+        <!--android:src="@drawable/arraybit_1" />-->
 
 
     <!--<ImageView-->

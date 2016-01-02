@@ -27,9 +27,9 @@
             <ImageView
                 android:id="@+id/ivItemImage"
                 style="@style/ImageView"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:layout_margin="@dimen/control_SpecingSmall"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
                 tools:ignore="ContentDescription" />
 
             <LinearLayout

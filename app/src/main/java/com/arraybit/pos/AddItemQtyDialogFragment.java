@@ -24,6 +24,7 @@ import com.rey.material.widget.EditText;
 import com.rey.material.widget.ImageButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @SuppressWarnings("unchecked")
 public class AddItemQtyDialogFragment extends DialogFragment implements View.OnClickListener {
@@ -162,7 +163,6 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                     UpdateArrayListAdapter(null, null, false);
                     isDeleted = false;
                 }
-
             }
             actRemark.showDropDown();
         } else if (v.getId() == R.id.actModifier) {
@@ -181,6 +181,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                     UpdateArrayListAdapter(null, null, true);
                     isDeleted = false;
                 }
+
             }
             actModifier.showDropDown();
         } else if (v.getId() == R.id.btnNum1) {
@@ -328,6 +329,8 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     }
 
     private void SetArrayListAdapter(ArrayList<String> alString, ArrayList<String> alStringModifier) {
+        alStringFilter = new ArrayList<>();
+        alStringModifierFilter = new ArrayList<>();
         if (alString != null) {
             adapter = new ArrayAdapter<>
                     (getActivity(), android.R.layout.simple_spinner_dropdown_item, alString);
@@ -347,14 +350,34 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
 
     private void SetOrderItemTran() {
         objOrderItemTran = new ItemMaster();
+        StringBuilder sb;
         try {
             if (Globals.alOrderItemTran.size() > 0) {
                 for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
                     if (Globals.alOrderItemTran.get(i).getItemModifierIds() != null) {
-                        if (objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId() && (!Globals.alOrderItemTran.get(i).getItemModifierIds().equals("null") && !sbModifier.toString().equals("null")) && Globals.alOrderItemTran.get(i).getItemModifierIds().equals(sbModifier.toString())) {
-                            isDuplicate = true;
-                            CheckDuplicateRemark(i);
-                            break;
+                        if (objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId() && (!Globals.alOrderItemTran.get(i).getItemModifierIds().equals("null") && !sbModifier.toString().equals("null"))) {
+                            ArrayList<String> alStringOld = new ArrayList<>(Arrays.asList(Globals.alOrderItemTran.get(i).getItemModifierIds().split(",")));
+                            ArrayList<String> alStringNew = new ArrayList<>(Arrays.asList(sbModifier.toString().split(",")));
+
+                            if (sbModifier.toString().equals(Globals.alOrderItemTran.get(i).getItemModifierIds())) {
+                                isDuplicate = true;
+                                CheckDuplicateRemark(i);
+                                break;
+                            } else if (sbModifier.toString().length() == Globals.alOrderItemTran.get(i).getItemModifierIds().length()) {
+                                sb = new StringBuilder();
+                                for (int k = 0; k < alStringOld.size(); k++) {
+                                    for (int j = 0; j < alStringNew.size(); j++) {
+                                        if (alStringNew.get(j).equals(alStringOld.get(k))) {
+                                            sb.append(alStringOld.get(k)).append(",");
+                                        }
+                                    }
+                                }
+                                if (sb.toString().equals(Globals.alOrderItemTran.get(i).getItemModifierIds())) {
+                                    isDuplicate = true;
+                                    CheckDuplicateRemark(i);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }

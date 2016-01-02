@@ -47,6 +47,7 @@ public class ThankYouFragment extends Fragment {
 
                 getActivity().getSupportFragmentManager().popBackStack();
                 Intent intent=new Intent(getActivity(),WelcomeActivity.class);
+                intent.putExtra("TableMaster",GuestHomeActivity.objTableMaster);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("GuestScreen",true);
                 startActivity(intent);

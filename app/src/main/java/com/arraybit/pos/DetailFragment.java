@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 
 import com.arraybit.global.Globals;
@@ -35,6 +37,7 @@ import com.rey.material.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
@@ -79,6 +82,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
         //ImageView
         ivItemImage = (ImageView) view.findViewById(R.id.ivItemImage);
+        //SetImageSize();
         //end
 
         //TextView
@@ -409,6 +413,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     }
 
     private void SetArrayListAdapter(ArrayList<String> alString, ArrayList<String> alStringModifier) {
+        alStringFilter = new ArrayList<>();
+        alStringModifierFilter = new ArrayList<>();
         if (alString != null) {
             adapter = new ArrayAdapter<>
                     (getActivity(), android.R.layout.simple_spinner_dropdown_item, alString);
@@ -427,16 +433,39 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     }
 
     private void SetOrderItemTran() {
-
         objOrderItemTran = new ItemMaster();
+        StringBuilder sb;
         try {
             if (Globals.alOrderItemTran.size() > 0) {
                 for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
                     if (Globals.alOrderItemTran.get(i).getItemModifierIds() != null) {
-                        if (objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId() && (!Globals.alOrderItemTran.get(i).getItemModifierIds().equals("null") && !sbModifier.toString().equals("null")) && Globals.alOrderItemTran.get(i).getItemModifierIds().equals(sbModifier.toString())) {
-                            isDuplicate = true;
-                            CheckDuplicateRemark(i);
-                            break;
+                        if (objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId() && (!Globals.alOrderItemTran.get(i).getItemModifierIds().equals("null") && !sbModifier.toString().equals("null"))) {
+                            ArrayList<String> alStringOld = new ArrayList<>(Arrays.asList(Globals.alOrderItemTran.get(i).getItemModifierIds().split(",")));
+                            ArrayList<String> alStringNew = new ArrayList<>(Arrays.asList(sbModifier.toString().split(",")));
+
+                            if(sbModifier.toString().equals(Globals.alOrderItemTran.get(i).getItemModifierIds())){
+                                isDuplicate = true;
+                                CheckDuplicateRemark(i);
+                                break;
+                            }
+                            else if(sbModifier.toString().length() == Globals.alOrderItemTran.get(i).getItemModifierIds().length())
+                            {
+                                sb = new StringBuilder();
+                                for(int k=0;k<alStringOld.size();k++){
+                                    for(int j=0;j<alStringNew.size();j++){
+                                        if(alStringNew.get(j).equals(alStringOld.get(k)))
+                                        {
+                                            sb.append(alStringOld.get(k)).append(",");
+                                        }
+                                    }
+                                }
+                                if(sb.toString().equals(Globals.alOrderItemTran.get(i).getItemModifierIds()))
+                                {
+                                    isDuplicate = true;
+                                    CheckDuplicateRemark(i);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -476,6 +505,34 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void CheckDuplicateModifier(int i){
+        StringBuilder sb;
+        ArrayList<String> alStringOld = new ArrayList<>(Arrays.asList(Globals.alOrderItemTran.get(i).getItemModifierIds().split(",")));
+        ArrayList<String> alStringNew = new ArrayList<>(Arrays.asList(sbModifier.toString().split(",")));
+
+        if(sbModifier.toString().equals(Globals.alOrderItemTran.get(i).getItemModifierIds())){
+            isDuplicate = true;
+            CheckDuplicateRemark(i);
+        }
+        else
+        {
+            sb = new StringBuilder();
+            for(int k=0;k<alStringOld.size();k++){
+                for(int j=0;j<alStringNew.size();j++){
+                    if(alStringNew.get(j).equals(alStringOld.get(k)))
+                    {
+                        sb.append(alStringOld.get(k)).append(",");
+                    }
+                }
+            }
+            if(!sb.toString().equals("") && sb.toString().equals(Globals.alOrderItemTran.get(i).getItemModifierIds()))
+            {
+                isDuplicate = true;
+                CheckDuplicateRemark(i);
+            }
         }
     }
 
@@ -565,6 +622,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void SetImageSize(){
+        DisplayMetrics  displayMetrics = getActivity().getResources().getDisplayMetrics();
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(displayMetrics.widthPixels,displayMetrics.widthPixels);
+        ivItemImage.setLayoutParams(layoutParams);
+    }
+
     public class DetailLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
@@ -609,9 +672,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onGlobalLayout() {
                         if (!objItemMaster.getImageName().equals("null")) {
-                            Picasso.with(ivItemImage.getContext()).load(objItemMaster.getImageName()).priority(Picasso.Priority.NORMAL).resize(ivItemImage.getWidth(), ivItemImage.getHeight()).into(ivItemImage);
+                            Picasso.with(ivItemImage.getContext()).load(objItemMaster.getImageName()).into(ivItemImage);
                         } else {
-                            Picasso.with(ivItemImage.getContext()).load(R.drawable.vada_paav).priority(Picasso.Priority.NORMAL).resize(ivItemImage.getWidth(), ivItemImage.getHeight()).into(ivItemImage);
+                            Picasso.with(ivItemImage.getContext()).load(R.drawable.vada_paav).into(ivItemImage);
                         }
                     }
                 });

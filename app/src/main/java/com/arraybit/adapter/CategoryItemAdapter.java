@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
@@ -69,20 +70,17 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         holder.btnAdd.setId(position);
 
         if (!isWaiterGrid) {
-
-            if(width!=-1 && height!=-1) {
-                if (objItemMaster.getImageName().equals("null")) {
-                    Picasso.with(holder.ivItem.getContext()).load(R.drawable.vada_paav).priority(Picasso.Priority.NORMAL).resize(width, height).into(holder.ivItem);
-                } else {
-                    Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).priority(Picasso.Priority.NORMAL).resize(width, height).into(holder.ivItem);
-                }
+            if (objItemMaster.getImageName().equals("null")) {
+                Picasso.with(holder.ivItem.getContext()).load(R.drawable.vada_paav).into(holder.ivItem);
+            } else {
+                Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).into(holder.ivItem);
             }
         }
 
         holder.txtItemName.setText(objItemMaster.getItemName());
-        if(objItemMaster.getShortDescription().equals("")){
+        if (objItemMaster.getShortDescription().equals("")) {
             holder.txtItemDescription.setVisibility(View.GONE);
-        }else{
+        } else {
             holder.txtItemDescription.setVisibility(View.VISIBLE);
             holder.txtItemDescription.setText(objItemMaster.getShortDescription());
         }
@@ -131,15 +129,14 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
             btnAdd = (Button) itemView.findViewById(R.id.btnAdd);
 
-            if(!isWaiterGrid)
-            {
-                width = ivItem.getLayoutParams().width;
-                if(width==-1)
-                {
-                    DisplayMetrics displayMetrics = new DisplayMetrics();
-                    width = displayMetrics.widthPixels/2;
-                }
-                height = ivItem.getLayoutParams().height;
+            if (!isWaiterGrid && isViewChange) {
+                DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
+                width = displayMetrics.widthPixels / 2;
+                height = displayMetrics.widthPixels / 2;
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
+                ivItem.setLayoutParams(layoutParams);
             }
 
 //            if(!isWaiterGrid) {
@@ -170,7 +167,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     //orderItemDetail=(OrderItemDetail)context;
                     //orderItemDetail.ItemDetail();
                     //DetailFragment detailFragment = new DetailFragment(v.getId());
-                    Globals.HideKeyBoard(context,v);
+                    Globals.HideKeyBoard(context, v);
                     if (isWaiterGrid) {
                         objItemClickListener.ButtonOnClick(alItemMaster.get(v.getId()));
                     } else {
@@ -186,7 +183,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 public void onClick(View v) {
 
                     //objItemClickListener = (ItemClickListener)context;
-                    Globals.HideKeyBoard(context,v);
+                    Globals.HideKeyBoard(context, v);
                     objItemClickListener.ButtonOnClick(alItemMaster.get(v.getId()));
                     //AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment();
                     //addItemQtyDialogFragment.show(fragmentManager,"");

@@ -39,24 +39,27 @@
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabDineIn"
-            style="@style/FloatingButtonWithTextStyle"
+            style="@style/GreenTableFloatingButtonWithTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@mipmap/fab_dine"
             fab:fab_label="@string/aofDineIn"
             />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabTakeAway"
-            style="@style/FloatingButtonWithTextStyle"
+            style="@style/RedTableFloatingButtonWithTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@mipmap/fab_take"
             fab:fab_label="@string/aofTakeAway" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabAll"
-            style="@style/FloatingButtonWithTextStyle"
+            style="@style/BlueTableFloatingButtonWithTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@mipmap/select_all"
             fab:fab_label="@string/aofAll" />
 
     </com.github.clans.fab.FloatingActionMenu>

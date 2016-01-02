@@ -266,7 +266,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             txtCartNumber.setText(String.valueOf(Globals.counter));
             txtCartNumber.setSoundEffectsEnabled(true);
             txtCartNumber.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.cart_number));
-            txtCartNumber.setAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_in_left));
+            txtCartNumber.setAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fab_scale_up));
         } else {
             txtCartNumber.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
         }

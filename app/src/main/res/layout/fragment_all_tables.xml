@@ -35,29 +35,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/control_SpecingSmall"
-        app:menu_icon="@mipmap/fmenu">
+        fab:menu_icon="@mipmap/fmenu">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabVacant"
-            style="@style/FloatingButtonWithTextStyle"
+            style="@style/GreenTableFloatingButtonWithTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_label="@string/tsVacant"
-            />
+            android:src="@mipmap/fab_vacant"
+            fab:fab_label="@string/tsVacant" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabBusy"
-            style="@style/FloatingButtonWithTextStyle"
+            style="@style/RedTableFloatingButtonWithTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@mipmap/fab_occupy"
             fab:fab_label="@string/tsBusy" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabAll"
-            style="@style/FloatingButtonWithTextStyle"
+            style="@style/BlueTableFloatingButtonWithTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_label="@string/tsAll" />
+            android:src="@mipmap/select_all"
+            fab:fab_label="@string/tsAll"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 </RelativeLayout>

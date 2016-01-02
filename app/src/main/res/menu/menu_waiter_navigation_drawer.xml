@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/wChangeCounter"
-        android:icon="@mipmap/food"
+        android:icon="@mipmap/m_menu"
         android:title="@string/navChangeCounter" />
 
     <item

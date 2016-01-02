@@ -31,8 +31,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/action_settings"
-                    android:src="@mipmap/food" />
+                    android:contentDescription="@string/action_settings" />
 
                 <com.rey.material.widget.TextView
                     android:layout_width="wrap_content"

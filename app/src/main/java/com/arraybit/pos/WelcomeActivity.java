@@ -52,6 +52,7 @@ public class WelcomeActivity extends Activity implements GestureDetector.OnGestu
                         if(isGuestScreen) {
                             Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
                             //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            i.putExtra("TableMaster",intent.getParcelableExtra("TableMaster"));
                             startActivity(i);
                             overridePendingTransition(R.anim.right_in, R.anim.left_out);
                             finish();

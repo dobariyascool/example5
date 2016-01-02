@@ -86,7 +86,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/m_table"
+                        android:src="@mipmap/dine_in"
                         tools:ignore="ContentDescription" />
 
                     <com.rey.material.widget.TextView
@@ -115,7 +115,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/m_menu"
+                        android:src="@mipmap/take_away"
                         tools:ignore="ContentDescription" />
 
                     <com.rey.material.widget.TextView

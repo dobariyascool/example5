@@ -10,7 +10,7 @@
 
         <item
             android:id="@+id/profile"
-            android:icon="@mipmap/plus"
+            android:icon="@mipmap/hotel"
             android:title="@string/navProfile" />
 
         <!--<item-->

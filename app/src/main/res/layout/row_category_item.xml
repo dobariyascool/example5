@@ -13,8 +13,9 @@
 
         <ImageView
             android:id="@+id/ivItem"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/itemListImageWidth"
+            android:layout_height="@dimen/itemListImageHeight"
+            android:scaleType="centerInside"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
