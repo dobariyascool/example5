@@ -26,6 +26,41 @@ public class RegisteredUserMaster implements Parcelable {
     boolean IsEnabled;
     /// Extra
     String Area;
+    short linktoBusinessMasterId;
+    public static final Creator<RegisteredUserMaster> CREATOR = new Creator<RegisteredUserMaster>() {
+        @Override
+        public RegisteredUserMaster createFromParcel(Parcel source) {
+            RegisteredUserMaster objRegisteredUserMaster = new RegisteredUserMaster();
+            objRegisteredUserMaster.RegisteredUserMasterId = source.readInt();
+            objRegisteredUserMaster.Email = source.readString();
+            objRegisteredUserMaster.Phone = source.readString();
+            objRegisteredUserMaster.Password = source.readString();
+            objRegisteredUserMaster.FirstName = source.readString();
+            objRegisteredUserMaster.LastName = source.readString();
+            objRegisteredUserMaster.Gender = source.readString();
+            objRegisteredUserMaster.BirthDate = source.readString();
+            objRegisteredUserMaster.linktoAreaMasterId = (short) source.readInt();
+            objRegisteredUserMaster.CreateDateTime = source.readString();
+            objRegisteredUserMaster.linktoUserMasterIdCreatedBy = (short) source.readInt();
+            objRegisteredUserMaster.UpdateDateTime = source.readString();
+            objRegisteredUserMaster.linktoUserMasterIdUpdatedBy = (short) source.readInt();
+            objRegisteredUserMaster.LastLoginDateTime = source.readString();
+            objRegisteredUserMaster.linktoSourceMasterId = (short) source.readInt();
+            objRegisteredUserMaster.Comment = source.readString();
+            objRegisteredUserMaster.IsEnabled = source.readByte() != 0;
+
+            /// Extra
+            objRegisteredUserMaster.Area = source.readString();
+            objRegisteredUserMaster.linktoBusinessMasterId = (short) source.readInt();
+            return objRegisteredUserMaster;
+
+        }
+
+        @Override
+        public RegisteredUserMaster[] newArray(int size) {
+            return new RegisteredUserMaster[size];
+        }
+    };
 
     public int getRegisteredUserMasterId() {
         return this.RegisteredUserMasterId;
@@ -167,45 +202,19 @@ public class RegisteredUserMaster implements Parcelable {
         return this.Area;
     }
 
-
     public void setArea(String area) {
         this.Area = area;
     }
+
+    public short getLinktoBusinessMasterId() {
+        return linktoBusinessMasterId;
+    }
+
     //endregion
 
-    public static final Creator<RegisteredUserMaster> CREATOR = new Creator<RegisteredUserMaster>() {
-        @Override
-        public RegisteredUserMaster createFromParcel(Parcel source) {
-            RegisteredUserMaster objRegisteredUserMaster = new RegisteredUserMaster();
-            objRegisteredUserMaster.RegisteredUserMasterId = source.readInt();
-            objRegisteredUserMaster.Email = source.readString();
-            objRegisteredUserMaster.Phone = source.readString();
-            objRegisteredUserMaster.Password = source.readString();
-            objRegisteredUserMaster.FirstName = source.readString();
-            objRegisteredUserMaster.LastName = source.readString();
-            objRegisteredUserMaster.Gender = source.readString();
-            objRegisteredUserMaster.BirthDate = source.readString();
-            objRegisteredUserMaster.linktoAreaMasterId = (short) source.readInt();
-            objRegisteredUserMaster.CreateDateTime = source.readString();
-            objRegisteredUserMaster.linktoUserMasterIdCreatedBy = (short) source.readInt();
-            objRegisteredUserMaster.UpdateDateTime = source.readString();
-            objRegisteredUserMaster.linktoUserMasterIdUpdatedBy = (short) source.readInt();
-            objRegisteredUserMaster.LastLoginDateTime = source.readString();
-            objRegisteredUserMaster.linktoSourceMasterId = (short) source.readInt();
-            objRegisteredUserMaster.Comment = source.readString();
-            objRegisteredUserMaster.IsEnabled = source.readByte() != 0;
-
-            /// Extra
-            objRegisteredUserMaster.Area = source.readString();
-            return objRegisteredUserMaster;
-
-        }
-
-        @Override
-        public RegisteredUserMaster[] newArray(int size) {
-            return new RegisteredUserMaster[size];
-        }
-    };
+    public void setLinktoBusinessMasterId(short linktoBusinessMasterId) {
+        this.linktoBusinessMasterId = linktoBusinessMasterId;
+    }
 
     @Override
     public int describeContents() {
@@ -235,6 +244,7 @@ public class RegisteredUserMaster implements Parcelable {
 
         /// Extra
         parcel.writeString(Area);
+        parcel.writeInt(linktoBusinessMasterId);
 
     }
 

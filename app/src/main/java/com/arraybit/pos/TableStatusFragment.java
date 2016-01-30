@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.parser.TableJSONParser;
 import com.rey.material.widget.Button;
@@ -79,7 +81,12 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             objTable.setStatusColor(Globals.TableStatusColor.Vacant.getValue());
             objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Vacant.getValue());
 
-            new UpdateTableStatusLoadingTask().execute();
+            if (Service.CheckNet(getActivity())) {
+                new UpdateTableStatusLoadingTask().execute();
+            } else {
+                //Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            }
 
         } else if (v.getId() == R.id.btnOccupy) {
 
@@ -89,7 +96,12 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             objTable.setStatusColor(Globals.TableStatusColor.Occupied.getValue());
             objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Occupied.getValue());
 
-            new UpdateTableStatusLoadingTask().execute();
+            if (Service.CheckNet(getActivity())) {
+                new UpdateTableStatusLoadingTask().execute();
+            } else {
+                //Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            }
         } else if (v.getId() == R.id.btnBlock) {
 
             objTable = new TableMaster();
@@ -98,7 +110,12 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             objTable.setStatusColor(Globals.TableStatusColor.Block.getValue());
             objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Block.getValue());
 
-            new UpdateTableStatusLoadingTask().execute();
+            if (Service.CheckNet(getActivity())) {
+                new UpdateTableStatusLoadingTask().execute();
+            } else {
+                //Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            }
         } else if (v.getId() == R.id.btnDirty) {
 
             objTable = new TableMaster();
@@ -107,7 +124,12 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             objTable.setStatusColor(Globals.TableStatusColor.Dirty.getValue());
             objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Dirty.getValue());
 
-            new UpdateTableStatusLoadingTask().execute();
+            if (Service.CheckNet(getActivity())) {
+                new UpdateTableStatusLoadingTask().execute();
+            } else {
+                Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+            }
+
         }
 
     }

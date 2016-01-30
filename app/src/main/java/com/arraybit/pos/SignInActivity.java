@@ -1,8 +1,10 @@
 package com.arraybit.pos;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,20 +12,25 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.modal.CounterMaster;
 import com.arraybit.modal.UserMaster;
+import com.arraybit.parser.CounterJSONParser;
 import com.arraybit.parser.UserMasterJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
+
+import java.util.ArrayList;
 
 @SuppressWarnings("ALL")
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
@@ -36,11 +43,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     ImageButton ibClear;
     int i = 0;
     Intent intent;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        setupWindowAnimations();
+
 
         //app_bar
         Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
@@ -63,12 +73,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         tbPasswordShow.setOnClickListener(this);
         ibClear.setOnClickListener(this);
         //end
-
-//        //get server name
-//        objSharePreferenceManage = new SharePreferenceManage();
-//        Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SignInActivity.this);
-//        Globals.ChangeUrl();
-//        //end
 
         etName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -114,16 +118,17 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnSignIn) {
-            Globals.HideKeyBoard(this,v);
+            Globals.HideKeyBoard(this, v);
             if (!ValidateControls()) {
-                Toast.makeText(SignInActivity.this, getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgValidation), SignInActivity.this, 1000);
                 return;
             }
             if (Service.CheckNet(SignInActivity.this)) {
+                view = v;
                 new SignInLodingTask().execute();
 
             } else {
-                Toast.makeText(SignInActivity.this, getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), SignInActivity.this, 1000);
             }
         }
         if (v.getId() == R.id.ibClear) {
@@ -137,34 +142,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         }
-    }
-
-    boolean ValidateControls() {
-        boolean IsValid = true;
-
-        if (etName.getText().toString().equals("") && etPassword.getText().toString().equals("")) {
-            etName.setError("Enter " + getResources().getString(R.string.siUserName));
-            etPassword.setError("Enter " + getResources().getString(R.string.siPassword));
-            IsValid = false;
-        } else if (etName.getText().toString().equals("") && !etPassword.getText().toString().equals("")) {
-            etName.setError("Enter " + getResources().getString(R.string.siUserName));
-            etPassword.clearError();
-            IsValid = false;
-        } else if (etPassword.getText().toString().equals("") && !etName.getText().toString().equals("")) {
-            etPassword.setError("Enter " + getResources().getString(R.string.siPassword));
-            etName.clearError();
-            IsValid = false;
-        } else {
-            etName.clearError();
-            etPassword.clearError();
-        }
-
-        return IsValid;
-    }
-
-    void ClearControls() {
-        etName.setText("");
-        etPassword.setText("");
     }
 
     @Override
@@ -212,7 +189,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                 if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SignInActivity.this) != null) {
                                     objSharePreferenceManage.RemovePreference("ServerPreference", "ServerName", SignInActivity.this);
                                     objSharePreferenceManage.ClearPreference("ServerPreference", SignInActivity.this);
-                                    Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
+                                    Globals.ReplaceFragment(new ServerNameFragment(), getSupportFragmentManager(), null);
                                 }
 
                             }
@@ -229,16 +206,44 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //fragment backPressed
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             //getSupportFragmentManager().popBackStack();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
     //end
 
-    public void CreateUserPreference() {
+    //region Private Methods and Interface
+    private boolean ValidateControls() {
+        boolean IsValid = true;
+
+        if (etName.getText().toString().equals("") && etPassword.getText().toString().equals("")) {
+            etName.setError("Enter " + getResources().getString(R.string.siUserName));
+            etPassword.setError("Enter " + getResources().getString(R.string.siPassword));
+            IsValid = false;
+        } else if (etName.getText().toString().equals("") && !etPassword.getText().toString().equals("")) {
+            etName.setError("Enter " + getResources().getString(R.string.siUserName));
+            etPassword.clearError();
+            IsValid = false;
+        } else if (etPassword.getText().toString().equals("") && !etName.getText().toString().equals("")) {
+            etPassword.setError("Enter " + getResources().getString(R.string.siPassword));
+            etName.clearError();
+            IsValid = false;
+        } else {
+            etName.clearError();
+            etPassword.clearError();
+        }
+
+        return IsValid;
+    }
+
+    private void ClearControls() {
+        etName.setText("");
+        etPassword.setText("");
+    }
+
+    private void CreateUserPreference() {
         objSharePreferenceManage = new SharePreferenceManage();
-        if (objUserMaster.getLinktoUserTypeMasterId() == Globals.UserType.valueOf("Waiter").getValue()) {
+        if (objUserMaster.getLinktoUserTypeMasterId() != 0) {
 
             if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", SignInActivity.this) == null) {
                 objSharePreferenceManage.CreatePreference("WaiterPreference", "UserName", etName.getText().toString(), SignInActivity.this);
@@ -252,31 +257,31 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 objSharePreferenceManage.CreatePreference("WaiterPreference", "UserTypeMasterId", String.valueOf(objUserMaster.getLinktoUserTypeMasterId()), SignInActivity.this);
             }
 
-            if(objSharePreferenceManage.GetPreference("WaiterPreference","UserSecurityCode",SignInActivity.this)==null){
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserSecurityCode", SignInActivity.this) == null) {
                 objSharePreferenceManage.CreatePreference("WaiterPreference", "UserSecurityCode", String.valueOf(objUserMaster.getPassword()), SignInActivity.this);
             }
 
-            if(objSharePreferenceManage.GetPreference("WaiterPreference","WaiterMasterId",SignInActivity.this)==null){
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId", SignInActivity.this) == null) {
                 objSharePreferenceManage.CreatePreference("WaiterPreference", "WaiterMasterId", String.valueOf(objUserMaster.getWaiterMasterId()), SignInActivity.this);
             }
 
-        } else {
-            if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SignInActivity.this) == null) {
-                objSharePreferenceManage.CreatePreference("WaitingPreference", "UserName", etName.getText().toString(), SignInActivity.this);
-            }
-
-            if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", SignInActivity.this) == null) {
-                objSharePreferenceManage.CreatePreference("WaitingPreference", "UserMasterId", String.valueOf(objUserMaster.getUserMasterId()), SignInActivity.this);
-            }
-
-            if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserTypeMasterId", SignInActivity.this) == null) {
-                objSharePreferenceManage.CreatePreference("WaitingPreference", "UserTypeMasterId", String.valueOf(objUserMaster.getLinktoUserTypeMasterId()), SignInActivity.this);
-            }
         }
-
     }
 
-    public class SignInLodingTask extends AsyncTask {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setupWindowAnimations() {
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            Slide slideTransition = new Slide();
+            slideTransition.setSlideEdge(Gravity.RIGHT);
+            slideTransition.setDuration(500);
+            getWindow().setEnterTransition(slideTransition);
+        }
+    }
+    //endregion
+
+    //region LoadingTask
+    class SignInLodingTask extends AsyncTask {
 
         ProgressDialog pDialog;
         String strName, strPassword;
@@ -309,27 +314,60 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             pDialog.dismiss();
             if (result == null) {
-                Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginFailedMsg), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginFailedMsg), SignInActivity.this, 1000);
 
             } else {
-
+                Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), SignInActivity.this, 2000);
                 CreateUserPreference();
 
-                Toast.makeText(SignInActivity.this, getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_SHORT).show();
-                ClearControls();
+                if (Service.CheckNet(SignInActivity.this)) {
+                    new CounterLoadingTask().execute();
+                    ClearControls();
 
-                if(SplashScreenActivity.counter > 1 || SplashScreenActivity.counter == 0) {
-                    Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
+                } else {
+                    Globals.ShowSnackBar(view, getResources().getString(R.string.MsgCheckConnection), SignInActivity.this, 1000);
                 }
-                else
-                {
-                    Intent intent=new Intent(SignInActivity.this,WelcomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            }
+        }
+    }
+
+    public class CounterLoadingTask extends AsyncTask {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            CounterJSONParser objCounterJSONParser = new CounterJSONParser();
+            return objCounterJSONParser.SelectAllCounterMaster(Globals.businessMasterId, objUserMaster.getUserMasterId());
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            ArrayList<CounterMaster> lstCounterMaster = (ArrayList<CounterMaster>) result;
+            if (lstCounterMaster != null && lstCounterMaster.size() != 0) {
+                if (lstCounterMaster.size() > 1) {
+                    Globals.ReplaceFragment(new CounterFragment(objUserMaster.getLinktoUserTypeMasterId()), getSupportFragmentManager(), null);
+                } else {
+
+                    objSharePreferenceManage = new SharePreferenceManage();
+                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterMasterId", String.valueOf(lstCounterMaster.get(0).getCounterMasterId()), SignInActivity.this);
+                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterName", lstCounterMaster.get(0).getCounterName(), SignInActivity.this);
+
+                    Intent intent = new Intent(SignInActivity.this, WelcomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
                     finish();
                 }
             }
         }
     }
+    //endregion
 }
 

@@ -3,7 +3,6 @@ package com.arraybit.pos;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,22 +51,17 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.layoutOrders) {
-            Globals.InitializeFragment(new AllOrdersFragment(null),getActivity().getSupportFragmentManager());
-        } else if (v.getId() == R.id.layoutDineIn) {
-            //Intent intent = new Intent(getActivity(),MenuActivity.class);
-            //startActivity(intent);
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(android.R.id.content, new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.DineIn.getValue())),getActivity().getResources().getString(R.string.title_fragment_all_tables));
-            fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_all_tables));
-            fragmentTransaction.commit();
-        } else if (v.getId() == R.id.layoutTakeAway) {
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(android.R.id.content, new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.TakeAway.getValue())),getActivity().getResources().getString(R.string.title_fragment_all_tables));
-            fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_all_tables));
-            fragmentTransaction.commit();
-        } else if (v.getId() == R.id.layoutOffers) {
-            Globals.InitializeFragment(new OfferFragment(getActivity()),getActivity().getSupportFragmentManager());
+        if (getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                && getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_waiter_options))) {
+            if (v.getId() == R.id.layoutOrders) {
+                Globals.ReplaceFragment(new AllOrdersFragment(null), getActivity().getSupportFragmentManager(), null);
+            } else if (v.getId() == R.id.layoutDineIn) {
+                Globals.ReplaceFragment(new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.DineIn.getValue())), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_all_tables));
+            } else if (v.getId() == R.id.layoutTakeAway) {
+                Globals.ReplaceFragment(new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.TakeAway.getValue())), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_all_tables));
+            } else if (v.getId() == R.id.layoutOffers) {
+                Globals.ReplaceFragment(new OfferFragment(getActivity()), getActivity().getSupportFragmentManager(), null);
+            }
         }
     }
 }

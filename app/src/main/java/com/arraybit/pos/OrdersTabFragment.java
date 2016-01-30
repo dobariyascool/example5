@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 
 import com.arraybit.adapter.OrdersAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.parser.OrderJOSNParser;
@@ -32,8 +33,8 @@ import java.util.ArrayList;
 public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTextListener{
 
     public final static String ITEMS_COUNT_KEY = "OrdersTabFragment$ItemsCount";
+    public TextView txtMsg;
     RecyclerView rvOrder;
-    TextView txtMsg;
     ArrayList<OrderMaster> alOrderMaster;
     int counterMasterId;
     String orderStatus, linktoTableMasterIds;
@@ -100,7 +101,12 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         this.orderStatus = orderStatus;
         alOrderMaster = new ArrayList<>();
 
-        new OrderMasterLoadingTask().execute();
+        if (Service.CheckNet(getActivity())) {
+            new OrderMasterLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(rvOrder, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
+
     }
 
     @Override
@@ -134,6 +140,31 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
 
     }
 
+    public void LoadOrderData() {
+        alOrderMaster = new ArrayList<>();
+        if (Service.CheckNet(getActivity())) {
+            new OrderMasterLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(rvOrder, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
+
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (alOrderMaster.size() != 0 && alOrderMaster != null) {
+            final ArrayList<OrderMaster> filteredList = Filter(alOrderMaster, newText);
+            ordersAdapter.SetSearchFilter(filteredList);
+        }
+        return false;
+    }
+
+    //region Private Methods
     private ArrayList<OrderMaster> Filter(ArrayList<OrderMaster> lstOrderMaster, String filterName) {
         filterName = filterName.toLowerCase();
         final ArrayList<OrderMaster> filteredList = new ArrayList<>();
@@ -161,25 +192,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
             }
         });
     }
-
-    public void LoadOrderData() {
-        alOrderMaster = new ArrayList<>();
-        new OrderMasterLoadingTask().execute();
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        if (alOrderMaster.size() != 0 && alOrderMaster != null) {
-            final ArrayList<OrderMaster> filteredList = Filter(alOrderMaster, newText);
-            ordersAdapter.SetSearchFilter(filteredList);
-        }
-        return false;
-    }
+    //endregion
 
     //region LoadingTask
     class OrderMasterLoadingTask extends AsyncTask {

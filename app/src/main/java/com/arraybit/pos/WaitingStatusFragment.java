@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.Button;
@@ -63,16 +64,23 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnServe.getText().toString()).getValue());
             objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
-            new UpdateWaitingStatusLoadingTask().execute();
+            if (Service.CheckNet(getActivity())) {
+                new UpdateWaitingStatusLoadingTask().execute();
+            } else {
+                Globals.ShowSnackBar(v,getResources().getString(R.string.MsgCheckConnection),getActivity(),1000);
+            }
             dismiss();
-
         }
         if (v.getId() == R.id.btnNot) {
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("NA").getValue());
             objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
 
-            new UpdateWaitingStatusLoadingTask().execute();
+            if (Service.CheckNet(getActivity())) {
+                new UpdateWaitingStatusLoadingTask().execute();
+            } else {
+                Globals.ShowSnackBar(v,getResources().getString(R.string.MsgCheckConnection),getActivity(),1000);
+            }
             dismiss();
         }
         if (v.getId() == R.id.btnCancel) {
@@ -80,7 +88,11 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnCancel.getText().toString()).getValue());
             objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
-            new UpdateWaitingStatusLoadingTask().execute();
+            if (Service.CheckNet(getActivity())) {
+                new UpdateWaitingStatusLoadingTask().execute();
+            } else {
+                Globals.ShowSnackBar(v,getResources().getString(R.string.MsgCheckConnection),getActivity(),1000);
+            }
             dismiss();
         }
         if (v.getId() == R.id.btnCall) {
@@ -93,6 +105,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         }
     }
 
+    //region Private Methods and Interface
     void SetButtonVisibility() {
         if (objWaiting.getWaitingStatus().equals(btnServe.getText().toString())) {
             btnServe.setVisibility(View.GONE);
@@ -113,10 +126,12 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         }
     }
 
-    public interface UpdateStatusListener {
+   interface UpdateStatusListener {
         void UpdateStatus(boolean flag);
     }
+    //endregion
 
+    //region LoadingTask
     class UpdateWaitingStatusLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
@@ -152,4 +167,5 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             progressDialog.dismiss();
         }
     }
+    //endregion
 }

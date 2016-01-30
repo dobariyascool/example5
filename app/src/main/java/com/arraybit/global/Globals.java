@@ -1,7 +1,9 @@
 package com.arraybit.global;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -11,14 +13,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,18 +35,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.arraybit.modal.DiscountMaster;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderItemTran;
 import com.arraybit.pos.CategoryItemFragment;
-import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.GuestLoginDialogFragment;
 import com.arraybit.pos.R;
 import com.arraybit.pos.SignInActivity;
 import com.arraybit.pos.SignUpFragment;
-import com.arraybit.pos.WelcomeActivity;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,7 +59,7 @@ public class Globals {
     public static String serverName = null;
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "hh:mm";
-    public static String DisplayTimeFormat="h:mm a";
+    public static String DisplayTimeFormat = "h:mm a";
     public static int sourceMasterId = 2;
     public static short businessMasterId = 1;
     public static short itemType = 2;
@@ -63,8 +70,9 @@ public class Globals {
     public static ArrayList<Long> alOrderMasterId = new ArrayList<>();
     public static short selectTableMasterId;
     public static Fragment targetFragment;
+    public static DiscountMaster objDiscountMaster;
+    public static String userName;
     static FragmentManager fragmentManager;
-    //public static Bitmap bitmap1;
 
     public static float ConvertDp(float dp, Context context) {
         Resources resources = context.getResources();
@@ -97,6 +105,24 @@ public class Globals {
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String GetCurrentTime() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("h/m");
+        return sdf.format(calendar.getTime());
+    }
+
+    public static void ShowSnackBar(View view, String message, Context context, int duration) {
+        Snackbar snackbar = Snackbar.make(view, message, duration);
+        View snackView = snackbar.getView();
+        TextView txt = (TextView) snackView.findViewById(android.support.design.R.id.snackbar_text);
+        txt.setGravity(Gravity.CENTER);
+        txt.setTextColor(ContextCompat.getColor(context, android.R.color.white));
+        txt.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        snackView.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_grey));
+        snackbar.show();
     }
 
     public static void SetNavigationDrawer(ActionBarDrawerToggle actionBarDrawerToggle, Context context, DrawerLayout drawerLayout, Toolbar app_bar) {
@@ -133,10 +159,10 @@ public class Globals {
         MenuItem mRegistration = menu.findItem(R.id.registration);
 
         if (userName == null) {
-            mLogin.setTitle(context.getResources().getString(R.string.navLogin));
+            mLogin.setTitle(context.getResources().getString(R.string.navLogin)).setVisible(true);
             mRegistration.setTitle(context.getResources().getString(R.string.navRegistration));
         } else {
-            mLogin.setTitle(context.getResources().getString(R.string.wmMyAccount));
+            mLogin.setTitle(context.getResources().getString(R.string.wmMyAccount)).setVisible(false);
             mRegistration.setTitle(context.getResources().getString(R.string.wmLogout));
         }
     }
@@ -149,24 +175,30 @@ public class Globals {
             guestLoginDialogFragment.show(fragmentManager, "");
 
         } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
-            SignUpFragment signUpFragment = new SignUpFragment();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(android.R.id.content, signUpFragment, activity.getResources().getString(R.string.title_fragment_signup));
-            fragmentTransaction.addToBackStack(activity.getResources().getString(R.string.title_fragment_signup));
-            fragmentTransaction.commit();
-        }
-        else if(menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)){
+            Globals.ReplaceFragment(new SignUpFragment(),fragmentManager,activity.getResources().getString(R.string.title_fragment_signup));
+        } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)) {
             objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", activity);
-            objSharePreferenceManage.RemovePreference("RegisteredUserMasterIdPreference", "RegisteredUserMasterId", activity);
-            objSharePreferenceManage.RemovePreference("RegistrationPreferenceFullName", "FullName",activity);
-            Intent intent=new Intent(activity,WelcomeActivity.class);
-            intent.putExtra("TableMaster",GuestHomeActivity.objTableMaster);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("GuestScreen", true);
-            activity.startActivity(intent);
-            activity.finish();
+            objSharePreferenceManage.RemovePreference("RegistrationPreference", "RegisteredUserMasterId", activity);
+            objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", activity);
+            objSharePreferenceManage.ClearPreference("RegistrationPreference", activity);
+            Globals.userName = null;
+//            Intent intent=new Intent(activity,WelcomeActivity.class);
+//            intent.putExtra("TableMaster",GuestHomeActivity.objTableMaster);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra("GuestScreen", true);
+//            activity.startActivity(intent);
+//            activity.finish();
         }
 
+    }
+
+    public static void ClearPreference(Context context) {
+        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+        objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", context);
+        objSharePreferenceManage.RemovePreference("RegistrationPreference", "RegisteredUserMasterId", context);
+        objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", context);
+        objSharePreferenceManage.ClearPreference("RegistrationPreference", context);
+        Globals.userName = null;
     }
 
     public static void SetScaleImageBackground(final Context context, final LinearLayout linearLayout, final RelativeLayout relativeLayout, final FrameLayout frameLayout) {
@@ -221,6 +253,21 @@ public class Globals {
         fragmentTransaction.commit();
     }
 
+    public static void ReplaceFragment(Fragment fragment, FragmentManager fragmentManager, String fragmentName) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (Build.VERSION.SDK_INT >= 21) {
+            Slide slideTransition = new Slide();
+            slideTransition.setSlideEdge(Gravity.RIGHT);
+            slideTransition.setDuration(500);
+            fragment.setEnterTransition(slideTransition);
+        } else {
+            fragmentTransaction.setCustomAnimations(R.anim.right_in,R.anim.left_out,0,R.anim.right_exit);
+        }
+        fragmentTransaction.replace(android.R.id.content, fragment,fragmentName);
+        fragmentTransaction.addToBackStack(fragmentName);
+        fragmentTransaction.commit();
+    }
+
     public static void SetErrorLayout(LinearLayout layout, boolean isShow, String errorMsg) {
         TextView txtMsg = (TextView) layout.findViewById(R.id.txtMsg);
         ImageView ivErrorIcon = (ImageView) layout.findViewById(R.id.ivErrorIcon);
@@ -253,62 +300,56 @@ public class Globals {
 
         activityName = activity.getTitle().toString();
 
-        if (activityName.equals(activity.getResources().getString(R.string.title_activity_waiting))) {
+        if(Build.VERSION.SDK_INT < 21){
             Intent intent = new Intent(activity, SignInActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
+            activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
             activity.finish();
-
-            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserName", activity);
-            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserMasterId", activity);
-            objSharePreferenceManage.RemovePreference("WaitingPreference", "UserTypeMasterId", activity);
-
-            objSharePreferenceManage.ClearPreference("WaitingPreference", activity);
-        } else if (activityName.equals((activity.getResources().getString(R.string.title_activity_waiter_home)))) {
+        }else{
+            ActivityOptions options =
+                    ActivityOptions.
+                            makeSceneTransitionAnimation(activity);
             Intent intent = new Intent(activity, SignInActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            activity.startActivity(intent);
+            activity.startActivity(intent, options.toBundle());
             activity.finish();
-
-            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserName", activity);
-            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserMasterId", activity);
-            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId", activity);
-
-            Globals.counter = 0;
-            Globals.alOrderItemTran.clear();
-            Globals.selectTableMasterId = 0;
-
-            objSharePreferenceManage.ClearPreference("WaiterPreference", activity);
-        } else if(activityName.equals(activity.getResources().getString(R.string.title_fragment_category_item)) || activityName.equals(activity.getResources().getString(R.string.title_fragment_all_orders)))
-        {
-            Intent intent = new Intent(activity, SignInActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            activity.startActivity(intent);
-            activity.finish();
-
-            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserName", activity);
-            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserMasterId", activity);
-            objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId", activity);
-
-            Globals.counter = 0;
-            Globals.alOrderItemTran.clear();
-            Globals.selectTableMasterId = 0;
-
-            objSharePreferenceManage.ClearPreference("WaiterPreference", activity);
         }
+
+        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+        objSharePreferenceManage.RemovePreference("WaiterPreference", "UserName", activity);
+        objSharePreferenceManage.RemovePreference("WaiterPreference", "UserMasterId", activity);
+        objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId", activity);
+        objSharePreferenceManage.RemovePreference("WaiterPreference", "UserSecurityCode", activity);
+        objSharePreferenceManage.RemovePreference("WaiterPreference", "WaiterMasterId", activity);
+
+        Globals.counter = 0;
+        Globals.alOrderItemTran.clear();
+        Globals.selectTableMasterId = 0;
+
+        objSharePreferenceManage.ClearPreference("WaiterPreference", activity);
     }
 
-    public static void ClearData()
-    {
+    public static void ClearData() {
         Globals.counter = 0;
         Globals.alOrderItemTran.clear();
         Globals.selectTableMasterId = 0;
         Globals.alOrderItemSummery = new ArrayList<>();
         Globals.targetFragment = null;
     }
+
+
+    public static void HideNavigationBar(Activity activity){
+        if(Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19) {
+            View v = activity.getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+            v.setSystemUiVisibility(uiOptions);
+        } else if(Build.VERSION.SDK_INT >= 19) {
+            View decorView = activity.getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.FOCUS_DOWN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+    }
+
 
     //set runtime orientation for mobile and tablet
     public static void RuntimeChangeOrientation(Activity activity) {
@@ -319,10 +360,10 @@ public class Globals {
         }
     }
 
-    public static void CategoryItemFragmentResetStaticVariable(){
+    public static void CategoryItemFragmentResetStaticVariable() {
         CategoryItemFragment.isViewChange = false;
         Globals.targetFragment = null;
-        CategoryItemFragment.i=0;
+        CategoryItemFragment.i = 0;
     }
 
     //region Enum
@@ -474,14 +515,34 @@ public class Globals {
     }
 
     public enum UserType {
+        Captain(1),
         Waiter(2),
-        Waiting(3);
+        Delivery_Person(3),
+        Waiting(4);
 
         private int intValue;
 
         UserType(int value) {
             intValue = value;
 
+        }
+
+        public int getValue() {
+            return intValue;
+        }
+    }
+
+    public enum FeedbackQuestionType {
+        Input(1),
+        Rating(2),
+        Single_Select(3),
+        Multi_Select(4),
+        Simple_Feedback(5);
+
+        private int intValue;
+
+        FeedbackQuestionType(int value) {
+            intValue = value;
         }
 
         public int getValue() {

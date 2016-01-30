@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 
 import com.arraybit.adapter.CounterAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CounterMaster;
 import com.arraybit.parser.CounterJSONParser;
@@ -38,9 +39,10 @@ public class CounterFragment extends Fragment {
     SharePreferenceManage objSharePreferenceManage;
     CounterJSONParser objCounterJSONParser;
     LinearLayout counterLayout;
+    short userMasterId, userType;
 
-    public CounterFragment() {
-        // Required empty public constructor
+    public CounterFragment(short userType) {
+        this.userType = userType;
     }
 
     @Override
@@ -57,18 +59,22 @@ public class CounterFragment extends Fragment {
         }
         app_bar.setTitle(getResources().getString(R.string.title_fragment_counter));
 
-        counterLayout =(LinearLayout)view.findViewById(R.id.counterLayout);
-        Globals.SetScaleImageBackground(getActivity(),counterLayout, null,null);
+        counterLayout = (LinearLayout) view.findViewById(R.id.counterLayout);
+        Globals.SetScaleImageBackground(getActivity(), counterLayout, null, null);
 
         rvCounter = (RecyclerView) view.findViewById(R.id.rvCounter);
         rvCounter.setVisibility(View.GONE);
         linearLayoutManager = new LinearLayoutManager(getActivity());
 
-        gridLayoutManager = new GridLayoutManager(getActivity(),2);
-
-        new CounterLoadingTask().execute();
+        gridLayoutManager = new GridLayoutManager(getActivity(), 2);
 
         setHasOptionsMenu(true);
+
+        if (Service.CheckNet(getActivity())) {
+            new CounterLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
 
         return view;
     }
@@ -76,11 +82,10 @@ public class CounterFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))){
+        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             menu.findItem(R.id.mWaiting).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
-        }
-        else if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))){
+        } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             menu.findItem(R.id.logout).setVisible(false);
         }
 
@@ -92,6 +97,7 @@ public class CounterFragment extends Fragment {
         Globals.SetScaleImageBackground(getActivity(), counterLayout, null, null);
     }
 
+    //region LoadingTask
     public class CounterLoadingTask extends AsyncTask {
         ProgressDialog progressDialog;
 
@@ -104,12 +110,18 @@ public class CounterFragment extends Fragment {
             progressDialog.setCancelable(false);
             progressDialog.show();
 
+            objSharePreferenceManage = new SharePreferenceManage();
+            if (userType != 0) {
+                if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity()) != null) {
+                    userMasterId = Short.parseShort(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity()));
+                }
+            }
             objCounterJSONParser = new CounterJSONParser();
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            alCounterMaster = objCounterJSONParser.SelectAllCounterMaster(Globals.businessMasterId);
+            alCounterMaster = objCounterJSONParser.SelectAllCounterMaster(Globals.businessMasterId, userMasterId);
             return alCounterMaster;
         }
 
@@ -118,14 +130,18 @@ public class CounterFragment extends Fragment {
             super.onPostExecute(result);
             progressDialog.dismiss();
 
-            if(alCounterMaster != null && alCounterMaster.size()!=0) {
+            if (alCounterMaster == null) {
+                Globals.ShowSnackBar(counterLayout, getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
+            } else if (alCounterMaster.size() == 0) {
+                Globals.ShowSnackBar(counterLayout, getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
+            } else {
 
                 rvCounter.setVisibility(View.VISIBLE);
-                adapter = new CounterAdapter(getActivity(), alCounterMaster);
+                adapter = new CounterAdapter(getActivity(), alCounterMaster, userType);
                 rvCounter.setAdapter(adapter);
                 rvCounter.setLayoutManager(linearLayoutManager);
-                //rvCounter.setLayoutManager(gridLayoutManager);
             }
         }
     }
+    //endregion
 }

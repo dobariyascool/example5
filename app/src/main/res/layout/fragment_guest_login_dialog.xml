@@ -9,7 +9,6 @@
     android:paddingTop="@dimen/dialog_vertical_margin"
     tools:context="com.arraybit.pos.GuestLoginDialogFragment">
 
-
     <com.rey.material.widget.TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,4 +35,25 @@
         android:hint="@string/siPassword"
         android:inputType="textPassword" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.rey.material.widget.TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/control_SpecingTiny"
+            android:text="@string/siNewUser" />
+
+        <com.rey.material.widget.CompoundButton
+            android:id="@+id/cbSignUp"
+            style="@style/CompoundButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/control_SpecingTiny"
+            android:text="@string/siSignupHere" />
+
+    </LinearLayout>
 </LinearLayout>

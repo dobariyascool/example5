@@ -4,11 +4,11 @@ package com.arraybit.pos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.arraybit.global.Globals;
 import com.rey.material.widget.Button;
 
 
@@ -24,19 +24,15 @@ public class ThankYouFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_thank_you, container, false);
+        View view = inflater.inflate(R.layout.fragment_thank_you, container, false);
 
-        Button btnFeedback=(Button)view.findViewById(R.id.btnFeedback);
-        Button btnSkip=(Button)view.findViewById(R.id.btnSkip);
+        Button btnFeedback = (Button) view.findViewById(R.id.btnFeedback);
+        Button btnSkip = (Button) view.findViewById(R.id.btnSkip);
 
         btnFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                FragmentManager fragmentManager=getFragmentManager();
-                /*FeedbackFragment feedbackDialogFragment=new FeedbackFragment();
-                feedbackDialogFragment.show(fragmentManager,"");*/
-
+                Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(),null);
             }
         });
 
@@ -44,12 +40,12 @@ public class ThankYouFragment extends Fragment {
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Globals.userName = null;
                 getActivity().getSupportFragmentManager().popBackStack();
-                Intent intent=new Intent(getActivity(),WelcomeActivity.class);
-                intent.putExtra("TableMaster",GuestHomeActivity.objTableMaster);
+                Intent intent = new Intent(getActivity(), WelcomeActivity.class);
+                intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("GuestScreen",true);
+                intent.putExtra("GuestScreen", true);
                 startActivity(intent);
                 getActivity().finish();
             }
@@ -57,5 +53,5 @@ public class ThankYouFragment extends Fragment {
 
         return view;
     }
-    
+
 }

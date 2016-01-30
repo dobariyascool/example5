@@ -31,7 +31,8 @@ public class SharePreferenceManage {
     public String GetPreference(String CreatedPreferenceName,String name,Context context)
     {
         SharedPreferences preference=context.getApplicationContext().getSharedPreferences(CreatedPreferenceName,0);
-        String editor=preference.getString(name,null);
+        String editor=preference.getString(name, null);
         return editor;
     }
+
 }

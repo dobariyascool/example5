@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:gravity="center"
+        android:maxLines="1"
         android:padding="@dimen/control_SpecingSmall"
         android:textColor="@color/primary_dark" />
 

@@ -7,6 +7,7 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -35,16 +36,12 @@
             android:label="@string/title_activity_login" />
         <activity
             android:name=".WelcomeActivity"
-            android:configChanges="orientation|screenSize"
+            android:configChanges="screenLayout|screenSize"
             android:label="@string/title_activity_welcome" />
         <activity
             android:name=".GuestHomeActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_home" />
-        <activity
-            android:name=".GuestOrderActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_guest_order" />
         <activity
             android:name=".WaiterHomeActivity"
             android:configChanges="orientation|screenSize"
@@ -54,18 +51,9 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_waiting" />
         <activity
-            android:name=".WaiterOrderDetailActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_waiter_order_detail" />
-        <activity
             android:name=".MenuActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_fragment_category_item" />
-
-        <activity
-            android:name=".AllOrdersActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/title_fragment_all_orders" />
 
         <receiver android:name="com.arraybit.global.TimeScheduler" />
 

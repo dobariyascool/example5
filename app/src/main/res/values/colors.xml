@@ -43,7 +43,6 @@
     <color name="googleplus_button">#d34836</color>
 
     <color name="rippleColor">#66999999</color>
-    <color name="bule_grey">#263238</color>
     //if you generate the transparent color than add 30,50,80 in color hexcode//
     <color name="transparent_orange">#30FFA726</color>
     <color name="brown">#795548</color>
@@ -76,6 +75,8 @@
     <color name="red_light">#E57373</color>
     <color name="blue">#2196f3</color>
     <color name="blue_light">#03A9F4</color>
+    <color name="grey">#AFAFAF</color>
+    <color name="blue_grey">#263238</color>
 
     //#757575
     <!-- END Other Color -->

@@ -16,15 +16,16 @@
         android:src="@drawable/my_account" />
 
     <com.rey.material.widget.TextView
-        android:id="@+id/title"
+        android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/control_SpecingTiny"
-        android:text="Thank you for shopping ..............................."
+        android:text="Thank you for ..................................."
         android:textSize="@dimen/control_TextMedium"
         tools:ignore="HardcodedText" />
 
     <LinearLayout
+        android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

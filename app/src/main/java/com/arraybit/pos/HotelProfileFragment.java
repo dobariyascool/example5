@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,9 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.modal.BusinessMaster;
 import com.arraybit.modal.UserMaster;
 import com.arraybit.parser.BusinessJSONParser;
@@ -42,19 +43,10 @@ public class HotelProfileFragment extends Fragment {
     UserMaster objUserMaster;
     BusinessJSONParser objBusinessJSONParser;
     Activity activityName;
+    CoordinatorLayout hotelProfileFragment;
 
     public HotelProfileFragment(Activity activityName) {
         this.activityName = activityName;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        pageAdapter = new PageAdapter(getChildFragmentManager());
-        objUserMaster = new UserMaster();
-
-        new HotelLoadingTask().execute();
     }
 
     @Override
@@ -73,11 +65,28 @@ public class HotelProfileFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        hotelProfileFragment = (CoordinatorLayout) view.findViewById(R.id.hotelProfileFragment);
+
         tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         ivLogo = (ImageView) view.findViewById(R.id.ivLogo);
 
+        pageAdapter = new PageAdapter(getFragmentManager());
+        objUserMaster = new UserMaster();
+
+        if (Service.CheckNet(getActivity())) {
+            new HotelLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
+
         return view;
+    }
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -114,6 +123,7 @@ public class HotelProfileFragment extends Fragment {
 
     }
 
+    //region Page Adapter
     static class PageAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> fragmentList = new ArrayList<>();
         private final List<String> fragmentTitleList = new ArrayList<>();
@@ -142,8 +152,10 @@ public class HotelProfileFragment extends Fragment {
             return fragmentTitleList.get(position);
         }
     }
+    //endregion
 
-    private class HotelLoadingTask extends AsyncTask {
+    //region LoadingTask
+    class HotelLoadingTask extends AsyncTask {
 
         @Override
         protected void onPreExecute() {
@@ -163,17 +175,18 @@ public class HotelProfileFragment extends Fragment {
             super.onPostExecute(result);
 
             if (objBusinessMaster == null) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(hotelProfileFragment, getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
             } else {
 
                 Picasso.with(ivLogo.getContext()).load(objBusinessMaster.getImageName()).into(ivLogo);
 
+                pageAdapter.addFragment(new InformationFragment(objBusinessMaster), "Information");
                 pageAdapter.addFragment(new GalleryFragment(objBusinessMaster.getBusinessMasterId()), "Gallery");
-                pageAdapter.addFragment(new InformationFragment(), "Information");
 
                 viewPager.setAdapter(pageAdapter);
                 tabLayout.setupWithViewPager(viewPager);
             }
         }
     }
+    //endregion
 }

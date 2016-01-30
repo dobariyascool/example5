@@ -71,7 +71,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
         if (!isWaiterGrid) {
             if (objItemMaster.getImageName().equals("null")) {
-                Picasso.with(holder.ivItem.getContext()).load(R.drawable.vada_paav).into(holder.ivItem);
+                Picasso.with(holder.ivItem.getContext()).load(R.drawable.default_image).into(holder.ivItem);
             } else {
                 Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).into(holder.ivItem);
             }
@@ -132,8 +132,8 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             if (!isWaiterGrid && isViewChange) {
                 DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-                width = displayMetrics.widthPixels / 2;
-                height = displayMetrics.widthPixels / 2;
+                width = displayMetrics.widthPixels / 2 - 32;
+                height = displayMetrics.widthPixels / 2 - 32;
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
                 ivItem.setLayoutParams(layoutParams);

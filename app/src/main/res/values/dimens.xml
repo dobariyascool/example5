@@ -28,6 +28,7 @@
 
     <dimen name="control_TextTiny">10sp</dimen>
     <dimen name="control_TextSmall">12sp</dimen>
+    <dimen name="control_TextNormal">14sp</dimen>
     <dimen name="control_TextMedium">16sp</dimen>
     <dimen name="control_TextLarge">24sp</dimen>
 
@@ -166,5 +167,7 @@
     <dimen name="itemListImageWidth">100dp</dimen>
     <dimen name="itemListImageHeight">100dp</dimen>
     <dimen name="itemGridImageHeight">130dp</dimen>
+
+    <dimen name="swipeImageHeight">100dp</dimen>
     
 </resources>

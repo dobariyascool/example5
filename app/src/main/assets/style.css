@@ -1,0 +1,39 @@
+body{
+	font-family: 'Roboto', sans-serif;
+	font-size:14px;
+	}
+	
+.page-block--lowlight {
+    background-color: #ffffff;
+    color: #a9a9a9;
+}
+p{
+	text-align:justify;
+	}
+.page-width {
+    width: 1170px;
+}
+.section-heading {
+    margin-bottom: 1.875em;
+    text-align: center;
+}
+.section-heading__heading {
+    margin-bottom: 30px;
+    text-align: center;
+}
+.page-block--lowlight .section-heading > h1, .page-block--lowlight .section-heading > h2 {
+    color: #fff;
+}
+.page-block {
+    border-color: #e5e5e5;
+    padding: 0.625em 0;
+}
+.section-block--border-top {
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+.section-block {
+    border-color: #e5e5e5;
+    padding-bottom: 1.8125em;
+    padding-top: 1.8125em;
+}

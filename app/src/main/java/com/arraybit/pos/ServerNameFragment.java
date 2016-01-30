@@ -1,7 +1,9 @@
 package com.arraybit.pos;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +17,7 @@ import com.arraybit.global.SharePreferenceManage;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
+@SuppressWarnings("unchecked")
 public class ServerNameFragment extends Fragment {
     EditText etServerName;
     Button btnSave;
@@ -32,8 +35,8 @@ public class ServerNameFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_server_name, container, false);
 
         //linearlayout
-        mainLayout =(LinearLayout)view.findViewById(R.id.mainLayout);
-        Globals.SetScaleImageBackground(getContext(), mainLayout, null,null);
+        mainLayout = (LinearLayout) view.findViewById(R.id.mainLayout);
+        Globals.SetScaleImageBackground(getContext(), mainLayout, null, null);
         //end
 
         etServerName = (EditText) view.findViewById(R.id.etServerName);
@@ -57,11 +60,9 @@ public class ServerNameFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(etServerName.getText().toString().equals(""))
-                {
-                    etServerName.setError("Enter "+getResources().getString(R.string.sfName));
-                }
-                else {
+                if (etServerName.getText().toString().equals("")) {
+                    etServerName.setError("Enter " + getResources().getString(R.string.sfName));
+                } else {
                     SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
 
                     objSharePreferenceManage.CreatePreference("ServerPreference", "ServerName", etServerName.getText().toString(), getActivity());
@@ -69,9 +70,18 @@ public class ServerNameFragment extends Fragment {
                     Globals.serverName = etServerName.getText().toString();
                     Globals.ChangeUrl();
 
-                    Intent intent = new Intent(getActivity(), SignInActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        ActivityOptions options =
+                                ActivityOptions.makeSceneTransitionAnimation(getActivity());
+                        Intent intent = new Intent(getActivity(), SignInActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        getActivity().startActivity(intent, options.toBundle());
+                    } else {
+                        Intent intent = new Intent(getActivity(), SignInActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    }
                 }
             }
         });

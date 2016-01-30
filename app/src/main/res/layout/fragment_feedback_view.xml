@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/control_SpecingLarge"
+    android:gravity="top"
+    android:orientation="horizontal"
+    tools:context="com.arraybit.pos.FeedbackViewFragment">
+
+    <LinearLayout
+        android:id="@+id/feedbackViewFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/control_SpecingLarge"
+        android:layout_marginTop="@dimen/control_SpecingLarge"
+        android:gravity="center"
+        android:orientation="vertical" />
+
+</LinearLayout>

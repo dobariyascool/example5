@@ -15,7 +15,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
 
+import com.arraybit.adapter.ModifierAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.parser.ItemJSONParser;
 import com.arraybit.parser.ItemRemarkJSONParser;
@@ -26,11 +28,12 @@ import com.rey.material.widget.ImageButton;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+@SuppressLint("ValidFragment")
 @SuppressWarnings("unchecked")
 public class AddItemQtyDialogFragment extends DialogFragment implements View.OnClickListener {
 
     EditText etQuantity;
-    ArrayList<String> alString, alStringFilter, alStringModifier, alStringModifierFilter;
+    ArrayList<String> alString, alStringFilter, alStringModifier, alStringModifierFilter, alStringModifierRate, alStringModifierRateFilter;
     AppCompatMultiAutoCompleteTextView actRemark, actModifier;
     TextInputLayout textInputLayout, textInputLayoutModifier;
     ImageButton ibPlus;
@@ -43,6 +46,8 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     boolean isDuplicate;
     StringBuilder sbModifier;
     double totalModifierAmount, totalAmount;
+    ModifierAdapter modifierAdapter;
+    StringBuilder sb;
 
     public AddItemQtyDialogFragment(ItemMaster objItemMaster) {
         this.objItemMaster = objItemMaster;
@@ -97,9 +102,12 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         btnNum8.setOnClickListener(this);
         btnNum9.setOnClickListener(this);
 
-        new RemarkLoadingTask().execute();
-
-        new ModifierLoadingTask().execute();
+        if (Service.CheckNet(getActivity())) {
+            new RemarkLoadingTask().execute();
+            new ModifierLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(getActivity().getCurrentFocus(), getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
 
         objAddToCartListener = (AddToCartListener) getTargetFragment();
 
@@ -119,7 +127,6 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             textInputLayout.clearFocus();
             textInputLayoutModifier.clearFocus();
             etQuantity.requestFocus();
-            //etQuantity.selectAll();
 
         } else if (v.getId() == R.id.ibMinus) {
             if (etQuantity.getText().toString().equals("")) {
@@ -167,6 +174,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             actRemark.showDropDown();
         } else if (v.getId() == R.id.actModifier) {
             if (actModifier.getText().toString().isEmpty()) {
+                sb = new StringBuilder();
                 SetArrayListAdapter(null, alStringModifier);
             } else {
                 if (isDeleted) {
@@ -206,7 +214,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     }
     //endregion
 
-    //region Private Methods
+    //region Private Methods and Interface
     private int IncrementDecrementValue(int id, int value) {
         if (id == R.id.ibPlus) {
             value++;
@@ -276,12 +284,14 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             } else {
                 if (modifierName == null && isDeleted) {
                     alStringModifierFilter = new ArrayList<>();
+                    alStringModifierRateFilter = new ArrayList<>();
                     for (String strSelectedValue : modifierSelectedValue) {
                         if (!strSelectedValue.equals("")) {
                             if (alStringModifierFilter.size() == 0) {
                                 for (int j = 0; j < alStringModifier.size(); j++) {
                                     if (!strSelectedValue.equals(alStringModifier.get(j))) {
                                         alStringModifierFilter.add(alStringModifier.get(j));
+                                        alStringModifierRateFilter.add(alStringModifierRate.get(j));
                                     }
                                 }
                             } else {
@@ -289,24 +299,24 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                                     str = strSelectedValue;
                                     if (alStringModifierFilter.get(j).equals(str)) {
                                         alStringModifierFilter.remove(j);
+                                        alStringModifierRateFilter.remove(j);
                                     }
                                 }
                             }
                         }
                     }
-                    adapter = new ArrayAdapter<>
-                            (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringModifierFilter);
+                    modifierAdapter = new ModifierAdapter(getActivity(), alStringModifierFilter, alStringModifierRateFilter, false);
                     actModifier.setAdapter(adapter);
                 } else {
                     if (alStringModifierFilter.size() == 0) {
                         for (int i = 0; i < alStringModifier.size(); i++) {
                             if (!alStringModifier.get(i).equals(modifierName)) {
                                 alStringModifierFilter.add(alStringModifier.get(i));
+                                alStringModifierRateFilter.add(alStringModifierRate.get(i));
                             }
                         }
-                        adapter = new ArrayAdapter<>
-                                (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringModifierFilter);
-                        actModifier.setAdapter(adapter);
+                        modifierAdapter = new ModifierAdapter(getActivity(), alStringModifierFilter, alStringModifierRateFilter, false);
+                        actModifier.setAdapter(modifierAdapter);
 
                     } else {
                         for (int j = 0; j < alStringModifierFilter.size(); j++) {
@@ -316,12 +326,12 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                         }
                         if (isRemove != -1) {
                             alStringModifierFilter.remove(isRemove);
+                            alStringModifierRateFilter.remove(isRemove);
                         }
                     }
                 }
-                adapter = new ArrayAdapter<>
-                        (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringModifierFilter);
-                actModifier.setAdapter(adapter);
+                modifierAdapter = new ModifierAdapter(getActivity(), alStringModifierFilter, alStringModifierRateFilter, false);
+                actModifier.setAdapter(modifierAdapter);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -331,14 +341,14 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     private void SetArrayListAdapter(ArrayList<String> alString, ArrayList<String> alStringModifier) {
         alStringFilter = new ArrayList<>();
         alStringModifierFilter = new ArrayList<>();
+        alStringModifierRateFilter = new ArrayList<>();
         if (alString != null) {
             adapter = new ArrayAdapter<>
                     (getActivity(), android.R.layout.simple_spinner_dropdown_item, alString);
             actRemark.setAdapter(adapter);
         } else {
-            adapter = new ArrayAdapter<>
-                    (getActivity(), android.R.layout.simple_spinner_dropdown_item, alStringModifier);
-            actModifier.setAdapter(adapter);
+            modifierAdapter = new ModifierAdapter(getActivity(), alStringModifier, alStringModifierRate, false);
+            actModifier.setAdapter(modifierAdapter);
         }
     }
 
@@ -350,37 +360,9 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
 
     private void SetOrderItemTran() {
         objOrderItemTran = new ItemMaster();
-        StringBuilder sb;
         try {
             if (Globals.alOrderItemTran.size() > 0) {
-                for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
-                    if (Globals.alOrderItemTran.get(i).getItemModifierIds() != null) {
-                        if (objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId() && (!Globals.alOrderItemTran.get(i).getItemModifierIds().equals("null") && !sbModifier.toString().equals("null"))) {
-                            ArrayList<String> alStringOld = new ArrayList<>(Arrays.asList(Globals.alOrderItemTran.get(i).getItemModifierIds().split(",")));
-                            ArrayList<String> alStringNew = new ArrayList<>(Arrays.asList(sbModifier.toString().split(",")));
-
-                            if (sbModifier.toString().equals(Globals.alOrderItemTran.get(i).getItemModifierIds())) {
-                                isDuplicate = true;
-                                CheckDuplicateRemark(i);
-                                break;
-                            } else if (sbModifier.toString().length() == Globals.alOrderItemTran.get(i).getItemModifierIds().length()) {
-                                sb = new StringBuilder();
-                                for (int k = 0; k < alStringOld.size(); k++) {
-                                    for (int j = 0; j < alStringNew.size(); j++) {
-                                        if (alStringNew.get(j).equals(alStringOld.get(k))) {
-                                            sb.append(alStringOld.get(k)).append(",");
-                                        }
-                                    }
-                                }
-                                if (sb.toString().equals(Globals.alOrderItemTran.get(i).getItemModifierIds())) {
-                                    isDuplicate = true;
-                                    CheckDuplicateRemark(i);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
+                CheckDuplicateRemarkAndModifier();
                 if (!isDuplicate) {
                     objOrderItemTran.setItemMasterId(objItemMaster.getItemMasterId());
                     objOrderItemTran.setItemName(objItemMaster.getItemName());
@@ -390,10 +372,15 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                     if (!sbModifier.toString().equals("null")) {
                         objOrderItemTran.setItemModifierIds(sbModifier.toString());
                     }
-                    objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
                     if (alOrderItemModifierTran.size() != 0) {
-                        totalAmount = Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice() + alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount();
+                        totalAmount = Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice() + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString()));
                         objOrderItemTran.setTotalAmount(totalAmount);
+                    }
+                    if (Integer.valueOf(etQuantity.getText().toString()) > 1) {
+                        SetOrderItemModifierQty(alOrderItemModifierTran, Integer.valueOf(etQuantity.getText().toString()));
+                        objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
+                    } else {
+                        objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
                     }
                 }
             } else {
@@ -405,10 +392,15 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                 if (!sbModifier.toString().equals("null")) {
                     objOrderItemTran.setItemModifierIds(sbModifier.toString());
                 }
-                objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
                 if (alOrderItemModifierTran.size() != 0) {
-                    totalAmount = Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice() + alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount();
+                    totalAmount = Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice() + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString()));
                     objOrderItemTran.setTotalAmount(totalAmount);
+                }
+                if (Integer.valueOf(etQuantity.getText().toString()) > 1) {
+                    SetOrderItemModifierQty(alOrderItemModifierTran, Integer.valueOf(etQuantity.getText().toString()));
+                    objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
+                } else {
+                    objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
                 }
             }
         } catch (NumberFormatException e) {
@@ -416,57 +408,103 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         }
     }
 
-    private void CheckDuplicateRemark(int i) {
-        String[] strNewRemark, strOldRemark;
-        StringBuilder sb = new StringBuilder();
+    private void CheckDuplicateRemarkAndModifier() {
+        String[] strNewRemark = new String[0], strOldRemark;
+        int cnt;
+        StringBuilder sb;
         try {
+            for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
+                cnt = 0;
+                if (Globals.alOrderItemTran.get(i).getItemModifierIds() != null) {
+                    if (objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId() && (!Globals.alOrderItemTran.get(i).getItemModifierIds().equals("null") && !sbModifier.toString().equals("null"))) {
+                        ArrayList<String> alStringOld = new ArrayList<>(Arrays.asList(Globals.alOrderItemTran.get(i).getItemModifierIds().split(",")));
+                        ArrayList<String> alStringNew = new ArrayList<>(Arrays.asList(sbModifier.toString().split(",")));
 
-            Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
-            Globals.alOrderItemTran.get(i).setTotalAmount(Globals.alOrderItemTran.get(i).getTotalAmount() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
-            Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+                        if (!actRemark.getText().toString().isEmpty() && !Globals.alOrderItemTran.get(i).getRemark().isEmpty()) {
 
-            if (!actRemark.getText().toString().isEmpty()) {
-                if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(",")) {
-                    strNewRemark = String.valueOf(actRemark.getText().subSequence(0, actRemark.length()) + " ").split(", ");
-                } else if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(" ")) {
-                    strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
-                } else {
-                    strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
-                }
+                            if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(",")) {
+                                strNewRemark = String.valueOf(actRemark.getText().subSequence(0, actRemark.length()) + " ").split(", ");
+                            } else if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(" ")) {
+                                strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
+                            } else {
+                                strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
+                            }
 
-                if (!Globals.alOrderItemTran.get(i).getRemark().isEmpty()) {
-                    String listRemark = Globals.alOrderItemTran.get(i).getRemark();
-                    if (listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(",")) {
-                        strOldRemark = String.valueOf(listRemark.subSequence(0, listRemark.length()) + " ").split(", ");
-                    } else if (listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(" ")) {
-                        strOldRemark = listRemark.subSequence(0, listRemark.length()).toString().split(", ");
-                    } else {
-                        strOldRemark = listRemark.subSequence(0, listRemark.length()).toString().split(", ");
-                    }
 
-                    if (strNewRemark.length != 0) {
-                        for (String newRemark : strNewRemark) {
-                            for (String oldRemark : strOldRemark) {
-                                if (!newRemark.equals(oldRemark)) {
-                                    sb.append(newRemark).append(",");
-                                    break;
+                            String listRemark = Globals.alOrderItemTran.get(i).getRemark();
+                            if (listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(",")) {
+                                strOldRemark = String.valueOf(listRemark.subSequence(0, listRemark.length()) + " ").split(", ");
+                            } else if (listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(" ")) {
+                                strOldRemark = listRemark.subSequence(0, listRemark.length()).toString().split(", ");
+                            } else {
+                                strOldRemark = listRemark.subSequence(0, listRemark.length()).toString().split(", ");
+                            }
+
+                            if (strNewRemark.length != 0) {
+                                for (String newRemark : strNewRemark) {
+                                    for (String oldRemark : strOldRemark) {
+                                        if (newRemark.equals(oldRemark)) {
+                                            cnt = cnt + 1;
+                                        }
+                                    }
                                 }
                             }
                         }
+                        if ((sbModifier.toString().equals(Globals.alOrderItemTran.get(i).getItemModifierIds()) && ((strNewRemark.length != 0 && cnt != 0 && strNewRemark.length == cnt) || (actRemark.getText().toString().isEmpty() && Globals.alOrderItemTran.get(i).getRemark().isEmpty())))) {
+                            isDuplicate = true;
+                            Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+                            if (alOrderItemModifierTran.size() > 0) {
+                                Globals.alOrderItemTran.get(i).setTotalAmount((Globals.alOrderItemTran.get(i).getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+                            }
+                            Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+                            if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
+                                SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
+                            }
+                            break;
+                        } else if (sbModifier.toString().length() == Globals.alOrderItemTran.get(i).getItemModifierIds().length() && ((strNewRemark.length != 0 && cnt != 0 && strNewRemark.length == cnt) || (actRemark.getText().toString().isEmpty() && Globals.alOrderItemTran.get(i).getRemark().isEmpty()))) {
+                            sb = new StringBuilder();
+                            for (int k = 0; k < alStringOld.size(); k++) {
+                                for (int j = 0; j < alStringNew.size(); j++) {
+                                    if (alStringNew.get(j).equals(alStringOld.get(k))) {
+                                        sb.append(alStringOld.get(k)).append(",");
+                                    }
+                                }
+                            }
+                            if (sb.toString().equals(Globals.alOrderItemTran.get(i).getItemModifierIds())) {
+                                isDuplicate = true;
+                                Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+                                if (alOrderItemModifierTran.size() > 0) {
+                                    Globals.alOrderItemTran.get(i).setTotalAmount((Globals.alOrderItemTran.get(i).getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+                                }
+                                Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+                                if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
+                                    SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
+                                }
+                                break;
+                            }
+                        } else if (actRemark.getText().toString().isEmpty() && Globals.alOrderItemTran.get(i).getRemark().isEmpty() && sbModifier.toString().isEmpty() && Globals.alOrderItemTran.get(i).getItemModifierIds().isEmpty()) {
+                            isDuplicate = true;
+                            Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+                            if (alOrderItemModifierTran.size() > 0) {
+                                Globals.alOrderItemTran.get(i).setTotalAmount((Globals.alOrderItemTran.get(i).getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+                            }
+                            Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+                            if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
+                                SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
+                            }
+                            break;
+                        }
                     }
-                    if (!listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(",")
-                            && !listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(" ")) {
-                        Globals.alOrderItemTran.get(i).setRemark(Globals.alOrderItemTran.get(i).getRemark() + ", " + sb.toString());
-                    } else {
-                        Globals.alOrderItemTran.get(i).setRemark(Globals.alOrderItemTran.get(i).getRemark() + sb.toString());
-                    }
-
-                } else {
-                    Globals.alOrderItemTran.get(i).setRemark(actRemark.getText().toString());
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void SetOrderItemModifierQty(ArrayList<ItemMaster> alItemMasterModifier, int Quantity) {
+        for (int j = 0; j < alItemMasterModifier.size(); j++) {
+            alItemMasterModifier.get(j).setMRP(alItemMasterModifier.get(j).getActualSellPrice() * Quantity);
         }
     }
 
@@ -488,6 +526,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                             objOrderItemModifier = new ItemMaster();
                             objOrderItemModifier.setItemName(alItemMasterModifier.get(j).getItemName());
                             objOrderItemModifier.setItemModifierIds(String.valueOf(alItemMasterModifier.get(j).getItemMasterId()));
+                            objOrderItemModifier.setActualSellPrice(alItemMasterModifier.get(j).getMRP());
                             objOrderItemModifier.setMRP(alItemMasterModifier.get(j).getMRP());
                             totalModifierAmount = totalModifierAmount + alItemMasterModifier.get(j).getMRP();
                             objOrderItemModifier.setTotalAmount(totalModifierAmount);
@@ -501,11 +540,11 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             e.printStackTrace();
         }
     }
-    //endregion
 
-    public interface AddToCartListener {
+    interface AddToCartListener {
         void AddToCart(boolean isAddToCart, ItemMaster objOrderItemTran);
     }
+    //endregion
 
     //region Loading Task
     class RemarkLoadingTask extends AsyncTask {
@@ -569,11 +608,14 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
 
             if (alItemMasterModifier != null && alItemMasterModifier.size() != 0) {
                 alStringModifier = new ArrayList<>();
+                alStringModifierRate = new ArrayList<>();
                 for (int i = 0; i < alItemMasterModifier.size(); i++) {
                     alStringModifier.add(alItemMasterModifier.get(i).getItemName());
+                    alStringModifierRate.add(Globals.dfWithPrecision.format(alItemMasterModifier.get(i).getMRP()));
                 }
 
                 alStringModifierFilter = new ArrayList<>();
+
 
                 actModifier.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
                 SetArrayListAdapter(null, alStringModifier);
@@ -605,41 +647,4 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     }
     //endregion
 }
-
-//    @NonNull
-//    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setView(R.layout.fragment_add_item_qty_dialog);
-//        builder.setPositiveButton(getResources().getString(R.string.ldLogin), null);
-//        builder.setNegativeButton(getResources().getString(R.string.ldCancel), null);
-//        builder.setCancelable(false);
-//        //setRetainInstance(false);
-//
-//        final AlertDialog alertDialog = builder.create();
-//
-//        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//            @Override
-//            public void onShow(DialogInterface dialog) {
-//
-//                Button positive = ((AlertDialog) alertDialog).getButton(DialogInterface.BUTTON_POSITIVE);
-//                positive.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                    }
-//                });
-//
-//                Button negative = ((AlertDialog) alertDialog).getButton(DialogInterface.BUTTON_NEGATIVE);
-//                negative.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        dismiss();
-//                    }
-//                });
-//
-//            }
-//        });
-//        return alertDialog;
-//    }
 

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.pos.R;
@@ -66,33 +67,33 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
                 layout[i].setLayoutParams(layoutParams1);
                 layout[i].setOrientation(LinearLayout.HORIZONTAL);
 
-                txtQty[i] = new TextView(context);
-                LinearLayout.LayoutParams txtQtyLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
-                txtQtyLayoutParams.weight = 0.15f;
-                txtQty[i].setLayoutParams(txtQtyLayoutParams);
-                txtQty[i].setGravity(Gravity.START);
-                txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
-
                 txtName[i] = new TextView(context);
                 LinearLayout.LayoutParams txtNameLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
                 txtNameLayoutParams.weight = 0.5f;
                 txtName[i].setLayoutParams(txtNameLayoutParams);
                 txtName[i].setGravity(Gravity.START);
-                txtName[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+
+
+                txtQty[i] = new TextView(context);
+                LinearLayout.LayoutParams txtQtyLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+                txtQtyLayoutParams.gravity = Gravity.TOP;
+                txtQtyLayoutParams.weight = 0.15f;
+                txtQty[i].setLayoutParams(txtQtyLayoutParams);
+                txtQty[i].setGravity(Gravity.CENTER);
+
 
                 txtRate[i] = new TextView(context);
                 LinearLayout.LayoutParams txtRateLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
                 txtRateLayoutParams.weight = 0.22f;
                 txtRate[i].setLayoutParams(txtRateLayoutParams);
                 txtRate[i].setGravity(Gravity.END);
-                txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+
 
                 txtAmount[i] = new TextView(context);
                 LinearLayout.LayoutParams txtAmountLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
                 txtAmountLayoutParams.weight = 0.3f;
                 txtAmount[i].setLayoutParams(txtAmountLayoutParams);
                 txtAmount[i].setGravity(Gravity.END);
-                txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
 
                 if (alOrderItemTran.get(i).getItemModifierIds().equals("0")) {
                     txtQty[i].setTextSize(14f);
@@ -103,8 +104,14 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
                     txtQty[i].setVisibility(View.VISIBLE);
                     txtQty[i].setText(String.valueOf(alOrderItemTran.get(i).getQuantity()));
                     txtName[i].setText(alOrderItemTran.get(i).getItemName());
-                    txtRate[i].setText(String.valueOf(alOrderItemTran.get(i).getActualSellPrice()));
-                    txtAmount[i].setText(String.valueOf(alOrderItemTran.get(i).getSellPrice()));
+                    txtRate[i].setText(Globals.dfWithPrecision.format(alOrderItemTran.get(i).getActualSellPrice()));
+                    txtAmount[i].setText(Globals.dfWithPrecision.format(alOrderItemTran.get(i).getSellPrice()));
+
+                    txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+                    txtName[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+                    txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+                    txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+
                 } else {
 
                     txtQty[i].setTextSize(12f);
@@ -114,16 +121,22 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
 
                     txtQty[i].setVisibility(View.INVISIBLE);
                     txtName[i].setText(alOrderItemTran.get(i).getItemName());
-                    txtRate[i].setText(String.valueOf(alOrderItemTran.get(i).getActualSellPrice()));
-                    txtAmount[i].setText(String.valueOf(alOrderItemTran.get(i).getSellPrice()));
+                    txtRate[i].setText(Globals.dfWithPrecision.format(alOrderItemTran.get(i).getActualSellPrice()));
+                    txtAmount[i].setText(Globals.dfWithPrecision.format((alOrderItemTran.get(i).getSellPrice())));
+
+                    txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    txtName[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
                 }
 
-                layout[i].addView(txtQty[i]);
                 layout[i].addView(txtName[i]);
+                layout[i].addView(txtQty[i]);
                 layout[i].addView(txtRate[i]);
                 layout[i].addView(txtAmount[i]);
 
                 holder.orderItemLayout.addView(layout[i]);
+
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.arraybit.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
@@ -21,12 +22,14 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
     ArrayList<CounterMaster> alCounterMaster;
     View view;
     SharePreferenceManage objSharePreferenceManage;
+    short userType;
     private LayoutInflater inflater;
 
-    public CounterAdapter(Context context, ArrayList<CounterMaster> alCounterMaster) {
+    public CounterAdapter(Context context, ArrayList<CounterMaster> alCounterMaster,short userType) {
         this.context = context;
         this.alCounterMaster = alCounterMaster;
         inflater = LayoutInflater.from(context);
+        this.userType = userType;
     }
 
     @Override
@@ -64,8 +67,10 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
                     objSharePreferenceManage.CreatePreference("CounterPreference", "CounterName", alCounterMaster.get(view.getId()).getCounterName(), context);
 
                     Intent intent = new Intent(context, WelcomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("UserType",userType);
                     context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             });
         }

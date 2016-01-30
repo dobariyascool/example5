@@ -1,39 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cvGallery"
+    style="@style/CardViewTransparent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/control_SpecingTiny">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        style="@style/CardView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/control_SpecingTiny">
+        android:layout_height="150dp"
+        android:background="@drawable/image_border"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtGalleryTitle"
+            style="@style/PrimaryTextView"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="@dimen/control_SpecingTiny"
+            android:text="@string/abc_action_bar_home_description" />
 
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtGalleryTitle"
-                style="@style/PrimaryTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:maxLines="1"
-                android:padding="@dimen/control_SpecingTiny"
-                android:text="@string/abc_action_bar_home_description" />
+        <ImageView
+            android:id="@+id/ivGalleryImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            android:padding="2dp"
+            android:scaleType="centerInside" />
+        <!--android:adjustViewBounds="true"-->
 
-            <ImageView
-                android:id="@+id/ivGalleryImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/app_name"
-                android:paddingBottom="@dimen/control_SpecingTiny"
-                android:scaleType="centerInside" />
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

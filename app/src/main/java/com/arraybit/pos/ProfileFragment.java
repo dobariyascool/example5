@@ -61,12 +61,12 @@ public class ProfileFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-
-        menu.findItem(R.id.mWaiting).setVisible(false);
-
-    }
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//        super.onPrepareOptionsMenu(menu);
+//
+//        menu.findItem(R.id.mWaiting).setVisible(false);
+//
+//    }
 
 }

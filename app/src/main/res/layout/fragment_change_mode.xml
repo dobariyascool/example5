@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
-    tools:context=".ChangeModeDialogFragment">
+    tools:context=".ChangeModeDialogFragment"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="250dp"
@@ -26,19 +27,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <com.rey.material.widget.Button
                 android:id="@+id/btnWaiterMode"
-                android:layout_width="130dp"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_weight="1"
                 android:text="@string/cmfWaiterMode" />
 
             <com.rey.material.widget.Button
                 android:id="@+id/btnGuestMode"
-                android:layout_width="130dp"
+                style="@style/NumberButton"
+                android:layout_width="0dp"
                 android:layout_height="100dp"
+                android:layout_weight="1"
                 android:text="@string/cmfGuestMode" />
 
         </LinearLayout>
@@ -55,14 +61,14 @@
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="cancel" />
+                android:text="@string/cmfCancel" />
 
             <com.rey.material.widget.Button
                 android:id="@+id/btnSubmit"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="submit" />
+                android:text="@string/cmfSubmit" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

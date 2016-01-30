@@ -2,6 +2,7 @@ package com.arraybit.parser;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.modal.FeedbackAnswerMaster;
 import com.arraybit.modal.FeedbackMaster;
 
 import org.json.JSONArray;
@@ -18,8 +19,7 @@ import java.util.Locale;
 /// <summary>
 /// JSONParser for FeedbackMaster
 /// </summary>
-public class FeedbackJSONParser
-{
+public class FeedbackJSONParser {
     public String InsertFeedbackMaster = "InsertFeedbackMaster";
     public String UpdateFeedbackMaster = "UpdateFeedbackMaster";
     public String SelectFeedbackMaster = "SelectFeedbackMaster";
@@ -41,12 +41,12 @@ public class FeedbackJSONParser
                 objFeedbackMaster.setFeedback(jsonObject.getString("Feedback"));
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("FeedbackDateTime"));
                 objFeedbackMaster.setFeedbackDateTime(sdfControlDateFormat.format(dt));
-                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short)jsonObject.getInt("linktoFeedbackTypeMasterId"));
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) jsonObject.getInt("linktoFeedbackTypeMasterId"));
                 if (!jsonObject.getString("linktoRegisteredUserMasterId").equals("null")) {
                     objFeedbackMaster.setlinktoRegisteredUserMasterId(jsonObject.getInt("linktoRegisteredUserMasterId"));
                 }
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("ReplyDateTime"));
-                objFeedbackMaster.setlinktoBusinessMasterId((short)jsonObject.getInt("linktoBusinessMasterId"));
+                objFeedbackMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
 
                 /// Extra
                 objFeedbackMaster.setFeedbackType(jsonObject.getString("FeedbackType"));
@@ -73,12 +73,12 @@ public class FeedbackJSONParser
                 objFeedbackMaster.setFeedback(jsonArray.getJSONObject(i).getString("Feedback"));
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("FeedbackDateTime"));
                 objFeedbackMaster.setFeedbackDateTime(sdfControlDateFormat.format(dt));
-                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short)jsonArray.getJSONObject(i).getInt("linktoFeedbackTypeMasterId"));
+                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoFeedbackTypeMasterId"));
                 if (!jsonArray.getJSONObject(i).getString("linktoRegisteredUserMasterId").equals("null")) {
                     objFeedbackMaster.setlinktoRegisteredUserMasterId(jsonArray.getJSONObject(i).getInt("linktoRegisteredUserMasterId"));
                 }
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("ReplyDateTime"));
-                objFeedbackMaster.setlinktoBusinessMasterId((short)jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
+                objFeedbackMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
 
                 /// Extra
                 objFeedbackMaster.setFeedbackType(jsonArray.getJSONObject(i).getString("FeedbackType"));
@@ -93,8 +93,8 @@ public class FeedbackJSONParser
         }
     }
 
-    public String InsertFeedbackMaster(FeedbackMaster objFeedbackMaster) {
-        dt=new Date();
+    public String InsertFeedbackMaster(FeedbackMaster objFeedbackMaster, ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster) {
+        dt = new Date();
         try {
             JSONStringer stringer = new JSONStringer();
             stringer.object();
@@ -113,14 +113,29 @@ public class FeedbackJSONParser
             stringer.key("linktoBusinessMasterId").value(objFeedbackMaster.getlinktoBusinesseMasterId());
 
             stringer.endObject();
+            stringer.key("lstFeedbackTran");
+            stringer.array();
 
+            for (int i = 0; i < alFeedbackAnswerMaster.size(); i++) {
+                stringer.object();
+                stringer.key("linktoFeedbackQuestionMasterId").value(alFeedbackAnswerMaster.get(i).getlinktoFeedbackQuestionMasterId());
+                if (alFeedbackAnswerMaster.get(i).getFeedbackAnswerMasterId() != 0) {
+                    stringer.key("linktoFeedbackAnswerMasterId").value(alFeedbackAnswerMaster.get(i).getFeedbackAnswerMasterId());
+                } else {
+                    stringer.key("linktoFeedbackAnswerMasterId").value(null);
+                }
+                stringer.key("Answer").value(alFeedbackAnswerMaster.get(i).getAnswer());
+                stringer.endObject();
+            }
+
+            stringer.endArray();
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertFeedbackMaster, stringer);
             JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertFeedbackMaster + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
-        }
-        catch (Exception ex) {
+            //return "-1";
+        } catch (Exception ex) {
             return "-1";
         }
     }
@@ -151,8 +166,7 @@ public class FeedbackJSONParser
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateFeedbackMaster, stringer);
             JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateFeedbackMaster + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return "-1";
         }
     }
@@ -167,8 +181,7 @@ public class FeedbackJSONParser
                 }
             }
             return null;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -184,8 +197,7 @@ public class FeedbackJSONParser
                 }
             }
             return lstFeedbackMaster;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }

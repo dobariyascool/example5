@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -34,6 +33,7 @@ public class AddFragment extends Fragment {
     WaitingJSONParser objWaitingJSONParser;
     SharePreferenceManage objSharePreferenceManage;
     String status;
+    View view;
 
     public AddFragment() {
         // Required empty public constructor
@@ -74,13 +74,14 @@ public class AddFragment extends Fragment {
                 Globals.HideKeyBoard(getActivity(), v);
 
                 if (!ValidateControls()) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_LONG).show();
+                    Globals.ShowSnackBar(v, getResources().getString(R.string.MsgValidation), getActivity(), 1000);
                     return;
                 }
                 if (Service.CheckNet(getActivity())) {
+                    view = v;
                     new AddLodingTask().execute();
                 } else {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+                    Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                 }
             }
         });
@@ -113,6 +114,7 @@ public class AddFragment extends Fragment {
         menu.findItem(R.id.logout).setVisible(false);
     }
 
+    //region Private Methods
     void ClearControls() {
         etName.setText("");
         etMobileNo.setText("");
@@ -126,7 +128,7 @@ public class AddFragment extends Fragment {
             etName.setError("Enter " + getResources().getString(R.string.afName));
             etPersons.clearError();
             IsValid = false;
-        }  else if (etPersons.getText().toString().equals("")
+        } else if (etPersons.getText().toString().equals("")
                 && !etName.getText().toString().equals("")) {
             etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
             etName.clearError();
@@ -136,8 +138,8 @@ public class AddFragment extends Fragment {
             etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
             etName.setError("Enter " + getResources().getString(R.string.afName));
             IsValid = false;
-        } else if(!etMobileNo.getText().toString().equals("")
-                && !etName.getText().toString().equals("") && !etPersons.getText().toString().equals("")){
+        } else if (!etMobileNo.getText().toString().equals("")
+                && !etName.getText().toString().equals("") && !etPersons.getText().toString().equals("")) {
             if (etMobileNo.getText().length() != 10) {
                 etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
                 IsValid = false;
@@ -149,7 +151,9 @@ public class AddFragment extends Fragment {
         }
         return IsValid;
     }
+    //endregion
 
+    //region LoadingTask
     public class AddLodingTask extends AsyncTask {
 
         @Override
@@ -187,17 +191,18 @@ public class AddFragment extends Fragment {
             super.onPostExecute(o);
 
             if (status.equals("-1")) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(view, getResources().getString(R.string.MsgServerNotResponding), getActivity(), 1000);
             } else if (status.equals("0")) {
-
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(view, getResources().getString(R.string.MsgAddPerson), getActivity(), 1000);
                 ClearControls();
 
                 Intent intent = new Intent(getActivity(), WaitingActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 getActivity().startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
             pDialog.dismiss();
         }
     }
+    //endregion
 }

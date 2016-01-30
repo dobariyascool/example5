@@ -8,11 +8,10 @@
 
     <ImageView
         android:id="@+id/ivLogo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:contentDescription="@string/splash_screen"
-        android:padding="@dimen/control_SpecingLarge"
-        android:scaleType="centerInside" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/splash_screen" />
+
 
 
     <!--<ImageView-->

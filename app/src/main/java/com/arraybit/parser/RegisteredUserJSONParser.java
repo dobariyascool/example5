@@ -139,6 +139,7 @@ public class RegisteredUserJSONParser {
             stringer.key("LastLoginDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoSourceMasterId").value(objRegisteredUserMaster.getlinktoSourceMasterId());
             stringer.key("Comment").value(objRegisteredUserMaster.getComment());
+            stringer.key("linktoBusinessMasterId").value(objRegisteredUserMaster.getLinktoBusinessMasterId());
             stringer.key("IsEnabled").value(objRegisteredUserMaster.getIsEnabled());
 
             stringer.endObject();

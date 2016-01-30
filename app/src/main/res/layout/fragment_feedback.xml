@@ -1,96 +1,155 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/feedbackFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/offwhite"
     android:orientation="vertical"
-    tools:context="com.arraybit.pos.FeedbackFragment">
+    tools:context="com.arraybit.pos.FeedbackFragment"
+    tools:ignore="ContentDescription">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:gravity="start|center">
+
+            <ImageView
+                android:id="@+id/ivPrevious"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_marginStart="@dimen/control_SpecingSmall"
+                android:src="@drawable/previous" />
+        </LinearLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:gravity="end|center">
+
+            <ImageView
+                android:id="@+id/ivNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingSmall"
+                android:src="@drawable/next"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/control_SpecingMedium">
+        android:layout_margin="@dimen/control_SpecingMedium"
+        android:visibility="gone">
 
         <LinearLayout
+            android:id="@+id/feedbackLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RadioGroup
-                android:id="@+id/rgMain"
+            <LinearLayout
+                android:id="@+id/layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                <RadioButton
-                    android:id="@+id/rbSuggestion"
-                    style="@style/RadioButton"
-                    android:layout_width="wrap_content"
+                <RadioGroup
+                    android:id="@+id/rgMain"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/fbSuggestion" />
+                    android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/rbBug"
-                    style="@style/RadioButton"
-                    android:layout_width="wrap_content"
+                    <RadioButton
+                        android:id="@+id/rbSuggestion"
+                        style="@style/RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/fbSuggestion" />
+
+                    <RadioButton
+                        android:id="@+id/rbBug"
+                        style="@style/RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fbBug" />
+
+
+                    <RadioButton
+                        android:id="@+id/rbOther"
+                        style="@style/RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fbOther" />
+                </RadioGroup>
+
+                <com.rey.material.widget.EditText
+                    android:id="@+id/etName"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/fbBug" />
+                    android:hint="@string/fbName"
+                    android:inputType="textCapWords|textCapSentences" />
 
-
-                <RadioButton
-                    android:id="@+id/rbOther"
-                    style="@style/RadioButton"
-                    android:layout_width="wrap_content"
+                <com.rey.material.widget.EditText
+                    android:id="@+id/etEmail"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/fbOther" />
-            </RadioGroup>
+                    android:hint="@string/fbEmail"
+                    android:inputType="textEmailAddress" />
 
-            <com.rey.material.widget.EditText
-                android:id="@+id/etName"
-                style="@style/EditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/fbName"
-                android:inputType="textCapWords|textCapSentences"
-                />
+                <com.rey.material.widget.EditText
+                    android:id="@+id/etMobileNo"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/fbMobileNo"
+                    android:inputType="phone"
+                    android:maxLength="10" />
 
-            <com.rey.material.widget.EditText
-                android:id="@+id/etEmail"
-                style="@style/EditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/fbEmail"
-                android:inputType="textEmailAddress" />
+                <com.rey.material.widget.EditText
+                    android:id="@+id/etFeedback"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:hint="@string/fbFeedback"
+                    android:inputType="textMultiLine" />
 
-            <com.rey.material.widget.EditText
-                android:id="@+id/etMobileNo"
-                style="@style/EditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/fbMobileNo"
-                android:inputType="phone"
-                android:maxLength="10" />
-
-            <com.rey.material.widget.EditText
-                android:id="@+id/etFeedback"
-                style="@style/EditText"
-                android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:hint="@string/fbFeedback"
-                android:inputType="textMultiLine" />
-
-            <com.rey.material.widget.Button
-                android:id="@+id/btnSubmit"
-                style="@style/Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/fbSubmit" />
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnSubmit"
+                    style="@style/Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fbSubmit" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

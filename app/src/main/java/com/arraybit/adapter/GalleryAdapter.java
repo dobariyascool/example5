@@ -1,6 +1,9 @@
 package com.arraybit.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.arraybit.modal.BusinessGalleryTran;
+import com.arraybit.pos.FullViewDialogFragment;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 import com.squareup.picasso.Picasso;
@@ -19,12 +23,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     Context context;
     ArrayList<BusinessGalleryTran> alBusinessGalleryTran;
     View view;
+    int width,height;
+    FragmentManager fragmentManager;
     private LayoutInflater inflater;
 
-    public GalleryAdapter(Context context, ArrayList<BusinessGalleryTran> alBusinessGalleryTran) {
+    public GalleryAdapter(Context context, ArrayList<BusinessGalleryTran> alBusinessGalleryTran,FragmentManager fragmentManager) {
         this.context = context;
         this.alBusinessGalleryTran = alBusinessGalleryTran;
         inflater = LayoutInflater.from(context);
+        this.fragmentManager = fragmentManager;
     }
 
     @Override
@@ -34,11 +41,39 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     }
 
     @Override
-    public void onBindViewHolder(GalleryViewHolder holder, int position) {
+    public void onBindViewHolder(final GalleryViewHolder holder, final int position) {
         BusinessGalleryTran current = alBusinessGalleryTran.get(position);
         holder.txtGalleryTitle.setText(current.getImageTitle());
+        holder.txtGalleryTitle.setVisibility(View.GONE);
+        holder.cvGallery.setId(position);
         if (current.getImagePhysicalName() != null) {
+            //Picasso.with(holder.ivGalleryImage.getContext()).load(current.getImagePhysicalName()).onlyScaleDown().into(holder.ivGalleryImage);
+//            Picasso.with(holder.ivGalleryImage.getContext())
+//                    .load(current.getImagePhysicalName())
+//                    .resize(width, height)
+//                    .into(holder.ivGalleryImage);
+
             Picasso.with(holder.ivGalleryImage.getContext()).load(current.getImagePhysicalName()).into(holder.ivGalleryImage);
+           
+//            Picasso.with(holder.ivGalleryImage.getContext()).load(current.getImagePhysicalName()).into(new Target() {
+//                @Override
+//                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                    Palette palette = Palette.from(bitmap).generate();
+//                    holder.ivGalleryImage.setImageBitmap(bitmap);
+//                    holder.ivGalleryImage.setBackgroundColor(palette.getDarkVibrantColor(0));
+//                    holder.cvGallery.setCardBackgroundColor(palette.getDarkVibrantColor(0));
+//                }
+//
+//                @Override
+//                public void onBitmapFailed(Drawable errorDrawable) {
+//
+//                }
+//
+//                @Override
+//                public void onPrepareLoad(Drawable placeHolderDrawable) {
+//
+//                }
+//            });
         }
     }
 
@@ -51,12 +86,28 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
         TextView txtGalleryTitle;
         ImageView ivGalleryImage;
+        CardView cvGallery;
 
         public GalleryViewHolder(View itemView) {
             super(itemView);
 
             txtGalleryTitle = (TextView) itemView.findViewById(R.id.txtGalleryTitle);
             ivGalleryImage = (ImageView) itemView.findViewById(R.id.ivGalleryImage);
+            cvGallery = (CardView)itemView.findViewById(R.id.cvGallery);
+
+            //DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            //width = displayMetrics.widthPixels/2;
+            //height = displayMetrics.heightPixels + 32;
+            cvGallery.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FullViewDialogFragment fullViewDialogFragment = new FullViewDialogFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("BusinessGallery",alBusinessGalleryTran.get(v.getId()));
+                    fullViewDialogFragment.setArguments(bundle);
+                    fullViewDialogFragment.show(fragmentManager,"");
+                }
+            });
         }
     }
 }

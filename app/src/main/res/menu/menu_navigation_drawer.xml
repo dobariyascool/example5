@@ -10,7 +10,7 @@
 
         <item
             android:id="@+id/profile"
-            android:icon="@mipmap/hotel"
+            android:icon="@mipmap/profile"
             android:title="@string/navProfile" />
 
         <!--<item-->
@@ -51,10 +51,10 @@
             android:icon="@mipmap/aboutus"
             android:title="@string/navAboutUs" />
 
-        <item
-            android:id="@+id/exit"
-            android:icon="@mipmap/exit"
-            android:title="@string/navExit" />
+        <!--<item-->
+    <!--android:id="@+id/exit"-->
+    <!--android:icon="@mipmap/exit"-->
+    <!--android:title="@string/navExit" />-->
 
     <!--</group>-->
 </menu>

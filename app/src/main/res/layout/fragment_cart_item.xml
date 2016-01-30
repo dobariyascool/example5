@@ -45,23 +45,26 @@
         android:padding="@dimen/control_SpecingTiny">
 
         <com.rey.material.widget.TextView
-            android:id="@+id/txtNo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.15"
-            android:text="@string/cifQty"
-            android:textAllCaps="false"
-            android:textColor="@color/primary"
-             />
-
-        <com.rey.material.widget.TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:gravity="start|center"
+            android:paddingEnd="0dp"
+            android:paddingStart="@dimen/control_SpecingTiny"
             android:text="@string/cifItem"
             android:textAllCaps="false"
             android:textColor="@color/primary" />
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:gravity="center"
+            android:text="@string/cifQty"
+            android:textAllCaps="false"
+            android:textColor="@color/primary"
+            />
 
         <com.rey.material.widget.TextView
             android:layout_width="0dp"

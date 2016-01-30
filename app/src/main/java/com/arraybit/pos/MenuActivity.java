@@ -11,14 +11,16 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.TableMaster;
 
 import java.util.ArrayList;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity{
 
     public static TableMaster objTableMaster = null;
     public static boolean parentActivity = false;
+    SharePreferenceManage objSharePreferenceManage;
     FrameLayout mainLayout;
 
     @Override
@@ -50,7 +52,15 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        //Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
+        Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (parentActivity) {
+            Globals.SetOptionMenu(Globals.userName, MenuActivity.this, menu);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

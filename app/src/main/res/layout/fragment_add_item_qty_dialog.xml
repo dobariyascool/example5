@@ -68,7 +68,7 @@
                 android:drawableEnd="@drawable/arrow_drop_down"
                 android:dropDownHeight="190dp"
                 android:imeOptions="actionDone"
-                android:singleLine="true"
+                android:lineSpacingMultiplier="1"
                 android:textSize="14sp" />
 
         </android.support.design.widget.TextInputLayout>

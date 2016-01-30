@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 
 import com.arraybit.adapter.OrderDetailAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.modal.OrderItemTran;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.parser.OrderItemJSONParser;
@@ -36,7 +37,7 @@ public class OrderDetailFragment extends Fragment {
     LinearLayout headerLayout;
     OrderMaster objOrderMaster;
     LinearLayout orderDetailFragment;
-    Button btnAddMore,btnCheckOut;
+    Button btnAddMore, btnCheckOut;
     ArrayList<OrderItemTran> lstOrderItemTran;
 
     public OrderDetailFragment(OrderMaster objOrderMaster) {
@@ -54,57 +55,46 @@ public class OrderDetailFragment extends Fragment {
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if(objOrderMaster!=null && objOrderMaster.getTableName()!=null){
-                app_bar.setTitle(objOrderMaster.getTableName()+" Summary");
-            }
-            else {
+            if (objOrderMaster != null && objOrderMaster.getTableName() != null) {
+                app_bar.setTitle(objOrderMaster.getTableName() + " Summary");
+            } else {
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_order_detail));
             }
         }
         //end
 
-        rvOrderItem = (RecyclerView)view.findViewById(R.id.rvOrderItem);
+        rvOrderItem = (RecyclerView) view.findViewById(R.id.rvOrderItem);
         rvOrderItem.setVisibility(View.GONE);
 
-        btnAddMore = (Button)view.findViewById(R.id.btnAddMore);
-        btnCheckOut = (Button)view.findViewById(R.id.btnCheckOut);
+        btnAddMore = (Button) view.findViewById(R.id.btnAddMore);
+        btnCheckOut = (Button) view.findViewById(R.id.btnCheckOut);
 
-        headerLayout = (LinearLayout)view.findViewById(R.id.headerLayout);
-        orderDetailFragment = (LinearLayout)view.findViewById(R.id.orderDetailFragment);
-        Globals.SetScaleImageBackground(getActivity(),orderDetailFragment,null,null);
+        headerLayout = (LinearLayout) view.findViewById(R.id.headerLayout);
+        orderDetailFragment = (LinearLayout) view.findViewById(R.id.orderDetailFragment);
+        Globals.SetScaleImageBackground(getActivity(), orderDetailFragment, null, null);
 
         lstOrderItemTran = new ArrayList<>();
         SetVisibility();
 
         setHasOptionsMenu(true);
 
-        new OrderDetailLoadingTask().execute();
+        if (Service.CheckNet(getActivity())) {
+            new OrderDetailLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
+
 
         return view;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home){
-            if(getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
-                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail)))
-            {
+        if (item.getItemId() == android.R.id.home) {
+            if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
-//            if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2) {
-//                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null &&
-//                            getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
-//
-//                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                    }
-//                    else if(getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
-//                            &&getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))){
-//                        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName() !=null && getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_detail))) {
-//
-//                            getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                        }
-//                    }
-//            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -125,7 +115,7 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), orderDetailFragment, null,null);
+        Globals.SetScaleImageBackground(getActivity(), orderDetailFragment, null, null);
     }
 
     @Override
@@ -134,7 +124,8 @@ public class OrderDetailFragment extends Fragment {
         menu.findItem(R.id.action_search).setVisible(false);
     }
 
-    public class OrderDetailLoadingTask extends AsyncTask {
+    //region LoadingTask
+    class OrderDetailLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
 
@@ -164,11 +155,12 @@ public class OrderDetailFragment extends Fragment {
             lstOrderItemTran = (ArrayList<OrderItemTran>) result;
 
             if (lstOrderItemTran != null) {
-                OrderDetailAdapter orderDetailAdapter=new OrderDetailAdapter(getActivity(),lstOrderItemTran);
+                OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(getActivity(), lstOrderItemTran);
                 SetVisibility();
                 rvOrderItem.setAdapter(orderDetailAdapter);
                 rvOrderItem.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
         }
     }
+    //endregion
 }

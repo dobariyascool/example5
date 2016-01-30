@@ -8,20 +8,100 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        tools:ignore="HardcodedText">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <com.rey.material.widget.TextView
-                android:id="@+id/txtDescription"
+                android:id="@+id/txtAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:maxLines="1"
+                android:maxLines="5"
                 android:padding="@dimen/control_SpecingSmall" />
+
+            <LinearLayout
+                android:id="@+id/phoneLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall">
+
+                <com.rey.material.widget.TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.3"
+                    android:maxLines="1"
+                    android:text="Phone"
+                    android:textColor="@color/blue_grey" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtPhone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:maxLines="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/emailLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall"
+                android:paddingTop="@dimen/control_SpecingSmall">
+
+                <com.rey.material.widget.TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.3"
+                    android:maxLines="1"
+                    android:text="Email"
+                    android:textColor="@color/blue_grey"  />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:maxLines="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/siteLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/control_SpecingSmall">
+
+                <com.rey.material.widget.TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.3"
+                    android:maxLines="1"
+                    android:text="Website"
+                    android:textColor="@color/blue_grey"  />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtWebSite"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:maxLines="1" />
+            </LinearLayout>
+
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvWorkingHours"

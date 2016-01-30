@@ -3,7 +3,7 @@
     <!--<group android:checkableBehavior="single">-->
     <item
         android:id="@+id/wHotelProfile"
-        android:icon="@mipmap/hotel"
+        android:icon="@mipmap/profile"
         android:title="@string/navProfile" />
 
     <item
@@ -13,14 +13,14 @@
 
     <item
         android:id="@+id/wChangeCounter"
-        android:icon="@mipmap/m_menu"
-        android:title="@string/navChangeCounter" />
+        android:icon="@mipmap/counter"
+        android:title="@string/navChangeCounter"
+        android:titleCondensed="@string/navChangeCounter"/>
 
     <item
         android:id="@+id/wChangeMode"
         android:icon="@mipmap/change_mode"
-        android:title="@string/navChangeMode"
-        android:visible="false"/>
+        android:title="@string/navChangeMode" />
 
     <item
         android:id="@+id/wFeedback"

@@ -198,8 +198,11 @@ public class OrderJOSNParser {
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertOrderMaster, stringer);
             if(jsonResponse!=null) {
                 JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertOrderMaster + "Result");
-                if (jsonObject.getLong("ErrorNumber") != 0) {
+                if(jsonObject.getInt("ErrorCode")==0){
                     return String.valueOf(jsonObject.getLong("ErrorNumber"));
+                }
+                else{
+                    return String.valueOf(jsonObject.getInt("ErrorCode"));
                 }
             }
             return "-1";
@@ -253,15 +256,13 @@ public class OrderJOSNParser {
     }
 
     public String SelectOrderNumber() {
+        String number = null;
         try {
             JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectOrderNumber);
             if (jsonResponse != null) {
-                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectOrderNumber + "Result");
-                if (jsonObject != null) {
-                    return jsonObject.getString("OrderNumber");
-                }
+                number = jsonResponse.getString(this.SelectOrderNumber + "Result");
             }
-            return null;
+            return number;
         }
         catch (Exception ex) {
             return null;

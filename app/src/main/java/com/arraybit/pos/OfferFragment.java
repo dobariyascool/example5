@@ -3,26 +3,41 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
+import com.arraybit.adapter.OfferAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
+import com.arraybit.modal.OfferMaster;
+import com.arraybit.parser.OfferJSONParser;
+import com.rey.material.widget.TextView;
 
-@SuppressWarnings("ConstantConditions")
+import java.util.ArrayList;
+
+@SuppressWarnings({"ConstantConditions", "unchecked"})
 @SuppressLint("ValidFragment")
 public class OfferFragment extends Fragment {
 
     Activity activityName;
-    LinearLayout offerFragment;
+    FrameLayout offerFragment;
+    OfferAdapter offerAdapter;
+    ArrayList<OfferMaster> alOfferMaster;
+    RecyclerView rvOffer;
+    TextView txtMsg;
 
     public OfferFragment(Activity activityName) {
         this.activityName = activityName;
@@ -43,10 +58,20 @@ public class OfferFragment extends Fragment {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.title_fragment_offer));
         }
 
-        offerFragment = (LinearLayout) view.findViewById(R.id.offerFragment);
-        Globals.SetScaleImageBackground(getActivity(), offerFragment, null, null);
+        offerFragment = (FrameLayout) view.findViewById(R.id.offerFragment);
+        Globals.SetScaleImageBackground(getActivity(),null, null,  offerFragment);
+
+        rvOffer = (RecyclerView)view.findViewById(R.id.rvOffer);
+        txtMsg = (TextView)view.findViewById(R.id.txtMsg);
 
         setHasOptionsMenu(true);
+
+        if (Service.CheckNet(getActivity())) {
+            new OfferLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
+
         return view;
     }
 
@@ -61,12 +86,17 @@ public class OfferFragment extends Fragment {
             menu.findItem(R.id.viewChange).setVisible(false);
         }
 
+        if(getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
+                &&getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()
+                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))){
+            Globals.SetOptionMenu(Globals.userName,getActivity(),menu);
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), offerFragment, null, null);
+        Globals.SetScaleImageBackground(getActivity(), null, null, offerFragment);
     }
 
     @Override
@@ -82,4 +112,52 @@ public class OfferFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void SetupRecyclerView() {
+
+        offerAdapter = new OfferAdapter(getActivity(),alOfferMaster,getActivity().getSupportFragmentManager());
+        rvOffer.setAdapter(offerAdapter);
+        rvOffer.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    //region LoadingTask
+    class OfferLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getActivity().getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            OfferJSONParser objOfferJSONParser = new OfferJSONParser();
+            return objOfferJSONParser.SelectAllOfferMaster();
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            progressDialog.dismiss();
+            ArrayList<OfferMaster> lstOfferMaster = (ArrayList<OfferMaster>) result;
+            if (lstOfferMaster == null) {
+                Globals.SetError(txtMsg, rvOffer, getActivity().getResources().getString(R.string.MsgSelectFail), true);
+            } else if (lstOfferMaster.size() == 0) {
+                Globals.SetError(txtMsg, rvOffer, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+            } else {
+                Globals.SetError(txtMsg, rvOffer, null, false);
+                alOfferMaster = lstOfferMaster;
+                SetupRecyclerView();
+            }
+        }
+    }
+    //endregion
 }

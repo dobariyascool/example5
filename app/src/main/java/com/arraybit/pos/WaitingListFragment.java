@@ -13,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -57,8 +56,7 @@ public class WaitingListFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new WaitingStatusLoadingTask().execute();
         } else {
-            Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
-            //Globals.SetErrorLayout(error_layout, true, getResources().getString(R.string.MsgCheckConnection));
+            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
         }
 
         return view;
@@ -78,8 +76,8 @@ public class WaitingListFragment extends Fragment {
     }
 
 
-    //region Method
-    public void SetTabLayout(ArrayList<WaitingStatusMaster> alWaitingStatusMaster, final WaitingListPagerAdapter waitingListPagerAdapter) {
+    //region Private Methods
+    private void SetTabLayout(ArrayList<WaitingStatusMaster> alWaitingStatusMaster, final WaitingListPagerAdapter waitingListPagerAdapter) {
 
         for (int i = 0; i < alWaitingStatusMaster.size(); i++) {
             if (alWaitingStatusMaster.get(i).getWaitingStatus().equals(Globals.WaitingStatus.Assign.toString())) {
@@ -121,6 +119,7 @@ public class WaitingListFragment extends Fragment {
 
     //endregion
 
+    //region Pager Adapter
     static class WaitingListPagerAdapter extends FragmentStatePagerAdapter {
 
         private final List<Fragment> WaitingFragmentList = new ArrayList<>();
@@ -154,6 +153,7 @@ public class WaitingListFragment extends Fragment {
             return WaitingTitleList.get(position);
         }
     }
+    //endregion
 
     //region LoadingTask
     class WaitingStatusLoadingTask extends AsyncTask {
@@ -184,14 +184,8 @@ public class WaitingListFragment extends Fragment {
         protected void onPostExecute(Object result) {
 
             progressDialog.dismiss();
-            if (alWaitingStatusMaster == null) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
-            } else if (alWaitingStatusMaster.size() == 0) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
-            } else {
-
+            if (alWaitingStatusMaster != null && alWaitingStatusMaster.size()!=0) {
                 waitingListPagerAdapter = new WaitingListPagerAdapter(getChildFragmentManager());
-
                 SetTabLayout(alWaitingStatusMaster, waitingListPagerAdapter);
 
             }

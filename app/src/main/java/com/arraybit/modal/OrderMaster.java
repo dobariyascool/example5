@@ -38,6 +38,7 @@ public class OrderMaster implements Parcelable {
     String OrderType;
     String TableName;
     int TotalItem;
+
     public static final Parcelable.Creator<OrderMaster> CREATOR = new Creator<OrderMaster>() {
         public OrderMaster createFromParcel(Parcel source) {
             OrderMaster objOrderMaster = new OrderMaster();

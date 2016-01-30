@@ -7,9 +7,10 @@
     <LinearLayout
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
+        android:background="#263238"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <com.rey.material.widget.TextView
             style="@style/PrimaryTextView"
@@ -17,7 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:gravity="start"
-            android:text="@string/rDayOfWeek" />
+            android:padding="@dimen/control_SpecingTiny"
+            android:text="@string/rDayOfWeek"
+            android:textColor="@color/white_blur" />
 
         <com.rey.material.widget.TextView
             style="@style/PrimaryTextView"
@@ -25,7 +28,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:gravity="end"
-            android:text="@string/rOpeningTime" />
+            android:padding="@dimen/control_SpecingTiny"
+            android:text="@string/rOpeningTime"
+            android:textColor="@color/white_blur" />
 
         <com.rey.material.widget.TextView
             style="@style/PrimaryTextView"
@@ -33,7 +38,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:gravity="end"
-            android:text="@string/rClosingTime" />
+            android:padding="@dimen/control_SpecingTiny"
+            android:text="@string/rClosingTime"
+            android:textColor="@color/white_blur" />
 
     </LinearLayout>
 
@@ -41,7 +48,10 @@
         android:id="@+id/layoutChild"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:layout_marginBottom="1dp"
+        android:background="#CFD8DC"
+        android:gravity="center"
+        android:padding="@dimen/control_SpecingTiny">
 
         <com.rey.material.widget.TextView
             android:id="@+id/txtDayOfWeek"

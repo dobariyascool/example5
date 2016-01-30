@@ -2,6 +2,7 @@ package com.arraybit.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -24,14 +25,16 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     View view;
     boolean isClickEnable;
     LayoutClickListener objLayoutClickListener;
+    FragmentManager fragmentManager;
 
     // Constructor
-    public TablesAdapter(Context context, ArrayList<TableMaster> result,boolean isClickEnable,LayoutClickListener objLayoutClickListener) {
+    public TablesAdapter(Context context, ArrayList<TableMaster> result, boolean isClickEnable, LayoutClickListener objLayoutClickListener, FragmentManager fragmentManager) {
         this.context = context;
         alTableMaster = result;
         this.isClickEnable = isClickEnable;
         this.layoutInflater = LayoutInflater.from(context);
         this.objLayoutClickListener = objLayoutClickListener;
+        this.fragmentManager = fragmentManager;
     }
 
     @Override
@@ -45,12 +48,12 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         TableMaster objTableMaster = alTableMaster.get(position);
 
         holder.cvTable.setId(position);
-        if (objTableMaster.getTableColor()==null) {
+        if (objTableMaster.getTableColor() == null) {
             holder.cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
         } else {
             holder.cvTable.setCardBackgroundColor(Color.parseColor("#" + objTableMaster.getTableColor()));
         }
-        holder.txtTableName.setText(objTableMaster.getTableName());
+        holder.txtTableName.setText(objTableMaster.getShortName());
         holder.txtPersons.setText(String.valueOf(objTableMaster.getMaxPerson()));
         holder.txtTableStatus.setText(objTableMaster.getTableStatus());
         holder.txtTableStatus.setTextColor(Color.parseColor("#" + objTableMaster.getStatusColor()));
@@ -67,7 +70,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     }
     //endregion
 
-    public void UpdateData(int position,TableMaster objTableMaster){
+    public void UpdateData(int position, TableMaster objTableMaster) {
         alTableMaster.get(position).setTableStatus(objTableMaster.getTableStatus());
         alTableMaster.get(position).setStatusColor(objTableMaster.getStatusColor());
         notifyDataSetChanged();
@@ -97,14 +100,18 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             txtTableStatus = (TextView) itemView.findViewById(R.id.txtTableStatus);
             cvTable = (CardView) itemView.findViewById(R.id.cvTable);
 
-            if(isClickEnable) {
+            if (isClickEnable) {
 
                 cvTable.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        Globals.HideKeyBoard(context,v);
-                        objLayoutClickListener.ChangeTableStatusClick(alTableMaster.get(v.getId()),v.getId());
+                        if(fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() != null
+                                && fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equals(context.getResources().getString(R.string.title_fragment_all_tables))) {
+
+                            Globals.HideKeyBoard(context, v);
+                            objLayoutClickListener.ChangeTableStatusClick(alTableMaster.get(v.getId()), v.getId());
+                        }
                     }
                 });
             }

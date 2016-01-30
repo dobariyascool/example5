@@ -4,16 +4,17 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.arraybit.adapter.GalleryAdapter;
 import com.arraybit.global.EndlessRecyclerOnScrollListener;
+import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.BusinessGalleryTran;
 import com.arraybit.parser.BusinessGalleryJSONParser;
@@ -49,6 +50,18 @@ public class GalleryFragment extends Fragment {
         rvGallery = (RecyclerView) view.findViewById(R.id.rvGallery);
         rvGallery.setVisibility(View.GONE);
 
+        if (alBusinessGalleryTran == null) {
+            if (Service.CheckNet(getActivity())) {
+                new GalleryLoadingTask().execute();
+            } else {
+                Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            }
+        } else if (alBusinessGalleryTran.size() == 0) {
+            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
+        } else {
+            SetGalleryRecyclerView(alBusinessGalleryTran);
+        }
+
         rvGallery.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
@@ -57,7 +70,7 @@ public class GalleryFragment extends Fragment {
                     if (Service.CheckNet(getActivity())) {
                         new GalleryLoadingTask().execute();
                     } else {
-                        Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
+                        Globals.ShowSnackBar(rvGallery, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                     }
                 }
             }
@@ -66,28 +79,21 @@ public class GalleryFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (alBusinessGalleryTran == null) {
-            new GalleryLoadingTask().execute();
-
-        } else if (alBusinessGalleryTran.size() == 0) {
-            Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
-        } else {
-            SetGalleryRecyclerView(alBusinessGalleryTran);
-        }
     }
 
-    public void SetGalleryRecyclerView(ArrayList<BusinessGalleryTran> lstBusinessGalleryTran) {
+    private void SetGalleryRecyclerView(ArrayList<BusinessGalleryTran> lstBusinessGalleryTran) {
         rvGallery.setVisibility(View.VISIBLE);
         txtMsg.setVisibility(View.GONE);
-        adapter = new GalleryAdapter(getActivity(), lstBusinessGalleryTran);
+        adapter = new GalleryAdapter(getActivity(), lstBusinessGalleryTran,getActivity().getSupportFragmentManager());
         rvGallery.setAdapter(adapter);
         rvGallery.setLayoutManager(gridLayoutManager);
     }
 
-    @SuppressWarnings("unchecked")
-    public class GalleryLoadingTask extends AsyncTask {
+
+    //region LoadingTask
+    class GalleryLoadingTask extends AsyncTask {
         ProgressDialog progressDialog;
 
         @Override
@@ -121,6 +127,7 @@ public class GalleryFragment extends Fragment {
                 progressDialog.dismiss();
             }
             ArrayList<BusinessGalleryTran> lstBusinessGalleryTran = (ArrayList<BusinessGalleryTran>) result;
+            alBusinessGalleryTran = lstBusinessGalleryTran;
             if (lstBusinessGalleryTran == null) {
                 if (currentPage == 1) {
                     txtMsg.setText(getResources().getString(R.string.MsgSelectFail));
@@ -136,4 +143,5 @@ public class GalleryFragment extends Fragment {
             }
         }
     }
+    //endregion
 }

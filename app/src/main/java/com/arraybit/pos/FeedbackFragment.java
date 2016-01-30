@@ -7,6 +7,9 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -14,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -21,29 +26,35 @@ import android.widget.Toast;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
-import com.arraybit.modal.FeedbackMaster;
-import com.arraybit.parser.FeedbackJSONParser;
+import com.arraybit.modal.FeedbackAnswerMaster;
+import com.arraybit.modal.FeedbackQuestionMaster;
+import com.arraybit.parser.FeedbackAnswerJSONParser;
+import com.arraybit.parser.FeedbackQuestionJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 @SuppressLint("ValidFragment")
-public class FeedbackFragment extends Fragment {
+public class FeedbackFragment extends Fragment implements View.OnClickListener {
 
     EditText etName, etEmail, etMobileNo, etFeedback;
     RadioGroup rgMain;
     RadioButton rbBug, rbSuggestion, rbOther;
     Button btnSubmit;
-    ProgressDialog pDialog;
-    String status;
     Activity activityName;
     int userMasterId;
-    FeedbackJSONParser objFeedbackJSONParser;
-    FeedbackMaster objFeedbackMaster;
     SharePreferenceManage objSharePreferenceManage;
+    ArrayList<FeedbackQuestionMaster> alFeedbackQuestionMaster;
+    ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, alFeedbackAnswerFilter, alFeedbackAnswer;
+    ViewPager viewPager;
+    ImageView ivNext, ivPrevious;
+    LinearLayout feedbackFragment;
 
     public FeedbackFragment(Activity activityName) {
-       this.activityName = activityName;
+        this.activityName = activityName;
     }
 
     @Override
@@ -62,6 +73,11 @@ public class FeedbackFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        feedbackFragment = (LinearLayout) view.findViewById(R.id.feedbackFragment);
+
+        ivNext = (ImageView) view.findViewById(R.id.ivNext);
+        ivPrevious = (ImageView) view.findViewById(R.id.ivPrevious);
+
         etName = (EditText) view.findViewById(R.id.etName);
         etEmail = (EditText) view.findViewById(R.id.etEmail);
         etMobileNo = (EditText) view.findViewById(R.id.etMobileNo);
@@ -74,6 +90,18 @@ public class FeedbackFragment extends Fragment {
         btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
 
         SetUser();
+
+        if (Service.CheckNet(getActivity())) {
+            new FeedbackQuestionLodingTask().execute();
+
+        } else {
+            Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
+
+        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+
+        ivNext.setOnClickListener(this);
+        ivPrevious.setOnClickListener(this);
 
         return view;
     }
@@ -93,8 +121,6 @@ public class FeedbackFragment extends Fragment {
                     return;
                 }
                 if (Service.CheckNet(getActivity())) {
-
-                    new FeedbackLodingTask().execute();
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
                 }
@@ -103,14 +129,56 @@ public class FeedbackFragment extends Fragment {
         });
     }
 
-    void ClearControls() {
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
+            menu.findItem(R.id.mWaiting).setVisible(false);
+        } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+            menu.findItem(R.id.action_search).setVisible(false);
+            menu.findItem(R.id.viewChange).setVisible(false);
+        }
+
+        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
+                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
+            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            getActivity().getSupportFragmentManager().popBackStack();
+            Globals.HideKeyBoard(getActivity(), getView());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.ivNext) {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+        } else if (v.getId() == R.id.ivPrevious) {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
+    }
+
+    //region Private Methods and Interface
+    private void ClearControls() {
         etName.setText("");
         etMobileNo.setText("");
         etEmail.setText("");
         etFeedback.setText("");
     }
 
-    boolean ValidateControls() {
+    private boolean ValidateControls() {
         boolean IsValid = true;
 
         if (etEmail.getText().toString().equals("") && !etFeedback.getText().toString().equals("")) {
@@ -140,50 +208,19 @@ public class FeedbackFragment extends Fragment {
         return IsValid;
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-
-        if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))){
-            menu.findItem(R.id.mWaiting).setVisible(false);
-        }
-        else if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))){
-            menu.findItem(R.id.action_search).setVisible(false);
-            menu.findItem(R.id.viewChange).setVisible(false);
-        }
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            getActivity().getSupportFragmentManager().popBackStack();
-            Globals.HideKeyBoard(getActivity(), getView());
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void SetUser(){
+    private void SetUser() {
         objSharePreferenceManage = new SharePreferenceManage();
-        if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))){
-            if(objSharePreferenceManage.GetPreference("WaitingPreference","UserName",getActivity())!=null
-                    && objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity())!=null)
-            {
+        if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
+            if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", getActivity()) != null
+                    && objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity()) != null) {
                 etName.setText(objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", getActivity()));
                 etName.setEnabled(false);
-                userMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference","UserMasterId",getActivity()));
+                userMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity()));
 
             }
-        }
-        else if(activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))){
-            if(objSharePreferenceManage.GetPreference("WaiterPreference","UserName",getActivity())!=null
-                    && objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())!=null)
-            {
+        } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", getActivity()) != null
+                    && objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity()) != null) {
                 etName.setText(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", getActivity()));
                 etName.setEnabled(false);
                 userMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity()));
@@ -191,59 +228,166 @@ public class FeedbackFragment extends Fragment {
         }
     }
 
-    class FeedbackLodingTask extends AsyncTask {
+    private void SetSelectedAnswer(int linktoFeedbackQuestionMasterId) {
+        alFeedbackAnswerFilter = new ArrayList<>();
+        for (int i = 0; i < alFeedbackAnswerMaster.size(); i++) {
+            if (alFeedbackAnswerMaster.get(i).getlinktoFeedbackQuestionMasterId() == linktoFeedbackQuestionMasterId) {
+                alFeedbackAnswerFilter.add(alFeedbackAnswerMaster.get(i));
+            }
+        }
+    }
+
+    private void SetVisibility(int position) {
+        if (position == 0) {
+            ivNext.setVisibility(View.VISIBLE);
+            ivPrevious.setVisibility(View.GONE);
+        } else if (position == viewPager.getOffscreenPageLimit() - 1) {
+            ivNext.setVisibility(View.GONE);
+            ivPrevious.setVisibility(View.VISIBLE);
+        } else {
+            ivNext.setVisibility(View.VISIBLE);
+            ivPrevious.setVisibility(View.VISIBLE);
+        }
+    }
+    //endregion
+
+    //region PagerAdapter
+    static class TablePagerAdapter extends FragmentStatePagerAdapter {
+
+        private final List<Fragment> tableFragmentList = new ArrayList<>();
+
+        public TablePagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        public void AddFragment(Fragment fragment) {
+            tableFragmentList.add(fragment);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return tableFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return tableFragmentList.size();
+        }
+
+    }
+
+    class FeedbackQuestionLodingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            pDialog.setIndeterminate(true);
-            pDialog.setCancelable(false);
-            pDialog.show();
-
-            objFeedbackMaster = new FeedbackMaster();
-            objFeedbackMaster.setName(etName.getText().toString());
-            objFeedbackMaster.setEmail(etEmail.getText().toString());
-            objFeedbackMaster.setPhone(etMobileNo.getText().toString());
-            objFeedbackMaster.setFeedback(etFeedback.getText().toString());
-
-            if (rbBug.isChecked()) {
-                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.BugReport.getValue());
-            } else if (rbSuggestion.isChecked()) {
-                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.Suggestion.getValue());
-            } else if (rbOther.isChecked()) {
-                objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.OtherQuery.getValue());
-            }
-
-            objFeedbackMaster.setlinktoRegisteredUserMasterId(userMasterId);
-            objFeedbackMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
-            objFeedbackJSONParser = new FeedbackJSONParser();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
 
         @Override
         protected Object doInBackground(Object[] params) {
-            status = objFeedbackJSONParser.InsertFeedbackMaster(objFeedbackMaster);
-            return status;
+            FeedbackQuestionJSONParser objFeedbackQuestionJSONParser = new FeedbackQuestionJSONParser();
+            return objFeedbackQuestionJSONParser.SelectAllFeedbackQuestionMaster();
         }
 
         @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
 
-            if (status.equals("-1")) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
-            } else if (status.equals("0")) {
-
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
-                ClearControls();
-
-                getActivity().getSupportFragmentManager().popBackStack();
+            progressDialog.dismiss();
+            ArrayList<FeedbackQuestionMaster> lstQuestionMasters = (ArrayList<FeedbackQuestionMaster>) result;
+            if (lstQuestionMasters == null) {
+                Globals.ShowSnackBar(feedbackFragment, getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
+            } else if (lstQuestionMasters.size() == 0) {
+                Globals.ShowSnackBar(feedbackFragment, getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
+            } else {
+                alFeedbackQuestionMaster = lstQuestionMasters;
+                FeedbackQuestionMaster objFeedbackQuestionMaster = new FeedbackQuestionMaster();
+                objFeedbackQuestionMaster.setQuestionType((short) Globals.FeedbackQuestionType.Simple_Feedback.getValue());
+                alFeedbackQuestionMaster.add(lstQuestionMasters.size(), objFeedbackQuestionMaster);
+                new FeedbackAnswerLodingTask().execute();
             }
-            pDialog.dismiss();
+
         }
 
     }
+
+    class FeedbackAnswerLodingTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            alFeedbackAnswer = new ArrayList<>();
+            for (int j = 0; j < alFeedbackQuestionMaster.size(); j++) {
+                FeedbackAnswerMaster objFeedbackAnswerMaster = new FeedbackAnswerMaster();
+                objFeedbackAnswerMaster.setFeedbackAnswerMasterId(0);
+                objFeedbackAnswerMaster.setFeedbackQuestion(null);
+                objFeedbackAnswerMaster.setAnswer(null);
+                objFeedbackAnswerMaster.setlinktoFeedbackQuestionMasterId(0);
+                alFeedbackAnswer.add(objFeedbackAnswerMaster);
+            }
+
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            FeedbackAnswerJSONParser objFeedbackAnswerJSONParser = new FeedbackAnswerJSONParser();
+            return objFeedbackAnswerJSONParser.SelectAllFeedbackAnswerMaster();
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
+            ArrayList<FeedbackAnswerMaster> lstFeedbackAnswerMaster = (ArrayList<FeedbackAnswerMaster>) result;
+            if (lstFeedbackAnswerMaster != null && lstFeedbackAnswerMaster.size() != 0) {
+                alFeedbackQuestionMaster.size();
+                alFeedbackAnswerMaster = lstFeedbackAnswerMaster;
+
+                TablePagerAdapter adapter = new TablePagerAdapter(getActivity().getSupportFragmentManager());
+
+                for (int i = 0; i < alFeedbackQuestionMaster.size(); i++) {
+                    SetSelectedAnswer(alFeedbackQuestionMaster.get(i).getFeedbackQuestionMasterId());
+                    adapter.AddFragment(FeedbackViewFragment.createInstance(alFeedbackQuestionMaster.get(i), alFeedbackAnswerFilter, i, alFeedbackAnswer));
+                }
+
+                viewPager.setAdapter(adapter);
+                viewPager.setOffscreenPageLimit(alFeedbackQuestionMaster.size());
+                SetVisibility(0);
+                viewPager.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Globals.HideKeyBoard(getActivity(), getView());
+                    }
+                });
+                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        Globals.HideKeyBoard(getActivity(), getView());
+                        SetVisibility(position);
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+            }
+
+        }
+    }
+    //endregion
 }
 

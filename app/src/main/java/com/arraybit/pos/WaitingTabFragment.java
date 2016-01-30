@@ -64,19 +64,18 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         return view;
     }
 
-    private void SetupRecyclerView(RecyclerView rvWaiting) {
-        waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
-        rvWaiting.setAdapter(waitingListAdapter);
-        rvWaiting.setLayoutManager(linearLayoutManager);
-    }
-
     public void LoadWaitingListData() {
 
         Bundle bundle = getArguments();
         objWaitingStatusMaster = bundle.getParcelable(ITEMS_COUNT_KEY);
         alWaitingMaster = new ArrayList<>();
 
-        new WaitingMasterLoadingTask().execute();
+        if (Service.CheckNet(getActivity())) {
+            new WaitingMasterLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(rvWaiting, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
+
         rvWaiting.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
@@ -84,6 +83,8 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
                     currentPage = current_page;
                     if (Service.CheckNet(getActivity())) {
                         new WaitingMasterLoadingTask().execute();
+                    } else {
+                        Globals.ShowSnackBar(rvWaiting, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                     }
                 }
             }
@@ -104,6 +105,14 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
             waitingListAdapter.WaitingListDataRemove(this.position);
         }
     }
+
+    //region Private Methods
+    private void SetupRecyclerView(RecyclerView rvWaiting) {
+        waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
+        rvWaiting.setAdapter(waitingListAdapter);
+        rvWaiting.setLayoutManager(linearLayoutManager);
+    }
+    //endregion
 
     //region LoadingTask
     @SuppressWarnings("ResourceType")

@@ -1,8 +1,10 @@
 package com.arraybit.pos;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +14,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
+import android.transition.Slide;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +27,7 @@ import android.widget.TextView;
 
 import com.arraybit.adapter.TablesAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.SectionMaster;
 import com.arraybit.modal.TableMaster;
@@ -139,49 +144,15 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
 
     }
 
-    private ArrayList<TableMaster> Filter(ArrayList<TableMaster> lstTableMaster, String filterName) {
-        filterName = filterName.toLowerCase();
-        final ArrayList<TableMaster> filteredList = new ArrayList<>();
-        for (TableMaster objTableMaster : lstTableMaster) {
-            isFilter = false;
-            ArrayList<String> alString = new ArrayList<>(Arrays.asList(objTableMaster.getTableName().toLowerCase().split(" ")));
-            alString.add(0, objTableMaster.getTableName().toLowerCase());
-            for (String str : alString) {
-                if (str.length() >= filterName.length()) {
-                    final String strItem = str.substring(0, filterName.length()).toLowerCase();
-                    if (!isFilter) {
-                        if (strItem.contains(filterName)) {
-                            filteredList.add(objTableMaster);
-                            isFilter = true;
-                        }
-                    }
-                }
-            }
-        }
-        return filteredList;
-    }
-
-    private void SetupRecyclerView(RecyclerView rvTables) {
-        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
-            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null);
-        } else {
-            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this);
-        }
-        rvTables.setAdapter(tablesAdapter);
-        rvTables.setLayoutManager(gridLayoutManager);
-        rvTables.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Globals.HideKeyBoard(getActivity(), recyclerView);
-            }
-        });
-    }
-
     public void LoadTableData(String tableStatusMasterId) {
         alTableMaster = new ArrayList<>();
         this.tableStatusMasterId = tableStatusMasterId;
-        new TableMasterLoadingTask().execute();
+        if (Service.CheckNet(getActivity())) {
+            new TableMasterLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(rvTables, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
+
     }
 
     public void TableDataFilter(int sectionMasterId, String tableStatusMasterId) {
@@ -189,7 +160,11 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         this.sectionMasterId = sectionMasterId;
         alTableMaster = new ArrayList<>();
 
-        new TableMasterLoadingTask().execute();
+        if (Service.CheckNet(getActivity())) {
+            new TableMasterLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(rvTables, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
     }
 
     @Override
@@ -206,6 +181,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         return false;
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public void ChangeTableStatusClick(TableMaster objTableMaster, int position) {
         this.position = position;
@@ -214,6 +190,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                 Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                 intent.putExtra("TableMaster", objTableMaster);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else {
                 if (Globals.selectTableMasterId == 0) {
                     Globals.selectTableMasterId = objTableMaster.getTableMasterId();
@@ -222,16 +199,26 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("TableMaster", objTableMaster);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Occupied.toString())) {
 
             AllTablesFragment.isRefresh = true;
             Bundle bundle = new Bundle();
             bundle.putParcelable("TableMaster", objTableMaster);
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment(null);
             orderSummaryFragment.setArguments(bundle);
+            if (Build.VERSION.SDK_INT >= 21) {
+                Slide slideTransition = new Slide();
+                slideTransition.setSlideEdge(Gravity.RIGHT);
+                slideTransition.setDuration(500);
 
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                orderSummaryFragment.setEnterTransition(slideTransition);
+            } else {
+                fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+            }
+
             fragmentTransaction.replace(R.id.allTablesFragment, orderSummaryFragment, getActivity().getResources().getString(R.string.title_fragment_order_summary));
             fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
             fragmentTransaction.commit();
@@ -254,6 +241,48 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         }
     }
 
+    //region Private Methods and Interface
+    private ArrayList<TableMaster> Filter(ArrayList<TableMaster> lstTableMaster, String filterName) {
+        filterName = filterName.toLowerCase();
+        final ArrayList<TableMaster> filteredList = new ArrayList<>();
+        for (TableMaster objTableMaster : lstTableMaster) {
+            isFilter = false;
+            ArrayList<String> alString = new ArrayList<>(Arrays.asList(objTableMaster.getShortName().toLowerCase().split(" ")));
+            alString.add(0, objTableMaster.getShortName().toLowerCase());
+            for (String str : alString) {
+                if (str.length() >= filterName.length()) {
+                    final String strItem = str.substring(0, filterName.length()).toLowerCase();
+                    if (!isFilter) {
+                        if (strItem.contains(filterName)) {
+                            filteredList.add(objTableMaster);
+                            isFilter = true;
+                        }
+                    }
+                }
+            }
+        }
+        return filteredList;
+    }
+
+    private void SetupRecyclerView(RecyclerView rvTables) {
+        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
+            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager());
+        } else {
+            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager());
+        }
+        rvTables.setAdapter(tablesAdapter);
+        rvTables.setLayoutManager(gridLayoutManager);
+        rvTables.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Globals.HideKeyBoard(getActivity(), recyclerView);
+            }
+        });
+    }
+    //endregion
+
+    //region LoadingTask
     class TableMasterLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
@@ -295,5 +324,6 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
             }
         }
     }
+    //endregion
 }
 

@@ -1,0 +1,20 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <dimen name="toolbar_Height">64dp</dimen>
+
+    <!-- splash screen imageview size-->
+    <dimen name="sImageHeight">200dp</dimen>
+    <dimen name="sImageWidth">200dp</dimen>
+    <dimen name="sHeight">50dp</dimen>
+    <dimen name="sMedium">25dp</dimen>
+    <dimen name="sMargin">16dp</dimen>
+
+
+    <dimen name="itemListImageWidth">120dp</dimen>
+    <dimen name="itemListImageHeight">120dp</dimen>
+    <dimen name="itemGridImageHeight">150dp</dimen>
+
+    <dimen name="swipeImageHeight">150dp</dimen>
+
+</resources>

@@ -28,6 +28,8 @@
     <string name="title_fragment_order_summary">Order Summary</string>
     <string name="title_fragment_guest_options">Guest Option</string>
     <string name="title_fragment_waiter_options">Waiter Option</string>
+    <string name="title_fragment_offer_detail">Offer Detail</string>
+    <string name="title_fragment_policy">Privacy Policy</string>
     <!-- end -->
 
     <string name="hello_world">Hello world!</string>
@@ -58,7 +60,9 @@
     <string name="MsgFeedback">Thank you for your feedback, your response will help us to improve the quality of service.</string>
     <string name="MsgVerification">Your Phone Number is Verified.</string>
     <string name="MsgCart">Cart is empty.</string>
-
+    <string name="MsgCartItem">Items are added into dish</string>
+    <string name="MsgConfirmOrder">Items are place into order</string>
+    <string name="MsgAddPerson">Persons are added successfully</string>
     <!-- End -->
 
     <string name="splash_screen">arraybitlogo</string>
@@ -285,10 +289,36 @@
     <!-- end -->
 
     <!-- fragment change mode -->
-    <string name="cmfWaiterMode">Waiter Mode</string>
+    <string name="cmfWaiterMode">Waiting Mode</string>
     <string name="cmfGuestMode">Guest Mode</string>
     <string name="cmfCancel">Cancel</string>
     <string name="cmfSubmit">Submit</string>
     <string name="title_activity_all_orders">AllOrdersActivity</string>
+    <!-- end -->
+
+    <!-- fragment order summary -->
+    <string name="osfTotalAmount">Total Amount</string>
+    <string name="osfNetAmount">Net Amount</string>
+    <string name="osfTax">Tax</string>
+    <string name="osfDiscount">Discount</string>
+    <string name="osfAmountPaid">Amount Paid</string>
+    <string name="osfBalance">Balance Amt.</string>
+    <string name="osfNumber">0.00</string>
+    <!-- end -->
+
+    <!-- fragment discount dialog -->
+    <string name="ddfPercentage">%</string>
+    <string name="ddfRupee">Rs.</string>
+    <string name="ddfDiscount">Discount</string>
+    <string name="ddfError">Please enter discount</string>
+    <string name="ddfErrorDiscountType">Please select discount type</string>
+    <string name="ddfErrorDiscount">Invalid discount</string>
+    <!-- end -->
+
+    <!-- fragment offer detail -->
+    <string name="odfTerm">Terms and Condition</string>
+    <string name="odfBillAmount">Minimum Bill Amount</string>
+    <string name="odfFromDateTime">From</string>
+    <string name="odfToDateTime">To</string>
     <!-- end -->
 </resources>

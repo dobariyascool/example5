@@ -53,10 +53,10 @@ public class CounterJSONParser {
         }
     }
 
-    public ArrayList<CounterMaster> SelectAllCounterMaster(int linktoBusinessMasterId) {
+    public ArrayList<CounterMaster> SelectAllCounterMaster(int linktoBusinessMasterId,int linktoUserMasterId) {
         ArrayList<CounterMaster> lstCounterMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllCounterMaster + "/" + linktoBusinessMasterId);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllCounterMaster + "/" + linktoBusinessMasterId + "/" +linktoUserMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllCounterMaster + "Result");
                 if (jsonArray != null) {

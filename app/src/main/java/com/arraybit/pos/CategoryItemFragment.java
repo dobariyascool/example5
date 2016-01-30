@@ -1,9 +1,11 @@
 package com.arraybit.pos;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,15 +16,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.modal.CategoryMaster;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.parser.CategoryJSONParser;
@@ -44,7 +47,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     FloatingActionMenu famRoot;
     FloatingActionButton fabVeg, fabNonVeg, fabJain;
     StringBuilder sbItemTypeMasterId = new StringBuilder();
-    boolean isForceToChange = false,isPause;
+    boolean isForceToChange = false, isPause;
     short isVegCheck = 0, isNonVegCheck = 0, isJainCheck = 0;
     FrameLayout categoryItemFragment;
 
@@ -99,7 +102,11 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         fabJain.setOnClickListener(this);
         //end
 
-        new GuestHomeCategoryLodingTask().execute();
+        if (Service.CheckNet(getActivity())) {
+            new GuestHomeCategoryLodingTask().execute();
+        } else {
+            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
 
         setHasOptionsMenu(true);
 
@@ -130,14 +137,17 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             menu.findItem(R.id.viewChange).setIcon(R.drawable.view_list);
         }
 
+        if (MenuActivity.parentActivity) {
+            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
+        }
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            if(MenuActivity.parentActivity)
-            {
-                Globals.OptionMenuItemClick(item,getActivity(),getActivity().getSupportFragmentManager());
+            if (MenuActivity.parentActivity) {
+                Globals.OptionMenuItemClick(item, getActivity(), getActivity().getSupportFragmentManager());
             }
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
                 if (MenuActivity.parentActivity) {
@@ -247,7 +257,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        if(isPause) {
+        if (isPause) {
             if (MenuActivity.parentActivity) {
                 new GuestHomeCategoryLodingTask().execute();
                 isPause = false;
@@ -255,36 +265,42 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    @SuppressWarnings("StringConcatenationInsideStringBufferAppend")
-    void CheckSelected() {
-        sbItemTypeMasterId = new StringBuilder();
-        if (fabVeg.isSelected()) {
-            sbItemTypeMasterId.append(Globals.ItemType.Veg.getValue() + ",");
-        }
-        if (fabNonVeg.isSelected()) {
-            sbItemTypeMasterId.append(Globals.ItemType.NonVeg.getValue() + ",");
-        }
-        if (fabJain.isSelected()) {
-            sbItemTypeMasterId.append(Globals.ItemType.Jain.getValue() + ",");
-        }
-    }
-
     @Override
     public void CartIconOnClick() {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
-        fragmentTransaction.replace(android.R.id.content, new CartItemFragment(), getActivity().getResources().getString(R.string.title_fragment_cart_item));
-        fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item));
         fragmentTransaction.commit();
+        ReplaceFragment(new CartItemFragment(), getActivity().getResources().getString(R.string.title_fragment_cart_item));
     }
 
     @Override
     public void CardViewOnClick(ItemMaster objItemMaster) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
-        fragmentTransaction.replace(android.R.id.content, new DetailFragment(objItemMaster.getItemMasterId()), getResources().getString(R.string.title_fragment_detail));
-        fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_detail));
         fragmentTransaction.commit();
+        ReplaceFragment(new DetailFragment(objItemMaster.getItemMasterId()), getResources().getString(R.string.title_fragment_detail));
+    }
+
+    //region Private Methods and Interface
+    @SuppressLint("CommitTransaction")
+    private void ReplaceFragment(Fragment fragment, String fragmentName) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Fade fade = new Fade();
+            fade.setDuration(500);
+            fragment.setEnterTransition(fade);
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
+            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
+            fragmentTransaction.addToBackStack(fragmentName);
+            fragmentTransaction.commit();
+        } else {
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
+            fragmentTransaction.addToBackStack(fragmentName);
+            fragmentTransaction.commit();
+        }
     }
 
     private void RemoveFragment(FragmentTransaction fragmentTransaction, int selectedPosition) {
@@ -308,8 +324,22 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    @SuppressWarnings("StringConcatenationInsideStringBufferAppend")
+    private void CheckSelected() {
+        sbItemTypeMasterId = new StringBuilder();
+        if (fabVeg.isSelected()) {
+            sbItemTypeMasterId.append(Globals.ItemType.Veg.getValue() + ",");
+        }
+        if (fabNonVeg.isSelected()) {
+            sbItemTypeMasterId.append(Globals.ItemType.NonVeg.getValue() + ",");
+        }
+        if (fabJain.isSelected()) {
+            sbItemTypeMasterId.append(Globals.ItemType.Jain.getValue() + ",");
+        }
+    }
+    //endregion
 
-    //pager adapter
+    //region PagerAdapter
     static class ItemPagerAdapter extends FragmentStatePagerAdapter {
 
         private final List<Fragment> itemFragmentList = new ArrayList<>();
@@ -344,7 +374,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             return itemFragmentTitleList.get(position).getCategoryName();
         }
     }
-    //end
+    //endregion
 
     //region Loading Task
 
@@ -376,13 +406,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
             if (alCategoryMaster == null) {
                 progressDialog.dismiss();
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(categoryItemFragment, getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
             } else if (alCategoryMaster.size() == 0) {
                 progressDialog.dismiss();
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(categoryItemFragment, getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
             } else {
 
-                //ibViewChange.setVisibility(View.VISIBLE);
                 itemPagerAdapter = new ItemPagerAdapter(getFragmentManager());
 
                 CategoryMaster objCategoryMaster = new CategoryMaster();

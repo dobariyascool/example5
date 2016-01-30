@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("ALL")
-public class AllOrdersFragment extends Fragment implements View.OnClickListener,OrdersAdapter.OrdersClickListener {
+public class AllOrdersFragment extends Fragment implements View.OnClickListener, OrdersAdapter.OrdersClickListener {
 
     TabLayout orderTabLayout;
     ViewPager orderViewPager;
@@ -85,8 +85,6 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
         orderTabLayout = (TabLayout) view.findViewById(R.id.orderTabLayout);
         orderViewPager = (ViewPager) view.findViewById(R.id.orderViewPager);
 
-        //fragmentLayout=(LinearLayout)view.findViewById(R.id.fragmentLayout);
-
         SetTabLayout();
 
         return view;
@@ -133,6 +131,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
 
         orderViewPager.setAdapter(orderPagerAdapter);
         orderTabLayout.setupWithViewPager(orderViewPager);
+        OrdersTabFragment ordersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(0);
 
         orderViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -205,21 +204,19 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
     }
 
     private void RefreshCurrentFragment(FragmentTransaction fragmentTransaction, int selectedPosition) {
-        // OrdersTabFragment CurrentOrdersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(orderTabLayout.getSelectedTabPosition());
-        //fragmentTransaction.remove(CurrentOrdersTabFragment);
     }
 
     @Override
     public void OrderDetail(OrderMaster objOrderMaster) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         RemoveFragment(fragmentTransaction, orderTabLayout.getSelectedTabPosition());
-        fragmentTransaction.replace(android.R.id.content, new OrderDetailFragment(objOrderMaster), getActivity().getResources().getString(R.string.title_fragment_order_detail));
-        fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_detail));
         fragmentTransaction.commit();
+        Globals.ReplaceFragment(new OrderDetailFragment(objOrderMaster), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_order_detail));
     }
 
     //endregion
 
+    //region Pager Adapter
     static class OrderPagerAdapter extends FragmentStatePagerAdapter {
 
         private final List<Fragment> orderFragmentList = new ArrayList<>();
@@ -253,5 +250,6 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
             return orderFragmentTitleList.get(position);
         }
     }
+    //endregion
 
 }

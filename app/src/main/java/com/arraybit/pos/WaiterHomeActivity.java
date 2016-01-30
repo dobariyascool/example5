@@ -1,10 +1,12 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -18,20 +20,24 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.modal.CounterMaster;
+import com.arraybit.parser.CounterJSONParser;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unchecked")
 @SuppressLint("InflateParams")
 public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     ActionBarDrawerToggle actionBarDrawerToggle;
     LinearLayout waiterHomeMainLayout;
-    boolean isDualPanel;
     SharePreferenceManage objSharePreferenceManage;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -40,6 +46,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiter_home);
+        //SetupWindowAnimations();
 
         //app_bar
         Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
@@ -51,14 +58,13 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         }
         //end
 
-        //linearlayout
+
         waiterHomeMainLayout = (LinearLayout) findViewById(R.id.waiterHomeMainLayout);
-        //LinearLayout waiterFragmentLayout = (LinearLayout) findViewById(R.id.waiterFragmentLayout);
-        //Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null, null);
-        //end
 
         //navigationView
         View headerView = LayoutInflater.from(WaiterHomeActivity.this).inflate(R.layout.navigation_header, null);
+        ImageView ivLogo = (ImageView)headerView.findViewById(R.id.ivLogo);
+        ivLogo.setVisibility(View.GONE);
         TextView txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
         TextView txtName = (TextView) headerView.findViewById(R.id.txtName);
 
@@ -73,21 +79,21 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         Globals.SetNavigationDrawer(actionBarDrawerToggle, WaiterHomeActivity.this, drawerLayout, app_bar);
         //end
 
-        // if (waiterHomeMainLayout.findViewById(R.id.fragment_waiter_option_list) == null) {
 
-        // isDualPanel = false;
         AddFragmentInLayout(new WaiterOptionListFragment());
-        // } else {
-        //  isDualPanel = true;
-        //}
+
+        if (Service.CheckNet(WaiterHomeActivity.this)) {
+            new CounterLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(waiterHomeMainLayout, getResources().getString(R.string.MsgCheckConnection), WaiterHomeActivity.this, 1000);
+        }
+
+
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        //Globals.SetScaleImageBackground(WaiterHomeActivity.this, waiterHomeMainLayout, null, null);
-        //}
     }
 
     @Override
@@ -129,7 +135,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaiterHomeActivity.this) != null) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.InitializeFragment(new CounterFragment(), getSupportFragmentManager());
+                Globals.ReplaceFragment(new CounterFragment((short) Globals.UserType.Waiter.getValue()), getSupportFragmentManager(), null);
             }
         } else if (menuItem.getItemId() == R.id.wChangeMode) {
             drawerLayout.closeDrawer(navigationView);
@@ -137,13 +143,13 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             changeModeDialogFragment.show(getSupportFragmentManager(), "");
         } else if (menuItem.getItemId() == R.id.wHotelProfile) {
             drawerLayout.closeDrawer(navigationView);
-            Globals.InitializeFragment(new HotelProfileFragment(WaiterHomeActivity.this), getSupportFragmentManager());
+            Globals.ReplaceFragment(new HotelProfileFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
         } else if (menuItem.getItemId() == R.id.wOffers) {
             drawerLayout.closeDrawer(navigationView);
-            Globals.InitializeFragment(new OfferFragment(WaiterHomeActivity.this), getSupportFragmentManager());
+            Globals.ReplaceFragment(new OfferFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
         } else if (menuItem.getItemId() == R.id.wFeedback) {
             drawerLayout.closeDrawer(navigationView);
-            Globals.InitializeFragment(new FeedbackFragment(WaiterHomeActivity.this), getSupportFragmentManager());
+            Globals.ReplaceFragment(new FeedbackFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
         } else if (menuItem.getItemId() == R.id.wRate) {
             Uri uri = Uri.parse("market://details?id=" + getPackageName());
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -153,21 +159,16 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
 
             }
-        } else if (menuItem.getItemId() == R.id.wExit) {
+
+        }else if(menuItem.getItemId() == R.id.wAbout){
+            drawerLayout.closeDrawer(navigationView);
+            Globals.ReplaceFragment(new AboutUsFragment((short) 1), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_policy));
+        }
+        else if (menuItem.getItemId() == R.id.wExit) {
             System.exit(0);
         }
         return false;
     }
-
-
-    //add fragment
-    void AddFragmentInLayout(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.waiterFragmentLayout, fragment, getResources().getString(R.string.title_fragment_waiter_options));
-        fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_waiter_options));
-        fragmentTransaction.commit();
-    }
-    //end
 
     //prevent backPressed
     @Override
@@ -186,13 +187,18 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_cart_item))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_summary))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
-                        &&getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_tables))) {
+                    Globals.objDiscountMaster = null;
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_tables))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else{
+                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+                else {
                     CategoryItemFragment.i = 0;
                     CategoryItemFragment.isViewChange = false;
                     getSupportFragmentManager().popBackStack();
@@ -205,20 +211,58 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     }
     //end
 
+    //region Private Methods and Interface
+    private void AddFragmentInLayout(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.waiterFragmentLayout, fragment, getResources().getString(R.string.title_fragment_waiter_options));
+        fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_waiter_options));
+        fragmentTransaction.commit();
+    }
+
     private void SetWaiterName(TextView txtName, TextView txtLetter, NavigationView navigationView) {
         objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this) != null) {
             txtName.setText(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this));
-            txtLetter.setText(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this).substring(0, 1));
+            txtLetter.setText(objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this).substring(0, 1).toUpperCase());
         }
         if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this) != null) {
-            if (SplashScreenActivity.counter == 1) {
-                navigationView.getMenu().findItem(R.id.wChangeCounter).setVisible(false);
-            } else {
-                navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this));
-            }
-
+            navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this));
         }
-        navigationView.getMenu().findItem(R.id.wChangeMode).setVisible(true);
     }
+    //endregion
+
+    //region LoadingTask
+    class CounterLoadingTask extends AsyncTask {
+        ProgressDialog progressDialog;
+        short userMasterId;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            objSharePreferenceManage = new SharePreferenceManage();
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", WaiterHomeActivity.this) != null) {
+                userMasterId = Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", WaiterHomeActivity.this));
+            }
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            CounterJSONParser objCounterJSONParser = new CounterJSONParser();
+            return objCounterJSONParser.SelectAllCounterMaster(Globals.businessMasterId, userMasterId);
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            ArrayList<CounterMaster> lstCounterMaster = (ArrayList<CounterMaster>) result;
+            if (lstCounterMaster != null && lstCounterMaster.size() != 0) {
+                if (lstCounterMaster.size() > 1) {
+                    navigationView.getMenu().findItem(R.id.wChangeCounter).setEnabled(true);
+                } else {
+                    navigationView.getMenu().findItem(R.id.wChangeCounter).setEnabled(false);
+                }
+            }
+        }
+    }
+    //endregion
 }

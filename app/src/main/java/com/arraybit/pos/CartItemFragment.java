@@ -1,12 +1,12 @@
 package com.arraybit.pos;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,10 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.arraybit.adapter.CartItemAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.modal.TableMaster;
@@ -41,10 +41,11 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     Button btnAddMore, btnConfirmOrder;
     CartItemAdapter adapter;
     OrderMaster objOrderMaster;
-    String orderNumber,orderMasterId;
+    String orderNumber, orderMasterId;
     SharePreferenceManage objSharePreferenceManage;
     short counterMasterId, userMasterId, waiterMasterId;
     double totalAmount;
+    View view;
 
     public CartItemFragment() {
         // Required empty public constructor
@@ -90,8 +91,6 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         btnAddMore.setOnClickListener(this);
         btnConfirmOrder.setOnClickListener(this);
 
-        new OrderNumberLoadingTask().execute();
-
         return view;
     }
 
@@ -104,12 +103,6 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             } else {
                 getFragmentManager().popBackStack();
             }
-//            if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-//                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_cart_item))) {
-//                getActivity().getFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//            } else {
-//                getFragmentManager().popBackStack();
-//            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -120,6 +113,9 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         menu.findItem(R.id.viewChange).setVisible(false);
         menu.findItem(R.id.action_search).setVisible(false);
         menu.findItem(R.id.cart_layout).setVisible(false);
+        if (MenuActivity.parentActivity) {
+            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
+        }
     }
 
     @Override
@@ -128,6 +124,57 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
     }
 
+    @Override
+    public void ImageViewOnClick(int position) {
+        adapter.RemoveData(position);
+        if (Globals.alOrderItemTran.size() == 0) {
+            SetRecyclerView();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btnAddMore) {
+            if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_cart_item))) {
+                getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
+        } else if (v.getId() == R.id.btnConfirmOrder) {
+            if (MenuActivity.parentActivity) {
+                GetValueFromSharePreference();
+
+                if (Service.CheckNet(getActivity())) {
+                    view = v;
+                    new OrderNumberLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(v, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+
+            } else {
+                GetValueFromSharePreference();
+                if (Service.CheckNet(getActivity())) {
+                    view = v;
+                    new OrderNumberLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(v, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+            }
+        } else if (v.getId() == R.id.cbMenu) {
+            if (MenuActivity.parentActivity) {
+                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_cart_item))) {
+                    getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+            } else {
+                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_cart_item))) {
+                    getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+            }
+        }
+    }
+
+    //region Private Methods and Interface
     private void SetRecyclerView() {
         if (Globals.alOrderItemTran.size() == 0) {
             SetVisibility();
@@ -158,54 +205,6 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         }
     }
 
-    @Override
-    public void ImageViewOnClick(int position) {
-        adapter.RemoveData(position);
-        if (Globals.alOrderItemTran.size() == 0) {
-            SetRecyclerView();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btnAddMore) {
-            if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_cart_item))) {
-                getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }
-        } else if (v.getId() == R.id.btnConfirmOrder) {
-            System.out.println("count " + getActivity().getSupportFragmentManager().getBackStackEntryAt(1).getName());
-            if (MenuActivity.parentActivity) {
-                GetValueFromSharePreference();
-                new OrderLoadingTask().execute();
-
-                if (!AllTablesFragment.isRefresh) {
-                    new TableStatusLoadingTask().execute();
-                }
-            } else {
-                GetValueFromSharePreference();
-                new OrderLoadingTask().execute();
-
-                if (!AllTablesFragment.isRefresh) {
-                    new TableStatusLoadingTask().execute();
-                }
-            }
-        } else if (v.getId() == R.id.cbMenu) {
-            if(MenuActivity.parentActivity){
-                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_cart_item))) {
-                    getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-            }
-            else{
-                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_cart_item))) {
-                    getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-            }
-        }
-    }
-
     private void GetValueFromSharePreference() {
         objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()) != null) {
@@ -218,6 +217,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             waiterMasterId = Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId", getActivity()));
         }
     }
+    //endregion
 
     //region LoadingTask
     class OrderLoadingTask extends AsyncTask {
@@ -272,28 +272,38 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         protected void onPostExecute(Object result) {
             progressDialog.dismiss();
             if (orderMasterId.equals("-1")) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
+                // Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(view, getResources().getString(R.string.MsgServerNotResponding), getActivity(), 1000);
             } else if (!orderMasterId.equals("0")) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.MsgInsertSuccess), Toast.LENGTH_LONG).show();
+                if (!AllTablesFragment.isRefresh) {
+                    new TableStatusLoadingTask().execute();
+                }
+                //Toast.makeText(getActivity(), getResources().getString(R.string.MsgCartItem), Toast.LENGTH_LONG).show();
+                Globals.ShowSnackBar(view, getResources().getString(R.string.MsgCartItem), getActivity(), 1000);
                 //getActivity().getSupportFragmentManager().popBackStack();
-                if(MenuActivity.parentActivity)
-                {
-                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    OrderMaster objOrderMaster = new OrderMaster();
-                    objOrderMaster.setOrderMasterId(Long.valueOf(orderMasterId));
-                    fragmentTransaction.replace(android.R.id.content, new OrderSummaryFragment(objOrderMaster), getActivity().getResources().getString(R.string.title_fragment_order_summary));
-                    fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
-                    fragmentTransaction.commit();
+                if (MenuActivity.parentActivity) {
+
+                    Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+                    intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    //FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    //OrderMaster objOrderMaster = new OrderMaster();
+                    //objOrderMaster.setOrderMasterId(Long.valueOf(orderMasterId));
+                    //fragmentTransaction.replace(android.R.id.content, new OrderSummaryFragment(objOrderMaster), getActivity().getResources().getString(R.string.title_fragment_order_summary));
+                    //fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
+                    //fragmentTransaction.commit();
                     Globals.counter = 0;
                     Globals.alOrderItemTran.clear();
-                }
-                else {
-                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                } else {
+
                     OrderMaster objOrderMaster = new OrderMaster();
                     objOrderMaster.setOrderMasterId(Long.valueOf(orderMasterId));
-                    fragmentTransaction.replace(android.R.id.content, new OrderSummaryFragment(objOrderMaster), getActivity().getResources().getString(R.string.title_fragment_order_summary));
-                    fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
-                    fragmentTransaction.commit();
+                    Globals.ReplaceFragment(new OrderSummaryFragment(objOrderMaster), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_order_summary));
+//                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                    fragmentTransaction.replace(android.R.id.content, new OrderSummaryFragment(objOrderMaster), getActivity().getResources().getString(R.string.title_fragment_order_summary));
+//                    fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
+//                    fragmentTransaction.commit();
                     Globals.counter = 0;
                     Globals.alOrderItemTran.clear();
                     //Globals.selectTableMasterId = 0;
@@ -315,6 +325,14 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
             orderNumber = objOrderJOSNParser.SelectOrderNumber();
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            if (orderNumber != null) {
+                new OrderLoadingTask().execute();
+            }
         }
     }
 

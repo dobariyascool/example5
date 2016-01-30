@@ -13,26 +13,35 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.TableMaster;
+import com.rey.material.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONStringer;
 
 
 @SuppressWarnings("RedundantIfStatement")
-public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GuestLoginDialogFragment.LoginResponseListener {
 
     public static TableMaster objTableMaster;
+    public static String userName;
     ActionBarDrawerToggle actionBarDrawerToggle;
-    String userName;
-    LinearLayout guestHomeMainLayout;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    boolean isDualPanel;
     Toolbar app_bar;
+    View headerView;
+    ImageView imageView,ivLogo;
+    TextView txtLetter, txtName;
+    LinearLayout nameLayout;
     SharePreferenceManage objSharePreferenceManage;
 
     @Override
@@ -49,14 +58,19 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         }
         //end
 
-        //linearlayout
-        //guestHomeMainLayout = (LinearLayout) findViewById(R.id.guestHomeMainLayout);
-        //LinearLayout guestFragmentLayout = (LinearLayout) findViewById(R.id.guestFragmentLayout);
-        //Globals.SetScaleImageBackground(GuestHomeActivity.this,guestHomeMainLayout,null,null);
-        //end
+        Intent intent = getIntent();
+        objTableMaster = intent.getParcelableExtra("TableMaster");
 
         //navigationView
         navigationView = (NavigationView) findViewById(R.id.navigationView);
+        headerView = LayoutInflater.from(GuestHomeActivity.this).inflate(R.layout.navigation_header, null);
+        nameLayout = (LinearLayout)headerView.findViewById(R.id.nameLayout);
+        imageView = (ImageView) headerView.findViewById(R.id.imageView);
+        ivLogo = (ImageView) headerView.findViewById(R.id.ivLogo);
+        txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
+        txtName = (TextView) headerView.findViewById(R.id.txtName);
+        SetGuestName();
+        navigationView.addHeaderView(headerView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
 
@@ -65,38 +79,14 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         Globals.SetNavigationDrawer(actionBarDrawerToggle, GuestHomeActivity.this, drawerLayout, app_bar);
         //end
 
-        //get username
-        ///Intent intent = getIntent();
-        //if (intent.getStringExtra("username") != null) {
-            //userName = intent.getStringExtra("username");
-        //}
-        objSharePreferenceManage=new SharePreferenceManage();
-        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName",GuestHomeActivity.this) != null){
-            userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName",GuestHomeActivity.this);
-        }
-        else{
-            userName = null;
-        }
-
-        Intent intent = getIntent();
-        objTableMaster = intent.getParcelableExtra("TableMaster");
-
         AddFragmentInLayout(new GuestOptionListFragment());
-
-        //check layout run in mobile or tablet
-//        if (findViewById(R.id.categoryItemFragment) == null) {
-//            isDualPanel = false;
-//        } else {
-//            isDualPanel = true;
-//        }
+        SaveObjectInPreference();
     }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        //if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE) {
-        //Globals.SetScaleImageBackground(GuestHomeActivity.this, guestHomeMainLayout, null, null);
-        //}
     }
 
     @Override
@@ -108,19 +98,8 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        Globals.SetOptionMenu(userName, GuestHomeActivity.this, menu);
+        Globals.SetOptionMenu(Globals.userName, GuestHomeActivity.this, menu);
         menu.findItem(R.id.home).setVisible(false);
-//        if(getSupportFragmentManager().getBackStackEntryCount()!=0){
-//            if(getSupportFragmentManager().getBackStackEntryAt(0).getName()!=null) {
-//                if (getSupportFragmentManager().getBackStackEntryAt(0).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
-//                    app_bar.getMenu().findItem(R.id.action_search).setVisible(false);
-//                }
-//            }
-//        }
-//        else
-//        {
-//            //app_bar.getMenu().findItem(R.id.action_search).setVisible(true);
-//        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -129,11 +108,19 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        Globals.OptionMenuItemClick(item, GuestHomeActivity.this, getSupportFragmentManager());
-
+        if (item.getTitle() == getResources().getString(R.string.wmLogout)) {
+            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+            objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", GuestHomeActivity.this);
+            objSharePreferenceManage.RemovePreference("RegistrationPreference", "RegisteredUserMasterId", GuestHomeActivity.this);
+            objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", GuestHomeActivity.this);
+            objSharePreferenceManage.ClearPreference("RegistrationPreference", GuestHomeActivity.this);
+            Globals.userName = null;
+            navigationView = (NavigationView) findViewById(R.id.navigationView);
+            SetGuestName();
+        } else {
+            Globals.OptionMenuItemClick(item, GuestHomeActivity.this, getSupportFragmentManager());
+            SetGuestName();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -146,13 +133,21 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             changeModeDialogFragment.show(getSupportFragmentManager(), "");
         } else if (menuItem.getItemId() == R.id.profile) {
             drawerLayout.closeDrawer(navigationView);
-            Globals.InitializeFragment(new HotelProfileFragment(GuestHomeActivity.this), getSupportFragmentManager());
+            Globals.ReplaceFragment(new HotelProfileFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
         } else if (menuItem.getItemId() == R.id.offers) {
             drawerLayout.closeDrawer(navigationView);
-            Globals.InitializeFragment(new OfferFragment(GuestHomeActivity.this), getSupportFragmentManager());
+            Globals.ReplaceFragment(new OfferFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
         } else if (menuItem.getItemId() == R.id.feedback) {
             drawerLayout.closeDrawer(navigationView);
-            Globals.InitializeFragment(new FeedbackFragment(GuestHomeActivity.this), getSupportFragmentManager());
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
+            if (Globals.userName != null) {
+                Globals.ReplaceFragment(new FeedbackFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
+            } else {
+                GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+                guestLoginDialogFragment.setTargetFragment(currentFragment, 0);
+                guestLoginDialogFragment.show(getSupportFragmentManager(), "");
+            }
+
         } else if (menuItem.getItemId() == R.id.rate) {
             Uri uri = Uri.parse("market://details?id=" + getPackageName());
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -161,38 +156,91 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
             }
+        }else if(menuItem.getItemId() == R.id.aboutus){
+            drawerLayout.closeDrawer(navigationView);
+            Globals.ReplaceFragment(new AboutUsFragment((short) 1), getSupportFragmentManager(),getResources().getString(R.string.title_fragment_policy));
         }
-//        else if (menuItem.getItemId() == R.id.wExit) {
-//            System.exit(0);
-//        }
         return false;
     }
 
-
-    //add fragment
-    void AddFragmentInLayout(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.guestFragmentLayout, fragment,getResources().getString(R.string.title_fragment_guest_options));
-        fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_guest_options));
-        fragmentTransaction.commit();
+    @Override
+    public void LoginResponse() {
+        SetGuestName();
     }
-    //end
 
     //prevent backPressed
     @Override
     public void onBackPressed() {
         //fragment backPressed
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            if(getSupportFragmentManager().getBackStackEntryCount() > 1){
-                if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_signup)))
-                {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_signup))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_signup), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                else{
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && (!getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_summary)))) {
                     getSupportFragmentManager().popBackStack();
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
+                    getSupportFragmentManager().popBackStack();
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             }
         }
     }
     //end
+
+    //region Private Methods
+    private void SaveObjectInPreference() {
+        objSharePreferenceManage = new SharePreferenceManage();
+        try {
+            JSONStringer jsonStringer = new JSONStringer();
+            jsonStringer.object();
+            jsonStringer.key("TableMasterId").value(objTableMaster.getTableMasterId());
+            jsonStringer.key("TableName").value(objTableMaster.getTableName());
+            jsonStringer.key("ShortName").value(objTableMaster.getShortName());
+            jsonStringer.key("linktoTableStatusMasterId").value(objTableMaster.getlinktoTableStatusMasterId());
+            jsonStringer.key("linktoOrderTypeMasterId").value(objTableMaster.getlinktoOrderTypeMasterId());
+            jsonStringer.key("linktoSectionMasterId").value(objTableMaster.getlinktoSectionMasterId());
+            jsonStringer.key("linktoBusinessMasterId").value(objTableMaster.getlinktoBusinessMasterId());
+            jsonStringer.endObject();
+            objSharePreferenceManage.CreatePreference("GuestModePreference", "GuestMode", jsonStringer.toString(), GuestHomeActivity.this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void AddFragmentInLayout(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.guestFragmentLayout, fragment, getResources().getString(R.string.title_fragment_guest_options));
+        fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_guest_options));
+        fragmentTransaction.commit();
+    }
+
+    private void SetGuestName() {
+        objSharePreferenceManage = new SharePreferenceManage();
+        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", GuestHomeActivity.this) != null) {
+            Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", GuestHomeActivity.this);
+        } else {
+            Globals.userName = null;
+        }
+        if (Globals.userName != null) {
+            ivLogo.setVisibility(View.GONE);
+            nameLayout.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.VISIBLE);
+            txtName.setVisibility(View.VISIBLE);
+            txtLetter.setVisibility(View.VISIBLE);
+
+            txtName.setText(Globals.userName);
+            txtLetter.setText(Globals.userName.substring(0, 1).toUpperCase());
+        } else {
+            ivLogo.setVisibility(View.VISIBLE);
+            nameLayout.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
+            txtName.setVisibility(View.GONE);
+            txtLetter.setVisibility(View.GONE);
+        }
+
+    }
+    //endregion
 }
