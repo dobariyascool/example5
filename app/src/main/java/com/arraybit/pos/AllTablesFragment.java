@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,7 +21,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -43,7 +43,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     TablePagerAdapter tablePagerAdapter;
     FloatingActionMenu famRoot;
     Activity activityName;
-    RelativeLayout allTablesFragment;
+    CoordinatorLayout allTablesFragment;
     boolean isChangeMode, isVacant = false;
     String linktoOrderTypeMasterId;
 
@@ -74,8 +74,8 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_all_tables));
             }
 
-            allTablesFragment = (RelativeLayout) view.findViewById(R.id.allTablesFragment);
-            Globals.SetScaleImageBackground(getActivity(), null, allTablesFragment, null);
+            allTablesFragment = (CoordinatorLayout) view.findViewById(R.id.allTablesFragment);
+            Globals.SetScaleImageBackground(getActivity(),allTablesFragment);
 
             setHasOptionsMenu(true);
         }
@@ -145,7 +145,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), null, allTablesFragment, null);
+        Globals.SetScaleImageBackground(getActivity(),allTablesFragment);
     }
 
     @Override
@@ -156,13 +156,13 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
 
         if (v.getId() == R.id.fabVacant) {
             famRoot.close(true);
-            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(), String.valueOf(Globals.TableStatus.Vacant.getValue()));
+            tableTabFragment.TableDataFilter(String.valueOf(Globals.TableStatus.Vacant.getValue()));
         } else if (v.getId() == R.id.fabBusy) {
             famRoot.close(true);
-            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(), String.valueOf(Globals.TableStatus.Occupied.getValue()));
+            tableTabFragment.TableDataFilter(String.valueOf(Globals.TableStatus.Occupied.getValue()));
         } else if (v.getId() == R.id.fabAll) {
             famRoot.close(true);
-            tableTabFragment.TableDataFilter(objSectionMaster.getSectionMasterId(), null);
+            tableTabFragment.TableDataFilter(null);
         }
     }
 
@@ -243,12 +243,10 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
 
             progressDialog.dismiss();
             if (alSectionMaster == null) {
-                //Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.MsgSelectFail), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
                 Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
 
             } else if (alSectionMaster.size() == 0) {
-                //Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.MsgNoRecord), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
                 Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
 
@@ -290,6 +288,9 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
 
                     @Override
                     public void onPageSelected(int position) {
+                        if(famRoot.isMenuButtonHidden()){
+                            famRoot.showMenuButton(true);
+                        }
                         tableViewPager.setCurrentItem(position);
                         //load data when tab is change
                         TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(position);

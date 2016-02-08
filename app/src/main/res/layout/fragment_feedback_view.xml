@@ -2,18 +2,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/control_SpecingLarge"
     android:gravity="top"
     android:orientation="horizontal"
     tools:context="com.arraybit.pos.FeedbackViewFragment">
 
-    <LinearLayout
-        android:id="@+id/feedbackViewFragment"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/control_SpecingLarge"
-        android:layout_marginTop="@dimen/control_SpecingLarge"
-        android:gravity="center"
-        android:orientation="vertical" />
+        android:fillViewport="true"
+        android:scrollbars="none">
 
+        <LinearLayout
+            android:id="@+id/feedbackViewFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/control_SpecingTiny"
+            android:orientation="vertical" />
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

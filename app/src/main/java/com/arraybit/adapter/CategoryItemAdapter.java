@@ -92,11 +92,6 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         return alItemMaster.size();
     }
 
-    public void ItemListDataChanged(ArrayList<ItemMaster> result) {
-        alItemMaster.addAll(result);
-        notifyDataSetChanged();
-    }
-
     public void SetSearchFilter(ArrayList<ItemMaster> result) {
         alItemMaster = new ArrayList<>();
         alItemMaster.addAll(result);
@@ -139,34 +134,10 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 ivItem.setLayoutParams(layoutParams);
             }
 
-//            if(!isWaiterGrid) {
-//                if(isViewChange) {
-//                    itemView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-//                        @Override
-//                        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-//
-//                            final ImageView imageView = (ImageView) v.findViewById(R.id.ivItem);
-//                            imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//                                @Override
-//                                public void onGlobalLayout() {
-//
-//                                    objSharePreferenceManage = new SharePreferenceManage();
-//                                    objSharePreferenceManage.CreatePreference("ImagePreference", "Width", String.valueOf(imageView.getWidth()), context);
-//                                    objSharePreferenceManage.CreatePreference("ImagePreference", "Height", String.valueOf(imageView.getHeight()), context);
-//                                    notifyDataSetChanged();
-//                                }
-//                            });
-//                        }
-//                    });
-//                }
-//            }
             cvItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    //orderItemDetail=(OrderItemDetail)context;
-                    //orderItemDetail.ItemDetail();
-                    //DetailFragment detailFragment = new DetailFragment(v.getId());
                     Globals.HideKeyBoard(context, v);
                     if (isWaiterGrid) {
                         objItemClickListener.ButtonOnClick(alItemMaster.get(v.getId()));
@@ -182,11 +153,8 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 @Override
                 public void onClick(View v) {
 
-                    //objItemClickListener = (ItemClickListener)context;
                     Globals.HideKeyBoard(context, v);
                     objItemClickListener.ButtonOnClick(alItemMaster.get(v.getId()));
-                    //AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment();
-                    //addItemQtyDialogFragment.show(fragmentManager,"");
                 }
             });
         }

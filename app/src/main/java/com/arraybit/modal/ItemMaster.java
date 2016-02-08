@@ -42,6 +42,7 @@ public class ItemMaster implements Parcelable {
     String Unit;
     String ItemStatus;
     String ItemModifierIds;
+    String OptionValueTranIds;
     double ActualSellPrice;
     int Quantity;
     String Remark;
@@ -84,6 +85,7 @@ public class ItemMaster implements Parcelable {
             objItemMaster.linktoOrderMasterId = source.readLong();
             objItemMaster.ItemModifierIds= source.readString();
             objItemMaster.Quantity = source.readInt();
+            objItemMaster.OptionValueTranIds = source.readString();
             return objItemMaster;
         }
 
@@ -378,6 +380,14 @@ public class ItemMaster implements Parcelable {
         TotalAmount = totalAmount;
     }
 
+    public String getOptionValueTranIds() {
+        return OptionValueTranIds;
+    }
+
+    public void setOptionValueTranIds(String optionValueTranIds) {
+        OptionValueTranIds = optionValueTranIds;
+    }
+
     //endregion
     public int describeContents() {
         return 0;
@@ -419,6 +429,7 @@ public class ItemMaster implements Parcelable {
         parcel.writeDouble(ActualSellPrice);
         parcel.writeLong(linktoOrderMasterId);
         parcel.writeString(ItemModifierIds);
+        parcel.writeString(OptionValueTranIds);
     }
 }
 

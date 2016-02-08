@@ -1,11 +1,16 @@
 package com.arraybit.pos;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -13,8 +18,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -29,42 +32,45 @@ import com.arraybit.modal.FeedbackMaster;
 import com.arraybit.modal.FeedbackQuestionMaster;
 import com.arraybit.parser.FeedbackJSONParser;
 import com.rey.material.widget.Button;
+import com.rey.material.widget.CheckBox;
+import com.rey.material.widget.CompoundButton;
 import com.rey.material.widget.EditText;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "UnnecessaryReturnStatement"})
+@SuppressLint("SetTextI18n")
 public class FeedbackViewFragment extends Fragment {
 
     public final static String ITEMS_COUNT_KEY = "TableTabFragment$ItemsCount";
-    LinearLayout feedbackViewFragment;
-    FeedbackQuestionMaster objFeedbackQuestionMaster;
+    LinearLayout feedbackViewFragment, feedbackLayout;
+    ArrayList<FeedbackQuestionMaster> alFeedbackQuestionMaster;
     ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, alFeedbackAnswer, alFeedbackAnswerFilter;
     SharePreferenceManage objSharePreferenceManage;
     int userMasterId, currentView;
     StringBuilder sbAnswerId;
     String checkedString;
     FeedbackMaster objFeedbackMaster;
-    View view;
-
+    View focusView;
+    LinearLayoutManager linearLayoutManager;
 
     public FeedbackViewFragment() {
         // Required empty public constructor
     }
 
-    public static FeedbackViewFragment createInstance(FeedbackQuestionMaster objFeedbackQuestionMaster, ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, int position, ArrayList<FeedbackAnswerMaster> alFeedbackAnswer) {
+    public static FeedbackViewFragment createInstance(ArrayList<FeedbackQuestionMaster> alFeedbackQuestionMaster, ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, int position) {
         FeedbackViewFragment feedbackViewFragment = new FeedbackViewFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(ITEMS_COUNT_KEY, objFeedbackQuestionMaster);
+        bundle.putParcelableArrayList(ITEMS_COUNT_KEY, alFeedbackQuestionMaster);
         bundle.putParcelableArrayList("FeedbackAnswerMaster", alFeedbackAnswerMaster);
-        bundle.putParcelableArrayList("FeedbackAnswer", alFeedbackAnswer);
         bundle.putInt("Position", position);
         feedbackViewFragment.setArguments(bundle);
         return feedbackViewFragment;
     }
 
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,63 +78,116 @@ public class FeedbackViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feedback_view, container, false);
 
         feedbackViewFragment = (LinearLayout) view.findViewById(R.id.feedbackViewFragment);
+        feedbackLayout = (LinearLayout) view.findViewById(R.id.feedbackLayout);
 
         Bundle bundle = getArguments();
-        objFeedbackQuestionMaster = bundle.getParcelable(ITEMS_COUNT_KEY);
+        alFeedbackQuestionMaster = bundle.getParcelableArrayList(ITEMS_COUNT_KEY);
         alFeedbackAnswerMaster = bundle.getParcelableArrayList("FeedbackAnswerMaster");
         currentView = bundle.getInt("Position");
-        alFeedbackAnswer = bundle.getParcelableArrayList("FeedbackAnswer");
+
+        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         SetLayout();
+
+        if (currentView != FeedbackFragment.alFinalFeedbackAnswers.size()) {
+            FeedbackFragment.alFinalFeedbackAnswers.get(currentView).addAll(alFeedbackAnswer);
+        }
 
         return view;
     }
 
     //region Private Methods and Interface
-    private void SetLayout() {
-        if (Globals.FeedbackQuestionType.Input.getValue() == objFeedbackQuestionMaster.getQuestionType()) {
-            SetInputLayout();
-        } else if (Globals.FeedbackQuestionType.Single_Select.getValue() == objFeedbackQuestionMaster.getQuestionType()) {
-            SetSingleChoiceLayout(alFeedbackAnswerMaster);
-        } else if (Globals.FeedbackQuestionType.Multi_Select.getValue() == objFeedbackQuestionMaster.getQuestionType()) {
-            SetMultiChoiceLayout(alFeedbackAnswerMaster);
-        } else if (Globals.FeedbackQuestionType.Rating.getValue() == objFeedbackQuestionMaster.getQuestionType()) {
-            SetRatingLayout();
-        } else if (Globals.FeedbackQuestionType.Simple_Feedback.getValue() == objFeedbackQuestionMaster.getQuestionType()) {
-            SetSimpleFeedbackLayout();
+    private void SetSelectedAnswer(int linktoFeedbackQuestionMasterId) {
+        alFeedbackAnswerFilter = new ArrayList<>();
+        for (int i = 0; i < alFeedbackAnswerMaster.size(); i++) {
+            if (alFeedbackAnswerMaster.get(i).getlinktoFeedbackQuestionMasterId() == linktoFeedbackQuestionMasterId) {
+                alFeedbackAnswerFilter.add(alFeedbackAnswerMaster.get(i));
+            }
         }
     }
 
-    private void SetSingleChoiceLayout(final ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster) {
+    private void SetLayout() {
+        CreateAnswerList();
+        for (int i = 0; i < alFeedbackQuestionMaster.size(); i++) {
+            if (Globals.FeedbackQuestionType.Input.getValue() == alFeedbackQuestionMaster.get(i).getQuestionType()) {
+                SetInputLayout(alFeedbackQuestionMaster.get(i), i);
+            } else if (Globals.FeedbackQuestionType.Single_Select.getValue() == alFeedbackQuestionMaster.get(i).getQuestionType()) {
+                SetSelectedAnswer(alFeedbackQuestionMaster.get(i).getFeedbackQuestionMasterId());
+                SetSingleChoiceLayout(alFeedbackAnswerMaster, alFeedbackQuestionMaster.get(i), i);
+            } else if (Globals.FeedbackQuestionType.Multi_Select.getValue() == alFeedbackQuestionMaster.get(i).getQuestionType()) {
+                SetSelectedAnswer(alFeedbackQuestionMaster.get(i).getFeedbackQuestionMasterId());
+                SetMultiChoiceLayout(alFeedbackAnswerMaster, alFeedbackQuestionMaster.get(i), i);
+            } else if (Globals.FeedbackQuestionType.Rating.getValue() == alFeedbackQuestionMaster.get(i).getQuestionType()) {
+                SetRatingLayout(alFeedbackQuestionMaster.get(i), i);
+            } else if (Globals.FeedbackQuestionType.Simple_Feedback.getValue() == alFeedbackQuestionMaster.get(i).getQuestionType()) {
+                SetSimpleFeedbackLayout();
+            }
+        }
+    }
+
+    private void SetSingleChoiceLayout(final ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, final FeedbackQuestionMaster objFeedbackQuestionMaster, final int position) {
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayoutParams.setMargins(16, 16, 16, 16);
+        linearLayoutParams.setMargins(16, 8, 16, 8);
         linearLayout.setLayoutParams(linearLayoutParams);
+        linearLayout.setPadding(16, 4, 16, 4);
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
+
+        LinearLayout headerLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        headerLayoutParams.setMargins(0, 0, 0, 0);
+        headerLayout.setLayoutParams(linearLayoutParams);
+        headerLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView txtNumber = new TextView(getActivity());
+        LinearLayout.LayoutParams txtNumberLayoutParams = new LinearLayout.LayoutParams(60, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txtNumberLayoutParams.gravity = Gravity.TOP;
+        txtNumber.setLayoutParams(txtNumberLayoutParams);
+        txtNumber.setText(position + 1 + ".");
+        txtNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
+        txtNumber.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        txtNumber.setTextSize(18f);
 
         TextView txtQuestion = new TextView(getActivity());
-        LinearLayout.LayoutParams txtQuestionLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams txtQuestionLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txtQuestionLayoutParams.weight = 1f;
+        txtQuestionLayoutParams.gravity = Gravity.TOP;
         txtQuestion.setLayoutParams(txtQuestionLayoutParams);
         txtQuestion.setText(objFeedbackQuestionMaster.getFeedbackQuestion());
         txtQuestion.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
+        txtQuestion.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         txtQuestion.setTextSize(18f);
 
+        LinearLayout childLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams childLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        childLayoutParams.setMargins(0, 0, 0, 0);
+        headerLayout.setLayoutParams(childLayoutParams);
+        headerLayout.setGravity(Gravity.CENTER);
+        headerLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView txt = new TextView(getActivity());
+        LinearLayout.LayoutParams txtLayoutParams = new LinearLayout.LayoutParams(80, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txt.setLayoutParams(txtLayoutParams);
+        txt.setVisibility(View.INVISIBLE);
+
         RadioGroup radioGroup = new RadioGroup(getActivity());
-        LinearLayout.LayoutParams radioGroupLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams radioGroupLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        radioGroupLayoutParams.weight = 1f;
         radioGroup.setLayoutParams(radioGroupLayoutParams);
         radioGroup.setOrientation(LinearLayout.VERTICAL);
 
         final RadioButton[] rbAnswer = new RadioButton[alFeedbackAnswerMaster.size()];
 
-        for (int j = 0; j < alFeedbackAnswerMaster.size(); j++) {
+        for (int j = 0; j < alFeedbackAnswerFilter.size(); j++) {
             rbAnswer[j] = new RadioButton(getActivity());
             LinearLayout.LayoutParams rbAnswerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             rbAnswer[j].setId(j);
-            rbAnswer[j].setTag(alFeedbackAnswerMaster.get(j).getFeedbackAnswerMasterId());
+            rbAnswer[j].setTag(alFeedbackAnswerFilter.get(j).getFeedbackAnswerMasterId());
             rbAnswer[j].setLayoutParams(rbAnswerLayoutParams);
-            rbAnswer[j].setText(alFeedbackAnswerMaster.get(j).getAnswer());
+            rbAnswer[j].setText(alFeedbackAnswerFilter.get(j).getAnswer());
             rbAnswer[j].setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
-            rbAnswer[j].setGravity(Gravity.CENTER);
+            rbAnswer[j].setGravity(Gravity.START | Gravity.CENTER);
             rbAnswer[j].setTextSize(14f);
 
             radioGroup.addView(rbAnswer[j]);
@@ -136,55 +195,94 @@ public class FeedbackViewFragment extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                Globals.HideKeyBoard(getActivity(), group);
                 rbAnswer[checkedId].setChecked(true);
-                alFeedbackAnswer.get(currentView).setFeedbackAnswerMasterId((int) rbAnswer[checkedId].getTag());
-                alFeedbackAnswer.get(currentView).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
+                alFeedbackAnswer.get(position).setFeedbackAnswerMasterId((int) rbAnswer[checkedId].getTag());
+                alFeedbackAnswer.get(position).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
             }
         });
 
-        linearLayout.addView(txtQuestion);
-        linearLayout.addView(radioGroup);
+        headerLayout.addView(txtNumber);
+        headerLayout.addView(txtQuestion);
+        childLayout.addView(txt);
+        childLayout.addView(radioGroup);
+        linearLayout.addView(headerLayout);
+        linearLayout.addView(childLayout);
         feedbackViewFragment.addView(linearLayout);
     }
 
-    private void SetMultiChoiceLayout(final ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster) {
+    private void SetMultiChoiceLayout(final ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, final FeedbackQuestionMaster objFeedbackQuestionMaster, final int position) {
         sbAnswerId = new StringBuilder();
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayoutParams.setMargins(16, 16, 16, 16);
+        linearLayoutParams.setMargins(16, 8, 16, 8);
         linearLayout.setLayoutParams(linearLayoutParams);
+        linearLayout.setPadding(16, 4, 16, 4);
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
+
+        LinearLayout headerLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        headerLayoutParams.setMargins(0, 0, 0, 0);
+        headerLayout.setLayoutParams(linearLayoutParams);
+        headerLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView txtNumber = new TextView(getActivity());
+        LinearLayout.LayoutParams txtNumberLayoutParams = new LinearLayout.LayoutParams(60, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txtNumberLayoutParams.gravity = Gravity.TOP;
+        txtNumber.setLayoutParams(txtNumberLayoutParams);
+        txtNumber.setText(position + 1 + ".");
+        txtNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
+        txtNumber.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        txtNumber.setTextSize(18f);
 
         TextView txtQuestion = new TextView(getActivity());
-        LinearLayout.LayoutParams txtQuestionLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams txtQuestionLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txtQuestionLayoutParams.gravity = Gravity.TOP;
+        txtQuestionLayoutParams.weight = 1f;
         txtQuestion.setLayoutParams(txtQuestionLayoutParams);
         txtQuestion.setText(objFeedbackQuestionMaster.getFeedbackQuestion());
         txtQuestion.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
+        txtQuestion.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         txtQuestion.setTextSize(18f);
 
+        LinearLayout childLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams childLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        childLayoutParams.setMargins(0, 0, 0, 0);
+        headerLayout.setLayoutParams(childLayoutParams);
+        headerLayout.setGravity(Gravity.CENTER);
+        headerLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView txt = new TextView(getActivity());
+        LinearLayout.LayoutParams txtLayoutParams = new LinearLayout.LayoutParams(80, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txt.setLayoutParams(txtLayoutParams);
+        txt.setVisibility(View.INVISIBLE);
+
         LinearLayout answerLinearLayout = new LinearLayout(getActivity());
-        LinearLayout.LayoutParams answerLinearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams answerLinearLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        answerLinearLayoutParams.weight = 1f;
         answerLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLinearLayout.setGravity(Gravity.CENTER);
+        answerLinearLayout.setGravity(Gravity.START | Gravity.CENTER);
         answerLinearLayout.setLayoutParams(answerLinearLayoutParams);
 
         final CheckBox[] cbAnswer = new CheckBox[alFeedbackAnswerMaster.size()];
 
-        for (int j = 0; j < alFeedbackAnswerMaster.size(); j++) {
+        for (int j = 0; j < alFeedbackAnswerFilter.size(); j++) {
             cbAnswer[j] = new CheckBox(getActivity());
             LinearLayout.LayoutParams rbAnswerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             cbAnswer[j].setId(j);
-            cbAnswer[j].setTag(alFeedbackAnswerMaster.get(j).getFeedbackAnswerMasterId());
+            cbAnswer[j].setTag(alFeedbackAnswerFilter.get(j).getFeedbackAnswerMasterId());
             cbAnswer[j].setLayoutParams(rbAnswerLayoutParams);
-            cbAnswer[j].setText(alFeedbackAnswerMaster.get(j).getAnswer());
+            cbAnswer[j].setText(alFeedbackAnswerFilter.get(j).getAnswer());
             cbAnswer[j].setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
-            cbAnswer[j].setGravity(Gravity.CENTER);
+            cbAnswer[j].setGravity(Gravity.START | Gravity.CENTER);
             cbAnswer[j].setTextSize(14f);
 
             cbAnswer[j].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onCheckedChanged(android.widget.CompoundButton buttonView, boolean isChecked) {
+                    Globals.HideKeyBoard(getActivity(), buttonView);
                     if (isChecked) {
                         sbAnswerId.append(buttonView.getTag()).append(",");
                     } else {
@@ -198,39 +296,62 @@ public class FeedbackViewFragment extends Fragment {
                             }
                         }
                     }
-                    alFeedbackAnswer.get(currentView).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
-                    alFeedbackAnswer.get(currentView).setFeedbackAnswerIds(sbAnswerId.toString());
+                    alFeedbackAnswer.get(position).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
+                    alFeedbackAnswer.get(position).setFeedbackAnswerIds(sbAnswerId.toString());
                 }
             });
 
             answerLinearLayout.addView(cbAnswer[j]);
         }
 
-        linearLayout.addView(txtQuestion);
-        linearLayout.addView(answerLinearLayout);
+        headerLayout.addView(txtNumber);
+        headerLayout.addView(txtQuestion);
+        childLayout.addView(txt);
+        childLayout.addView(answerLinearLayout);
+        linearLayout.addView(headerLayout);
+        linearLayout.addView(childLayout);
         feedbackViewFragment.addView(linearLayout);
     }
 
-    private void SetInputLayout() {
+    private void SetInputLayout(final FeedbackQuestionMaster objFeedbackQuestionMaster, final int position) {
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayoutParams.setMargins(16, 16, 16, 16);
+        linearLayoutParams.setMargins(16, 8, 16, 8);
         linearLayout.setLayoutParams(linearLayoutParams);
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setPadding(4, 4, 4, 4);
+        linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
+
+        LinearLayout headerLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        headerLayoutParams.setMargins(0, 0, 0, 0);
+        headerLayout.setLayoutParams(linearLayoutParams);
+        headerLayout.setGravity(Gravity.CENTER);
+        headerLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView txtNumber = new TextView(getActivity());
+        LinearLayout.LayoutParams txtNumberLayoutParams = new LinearLayout.LayoutParams(60, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txtNumber.setLayoutParams(txtNumberLayoutParams);
+        txtNumber.setText(position + 1 + ".");
+        txtNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
+        txtNumber.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        txtNumber.setTextSize(18f);
 
         TextView txtQuestion = new TextView(getActivity());
-        LinearLayout.LayoutParams txtQuestionLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams txtQuestionLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txtQuestionLayoutParams.weight = 1f;
         txtQuestion.setLayoutParams(txtQuestionLayoutParams);
         txtQuestion.setText(objFeedbackQuestionMaster.getFeedbackQuestion());
         txtQuestion.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
+        txtQuestion.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         txtQuestion.setTextSize(18f);
 
         final EditText editText = new EditText(getActivity());
         LinearLayout.LayoutParams editTextLayoutParams = new LinearLayout.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT);
         editText.setLayoutParams(editTextLayoutParams);
+        editText.setPadding(30, 0, 0, 0);
         editText.applyStyle(R.style.EditText);
-        editText.setHint("Answer");
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -240,9 +361,9 @@ public class FeedbackViewFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                alFeedbackAnswer.get(currentView).setAnswer(editText.getText().toString());
-                alFeedbackAnswer.get(currentView).setFeedbackAnswerMasterId(0);
-                alFeedbackAnswer.get(currentView).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
+                alFeedbackAnswer.get(position).setAnswer(editText.getText().toString());
+                alFeedbackAnswer.get(position).setFeedbackAnswerMasterId(0);
+                alFeedbackAnswer.get(position).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
             }
 
             @Override
@@ -251,24 +372,45 @@ public class FeedbackViewFragment extends Fragment {
             }
         });
 
-        linearLayout.addView(txtQuestion);
+        headerLayout.addView(txtNumber);
+        headerLayout.addView(txtQuestion);
+        linearLayout.addView(headerLayout);
         linearLayout.addView(editText);
         feedbackViewFragment.addView(linearLayout);
     }
 
-    private void SetRatingLayout() {
+    private void SetRatingLayout(final FeedbackQuestionMaster objFeedbackQuestionMaster, final int position) {
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayoutParams.setMargins(16, 16, 16, 16);
+        linearLayoutParams.setMargins(16, 8, 16, 8);
         linearLayout.setLayoutParams(linearLayoutParams);
         linearLayout.setGravity(Gravity.CENTER);
+        linearLayout.setPadding(4, 4, 4, 4);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
+
+        LinearLayout headerLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        headerLayoutParams.setMargins(0, 0, 0, 0);
+        headerLayout.setLayoutParams(linearLayoutParams);
+        headerLayout.setGravity(Gravity.CENTER);
+        headerLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView txtNumber = new TextView(getActivity());
+        LinearLayout.LayoutParams txtNumberLayoutParams = new LinearLayout.LayoutParams(60, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txtNumber.setLayoutParams(txtNumberLayoutParams);
+        txtNumber.setText(position + 1 + ".");
+        txtNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
+        txtNumber.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        txtNumber.setTextSize(18f);
 
         TextView txtQuestion = new TextView(getActivity());
-        LinearLayout.LayoutParams txtQuestionLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams txtQuestionLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txtQuestionLayoutParams.weight = 1f;
         txtQuestion.setLayoutParams(txtQuestionLayoutParams);
         txtQuestion.setText(objFeedbackQuestionMaster.getFeedbackQuestion());
         txtQuestion.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
+        txtQuestion.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         txtQuestion.setTextSize(18f);
 
         RatingBar ratingBar = new RatingBar(getActivity());
@@ -278,20 +420,37 @@ public class FeedbackViewFragment extends Fragment {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                alFeedbackAnswer.get(currentView).setAnswer(String.valueOf(ratingBar.getRating()));
-                alFeedbackAnswer.get(currentView).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
-                alFeedbackAnswer.get(currentView).setFeedbackAnswerMasterId(0);
+                Globals.HideKeyBoard(getActivity(), ratingBar);
+                alFeedbackAnswer.get(position).setAnswer(String.valueOf(ratingBar.getRating()));
+                alFeedbackAnswer.get(position).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
+                alFeedbackAnswer.get(position).setFeedbackAnswerMasterId(0);
             }
         });
 
-        linearLayout.addView(txtQuestion);
+        headerLayout.addView(txtNumber);
+        headerLayout.addView(txtQuestion);
+        linearLayout.addView(headerLayout);
         linearLayout.addView(ratingBar);
         feedbackViewFragment.addView(linearLayout);
     }
 
-    private void SetSimpleFeedbackLayout() {
+    private void CreateAnswerList() {
+        alFeedbackAnswer = new ArrayList<>();
+        for (int j = 0; j < alFeedbackQuestionMaster.size(); j++) {
+            FeedbackAnswerMaster objFeedbackAnswerMaster = new FeedbackAnswerMaster();
+            objFeedbackAnswerMaster.setFeedbackAnswerMasterId(0);
+            objFeedbackAnswerMaster.setFeedbackQuestion(null);
+            objFeedbackAnswerMaster.setAnswer(null);
+            objFeedbackAnswerMaster.setlinktoFeedbackQuestionMasterId(0);
+            alFeedbackAnswer.add(objFeedbackAnswerMaster);
+        }
+    }
+
+    public void SetSimpleFeedbackLayout() {
+        feedbackViewFragment.removeAllViews();
         ScrollView scrollview = new ScrollView(getActivity());
         LinearLayout.LayoutParams scLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        scLayoutParams.setMargins(16, 64, 16, 64);
         scrollview.setLayoutParams(scLayoutParams);
 
         LinearLayout linearLayout = new LinearLayout(getActivity());
@@ -387,27 +546,25 @@ public class FeedbackViewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Globals.HideKeyBoard(getActivity(), v);
-                view = v;
+                focusView = v;
                 if (!ValidateControls(etEmail, etFeedback, etMobileNo)) {
-                    Globals.ShowSnackBar(view, getResources().getString(R.string.MsgValidation), getActivity(), 1000);
-                    return;
-                }
-                if (Service.CheckNet(getActivity())) {
-
-                    objFeedbackMaster = new FeedbackMaster();
-                    objFeedbackMaster.setName(etUserName.getText().toString());
-                    objFeedbackMaster.setEmail(etEmail.getText().toString());
-                    objFeedbackMaster.setPhone(etMobileNo.getText().toString());
-                    objFeedbackMaster.setFeedback(etFeedback.getText().toString());
-                    objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.valueOf(checkedString).getValue());
-                    objFeedbackMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
-                    if (userMasterId != 0) {
-                        objFeedbackMaster.setlinktoRegisteredUserMasterId(userMasterId);
-                    }
-
-                    new FeedbackLodingTask().execute();
+                    Globals.ShowSnackBar(focusView, getResources().getString(R.string.MsgValidation), getActivity(), 1000);
                 } else {
-                    Globals.ShowSnackBar(view, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                    if (Service.CheckNet(getActivity())) {
+                        objFeedbackMaster = new FeedbackMaster();
+                        objFeedbackMaster.setName(etUserName.getText().toString());
+                        objFeedbackMaster.setEmail(etEmail.getText().toString());
+                        objFeedbackMaster.setPhone(etMobileNo.getText().toString());
+                        objFeedbackMaster.setFeedback(etFeedback.getText().toString());
+                        objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.valueOf(checkedString).getValue());
+                        objFeedbackMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
+                        if (userMasterId != 0) {
+                            objFeedbackMaster.setlinktoRegisteredUserMasterId(userMasterId);
+                        }
+                        new FeedbackLodingTask().execute();
+                    } else {
+                        Globals.ShowSnackBar(focusView, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                    }
                 }
             }
         });
@@ -424,22 +581,29 @@ public class FeedbackViewFragment extends Fragment {
 
     private void SetUser(EditText etEmail, EditText etName) {
         objSharePreferenceManage = new SharePreferenceManage();
-        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
-            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null
-                    && objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) != null) {
-                userMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()));
-                etEmail.setText(objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()));
-                etEmail.setEnabled(false);
-                if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()) != null) {
-                    etName.setText(objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()));
-                    etName.setEnabled(false);
+        if(Globals.userName!=null) {
+            if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_home))) {
+                if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null
+                        && objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) != null) {
+                    userMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()));
+                    etEmail.setText(objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()));
+                    etEmail.setEnabled(false);
+                    if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()) != null) {
+                        etName.setText(objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()));
+                        etName.setEnabled(false);
+                    } else {
+                        etName.setEnabled(true);
+                    }
                 } else {
-                    etName.setEnabled(true);
+                    userMasterId = 0;
+                    etEmail.setEnabled(true);
                 }
-            } else {
-                userMasterId = 0;
-                etEmail.setEnabled(true);
             }
+        }else{
+            etEmail.setText("");
+            etName.setText("");
+            etName.setEnabled(true);
+            etEmail.setEnabled(true);
         }
     }
 
@@ -479,6 +643,7 @@ public class FeedbackViewFragment extends Fragment {
 
         ProgressDialog progressDialog;
         String status;
+        ArrayList<FeedbackAnswerMaster> alFinalAnswer, lstFeedbackAnswerMaster;
 
         @Override
         protected void onPreExecute() {
@@ -490,19 +655,23 @@ public class FeedbackViewFragment extends Fragment {
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            alFeedbackAnswerFilter = new ArrayList<>();
-            for (int i = 0; i < alFeedbackAnswer.size(); i++) {
-                if (alFeedbackAnswer.get(i).getlinktoFeedbackQuestionMasterId() != 0) {
-                    if (alFeedbackAnswer.get(i).getFeedbackAnswerIds() != null && !alFeedbackAnswer.get(i).getFeedbackAnswerIds().equals("")) {
-                        String[] strAnswer = alFeedbackAnswer.get(i).getFeedbackAnswerIds().split(",");
-                        for (String Str : strAnswer) {
-                            FeedbackAnswerMaster objFeedbackAnswerMaster = new FeedbackAnswerMaster();
-                            objFeedbackAnswerMaster.setlinktoFeedbackQuestionMasterId(alFeedbackAnswer.get(i).getlinktoFeedbackQuestionMasterId());
-                            objFeedbackAnswerMaster.setFeedbackAnswerMasterId(Integer.valueOf(Str));
-                            alFeedbackAnswerFilter.add(objFeedbackAnswerMaster);
+            alFinalAnswer = new ArrayList<>();
+            for (int i = 0; i < FeedbackFragment.alFinalFeedbackAnswers.size(); i++) {
+                lstFeedbackAnswerMaster = FeedbackFragment.alFinalFeedbackAnswers.get(i);
+                for (int j = 0; j < lstFeedbackAnswerMaster.size(); j++) {
+                    FeedbackAnswerMaster objFeedbackAnswerMaster = lstFeedbackAnswerMaster.get(j);
+                    if (objFeedbackAnswerMaster.getlinktoFeedbackQuestionMasterId() != 0) {
+                        if (objFeedbackAnswerMaster.getFeedbackAnswerIds() != null && !objFeedbackAnswerMaster.getFeedbackAnswerIds().equals("")) {
+                            String[] strAnswer = objFeedbackAnswerMaster.getFeedbackAnswerIds().split(",");
+                            for (String Str : strAnswer) {
+                                FeedbackAnswerMaster objFeedbackAnswer = new FeedbackAnswerMaster();
+                                objFeedbackAnswer.setlinktoFeedbackQuestionMasterId(objFeedbackAnswerMaster.getlinktoFeedbackQuestionMasterId());
+                                objFeedbackAnswer.setFeedbackAnswerMasterId(Integer.valueOf(Str));
+                                alFinalAnswer.add(objFeedbackAnswer);
+                            }
+                        } else {
+                            alFinalAnswer.add(objFeedbackAnswerMaster);
                         }
-                    } else {
-                        alFeedbackAnswerFilter.add(alFeedbackAnswer.get(i));
                     }
                 }
             }
@@ -511,16 +680,16 @@ public class FeedbackViewFragment extends Fragment {
         @Override
         protected Object doInBackground(Object[] params) {
             FeedbackJSONParser objFeedbackJSONParser = new FeedbackJSONParser();
-            status = objFeedbackJSONParser.InsertFeedbackMaster(objFeedbackMaster, alFeedbackAnswerFilter);
+            status = objFeedbackJSONParser.InsertFeedbackMaster(objFeedbackMaster, alFinalAnswer);
             return status;
         }
 
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-
+            progressDialog.dismiss();
             if (status.equals("-1")) {
-                Globals.ShowSnackBar(view, getResources().getString(R.string.MsgServerNotResponding), getActivity(), 1000);
+                Globals.ShowSnackBar(focusView, getResources().getString(R.string.MsgServerNotResponding), getActivity(), 1000);
             } else if (status.equals("0")) {
                 if (MenuActivity.parentActivity) {
                     Globals.userName = null;
@@ -531,12 +700,10 @@ public class FeedbackViewFragment extends Fragment {
                     startActivity(intent);
                     getActivity().finish();
                 } else {
-                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    getActivity().getSupportFragmentManager().popBackStack();
                 }
             }
-            progressDialog.dismiss();
+
         }
 
     }

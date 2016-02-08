@@ -84,7 +84,6 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             if (Service.CheckNet(getActivity())) {
                 new UpdateTableStatusLoadingTask().execute();
             } else {
-                //Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
                 Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
 
@@ -99,7 +98,6 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             if (Service.CheckNet(getActivity())) {
                 new UpdateTableStatusLoadingTask().execute();
             } else {
-                //Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
                 Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
         } else if (v.getId() == R.id.btnBlock) {
@@ -113,7 +111,6 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             if (Service.CheckNet(getActivity())) {
                 new UpdateTableStatusLoadingTask().execute();
             } else {
-                //Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_LONG).show();
                 Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
         } else if (v.getId() == R.id.btnDirty) {
@@ -138,6 +135,7 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
         void UpdateTableStatus(boolean flag, TableMaster objTableMaster);
     }
 
+    //region Loading Task
     class UpdateTableStatusLoadingTask extends AsyncTask {
 
         ProgressDialog progressDialog;
@@ -174,4 +172,5 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
             getDialog().dismiss();
         }
     }
+    //endregion
 }

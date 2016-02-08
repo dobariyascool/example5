@@ -3,6 +3,7 @@ package com.arraybit.pos;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.arraybit.adapter.OrdersAdapter;
 import com.arraybit.global.Globals;
@@ -33,7 +33,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
     TabLayout orderTabLayout;
     ViewPager orderViewPager;
     OrderPagerAdapter orderPagerAdapter;
-    FrameLayout allOrdersFragment;
+    CoordinatorLayout allOrdersFragment;
     String linktoTableMasterIds;
     FloatingActionMenu famRoot;
     boolean isRefresh;
@@ -58,8 +58,8 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
         }
         //end
 
-        allOrdersFragment = (FrameLayout) view.findViewById(R.id.allOrdersFragment);
-        Globals.SetScaleImageBackground(getActivity(), null, null, allOrdersFragment);
+        allOrdersFragment = (CoordinatorLayout) view.findViewById(R.id.allOrdersFragment);
+        Globals.SetScaleImageBackground(getActivity(),allOrdersFragment);
 
         setHasOptionsMenu(true);
 
@@ -100,7 +100,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), null, null, allOrdersFragment);
+        Globals.SetScaleImageBackground(getActivity(),allOrdersFragment);
     }
 
     @Override
@@ -141,6 +141,9 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onPageSelected(int position) {
+                if(famRoot.isMenuButtonHidden()){
+                    famRoot.showMenuButton(true);
+                }
                 orderViewPager.setCurrentItem(position);
                 //load data when tab is change
                 OrdersTabFragment ordersTabFragment = (OrdersTabFragment) orderPagerAdapter.GetCurrentFragment(position);
@@ -172,13 +175,13 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
 
         if (v.getId() == R.id.fabDineIn) {
             famRoot.close(true);
-            ordersTabFragment.OrderDataFilter(orderStatus, String.valueOf(Globals.OrderType.DineIn.getValue()));
+            ordersTabFragment.OrderDataFilter(String.valueOf(Globals.OrderType.DineIn.getValue()));
         } else if (v.getId() == R.id.fabTakeAway) {
             famRoot.close(true);
-            ordersTabFragment.OrderDataFilter(orderStatus, String.valueOf(Globals.OrderType.TakeAway.getValue()));
+            ordersTabFragment.OrderDataFilter(String.valueOf(Globals.OrderType.TakeAway.getValue()));
         } else if (v.getId() == R.id.fabAll) {
             famRoot.close(true);
-            ordersTabFragment.OrderDataFilter(orderStatus, null);
+            ordersTabFragment.OrderDataFilter(null);
         }
     }
 

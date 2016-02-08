@@ -69,12 +69,11 @@ public class WaitingListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (getFragmentManager().getBackStackEntryCount() == 0) {
-                    Globals.InitializeAnimatedFragment(new AddFragment(), getFragmentManager());
+                    Globals.InitializeAnimatedFragment(new AddFragment(), getFragmentManager(),getActivity().getResources().getString(R.string.title_fragment_add));
                 }
             }
         });
     }
-
 
     //region Private Methods
     private void SetTabLayout(ArrayList<WaitingStatusMaster> alWaitingStatusMaster, final WaitingListPagerAdapter waitingListPagerAdapter) {
@@ -104,6 +103,9 @@ public class WaitingListFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
+                if(fabAdd.isHidden()){
+                    fabAdd.show(true);
+                }
                 waitingViewPager.setCurrentItem(position);
                 //load data when tab is change
                 WaitingTabFragment waitingTabFragment = (WaitingTabFragment) waitingListPagerAdapter.GetCurrentFragment(position);

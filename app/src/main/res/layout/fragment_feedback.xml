@@ -1,155 +1,105 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/feedbackFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/offwhite"
-    android:orientation="vertical"
     tools:context="com.arraybit.pos.FeedbackFragment"
     tools:ignore="ContentDescription">
-
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        tools:ignore="HardcodedText,UselessParent">
+
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.1"
-            android:gravity="start|center">
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/primary"
+            android:gravity="center"
+            android:minHeight="?attr/actionBarSize"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/ivPrevious"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/control_SpecingTiny"
-                android:layout_marginEnd="@dimen/control_SpecingTiny"
-                android:layout_marginStart="@dimen/control_SpecingSmall"
-                android:src="@drawable/previous" />
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtFeedbackGroup"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
         </LinearLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center" />
 
-
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_marginStart="@dimen/control_SpecingSmall"
+            android:layout_marginTop="@dimen/control_SpecingTiny"
             android:layout_weight="0.1"
-            android:gravity="end|center">
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivPrevious"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/previous_selector" />
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtPrevious"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="start|center"
+                android:maxLines="1"
+                android:paddingEnd="0dp"
+                android:paddingStart="@dimen/control_SpecingTiny"
+                android:text="Previous"
+                android:textColor="@drawable/text_selector"
+                android:textSize="16sp" />
+
+            <com.rey.material.widget.TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:ignore="NestedWeights" />
+
+            <com.rey.material.widget.TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtNext"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="end|center"
+                android:maxLines="1"
+                android:paddingEnd="@dimen/control_SpecingTiny"
+                android:paddingStart="0dp"
+                android:text="Next"
+                android:textColor="@drawable/text_selector"
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/ivNext"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/control_SpecingTiny"
-                android:layout_marginEnd="@dimen/control_SpecingSmall"
-                android:src="@drawable/next"
-                />
+                android:layout_height="match_parent"
+                android:src="@drawable/next_selector" />
         </LinearLayout>
-
     </LinearLayout>
-
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/control_SpecingMedium"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:id="@+id/feedbackLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <RadioGroup
-                    android:id="@+id/rgMain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/rbSuggestion"
-                        style="@style/RadioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="@string/fbSuggestion" />
-
-                    <RadioButton
-                        android:id="@+id/rbBug"
-                        style="@style/RadioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fbBug" />
-
-
-                    <RadioButton
-                        android:id="@+id/rbOther"
-                        style="@style/RadioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fbOther" />
-                </RadioGroup>
-
-                <com.rey.material.widget.EditText
-                    android:id="@+id/etName"
-                    style="@style/EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/fbName"
-                    android:inputType="textCapWords|textCapSentences" />
-
-                <com.rey.material.widget.EditText
-                    android:id="@+id/etEmail"
-                    style="@style/EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/fbEmail"
-                    android:inputType="textEmailAddress" />
-
-                <com.rey.material.widget.EditText
-                    android:id="@+id/etMobileNo"
-                    style="@style/EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/fbMobileNo"
-                    android:inputType="phone"
-                    android:maxLength="10" />
-
-                <com.rey.material.widget.EditText
-                    android:id="@+id/etFeedback"
-                    style="@style/EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:hint="@string/fbFeedback"
-                    android:inputType="textMultiLine" />
-
-                <com.rey.material.widget.Button
-                    android:id="@+id/btnSubmit"
-                    style="@style/Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/fbSubmit" />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+</FrameLayout>

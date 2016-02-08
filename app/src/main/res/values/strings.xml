@@ -60,9 +60,9 @@
     <string name="MsgFeedback">Thank you for your feedback, your response will help us to improve the quality of service.</string>
     <string name="MsgVerification">Your Phone Number is Verified.</string>
     <string name="MsgCart">Cart is empty.</string>
-    <string name="MsgCartItem">Items are added into dish</string>
+    <string name="MsgCartItem">Item is added into dish</string>
     <string name="MsgConfirmOrder">Items are place into order</string>
-    <string name="MsgAddPerson">Persons are added successfully</string>
+    <string name="MsgAddPerson">Person is added successfully</string>
     <!-- End -->
 
     <string name="splash_screen">arraybitlogo</string>
@@ -145,9 +145,8 @@
     <!-- end -->
 
     <!-- row_workinghours-->
-    <string name="rDayOfWeek">DayOfWeek</string>
-    <string name="rClosingTime">ClosingTime</string>
-    <string name="rOpeningTime">OpeningTime</string>
+    <string name="rTimings">Timings</string>
+    <string name="rTo">To</string>
     <!-- End -->
 
     <!-- signup dailog -->
@@ -181,7 +180,7 @@
     <string name="fbOther">Other Query</string>
     <string name="fbBug">Bug Report</string>
     <string name="fbSuggestion">Suggestion</string>
-
+    <string name="fbFeedbackGroup">Give Suggestion</string>
     <!-- end -->
 
     <!-- fragment server -->
@@ -320,5 +319,6 @@
     <string name="odfBillAmount">Minimum Bill Amount</string>
     <string name="odfFromDateTime">From</string>
     <string name="odfToDateTime">To</string>
+    <string name="title_activity_main2">Main2Activity</string>
     <!-- end -->
 </resources>

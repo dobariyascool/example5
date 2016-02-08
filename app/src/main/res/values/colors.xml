@@ -53,6 +53,8 @@
 
     //red-300
     <color name="orange">#E65100</color>
+    <color name="orange_light">#F17826</color>
+    <color name="orange_200">#FFAB91</color>
     //400
     <color name="amber">#FFCA28</color>
     //800
@@ -76,7 +78,9 @@
     <color name="blue">#2196f3</color>
     <color name="blue_light">#03A9F4</color>
     <color name="grey">#AFAFAF</color>
+    <color name="blue_grey_500">#607D8B</color>
     <color name="blue_grey">#263238</color>
+
 
     //#757575
     <!-- END Other Color -->

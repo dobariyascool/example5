@@ -98,23 +98,24 @@
     </style>
 
     <style name="AppCompactAutoCompleteTextView">
-        android.support.v7.widget.AppCompatAutoCompleteTextView</style>
+        android.support.v7.widget.AppCompatAutoCompleteTextView
+    </style>
     <!--<style name="Theme.Dialog" parent="@android:style/Theme.Translucent.NoTitleBar">-->
-        <!--<item name="android:windowFrame">@null</item>-->
-        <!--<item name="android:windowIsFloating">true</item>-->
-        <!--<item name="android:windowContentOverlay">@null</item>-->
-        <!--<item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>-->
-        <!--<item name="android:windowNoTitle">true</item>-->
-        <!--<item name="android:backgroundDimEnabled">true</item>-->
+    <!--<item name="android:windowFrame">@null</item>-->
+    <!--<item name="android:windowIsFloating">true</item>-->
+    <!--<item name="android:windowContentOverlay">@null</item>-->
+    <!--<item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>-->
+    <!--<item name="android:windowNoTitle">true</item>-->
+    <!--<item name="android:backgroundDimEnabled">true</item>-->
     <!--</style>-->
     <!--<style name="TransparentDialog" parent="AppTheme.Translucent.NoTitleBar.Fullscreen"/>-->
 
     <!--<style name="GalleryDialog" parent="Theme.AppCompat.Dialog">-->
-        <!--<item name="windowBackground">@color/transparent</item>-->
-        <!--<item name="colorBackgroundCacheHint">@null</item>-->
-        <!--<item name="windowIsTranslucent">true</item>-->
-        <!--<item name="windowAnimationStyle">@style/Animation</item>-->
-        <!--<item name="android:windowFullscreen">true</item>-->
+    <!--<item name="windowBackground">@color/transparent</item>-->
+    <!--<item name="colorBackgroundCacheHint">@null</item>-->
+    <!--<item name="windowIsTranslucent">true</item>-->
+    <!--<item name="windowAnimationStyle">@style/Animation</item>-->
+    <!--<item name="android:windowFullscreen">true</item>-->
     <!--</style>-->
 
     <style name="Spinner" parent="Material.Widget.Spinner.Light">
@@ -257,22 +258,34 @@
     <!--fab:menu_labels_showAnimation="@anim/jump_from_down"-->
     <!--fab:menu_labels_singleLine="true"-->
 
+    <!--<style name="FloatingMenu" parent="FloatingActionMenu">-->
+        <!--<item name="menu_backgroundColor">@color/transparentBackground</item>-->
+        <!--<item name="menu_colorNormal">@color/accent_dark</item>-->
+        <!--<item name="menu_colorPressed">@color/accent</item>-->
+        <!--<item name="menu_colorRipple">@color/accent_light</item>-->
+        <!--<item name="menu_labels_ellipsize">end</item>-->
+        <!--<item name="menu_labels_hideAnimation">@anim/jump_to_down</item>-->
+        <!--<item name="menu_labels_position">left</item>-->
+        <!--<item name="menu_labels_showAnimation">@anim/jump_from_down</item>-->
+        <!--<item name="menu_labels_singleLine">true</item>-->
+    <!--</style>-->
+
     <style name="FloatingMenu" parent="FloatingActionMenu">
-        <item name="menu_backgroundColor">@color/transparentBackground</item>
-        <item name="menu_colorNormal">@color/accent_dark</item>
-        <item name="menu_colorPressed">@color/accent</item>
-        <item name="menu_colorRipple">@color/accent_light</item>
-        <item name="menu_labels_ellipsize">end</item>
-        <item name="menu_labels_hideAnimation">@anim/jump_to_down</item>
-        <item name="menu_labels_position">left</item>
-        <item name="menu_labels_showAnimation">@anim/jump_from_down</item>
-        <item name="menu_labels_singleLine">true</item>
+    <item name="menu_backgroundColor">@color/transparentBackground</item>
+    <item name="menu_colorNormal">@color/orange</item>
+    <item name="menu_colorPressed">@color/orange_light</item>
+    <item name="menu_colorRipple">@color/orange_light</item>
+    <item name="menu_labels_ellipsize">end</item>
+    <item name="menu_labels_hideAnimation">@anim/jump_to_down</item>
+    <item name="menu_labels_position">left</item>
+    <item name="menu_labels_showAnimation">@anim/jump_from_down</item>
+    <item name="menu_labels_singleLine">true</item>
     </style>
 
     <style name="FloatingButtonWithTextStyle" parent="FloatingActionButton">
         <!--<item name="android:background">@drawable/rounded_button</item>-->
-        <item name="fab_colorNormal">@color/accent_dark</item>
-        <item name="rd_rippleColor">@color/accent_light</item>
+        <item name="fab_colorNormal">@android:color/white</item>
+        <item name="rd_rippleColor">@android:color/white</item>
         <item name="rd_cornerRadius">@dimen/fbutton_cornerRadius</item>
         <!--<item name="android:textColor">@drawable/link_label_selector</item>-->
         <item name="android:height">@dimen/fbuttonMini_Height</item>
@@ -280,11 +293,12 @@
         <item name="android:layout_marginEnd">@dimen/fbutton_MarginBottomEnd</item>
         <item name="android:layout_marginBottom">@dimen/fbutton_MarginBottomEndTablet</item>
         <item name="fab_size">mini</item>
-        <item name="fab_colorPressed">@color/accent</item>
-        <item name="fab_colorRipple">@color/accent</item>
+        <item name="fab_colorPressed">@android:color/white</item>
+        <item name="fab_colorRipple">@android:color/white</item>
     </style>
 
     //#66BB6A,#F44336,#03A9F4
+
     <style name="GreenTableFloatingButtonWithTextStyle" parent="FloatingActionButton">
         <item name="fab_colorNormal">@color/green</item>
         <item name="rd_rippleColor">@color/green_light</item>
@@ -325,10 +339,10 @@
     </style>
 
     <style name="FloatingButton" parent="FloatingActionButton">
-        <item name="fab_colorNormal">@color/accent_dark</item>
-        <item name="rd_rippleColor">@color/accent_light</item>
+        <item name="fab_colorNormal">@color/orange</item>
+        <item name="rd_rippleColor">@color/orange_light</item>
         <item name="fab_size">normal</item>
-        <item name="fab_colorPressed">@color/accent</item>
+        <item name="fab_colorPressed">@color/orange</item>
         <item name="android:src">@drawable/plus_white</item>
     </style>
 
@@ -347,6 +361,7 @@
     </style>
 
     <style name="MaterialButton">com.rey.material.widget.Button</style>
+
     <style name="MaterialSnackBar">com.rey.material.widget.SnackBar</style>
 
     <style name="NumberButton" parent="MaterialButton">

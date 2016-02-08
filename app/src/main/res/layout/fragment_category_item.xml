@@ -1,10 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/categoryItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.arraybit.pos.CategoryItemFragment">
 
     <LinearLayout
@@ -28,14 +27,14 @@
             android:layout_height="match_parent"
             android:visibility="visible" />
     </LinearLayout>
-    <com.github.clans.fab.FloatingActionMenu xmlns:fab="http://schemas.android.com/apk/res-auto"
+    <com.github.clans.fab.FloatingActionMenu
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/famRoot"
         style="@style/FloatingMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/control_SpecingSmall"
-        android:visibility="gone"
-        app:layout_behavior="com.support.android.designlibdemo.ScrollAwareFABBehavior"
+        app:layout_behavior="com.arraybit.global.FloatingActionMenuBehavior"
         app:menu_icon="@mipmap/fmenu">
 
         <com.github.clans.fab.FloatingActionButton
@@ -63,4 +62,4 @@
             fab:fab_label="@string/ghJain" />
 
     </com.github.clans.fab.FloatingActionMenu>
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

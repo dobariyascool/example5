@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/allTablesFragment"
@@ -36,6 +36,7 @@
         android:layout_height="match_parent"
         android:padding="@dimen/control_SpecingSmall"
         android:visibility="gone"
+        app:layout_behavior="com.arraybit.global.FloatingActionMenuBehavior"
         fab:menu_icon="@mipmap/fmenu">
 
         <com.github.clans.fab.FloatingActionButton
@@ -63,4 +64,4 @@
             fab:fab_label="@string/tsAll"/>
 
     </com.github.clans.fab.FloatingActionMenu>
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

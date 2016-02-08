@@ -2,14 +2,16 @@ package com.arraybit.pos;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebView;
+import android.view.View;
 import android.widget.LinearLayout;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
+import com.github.clans.fab.FloatingActionButton;
 
 import org.json.JSONStringer;
 
@@ -26,7 +28,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final WebView load = (WebView)findViewById(R.id.load);
+        CoordinatorLayout coordinatorlayout = (CoordinatorLayout)findViewById(R.id.coordinatorlayout);
+
+        if(Service.CheckNet(MainActivity.this)){
+            Globals.ShowSnackBar(coordinatorlayout,"meassage",MainActivity.this,1000);
+        }
+
+        //FloatingActionMenu famRoot =(FloatingActionMenu)findViewById(R.id.famRoot);
+
+        FloatingActionButton fabAdd =(FloatingActionButton)findViewById(R.id.fabAdd);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Globals.ShowSnackBar(v,"meassage",MainActivity.this,1000);
+            }
+        });
+//
+//        RecyclerView listView = (RecyclerView)findViewById(R.id.lvToDoList);
+//        ArrayList<String> alStringFilter = new ArrayList<>();
+//        for(int i=0;i<100;i++){
+//            alStringFilter.add("Filter "+i);
+//        }
+//
+//        listView.setAdapter(new RecylerViewAdapter(MainActivity.this,alStringFilter));
+//        listView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+//
+//        FloatingActionMenu famRoot =(FloatingActionMenu)findViewById(R.id.famRoot);
+//        coordinatorlayout.onNestedScroll(listView,50,50,50,50);
+
+
+        //final WebView load = (WebView)findViewById(R.id.load);
 
 //        Button btnAdd = (Button)findViewById(R.id.button);
 //        int j = i;
@@ -84,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         //int j = i;
 
-        RequestQueue queue = Volley.newRequestQueue(this);
+ //       RequestQueue queue = Volley.newRequestQueue(this);
 
 //        try{
 //
@@ -215,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
 //        progressDialog.setCancelable(false);
 //        progressDialog.show();
         //load.setWebViewClient(new webCont());
-        load.loadUrl(url);
+ //       load.loadUrl(url);
 
 
 //        JsonObjectRequest jsonObjectRequest = null;

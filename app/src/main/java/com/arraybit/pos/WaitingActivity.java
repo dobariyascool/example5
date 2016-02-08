@@ -78,7 +78,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
         //drawerlayout and actionbardrawertoggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        Globals.SetNavigationDrawer(actionBarDrawerToggle, WaitingActivity.this, drawerLayout, app_bar);
+        Globals.SetNavigationDrawer(actionBarDrawerToggle, WaitingActivity.this, drawerLayout, app_bar,getSupportFragmentManager());
         //end
 
         //linear layout

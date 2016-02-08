@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/allOrdersFragment"
@@ -35,6 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/control_SpecingSmall"
+        app:layout_behavior="com.arraybit.global.FloatingActionMenuBehavior"
         app:menu_icon="@mipmap/fmenu">
 
         <com.github.clans.fab.FloatingActionButton
@@ -63,4 +64,4 @@
             fab:fab_label="@string/aofAll" />
 
     </com.github.clans.fab.FloatingActionMenu>
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

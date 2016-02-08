@@ -80,9 +80,6 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
 
             ivOffer = (ImageView) itemView.findViewById(R.id.ivOffer);
 
-            //width = context.getResources().getDisplayMetrics().widthPixels;
-            //height = context.getResources().getDisplayMetrics().heightPixels;
-
             txtOfferTitle = (TextView) itemView.findViewById(R.id.txtOfferTitle);
             txtOfferContent = (TextView) itemView.findViewById(R.id.txtOfferContent);
 

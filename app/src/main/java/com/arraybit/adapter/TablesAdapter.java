@@ -64,12 +64,6 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         return alTableMaster.size();
     }
 
-    public void TableDataChanged(ArrayList<TableMaster> result) {
-        alTableMaster.addAll(result);
-        notifyDataSetChanged();
-    }
-    //endregion
-
     public void UpdateData(int position, TableMaster objTableMaster) {
         alTableMaster.get(position).setTableStatus(objTableMaster.getTableStatus());
         alTableMaster.get(position).setStatusColor(objTableMaster.getStatusColor());
@@ -86,6 +80,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     public interface LayoutClickListener {
         void ChangeTableStatusClick(TableMaster objTableMaster, int position);
     }
+    //endregion
 
     class TableViewHolder extends RecyclerView.ViewHolder {
 
@@ -106,7 +101,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
                     @Override
                     public void onClick(View v) {
 
-                        if(fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() != null
+                        if (fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() != null
                                 && fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equals(context.getResources().getString(R.string.title_fragment_all_tables))) {
 
                             Globals.HideKeyBoard(context, v);
@@ -117,4 +112,5 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             }
         }
     }
+
 }

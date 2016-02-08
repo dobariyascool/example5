@@ -80,7 +80,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                             Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
                             if (getTargetFragment() == currentFragment) {
                                 dismiss();
-                                Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), null);
+                                Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
                             } else {
                                 dismiss();
                                 objLoginResponseListener = (LoginResponseListener) getTargetFragment();
@@ -96,9 +96,18 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(View v) {
                         if (getTargetFragment() != null) {
-                            SignUpFragment signUpFragment = new SignUpFragment();
-                            signUpFragment.setTargetFragment(getTargetFragment(), 0);
-                            Globals.ReplaceFragment(signUpFragment, getActivity().getSupportFragmentManager(), null);
+                            FeedbackFragment currentFragment = (FeedbackFragment) getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_feedback));
+                            if(getTargetFragment() == currentFragment){
+                                currentFragment.RemoveFragment();
+                                SignUpFragment signUpFragment = new SignUpFragment();
+                                signUpFragment.setTargetFragment(getTargetFragment(), 0);
+                                Globals.ReplaceFragment(signUpFragment, getActivity().getSupportFragmentManager(), null);
+                            }
+                            else{
+                                SignUpFragment signUpFragment = new SignUpFragment();
+                                signUpFragment.setTargetFragment(getTargetFragment(), 0);
+                                Globals.ReplaceFragment(signUpFragment, getActivity().getSupportFragmentManager(), null);
+                            }
                         } else {
                             Globals.ReplaceFragment(new SignUpFragment(), getActivity().getSupportFragmentManager(), null);
                         }
@@ -195,9 +204,9 @@ public class GuestLoginDialogFragment extends DialogFragment {
                             Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
                         }
                         dismiss();
-                        Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getFragmentManager(), null);
-                    } else {
-
+                        Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getFragmentManager(),getActivity().getResources().getString(R.string.title_fragment_feedback));
+                    }
+                    else {
                         CreateGuestPreference();
                         ClearControls();
                         Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);

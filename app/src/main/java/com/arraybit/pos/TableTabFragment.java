@@ -36,6 +36,9 @@ import com.arraybit.parser.TableJSONParser;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class TableTabFragment extends Fragment implements SearchView.OnQueryTextListener, TablesAdapter.LayoutClickListener, TableStatusFragment.UpdateTableStatusListener {
@@ -79,6 +82,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
 
         rvTables = (RecyclerView) view.findViewById(R.id.rvTables);
+        rvTables.setHasFixedSize(true);
         rvTables.setVisibility(View.GONE);
 
         displayMetrics = getActivity().getResources().getDisplayMetrics();
@@ -155,15 +159,28 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
 
     }
 
-    public void TableDataFilter(int sectionMasterId, String tableStatusMasterId) {
-        this.tableStatusMasterId = tableStatusMasterId;
-        this.sectionMasterId = sectionMasterId;
-        alTableMaster = new ArrayList<>();
+    public void TableDataFilter(String tableStatusMasterId) {
+        ArrayList<TableMaster> alTableMasterFilter = new ArrayList<>();
+        if(tableStatusMasterId!=null) {
+            for (int i = 0; i < alTableMaster.size(); i++) {
+                if (alTableMaster.get(i).getlinktoTableStatusMasterId() == Short.valueOf(tableStatusMasterId)) {
+                    alTableMasterFilter.add(alTableMaster.get(i));
+                }
+            }
+            if(alTableMasterFilter.size()==0){
+                Globals.SetError(txtMsg, rvTables, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+            }else{
+                Globals.SetError(txtMsg, rvTables, null, false);
+                SetupRecyclerView(rvTables, alTableMasterFilter);
+            }
+        }else{
+            if(alTableMaster.size()==0){
+                Globals.SetError(txtMsg, rvTables, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+            }else{
+                Globals.SetError(txtMsg, rvTables, null, false);
+                SetupRecyclerView(rvTables, alTableMaster);
+            }
 
-        if (Service.CheckNet(getActivity())) {
-            new TableMasterLoadingTask().execute();
-        } else {
-            Globals.ShowSnackBar(rvTables, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
         }
     }
 
@@ -264,13 +281,18 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         return filteredList;
     }
 
-    private void SetupRecyclerView(RecyclerView rvTables) {
+    private void SetupRecyclerView(RecyclerView rvTables,ArrayList<TableMaster> alTableMaster) {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager());
         } else {
             tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager());
         }
-        rvTables.setAdapter(tablesAdapter);
+        ScaleInAnimationAdapter animationAdapter  =  new ScaleInAnimationAdapter(tablesAdapter);
+        //AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(tablesAdapter);
+        //SlideInBottomAnimatorAdapter animationAdapter = new SlideInBottomAnimatorAdapter(tablesAdapter);
+        //animationAdapter.setFirstOnly(true);
+        //rvCartItem.setItemAnimator(new ScaleInLeftAnimator());
+        rvTables.setAdapter(new AlphaInAnimationAdapter(animationAdapter));
         rvTables.setLayoutManager(gridLayoutManager);
         rvTables.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -303,7 +325,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         protected Object doInBackground(Object[] objects) {
 
             TableJSONParser objTableJSONParser = new TableJSONParser();
-            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(counterMasterId, sectionMasterId, tableStatusMasterId, linktoOrderTypeMasterId);
+            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(counterMasterId, sectionMasterId,tableStatusMasterId,linktoOrderTypeMasterId);
         }
 
         @Override
@@ -320,7 +342,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
             } else {
                 Globals.SetError(txtMsg, rvTables, null, false);
                 alTableMaster = lstTableMaster;
-                SetupRecyclerView(rvTables);
+                SetupRecyclerView(rvTables,alTableMaster);
             }
         }
     }

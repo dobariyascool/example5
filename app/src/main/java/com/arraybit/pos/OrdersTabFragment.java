@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 
 @SuppressWarnings("unchecked")
-public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTextListener{
+public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     public final static String ITEMS_COUNT_KEY = "OrdersTabFragment$ItemsCount";
     public TextView txtMsg;
@@ -96,17 +96,28 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         return view;
     }
 
-    public void OrderDataFilter(String orderStatus, String orderTypeMasterId) {
-        this.orderTypeMasterId = orderTypeMasterId;
-        this.orderStatus = orderStatus;
-        alOrderMaster = new ArrayList<>();
-
-        if (Service.CheckNet(getActivity())) {
-            new OrderMasterLoadingTask().execute();
+    public void OrderDataFilter(String orderTypeMasterId) {
+        ArrayList<OrderMaster> alOrderMasterFilter = new ArrayList<>();
+        if (orderTypeMasterId != null) {
+            for (int i = 0; i < alOrderMaster.size(); i++) {
+                if (alOrderMaster.get(i).getlinktoOrderTypeMasterId() == Short.valueOf(orderTypeMasterId)) {
+                    alOrderMasterFilter.add(alOrderMaster.get(i));
+                }
+            }
+            if (alOrderMasterFilter.size() == 0) {
+                Globals.SetError(txtMsg, rvOrder, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+            } else {
+                Globals.SetError(txtMsg, rvOrder, null, false);
+                SetupRecyclerView(rvOrder, alOrderMasterFilter);
+            }
         } else {
-            Globals.ShowSnackBar(rvOrder, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            if (alOrderMaster.size() == 0) {
+                Globals.SetError(txtMsg, rvOrder, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+            } else {
+                Globals.SetError(txtMsg, rvOrder, null, false);
+                SetupRecyclerView(rvOrder, alOrderMaster);
+            }
         }
-
     }
 
     @Override
@@ -179,7 +190,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         return filteredList;
     }
 
-    private void SetupRecyclerView(RecyclerView rvOrder) {
+    private void SetupRecyclerView(RecyclerView rvOrder, ArrayList<OrderMaster> alOrderMaster) {
 
         ordersAdapter = new OrdersAdapter(getActivity(), alOrderMaster);
         rvOrder.setAdapter(ordersAdapter);
@@ -229,7 +240,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
             } else {
                 Globals.SetError(txtMsg, rvOrder, null, false);
                 alOrderMaster = lstOrderMaster;
-                SetupRecyclerView(rvOrder);
+                SetupRecyclerView(rvOrder, alOrderMaster);
             }
         }
     }

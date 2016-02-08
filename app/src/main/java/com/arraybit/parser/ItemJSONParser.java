@@ -117,6 +117,7 @@ public class ItemJSONParser {
                 objItemMaster.setItemModifierIds(jsonArray.getJSONObject(i).getString("ItemModifierMasterIds"));
                 objItemMaster.setQuantity(jsonArray.getJSONObject(i).getInt("Quantity"));
                 objItemMaster.setRemark(jsonArray.getJSONObject(i).getString("Remark"));
+                objItemMaster.setOptionValueTranIds(jsonArray.getJSONObject(i).getString("OptionValueTranIds"));
                 lstItemMaster.add(objItemMaster);
             }
             return lstItemMaster;

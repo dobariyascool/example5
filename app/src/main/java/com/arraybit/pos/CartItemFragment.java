@@ -272,27 +272,18 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         protected void onPostExecute(Object result) {
             progressDialog.dismiss();
             if (orderMasterId.equals("-1")) {
-                // Toast.makeText(getActivity(), getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
                 Globals.ShowSnackBar(view, getResources().getString(R.string.MsgServerNotResponding), getActivity(), 1000);
             } else if (!orderMasterId.equals("0")) {
                 if (!AllTablesFragment.isRefresh) {
                     new TableStatusLoadingTask().execute();
                 }
-                //Toast.makeText(getActivity(), getResources().getString(R.string.MsgCartItem), Toast.LENGTH_LONG).show();
                 Globals.ShowSnackBar(view, getResources().getString(R.string.MsgCartItem), getActivity(), 1000);
-                //getActivity().getSupportFragmentManager().popBackStack();
                 if (MenuActivity.parentActivity) {
 
                     Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                     intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                    //FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    //OrderMaster objOrderMaster = new OrderMaster();
-                    //objOrderMaster.setOrderMasterId(Long.valueOf(orderMasterId));
-                    //fragmentTransaction.replace(android.R.id.content, new OrderSummaryFragment(objOrderMaster), getActivity().getResources().getString(R.string.title_fragment_order_summary));
-                    //fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
-                    //fragmentTransaction.commit();
                     Globals.counter = 0;
                     Globals.alOrderItemTran.clear();
                 } else {
@@ -300,13 +291,8 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                     OrderMaster objOrderMaster = new OrderMaster();
                     objOrderMaster.setOrderMasterId(Long.valueOf(orderMasterId));
                     Globals.ReplaceFragment(new OrderSummaryFragment(objOrderMaster), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_order_summary));
-//                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(android.R.id.content, new OrderSummaryFragment(objOrderMaster), getActivity().getResources().getString(R.string.title_fragment_order_summary));
-//                    fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
-//                    fragmentTransaction.commit();
                     Globals.counter = 0;
                     Globals.alOrderItemTran.clear();
-                    //Globals.selectTableMasterId = 0;
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.arraybit.pos;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -44,6 +45,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     LinearLayout nameLayout;
     SharePreferenceManage objSharePreferenceManage;
 
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,11 +78,13 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
         //drawerlayout and actionbardrawertoggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        Globals.SetNavigationDrawer(actionBarDrawerToggle, GuestHomeActivity.this, drawerLayout, app_bar);
+        Globals.SetNavigationDrawer(actionBarDrawerToggle, GuestHomeActivity.this, drawerLayout, app_bar,getSupportFragmentManager());
         //end
 
         AddFragmentInLayout(new GuestOptionListFragment());
         SaveObjectInPreference();
+
+
     }
 
 
@@ -108,57 +112,50 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if (item.getTitle() == getResources().getString(R.string.wmLogout)) {
-            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-            objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", GuestHomeActivity.this);
-            objSharePreferenceManage.RemovePreference("RegistrationPreference", "RegisteredUserMasterId", GuestHomeActivity.this);
-            objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", GuestHomeActivity.this);
-            objSharePreferenceManage.ClearPreference("RegistrationPreference", GuestHomeActivity.this);
-            Globals.userName = null;
-            navigationView = (NavigationView) findViewById(R.id.navigationView);
-            SetGuestName();
-        } else {
             Globals.OptionMenuItemClick(item, GuestHomeActivity.this, getSupportFragmentManager());
             SetGuestName();
-        }
         return super.onOptionsItemSelected(item);
     }
 
     //navigationview event
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == R.id.changeMode) {
-            drawerLayout.closeDrawer(navigationView);
-            ChangeModeDialogFragment changeModeDialogFragment = new ChangeModeDialogFragment();
-            changeModeDialogFragment.show(getSupportFragmentManager(), "");
-        } else if (menuItem.getItemId() == R.id.profile) {
-            drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new HotelProfileFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
-        } else if (menuItem.getItemId() == R.id.offers) {
-            drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new OfferFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
-        } else if (menuItem.getItemId() == R.id.feedback) {
-            drawerLayout.closeDrawer(navigationView);
-            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
-            if (Globals.userName != null) {
-                Globals.ReplaceFragment(new FeedbackFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
-            } else {
-                GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
-                guestLoginDialogFragment.setTargetFragment(currentFragment, 0);
-                guestLoginDialogFragment.show(getSupportFragmentManager(), "");
-            }
+        if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
+                && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()
+                .equals(getResources().getString(R.string.title_fragment_guest_options))) {
+            if (menuItem.getItemId() == R.id.changeMode) {
+                drawerLayout.closeDrawer(navigationView);
+                ChangeModeDialogFragment changeModeDialogFragment = new ChangeModeDialogFragment();
+                changeModeDialogFragment.show(getSupportFragmentManager(), "");
+            } else if (menuItem.getItemId() == R.id.profile) {
+                drawerLayout.closeDrawer(navigationView);
+                Globals.ReplaceFragment(new HotelProfileFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
+            } else if (menuItem.getItemId() == R.id.offers) {
+                drawerLayout.closeDrawer(navigationView);
+                Globals.ReplaceFragment(new OfferFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
+            } else if (menuItem.getItemId() == R.id.feedback) {
+                drawerLayout.closeDrawer(navigationView);
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
+                if (Globals.userName != null) {
+                    Globals.ReplaceFragment(new FeedbackFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
+                } else {
+                    GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+                    guestLoginDialogFragment.setTargetFragment(currentFragment, 0);
+                    guestLoginDialogFragment.show(getSupportFragmentManager(), "");
+                }
 
-        } else if (menuItem.getItemId() == R.id.rate) {
-            Uri uri = Uri.parse("market://details?id=" + getPackageName());
-            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-            try {
-                startActivity(goToMarket);
-            } catch (ActivityNotFoundException e) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+            } else if (menuItem.getItemId() == R.id.rate) {
+                Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                }
+            } else if (menuItem.getItemId() == R.id.aboutus) {
+                drawerLayout.closeDrawer(navigationView);
+                Globals.ReplaceFragment(new AboutUsFragment((short) 1), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_policy));
             }
-        }else if(menuItem.getItemId() == R.id.aboutus){
-            drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new AboutUsFragment((short) 1), getSupportFragmentManager(),getResources().getString(R.string.title_fragment_policy));
         }
         return false;
     }

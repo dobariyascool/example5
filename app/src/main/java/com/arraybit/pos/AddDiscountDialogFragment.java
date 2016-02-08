@@ -290,7 +290,7 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
         protected Object doInBackground(Object[] objects) {
 
             DiscountJSONParser objDiscountJSONParser = new DiscountJSONParser();
-            alDiscountMaster = objDiscountJSONParser.SelectAllDiscountMaster();
+            alDiscountMaster = objDiscountJSONParser.SelectAllDiscountMaster(Globals.businessMasterId);
             return null;
         }
 

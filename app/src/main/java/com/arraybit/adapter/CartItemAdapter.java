@@ -53,6 +53,9 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             RemoveModifierView(holder);
         }
         if (objItemMaster.getAlOrderItemModifierTran().size() != 0) {
+            LinearLayout.LayoutParams txtQtyLayoutParams= (LinearLayout.LayoutParams) holder.txtQty.getLayoutParams();
+            txtQtyLayoutParams.gravity = Gravity.TOP;
+            holder.txtQty.setLayoutParams(txtQtyLayoutParams);
             SetModifierLayout(objItemMaster.getAlOrderItemModifierTran(), holder);
         }
         if (objItemMaster.getRemark().equals("")) {
@@ -82,6 +85,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             notifyDataSetChanged();
             Globals.counter = Globals.counter - 1;
         }
+
     }
 
     private void SetModifierLayout(ArrayList<ItemMaster> alOrderItemModifierTran, CartItemViewHolder holder) {

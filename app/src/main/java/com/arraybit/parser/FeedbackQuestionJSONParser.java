@@ -20,7 +20,7 @@ public class FeedbackQuestionJSONParser {
             if (jsonObject != null) {
                 objFeedbackQuestionMaster = new FeedbackQuestionMaster();
                 objFeedbackQuestionMaster.setFeedbackQuestionMasterId(jsonObject.getInt("FeedbackQuestionMasterId"));
-                objFeedbackQuestionMaster.setlinktoBusinessMasterId((short)jsonObject.getInt("linktoBusinessMasterId"));
+                objFeedbackQuestionMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
                 objFeedbackQuestionMaster.setFeedbackQuestion(jsonObject.getString("FeedbackQuestion"));
                 objFeedbackQuestionMaster.setQuestionType((short)jsonObject.getInt("QuestionType"));
                 if (!jsonObject.getString("SortOrder").equals("null")) {
@@ -43,15 +43,16 @@ public class FeedbackQuestionJSONParser {
             for (int i = 0; i < jsonArray.length(); i++) {
                 objFeedbackQuestionMaster = new FeedbackQuestionMaster();
                 objFeedbackQuestionMaster.setFeedbackQuestionMasterId(jsonArray.getJSONObject(i).getInt("FeedbackQuestionMasterId"));
-                objFeedbackQuestionMaster.setlinktoBusinessMasterId((short)jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
+                objFeedbackQuestionMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 objFeedbackQuestionMaster.setFeedbackQuestion(jsonArray.getJSONObject(i).getString("FeedbackQuestion"));
-                objFeedbackQuestionMaster.setQuestionType((short)jsonArray.getJSONObject(i).getInt("QuestionType"));
+                objFeedbackQuestionMaster.setQuestionType((short) jsonArray.getJSONObject(i).getInt("QuestionType"));
                 if (!jsonArray.getJSONObject(i).getString("SortOrder").equals("null")) {
                     objFeedbackQuestionMaster.setSortOrder(jsonArray.getJSONObject(i).getInt("SortOrder"));
                 }
                 objFeedbackQuestionMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
                 objFeedbackQuestionMaster.setIsDeleted(jsonArray.getJSONObject(i).getBoolean("IsDeleted"));
-
+                objFeedbackQuestionMaster.setLinktoFeedbackQuestionGroupMasterId((short) jsonArray.getJSONObject(i).getInt("linktoFeedbackQuestionGroupMasterId"));
+                objFeedbackQuestionMaster.setGroupName(jsonArray.getJSONObject(i).getString("QuestionGroupName"));
                 lstFeedbackQuestionMaster.add(objFeedbackQuestionMaster);
             }
             return lstFeedbackQuestionMaster;

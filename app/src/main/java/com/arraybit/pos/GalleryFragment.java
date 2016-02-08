@@ -57,7 +57,7 @@ public class GalleryFragment extends Fragment {
                 Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
         } else if (alBusinessGalleryTran.size() == 0) {
-            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
+            txtMsg.setText(getResources().getString(R.string.MsgNoRecord));
         } else {
             SetGalleryRecyclerView(alBusinessGalleryTran);
         }
@@ -135,7 +135,7 @@ public class GalleryFragment extends Fragment {
             } else {
                 if (lstBusinessGalleryTran.size() == 0) {
                     if (currentPage == 1) {
-                        txtMsg.setText(getResources().getString(R.string.MsgSelectFail));
+                        txtMsg.setText(getResources().getString(R.string.MsgNoRecord));
                     }
                 } else {
                     SetGalleryRecyclerView(lstBusinessGalleryTran);

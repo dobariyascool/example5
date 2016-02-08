@@ -149,6 +149,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         view = v;
+        Globals.HideKeyBoard(getActivity(),v);
         if (v.getId() == R.id.btnSignUp) {
             if (!ValidateControls()) {
                 Globals.ShowSnackBar(v, getResources().getString(R.string.MsgValidation), getActivity(), 1000);
@@ -428,7 +429,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
             if (lstSpinnerItem != null) {
                 SpinnerItem objSpinnerItem = new SpinnerItem();
-                objSpinnerItem.setText("--------SELECT--------");
+                objSpinnerItem.setText("--------SELECT AREA--------");
                 objSpinnerItem.setValue(0);
 
                 ArrayList<SpinnerItem> alSpinnerItem = new ArrayList<>();

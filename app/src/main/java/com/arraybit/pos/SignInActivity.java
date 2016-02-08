@@ -35,7 +35,6 @@ import java.util.ArrayList;
 @SuppressWarnings("ALL")
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //public static String ServerName = null;
     EditText etName, etPassword;
     UserMaster objUserMaster = null;
     SharePreferenceManage objSharePreferenceManage;

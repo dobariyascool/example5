@@ -63,7 +63,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
         //navigationView
         View headerView = LayoutInflater.from(WaiterHomeActivity.this).inflate(R.layout.navigation_header, null);
-        ImageView ivLogo = (ImageView)headerView.findViewById(R.id.ivLogo);
+        ImageView ivLogo = (ImageView) headerView.findViewById(R.id.ivLogo);
         ivLogo.setVisibility(View.GONE);
         TextView txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
         TextView txtName = (TextView) headerView.findViewById(R.id.txtName);
@@ -76,9 +76,8 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
         //drawerlayout and actionbardrawertoggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        Globals.SetNavigationDrawer(actionBarDrawerToggle, WaiterHomeActivity.this, drawerLayout, app_bar);
+        Globals.SetNavigationDrawer(actionBarDrawerToggle, WaiterHomeActivity.this, drawerLayout, app_bar, getSupportFragmentManager());
         //end
-
 
         AddFragmentInLayout(new WaiterOptionListFragment());
 
@@ -87,7 +86,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         } else {
             Globals.ShowSnackBar(waiterHomeMainLayout, getResources().getString(R.string.MsgCheckConnection), WaiterHomeActivity.this, 1000);
         }
-
 
     }
 
@@ -117,6 +115,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_settings) {
             return true;
         }
@@ -131,41 +130,44 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     //selected event
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == R.id.wChangeCounter) {
-            objSharePreferenceManage = new SharePreferenceManage();
-            if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaiterHomeActivity.this) != null) {
+        if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
+                .equals(getResources().getString(R.string.title_fragment_waiter_options))) {
+            if (menuItem.getItemId() == R.id.wChangeCounter) {
+                objSharePreferenceManage = new SharePreferenceManage();
+                if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaiterHomeActivity.this) != null) {
+                    drawerLayout.closeDrawer(navigationView);
+                    Globals.ReplaceFragment(new CounterFragment((short) Globals.UserType.Waiter.getValue()), getSupportFragmentManager(), null);
+                }
+            } else if (menuItem.getItemId() == R.id.wChangeMode) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new CounterFragment((short) Globals.UserType.Waiter.getValue()), getSupportFragmentManager(), null);
-            }
-        } else if (menuItem.getItemId() == R.id.wChangeMode) {
-            drawerLayout.closeDrawer(navigationView);
-            ChangeModeDialogFragment changeModeDialogFragment = new ChangeModeDialogFragment();
-            changeModeDialogFragment.show(getSupportFragmentManager(), "");
-        } else if (menuItem.getItemId() == R.id.wHotelProfile) {
-            drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new HotelProfileFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
-        } else if (menuItem.getItemId() == R.id.wOffers) {
-            drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new OfferFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
-        } else if (menuItem.getItemId() == R.id.wFeedback) {
-            drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new FeedbackFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
-        } else if (menuItem.getItemId() == R.id.wRate) {
-            Uri uri = Uri.parse("market://details?id=" + getPackageName());
-            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-            try {
-                startActivity(goToMarket);
-            } catch (ActivityNotFoundException e) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                ChangeModeDialogFragment changeModeDialogFragment = new ChangeModeDialogFragment();
+                changeModeDialogFragment.show(getSupportFragmentManager(), "");
+            } else if (menuItem.getItemId() == R.id.wHotelProfile) {
+                drawerLayout.closeDrawer(navigationView);
+                Globals.ReplaceFragment(new HotelProfileFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
+            } else if (menuItem.getItemId() == R.id.wOffers) {
+                drawerLayout.closeDrawer(navigationView);
+                Globals.ReplaceFragment(new OfferFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
+            } else if (menuItem.getItemId() == R.id.wFeedback) {
+                drawerLayout.closeDrawer(navigationView);
+                Globals.ReplaceFragment(new FeedbackFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
+            } else if (menuItem.getItemId() == R.id.wRate) {
+                Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
 
-            }
+                }
 
-        }else if(menuItem.getItemId() == R.id.wAbout){
-            drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new AboutUsFragment((short) 1), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_policy));
-        }
-        else if (menuItem.getItemId() == R.id.wExit) {
-            System.exit(0);
+            } else if (menuItem.getItemId() == R.id.wAbout) {
+                drawerLayout.closeDrawer(navigationView);
+                Globals.ReplaceFragment(new AboutUsFragment((short) 1), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_policy));
+            } else if (menuItem.getItemId() == R.id.wExit) {
+                System.exit(0);
+            }
         }
         return false;
     }
@@ -194,11 +196,10 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_tables))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                else {
+                } else {
                     CategoryItemFragment.i = 0;
                     CategoryItemFragment.isViewChange = false;
                     getSupportFragmentManager().popBackStack();

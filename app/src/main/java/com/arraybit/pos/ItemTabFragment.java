@@ -1,5 +1,6 @@
 package com.arraybit.pos;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,11 +35,15 @@ import com.rey.material.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-@SuppressWarnings({"unchecked", "ObjectEqualsNull"})
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.adapters.SlideInBottomAnimationAdapter;
+
+@SuppressWarnings({"unchecked", "ObjectEqualsNull", "ConstantConditions"})
 public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextListener, CategoryItemAdapter.ItemClickListener, AddItemQtyDialogFragment.AddToCartListener {
 
     public final static String ITEMS_COUNT_KEY = "ItemTabFragment";
     public static short cnt = 0;
+    public static Activity activity;
     TextView txtMsg;
     RecyclerView rvItem;
     LinearLayoutManager linearLayoutManager;
@@ -57,6 +62,8 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     RelativeLayout relativeLayout;
     CartIconListener objCartIconListener;
     MenuItem searchItem;
+    ArrayList<ItemMaster> alItemMasterFilter;
+    View v;
 
 
     public ItemTabFragment() {
@@ -106,7 +113,6 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
         }
 
-
         return view;
     }
 
@@ -115,11 +121,59 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         super.onActivityCreated(savedInstanceState);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     public void ItemDataFilter(String itemTypeMasterId) {
         this.itemTypeMasterId = itemTypeMasterId;
-        alItemMaster = new ArrayList<>();
-        new GuestHomeItemLoadingTask().execute();
+        alItemMasterFilter = new ArrayList<>();
+        boolean isDuplicate;
+        if (itemTypeMasterId != null) {
+            for (int i = 0; i < alItemMaster.size(); i++) {
+                if (!alItemMaster.get(i).getOptionValueTranIds().equals("")) {
+                    isDuplicate = false;
+                    String[] optionType = alItemMaster.get(i).getOptionValueTranIds().split(",");
+                    String[] itemType = itemTypeMasterId.split(",");
+                    for (String strItemType : itemType) {
+                        for (String strOptionType : optionType) {
+                            if (strItemType.equals(strOptionType)) {
+                                if (alItemMasterFilter.size() == 0) {
+                                    alItemMasterFilter.add(alItemMaster.get(i));
+                                } else {
+                                    for (int l = 0; l < alItemMasterFilter.size(); l++) {
+                                        if (alItemMasterFilter.get(l).getItemMasterId() == alItemMaster.get(i).getItemMasterId()) {
+                                            isDuplicate = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!isDuplicate) {
+                                        alItemMasterFilter.add(alItemMaster.get(i));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (alItemMasterFilter.size() == 0) {
+                Globals.SetError(txtMsg, rvItem, getResources().getString(R.string.MsgNoRecord), true);
+            } else {
+                Globals.SetError(txtMsg, rvItem, null, false);
+                SetupRecyclerView(false, alItemMasterFilter);
+            }
+
+        } else {
+            if (alItemMaster.size() == 0) {
+                Globals.SetError(txtMsg, rvItem, getResources().getString(R.string.MsgNoRecord), true);
+            } else {
+                Globals.SetError(txtMsg, rvItem, null, false);
+                SetupRecyclerView(false, alItemMaster);
+            }
+
+        }
+
     }
 
     @Override
@@ -154,9 +208,16 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         // Do something when collapsed
-                        if (alItemMaster.size() != 0 && alItemMaster != null) {
-                            categoryItemAdapter.SetSearchFilter(alItemMaster);
-                            Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                        if (CategoryItemFragment.sbItemTypeMasterId.toString().equals("")) {
+                            if (alItemMaster.size() != 0 && alItemMaster != null) {
+                                categoryItemAdapter.SetSearchFilter(alItemMaster);
+                                Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                            }
+                        } else {
+                            if (alItemMasterFilter.size() != 0 && alItemMasterFilter != null) {
+                                categoryItemAdapter.SetSearchFilter(alItemMasterFilter);
+                                Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                            }
                         }
                         return true; // Return true to collapse action view
                     }
@@ -176,11 +237,20 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if (alItemMaster.size() != 0 && alItemMaster != null) {
-            searchText = newText;
-            final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, newText);
-            categoryItemAdapter.SetSearchFilter(filteredList);
+        if(CategoryItemFragment.sbItemTypeMasterId.toString().equals("")){
+            if (alItemMaster.size() != 0 && alItemMaster != null) {
+                searchText = newText;
+                final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, newText);
+                categoryItemAdapter.SetSearchFilter(filteredList);
+            }
+        }else{
+           if(alItemMasterFilter.size() !=0 && alItemMasterFilter !=null){
+               searchText = newText;
+               final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, newText);
+               categoryItemAdapter.SetSearchFilter(filteredList);
+           }
         }
+
         return false;
     }
 
@@ -208,29 +278,69 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 Globals.counter = Globals.counter + 1;
                 SetCartNumber(txtCartNumber);
                 Globals.alOrderItemTran.add(objOrderItemTran);
-                Globals.ShowSnackBar(rvItem, getActivity().getResources().getString(R.string.MsgCartItem), getActivity(), 1000);
+                Globals.ShowSnackBar(rvItem, getActivity().getResources().getString(R.string.MsgCartItem), getActivity(), 2000);
             }
         }
     }
-    public void SetupRecyclerView() {
 
-        categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this);
-        rvItem.setVisibility(View.VISIBLE);
-        rvItem.setAdapter(categoryItemAdapter);
-        if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
-            rvItem.setLayoutManager(gridLayoutManager);
-        } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
-            rvItem.setLayoutManager(linearLayoutManager);
-        } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
-            final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
-            categoryItemAdapter.SetSearchFilter(filteredList);
-            rvItem.setLayoutManager(gridLayoutManager);
-        } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
-            final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
-            categoryItemAdapter.SetSearchFilter(filteredList);
-            rvItem.setLayoutManager(linearLayoutManager);
+    public void SetupRecyclerView(boolean isFilter, ArrayList<ItemMaster> alItemMaster) {
+        if (alItemMaster == null && !isFilter) {
+            categoryItemAdapter = new CategoryItemAdapter(getActivity(), this.alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this);
+            rvItem.setVisibility(View.VISIBLE);
+            rvItem.setAdapter(categoryItemAdapter);
+            if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                rvItem.setLayoutManager(gridLayoutManager);
+            } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                rvItem.setLayoutManager(linearLayoutManager);
+            } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                final ArrayList<ItemMaster> filteredList = Filter(this.alItemMaster, searchText);
+                categoryItemAdapter.SetSearchFilter(filteredList);
+                rvItem.setLayoutManager(gridLayoutManager);
+            } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                final ArrayList<ItemMaster> filteredList = Filter(this.alItemMaster, searchText);
+                categoryItemAdapter.SetSearchFilter(filteredList);
+                rvItem.setLayoutManager(linearLayoutManager);
+            }
+        } else if (alItemMaster == null && isFilter) {
+            categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMasterFilter, getFragmentManager(), CategoryItemFragment.isViewChange, this);
+            rvItem.setVisibility(View.VISIBLE);
+            rvItem.setAdapter(categoryItemAdapter);
+            if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                rvItem.setLayoutManager(gridLayoutManager);
+            } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                rvItem.setLayoutManager(linearLayoutManager);
+            } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, searchText);
+                categoryItemAdapter.SetSearchFilter(filteredList);
+                rvItem.setLayoutManager(gridLayoutManager);
+            } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, searchText);
+                categoryItemAdapter.SetSearchFilter(filteredList);
+                rvItem.setLayoutManager(linearLayoutManager);
+            }
+        } else {
+            categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this);
+            rvItem.setVisibility(View.VISIBLE);
+            ScaleInAnimationAdapter slideInBottomAnimationAdapter = new ScaleInAnimationAdapter(categoryItemAdapter);
+            rvItem.setAdapter(slideInBottomAnimationAdapter);
+            if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                rvItem.setLayoutManager(gridLayoutManager);
+            } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                rvItem.setLayoutManager(linearLayoutManager);
+            } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
+                categoryItemAdapter.SetSearchFilter(filteredList);
+                rvItem.setLayoutManager(gridLayoutManager);
+            } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
+                categoryItemAdapter.SetSearchFilter(filteredList);
+                rvItem.setLayoutManager(linearLayoutManager);
+            }
         }
-
+        if (CategoryItemFragment.objCategoryMaster != null && CategoryItemFragment.objCategoryMaster.getCategoryName().equals(objCategoryMaster.getCategoryName())) {
+            Globals.ShowSnackBar(rvItem, getActivity().getResources().getString(R.string.MsgCartItem), getActivity(), 2000);
+            CategoryItemFragment.objCategoryMaster = null;
+        }
         rvItem.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -305,7 +415,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-            return objItemJSONParser.SelectAllItemMaster(currentPage, counterMasterId,MenuActivity.objTableMaster.getlinktoSectionMasterId(),MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
+            return objItemJSONParser.SelectAllItemMaster(currentPage, counterMasterId, MenuActivity.objTableMaster.getlinktoSectionMasterId(), MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
 
         }
 
@@ -319,14 +429,20 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
             ArrayList<ItemMaster> lstItemMaster = (ArrayList<ItemMaster>) result;
             if (lstItemMaster == null) {
-                Globals.SetError(txtMsg, rvItem, getResources().getString(R.string.MsgSelectFail), true);
+                Globals.SetError(txtMsg, rvItem, getActivity().getResources().getString(R.string.MsgSelectFail), true);
             } else if (lstItemMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvItem, getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetError(txtMsg, rvItem, getActivity().getResources().getString(R.string.MsgNoRecord), true);
             } else {
                 Globals.SetError(txtMsg, rvItem, null, false);
                 alItemMaster = lstItemMaster;
-                SetupRecyclerView();
-                cnt = 1;
+                if(CategoryItemFragment.sbItemTypeMasterId.toString().equals("")){
+                    SetupRecyclerView(false, alItemMaster);
+                    cnt = 1;
+                }
+                else{
+                    ItemDataFilter(CategoryItemFragment.sbItemTypeMasterId.toString());
+                    cnt = 1;
+                }
             }
         }
     }

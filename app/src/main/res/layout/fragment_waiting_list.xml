@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -72,8 +72,8 @@
         style="@style/FloatingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/control_SpecingSmall" />
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/control_SpecingSmall"
+        app:layout_behavior="com.arraybit.global.FloatingActionMenuBehavior" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

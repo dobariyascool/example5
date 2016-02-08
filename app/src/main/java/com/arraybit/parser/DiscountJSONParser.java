@@ -55,10 +55,10 @@ public class DiscountJSONParser {
         }
     }
 
-    public ArrayList<DiscountMaster> SelectAllDiscountMaster() {
+    public ArrayList<DiscountMaster> SelectAllDiscountMaster(int linktoBusinessMasterId) {
         ArrayList<DiscountMaster> lstDiscountMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllDiscountMaster);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllDiscountMaster + "/" + linktoBusinessMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllDiscountMaster + "Result");
                 if (jsonArray != null) {

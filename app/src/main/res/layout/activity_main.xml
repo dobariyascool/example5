@@ -1,13 +1,68 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorlayout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <WebView
-        android:id="@+id/load"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/lvToDoList"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
+
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/control_SpecingSmall"
+        app:layout_behavior="com.arraybit.global.FloatingActionMenuBehavior" />
+
+
+    <!--<com.github.clans.fab.FloatingActionMenu-->
+        <!--xmlns:fab="http://schemas.android.com/apk/res-auto"-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/famRoot"-->
+        <!--style="@style/FloatingMenu"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:padding="@dimen/control_SpecingSmall"-->
+        <!--app:layout_behavior="com.arraybit.global.FloatingActionMenuBehavior"-->
+        <!--app:menu_icon="@mipmap/fmenu">-->
+
+        <!--<com.github.clans.fab.FloatingActionButton-->
+            <!--android:id="@+id/fabVeg"-->
+            <!--style="@style/FloatingButtonWithTextStyle"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@mipmap/veg_icon"-->
+            <!--fab:fab_label="@string/ghVeg" />-->
+
+        <!--<com.github.clans.fab.FloatingActionButton-->
+            <!--android:id="@+id/fabNonVeg"-->
+            <!--style="@style/FloatingButtonWithTextStyle"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@mipmap/nonvegicon"-->
+            <!--fab:fab_label="@string/ghNonVeg" />-->
+
+        <!--<com.github.clans.fab.FloatingActionButton-->
+            <!--android:id="@+id/fabJain"-->
+            <!--style="@style/FloatingButtonWithTextStyle"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@mipmap/jain_icon"-->
+            <!--fab:fab_label="@string/ghJain" />-->
+
+    <!--</com.github.clans.fab.FloatingActionMenu>-->
+
+    <!--<WebView-->
+        <!--android:id="@+id/load"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
 
     <!--<ImageView-->
         <!--android:id="@+id/ivOffer"-->
@@ -82,4 +137,4 @@
         <!--android:id="@+id/webview"-->
         <!--android:layout_width="150dp"-->
         <!--android:layout_height="150dp" />-->
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

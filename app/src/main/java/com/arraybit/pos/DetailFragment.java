@@ -56,11 +56,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     ArrayAdapter<String> adapter;
     String[] selectedValue, modifierSelectedValue, modifierValue;
     boolean isDeleted;
-    boolean isDuplicate = false;
+    boolean isDuplicate = false,isShow=false;
     ArrayList<ItemMaster> alOrderItemModifierTran, alItemMasterModifier;
     StringBuilder sbModifier;
     double totalModifierAmount, totalAmount;
     ModifierAdapter modifierAdapter;
+    ResponseListener objResponseListener;
 
     public DetailFragment(int ItemMasterId) {
         this.ItemMasterId = ItemMasterId;
@@ -234,6 +235,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                     && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
+            if(isShow) {
+                if (getTargetFragment() != null) {
+                    objResponseListener = (ResponseListener) getTargetFragment();
+                    objResponseListener.ShowMessage();
+                }
             }
         } else if (v.getId() == R.id.textInputLayout) {
             textInputLayout.setFocusable(true);
@@ -467,6 +474,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                     }
                     Globals.alOrderItemTran.add(objOrderItemTran);
                     Globals.counter = Globals.counter + 1;
+                    isShow = true;
                 }
             } else {
                 objOrderItemTran.setItemMasterId(objItemMaster.getItemMasterId());
@@ -489,6 +497,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                 }
                 Globals.alOrderItemTran.add(objOrderItemTran);
                 Globals.counter = Globals.counter + 1;
+                isShow = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -626,6 +635,10 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    interface ResponseListener {
+        void ShowMessage();
     }
     //endregion
 

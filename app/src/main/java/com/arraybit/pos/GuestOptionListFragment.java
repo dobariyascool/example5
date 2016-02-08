@@ -61,6 +61,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
     }
 
+
     @Override
     public void onClick(View v) {
         if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
@@ -77,7 +78,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                     guestLoginDialogFragment.setTargetFragment(this, 0);
                     guestLoginDialogFragment.show(getActivity().getSupportFragmentManager(), "");
                 } else {
-                    Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), null);
+                    Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(),getActivity().getResources().getString(R.string.title_fragment_feedback));
                 }
             } else if (v.getId() == R.id.layoutMenu) {
                 Intent intent = new Intent(getActivity(), MenuActivity.class);

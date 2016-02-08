@@ -1,11 +1,11 @@
 package com.arraybit.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.BusinessHoursTran;
@@ -40,6 +40,7 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         return new WorkingHoursViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(WorkingHoursViewHolder holder, int position) {
 
@@ -52,29 +53,25 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         }
 
         if (position == 0) {
-            holder.layoutHeader.setVisibility(View.VISIBLE);
-            holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()));
-
-            if (sdfTimeFormat.format(dt).equals("00")) {
-                holder.txtOpeningTime.setText("--Close--");
-                holder.txtClosingTime.setText("");
-            } else {
-                holder.txtOpeningTime.setText(String.valueOf(current.getOpeningTime()));
-                holder.txtClosingTime.setText(String.valueOf(current.getClosingTime()));
-            }
+            holder.txtHeader.setVisibility(View.VISIBLE);
         } else {
-            holder.layoutHeader.setVisibility(View.GONE);
-            holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()));
-
-            if (sdfTimeFormat.format(dt).equals("00")) {
-                holder.txtOpeningTime.setText("--Close--");
-                holder.txtClosingTime.setText("");
-            } else {
-                holder.txtOpeningTime.setText(String.valueOf(current.getOpeningTime()));
-                holder.txtClosingTime.setText(String.valueOf(current.getClosingTime()));
-            }
-
+            holder.txtHeader.setVisibility(View.GONE);
         }
+        holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()));
+
+        if (current.getOpeningTime().equals("12:00 AM")) {
+            holder.txtStartTime.setText("Close");
+            holder.txtEndTime.setVisibility(View.GONE);
+        } else {
+            if (current.getBreakStartTime() == null && current.getBreakEndTime() == null) {
+                holder.txtStartTime.setText(current.getOpeningTime() + " " + context.getString(R.string.rTo) + " " + current.getClosingTime());
+                holder.txtEndTime.setVisibility(View.GONE);
+            } else {
+                holder.txtStartTime.setText(current.getOpeningTime() + " " + context.getString(R.string.rTo) + " " + current.getBreakStartTime());
+                holder.txtEndTime.setText(current.getBreakEndTime() + " " + context.getString(R.string.rTo) + " " + current.getClosingTime());
+            }
+        }
+
     }
 
     @Override
@@ -83,16 +80,15 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
     }
 
     class WorkingHoursViewHolder extends RecyclerView.ViewHolder {
-        TextView txtDayOfWeek, txtOpeningTime, txtClosingTime;
-        LinearLayout layoutHeader;
+        TextView txtDayOfWeek, txtStartTime, txtEndTime, txtHeader;
 
         public WorkingHoursViewHolder(View itemView) {
             super(itemView);
 
             txtDayOfWeek = (TextView) itemView.findViewById(R.id.txtDayOfWeek);
-            txtOpeningTime = (TextView) itemView.findViewById(R.id.txtOpeningTime);
-            txtClosingTime = (TextView) itemView.findViewById(R.id.txtClosingTime);
-            layoutHeader = (LinearLayout) itemView.findViewById(R.id.layoutHeader);
+            txtStartTime = (TextView) itemView.findViewById(R.id.txtStartTime);
+            txtEndTime = (TextView) itemView.findViewById(R.id.txtEndTime);
+            txtHeader = (TextView) itemView.findViewById(R.id.txtHeader);
         }
     }
 

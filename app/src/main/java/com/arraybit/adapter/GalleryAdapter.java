@@ -23,11 +23,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     Context context;
     ArrayList<BusinessGalleryTran> alBusinessGalleryTran;
     View view;
-    int width,height;
     FragmentManager fragmentManager;
     private LayoutInflater inflater;
 
-    public GalleryAdapter(Context context, ArrayList<BusinessGalleryTran> alBusinessGalleryTran,FragmentManager fragmentManager) {
+    public GalleryAdapter(Context context, ArrayList<BusinessGalleryTran> alBusinessGalleryTran, FragmentManager fragmentManager) {
         this.context = context;
         this.alBusinessGalleryTran = alBusinessGalleryTran;
         inflater = LayoutInflater.from(context);
@@ -47,33 +46,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         holder.txtGalleryTitle.setVisibility(View.GONE);
         holder.cvGallery.setId(position);
         if (current.getImagePhysicalName() != null) {
-            //Picasso.with(holder.ivGalleryImage.getContext()).load(current.getImagePhysicalName()).onlyScaleDown().into(holder.ivGalleryImage);
-//            Picasso.with(holder.ivGalleryImage.getContext())
-//                    .load(current.getImagePhysicalName())
-//                    .resize(width, height)
-//                    .into(holder.ivGalleryImage);
-
             Picasso.with(holder.ivGalleryImage.getContext()).load(current.getImagePhysicalName()).into(holder.ivGalleryImage);
-           
-//            Picasso.with(holder.ivGalleryImage.getContext()).load(current.getImagePhysicalName()).into(new Target() {
-//                @Override
-//                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                    Palette palette = Palette.from(bitmap).generate();
-//                    holder.ivGalleryImage.setImageBitmap(bitmap);
-//                    holder.ivGalleryImage.setBackgroundColor(palette.getDarkVibrantColor(0));
-//                    holder.cvGallery.setCardBackgroundColor(palette.getDarkVibrantColor(0));
-//                }
-//
-//                @Override
-//                public void onBitmapFailed(Drawable errorDrawable) {
-//
-//                }
-//
-//                @Override
-//                public void onPrepareLoad(Drawable placeHolderDrawable) {
-//
-//                }
-//            });
         }
     }
 
@@ -93,19 +66,16 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
             txtGalleryTitle = (TextView) itemView.findViewById(R.id.txtGalleryTitle);
             ivGalleryImage = (ImageView) itemView.findViewById(R.id.ivGalleryImage);
-            cvGallery = (CardView)itemView.findViewById(R.id.cvGallery);
+            cvGallery = (CardView) itemView.findViewById(R.id.cvGallery);
 
-            //DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-            //width = displayMetrics.widthPixels/2;
-            //height = displayMetrics.heightPixels + 32;
             cvGallery.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     FullViewDialogFragment fullViewDialogFragment = new FullViewDialogFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("BusinessGallery",alBusinessGalleryTran.get(v.getId()));
+                    bundle.putParcelable("BusinessGallery", alBusinessGalleryTran.get(v.getId()));
                     fullViewDialogFragment.setArguments(bundle);
-                    fullViewDialogFragment.show(fragmentManager,"");
+                    fullViewDialogFragment.show(fragmentManager, "");
                 }
             });
         }
