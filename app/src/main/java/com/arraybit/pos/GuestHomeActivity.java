@@ -83,8 +83,6 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
         AddFragmentInLayout(new GuestOptionListFragment());
         SaveObjectInPreference();
-
-
     }
 
 
@@ -112,8 +110,12 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
+                && !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()
+                .equals(getResources().getString(R.string.title_fragment_offer_detail))) {
             Globals.OptionMenuItemClick(item, GuestHomeActivity.this, getSupportFragmentManager());
             SetGuestName();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -154,7 +156,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                 }
             } else if (menuItem.getItemId() == R.id.aboutus) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new AboutUsFragment((short) 1), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_policy));
+                Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
             }
         }
         return false;
@@ -173,14 +175,44 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                 if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_signup))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_signup), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && (!getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_summary)))) {
+                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
                     getSupportFragmentManager().popBackStack();
-                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
-                    getSupportFragmentManager().popBackStack();
-                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
+                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_about_us))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_about_us), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_myaccount))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_myaccount), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    MyAccountFragment.objRegisteredUserMaster = null;
+                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_myprofile))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_myprofile), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
+                else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_notification_settings))) {
+                    NotificationSettingsFragment notificationSettingsFragment = (NotificationSettingsFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_notification_settings));
+                    notificationSettingsFragment.CreateNotificationPreference();
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_notification_settings), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_change_password))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_change_password), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+                else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_summary))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_summary), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_offer_detail))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_offer_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_offer))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_offer), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+//                else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+//                        && (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_summary)))) {
+//                    //getSupportFragmentManager().popBackStack();
+//                }
             }
         }
     }
@@ -238,6 +270,11 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             txtLetter.setVisibility(View.GONE);
         }
 
+    }
+
+    public void EditTextOnClick(View view) {
+        GuestProfileFragment guestProfileFragment = (GuestProfileFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_myprofile));
+        guestProfileFragment.EditTextOnClick();
     }
     //endregion
 }

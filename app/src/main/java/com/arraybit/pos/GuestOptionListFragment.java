@@ -69,7 +69,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
             if (v.getId() == R.id.layoutOrders) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("TableMaster", GuestHomeActivity.objTableMaster);
-                OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment(null);
+                OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
                 orderSummaryFragment.setArguments(bundle);
                 Globals.ReplaceFragment(orderSummaryFragment, getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_order_summary));
             } else if (v.getId() == R.id.layoutFeedback) {
@@ -87,7 +87,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (v.getId() == R.id.layoutOffers) {
-                Globals.ReplaceFragment(new OfferFragment(getActivity()), getActivity().getSupportFragmentManager(), null);
+                Globals.ReplaceFragment(new OfferFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_offer));
             }
         }
     }

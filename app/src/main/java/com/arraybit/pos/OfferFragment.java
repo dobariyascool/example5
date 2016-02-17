@@ -28,6 +28,8 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 @SuppressLint("ValidFragment")
 public class OfferFragment extends Fragment {
@@ -86,8 +88,8 @@ public class OfferFragment extends Fragment {
             menu.findItem(R.id.viewChange).setVisible(false);
         }
 
-        if(getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
-                &&getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()
+        if(getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()!=null
+                &&getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()
                 .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))){
             Globals.SetOptionMenu(Globals.userName,getActivity(),menu);
         }
@@ -109,14 +111,14 @@ public class OfferFragment extends Fragment {
             Globals.HideKeyBoard(getActivity(), getView());
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     private void SetupRecyclerView() {
 
         offerAdapter = new OfferAdapter(getActivity(),alOfferMaster,getActivity().getSupportFragmentManager());
-        rvOffer.setAdapter(offerAdapter);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(offerAdapter);
+        rvOffer.setAdapter(scaleInAnimationAdapter);
         rvOffer.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
@@ -151,7 +153,7 @@ public class OfferFragment extends Fragment {
             if (lstOfferMaster == null) {
                 Globals.SetError(txtMsg, rvOffer, getActivity().getResources().getString(R.string.MsgSelectFail), true);
             } else if (lstOfferMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvOffer, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetError(txtMsg, rvOffer, getActivity().getResources().getString(R.string.MsgOffer), true);
             } else {
                 Globals.SetError(txtMsg, rvOffer, null, false);
                 alOfferMaster = lstOfferMaster;

@@ -17,7 +17,10 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartItemViewHolder> {
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
+
+public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartItemViewHolder>{
 
     Context context;
     ArrayList<ItemMaster> alItemMaster;
@@ -77,12 +80,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         return alItemMaster.size();
     }
 
-    public void RemoveData(int position) {
+    public void RemoveData(int position,ScaleInAnimationAdapter scaleInAnimationAdapter) {
         if (alItemMaster.size() != 0 && position >= 0) {
             isModifierChanged = false;
             alItemMaster.remove(position);
             notifyItemRemoved(position);
-            notifyDataSetChanged();
+            scaleInAnimationAdapter.notifyDataSetChanged();
             Globals.counter = Globals.counter - 1;
         }
 
@@ -143,9 +146,9 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
     }
 
     //region ViewHolder
-    class CartItemViewHolder extends RecyclerView.ViewHolder {
+    class CartItemViewHolder extends RecyclerView.ViewHolder{
 
-        TextView txtIndex, txtItem, txtQty, txtRate, txtAmount, txtRemark;
+        TextView txtItem, txtQty, txtRate, txtAmount, txtRemark;
         LinearLayout childLayout, modifierLayout, modifierRateLayout, modifierAmountLayout, remarkLayout;
         ImageView ivClose;
 

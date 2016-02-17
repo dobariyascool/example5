@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">POS</string>
+    <string name="app_name">Central POS</string>
 
     <!-- activity title -->
     <string name="title_activity_welcome">WelcomeActivity</string>
@@ -29,7 +29,13 @@
     <string name="title_fragment_guest_options">Guest Option</string>
     <string name="title_fragment_waiter_options">Waiter Option</string>
     <string name="title_fragment_offer_detail">Offer Detail</string>
+    <string name="title_fragment_about_us">About Us</string>
     <string name="title_fragment_policy">Privacy Policy</string>
+    <string name="title_fragment_myaccount">My Account</string>
+    <string name="title_fragment_myprofile">My Profile</string>
+    <string name="title_fragment_notification_settings">Notification Settings</string>
+    <string name="title_fragment_change_password">Change Password</string>
+    <string name="title_fragment_table_order">Orders</string>
     <!-- end -->
 
     <string name="hello_world">Hello world!</string>
@@ -63,6 +69,11 @@
     <string name="MsgCartItem">Item is added into dish</string>
     <string name="MsgConfirmOrder">Items are place into order</string>
     <string name="MsgAddPerson">Person is added successfully</string>
+    <string name="MsgUpdateProfile">Profile updated successfully</string>
+    <string name="MsgUpdatePassword">Password changed successfully</string>
+    <string name="MsgOffer">Currently No offers available.</string>
+    <string name="MsgGallery">No Images Yet.</string>
+    <string name="MsgItem">There is no item.</string>
     <!-- End -->
 
     <string name="splash_screen">arraybitlogo</string>
@@ -103,6 +114,8 @@
     <string name="suMale">Male</string>
     <string name="suFemale">Female</string>
     <string name="suGender">Gender</string>
+    <string name="suBirthDate">Birth Date</string>
+    <string name="suUpdate">Update Profile</string>
     <!-- end -->
 
 
@@ -142,6 +155,7 @@
     <!-- login dialog -->
     <string name="ldLogin">Login</string>
     <string name="ldCancel">Cancel</string>
+    <string name="ldSkip">Skip</string>
     <!-- end -->
 
     <!-- row_workinghours-->
@@ -261,6 +275,7 @@
     <string name="wolfTable">Dine In</string>
     <string name="wolfMenu">Take Away</string>
     <string name="wolfOffer">Offers</string>
+    <string name="wolfGenerate">Generate Bill</string>
     <!-- end -->
 
     <!-- fragment guest option list-->
@@ -297,6 +312,7 @@
 
     <!-- fragment order summary -->
     <string name="osfTotalAmount">Total Amount</string>
+    <string name="osfRounding">Rounding Off</string>
     <string name="osfNetAmount">Net Amount</string>
     <string name="osfTax">Tax</string>
     <string name="osfDiscount">Discount</string>
@@ -321,4 +337,49 @@
     <string name="odfToDateTime">To</string>
     <string name="title_activity_main2">Main2Activity</string>
     <!-- end -->
+
+    <!-- about us fragment -->
+    <string name="abLegal">Legal</string>
+    <string name="abApp">About This</string>
+    <string name="abVersion">Build Version</string>
+    <string name="abPolicy">Privacy Policy</string>
+    <string name="abTerms">Terms Of Service</string>
+    <string name="abBuildVersion">Build Version</string>
+    <string name="abDiscountza">Discounza.com - Why pay full price?</string>
+    <string name="abVersionName">Version Name</string>
+    <string name="abVersionCode">Version Code</string>
+    <!-- end -->
+
+    <!-- myaccount fragment -->
+    <string-array name="Option">
+        <item>Notification Settings</item>
+        <item>Change Password</item>
+        <item>Logout</item>
+    </string-array>
+    <!-- end -->
+
+    <!-- notification settings -->
+    <string name="NotificationSettingDescription"><![CDATA[Manage your push notifications from this section]]></string>
+    <string name="PushNotificationOnOff">Push Notification</string>
+    <string name="EmailNotificationOnOff">Email Notification</string>
+    <string name="NotificationOnOffTime">Notify me between</string>
+    <string name="NoOnTime">On Time</string>
+    <string name="NoOffTime">Off Time</string>
+    <!-- end -->
+
+    <!-- change password fragment -->
+    <string name="cpOldPassword">Old Password</string>
+    <string name="cpNewPasssword">New Password</string>
+    <string name="cpConfirmPassword">Confirm Password</string>
+    <string name="cpChangePassword">Change Password</string>
+    <!-- end -->
+
+    <!-- order status dialog -->
+    <string name="osdTitle">Change Status</string>
+    <string name="osdCooking">Cooking</string>
+    <string name="osdServed">Served</string>
+    <string name="osdCancel">Cancelled</string>
+    <string name="osdReady">Ready</string>
+    <!-- end -->
+
 </resources>

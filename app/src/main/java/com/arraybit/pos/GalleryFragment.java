@@ -22,6 +22,8 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
 @SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
 public class GalleryFragment extends Fragment {
@@ -57,7 +59,7 @@ public class GalleryFragment extends Fragment {
                 Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
         } else if (alBusinessGalleryTran.size() == 0) {
-            txtMsg.setText(getResources().getString(R.string.MsgNoRecord));
+            txtMsg.setText(getResources().getString(R.string.MsgGallery));
         } else {
             SetGalleryRecyclerView(alBusinessGalleryTran);
         }
@@ -87,7 +89,8 @@ public class GalleryFragment extends Fragment {
         rvGallery.setVisibility(View.VISIBLE);
         txtMsg.setVisibility(View.GONE);
         adapter = new GalleryAdapter(getActivity(), lstBusinessGalleryTran,getActivity().getSupportFragmentManager());
-        rvGallery.setAdapter(adapter);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
+        rvGallery.setAdapter(scaleInAnimationAdapter);
         rvGallery.setLayoutManager(gridLayoutManager);
     }
 
@@ -135,7 +138,7 @@ public class GalleryFragment extends Fragment {
             } else {
                 if (lstBusinessGalleryTran.size() == 0) {
                     if (currentPage == 1) {
-                        txtMsg.setText(getResources().getString(R.string.MsgNoRecord));
+                        txtMsg.setText(getResources().getString(R.string.MsgGallery));
                     }
                 } else {
                     SetGalleryRecyclerView(lstBusinessGalleryTran);

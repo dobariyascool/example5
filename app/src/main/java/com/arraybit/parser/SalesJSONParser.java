@@ -177,7 +177,7 @@ public class SalesJSONParser
             stringer.key("linktoWaiterMasterIdCaptain").value(objSalesMaster.getlinktoWaiterMasterIdCaptain());
             stringer.key("linktoCustomerMasterId").value(objSalesMaster.getlinktoCustomerMasterId());
             stringer.key("linktoOrderTypeMasterId").value(objSalesMaster.getlinktoOrderTypeMasterId());
-            stringer.key("linktoOrderStatusMasterId").value(objSalesMaster.getlinktoOrderStatusMasterId());
+            stringer.key("linktoOrderStatusMasterId").value(null);
             stringer.key("TotalAmount").value(objSalesMaster.getTotalAmount());
             stringer.key("TotalTax").value(objSalesMaster.getTotalTax());
             stringer.key("DiscountPercentage").value(objSalesMaster.getDiscountPercentage());
@@ -208,14 +208,14 @@ public class SalesJSONParser
                 stringer.key("ItemCode").value(alSalesItemTran.get(i).getItemCode());
                 stringer.key("ItemName").value(alSalesItemTran.get(i).getItemName());
                 stringer.key("Quantity").value(alSalesItemTran.get(i).getQuantity());
-                stringer.key("SellPrice").value(alSalesItemTran.get(i).getSellPrice());
+                stringer.key("ActualSellPrice").value(alSalesItemTran.get(i).getActualSellPrice());
                 stringer.key("Remark").value(alSalesItemTran.get(i).getRemark());
                 stringer.key("lstOrderItemModifierTran");
                 stringer.array();
                 for(int j=0;j<alSalesItemTran.get(i).getAlOrderItemModifierTran().size();j++){
                     stringer.object();
                     stringer.key("ItemModifierMasterIds").value(alSalesItemTran.get(i).getAlOrderItemModifierTran().get(j).getItemModifierIds());
-                    stringer.key("MRP").value(alSalesItemTran.get(i).getAlOrderItemModifierTran().get(j).getSellPrice());
+                    stringer.key("ActualSellPrice").value(alSalesItemTran.get(i).getAlOrderItemModifierTran().get(j).getActualSellPrice());
                     stringer.endObject();
                 }
                 stringer.endArray();

@@ -27,6 +27,8 @@ import com.arraybit.parser.CounterJSONParser;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 @SuppressLint("ValidFragment")
 public class CounterFragment extends Fragment {
@@ -138,7 +140,8 @@ public class CounterFragment extends Fragment {
 
                 rvCounter.setVisibility(View.VISIBLE);
                 adapter = new CounterAdapter(getActivity(), alCounterMaster, userType);
-                rvCounter.setAdapter(adapter);
+                ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
+                rvCounter.setAdapter(scaleInAnimationAdapter);
                 rvCounter.setLayoutManager(linearLayoutManager);
             }
         }

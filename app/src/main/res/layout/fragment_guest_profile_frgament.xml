@@ -1,0 +1,157 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/offwhite"
+    tools:context=".GuestProfileFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <RelativeLayout
+            android:id="@+id/topPanel"
+            android:layout_width="match_parent"
+            android:layout_height="192dp"
+            android:background="@color/primary">
+
+            <include
+                android:id="@+id/app_bar"
+                layout="@layout/app_bar" />
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtLoginChar"
+                style="@style/PrimaryTextView"
+                android:layout_width="@dimen/ct_width"
+                android:layout_height="@dimen/ct_height"
+                android:layout_centerInParent="true"
+                android:background="@drawable/myaccount_selector"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/control_TextLarge" />
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtFullName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtLoginChar"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtFullName"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/control_SpecingMedium">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.rey.material.widget.EditText
+                    android:id="@+id/etFirstName"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/suFirstName"
+                    android:inputType="textPersonName" />
+
+                <com.rey.material.widget.EditText
+                    android:id="@+id/etLastName"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/suLastName"
+                    android:inputType="textPersonName" />
+
+                <com.rey.material.widget.EditText
+                    android:id="@+id/etPhone"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/suPhone"
+                    android:inputType="phone"
+                    android:maxLength="10" />
+
+                <com.rey.material.widget.EditText
+                    android:id="@+id/etDateOfBirth"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/suBirthDate"
+                    android:onClick="EditTextOnClick"/>
+
+                <RadioGroup
+                    android:id="@+id/rgMain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbMale"
+                        style="@style/RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:text="@string/suMale" />
+
+                    <RadioButton
+                        android:id="@+id/rbFemale"
+                        style="@style/RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/control_SpecingMedium"
+                        android:gravity="center"
+                        android:text="@string/suFemale" />
+                </RadioGroup>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/control_SpecingSmall"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.rey.material.widget.TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/control_SpecingSmall"
+                        android:gravity="center"
+                        android:text="Area"
+                        android:textColor="@color/primary"
+                        tools:ignore="HardcodedText" />
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/spnrArea"
+                        style="@style/Spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnUpdateProfile"
+                    style="@style/Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/control_SpecingSmall"
+                    android:text="@string/suUpdate" />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</FrameLayout>

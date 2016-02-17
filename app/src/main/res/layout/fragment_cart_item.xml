@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cartItemFragment"
     android:layout_width="match_parent"
@@ -101,8 +102,32 @@
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         android:layout_marginTop="@dimen/control_SpecingSmall"
-        android:layout_weight="0.9" />
+        android:layout_weight="0.77" />
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/cvRemark"
+        style="@style/DefaultCardView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/control_SpecingTiny"
+        android:layout_marginEnd="@dimen/control_SpecingSmall"
+        android:layout_marginStart="@dimen/control_SpecingSmall"
+        android:layout_marginTop="@dimen/control_SpecingTiny"
+        android:layout_weight="0.13">
+
+        <com.rey.material.widget.EditText
+            android:id="@+id/etRemark"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:hint="@string/aiqfRemark"
+            android:paddingEnd="@dimen/control_SpecingSmall"
+            android:paddingStart="@dimen/control_SpecingSmall"
+            android:singleLine="true"
+            app:et_inputId="@+id/remarkInput"/>
+
+    </android.support.v7.widget.CardView>
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
@@ -131,6 +156,5 @@
             android:layout_marginStart="@dimen/control_SpecingSmall"
             android:layout_weight="1"
             android:text="@string/cifConfirmOrder" />
-
     </LinearLayout>
 </LinearLayout>

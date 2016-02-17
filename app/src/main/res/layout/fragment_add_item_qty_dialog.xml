@@ -47,32 +47,6 @@
                 android:textSize="14sp" />
 
         </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutModifier"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/aiqfModifier"
-            android:paddingBottom="0dp"
-            android:paddingEnd="@dimen/control_SpecingSmall"
-            android:paddingStart="@dimen/control_SpecingSmall"
-            android:paddingTop="@dimen/control_SpecingTiny"
-            android:textColor="@android:color/black"
-            android:textColorHint="@color/primary_dark"
-            app:et_labelTextColor="@android:color/black">
-
-            <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
-                android:id="@+id/actModifier"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/arrow_drop_down"
-                android:dropDownHeight="190dp"
-                android:imeOptions="actionDone"
-                android:lineSpacingMultiplier="1"
-                android:textSize="14sp" />
-
-        </android.support.design.widget.TextInputLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"

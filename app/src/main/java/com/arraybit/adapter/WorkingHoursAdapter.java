@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.BusinessHoursTran;
@@ -15,6 +16,7 @@ import com.rey.material.widget.TextView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -59,6 +61,13 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         }
         holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()));
 
+        Calendar calendar = Calendar.getInstance();
+        if(Globals.Days.valueOf("Day"+calendar.get(Calendar.DAY_OF_WEEK)).getValue().equals(holder.txtDayOfWeek.getText())){
+            holder.layoutChild.setSelected(true);
+        }else{
+            holder.layoutChild.setSelected(false);
+        }
+
         if (current.getOpeningTime().equals("12:00 AM")) {
             holder.txtStartTime.setText("Close");
             holder.txtEndTime.setVisibility(View.GONE);
@@ -81,9 +90,12 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
 
     class WorkingHoursViewHolder extends RecyclerView.ViewHolder {
         TextView txtDayOfWeek, txtStartTime, txtEndTime, txtHeader;
+        LinearLayout layoutChild;
 
         public WorkingHoursViewHolder(View itemView) {
             super(itemView);
+
+            layoutChild = (LinearLayout)itemView.findViewById(R.id.layoutChild);
 
             txtDayOfWeek = (TextView) itemView.findViewById(R.id.txtDayOfWeek);
             txtStartTime = (TextView) itemView.findViewById(R.id.txtStartTime);

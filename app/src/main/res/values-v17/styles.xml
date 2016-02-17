@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="CardView" parent="AppCompactCardView">
-        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
-        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
-        <item name="cardBackgroundColor">@color/transparent_orange</item>
-    </style>
-
-    <style name="CardViewOptions" parent="AppCompactCardView">
-        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
-        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
-        <item name="cardBackgroundColor">@color/transparent_orange</item>
-    </style>
-
+    <style name="AppCompactCardView">android.support.v7.CardView</style>
     <style name="CardViewTransparent" parent="AppCompactCardView">
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
-        <item name="cardBackgroundColor">#ffffff</item>
+        <item name="cardBackgroundColor">@color/transparent_orange</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardMaxElevation">0dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
     </style>
 
+    <style name="DefaultCardView" parent="AppCompactCardView">
+        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
+        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardMaxElevation">0dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
+    </style>
+
+    <style name="CardViewBlock" parent="AppCompactCardView">
+        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
+        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
+        <item name="cardBackgroundColor">@color/transparent_orange</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardMaxElevation">0dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
+    </style>
 </resources>

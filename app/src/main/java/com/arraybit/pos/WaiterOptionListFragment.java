@@ -31,12 +31,12 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
         LinearLayout layoutOrders = (LinearLayout) view.findViewById(R.id.layoutOrders);
         LinearLayout layoutDineIn = (LinearLayout) view.findViewById(R.id.layoutDineIn);
         LinearLayout layoutTakeAway = (LinearLayout) view.findViewById(R.id.layoutTakeAway);
-        LinearLayout layoutOffers = (LinearLayout) view.findViewById(R.id.layoutOffers);
+        LinearLayout layoutBill = (LinearLayout) view.findViewById(R.id.layoutBill);
 
         layoutOrders.setOnClickListener(this);
         layoutDineIn.setOnClickListener(this);
         layoutTakeAway.setOnClickListener(this);
-        layoutOffers.setOnClickListener(this);
+        layoutBill.setOnClickListener(this);
 
         setHasOptionsMenu(true);
 
@@ -59,8 +59,8 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
                 Globals.ReplaceFragment(new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.DineIn.getValue())), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_all_tables));
             } else if (v.getId() == R.id.layoutTakeAway) {
                 Globals.ReplaceFragment(new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.TakeAway.getValue())), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_all_tables));
-            } else if (v.getId() == R.id.layoutOffers) {
-                Globals.ReplaceFragment(new OfferFragment(getActivity()), getActivity().getSupportFragmentManager(), null);
+            } else if (v.getId() == R.id.layoutBill) {
+                Globals.ReplaceFragment(new TableOrderFragment(),getActivity().getSupportFragmentManager(),null);
             }
         }
     }

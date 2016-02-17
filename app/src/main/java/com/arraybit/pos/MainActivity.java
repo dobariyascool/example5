@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Globals.serverName ="10.0.3.2:3653";
+        Globals.ChangeUrl();
+
         CoordinatorLayout coordinatorlayout = (CoordinatorLayout)findViewById(R.id.coordinatorlayout);
 
         if(Service.CheckNet(MainActivity.this)){
@@ -40,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Globals.ShowSnackBar(v,"meassage",MainActivity.this,1000);
+//                Globals.ShowSnackBar(v,"meassage",MainActivity.this,1000);
             }
         });
+
+
 //
 //        RecyclerView listView = (RecyclerView)findViewById(R.id.lvToDoList);
 //        ArrayList<String> alStringFilter = new ArrayList<>();

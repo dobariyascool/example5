@@ -36,7 +36,6 @@ import com.arraybit.parser.TableJSONParser;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 
@@ -58,6 +57,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     boolean isFilter;
     Bundle bundle;
     String linktoOrderTypeMasterId;
+    ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     public TableTabFragment() {
         // Required empty public constructor
@@ -132,7 +132,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                         public boolean onMenuItemActionCollapse(MenuItem item) {
                             // Do something when collapsed
                             if (alTableMaster.size() != 0 && alTableMaster != null) {
-                                tablesAdapter.SetSearchFilter(alTableMaster);
+                                tablesAdapter.SetSearchFilter(alTableMaster, scaleInAnimationAdapter);
                                 Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
                             }
                             return true; // Return true to collapse action view
@@ -161,22 +161,22 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
 
     public void TableDataFilter(String tableStatusMasterId) {
         ArrayList<TableMaster> alTableMasterFilter = new ArrayList<>();
-        if(tableStatusMasterId!=null) {
+        if (tableStatusMasterId != null) {
             for (int i = 0; i < alTableMaster.size(); i++) {
                 if (alTableMaster.get(i).getlinktoTableStatusMasterId() == Short.valueOf(tableStatusMasterId)) {
                     alTableMasterFilter.add(alTableMaster.get(i));
                 }
             }
-            if(alTableMasterFilter.size()==0){
+            if (alTableMasterFilter.size() == 0) {
                 Globals.SetError(txtMsg, rvTables, getActivity().getResources().getString(R.string.MsgNoRecord), true);
-            }else{
+            } else {
                 Globals.SetError(txtMsg, rvTables, null, false);
                 SetupRecyclerView(rvTables, alTableMasterFilter);
             }
-        }else{
-            if(alTableMaster.size()==0){
+        } else {
+            if (alTableMaster.size() == 0) {
                 Globals.SetError(txtMsg, rvTables, getActivity().getResources().getString(R.string.MsgNoRecord), true);
-            }else{
+            } else {
                 Globals.SetError(txtMsg, rvTables, null, false);
                 SetupRecyclerView(rvTables, alTableMaster);
             }
@@ -193,7 +193,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     public boolean onQueryTextChange(String newText) {
         if (alTableMaster.size() != 0 && alTableMaster != null) {
             final ArrayList<TableMaster> filteredList = Filter(alTableMaster, newText);
-            tablesAdapter.SetSearchFilter(filteredList);
+            tablesAdapter.SetSearchFilter(filteredList, scaleInAnimationAdapter);
         }
         return false;
     }
@@ -224,7 +224,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
             Bundle bundle = new Bundle();
             bundle.putParcelable("TableMaster", objTableMaster);
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment(null);
+            OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
             orderSummaryFragment.setArguments(bundle);
             if (Build.VERSION.SDK_INT >= 21) {
                 Slide slideTransition = new Slide();
@@ -254,7 +254,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     @Override
     public void UpdateTableStatus(boolean flag, TableMaster objTableMaster) {
         if (flag) {
-            tablesAdapter.UpdateData(position, objTableMaster);
+            tablesAdapter.UpdateData(position, objTableMaster, scaleInAnimationAdapter);
         }
     }
 
@@ -281,18 +281,14 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         return filteredList;
     }
 
-    private void SetupRecyclerView(RecyclerView rvTables,ArrayList<TableMaster> alTableMaster) {
+    private void SetupRecyclerView(RecyclerView rvTables, ArrayList<TableMaster> alTableMaster) {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager());
         } else {
             tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager());
         }
-        ScaleInAnimationAdapter animationAdapter  =  new ScaleInAnimationAdapter(tablesAdapter);
-        //AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(tablesAdapter);
-        //SlideInBottomAnimatorAdapter animationAdapter = new SlideInBottomAnimatorAdapter(tablesAdapter);
-        //animationAdapter.setFirstOnly(true);
-        //rvCartItem.setItemAnimator(new ScaleInLeftAnimator());
-        rvTables.setAdapter(new AlphaInAnimationAdapter(animationAdapter));
+        scaleInAnimationAdapter = new ScaleInAnimationAdapter(tablesAdapter);
+        rvTables.setAdapter(scaleInAnimationAdapter);
         rvTables.setLayoutManager(gridLayoutManager);
         rvTables.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -325,7 +321,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         protected Object doInBackground(Object[] objects) {
 
             TableJSONParser objTableJSONParser = new TableJSONParser();
-            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(counterMasterId, sectionMasterId,tableStatusMasterId,linktoOrderTypeMasterId);
+            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(counterMasterId, sectionMasterId, tableStatusMasterId, linktoOrderTypeMasterId);
         }
 
         @Override
@@ -342,7 +338,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
             } else {
                 Globals.SetError(txtMsg, rvTables, null, false);
                 alTableMaster = lstTableMaster;
-                SetupRecyclerView(rvTables,alTableMaster);
+                SetupRecyclerView(rvTables, alTableMaster);
             }
         }
     }

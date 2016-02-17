@@ -32,7 +32,7 @@ public class ThankYouFragment extends Fragment {
         btnFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(),null);
+                Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), null);
             }
         });
 

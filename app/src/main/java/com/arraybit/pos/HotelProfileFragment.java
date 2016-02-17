@@ -113,12 +113,13 @@ public class HotelProfileFragment extends Fragment {
 
         if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             menu.findItem(R.id.mWaiting).setVisible(false);
+        } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()!=null
+                && getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName().equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
+            menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.registration).setVisible(false);
         } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
-        } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_home))) {
-            menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.registration).setVisible(false);
         }
 
     }

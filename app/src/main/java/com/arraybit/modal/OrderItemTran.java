@@ -15,13 +15,16 @@ public class OrderItemTran implements Parcelable {
     short ItemPoint;
     short DeductedPoint;
     String ItemRemark;
-    short linktoOrderStatusMasterId;
+    Short linktoOrderStatusMasterId;
     String UpdateDateTime;
     short linktoUserMasterIdUpdatedBy;
     /// Extra
     String Order;
     String Item;
     String OrderStatus;
+    String OrderItemTranIds;
+    String ModifierRates;
+
     public static final Creator<OrderItemTran> CREATOR = new Creator<OrderItemTran>() {
         @Override
         public OrderItemTran createFromParcel(Parcel source) {
@@ -42,6 +45,8 @@ public class OrderItemTran implements Parcelable {
             objOrderItemTran.Order = source.readString();
             objOrderItemTran.Item = source.readString();
             objOrderItemTran.OrderStatus = source.readString();
+            objOrderItemTran.OrderItemTranIds = source.readString();
+            objOrderItemTran.ModifierRates = source.readString();
             return objOrderItemTran;
 
         }
@@ -116,11 +121,11 @@ public class OrderItemTran implements Parcelable {
         this.ItemRemark = itemRemark;
     }
 
-    public short getlinktoOrderStatusMasterId() {
+    public Short getlinktoOrderStatusMasterId() {
         return this.linktoOrderStatusMasterId;
     }
 
-    public void setlinktoOrderStatusMasterId(short linktoOrderStatusMasterId) {
+    public void setlinktoOrderStatusMasterId(Short linktoOrderStatusMasterId) {
         this.linktoOrderStatusMasterId = linktoOrderStatusMasterId;
     }
 
@@ -160,11 +165,28 @@ public class OrderItemTran implements Parcelable {
         return this.OrderStatus;
     }
 
-    //endregion
-
     public void setOrderStatus(String orderStatus) {
         this.OrderStatus = orderStatus;
     }
+
+    public String getOrderItemTranIds() {
+        return OrderItemTranIds;
+    }
+
+    public void setOrderItemTranIds(String orderItemTranIds) {
+        OrderItemTranIds = orderItemTranIds;
+    }
+
+    public String getModifierRates() {
+        return ModifierRates;
+    }
+
+    public void setModifierRates(String modifierRates) {
+        ModifierRates = modifierRates;
+    }
+
+    //endregion
+
 
     @Override
     public int describeContents() {
@@ -190,6 +212,8 @@ public class OrderItemTran implements Parcelable {
         parcel.writeString(Order);
         parcel.writeString(Item);
         parcel.writeString(OrderStatus);
+        parcel.writeString(OrderItemTranIds);
+        parcel.writeString(ModifierRates);
 
     }
 }

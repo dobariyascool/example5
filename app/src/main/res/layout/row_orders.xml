@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/cvOrder"
-    style="@style/CardView"
+    style="@style/CardViewTransparent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/control_SpecingTiny"
@@ -13,10 +13,57 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/control_SpecingTiny"
+        android:paddingBottom="@dimen/control_SpecingSmall"
         android:paddingEnd="@dimen/control_SpecingSmall"
         android:paddingStart="@dimen/control_SpecingSmall"
         android:paddingTop="@dimen/control_SpecingTiny">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/control_SpecingTiny"
+            android:layout_marginTop="@dimen/control_SpecingTiny"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtTableName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/control_TextMedium"
+                    android:textStyle="bold" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtOrderNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingEnd="@dimen/control_SpecingTiny"
+                    android:paddingStart="@dimen/control_SpecingTiny"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/control_TextMedium" />
+
+            </LinearLayout>
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtOrderTime"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="end|center"
+                android:maxLines="1"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/control_TextSmall" />
+
+        </LinearLayout>
 
         <com.rey.material.widget.TextView
             android:id="@+id/txtOrderTimeDifference"
@@ -28,51 +75,28 @@
             android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.TextView
-            android:id="@+id/txtOrderTime"
+            android:id="@+id/txtOrderType"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:maxLines="1"
-            android:textColor="@color/grey"
+            android:textColor="#C0CA33"
             android:textSize="@dimen/control_TextSmall" />
 
-        <com.rey.material.widget.TextView
-                android:id="@+id/txtTableName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/control_TextMedium"
-                android:textStyle="bold" />
+        <!--<com.rey.material.widget.TextView-->
+            <!--android:id="@+id/txtOrderTime"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="end"-->
+            <!--android:maxLines="1"-->
+            <!--android:textColor="@color/grey"-->
+            <!--android:textSize="@dimen/control_TextSmall" />-->
 
-        <com.rey.material.widget.TextView
-                android:id="@+id/txtOrderNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/grey"
-                android:textSize="@dimen/control_TextSmall" />
-
-        <com.rey.material.widget.TextView
-                android:id="@+id/txtOrderType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:maxLines="1"
-                android:textColor="#C0CA33"
-                android:textSize="@dimen/control_TextSmall" />
-
-
-        <com.rey.material.widget.TextView
-                android:id="@+id/txtTotalItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:textColor="@color/grey"
-                android:textSize="@dimen/control_TextSmall" />
+        <LinearLayout
+            android:id="@+id/itemLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
 
         <com.rey.material.widget.TextView
             android:id="@+id/txtTotalAmount"
@@ -81,7 +105,8 @@
             android:gravity="end"
             android:textColor="@android:color/white"
             android:textSize="@dimen/control_TextMedium"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>
 

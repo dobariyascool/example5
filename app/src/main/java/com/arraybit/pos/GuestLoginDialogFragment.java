@@ -1,14 +1,19 @@
 package com.arraybit.pos;
 
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -49,10 +54,20 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onShow(DialogInterface dialog) {
+            public void onShow(final DialogInterface dialog) {
 
                 CompoundButton cbSignUp = (CompoundButton) getDialog().findViewById(R.id.cbSignUp);
+                CompoundButton cbSkip = (CompoundButton) getDialog().findViewById(R.id.cbSkip);
                 Button positive = (alertDialog).getButton(DialogInterface.BUTTON_POSITIVE);
+
+                if (getTargetFragment() != null) {
+                    Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
+                    if (getTargetFragment() == currentFragment) {
+                        cbSkip.setVisibility(View.VISIBLE);
+                    }else{
+                        cbSkip.setVisibility(View.GONE);
+                    }
+                }
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -80,7 +95,6 @@ public class GuestLoginDialogFragment extends DialogFragment {
                             Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
                             if (getTargetFragment() == currentFragment) {
                                 dismiss();
-                                Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
                             } else {
                                 dismiss();
                                 objLoginResponseListener = (LoginResponseListener) getTargetFragment();
@@ -103,15 +117,32 @@ public class GuestLoginDialogFragment extends DialogFragment {
                                 signUpFragment.setTargetFragment(getTargetFragment(), 0);
                                 Globals.ReplaceFragment(signUpFragment, getActivity().getSupportFragmentManager(), null);
                             }
+                            else if(getTargetFragment() == getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_offer_detail))){
+                                ReplaceFragment(new SignUpFragment(), null);
+                            }
+                            else if(MenuActivity.parentActivity && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()==null) {
+                                //first remove current tab and then open signup fragment
+                                objLoginResponseListener = (LoginResponseListener)getTargetFragment();
+                                objLoginResponseListener.LoginResponse();
+                            }
                             else{
                                 SignUpFragment signUpFragment = new SignUpFragment();
                                 signUpFragment.setTargetFragment(getTargetFragment(), 0);
                                 Globals.ReplaceFragment(signUpFragment, getActivity().getSupportFragmentManager(), null);
+
                             }
                         } else {
                             Globals.ReplaceFragment(new SignUpFragment(), getActivity().getSupportFragmentManager(), null);
                         }
                         dismiss();
+                    }
+                });
+
+                cbSkip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        dismiss();
+                        Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
                     }
                 });
             }
@@ -121,6 +152,22 @@ public class GuestLoginDialogFragment extends DialogFragment {
     }
 
     //region Private Methods and Interface
+    @SuppressLint("RtlHardcoded")
+    private void ReplaceFragment(Fragment fragment,String fragmentName){
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= 21) {
+            Slide slideTransition = new Slide();
+            slideTransition.setSlideEdge(Gravity.RIGHT);
+            slideTransition.setDuration(500);
+            fragment.setEnterTransition(slideTransition);
+        } else {
+            fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
+        }
+        fragmentTransaction.replace(R.id.offerDetailFragment, fragment, fragmentName);
+        fragmentTransaction.addToBackStack(fragmentName);
+        fragmentTransaction.commit();
+    }
+
     private boolean ValidateControls() {
         boolean IsValid = true;
 
@@ -148,11 +195,13 @@ public class GuestLoginDialogFragment extends DialogFragment {
         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) == null) {
             objSharePreferenceManage.CreatePreference("RegistrationPreference", "RegisteredUserMasterId", String.valueOf(objRegisteredUserMaster.getRegisteredUserMasterId()), getActivity());
         }
-        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FullName", getActivity()) == null) {
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", String.valueOf(objRegisteredUserMaster.getFirstName()) + " " + String.valueOf(objRegisteredUserMaster.getLastName()), getActivity());
-        }
-        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()) == null) {
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName", String.valueOf(objRegisteredUserMaster.getFirstName()), getActivity());
+        if(!objRegisteredUserMaster.getFirstName().equals("")) {
+            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FullName", getActivity()) == null) {
+                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", String.valueOf(objRegisteredUserMaster.getFirstName()) + " " + String.valueOf(objRegisteredUserMaster.getLastName()), getActivity());
+            }
+            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()) == null) {
+                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName", String.valueOf(objRegisteredUserMaster.getFirstName()), getActivity());
+            }
         }
     }
 
@@ -182,8 +231,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-
-            objRegisteredUserMaster = objRegisteredUserJSONParser.SelectRegisteredUserMasterUserName(strUserName, strPassword);
+            objRegisteredUserMaster = objRegisteredUserJSONParser.SelectRegisteredUserMasterUserName(strUserName, strPassword,0);
             return objRegisteredUserMaster;
         }
 
@@ -205,6 +253,26 @@ public class GuestLoginDialogFragment extends DialogFragment {
                         }
                         dismiss();
                         Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getFragmentManager(),getActivity().getResources().getString(R.string.title_fragment_feedback));
+                    }
+                    else if(getTargetFragment() == getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_offer_detail))){
+                        CreateGuestPreference();
+                        ClearControls();
+                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
+                        objSharePreferenceManage = new SharePreferenceManage();
+                        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
+                            Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
+                        }
+                        dismiss();
+                    }
+                    else if(MenuActivity.parentActivity && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()==null){
+                        CreateGuestPreference();
+                        ClearControls();
+                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
+                        objSharePreferenceManage = new SharePreferenceManage();
+                        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
+                            Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
+                        }
+                        dismiss();
                     }
                     else {
                         CreateGuestPreference();

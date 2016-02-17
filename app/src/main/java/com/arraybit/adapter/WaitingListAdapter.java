@@ -14,6 +14,8 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
 public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.WaitingListViewHolder> {
 
     Context context;
@@ -54,16 +56,12 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
         return alWaitingMaster.size();
     }
 
-    public void WaitingListDataChanged(ArrayList<WaitingMaster> result) {
-        alWaitingMaster.addAll(result);
-        notifyDataSetChanged();
-    }
 
-    public void WaitingListDataRemove(int position) {
+    public void WaitingListDataRemove(int position,ScaleInAnimationAdapter scaleInAnimationAdapter) {
         alWaitingMaster.remove(position);
         notifyItemRemoved(position);
         //change the index
-        notifyDataSetChanged();
+        scaleInAnimationAdapter.notifyDataSetChanged();
     }
 
     //region interface

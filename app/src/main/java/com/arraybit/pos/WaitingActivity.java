@@ -58,8 +58,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //end
 
         //naviagtionview
-        View headerView = LayoutInflater.from(WaitingActivity.this).inflate(R.layout.navigation_header, null);
-        ImageView ivLogo = (ImageView)headerView.findViewById(R.id.ivLogo);
+        @SuppressLint("InflateParams") View headerView = LayoutInflater.from(WaitingActivity.this).inflate(R.layout.navigation_header, null);
+        ImageView ivLogo = (ImageView) headerView.findViewById(R.id.ivLogo);
         ivLogo.setVisibility(View.GONE);
         TextView txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
         TextView txtName = (TextView) headerView.findViewById(R.id.txtName);
@@ -78,7 +78,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
         //drawerlayout and actionbardrawertoggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        Globals.SetNavigationDrawer(actionBarDrawerToggle, WaitingActivity.this, drawerLayout, app_bar,getSupportFragmentManager());
+        Globals.SetNavigationDrawer(actionBarDrawerToggle, WaitingActivity.this, drawerLayout, app_bar, getSupportFragmentManager());
         //end
 
         //linear layout
@@ -177,9 +177,9 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
             }
-        }else if(menuItem.getItemId() == R.id.wAbout){
+        } else if (menuItem.getItemId() == R.id.wAbout) {
             drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new AboutUsFragment((short) 1), getSupportFragmentManager(),null);
+            Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
         }
         return false;
     }

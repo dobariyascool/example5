@@ -197,7 +197,7 @@
 
     <style name="MaterialTabLayout">android.support.design.widget.TabLayout</style>
 
-    <style name="AppCompactCardView">android.support.v7.cardview</style>
+    <style name="AppCompactCardView">android.support.v7.CardView</style>
 
     <style name="FloatingActionButton">com.github.clans.fab.FloatingActionButton</style>
 
@@ -227,25 +227,41 @@
         <item name="rd_rippleType">wave</item>
     </style>
 
-    <style name="CardView" parent="AppCompactCardView">
-        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
-        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
-        <item name="cardElevation">@dimen/card_Elevation</item>
-        <item name="cardBackgroundColor">@color/transparent_orange</item>
-    </style>
-
     <style name="CardViewTransparent" parent="AppCompactCardView">
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
         <item name="cardElevation">@dimen/card_Elevation</item>
-        <item name="cardBackgroundColor">#ffffff</item>
+        <item name="cardBackgroundColor">@color/transparent_orange</item>
     </style>
 
-    <style name="CardViewOptions" parent="AppCompactCardView">
+    <style name="DefaultCardView" parent="AppCompactCardView">
+        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
+        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
+        <item name="cardElevation">@dimen/card_Elevation</item>
+        <!--<item name="android:layout_marginBottom">@dimen/card_Margin</item>-->
+    </style>
+
+    <style name="CardViewBlock" parent="AppCompactCardView">
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
         <item name="cardElevation">@dimen/card_Elevation</item>
         <item name="cardBackgroundColor">@color/transparent_orange</item>
+    </style>
+
+    <style name="Switch">
+        <item name="sw_trackSize">14dp</item>
+        <item name="sw_trackCap">round</item>
+        <item name="sw_thumbRadius">10dp</item>
+        <item name="sw_thumbElevation">2dp</item>
+        <item name="sw_animDuration">@android:integer/config_shortAnimTime</item>
+        <item name="sw_interpolator">@android:anim/decelerate_interpolator</item>
+    </style>
+
+    <style name="DialogButton" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">#009688</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Button</item>
     </style>
 
     <!--fab:menu_backgroundColor="@color/transparentBackground"-->
@@ -259,27 +275,27 @@
     <!--fab:menu_labels_singleLine="true"-->
 
     <!--<style name="FloatingMenu" parent="FloatingActionMenu">-->
-        <!--<item name="menu_backgroundColor">@color/transparentBackground</item>-->
-        <!--<item name="menu_colorNormal">@color/accent_dark</item>-->
-        <!--<item name="menu_colorPressed">@color/accent</item>-->
-        <!--<item name="menu_colorRipple">@color/accent_light</item>-->
-        <!--<item name="menu_labels_ellipsize">end</item>-->
-        <!--<item name="menu_labels_hideAnimation">@anim/jump_to_down</item>-->
-        <!--<item name="menu_labels_position">left</item>-->
-        <!--<item name="menu_labels_showAnimation">@anim/jump_from_down</item>-->
-        <!--<item name="menu_labels_singleLine">true</item>-->
+    <!--<item name="menu_backgroundColor">@color/transparentBackground</item>-->
+    <!--<item name="menu_colorNormal">@color/accent_dark</item>-->
+    <!--<item name="menu_colorPressed">@color/accent</item>-->
+    <!--<item name="menu_colorRipple">@color/accent_light</item>-->
+    <!--<item name="menu_labels_ellipsize">end</item>-->
+    <!--<item name="menu_labels_hideAnimation">@anim/jump_to_down</item>-->
+    <!--<item name="menu_labels_position">left</item>-->
+    <!--<item name="menu_labels_showAnimation">@anim/jump_from_down</item>-->
+    <!--<item name="menu_labels_singleLine">true</item>-->
     <!--</style>-->
 
     <style name="FloatingMenu" parent="FloatingActionMenu">
-    <item name="menu_backgroundColor">@color/transparentBackground</item>
-    <item name="menu_colorNormal">@color/orange</item>
-    <item name="menu_colorPressed">@color/orange_light</item>
-    <item name="menu_colorRipple">@color/orange_light</item>
-    <item name="menu_labels_ellipsize">end</item>
-    <item name="menu_labels_hideAnimation">@anim/jump_to_down</item>
-    <item name="menu_labels_position">left</item>
-    <item name="menu_labels_showAnimation">@anim/jump_from_down</item>
-    <item name="menu_labels_singleLine">true</item>
+        <item name="menu_backgroundColor">@color/transparentBackground</item>
+        <item name="menu_colorNormal">@color/orange</item>
+        <item name="menu_colorPressed">@color/orange_light</item>
+        <item name="menu_colorRipple">@color/orange_light</item>
+        <item name="menu_labels_ellipsize">end</item>
+        <item name="menu_labels_hideAnimation">@anim/jump_to_down</item>
+        <item name="menu_labels_position">left</item>
+        <item name="menu_labels_showAnimation">@anim/jump_from_down</item>
+        <item name="menu_labels_singleLine">true</item>
     </style>
 
     <style name="FloatingButtonWithTextStyle" parent="FloatingActionButton">
@@ -346,6 +362,14 @@
         <item name="android:src">@drawable/plus_white</item>
     </style>
 
+    <style name="FloatingMiniButton" parent="FloatingActionButton">
+        <item name="fab_colorNormal">@color/orange</item>
+        <item name="rd_rippleColor">@color/orange_light</item>
+        <item name="fab_size">mini</item>
+        <item name="fab_colorPressed">@color/orange</item>
+        <item name="android:src">@drawable/edit</item>
+    </style>
+
     <style name="TextView">
         <item name="android:background">@color/primary</item>
         <item name="android:textColor">@android:color/white</item>
@@ -371,10 +395,13 @@
         <item name="rd_rippleType">wave</item>
         <item name="rd_rippleColor">#90A4AE</item>
         <item name="rd_cornerRadius">2dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Button</item>
     </style>
 
     <style name="StatusButton" parent="MaterialButton">
-        <item name="android:background">@android:color/white</item>
+        <item name="android:background">@drawable/status_btn_border</item>
         <item name="android:padding">@dimen/control_SpecingSmall</item>
         <item name="android:textSize">@dimen/control_TextSmall</item>
         <item name="android:textColor">@android:color/black</item>

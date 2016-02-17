@@ -4,6 +4,8 @@ package com.arraybit.global;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -30,11 +32,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.arraybit.modal.DiscountMaster;
 import com.arraybit.modal.ItemMaster;
@@ -42,14 +46,20 @@ import com.arraybit.modal.OrderItemTran;
 import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.FeedbackFragment;
 import com.arraybit.pos.GuestLoginDialogFragment;
+import com.arraybit.pos.MenuActivity;
+import com.arraybit.pos.MyAccountFragment;
 import com.arraybit.pos.R;
 import com.arraybit.pos.SignInActivity;
 import com.arraybit.pos.SignUpFragment;
+import com.rey.material.widget.EditText;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,6 +85,8 @@ public class Globals {
     public static DiscountMaster objDiscountMaster;
     public static String userName;
     static FragmentManager fragmentManager;
+    static int y, M, d, H, m;
+
 
     public static float ConvertDp(float dp, Context context) {
         Resources resources = context.getResources();
@@ -101,6 +113,51 @@ public class Globals {
             app_bar.setPadding(0, 50, 0, 0);
         }
     }
+
+    public static void ShowDatePickerDialog(final EditText txtView, Context context) {
+        final Calendar c = Calendar.getInstance();
+
+        if (!txtView.getText().toString().equals("")) {
+            SimpleDateFormat sdfControl = new SimpleDateFormat(DateFormat, Locale.US);
+            try {
+                Date dt = sdfControl.parse(String.valueOf(txtView.getText()));
+                c.setTime(dt);
+            } catch (ParseException ignored) {
+            }
+        }
+
+        y = c.get(Calendar.YEAR);
+        M = c.get(Calendar.MONTH);
+        d = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dp = new DatePickerDialog(context,
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        y = year;
+                        M = monthOfYear;
+                        d = dayOfMonth;
+
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.YEAR, year);
+                        cal.set(Calendar.MONTH, monthOfYear);
+                        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        cal.set(Calendar.HOUR_OF_DAY, 0);
+                        cal.set(Calendar.MINUTE, 0);
+                        cal.set(Calendar.SECOND, 0);
+                        cal.set(Calendar.MILLISECOND, 0);
+
+                        SimpleDateFormat sdfControl = new SimpleDateFormat(DateFormat, Locale.US);
+                        txtView.setText(sdfControl.format(cal.getTime()));
+                    }
+
+                }, y, M, d);
+
+        dp.hide();
+        dp.show();
+    }
+
 
     public static boolean IsValidEmail(String email) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -182,48 +239,94 @@ public class Globals {
             mLogin.setTitle(context.getResources().getString(R.string.navLogin)).setVisible(true);
             mRegistration.setTitle(context.getResources().getString(R.string.navRegistration));
         } else {
-            mLogin.setTitle(context.getResources().getString(R.string.wmMyAccount)).setVisible(false);
+            mLogin.setTitle(context.getResources().getString(R.string.wmMyAccount)).setVisible(true);
             mRegistration.setTitle(context.getResources().getString(R.string.wmLogout));
         }
     }
 
+
+    public static void ShowTimePickerDialog(final TextView txtView, final Context context) {
+        final Calendar c = Calendar.getInstance();
+
+        if (!txtView.getText().toString().equals("")) {
+            SimpleDateFormat sdfControl = new SimpleDateFormat(TimeFormat, Locale.US);
+            try {
+                Date dt = sdfControl.parse(String.valueOf(txtView.getText()));
+                c.setTime(dt);
+            } catch (ParseException ignored) {
+            }
+        }
+
+        H = c.get(Calendar.HOUR_OF_DAY);
+        m = c.get(Calendar.MINUTE);
+
+        TimePickerDialog dp = new TimePickerDialog(context,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        H = hourOfDay;
+                        m = minute;
+
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.YEAR, 0);
+                        cal.set(Calendar.MONTH, 0);
+                        cal.set(Calendar.DAY_OF_MONTH, 0);
+                        cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        cal.set(Calendar.MINUTE, minute);
+                        cal.set(Calendar.SECOND, 0);
+                        cal.set(Calendar.MILLISECOND, 0);
+
+                        SimpleDateFormat sdfControl = new SimpleDateFormat(TimeFormat, Locale.US);
+                        txtView.setText(sdfControl.format(cal.getTime()));
+
+                    }
+
+                }, H, m, true);
+
+        dp.hide();
+        dp.show();
+    }
+
+
     public static void OptionMenuItemClick(MenuItem menuItem, Activity activity, FragmentManager fragmentManager) {
         activityName = activity.getTitle().toString();
-        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-        if (fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() != null &&
-                fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equals(activity.getResources().getString(R.string.title_fragment_feedback))) {
-            if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
-                GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
-                Fragment currentFragment = fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
-                guestLoginDialogFragment.setTargetFragment(currentFragment, 0);
-                guestLoginDialogFragment.show(fragmentManager, "");
-            } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
-                FeedbackFragment currentFragment = (FeedbackFragment) fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
-                currentFragment.RemoveFragment();
-                Globals.ReplaceFragment(new SignUpFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_signup));
-
-            } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)) {
-                objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", activity);
-                objSharePreferenceManage.RemovePreference("RegistrationPreference", "RegisteredUserMasterId", activity);
-                objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", activity);
-                objSharePreferenceManage.ClearPreference("RegistrationPreference", activity);
-                Globals.userName = null;
-                FeedbackFragment currentFragment = (FeedbackFragment) fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
-                currentFragment.LoginResponse();
+        if (menuItem.getItemId() != android.R.id.home) {
+            if (fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() != null &&
+                    fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equals(activity.getResources().getString(R.string.title_fragment_feedback))) {
+                if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
+                    GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+                    Fragment currentFragment = fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
+                    guestLoginDialogFragment.setTargetFragment(currentFragment, 0);
+                    guestLoginDialogFragment.show(fragmentManager, "");
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
+                    FeedbackFragment currentFragment = (FeedbackFragment) fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
+                    currentFragment.RemoveFragment();
+                    Globals.ReplaceFragment(new SignUpFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_signup));
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)) {
+                    ClearPreference(activity.getApplication());
+                    Globals.userName = null;
+                    FeedbackFragment currentFragment = (FeedbackFragment) fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
+                    currentFragment.LoginResponse();
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
+                    FeedbackFragment currentFragment = (FeedbackFragment) fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
+                    currentFragment.RemoveFragment();
+                    Globals.ReplaceFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
+                }
+            } else if (MenuActivity.parentActivity && fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() == null) {
             }
-        } else {
-            if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
-                GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
-                guestLoginDialogFragment.show(fragmentManager, "");
-
-            } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
-                Globals.ReplaceFragment(new SignUpFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_signup));
-            } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)) {
-                objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", activity);
-                objSharePreferenceManage.RemovePreference("RegistrationPreference", "RegisteredUserMasterId", activity);
-                objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", activity);
-                objSharePreferenceManage.ClearPreference("RegistrationPreference", activity);
-                Globals.userName = null;
+            else {
+                if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
+                    GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+                    guestLoginDialogFragment.show(fragmentManager, "");
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
+                    Globals.ReplaceFragment(new SignUpFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_signup));
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)) {
+                    ClearPreference(activity.getApplication());
+                    Globals.userName = null;
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
+                    Globals.ReplaceFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
+                }
             }
         }
     }
@@ -233,7 +336,14 @@ public class Globals {
         objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", context);
         objSharePreferenceManage.RemovePreference("RegistrationPreference", "RegisteredUserMasterId", context);
         objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", context);
+        objSharePreferenceManage.RemovePreference("RegistrationPreference", "FirstName", context);
+        objSharePreferenceManage.RemovePreference("NotificationOnTimePreference", "OnTime", context);
+        objSharePreferenceManage.RemovePreference("NotificationOffTimePreference", "OffTime", context);
+        objSharePreferenceManage.RemovePreference("NotificationPreference", "Push", context);
         objSharePreferenceManage.ClearPreference("RegistrationPreference", context);
+        objSharePreferenceManage.ClearPreference("NotificationOnTimePreference", context);
+        objSharePreferenceManage.ClearPreference("NotificationOffTimePreference", context);
+        objSharePreferenceManage.ClearPreference("NotificationPreference", context);
         Globals.userName = null;
     }
 
@@ -496,7 +606,7 @@ public class Globals {
     public enum TableStatusColor {
         Vacant("4CAF50"),
         Occupied("2196F3"),
-        Dirty("795548"),
+        Dirty("FF9800"),
         Block("F44336");
 
         private String strValue;

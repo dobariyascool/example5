@@ -8,11 +8,9 @@ public class Person {
     int person;
 
 
-    public Person(int index, String name, String mobile, int person) {
+    public Person(int index, String name) {
         this.index = index;
         this.name = name;
-        this.mobile = mobile;
-        this.person = person;
     }
 
     public int getIndex() {

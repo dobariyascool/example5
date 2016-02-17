@@ -9,6 +9,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -22,15 +23,19 @@ import com.arraybit.adapter.OrdersAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.modal.OrderItemTran;
 import com.arraybit.modal.OrderMaster;
+import com.arraybit.parser.OrderItemJSONParser;
 import com.arraybit.parser.OrderJOSNParser;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
 
 @SuppressWarnings("unchecked")
-public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTextListener,OrdersAdapter.LayoutClickListener,OrderStatusDialogFragment.UpdateStatusListener {
 
     public final static String ITEMS_COUNT_KEY = "OrdersTabFragment$ItemsCount";
     public TextView txtMsg;
@@ -41,9 +46,13 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     GridLayoutManager gridLayoutManager;
     SharePreferenceManage objSharePreferenceManage;
     OrdersAdapter ordersAdapter;
-    int id;
+    int id,itemPosition,orderPosition;
     DisplayMetrics displayMetrics;
     String orderTypeMasterId;
+    StringBuilder sbOrderMasterIds;
+    ArrayList<OrderItemTran> alOrderItemTran;
+    ScaleInAnimationAdapter scaleInAnimationAdapter;
+
 
     public OrdersTabFragment() {
         // Required empty public constructor
@@ -108,14 +117,14 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                 Globals.SetError(txtMsg, rvOrder, getActivity().getResources().getString(R.string.MsgNoRecord), true);
             } else {
                 Globals.SetError(txtMsg, rvOrder, null, false);
-                SetupRecyclerView(rvOrder, alOrderMasterFilter);
+                SetupRecyclerView(rvOrder, alOrderMasterFilter, alOrderItemTran);
             }
         } else {
             if (alOrderMaster.size() == 0) {
                 Globals.SetError(txtMsg, rvOrder, getActivity().getResources().getString(R.string.MsgNoRecord), true);
             } else {
                 Globals.SetError(txtMsg, rvOrder, null, false);
-                SetupRecyclerView(rvOrder, alOrderMaster);
+                SetupRecyclerView(rvOrder, alOrderMaster, alOrderItemTran);
             }
         }
     }
@@ -136,7 +145,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         // Do something when collapsed
                         if (alOrderMaster.size() != 0 && alOrderMaster != null) {
-                            ordersAdapter.SetSearchFilter(alOrderMaster);
+                            ordersAdapter.SetSearchFilter(alOrderMaster,scaleInAnimationAdapter);
                             Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
                         }
                         return true; // Return true to collapse action view
@@ -170,9 +179,34 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     public boolean onQueryTextChange(String newText) {
         if (alOrderMaster.size() != 0 && alOrderMaster != null) {
             final ArrayList<OrderMaster> filteredList = Filter(alOrderMaster, newText);
-            ordersAdapter.SetSearchFilter(filteredList);
+            ordersAdapter.SetSearchFilter(filteredList,scaleInAnimationAdapter);
         }
         return false;
+    }
+
+    @Override
+    public void ChangeOrderItemStatusClick(OrderItemTran objOrderItemTran,OrderMaster objOrderMaster,int itemPosition,int orderPosition,boolean isOrder) {
+        this.itemPosition = itemPosition;
+        this.orderPosition = orderPosition;
+        OrderStatusDialogFragment orderStatusDialogFragment = new OrderStatusDialogFragment(objOrderItemTran,objOrderMaster,isOrder);
+        orderStatusDialogFragment.setTargetFragment(this,0);
+        orderStatusDialogFragment.show(getActivity().getSupportFragmentManager(),"");
+    }
+
+    @Override
+    public void UpdateStatus(boolean flag,boolean isOrder,OrderItemTran objOrderItemTran,boolean isTotalUpdate) {
+        if(isOrder){
+            if(flag){
+                if(!orderStatus.equals(Globals.OrderStatus.All.toString())){
+                    ordersAdapter.RemoveOrder(orderPosition,scaleInAnimationAdapter);
+                }
+            }
+
+        }else{
+            if(flag) {
+                ordersAdapter.UpdateOrderItemTran(itemPosition,orderPosition, objOrderItemTran,isTotalUpdate,scaleInAnimationAdapter);
+            }
+        }
     }
 
     //region Private Methods
@@ -190,11 +224,12 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         return filteredList;
     }
 
-    private void SetupRecyclerView(RecyclerView rvOrder, ArrayList<OrderMaster> alOrderMaster) {
+    private void SetupRecyclerView(RecyclerView rvOrder, ArrayList<OrderMaster> alOrderMaster, ArrayList<OrderItemTran> alOrderItemTran) {
 
-        ordersAdapter = new OrdersAdapter(getActivity(), alOrderMaster);
-        rvOrder.setAdapter(ordersAdapter);
-        rvOrder.setLayoutManager(gridLayoutManager);
+        ordersAdapter = new OrdersAdapter(getActivity(), alOrderMaster, alOrderItemTran,getActivity().getSupportFragmentManager(),this);
+        scaleInAnimationAdapter = new ScaleInAnimationAdapter(ordersAdapter);
+        rvOrder.setAdapter(scaleInAnimationAdapter);
+        rvOrder.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         rvOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -240,7 +275,40 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
             } else {
                 Globals.SetError(txtMsg, rvOrder, null, false);
                 alOrderMaster = lstOrderMaster;
-                SetupRecyclerView(rvOrder, alOrderMaster);
+                sbOrderMasterIds = new StringBuilder();
+                for (int i = 0; i < alOrderMaster.size(); i++) {
+                    sbOrderMasterIds.append(alOrderMaster.get(i).getOrderMasterId()).append(",");
+                }
+                if (!sbOrderMasterIds.toString().equals("")) {
+                    new OrderItemTranLoadingTask().execute();
+                }
+                //SetupRecyclerView(rvOrder, alOrderMaster);
+            }
+        }
+    }
+
+    class OrderItemTranLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            OrderItemJSONParser objOrderItemJSONParser = new OrderItemJSONParser();
+            return objOrderItemJSONParser.SelectAllOrderItemTran(sbOrderMasterIds.toString());
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            alOrderItemTran = (ArrayList<OrderItemTran>) result;
+            if (alOrderItemTran != null && alOrderItemTran.size() != 0) {
+                SetupRecyclerView(rvOrder, alOrderMaster, alOrderItemTran);
             }
         }
     }

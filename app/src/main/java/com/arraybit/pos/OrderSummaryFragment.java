@@ -42,6 +42,8 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 @SuppressLint("ValidFragment")
 public class OrderSummaryFragment extends Fragment implements View.OnClickListener, AddDiscountDialogFragment.DiscountSelectionListener, GuestLoginDialogFragment.LoginResponseListener {
@@ -50,7 +52,6 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     RecyclerView rvOrderItemSummery;
     LinearLayout headerLayout, amountLayout, taxLayout;
     FrameLayout orderSummeryLayout;
-    OrderMaster objOrderMaster;
     TableMaster objTableMaster;
     SharePreferenceManage objSharePreferenceManage;
     ArrayList<OrderMaster> lstOrderMaster;
@@ -59,12 +60,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     double totalAmount, totalTaxPercentage, totalTaxAmount, totalTax, totalDiscount;
     String billNumber;
     ArrayList<TaxMaster> alTaxMaster;
-    TextView txtTotalAmount, txtTotalDiscount, txtNetAmount, txtHeaderDiscount;
+    TextView txtTotalAmount, txtTotalDiscount, txtNetAmount, txtHeaderDiscount, txtRoundingOff;
     ProgressDialog progressDialog;
+    String strNetAmount;
 
-
-    public OrderSummaryFragment(OrderMaster objOrderMaster) {
-        this.objOrderMaster = objOrderMaster;
+    public OrderSummaryFragment() {
     }
 
     @Override
@@ -88,7 +88,15 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName() != null
+                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()
+                    .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            } else {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
             if (objTableMaster != null && objTableMaster.getTableName() != null) {
                 app_bar.setTitle(objTableMaster.getTableName() + "  Summary");
             } else {
@@ -108,6 +116,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         txtTotalDiscount = (TextView) view.findViewById(R.id.txtTotalDiscount);
         txtNetAmount = (TextView) view.findViewById(R.id.txtNetAmount);
         txtHeaderDiscount = (TextView) view.findViewById(R.id.txtHeaderDiscount);
+        txtRoundingOff = (TextView) view.findViewById(R.id.txtRoundingOff);
 
         rvOrderItemSummery = (RecyclerView) view.findViewById(R.id.rvOrderItemSummery);
         rvOrderItemSummery.setVisibility(View.GONE);
@@ -128,7 +137,6 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             txtHeaderDiscount.setOnClickListener(this);
         }
 
-
         GetValueFromSharePreference();
 
         if (Service.CheckNet(getActivity())) {
@@ -144,34 +152,39 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName() != null
+                && getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()
+                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
+            menu.findItem(R.id.home).setVisible(false);
+            menu.findItem(R.id.action_search).setVisible(false);
+            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
+        } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             menu.findItem(R.id.home).setVisible(true);
             menu.findItem(R.id.action_search).setVisible(false);
         } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
             menu.findItem(R.id.home).setVisible(true);
             menu.findItem(R.id.action_search).setVisible(false);
         }
-        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
-                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
-            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
-        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        if (item.getItemId() == android.R.id.home) {
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
         if (item.getItemId() == R.id.home) {
-            if (getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName() != null
-                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()
-                    .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
-                Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
-                intent.putExtra("ParentActivity", true);
-                intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                getActivity().startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            } else if (MenuActivity.parentActivity) {
+//            if (getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName() != null
+//                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()
+//                    .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
+//                Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+//                intent.putExtra("ParentActivity", true);
+//                intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                getActivity().startActivity(intent);
+//                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//            }
+            if (MenuActivity.parentActivity) {
                 Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                 intent.putExtra("ParentActivity", true);
                 intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
@@ -200,9 +213,17 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 } else {
-                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                            && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_summary))) {
-                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
+                        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                                && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_summary))) {
+                            getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        }
+                    } else {
+                        Intent intent = new Intent(getActivity(), MenuActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra("TableMaster", objTableMaster);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                     }
 //                    Intent intent = new Intent(getActivity(), MenuActivity.class);
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -258,6 +279,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     }
 
     //region Private Methods and Interface
+
     private void SetVisibility() {
         if (lstOrderMaster == null || lstOrderMaster.size() == 0) {
             rvOrderItemSummery.setVisibility(View.GONE);
@@ -339,6 +361,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         CalculateDiscount(totalAmount, totalTax);
     }
 
+    @SuppressLint("SetTextI18n")
     private void CalculateDiscount(double totalAmount, double totalTax) {
         if (Globals.objDiscountMaster != null) {
             if (Globals.objDiscountMaster.getIsPercentage()) {
@@ -349,12 +372,23 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
             if (totalDiscount <= totalAmount) {
                 txtTotalDiscount.setText(Globals.dfWithPrecision.format(totalDiscount));
-                txtNetAmount.setText(Globals.dfWithPrecision.format((totalAmount + totalTax) - totalDiscount));
+                strNetAmount = Globals.dfWithPrecision.format((totalAmount + totalTax) - totalDiscount);
+                txtNetAmount.setText(Globals.dfWithPrecision.format(Math.round((totalAmount + totalTax) - totalDiscount)));
+                if (!strNetAmount.isEmpty()) {
+                    txtRoundingOff.setText("- 0." + strNetAmount.substring(strNetAmount.lastIndexOf(".") + 1, strNetAmount.length()));
+                }
             } else {
                 txtTotalDiscount.setText(Globals.dfWithPrecision.format(0.00));
+                strNetAmount = Globals.dfWithPrecision.format(totalAmount + totalTax);
+                txtRoundingOff.setText("- 0." + strNetAmount.substring(strNetAmount.lastIndexOf(".") + 1, strNetAmount.length()));
+                txtNetAmount.setText(Globals.dfWithPrecision.format(Math.round(totalAmount + totalTax)));
             }
         } else {
-            txtNetAmount.setText(Globals.dfWithPrecision.format(totalAmount + totalTax));
+            strNetAmount = Globals.dfWithPrecision.format(totalAmount + totalTax);
+            txtNetAmount.setText(Globals.dfWithPrecision.format(Math.round(totalAmount + totalTax)));
+            if (!strNetAmount.isEmpty()) {
+                txtRoundingOff.setText("- 0." + strNetAmount.substring(strNetAmount.lastIndexOf(".") + 1, strNetAmount.length()));
+            }
         }
     }
 
@@ -483,7 +517,8 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             if (lstOrderItemTran != null) {
                 OrderSummaryAdapter orderSummeryAdapter = new OrderSummaryAdapter(getActivity(), lstOrderItemTran, lstOrderMaster);
                 SetVisibility();
-                rvOrderItemSummery.setAdapter(orderSummeryAdapter);
+                ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(orderSummeryAdapter);
+                rvOrderItemSummery.setAdapter(scaleInAnimationAdapter);
                 rvOrderItemSummery.setLayoutManager(new LinearLayoutManager(getActivity()));
                 SetSalesList(lstOrderMaster, lstOrderItemTran);
                 CalculateAmount();
@@ -535,7 +570,6 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             objSalesMaster.setlinktoWaiterMasterId(waiterMasterId);
             objSalesMaster.setlinktoCustomerMasterId(0);
             objSalesMaster.setlinktoOrderTypeMasterId(objTableMaster.getlinktoOrderTypeMasterId());
-            objSalesMaster.setlinktoOrderStatusMasterId((short) Globals.OrderStatus.Ready.getValue());
             objSalesMaster.setTotalAmount(totalAmount);
             objSalesMaster.setTotalTax(totalTax);
             objSalesMaster.setDiscountAmount(totalDiscount);
@@ -629,7 +663,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         protected Object doInBackground(Object[] objects) {
 
             TaxJSONParser objTaxJSONParser = new TaxJSONParser();
-            return objTaxJSONParser.SelectAllTaxMaster();
+            return objTaxJSONParser.SelectAllTaxMaster(Globals.businessMasterId);
         }
 
         @Override

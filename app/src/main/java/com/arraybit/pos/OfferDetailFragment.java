@@ -1,11 +1,15 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,8 +80,38 @@ public class OfferDetailFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             getActivity().getSupportFragmentManager().popBackStack();
+        } else if (item.getTitle() == getActivity().getResources().getString(R.string.navRegistration)) {
+            ReplaceFragment(new SignUpFragment(), getActivity().getResources().getString(R.string.title_fragment_signup));
+        } else if (item.getTitle() == getActivity().getResources().getString(R.string.navLogin)) {
+            GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+            guestLoginDialogFragment.setTargetFragment(this, 0);
+            guestLoginDialogFragment.show(getActivity().getSupportFragmentManager(), "");
+        } else if (item.getTitle() == getActivity().getResources().getString(R.string.wmMyAccount)) {
+            MyAccountFragment myAccountFragment = new MyAccountFragment();
+            myAccountFragment.setTargetFragment(this, 0);
+            ReplaceFragment(myAccountFragment, getActivity().getResources().getString(R.string.title_fragment_myaccount));
+        } else if (item.getTitle() == getActivity().getResources().getString(R.string.wmLogout)) {
+            Globals.ClearPreference(getActivity().getApplication());
+            Globals.userName = null;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //region Private Methods
+    @SuppressLint("RtlHardcoded")
+    private void ReplaceFragment(Fragment fragment, String fragmentName) {
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= 21) {
+            Slide slideTransition = new Slide();
+            slideTransition.setSlideEdge(Gravity.RIGHT);
+            slideTransition.setDuration(500);
+            fragment.setEnterTransition(slideTransition);
+        } else {
+            fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
+        }
+        fragmentTransaction.replace(R.id.offerDetailFragment, fragment, fragmentName);
+        fragmentTransaction.addToBackStack(fragmentName);
+        fragmentTransaction.commit();
     }
 
     @SuppressLint("SetTextI18n")
@@ -125,15 +159,15 @@ public class OfferDetailFragment extends Fragment {
                 offerDateLayout.setVisibility(View.GONE);
             } else {
                 offerDateLayout.setVisibility(View.VISIBLE);
-                if(objOfferMaster.getFromTime()==null && objOfferMaster.getToTime()==null){
+                if (objOfferMaster.getFromTime() == null && objOfferMaster.getToTime() == null) {
                     txtFromDate.setText(String.valueOf(objOfferMaster.getFromDate()));
                     txtToDate.setText(String.valueOf(objOfferMaster.getToDate()));
-                }
-                else{
-                    txtFromDate.setText(String.valueOf(objOfferMaster.getFromDate())+ " "+objOfferMaster.getFromTime());
-                    txtToDate.setText(String.valueOf(objOfferMaster.getToDate())+ " "+objOfferMaster.getToTime());
+                } else {
+                    txtFromDate.setText(String.valueOf(objOfferMaster.getFromDate()) + " " + objOfferMaster.getFromTime());
+                    txtToDate.setText(String.valueOf(objOfferMaster.getToDate()) + " " + objOfferMaster.getToTime());
                 }
             }
         }
     }
+    //endregion
 }

@@ -152,8 +152,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
 
         TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(tableTabLayout.getSelectedTabPosition());
-        SectionMaster objSectionMaster = tablePagerAdapter.GetCurrentSection(tableTabLayout.getSelectedTabPosition());
-
         if (v.getId() == R.id.fabVacant) {
             famRoot.close(true);
             tableTabFragment.TableDataFilter(String.valueOf(Globals.TableStatus.Vacant.getValue()));
@@ -193,9 +191,9 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             return tableFragmentList.get(position);
         }
 
-        public SectionMaster GetCurrentSection(int position) {
-            return tableFragmentTitleList.get(position);
-        }
+//        public SectionMaster GetCurrentSection(int position) {
+//            return tableFragmentTitleList.get(position);
+//        }
 
         @Override
         public Fragment getItem(int position) {

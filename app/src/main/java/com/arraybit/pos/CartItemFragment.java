@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +29,10 @@ import com.arraybit.parser.OrderJOSNParser;
 import com.arraybit.parser.TableJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.CompoundButton;
+import com.rey.material.widget.EditText;
 import com.rey.material.widget.TextView;
+
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
@@ -38,6 +42,8 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     CompoundButton cbMenu;
     LinearLayout headerLayout, cartItemFragment;
     RecyclerView rvCartItem;
+    EditText etRemark;
+    CardView cvRemark;
     Button btnAddMore, btnConfirmOrder;
     CartItemAdapter adapter;
     OrderMaster objOrderMaster;
@@ -46,6 +52,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     short counterMasterId, userMasterId, waiterMasterId;
     double totalAmount;
     View view;
+    ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     public CartItemFragment() {
         // Required empty public constructor
@@ -69,6 +76,10 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             }
         }
         //end
+
+        cvRemark = (CardView) view.findViewById(R.id.cvRemark);
+
+        etRemark = (EditText) view.findViewById(R.id.etRemark);
 
         cartItemFragment = (LinearLayout) view.findViewById(R.id.cartItemFragment);
         Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
@@ -126,7 +137,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
 
     @Override
     public void ImageViewOnClick(int position) {
-        adapter.RemoveData(position);
+        adapter.RemoveData(position, scaleInAnimationAdapter);
         if (Globals.alOrderItemTran.size() == 0) {
             SetRecyclerView();
         }
@@ -182,7 +193,8 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         } else {
             SetVisibility();
             adapter = new CartItemAdapter(getActivity(), Globals.alOrderItemTran, this);
-            rvCartItem.setAdapter(adapter);
+            scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
+            rvCartItem.setAdapter(scaleInAnimationAdapter);
             rvCartItem.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
     }
@@ -191,6 +203,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         if (Globals.alOrderItemTran.size() == 0) {
             txtMsg.setVisibility(View.VISIBLE);
             cbMenu.setVisibility(View.VISIBLE);
+            cvRemark.setVisibility(View.GONE);
             rvCartItem.setVisibility(View.GONE);
             headerLayout.setVisibility(View.GONE);
             btnAddMore.setVisibility(View.GONE);
@@ -198,6 +211,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         } else {
             txtMsg.setVisibility(View.GONE);
             cbMenu.setVisibility(View.GONE);
+            cvRemark.setVisibility(View.VISIBLE);
             headerLayout.setVisibility(View.VISIBLE);
             rvCartItem.setVisibility(View.VISIBLE);
             btnAddMore.setVisibility(View.VISIBLE);
@@ -249,7 +263,6 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             objOrderMaster.setlinktoCounterMasterId(counterMasterId);
             objOrderMaster.setlinktoTableMasterIds(String.valueOf(MenuActivity.objTableMaster.getTableMasterId()));
             objOrderMaster.setlinktoOrderTypeMasterId(MenuActivity.objTableMaster.getlinktoOrderTypeMasterId());
-            objOrderMaster.setlinktoOrderStatusMasterId((short) Globals.OrderStatus.Cooking.getValue());
             objOrderMaster.setTotalAmount(totalAmount);
             objOrderMaster.setTotalTax(0.00);
             objOrderMaster.setDiscount(0.00);
@@ -258,6 +271,9 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             objOrderMaster.setTotalDeductedPoint((short) 0);
             objOrderMaster.setlinktoWaiterMasterId(waiterMasterId);
             objOrderMaster.setlinktoUserMasterIdCreatedBy(userMasterId);
+            if (!etRemark.getText().toString().isEmpty()) {
+                objOrderMaster.setRemark(etRemark.getText().toString());
+            }
         }
 
         @Override
@@ -288,9 +304,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                     Globals.alOrderItemTran.clear();
                 } else {
 
-                    OrderMaster objOrderMaster = new OrderMaster();
-                    objOrderMaster.setOrderMasterId(Long.valueOf(orderMasterId));
-                    Globals.ReplaceFragment(new OrderSummaryFragment(objOrderMaster), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_order_summary));
+                    Globals.ReplaceFragment(new OrderSummaryFragment(), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_order_summary));
                     Globals.counter = 0;
                     Globals.alOrderItemTran.clear();
                 }

@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context="com.arraybit.pos.OrderStatusDialogFragment"
+    tools:ignore="HardcodedText">
+
+    <com.rey.material.widget.TextView
+        style="@style/TextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="@string/wsdTitle"
+        android:textAllCaps="false"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/control_SpecingMedium"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.rey.material.widget.Button
+            android:id="@+id/btnCooking"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/os_cooking"
+            android:text="@string/osdCooking" />
+
+        <com.rey.material.widget.Button
+            android:id="@+id/btnServed"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/os_served"
+            android:text="@string/osdServed" />
+
+        <com.rey.material.widget.Button
+            android:id="@+id/btnReady"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/os_ready"
+            android:padding="@dimen/control_SpecingSmall"
+            android:text="@string/osdReady"
+            android:textSize="@dimen/control_TextSmall" />
+
+        <com.rey.material.widget.Button
+            android:id="@+id/btnCancel"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/os_cancel"
+            android:padding="@dimen/control_SpecingSmall"
+            android:text="@string/osdCancel" />
+
+    </LinearLayout>
+</LinearLayout>

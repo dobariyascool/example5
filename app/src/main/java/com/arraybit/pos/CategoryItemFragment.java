@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CategoryMaster;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.parser.CategoryJSONParser;
@@ -37,7 +38,7 @@ import java.util.List;
 
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
-public class CategoryItemFragment extends Fragment implements View.OnClickListener, ItemTabFragment.CartIconListener, DetailFragment.ResponseListener {
+public class CategoryItemFragment extends Fragment implements View.OnClickListener, ItemTabFragment.CartIconListener, DetailFragment.ResponseListener, GuestLoginDialogFragment.LoginResponseListener {
 
     public static boolean isViewChange = false;
     public static short i = 0;
@@ -55,7 +56,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     public CategoryItemFragment() {
 
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -149,9 +149,9 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            if (MenuActivity.parentActivity) {
-                Globals.OptionMenuItemClick(item, getActivity(), getActivity().getSupportFragmentManager());
-            }
+//            if (MenuActivity.parentActivity) {
+//                Globals.OptionMenuItemClick(item, getActivity(), getActivity().getSupportFragmentManager());
+//            }
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
                 if (MenuActivity.parentActivity) {
                     Globals.CategoryItemFragmentResetStaticVariable();
@@ -198,6 +198,9 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                     itemTabFragment.SetupRecyclerView(false, null);
                 }
             }
+        }
+        if (MenuActivity.parentActivity || getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
+            OptionMenuClick(item);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -264,32 +267,15 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        //isPause = true;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        if (isPause) {
-//            if (MenuActivity.parentActivity) {
-//               // new GuestHomeCategoryLodingTask().execute();
-//                isPause = false;
-//            }
-//        }
-    }
-
-    @Override
     public void CartIconOnClick() {
         ReplaceFragment(new CartItemFragment(), getActivity().getResources().getString(R.string.title_fragment_cart_item));
     }
 
     @Override
     public void CardViewOnClick(ItemMaster objItemMaster) {
-        DetailFragment detailFragment = new DetailFragment(objItemMaster.getItemMasterId());
+        DetailFragment detailFragment = new DetailFragment(objItemMaster);
         detailFragment.setTargetFragment(this, 0);
-        ReplaceFragment(detailFragment, getResources().getString(R.string.title_fragment_detail));
+        ReplaceFragment(detailFragment, getActivity().getResources().getString(R.string.title_fragment_detail));
     }
 
     @Override
@@ -299,7 +285,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
     //region Private Methods and Interface
     @SuppressLint("CommitTransaction")
-    private void ReplaceFragment(Fragment fragment, String fragmentName) {
+    public void ReplaceFragment(Fragment fragment, String fragmentName) {
         if (Build.VERSION.SDK_INT >= 21) {
             Fade fade = new Fade();
             fade.setDuration(500);
@@ -342,6 +328,25 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
     }
 
+    private void OptionMenuClick(MenuItem menuItem) {
+        if (menuItem.getTitle() == getActivity().getResources().getString(R.string.navLogin)) {
+            GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+            guestLoginDialogFragment.setTargetFragment(this, 0);
+            guestLoginDialogFragment.show(getActivity().getSupportFragmentManager(), "");
+        } else if (menuItem.getTitle() == getActivity().getResources().getString(R.string.navRegistration)) {
+            ReplaceFragment(new SignUpFragment(), getActivity().getResources().getString(R.string.title_fragment_signup));
+        } else if (menuItem.getTitle() == getActivity().getResources().getString(R.string.wmLogout)) {
+            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+            objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", getActivity());
+            objSharePreferenceManage.RemovePreference("RegistrationPreference", "RegisteredUserMasterId", getActivity());
+            objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", getActivity());
+            objSharePreferenceManage.ClearPreference("RegistrationPreference", getActivity());
+            Globals.userName = null;
+        } else if (menuItem.getTitle() == getActivity().getResources().getString(R.string.wmMyAccount)) {
+            ReplaceFragment(new MyAccountFragment(), getActivity().getResources().getString(R.string.title_fragment_myaccount));
+        }
+    }
+
     @SuppressWarnings("StringConcatenationInsideStringBufferAppend")
     private void CheckSelected() {
         sbItemTypeMasterId = new StringBuilder();
@@ -375,6 +380,13 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 }
             }
         }
+    }
+
+    //compound button signup click event form guest login
+    @Override
+    public void LoginResponse() {
+        //SignUpFragment signUpFragment = new SignUpFragment();
+        ReplaceFragment(new SignUpFragment(), getActivity().getResources().getString(R.string.title_fragment_signup));
     }
     //endregion
 
@@ -475,7 +487,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                     public void onTabSelected(TabLayout.Tab tab) {
                         //set the current view on tab click
                         itemViewPager.setCurrentItem(tab.getPosition());
-                        if(famRoot.isMenuButtonHidden()){
+                        if (famRoot.isMenuButtonHidden()) {
                             famRoot.showMenuButton(true);
                         }
 

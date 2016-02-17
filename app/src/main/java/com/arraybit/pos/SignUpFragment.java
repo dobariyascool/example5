@@ -1,5 +1,6 @@
 package com.arraybit.pos;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -149,7 +150,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         view = v;
-        Globals.HideKeyBoard(getActivity(),v);
+        Globals.HideKeyBoard(getActivity(), v);
         if (v.getId() == R.id.btnSignUp) {
             if (!ValidateControls()) {
                 Globals.ShowSnackBar(v, getResources().getString(R.string.MsgValidation), getActivity(), 1000);
@@ -172,10 +173,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 guestLoginDialogFragment.show(getFragmentManager(), "");
             }
 
-        }else if(v.getId() == R.id.cbPrivacyPolicy){
-            ReplaceFragment(new AboutUsFragment((short) 2));
-        }else if(v.getId() == R.id.cbTermsofService){
-            ReplaceFragment(new AboutUsFragment((short) 2));
+        } else if (v.getId() == R.id.cbPrivacyPolicy) {
+            ReplaceFragment(new PolicyFragment((short) 1));
+        } else if (v.getId() == R.id.cbTermsofService) {
+            ReplaceFragment(new PolicyFragment((short) 1));
         }
     }
 
@@ -192,12 +193,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == android.R.id.home) {
             getActivity().getSupportFragmentManager().popBackStack();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -297,7 +296,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         etPhone.setText("");
     }
 
-    private void ReplaceFragment(Fragment fragment){
+    @SuppressLint("RtlHardcoded")
+    private void ReplaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         if (Build.VERSION.SDK_INT >= 21) {
             Slide slideTransition = new Slide();
@@ -305,9 +305,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             slideTransition.setDuration(500);
             fragment.setEnterTransition(slideTransition);
         } else {
-            fragmentTransaction.setCustomAnimations(R.anim.right_in,R.anim.left_out,0,R.anim.right_exit);
+            fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
         }
-        fragmentTransaction.replace(R.id.signUpFragment,fragment,getActivity().getResources().getString(R.string.title_fragment_policy));
+        fragmentTransaction.replace(R.id.signUpFragment, fragment, getActivity().getResources().getString(R.string.title_fragment_policy));
         fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_policy));
         fragmentTransaction.commit();
     }
@@ -320,11 +320,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) == null) {
             objSharePreferenceManage.CreatePreference("RegistrationPreference", "RegisteredUserMasterId", String.valueOf(objRegisteredUserMaster.getRegisteredUserMasterId()), getActivity());
         }
-        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FullName", getActivity()) == null) {
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", String.valueOf(objRegisteredUserMaster.getFirstName()) + " " + String.valueOf(objRegisteredUserMaster.getLastName()), getActivity());
-        }
-        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()) == null) {
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName", String.valueOf(objRegisteredUserMaster.getFirstName()), getActivity());
+        if (objRegisteredUserMaster.getFirstName() != null) {
+            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FullName", getActivity()) == null) {
+                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", String.valueOf(objRegisteredUserMaster.getFirstName()) + " " + String.valueOf(objRegisteredUserMaster.getLastName()), getActivity());
+            }
+            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()) == null) {
+                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName", String.valueOf(objRegisteredUserMaster.getFirstName()), getActivity());
+            }
         }
         Globals.userName = objRegisteredUserMaster.getEmail();
     }
@@ -436,7 +438,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 alSpinnerItem.add(objSpinnerItem);
                 lstSpinnerItem.addAll(0, alSpinnerItem);
 
-                adapter = new SpinnerAdapter(getActivity(), lstSpinnerItem);
+                adapter = new SpinnerAdapter(getActivity(), lstSpinnerItem, true);
                 spnrArea.setAdapter(adapter);
             }
         }

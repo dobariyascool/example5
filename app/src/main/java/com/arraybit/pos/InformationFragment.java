@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +21,8 @@ import com.arraybit.parser.BusinessHoursJSONParser;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
+
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 
 @SuppressLint("ValidFragment")
@@ -87,11 +88,8 @@ public class InformationFragment extends Fragment {
     private void SetWorkingHoursRecyclerView(ArrayList<BusinessHoursTran> lstBusinessHoursTran) {
         rvWorkingHours.setVisibility(View.VISIBLE);
         adapter = new WorkingHoursAdapter(getActivity(), lstBusinessHoursTran);
-        DefaultItemAnimator animator = new DefaultItemAnimator();
-        animator.setAddDuration(1000);
-        animator.setRemoveDuration(1000);
-        rvWorkingHours.setItemAnimator(animator);
-        rvWorkingHours.setAdapter(adapter);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
+        rvWorkingHours.setAdapter(scaleInAnimationAdapter);
         rvWorkingHours.setLayoutManager(linearLayoutManager);
     }
 

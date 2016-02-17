@@ -1,159 +1,170 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/offerDetailFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/offwhite"
-    android:orientation="vertical"
     tools:context=".OfferDetailFragment"
     tools:ignore="ContentDescription">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
-
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
-        <LinearLayout
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/control_SpecingSmall"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="300dp">
-
-                <ImageView
-                    android:id="@+id/ivOffer"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerInside" />
-
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtOfferDiscount"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="@dimen/control_SpecingTiny"
-                    android:background="@color/accent_secondary"
-                    android:gravity="center"
-                    android:maxLines="2"
-                    android:textColor="@color/primary"
-                    android:textSize="@dimen/control_TextMedium" />
-
-            </RelativeLayout>
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
-                android:id="@+id/offerDateLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/control_SpecingTiny"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtHeaderFromDate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
-                    android:maxLines="1"
-                    android:text="@string/odfFromDateTime"
-                    android:textColor="#616161"
-                    android:textSize="@dimen/control_TextSmall" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
 
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtFromDate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="start"
-                    android:maxLines="1"
-                    android:text="2016-12-23 11:00:00"
-                    android:textSize="@dimen/control_TextSmall" />
+                    <ImageView
+                        android:id="@+id/ivOffer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter" />
 
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtHeaderToDate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:maxLines="1"
-                    android:text="@string/odfToDateTime"
-                    android:textColor="#616161"
-                    android:textSize="@dimen/control_TextSmall" />
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/txtOfferDiscount"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/accent_secondary"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:textColor="@color/primary"
+                        android:textSize="@dimen/control_TextMedium" />
 
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtToDate"
-                    android:layout_width="0dp"
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="1"
-                    android:text="2016-12-23 11:00:00"
-                    android:textSize="@dimen/control_TextSmall" />
+                    android:layout_margin="@dimen/control_SpecingSmall"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/offerDateLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/control_SpecingTiny"
+                        android:orientation="horizontal">
+
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtHeaderFromDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:maxLines="1"
+                            android:text="@string/odfFromDateTime"
+                            android:textColor="#616161"
+                            android:textSize="@dimen/control_TextSmall" />
+
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtFromDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:maxLines="1"
+                            android:textSize="@dimen/control_TextSmall" />
+
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtHeaderToDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.2"
+                            android:maxLines="1"
+                            android:text="@string/odfToDateTime"
+                            android:textColor="#616161"
+                            android:textSize="@dimen/control_TextSmall" />
+
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtToDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:textSize="@dimen/control_TextSmall" />
+                    </LinearLayout>
+
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/txtOfferTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/control_SpecingTiny"
+                        android:maxLines="2"
+                        android:textColor="#4E342E"
+                        android:textSize="@dimen/control_TextLarge" />
+
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/txtOfferContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/control_SpecingTiny"
+                        android:maxLines="5"
+                        android:textColor="@color/blue_grey"
+                        android:textSize="@dimen/control_TextMedium" />
+
+                    <LinearLayout
+                        android:id="@+id/billAmountLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/control_SpecingTiny"
+                        android:orientation="horizontal">
+
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtHeaderAmount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="@string/odfBillAmount"
+                            android:textColor="#616161" />
+
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtAmount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:maxLines="1"
+                            android:textColor="@color/blue_grey"
+                            android:textSize="@dimen/control_TextMedium" />
+                    </LinearLayout>
+
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/txtHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/control_SpecingTiny"
+                        android:maxLines="1"
+                        android:textSize="@dimen/control_TextMedium" />
+
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/txtTermsCondition"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="25"
+                        android:textColor="@color/blue_grey" />
+
+                </LinearLayout>
             </LinearLayout>
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtOfferTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/control_SpecingTiny"
-                android:maxLines="2"
-                android:textColor="#4E342E"
-                android:textSize="@dimen/control_TextLarge" />
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtOfferContent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/control_SpecingTiny"
-                android:maxLines="5"
-                android:textColor="@color/blue_grey"
-                android:textSize="@dimen/control_TextMedium" />
-
-            <LinearLayout
-                android:id="@+id/billAmountLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/control_SpecingTiny"
-                android:orientation="horizontal">
-
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtHeaderAmount"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="1"
-                    android:text="@string/odfBillAmount"
-                    android:textColor="#616161" />
-
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtAmount"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="start"
-                    android:maxLines="1"
-                    android:textColor="@color/blue_grey"
-                    android:textSize="@dimen/control_TextMedium" />
-            </LinearLayout>
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/control_SpecingTiny"
-                android:maxLines="1"
-                android:textSize="@dimen/control_TextMedium" />
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtTermsCondition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="25"
-                android:textColor="@color/blue_grey" />
-
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-</LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
+</FrameLayout>

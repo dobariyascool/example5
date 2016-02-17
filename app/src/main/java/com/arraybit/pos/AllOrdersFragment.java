@@ -18,9 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arraybit.adapter.OrdersAdapter;
 import com.arraybit.global.Globals;
-import com.arraybit.modal.OrderMaster;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -28,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("ALL")
-public class AllOrdersFragment extends Fragment implements View.OnClickListener, OrdersAdapter.OrdersClickListener {
+public class AllOrdersFragment extends Fragment implements View.OnClickListener {
 
     TabLayout orderTabLayout;
     ViewPager orderViewPager;
@@ -59,7 +57,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
         //end
 
         allOrdersFragment = (CoordinatorLayout) view.findViewById(R.id.allOrdersFragment);
-        Globals.SetScaleImageBackground(getActivity(),allOrdersFragment);
+        Globals.SetScaleImageBackground(getActivity(), allOrdersFragment);
 
         setHasOptionsMenu(true);
 
@@ -100,7 +98,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(),allOrdersFragment);
+        Globals.SetScaleImageBackground(getActivity(), allOrdersFragment);
     }
 
     @Override
@@ -141,7 +139,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onPageSelected(int position) {
-                if(famRoot.isMenuButtonHidden()){
+                if (famRoot.isMenuButtonHidden()) {
                     famRoot.showMenuButton(true);
                 }
                 orderViewPager.setCurrentItem(position);
@@ -207,14 +205,6 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener,
     }
 
     private void RefreshCurrentFragment(FragmentTransaction fragmentTransaction, int selectedPosition) {
-    }
-
-    @Override
-    public void OrderDetail(OrderMaster objOrderMaster) {
-        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        RemoveFragment(fragmentTransaction, orderTabLayout.getSelectedTabPosition());
-        fragmentTransaction.commit();
-        Globals.ReplaceFragment(new OrderDetailFragment(objOrderMaster), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_order_detail));
     }
 
     //endregion

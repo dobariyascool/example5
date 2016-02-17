@@ -86,15 +86,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
         ivPrevious = (ImageView) view.findViewById(R.id.ivPrevious);
 
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        if(Build.VERSION.SDK_INT >= 21){
-            viewPager.setPadding(0,0,0,8);
-            viewPager.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.offwhite));
-            viewPager.setElevation(8f);
-            viewPager.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-        }else{
-            viewPager.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.bottom_border));
-            viewPager.setPadding(0, 0, 0, 16);
-        }
+        SetViewPagerElevation();
 
         txtNext.setOnClickListener(this);
         txtPrevious.setOnClickListener(this);
@@ -170,6 +162,18 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
             if (alFeedbackQuestionMaster.get(i).getLinktoFeedbackQuestionGroupMasterId() == linktoFeedbackQuestionGroupMasterId) {
                 alFeedbackQuestionMasterFilter.add(alFeedbackQuestionMaster.get(i));
             }
+        }
+    }
+
+    private void SetViewPagerElevation() {
+        if(Build.VERSION.SDK_INT >= 21){
+            viewPager.setPadding(0,0,0,8);
+            viewPager.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.offwhite));
+            viewPager.setElevation(8f);
+            viewPager.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+        }else{
+            viewPager.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.bottom_border));
+            viewPager.setPadding(0, 0, 0, 16);
         }
     }
 

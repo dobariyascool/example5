@@ -7,6 +7,7 @@ import com.arraybit.modal.OrderItemTran;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import java.util.Locale;
 public class OrderItemJSONParser {
 
     public String SelectAllOrderItemTran = "SelectAllOrderItemTranByOrderMasterId";
+    public String UpdateOrderItemTranStatus = "UpdateOrderItemTranStatus";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     Date dt = null;
@@ -35,7 +37,9 @@ public class OrderItemJSONParser {
                 objOrderItemTran.setItemPoint((short) jsonObject.getInt("ItemPoint"));
                 objOrderItemTran.setDeductedPoint((short) jsonObject.getInt("DeductedPoint"));
                 objOrderItemTran.setItemRemark(jsonObject.getString("ItemRemark"));
-                objOrderItemTran.setlinktoOrderStatusMasterId((short) jsonObject.getInt("linktoOrderStatusMasterId"));
+                if(!jsonObject.getString("linktoOrderStatusMasterId").equals("null")){
+                    objOrderItemTran.setlinktoOrderStatusMasterId(Short.valueOf(jsonObject.getString("linktoOrderStatusMasterId")));
+                }
                 if(!jsonObject.getString("UpdateDateTime").equals("null")) {
                     dt = sdfDateTimeFormat.parse(jsonObject.getString("UpdateDateTime"));
                     objOrderItemTran.setUpdateDateTime(sdfControlDateFormat.format(dt));
@@ -48,6 +52,8 @@ public class OrderItemJSONParser {
                 objOrderItemTran.setOrder(jsonObject.getString("Order"));
                 objOrderItemTran.setItem(jsonObject.getString("Item"));
                 objOrderItemTran.setOrderStatus(jsonObject.getString("OrderStatus"));
+                objOrderItemTran.setOrderItemTranIds(jsonObject.getString("OrderItemTranIds"));
+                objOrderItemTran.setModifierRates(jsonObject.getString("ModifierRates"));
             }
             return objOrderItemTran;
         } catch (JSONException e) {
@@ -71,7 +77,9 @@ public class OrderItemJSONParser {
                 objOrderItemTran.setItemPoint((short) jsonArray.getJSONObject(i).getInt("ItemPoint"));
                 objOrderItemTran.setDeductedPoint((short) jsonArray.getJSONObject(i).getInt("DeductedPoint"));
                 objOrderItemTran.setItemRemark(jsonArray.getJSONObject(i).getString("ItemRemark"));
-                objOrderItemTran.setlinktoOrderStatusMasterId((short)jsonArray.getJSONObject(i).getInt("linktoOrderStatusMasterId"));
+                if(!jsonArray.getJSONObject(i).getString("linktoOrderStatusMasterId").equals("null")){
+                    objOrderItemTran.setlinktoOrderStatusMasterId(Short.valueOf(jsonArray.getJSONObject(i).getString("linktoOrderStatusMasterId")));
+                }
                 if(!jsonArray.getJSONObject(i).getString("UpdateDateTime").equals("null")) {
                     dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("UpdateDateTime"));
                     objOrderItemTran.setUpdateDateTime(sdfControlDateFormat.format(dt));
@@ -84,6 +92,8 @@ public class OrderItemJSONParser {
                 objOrderItemTran.setOrder(jsonArray.getJSONObject(i).getString("Order"));
                 objOrderItemTran.setItem(jsonArray.getJSONObject(i).getString("Item"));
                 objOrderItemTran.setOrderStatus(jsonArray.getJSONObject(i).getString("OrderStatus"));
+                objOrderItemTran.setOrderItemTranIds(jsonArray.getJSONObject(i).getString("OrderItemTranIds"));
+                objOrderItemTran.setModifierRates(jsonArray.getJSONObject(i).getString("ModifierRates"));
                 lstOrderItemTran.add(objOrderItemTran);
             }
             return lstOrderItemTran;
@@ -94,7 +104,34 @@ public class OrderItemJSONParser {
         }
     }
 
-    public ArrayList<OrderItemTran> SelectAllOrderItemTran(long orderMasterId) {
+    public String UpdateOrderItemTranStatus(OrderItemTran objOrderItemTran) {
+        dt=new Date();
+        try {
+            JSONStringer stringer = new JSONStringer();
+            stringer.object();
+
+            stringer.key("orderItemTran");
+            stringer.object();
+
+            stringer.key("OrderItemTranIds").value(objOrderItemTran.getOrderItemTranIds());
+            stringer.key("linktoOrderStatusMasterId").value(objOrderItemTran.getlinktoOrderStatusMasterId());
+            stringer.key("UpdateDateTime").value(sdfDateTimeFormat.format(dt));
+            stringer.key("linktoUserMasterIdUpdatedBy").value(objOrderItemTran.getlinktoUserMasterIdUpdatedBy());
+
+            stringer.endObject();
+
+            stringer.endObject();
+
+            JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateOrderItemTranStatus, stringer);
+            JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateOrderItemTranStatus + "Result");
+            return String.valueOf(jsonObject.getInt("ErrorCode"));
+        }
+        catch (Exception ex) {
+            return "-1";
+        }
+    }
+
+    public ArrayList<OrderItemTran> SelectAllOrderItemTran(String orderMasterId) {
         ArrayList<OrderItemTran> lstOrderItemTran = null;
         try {
             JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderItemTran +"/"+orderMasterId);

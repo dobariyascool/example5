@@ -1,5 +1,6 @@
 package com.arraybit.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
@@ -27,7 +28,6 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
     View view;
     Context context;
     ArrayList<OfferMaster> alOfferMaster;
-    int width, height;
     FragmentManager fragmentManager;
 
 
@@ -84,6 +84,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
             txtOfferContent = (TextView) itemView.findViewById(R.id.txtOfferContent);
 
             cvOffer.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("RtlHardcoded")
                 @Override
                 public void onClick(View v) {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

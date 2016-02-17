@@ -61,6 +61,7 @@ public class RegisteredUserMaster implements Parcelable {
             return new RegisteredUserMaster[size];
         }
     };
+    String OldPassword;
 
     public int getRegisteredUserMasterId() {
         return this.RegisteredUserMasterId;
@@ -210,11 +211,20 @@ public class RegisteredUserMaster implements Parcelable {
         return linktoBusinessMasterId;
     }
 
-    //endregion
-
     public void setLinktoBusinessMasterId(short linktoBusinessMasterId) {
         this.linktoBusinessMasterId = linktoBusinessMasterId;
     }
+
+    public String getOldPassword() {
+        return OldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        OldPassword = oldPassword;
+    }
+
+    //endregion
+
 
     @Override
     public int describeContents() {

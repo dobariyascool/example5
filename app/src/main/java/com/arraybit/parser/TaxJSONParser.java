@@ -33,7 +33,6 @@ public class TaxJSONParser {
                 objTaxMaster.setIsPercentage(jsonObject.getBoolean("IsPercentage"));
                 objTaxMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
                 objTaxMaster.setIsEnabled(jsonObject.getBoolean("IsEnabled"));
-                objTaxMaster.setIsDeleted(jsonObject.getBoolean("IsDeleted"));
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
                 objTaxMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objTaxMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
@@ -63,7 +62,6 @@ public class TaxJSONParser {
                 objTaxMaster.setIsPercentage(jsonArray.getJSONObject(i).getBoolean("IsPercentage"));
                 objTaxMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 objTaxMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
-                objTaxMaster.setIsDeleted(jsonArray.getJSONObject(i).getBoolean("IsDeleted"));
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
                 objTaxMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objTaxMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
@@ -80,10 +78,10 @@ public class TaxJSONParser {
         }
     }
 
-    public ArrayList<TaxMaster> SelectAllTaxMaster() {
+    public ArrayList<TaxMaster> SelectAllTaxMaster(short linktoBusinessMasterId) {
         ArrayList<TaxMaster> lstTaxMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTaxMaster);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTaxMaster + "/" +linktoBusinessMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllTaxMaster + "Result");
                 if (jsonArray != null) {

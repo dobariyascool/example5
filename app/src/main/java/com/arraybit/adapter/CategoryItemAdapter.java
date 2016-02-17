@@ -23,6 +23,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
 public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapter.ItemViewHolder> {
 
     int width, height;
@@ -92,16 +94,16 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         return alItemMaster.size();
     }
 
-    public void SetSearchFilter(ArrayList<ItemMaster> result) {
+    public void SetSearchFilter(ArrayList<ItemMaster> result,ScaleInAnimationAdapter scaleInAnimationAdapter) {
         alItemMaster = new ArrayList<>();
         alItemMaster.addAll(result);
-        notifyDataSetChanged();
+        scaleInAnimationAdapter.notifyDataSetChanged();
     }
 
     public interface ItemClickListener {
-        public void ButtonOnClick(ItemMaster objItemMaster);
+      void ButtonOnClick(ItemMaster objItemMaster);
 
-        public void CardViewOnClick(ItemMaster objItemMaster);
+      void CardViewOnClick(ItemMaster objItemMaster);
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {

@@ -46,14 +46,12 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiter_home);
-        //SetupWindowAnimations();
 
         //app_bar
         Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //getSupportActionBar().setIcon(R.drawable.likeat_logo);
             getSupportActionBar().setLogo(R.mipmap.app_logo);
         }
         //end
@@ -164,7 +162,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
             } else if (menuItem.getItemId() == R.id.wAbout) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new AboutUsFragment((short) 1), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_policy));
+                Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
             } else if (menuItem.getItemId() == R.id.wExit) {
                 System.exit(0);
             }
@@ -199,7 +197,10 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else {
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_about_us))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_about_us), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }else {
                     CategoryItemFragment.i = 0;
                     CategoryItemFragment.isViewChange = false;
                     getSupportFragmentManager().popBackStack();

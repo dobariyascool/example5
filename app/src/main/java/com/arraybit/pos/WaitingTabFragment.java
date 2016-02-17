@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.arraybit.adapter.WaitingListAdapter;
-import com.arraybit.global.EndlessRecyclerOnScrollListener;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.WaitingMaster;
@@ -21,6 +20,8 @@ import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
+
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 
 @SuppressWarnings("unchecked")
@@ -31,9 +32,10 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
     TextView txtMsg;
     ArrayList<WaitingMaster> alWaitingMaster;
     LinearLayoutManager linearLayoutManager;
-    int currentPage = 1, position;
+    int position;
     WaitingListAdapter waitingListAdapter;
     WaitingStatusMaster objWaitingStatusMaster;
+    ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     public WaitingTabFragment() {
     }
@@ -76,19 +78,6 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
             Globals.ShowSnackBar(rvWaiting, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
         }
 
-        rvWaiting.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-                if (current_page > currentPage) {
-                    currentPage = current_page;
-                    if (Service.CheckNet(getActivity())) {
-                        new WaitingMasterLoadingTask().execute();
-                    } else {
-                        Globals.ShowSnackBar(rvWaiting, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
-                    }
-                }
-            }
-        });
     }
 
     @Override
@@ -102,14 +91,15 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
     @Override
     public void UpdateStatus(boolean flag) {
         if (flag) {
-            waitingListAdapter.WaitingListDataRemove(this.position);
+            waitingListAdapter.WaitingListDataRemove(this.position, scaleInAnimationAdapter);
         }
     }
 
     //region Private Methods
     private void SetupRecyclerView(RecyclerView rvWaiting) {
         waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
-        rvWaiting.setAdapter(waitingListAdapter);
+        scaleInAnimationAdapter = new ScaleInAnimationAdapter(waitingListAdapter);
+        rvWaiting.setAdapter(scaleInAnimationAdapter);
         rvWaiting.setLayoutManager(linearLayoutManager);
     }
     //endregion
@@ -124,47 +114,30 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         protected void onPreExecute() {
             super.onPreExecute();
 
-            if (currentPage > 2 && alWaitingMaster.size() != 0) {
-                progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-                progressDialog.setIndeterminate(true);
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-            }
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
 
             WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
-            if (linearLayoutManager.canScrollVertically() && alWaitingMaster.size() == 0) {
-                currentPage = 1;
-            }
-            return objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(currentPage, objWaitingStatusMaster.getWaitingStatusMasterId());
+            return objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(objWaitingStatusMaster.getWaitingStatusMasterId());
         }
 
         @Override
         protected void onPostExecute(Object result) {
-            if (currentPage > 2) {
-                progressDialog.dismiss();
-            }
+            progressDialog.dismiss();
             ArrayList<WaitingMaster> lstWaitingMaster = (ArrayList<WaitingMaster>) result;
             if (lstWaitingMaster == null) {
-                if (currentPage == 1) {
-                    Globals.SetError(txtMsg, rvWaiting, getResources().getString(R.string.MsgSelectFail), true);
-                }
+                Globals.SetError(txtMsg, rvWaiting, getResources().getString(R.string.MsgSelectFail), true);
             } else if (lstWaitingMaster.size() == 0) {
-                if (currentPage == 1) {
-                    Globals.SetError(txtMsg, rvWaiting, getResources().getString(R.string.MsgNoRecord), true);
-                }
+                Globals.SetError(txtMsg, rvWaiting, getResources().getString(R.string.MsgNoRecord), true);
             } else {
-                if (currentPage > 1) {
-                    waitingListAdapter.WaitingListDataChanged(lstWaitingMaster);
-                    return;
-                } else if (lstWaitingMaster.size() < 10) {
-                    currentPage += 1;
-                }
-
                 Globals.SetError(txtMsg, rvWaiting, null, false);
                 alWaitingMaster = lstWaitingMaster;
                 SetupRecyclerView(rvWaiting);

@@ -17,6 +17,8 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
 public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewHolder> {
 
     Context context;
@@ -64,16 +66,18 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         return alTableMaster.size();
     }
 
-    public void UpdateData(int position, TableMaster objTableMaster) {
+    public void UpdateData(int position, TableMaster objTableMaster,ScaleInAnimationAdapter animationAdapter) {
         alTableMaster.get(position).setTableStatus(objTableMaster.getTableStatus());
         alTableMaster.get(position).setStatusColor(objTableMaster.getStatusColor());
-        notifyDataSetChanged();
+        animationAdapter.notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 
-    public void SetSearchFilter(ArrayList<TableMaster> result) {
+    public void SetSearchFilter(ArrayList<TableMaster> result,ScaleInAnimationAdapter animationAdapter) {
         alTableMaster = new ArrayList<>();
         alTableMaster.addAll(result);
-        notifyDataSetChanged();
+        animationAdapter.notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 
     //region interface
@@ -112,5 +116,4 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             }
         }
     }
-
 }

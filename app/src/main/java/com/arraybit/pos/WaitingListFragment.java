@@ -23,6 +23,7 @@ import com.github.clans.fab.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @SuppressWarnings({"unchecked"})
 public class WaitingListFragment extends Fragment {
 
@@ -32,7 +33,6 @@ public class WaitingListFragment extends Fragment {
 
     ArrayList<WaitingStatusMaster> alWaitingStatusMaster;
     WaitingListPagerAdapter waitingListPagerAdapter;
-
 
     public WaitingListFragment() {
         // Required empty public constructor
@@ -69,7 +69,7 @@ public class WaitingListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (getFragmentManager().getBackStackEntryCount() == 0) {
-                    Globals.InitializeAnimatedFragment(new AddFragment(), getFragmentManager(),getActivity().getResources().getString(R.string.title_fragment_add));
+                    Globals.InitializeAnimatedFragment(new AddFragment(), getFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_add));
                 }
             }
         });
@@ -103,7 +103,7 @@ public class WaitingListFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                if(fabAdd.isHidden()){
+                if (fabAdd.isHidden()) {
                     fabAdd.show(true);
                 }
                 waitingViewPager.setCurrentItem(position);
@@ -186,7 +186,7 @@ public class WaitingListFragment extends Fragment {
         protected void onPostExecute(Object result) {
 
             progressDialog.dismiss();
-            if (alWaitingStatusMaster != null && alWaitingStatusMaster.size()!=0) {
+            if (alWaitingStatusMaster != null && alWaitingStatusMaster.size() != 0) {
                 waitingListPagerAdapter = new WaitingListPagerAdapter(getChildFragmentManager());
                 SetTabLayout(alWaitingStatusMaster, waitingListPagerAdapter);
 

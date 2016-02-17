@@ -17,7 +17,7 @@ public class OrderMaster implements Parcelable {
     int linktoWaiterMasterId;
     short linktoCustomerMasterId;
     short linktoOrderTypeMasterId;
-    short linktoOrderStatusMasterId;
+    Short linktoOrderStatusMasterId;
     double TotalAmount;
     double TotalTax;
     double Discount;
@@ -38,6 +38,7 @@ public class OrderMaster implements Parcelable {
     String OrderType;
     String TableName;
     int TotalItem;
+    int TotalKOT;
 
     public static final Parcelable.Creator<OrderMaster> CREATOR = new Creator<OrderMaster>() {
         public OrderMaster createFromParcel(Parcel source) {
@@ -72,6 +73,7 @@ public class OrderMaster implements Parcelable {
             objOrderMaster.TableName = source.readString();
             objOrderMaster.OrderTime = source.readString();
             objOrderMaster.TotalItem = source.readInt();
+            objOrderMaster.TotalKOT = source.readInt();
 
             return objOrderMaster;
         }
@@ -147,11 +149,11 @@ public class OrderMaster implements Parcelable {
         this.linktoOrderTypeMasterId = linktoOrderTypeMasterId;
     }
 
-    public short getlinktoOrderStatusMasterId() {
+    public Short getlinktoOrderStatusMasterId() {
         return this.linktoOrderStatusMasterId;
     }
 
-    public void setlinktoOrderStatusMasterId(short linktoOrderStatusMasterId) {
+    public void setlinktoOrderStatusMasterId(Short linktoOrderStatusMasterId) {
         this.linktoOrderStatusMasterId = linktoOrderStatusMasterId;
     }
 
@@ -315,6 +317,14 @@ public class OrderMaster implements Parcelable {
         AlOrderItemTran = alOrderItemTran;
     }
 
+    public int getTotalKOT() {
+        return TotalKOT;
+    }
+
+    public void setTotalKOT(int totalKOT) {
+        TotalKOT = totalKOT;
+    }
+
     //endregion
 
     @Override
@@ -354,6 +364,7 @@ public class OrderMaster implements Parcelable {
         parcel.writeString(TableName);
         parcel.writeString(OrderTime);
         parcel.writeInt(TotalItem);
+        parcel.writeInt(TotalKOT);
     }
 }
 

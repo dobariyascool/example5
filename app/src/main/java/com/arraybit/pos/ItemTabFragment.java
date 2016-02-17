@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-import jp.wasabeef.recyclerview.animators.adapters.SlideInBottomAnimationAdapter;
 
 @SuppressWarnings({"unchecked", "ObjectEqualsNull", "ConstantConditions"})
 public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextListener, CategoryItemAdapter.ItemClickListener, AddItemQtyDialogFragment.AddToCartListener {
@@ -63,6 +62,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     CartIconListener objCartIconListener;
     MenuItem searchItem;
     ArrayList<ItemMaster> alItemMasterFilter;
+    ScaleInAnimationAdapter scaleInAnimationAdapter;
     View v;
 
 
@@ -158,7 +158,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 }
             }
             if (alItemMasterFilter.size() == 0) {
-                Globals.SetError(txtMsg, rvItem, getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetError(txtMsg, rvItem, getActivity().getResources().getString(R.string.MsgItem), true);
             } else {
                 Globals.SetError(txtMsg, rvItem, null, false);
                 SetupRecyclerView(false, alItemMasterFilter);
@@ -166,7 +166,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
         } else {
             if (alItemMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvItem, getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetError(txtMsg, rvItem, getActivity().getResources().getString(R.string.MsgItem), true);
             } else {
                 Globals.SetError(txtMsg, rvItem, null, false);
                 SetupRecyclerView(false, alItemMaster);
@@ -210,12 +210,12 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                         // Do something when collapsed
                         if (CategoryItemFragment.sbItemTypeMasterId.toString().equals("")) {
                             if (alItemMaster.size() != 0 && alItemMaster != null) {
-                                categoryItemAdapter.SetSearchFilter(alItemMaster);
+                                categoryItemAdapter.SetSearchFilter(alItemMaster,scaleInAnimationAdapter);
                                 Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
                             }
                         } else {
                             if (alItemMasterFilter.size() != 0 && alItemMasterFilter != null) {
-                                categoryItemAdapter.SetSearchFilter(alItemMasterFilter);
+                                categoryItemAdapter.SetSearchFilter(alItemMasterFilter,scaleInAnimationAdapter);
                                 Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
                             }
                         }
@@ -241,13 +241,13 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             if (alItemMaster.size() != 0 && alItemMaster != null) {
                 searchText = newText;
                 final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, newText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
+                categoryItemAdapter.SetSearchFilter(filteredList,scaleInAnimationAdapter);
             }
         }else{
            if(alItemMasterFilter.size() !=0 && alItemMasterFilter !=null){
                searchText = newText;
                final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, newText);
-               categoryItemAdapter.SetSearchFilter(filteredList);
+               categoryItemAdapter.SetSearchFilter(filteredList,scaleInAnimationAdapter);
            }
         }
 
@@ -258,9 +258,14 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     @Override
     public void ButtonOnClick(ItemMaster objItemMaster) {
         MenuItemCompat.collapseActionView(searchItem);
-        AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
-        addItemQtyDialogFragment.setTargetFragment(this, 0);
-        addItemQtyDialogFragment.show(getFragmentManager(), "");
+        if(objItemMaster.getItemModifierIds().equals("")) {
+            AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
+            addItemQtyDialogFragment.setTargetFragment(this, 0);
+            addItemQtyDialogFragment.show(getFragmentManager(), "");
+        }else{
+            objCartIconListener = (CartIconListener) Globals.targetFragment;
+            objCartIconListener.CardViewOnClick(objItemMaster);
+        }
     }
 
     @Override
@@ -287,53 +292,55 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         if (alItemMaster == null && !isFilter) {
             categoryItemAdapter = new CategoryItemAdapter(getActivity(), this.alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this);
             rvItem.setVisibility(View.VISIBLE);
-            rvItem.setAdapter(categoryItemAdapter);
+            scaleInAnimationAdapter = new ScaleInAnimationAdapter(categoryItemAdapter);
+            rvItem.setAdapter(scaleInAnimationAdapter);
             if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
                 rvItem.setLayoutManager(gridLayoutManager);
             } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
                 rvItem.setLayoutManager(linearLayoutManager);
             } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
                 final ArrayList<ItemMaster> filteredList = Filter(this.alItemMaster, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
+                categoryItemAdapter.SetSearchFilter(filteredList,scaleInAnimationAdapter);
                 rvItem.setLayoutManager(gridLayoutManager);
             } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
                 final ArrayList<ItemMaster> filteredList = Filter(this.alItemMaster, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
+                categoryItemAdapter.SetSearchFilter(filteredList,scaleInAnimationAdapter);
                 rvItem.setLayoutManager(linearLayoutManager);
             }
         } else if (alItemMaster == null && isFilter) {
             categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMasterFilter, getFragmentManager(), CategoryItemFragment.isViewChange, this);
             rvItem.setVisibility(View.VISIBLE);
-            rvItem.setAdapter(categoryItemAdapter);
+            scaleInAnimationAdapter = new ScaleInAnimationAdapter(categoryItemAdapter);
+            rvItem.setAdapter(scaleInAnimationAdapter);
             if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
                 rvItem.setLayoutManager(gridLayoutManager);
             } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
                 rvItem.setLayoutManager(linearLayoutManager);
             } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
                 final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
+                categoryItemAdapter.SetSearchFilter(filteredList,scaleInAnimationAdapter);
                 rvItem.setLayoutManager(gridLayoutManager);
             } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
                 final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
+                categoryItemAdapter.SetSearchFilter(filteredList,scaleInAnimationAdapter);
                 rvItem.setLayoutManager(linearLayoutManager);
             }
         } else {
             categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this);
             rvItem.setVisibility(View.VISIBLE);
-            ScaleInAnimationAdapter slideInBottomAnimationAdapter = new ScaleInAnimationAdapter(categoryItemAdapter);
-            rvItem.setAdapter(slideInBottomAnimationAdapter);
+            scaleInAnimationAdapter = new ScaleInAnimationAdapter(categoryItemAdapter);
+            rvItem.setAdapter(scaleInAnimationAdapter);
             if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
                 rvItem.setLayoutManager(gridLayoutManager);
             } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
                 rvItem.setLayoutManager(linearLayoutManager);
             } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
                 final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
+                categoryItemAdapter.SetSearchFilter(filteredList,scaleInAnimationAdapter);
                 rvItem.setLayoutManager(gridLayoutManager);
             } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
                 final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
+                categoryItemAdapter.SetSearchFilter(filteredList,scaleInAnimationAdapter);
                 rvItem.setLayoutManager(linearLayoutManager);
             }
         }
@@ -415,7 +422,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-            return objItemJSONParser.SelectAllItemMaster(currentPage, counterMasterId, MenuActivity.objTableMaster.getlinktoSectionMasterId(), MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
+            return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoSectionMasterId(), MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId);
 
         }
 
@@ -431,7 +438,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             if (lstItemMaster == null) {
                 Globals.SetError(txtMsg, rvItem, getActivity().getResources().getString(R.string.MsgSelectFail), true);
             } else if (lstItemMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvItem, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetError(txtMsg, rvItem, getActivity().getResources().getString(R.string.MsgItem), true);
             } else {
                 Globals.SetError(txtMsg, rvItem, null, false);
                 alItemMaster = lstItemMaster;
