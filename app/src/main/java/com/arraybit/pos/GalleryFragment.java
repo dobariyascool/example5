@@ -49,6 +49,8 @@ public class GalleryFragment extends Fragment {
         gridLayoutManager = new GridLayoutManager(getActivity(),2);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
+        Globals.TextViewFontTypeFace(txtMsg,getActivity());
+
         rvGallery = (RecyclerView) view.findViewById(R.id.rvGallery);
         rvGallery.setVisibility(View.GONE);
 

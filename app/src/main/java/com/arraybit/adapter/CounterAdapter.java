@@ -8,12 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CounterMaster;
 import com.arraybit.pos.R;
 import com.arraybit.pos.WelcomeActivity;
+import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,8 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
         public CounterViewHolder(View itemView) {
             super(itemView);
             txtCounterTitle = (TextView) itemView.findViewById(R.id.txtCounterTitle);
+            Globals.TextViewFontTypeFace(txtCounterTitle, context);
+
             cvCounter = (CardView) itemView.findViewById(R.id.cvCounter);
 
             cvCounter.setOnClickListener(new View.OnClickListener() {

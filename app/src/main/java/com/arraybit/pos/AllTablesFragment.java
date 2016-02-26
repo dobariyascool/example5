@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -112,6 +113,12 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         }
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override
@@ -277,7 +284,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
                 } else {
                     tableTabFragment.LoadTableData(null);
                 }
-
 
                 tableViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.arraybit.global.Globals;
 import com.arraybit.global.SpinnerItem;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
@@ -53,6 +54,7 @@ public class SpinnerAdapter extends BaseAdapter {
         }
         view1.setId(lstSpinnerItem.get(i).getValue());
         TextView txtview = (TextView) view1.findViewById(R.id.txtSpinnerItem);
+        Globals.TextViewFontTypeFace(txtview,context);
         if(!isAlignCenter){
             txtview.setGravity(Gravity.START | Gravity.CENTER);
         }

@@ -27,14 +27,14 @@
 
       <RelativeLayout
             android:id="@+id/relativeLayout"
-            android:layout_width="65dp"
-            android:layout_height="65dp">
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="@dimen/control_SpecingSmall">
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/control_SpecingTiny"
                 android:src="@drawable/myaccount_selector"
                 tools:ignore="ContentDescription,HardcodedText" />
 

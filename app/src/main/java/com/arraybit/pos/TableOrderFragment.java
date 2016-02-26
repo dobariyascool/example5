@@ -63,6 +63,7 @@ public class TableOrderFragment extends Fragment {
         //end
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
+        Globals.TextViewFontTypeFace(txtMsg,getActivity());
 
         rvTableOrder = (RecyclerView) view.findViewById(R.id.rvTableOrder);
         rvTableOrder.setVisibility(View.GONE);

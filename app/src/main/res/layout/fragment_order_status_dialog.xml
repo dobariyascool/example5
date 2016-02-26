@@ -49,8 +49,7 @@
             android:layout_weight="1"
             android:drawableTop="@mipmap/os_ready"
             android:padding="@dimen/control_SpecingSmall"
-            android:text="@string/osdReady"
-            android:textSize="@dimen/control_TextSmall" />
+            android:text="@string/osdReady" />
 
         <com.rey.material.widget.Button
             android:id="@+id/btnCancel"

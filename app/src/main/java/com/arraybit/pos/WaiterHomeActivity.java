@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -51,6 +52,9 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
         if (getSupportActionBar() != null) {
+            if (Build.VERSION.SDK_INT >= 21) {
+                app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
+            }
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setLogo(R.mipmap.app_logo);
         }
@@ -135,7 +139,11 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 objSharePreferenceManage = new SharePreferenceManage();
                 if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaiterHomeActivity.this) != null) {
                     drawerLayout.closeDrawer(navigationView);
-                    Globals.ReplaceFragment(new CounterFragment((short) Globals.UserType.Waiter.getValue()), getSupportFragmentManager(), null);
+                    CounterFragment counterFragment = new CounterFragment((short) Globals.UserType.Waiter.getValue());
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isBack", true);
+                    counterFragment.setArguments(bundle);
+                    Globals.ReplaceFragment(counterFragment, getSupportFragmentManager(), null);
                 }
             } else if (menuItem.getItemId() == R.id.wChangeMode) {
                 drawerLayout.closeDrawer(navigationView);
@@ -143,7 +151,20 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 changeModeDialogFragment.show(getSupportFragmentManager(), "");
             } else if (menuItem.getItemId() == R.id.wHotelProfile) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new HotelProfileFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
+                //if (Build.VERSION.SDK_INT < 21) {
+                Intent intent = new Intent(WaiterHomeActivity.this, HotelProfileActivity.class);
+                intent.putExtra("Mode",(short) 2);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                //} else {
+//                    ActivityOptions options =
+//                            ActivityOptions.
+//                                    makeSceneTransitionAnimation(WaiterHomeActivity.this);
+//                    Intent intent = new Intent(WaiterHomeActivity.this, HotelProfileActivity.class);
+//                    intent.putExtra("isWaiterMode", true);
+//                    startActivity(intent, options.toBundle());
+//                }
+
             } else if (menuItem.getItemId() == R.id.wOffers) {
                 drawerLayout.closeDrawer(navigationView);
                 Globals.ReplaceFragment(new OfferFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
@@ -162,7 +183,11 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
             } else if (menuItem.getItemId() == R.id.wAbout) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
+                Intent intent = new Intent(WaiterHomeActivity.this, AboutUsActivity.class);
+                intent.putExtra("Mode",(short) 2);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                //Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
             } else if (menuItem.getItemId() == R.id.wExit) {
                 System.exit(0);
             }
@@ -200,7 +225,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_about_us))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_about_us), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else {
+                } else {
                     CategoryItemFragment.i = 0;
                     CategoryItemFragment.isViewChange = false;
                     getSupportFragmentManager().popBackStack();
@@ -230,6 +255,8 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this) != null) {
             navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this));
         }
+        Globals.TextViewFontTypeFace(txtName, WaiterHomeActivity.this);
+        Globals.TextViewFontTypeFace(txtLetter, WaiterHomeActivity.this);
     }
     //endregion
 
@@ -267,4 +294,5 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         }
     }
     //endregion
+
 }

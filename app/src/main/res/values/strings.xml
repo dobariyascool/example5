@@ -15,7 +15,7 @@
     <string name="title_fragment_signup">Sign Up</string>
     <string name="title_activity_waiting">Waiting List</string>
     <string name="title_fragment_add">Add</string>
-    <string name="title_fragment_profile">My Profile</string>
+    <string name="title_fragment_profile">Profile</string>
     <string name="title_fragment_feedback">Feedback</string>
     <string name="title_fragment_counter">Counter</string>
     <string name="title_activity_waiter_order_detail">Home</string>
@@ -31,8 +31,8 @@
     <string name="title_fragment_offer_detail">Offer Detail</string>
     <string name="title_fragment_about_us">About Us</string>
     <string name="title_fragment_policy">Privacy Policy</string>
-    <string name="title_fragment_myaccount">My Account</string>
-    <string name="title_fragment_myprofile">My Profile</string>
+    <string name="title_fragment_myaccount">Your Account</string>
+    <string name="title_fragment_myprofile">Your Profile</string>
     <string name="title_fragment_notification_settings">Notification Settings</string>
     <string name="title_fragment_change_password">Change Password</string>
     <string name="title_fragment_table_order">Orders</string>
@@ -61,7 +61,7 @@
     <string name="MsgCheckConnection">Please check internet connection</string>
     <string name="MsgConfirmDelete">Delete Record?</string>
     <string name="MsgConfirmLogout">Are you sure to Logout?</string>
-    <string name="MsgConfirmSettings">Are you sure to Off?</string>
+    <string name="MsgConfirmSettings">Push notification off?</string>
     <string name="MsgServerNotResponding">Server not responding, Try again later</string>
     <string name="MsgFeedback">Thank you for your feedback, your response will help us to improve the quality of service.</string>
     <string name="MsgVerification">Your Phone Number is Verified.</string>
@@ -74,6 +74,7 @@
     <string name="MsgOffer">Currently No offers available.</string>
     <string name="MsgGallery">No Images Yet.</string>
     <string name="MsgItem">There is no item.</string>
+    <string name="MsgChangeMode">Switch to waiter mode?</string>
     <!-- End -->
 
     <string name="splash_screen">arraybitlogo</string>
@@ -220,6 +221,7 @@
     <string name="wsdServe">Assign</string>
     <string name="wsdNot">N/A</string>
     <string name="wsdCancel">Cancel</string>
+    <string name="wsdWaiting">Waiting</string>
     <string name="wsdCall">Call</string>
     <!-- end -->
 
@@ -262,7 +264,7 @@
     <string name="aiqfRemark">Remark</string>
     <string name="aiqfModifier">Modifier</string>
     <string name="aiqfCancel">Cancel</string>
-    <string name="aiqfOk">OK</string>
+    <string name="aiqfOk">Done</string>
     <string name="aiqfTitle">Add Quantity</string>
     <!-- end -->
 
@@ -380,6 +382,9 @@
     <string name="osdServed">Served</string>
     <string name="osdCancel">Cancelled</string>
     <string name="osdReady">Ready</string>
+    <string name="title_activity_hotel_profile">HotelProfileActivity</string>
+    <string name="title_activity_offer">OfferActivity</string>
+    <string name="title_activity_about_us">AboutUsActivity</string>
     <!-- end -->
 
 </resources>

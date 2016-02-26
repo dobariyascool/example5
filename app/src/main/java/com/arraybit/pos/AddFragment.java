@@ -3,6 +3,7 @@ package com.arraybit.pos;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -47,10 +48,12 @@ public class AddFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add, container, false);
 
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
-
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if(Build.VERSION.SDK_INT >=21){
+                app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
+            }
         }
         app_bar.setTitle(getResources().getString(R.string.title_fragment_add));
 
@@ -59,8 +62,13 @@ public class AddFragment extends Fragment {
         etName = (EditText) view.findViewById(R.id.etName);
         etMobileNo = (EditText) view.findViewById(R.id.etMobileNo);
         etPersons = (EditText) view.findViewById(R.id.etPersons);
+
         btnAdd = (Button) view.findViewById(R.id.btnAdd);
 
+        Globals.ButtonFontTypeFace(btnAdd,getActivity());
+        Globals.EditTextFontTypeFace(etName, getActivity());
+        Globals.EditTextFontTypeFace(etMobileNo, getActivity());
+        Globals.EditTextFontTypeFace(etPersons, getActivity());
         return view;
     }
 

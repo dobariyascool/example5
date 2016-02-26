@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.arraybit.global.Globals;
 import com.rey.material.widget.Button;
+import com.rey.material.widget.TextView;
 
 
 public class ThankYouFragment extends Fragment {
@@ -26,8 +27,14 @@ public class ThankYouFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_thank_you, container, false);
 
+        TextView txtTitle =(TextView)view.findViewById(R.id.txtTitle);
+
         Button btnFeedback = (Button) view.findViewById(R.id.btnFeedback);
         Button btnSkip = (Button) view.findViewById(R.id.btnSkip);
+
+        Globals.ButtonFontTypeFace(btnFeedback,getActivity());
+        Globals.ButtonFontTypeFace(btnSkip,getActivity());
+        Globals.TextViewFontTypeFace(txtTitle, getActivity());
 
         btnFeedback.setOnClickListener(new View.OnClickListener() {
             @Override

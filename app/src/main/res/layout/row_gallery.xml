@@ -4,7 +4,8 @@
     style="@style/DefaultCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/control_SpecingTiny">
+    android:layout_margin="@dimen/control_SpecingTiny"
+    android:foreground="@drawable/offer_ripple_effect">
 
     <LinearLayout
         android:layout_width="match_parent"

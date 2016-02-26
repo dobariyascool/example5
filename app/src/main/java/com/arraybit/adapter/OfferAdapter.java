@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.arraybit.global.Globals;
 import com.arraybit.modal.OfferMaster;
 import com.arraybit.pos.OfferDetailFragment;
 import com.arraybit.pos.R;
@@ -82,6 +83,9 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
 
             txtOfferTitle = (TextView) itemView.findViewById(R.id.txtOfferTitle);
             txtOfferContent = (TextView) itemView.findViewById(R.id.txtOfferContent);
+
+            Globals.TextViewFontTypeFace(txtOfferContent,context);
+            Globals.TextViewFontTypeFace(txtOfferTitle,context);
 
             cvOffer.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("RtlHardcoded")

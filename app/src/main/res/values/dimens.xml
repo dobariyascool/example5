@@ -7,6 +7,49 @@
     <dimen name="dialog_horizontal_margin">16dp</dimen>
     <dimen name="dialog_vertical_margin">8dp</dimen>
 
+    <!-- set elevation -->
+    <dimen name="app_bar_elevation">4dp</dimen>
+    <dimen name="top_bar_elevation">8dp</dimen>
+    <dimen name="navigation_view_elevation">16dp</dimen>
+    <dimen name="snackbar_elevation">6dp</dimen>
+    <!-- end -->
+
+    <dimen name="floating_action_button_padding">16dp</dimen>
+    <dimen name="status_bar_height">24dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="subtitle_height">48dp</dimen>
+    <dimen name="list_item_height">72dp</dimen>
+    <dimen name="navigation_drawer_icon_padding">16dp</dimen>
+    <dimen name="navigation_drawer_text_padding">72dp</dimen>
+
+    <!--In tablet -->
+    <dimen name="toolbar_height_in_tab">64dp</dimen>
+    <dimen name="navigation_drawer_icon_padding_in_tab">24dp</dimen>
+    <dimen name="navigation_drawer_text_padding_in_tab">80dp</dimen>
+    <!-- end -->
+
+    <!-- bottom sheet -->
+    <dimen name="bottom_sheet_margin">16dp</dimen>
+    <dimen name="list_icon_size">24dp</dimen>
+    <dimen name="list_text_margin">32dp</dimen>
+    <dimen name="list_height">48dp</dimen>
+    <dimen name="list_header_height">56dp</dimen>
+    <dimen name="grid_list_margin">24dp</dimen>
+    <dimen name="grid_list_icon_size">48dp</dimen>
+    <dimen name="grid_list_text_area">16dp</dimen>
+    <dimen name="grid_bottom_margin">16dp</dimen>
+    <!-- end -->
+
+    <!-- dialog button -->
+    <dimen name="dialog_button_height">48dp</dimen>
+    <dimen name="dialog_button_layout_height">52dp</dimen>
+    <dimen name="dialog_button_layout_margin_top">24dp</dimen>
+    <dimen name="dialog_margin">24dp</dimen>
+    <dimen name="dialog_button_padding_end">8dp</dimen>
+    <dimen name="dialog_button_padding_top">8dp</dimen>
+    <dimen name="dialog_button_padding_bottom">8dp</dimen>
+    <!-- end -->
+
     <!-- app bar-->
     <dimen name="app_bar_padding">0dp</dimen>
     <!-- end -->

@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.arraybit.adapter.MyAccountAdapter;
 import com.arraybit.global.Globals;
@@ -58,6 +59,11 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
 
         setHasOptionsMenu(true);
 
+        RelativeLayout topPanel = (RelativeLayout)view.findViewById(R.id.topPanel);
+        if(Build.VERSION.SDK_INT >= 21){
+            topPanel.setElevation(16f);
+        }
+
         txtLoginChar = (TextView) view.findViewById(R.id.txtLoginChar);
         txtFullName = (TextView) view.findViewById(R.id.txtFullName);
         txtEmail = (TextView) view.findViewById(R.id.txtEmail);
@@ -80,7 +86,8 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
                     guestProfileFragment.setTargetFragment(MyAccountFragment.this, 0);
                     ReplaceFragment(guestProfileFragment, getActivity().getResources().getString(R.string.title_fragment_myprofile));
                 } else {
-                    Globals.ReplaceFragment(new GuestProfileFragment(), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_myprofile));
+                    ReplaceFragment(new GuestProfileFragment(), getActivity().getResources().getString(R.string.title_fragment_myprofile));
+                    //Globals.ReplaceFragment(new GuestProfileFragment(), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_myprofile));
                 }
             }
         });
@@ -97,8 +104,11 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            getActivity().getSupportFragmentManager().popBackStack();
-            objRegisteredUserMaster = null;
+            if(getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()
+                    .equals(getActivity().getResources().getString(R.string.title_fragment_myaccount))) {
+                getActivity().getSupportFragmentManager().popBackStack();
+                objRegisteredUserMaster = null;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -146,6 +156,9 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
         } else {
             txtFullName.setVisibility(View.GONE);
         }
+        Globals.TextViewFontTypeFace(txtEmail,getActivity());
+        Globals.TextViewFontTypeFace(txtLoginChar,getActivity());
+        Globals.TextViewFontTypeFace(txtFullName,getActivity());
     }
 
     @Override
@@ -169,9 +182,11 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
             }
         } else {
             if (id == 0) {
-                Globals.ReplaceFragment(new NotificationSettingsFragment(), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_notification_settings));
+               ReplaceFragment(new NotificationSettingsFragment(), getActivity().getResources().getString(R.string.title_fragment_notification_settings));
+               // Globals.ReplaceFragment(new NotificationSettingsFragment(), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_notification_settings));
             } else if (id == 1) {
-                Globals.ReplaceFragment(new ChangePasswordFragment(), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_change_password));
+               ReplaceFragment(new ChangePasswordFragment(), getActivity().getResources().getString(R.string.title_fragment_change_password));
+                //Globals.ReplaceFragment(new ChangePasswordFragment(), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_change_password));
             } else if (id == 2) {
                 Globals.ClearPreference(getActivity().getApplicationContext());
                 getActivity().getSupportFragmentManager().popBackStack();

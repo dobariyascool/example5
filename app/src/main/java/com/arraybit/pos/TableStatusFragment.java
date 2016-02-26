@@ -56,6 +56,11 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
         btnBlock.setOnClickListener(this);
         btnDirty.setOnClickListener(this);
 
+        Globals.ButtonFontTypeFace(btnVacant, getActivity());
+        Globals.ButtonFontTypeFace(btnOccupy, getActivity());
+        Globals.ButtonFontTypeFace(btnDirty, getActivity());
+        Globals.ButtonFontTypeFace(btnBlock, getActivity());
+
         objUpdateTableStatusListener = (UpdateTableStatusListener) getTargetFragment();
 
         return view;

@@ -8,8 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Slide;
-import android.view.Gravity;
+import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +48,9 @@ public class OfferDetailFragment extends Fragment {
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if(Build.VERSION.SDK_INT >=21){
+                app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
+            }
             app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_offer_detail));
         }
         //end
@@ -102,12 +104,12 @@ public class OfferDetailFragment extends Fragment {
     private void ReplaceFragment(Fragment fragment, String fragmentName) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         if (Build.VERSION.SDK_INT >= 21) {
-            Slide slideTransition = new Slide();
-            slideTransition.setSlideEdge(Gravity.RIGHT);
-            slideTransition.setDuration(500);
-            fragment.setEnterTransition(slideTransition);
+            Fade fade = new Fade();
+            fade.setDuration(500);
+            fragment.setEnterTransition(fade);
+            fragment.setEnterTransition(fade);
         } else {
-            fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         }
         fragmentTransaction.replace(R.id.offerDetailFragment, fragment, fragmentName);
         fragmentTransaction.addToBackStack(fragmentName);
@@ -116,6 +118,14 @@ public class OfferDetailFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void SetDetailLayout() {
+        Globals.TextViewFontTypeFace(txtOfferTitle,getActivity());
+        Globals.TextViewFontTypeFace(txtOfferContent,getActivity());
+        Globals.TextViewFontTypeFace(txtAmount,getActivity());
+        Globals.TextViewFontTypeFace(txtTermsCondition,getActivity());
+        Globals.TextViewFontTypeFace(txtFromDate,getActivity());
+        Globals.TextViewFontTypeFace(txtToDate,getActivity());
+        Globals.TextViewFontTypeFace(txtHeader,getActivity());
+        Globals.TextViewFontTypeFace(txtOfferDiscount,getActivity());
         if (objOfferMaster != null) {
             txtOfferTitle.setText(objOfferMaster.getOfferTitle());
             if (objOfferMaster.getOfferContent().equals("") || objOfferMaster.getOfferContent().isEmpty() || objOfferMaster.getOfferContent() == null) {

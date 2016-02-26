@@ -12,7 +12,6 @@ import android.widget.ImageView;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
-import com.bumptech.glide.Glide;
 
 
 @SuppressWarnings("unchecked")
@@ -24,8 +23,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        ImageView ivLogo = (ImageView) findViewById(R.id.ivLogo);
-        Glide.with(SplashScreenActivity.this).load(R.drawable.arraybit).asGif().into(ivLogo);
+        ImageView ivLogo = (ImageView) findViewById(R.id.ivCompanyLogo);
+//        Glide.with(SplashScreenActivity.this).load(R.drawable.arraybit).asBitmap().into(ivLogo);
 
         new Handler().postDelayed(new Runnable() {
             @Override

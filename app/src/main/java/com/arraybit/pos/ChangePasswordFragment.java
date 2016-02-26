@@ -3,6 +3,7 @@ package com.arraybit.pos;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -47,10 +48,12 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         View view = inflater.inflate(R.layout.fragment_change_password, container, false);
 
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
-
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if(Build.VERSION.SDK_INT >=21){
+                app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
+            }
         }
         app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_change_password));
 
@@ -78,7 +81,10 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         tbPasswordShowOld.setOnClickListener(this);
         tbPasswordShowNew.setOnClickListener(this);
         tbPasswordShowConfirm.setOnClickListener(this);
+        Globals.ButtonFontTypeFace(btnChangePassword,getActivity());
         //end
+
+        SetTypeFace();
 
         //region TextChange Event
         etOldPassword.addTextChangedListener(new TextWatcher() {
@@ -200,6 +206,12 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     }
 
     //region Private Methods
+    private void SetTypeFace(){
+        Globals.EditTextFontTypeFace(etConfirmPassword,getActivity());
+        Globals.EditTextFontTypeFace(etNewPassword,getActivity());
+        Globals.EditTextFontTypeFace(etOldPassword,getActivity());
+    }
+
     private boolean Validation() {
         boolean IsValid = true;
         if (etOldPassword.getText().toString().equals("") && etNewPassword.getText().toString().equals("") && etConfirmPassword.getText().toString().equals("")) {

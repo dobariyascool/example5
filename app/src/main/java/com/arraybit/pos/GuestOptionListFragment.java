@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
+import com.rey.material.widget.TextView;
 
 public class GuestOptionListFragment extends Fragment implements View.OnClickListener {
 
@@ -32,15 +34,25 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         guestOptionLayout = (LinearLayout) view.findViewById(R.id.guestOptionLayout);
         Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
 
-        LinearLayout layoutMenu = (LinearLayout) view.findViewById(R.id.layoutMenu);
-        LinearLayout layoutOrders = (LinearLayout) view.findViewById(R.id.layoutOrders);
-        LinearLayout layoutOffers = (LinearLayout) view.findViewById(R.id.layoutOffers);
-        LinearLayout layoutFeedback = (LinearLayout) view.findViewById(R.id.layoutFeedback);
+        CardView cvMenu = (CardView)view.findViewById(R.id.cvMenu);
+        CardView cvOrders = (CardView)view.findViewById(R.id.cvOrders);
+        CardView cvOffers = (CardView)view.findViewById(R.id.cvOffers);
+        CardView cvFeedback = (CardView)view.findViewById(R.id.cvFeedback);
 
-        layoutMenu.setOnClickListener(this);
-        layoutOrders.setOnClickListener(this);
-        layoutOffers.setOnClickListener(this);
-        layoutFeedback.setOnClickListener(this);
+        TextView txtMenu = (TextView)view.findViewById(R.id.txtMenu);
+        TextView txtOrders = (TextView)view.findViewById(R.id.txtOrders);
+        TextView txtOffers = (TextView)view.findViewById(R.id.txtOffers);
+        TextView txtFeedback = (TextView)view.findViewById(R.id.txtFeedback);
+
+        Globals.TextViewFontTypeFace(txtMenu,getActivity());
+        Globals.TextViewFontTypeFace(txtOrders,getActivity());
+        Globals.TextViewFontTypeFace(txtOffers,getActivity());
+        Globals.TextViewFontTypeFace(txtFeedback,getActivity());
+
+        cvMenu.setOnClickListener(this);
+        cvOrders.setOnClickListener(this);
+        cvOffers.setOnClickListener(this);
+        cvFeedback.setOnClickListener(this);
 
         setHasOptionsMenu(true);
 
@@ -66,13 +78,13 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                 && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_guest_options))) {
-            if (v.getId() == R.id.layoutOrders) {
+            if (v.getId() == R.id.cvOrders) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("TableMaster", GuestHomeActivity.objTableMaster);
                 OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
                 orderSummaryFragment.setArguments(bundle);
                 Globals.ReplaceFragment(orderSummaryFragment, getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_order_summary));
-            } else if (v.getId() == R.id.layoutFeedback) {
+            } else if (v.getId() == R.id.cvFeedback) {
                 if (Globals.userName == null) {
                     GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
                     guestLoginDialogFragment.setTargetFragment(this, 0);
@@ -80,13 +92,13 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                 } else {
                     Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(),getActivity().getResources().getString(R.string.title_fragment_feedback));
                 }
-            } else if (v.getId() == R.id.layoutMenu) {
+            } else if (v.getId() == R.id.cvMenu) {
                 Intent intent = new Intent(getActivity(), MenuActivity.class);
                 intent.putExtra("ParentActivity", true);
                 intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            } else if (v.getId() == R.id.layoutOffers) {
+            } else if (v.getId() == R.id.cvOffers) {
                 Globals.ReplaceFragment(new OfferFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_offer));
             }
         }

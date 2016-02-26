@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:minHeight="?attr/actionBarSize"
     android:theme="@style/ToolBar"
-    app:popupTheme="@style/Popup" >
+    app:popupTheme="@style/Popup"
+    app:titleTextAppearance="@style/MyActionBarMenuText" >
     <!-- app:layout_scrollFlags="scroll|enterAlways"-->
 </android.support.v7.widget.Toolbar>

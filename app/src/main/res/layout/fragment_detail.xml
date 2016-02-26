@@ -94,6 +94,7 @@
                         android:orientation="horizontal">
 
                         <com.rey.material.widget.TextView
+                            android:id="@+id/txtHeaderModifier"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingEnd="@dimen/control_SpecingTiny"

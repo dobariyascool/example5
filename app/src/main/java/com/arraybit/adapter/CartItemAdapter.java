@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 
-public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartItemViewHolder>{
+public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartItemViewHolder> {
 
     Context context;
     ArrayList<ItemMaster> alItemMaster;
@@ -56,7 +56,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             RemoveModifierView(holder);
         }
         if (objItemMaster.getAlOrderItemModifierTran().size() != 0) {
-            LinearLayout.LayoutParams txtQtyLayoutParams= (LinearLayout.LayoutParams) holder.txtQty.getLayoutParams();
+            LinearLayout.LayoutParams txtQtyLayoutParams = (LinearLayout.LayoutParams) holder.txtQty.getLayoutParams();
             txtQtyLayoutParams.gravity = Gravity.TOP;
             holder.txtQty.setLayoutParams(txtQtyLayoutParams);
             SetModifierLayout(objItemMaster.getAlOrderItemModifierTran(), holder);
@@ -80,7 +80,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         return alItemMaster.size();
     }
 
-    public void RemoveData(int position,ScaleInAnimationAdapter scaleInAnimationAdapter) {
+    public void RemoveData(int position, ScaleInAnimationAdapter scaleInAnimationAdapter) {
         if (alItemMaster.size() != 0 && position >= 0) {
             isModifierChanged = false;
             alItemMaster.remove(position);
@@ -105,6 +105,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             txtModifierName[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
             txtModifierName[i].setMaxLines(1);
             txtModifierName[i].setText(alOrderItemModifierTran.get(i).getItemName());
+            Globals.TextViewFontTypeFace(txtModifierName[i], context);
 
             txtModifierRate[i] = new TextView(context);
             LinearLayout.LayoutParams txtModifierRateParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -114,6 +115,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             txtModifierRate[i].setMaxLines(1);
             txtModifierRate[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
             txtModifierRate[i].setText(Globals.dfWithPrecision.format(alOrderItemModifierTran.get(i).getActualSellPrice()));
+            Globals.TextViewFontTypeFace(txtModifierRate[i], context);
 
             txtModifierAmount[i] = new TextView(context);
             LinearLayout.LayoutParams txtModifierAmountParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -123,6 +125,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             txtModifierAmount[i].setMaxLines(1);
             txtModifierAmount[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
             txtModifierAmount[i].setText(Globals.dfWithPrecision.format(alOrderItemModifierTran.get(i).getMRP()));
+            Globals.TextViewFontTypeFace(txtModifierAmount[i], context);
 
             holder.modifierLayout.addView(txtModifierName[i]);
             holder.modifierRateLayout.addView(txtModifierRate[i]);
@@ -132,7 +135,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
     }
 
-    private void RemoveModifierView(CartItemViewHolder holder){
+    private void RemoveModifierView(CartItemViewHolder holder) {
         holder.modifierLayout.removeAllViewsInLayout();
         holder.modifierRateLayout.removeAllViewsInLayout();
         holder.modifierAmountLayout.removeAllViewsInLayout();
@@ -146,7 +149,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
     }
 
     //region ViewHolder
-    class CartItemViewHolder extends RecyclerView.ViewHolder{
+    class CartItemViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtItem, txtQty, txtRate, txtAmount, txtRemark;
         LinearLayout childLayout, modifierLayout, modifierRateLayout, modifierAmountLayout, remarkLayout;
@@ -167,6 +170,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             txtQty = (TextView) itemView.findViewById(R.id.txtQty);
             txtRemark = (TextView) itemView.findViewById(R.id.txtRemark);
             ivClose = (ImageView) itemView.findViewById(R.id.ivClose);
+
+            Globals.TextViewFontTypeFace(txtItem, context);
+            Globals.TextViewFontTypeFace(txtAmount, context);
+            Globals.TextViewFontTypeFace(txtRate, context);
+            Globals.TextViewFontTypeFace(txtQty, context);
+            Globals.TextViewFontTypeFace(txtRemark, context);
 
             childLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

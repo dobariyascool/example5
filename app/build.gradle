@@ -11,6 +11,11 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        applicationVariants.all { variant ->
+                    variant.outputs.each { output ->
+                    output.outputFile = file("$project.buildDir/outputs/apk/CentralPOS.apk")
+            }
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

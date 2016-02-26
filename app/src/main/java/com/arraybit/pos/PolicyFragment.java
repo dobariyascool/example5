@@ -2,6 +2,7 @@ package com.arraybit.pos;
 
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -31,10 +32,12 @@ public class PolicyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_policy, container, false);
 
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
-
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if(Build.VERSION.SDK_INT >=21){
+                app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
+            }
         }
         if (value == 1) {
             app_bar.setTitle(getResources().getString(R.string.title_fragment_policy));

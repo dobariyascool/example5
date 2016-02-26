@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -59,6 +60,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         ImageButton ibMinus = (ImageButton) view.findViewById(R.id.ibMinus);
 
         etQuantity = (EditText) view.findViewById(R.id.etQuantity);
+        Globals.EditTextFontTypeFace(etQuantity,getActivity());
 
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
@@ -72,6 +74,18 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         Button btnNum7 = (Button) view.findViewById(R.id.btnNum7);
         Button btnNum8 = (Button) view.findViewById(R.id.btnNum8);
         Button btnNum9 = (Button) view.findViewById(R.id.btnNum9);
+
+        Globals.ButtonFontTypeFace(btnNum1,getActivity());
+        Globals.ButtonFontTypeFace(btnNum2,getActivity());
+        Globals.ButtonFontTypeFace(btnNum3,getActivity());
+        Globals.ButtonFontTypeFace(btnNum4,getActivity());
+        Globals.ButtonFontTypeFace(btnNum5,getActivity());
+        Globals.ButtonFontTypeFace(btnNum6,getActivity());
+        Globals.ButtonFontTypeFace(btnNum7,getActivity());
+        Globals.ButtonFontTypeFace(btnNum8,getActivity());
+        Globals.ButtonFontTypeFace(btnNum9,getActivity());
+        Globals.ButtonFontTypeFace(btnOk,getActivity());
+        Globals.ButtonFontTypeFace(btnCancel, getActivity());
 
         actRemark = (AppCompatMultiAutoCompleteTextView) view.findViewById(R.id.actRemark);
 
@@ -101,6 +115,8 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         }
 
         objAddToCartListener = (AddToCartListener) getTargetFragment();
+
+        SetTypeFace();
 
         return view;
     }
@@ -178,6 +194,13 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     //endregion
 
     //region Private Methods and Interface
+    private void SetTypeFace(){
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(),
+                "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
+        actRemark.setTypeface(typeface);
+        textInputLayout.setTypeface(typeface);
+    }
+
     private int IncrementDecrementValue(int id, int value) {
         if (id == R.id.ibPlus) {
             value++;

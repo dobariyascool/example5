@@ -4,6 +4,7 @@ package com.arraybit.pos;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,6 +59,10 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
                 CompoundButton cbSignUp = (CompoundButton) getDialog().findViewById(R.id.cbSignUp);
                 CompoundButton cbSkip = (CompoundButton) getDialog().findViewById(R.id.cbSkip);
+                Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(),
+                        "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
+                cbSignUp.setTypeface(roboto);
+                cbSkip.setTypeface(roboto);
                 Button positive = (alertDialog).getButton(DialogInterface.BUTTON_POSITIVE);
 
                 if (getTargetFragment() != null) {
@@ -68,11 +73,14 @@ public class GuestLoginDialogFragment extends DialogFragment {
                         cbSkip.setVisibility(View.GONE);
                     }
                 }
+                positive.setTypeface(roboto);
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         etUserName = (EditText) getDialog().findViewById(R.id.etUserName);
                         etPassword = (EditText) getDialog().findViewById(R.id.etPassword);
+                        Globals.EditTextFontTypeFace(etPassword,getActivity());
+                        Globals.EditTextFontTypeFace(etUserName,getActivity());
                         view = v;
                         if (!ValidateControls()) {
                             Globals.ShowSnackBar(v, getResources().getString(R.string.MsgValidation), getActivity(), 1000);
@@ -88,6 +96,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                 });
 
                 Button negative = (alertDialog).getButton(DialogInterface.BUTTON_NEGATIVE);
+                negative.setTypeface(roboto);
                 negative.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

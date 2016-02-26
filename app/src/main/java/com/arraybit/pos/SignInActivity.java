@@ -53,16 +53,22 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         //app_bar
         Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
+        if(Build.VERSION.SDK_INT >=21){
+            app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
+        }
         setSupportActionBar(app_bar);
         //end
 
         //edittext
         etName = (EditText) findViewById(R.id.etName);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        Globals.EditTextFontTypeFace(etName,SignInActivity.this);
+        Globals.EditTextFontTypeFace(etPassword,SignInActivity.this);
         //end
 
         //button
         Button btnSignIn = (Button) findViewById(R.id.btnSignIn);
+        Globals.ButtonFontTypeFace(btnSignIn,this);
         tbPasswordShow = (ToggleButton) findViewById(R.id.tbPasswordShow);
         ibClear = (ImageButton) findViewById(R.id.ibClear);
         //end

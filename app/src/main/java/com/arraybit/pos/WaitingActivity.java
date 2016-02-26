@@ -1,8 +1,10 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -152,20 +154,24 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if (menuItem.getItemId() == R.id.wExit) {
             System.exit(0);
         } else if (menuItem.getItemId() == R.id.wChangeMode) {
-            drawerLayout.closeDrawer(navigationView);
-            Intent intent = new Intent(WaitingActivity.this, WaiterHomeActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            finish();
+            ConfirmMessage();
         } else if (menuItem.getItemId() == R.id.wChangeCounter) {
             objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaitingActivity.this) != null) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new CounterFragment((short) Globals.UserType.Waiting.getValue()), getSupportFragmentManager(), null);
+                CounterFragment counterFragment = new CounterFragment((short) Globals.UserType.Waiting.getValue());
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isBack", true);
+                counterFragment.setArguments(bundle);
+                Globals.ReplaceFragment(counterFragment, getSupportFragmentManager(), null);
             }
         } else if (menuItem.getItemId() == R.id.wHotelProfile) {
             drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new HotelProfileFragment(WaitingActivity.this), getSupportFragmentManager(), null);
+            Intent intent = new Intent(WaitingActivity.this, HotelProfileActivity.class);
+            intent.putExtra("Mode", (short)1);
+            startActivity(intent);
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+           /// Globals.ReplaceFragment(new HotelProfileFragment(WaitingActivity.this), getSupportFragmentManager(), null);
         } else if (menuItem.getItemId() == R.id.wOffers) {
             drawerLayout.closeDrawer(navigationView);
             Globals.ReplaceFragment(new OfferFragment(WaitingActivity.this), getSupportFragmentManager(), null);
@@ -179,7 +185,11 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             }
         } else if (menuItem.getItemId() == R.id.wAbout) {
             drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
+            Intent intent = new Intent(WaitingActivity.this, AboutUsActivity.class);
+            intent.putExtra("Mode",(short) 2);
+            startActivity(intent);
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            //Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
         }
         return false;
     }
@@ -232,6 +242,36 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaitingActivity.this) != null) {
             navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaitingActivity.this));
         }
+        Globals.TextViewFontTypeFace(txtLetter, WaitingActivity.this);
+        Globals.TextViewFontTypeFace(txtName, WaitingActivity.this);
+    }
+
+    private void ConfirmMessage() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WaitingActivity.this);
+        alertDialogBuilder
+                .setMessage(getResources().getString(R.string.MsgChangeMode))
+                .setCancelable(false)
+                .setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                drawerLayout.closeDrawer(navigationView);
+                                Intent intent = new Intent(WaitingActivity.this, WaiterHomeActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                                finish();
+                            }
+                        })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                            }
+                        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        alertDialog.show();
     }
     //endregion
 

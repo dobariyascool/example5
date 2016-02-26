@@ -29,6 +29,10 @@
         android:layout_width="@dimen/navWidth"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/offwhite"
+        app:elevation="16dp"
+        app:itemBackground="@drawable/navigation_view_ripple_effect"
+        app:itemTextAppearance="@style/NavigationViewStyle"
         app:itemTextColor="@color/navigationdrawerText"
         app:menu="@menu/menu_navigation_drawer" />
     <!-- end -->

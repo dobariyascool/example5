@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -57,6 +58,9 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setLogo(R.mipmap.app_logo);
+            if(Build.VERSION.SDK_INT >=21){
+                app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
+            }
         }
         //end
 
@@ -131,7 +135,11 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                 changeModeDialogFragment.show(getSupportFragmentManager(), "");
             } else if (menuItem.getItemId() == R.id.profile) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new HotelProfileFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
+                //Globals.ReplaceFragment(new HotelProfileFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
+                Intent intent = new Intent(GuestHomeActivity.this, HotelProfileActivity.class);
+                intent.putExtra("Mode",(short)3);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (menuItem.getItemId() == R.id.offers) {
                 drawerLayout.closeDrawer(navigationView);
                 Globals.ReplaceFragment(new OfferFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
@@ -156,7 +164,11 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                 }
             } else if (menuItem.getItemId() == R.id.aboutus) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
+                //Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
+                Intent intent = new Intent(GuestHomeActivity.this, AboutUsActivity.class);
+                intent.putExtra("Mode",(short) 3);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         }
         return false;
@@ -269,7 +281,8 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             txtName.setVisibility(View.GONE);
             txtLetter.setVisibility(View.GONE);
         }
-
+        Globals.TextViewFontTypeFace(txtLetter,GuestHomeActivity.this);
+        Globals.TextViewFontTypeFace(txtName,GuestHomeActivity.this);
     }
 
     public void EditTextOnClick(View view) {

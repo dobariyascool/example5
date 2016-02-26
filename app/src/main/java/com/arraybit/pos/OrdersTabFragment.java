@@ -79,6 +79,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         setHasOptionsMenu(true);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
+        Globals.TextViewFontTypeFace(txtMsg,getActivity());
 
         displayMetrics = getActivity().getResources().getDisplayMetrics();
 

@@ -36,6 +36,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
     FloatingActionMenu famRoot;
     boolean isRefresh;
 
+
     public AllOrdersFragment(String linktoTableMasterIds) {
         this.linktoTableMasterIds = linktoTableMasterIds;
     }
@@ -85,6 +86,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
 
         SetTabLayout();
 
+
         return view;
     }
 
@@ -118,7 +120,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
 
 
     //region Method
-    public void SetTabLayout() {
+    private void SetTabLayout() {
 
         orderPagerAdapter = new OrderPagerAdapter(getFragmentManager());
         orderPagerAdapter.AddFragment(OrdersTabFragment.createInstance(Globals.OrderStatus.All.toString(), linktoTableMasterIds), Globals.OrderStatus.All.toString());

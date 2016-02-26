@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.arraybit.global.Globals;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.pos.R;
 import com.arraybit.pos.WaitingActivity;
@@ -86,6 +87,11 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
             txtMobileNo = (TextView) itemView.findViewById(R.id.txtMobileNo);
             txtPersons = (TextView) itemView.findViewById(R.id.txtPersons);
 
+            Globals.TextViewFontTypeFace(txtIndex, context);
+            Globals.TextViewFontTypeFace(txtName, context);
+            Globals.TextViewFontTypeFace(txtMobileNo, context);
+            Globals.TextViewFontTypeFace(txtPersons, context);
+
             childLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -94,14 +100,7 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
 
                     //fragment outside click not show the dialog
                     if(activity.getSupportFragmentManager().getBackStackEntryCount() == 0) {
-
-                        WaitingMaster objWaitingMaster = new WaitingMaster();
-
-                        objWaitingMaster.setWaitingMasterId(alWaitingMaster.get(v.getId()).getWaitingMasterId());
-                        objWaitingMaster.setWaitingStatus(alWaitingMaster.get(v.getId()).getWaitingStatus());
-                        objWaitingMaster.setPersonMobile(alWaitingMaster.get(v.getId()).getPersonMobile());
-
-                        objChildLayoutClickListener.ChangeStatusClick(objWaitingMaster, v.getId());
+                        objChildLayoutClickListener.ChangeStatusClick(alWaitingMaster.get(v.getId()), v.getId());
                     }
                 }
             });

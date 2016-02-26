@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppCompactCardView">android.support.v7.CardView</style>
+
+    <style name="DefaultCardView" parent="AppCompactCardView">
+        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
+        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
+        <item name="cardElevation">@dimen/card_Elevation</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
+    </style>
+
+    <style name="FloatingMiniButton" parent="FloatingActionButton">
+        <item name="fab_colorNormal">@color/orange</item>
+        <item name="rd_rippleColor">@color/orange_light</item>
+        <item name="fab_size">mini</item>
+        <item name="fab_colorPressed">@color/orange</item>
+        <item name="android:src">@drawable/edit</item>
+        <item name="android:layout_marginTop">162dp</item>
+        <item name="android:layout_marginEnd">@dimen/control_SpecingSmall</item>
+    </style>
+
+    <style name="ToolBar" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:background">@color/primary</item>
+    </style>
+</resources>

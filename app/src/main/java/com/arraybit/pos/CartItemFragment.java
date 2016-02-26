@@ -3,7 +3,9 @@ package com.arraybit.pos;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -74,12 +76,16 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             } else {
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_cart_item));
             }
+            if(Build.VERSION.SDK_INT >=21){
+                app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
+            }
         }
         //end
 
         cvRemark = (CardView) view.findViewById(R.id.cvRemark);
 
         etRemark = (EditText) view.findViewById(R.id.etRemark);
+        Globals.EditTextFontTypeFace(etRemark,getActivity());
 
         cartItemFragment = (LinearLayout) view.findViewById(R.id.cartItemFragment);
         Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
@@ -87,6 +93,16 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         setHasOptionsMenu(true);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
+        TextView txtHeaderItem = (TextView) view.findViewById(R.id.txtHeaderItem);
+        TextView txtHeaderRate = (TextView) view.findViewById(R.id.txtHeaderRate);
+        TextView txtHeaderNo = (TextView) view.findViewById(R.id.txtHeaderNo);
+        TextView txtHeaderAmount = (TextView) view.findViewById(R.id.txtHeaderAmount);
+
+        Globals.TextViewFontTypeFace(txtHeaderAmount,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderNo,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderItem,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderRate,getActivity());
+
         cbMenu = (CompoundButton) view.findViewById(R.id.cbMenu);
 
         headerLayout = (LinearLayout) view.findViewById(R.id.headerLayout);
@@ -97,10 +113,14 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         btnConfirmOrder = (Button) view.findViewById(R.id.btnConfirmOrder);
 
         SetRecyclerView();
+        SetTypeFace();
 
         cbMenu.setOnClickListener(this);
         btnAddMore.setOnClickListener(this);
         btnConfirmOrder.setOnClickListener(this);
+
+        Globals.ButtonFontTypeFace(btnAddMore,getActivity());
+        Globals.ButtonFontTypeFace(btnConfirmOrder,getActivity());
 
         return view;
     }
@@ -186,6 +206,13 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     }
 
     //region Private Methods and Interface
+    private void SetTypeFace(){
+        Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(),
+                "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
+        cbMenu.setTypeface(roboto);
+        Globals.TextViewFontTypeFace(txtMsg,getActivity());
+    }
+
     private void SetRecyclerView() {
         if (Globals.alOrderItemTran.size() == 0) {
             SetVisibility();

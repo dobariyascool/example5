@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 
 import com.arraybit.adapter.ModifierAdapter;
+import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
 import com.rey.material.widget.Button;
 
@@ -53,6 +54,9 @@ public class ModifierSelectionFragmentDialog extends DialogFragment implements V
 
         btnCancel.setOnClickListener(this);
         btnDone.setOnClickListener(this);
+
+        Globals.ButtonFontTypeFace(btnCancel, getActivity());
+        Globals.ButtonFontTypeFace(btnDone,getActivity());
 
         SetRecyclerViewElevation();
         return view;

@@ -6,7 +6,7 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context="com.arraybit.pos.WaiterOptionListFragment"
-    tools:ignore="DisableBaselineAlignment">
+    tools:ignore="DisableBaselineAlignment,UselessParent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
         android:layout_marginStart="120dp"
         android:layout_weight="2"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,121 +43,148 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
-                <LinearLayout
-                    android:id="@+id/layoutOrders"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cvOrders"
+                    style="@style/CardViewOption"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="@dimen/control_SpecingSmall"
-                    android:layout_weight="1"
-                    android:background="@drawable/option_button"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_weight="1">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/m_order"
-                        tools:ignore="ContentDescription" />
-
-                    <com.rey.material.widget.TextView
-                        android:id="@+id/txtOrders"
+                    <LinearLayout
+                        android:id="@+id/layoutOrders"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/leftHeight"
-                        android:layout_gravity="center"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:padding="@dimen/control_SpecingSmall"
-                        android:text="@string/wolfOrder"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/control_TextMedium" />
+                        android:orientation="vertical">
 
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/layoutDineIn"
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/m_order"
+                            tools:ignore="ContentDescription" />
+
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtOrders"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/leftHeight"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/control_SpecingSmall"
+                            android:text="@string/wolfOrder"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/control_TextMedium" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cvDineIn"
+                    style="@style/CardViewOption"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="@dimen/control_SpecingSmall"
-                    android:layout_weight="1"
-                    android:background="@drawable/option_button"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_weight="1">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/dine_in"
-                        tools:ignore="ContentDescription" />
-
-                    <com.rey.material.widget.TextView
-                        android:id="@+id/txtDineIn"
+                    <LinearLayout
+                        android:id="@+id/layoutDineIn"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/leftHeight"
-                        android:layout_gravity="center"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:padding="@dimen/control_SpecingSmall"
-                        android:text="@string/wolfTable"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/control_TextMedium" />
+                        android:orientation="vertical">
 
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/dine_in"
+                            tools:ignore="ContentDescription" />
 
-                <LinearLayout
-                    android:id="@+id/layoutTakeAway"
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtDineIn"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/leftHeight"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/control_SpecingSmall"
+                            android:text="@string/wolfTable"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/control_TextMedium" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cvTakeAway"
+                    style="@style/CardViewOption"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="@dimen/control_SpecingSmall"
-                    android:layout_weight="1"
-                    android:background="@drawable/option_button"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_weight="1">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/take_away"
-                        tools:ignore="ContentDescription" />
-
-                    <com.rey.material.widget.TextView
-                        android:id="@+id/txtTakeAway"
+                    <LinearLayout
+                        android:id="@+id/layoutTakeAway"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/leftHeight"
-                        android:layout_gravity="center"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:padding="@dimen/control_SpecingSmall"
-                        android:text="@string/wolfMenu"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/control_TextMedium" />
+                        android:orientation="vertical">
 
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/take_away"
+                            tools:ignore="ContentDescription" />
 
-                <LinearLayout
-                    android:id="@+id/layoutBill"
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtTakeAway"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/leftHeight"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/control_SpecingSmall"
+                            android:text="@string/wolfMenu"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/control_TextMedium" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cvBill"
+                    style="@style/CardViewOption"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/option_button"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_weight="1">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/m_bill"
-                        tools:ignore="ContentDescription" />
-
-                    <com.rey.material.widget.TextView
-                        android:id="@+id/txtBill"
+                    <LinearLayout
+                        android:id="@+id/layoutBill"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:padding="@dimen/control_SpecingSmall"
-                        android:text="@string/wolfGenerate"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/control_TextMedium" />
+                        android:orientation="vertical">
 
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/m_bill"
+                            tools:ignore="ContentDescription" />
+
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtBill"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/control_SpecingSmall"
+                            android:text="@string/wolfGenerate"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/control_TextMedium" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

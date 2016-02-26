@@ -50,6 +50,7 @@ public class GuestProfileFragment extends Fragment {
     View view;
     UpdateResponseListener objUpdateResponseListener;
 
+
     public GuestProfileFragment() {
         // Required empty public constructor
     }
@@ -58,7 +59,7 @@ public class GuestProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_guest_profile_frgament, container, false);
+        View view = inflater.inflate(R.layout.fragment_guest_profile, container, false);
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
 
         if (app_bar != null) {
@@ -77,6 +78,7 @@ public class GuestProfileFragment extends Fragment {
         etLastName = (EditText) view.findViewById(R.id.etLastName);
         etPhone = (EditText) view.findViewById(R.id.etPhone);
         etDateOfBirth = (EditText) view.findViewById(R.id.etDateOfBirth);
+        //hide keyboard
         etDateOfBirth.setInputType(InputType.TYPE_NULL);
 
         rbMale = (RadioButton) view.findViewById(R.id.rbMale);
@@ -85,8 +87,10 @@ public class GuestProfileFragment extends Fragment {
         spnrArea = (AppCompatSpinner) view.findViewById(R.id.spnrArea);
 
         btnUpdateProfile = (Button) view.findViewById(R.id.btnUpdateProfile);
+        Globals.ButtonFontTypeFace(btnUpdateProfile,getActivity());
 
         SetUserName();
+        SetTypeFace();
 
         if (Service.CheckNet(getActivity())) {
             new SpinnerLoadingTask().execute();
@@ -158,6 +162,16 @@ public class GuestProfileFragment extends Fragment {
     }
 
     //region Private Methods
+    private void SetTypeFace(){
+        Globals.EditTextFontTypeFace(etDateOfBirth,getActivity());
+        Globals.EditTextFontTypeFace(etFirstName,getActivity());
+        Globals.EditTextFontTypeFace(etLastName,getActivity());
+        Globals.EditTextFontTypeFace(etPhone, getActivity());
+        Globals.TextViewFontTypeFace(txtLoginChar, getActivity());
+        Globals.TextViewFontTypeFace(txtFullName, getActivity());
+        Globals.TextViewFontTypeFace(txtEmail,getActivity());
+    }
+
     private void SetUserName() {
         SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
@@ -189,6 +203,9 @@ public class GuestProfileFragment extends Fragment {
                 }
             }
         }
+        Globals.TextViewFontTypeFace(txtLoginChar,getActivity());
+        Globals.TextViewFontTypeFace(txtFullName,getActivity());
+        Globals.TextViewFontTypeFace(txtEmail,getActivity());
     }
 
     private void CreateGuestPreference(RegisteredUserMaster objRegisteredUserMaster) {

@@ -58,6 +58,8 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
         TextView[] txtAmount = new TextView[alOrderItemTran.size()];
         TextView[] txtQty = new TextView[alOrderItemTran.size()];
 
+
+
         for (int i = 0; i < alOrderItemTran.size(); i++) {
 
             if (orderMasterId == alOrderItemTran.get(i).getLinktoOrderMasterId()) {
@@ -72,7 +74,7 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
                 txtNameLayoutParams.weight = 0.5f;
                 txtName[i].setLayoutParams(txtNameLayoutParams);
                 txtName[i].setGravity(Gravity.START);
-
+                Globals.TextViewFontTypeFace(txtName[i], context);
 
                 txtQty[i] = new TextView(context);
                 LinearLayout.LayoutParams txtQtyLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -80,6 +82,7 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
                 txtQtyLayoutParams.weight = 0.15f;
                 txtQty[i].setLayoutParams(txtQtyLayoutParams);
                 txtQty[i].setGravity(Gravity.CENTER);
+                Globals.TextViewFontTypeFace(txtQty[i], context);
 
 
                 txtRate[i] = new TextView(context);
@@ -87,13 +90,14 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
                 txtRateLayoutParams.weight = 0.22f;
                 txtRate[i].setLayoutParams(txtRateLayoutParams);
                 txtRate[i].setGravity(Gravity.END);
-
+                Globals.TextViewFontTypeFace(txtRate[i], context);
 
                 txtAmount[i] = new TextView(context);
                 LinearLayout.LayoutParams txtAmountLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
                 txtAmountLayoutParams.weight = 0.3f;
                 txtAmount[i].setLayoutParams(txtAmountLayoutParams);
                 txtAmount[i].setGravity(Gravity.END);
+                Globals.TextViewFontTypeFace(txtAmount[i], context);
 
                 if (alOrderItemTran.get(i).getItemModifierIds().equals("0")) {
                     txtQty[i].setTextSize(14f);
@@ -151,7 +155,10 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
             super(itemView);
 
             cvOrderItem = (CardView) itemView.findViewById(R.id.cvOrderItem);
+
             txtOrderNumber = (TextView) itemView.findViewById(R.id.txtOrderNumber);
+            Globals.TextViewFontTypeFace(txtOrderNumber,context);
+
             orderItemLayout = (LinearLayout) itemView.findViewById(R.id.orderItemLayout);
         }
     }

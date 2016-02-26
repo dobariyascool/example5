@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -98,6 +99,10 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
         } else {
             Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
         }
+
+        Globals.TextViewFontTypeFace(txtFeedbackGroup,getActivity());
+        Globals.TextViewFontTypeFace(txtNext,getActivity());
+        Globals.TextViewFontTypeFace(txtPrevious,getActivity());
 
         return view;
     }
@@ -209,6 +214,26 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             FeedbackViewFragment CurrentFeedbackViewFragment = (FeedbackViewFragment) adapter.GetCurrentFragment(i);
             fragmentTransaction.remove(CurrentFeedbackViewFragment);
+            fragmentTransaction.commit();
+        }
+    }
+
+    public void ReplaceFragment(Fragment fragment, String fragmentName) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Fade fade = new Fade();
+            fade.setDuration(500);
+            fragment.setEnterTransition(fade);
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            RemoveFragment();
+            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
+            fragmentTransaction.addToBackStack(fragmentName);
+            fragmentTransaction.commit();
+        } else {
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            RemoveFragment();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
+            fragmentTransaction.addToBackStack(fragmentName);
             fragmentTransaction.commit();
         }
     }

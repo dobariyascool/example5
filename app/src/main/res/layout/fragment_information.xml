@@ -33,6 +33,7 @@
                 android:paddingStart="@dimen/control_SpecingSmall">
 
                 <com.rey.material.widget.TextView
+                    android:id="@+id/txtHeaderPhone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -60,6 +61,7 @@
                 android:paddingTop="@dimen/control_SpecingSmall">
 
                 <com.rey.material.widget.TextView
+                    android:id="@+id/txtHeaderEmail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -85,6 +87,7 @@
                 android:padding="@dimen/control_SpecingSmall">
 
                 <com.rey.material.widget.TextView
+                    android:id="@+id/txtHeaderWebSite"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

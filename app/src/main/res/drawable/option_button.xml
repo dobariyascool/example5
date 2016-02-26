@@ -5,15 +5,15 @@
     android:shape="rectangle">
 
     <!-- #A0010610,#A00d001a-->
-    <solid android:color="#65000000"/>
+    <solid android:color="#65000000" />
 
     <stroke
         android:width="0.0dp"
-        android:color="@color/accent"/>
+        android:color="@color/accent" />
 
     <padding
         android:left="3dp"
-        android:right="3dp"/>
+        android:right="3dp" />
 
-    <corners android:radius="1dp"/>
+    <corners android:radius="1dp" />
 </shape>

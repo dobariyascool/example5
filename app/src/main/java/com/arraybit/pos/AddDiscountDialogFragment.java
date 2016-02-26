@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -51,6 +52,7 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         etDiscount = (EditText) view.findViewById(R.id.etDiscount);
+        Globals.EditTextFontTypeFace(etDiscount,getActivity());
 
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
@@ -68,10 +70,25 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
         Button btnDot = (Button) view.findViewById(R.id.btnDot);
         ImageButton btnClear = (ImageButton) view.findViewById(R.id.btnClear);
 
+        Globals.ButtonFontTypeFace(btnNum1,getActivity());
+        Globals.ButtonFontTypeFace(btnNum2,getActivity());
+        Globals.ButtonFontTypeFace(btnNum3,getActivity());
+        Globals.ButtonFontTypeFace(btnNum4,getActivity());
+        Globals.ButtonFontTypeFace(btnNum5,getActivity());
+        Globals.ButtonFontTypeFace(btnNum6,getActivity());
+        Globals.ButtonFontTypeFace(btnNum7,getActivity());
+        Globals.ButtonFontTypeFace(btnNum8,getActivity());
+        Globals.ButtonFontTypeFace(btnNum9,getActivity());
+        Globals.ButtonFontTypeFace(btnNum0,getActivity());
+        Globals.ButtonFontTypeFace(btnOk,getActivity());
+        Globals.ButtonFontTypeFace(btnCancel,getActivity());
+
         actDiscount = (AppCompatAutoCompleteTextView) view.findViewById(R.id.actDiscount);
 
         tbPercentage = (ToggleButton) view.findViewById(R.id.tbPercentage);
         tbRupee = (ToggleButton) view.findViewById(R.id.tbRupee);
+
+        SetTypeFace();
 
         actDiscount.setOnClickListener(this);
         etDiscount.setOnClickListener(this);
@@ -276,6 +293,14 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
             return false;
         }
         return true;
+    }
+
+    private void SetTypeFace(){
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(),
+                "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
+        actDiscount.setTypeface(typeface);
+        tbRupee.setTypeface(typeface);
+        tbPercentage.setTypeface(typeface);
     }
 
     interface DiscountSelectionListener {

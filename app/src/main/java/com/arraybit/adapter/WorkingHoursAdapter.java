@@ -62,10 +62,18 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()));
 
         Calendar calendar = Calendar.getInstance();
-        if(Globals.Days.valueOf("Day"+calendar.get(Calendar.DAY_OF_WEEK)).getValue().equals(holder.txtDayOfWeek.getText())){
-            holder.layoutChild.setSelected(true);
+        if(calendar.get(Calendar.DAY_OF_WEEK)==7){
+            if (Globals.Days.valueOf("Day" + 0).getValue().equals(holder.txtDayOfWeek.getText())) {
+                holder.layoutChild.setSelected(true);
+            } else {
+                holder.layoutChild.setSelected(false);
+            }
         }else{
-            holder.layoutChild.setSelected(false);
+            if (Globals.Days.valueOf("Day" + calendar.get(Calendar.DAY_OF_WEEK)).getValue().equals(holder.txtDayOfWeek.getText())) {
+                holder.layoutChild.setSelected(true);
+            } else {
+                holder.layoutChild.setSelected(false);
+            }
         }
 
         if (current.getOpeningTime().equals("12:00 AM")) {
@@ -95,12 +103,16 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         public WorkingHoursViewHolder(View itemView) {
             super(itemView);
 
-            layoutChild = (LinearLayout)itemView.findViewById(R.id.layoutChild);
-
+            layoutChild = (LinearLayout) itemView.findViewById(R.id.layoutChild);
             txtDayOfWeek = (TextView) itemView.findViewById(R.id.txtDayOfWeek);
             txtStartTime = (TextView) itemView.findViewById(R.id.txtStartTime);
             txtEndTime = (TextView) itemView.findViewById(R.id.txtEndTime);
             txtHeader = (TextView) itemView.findViewById(R.id.txtHeader);
+
+            Globals.TextViewFontTypeFace(txtHeader, context);
+            Globals.TextViewFontTypeFace(txtDayOfWeek, context);
+            Globals.TextViewFontTypeFace(txtEndTime, context);
+            Globals.TextViewFontTypeFace(txtStartTime, context);
         }
     }
 

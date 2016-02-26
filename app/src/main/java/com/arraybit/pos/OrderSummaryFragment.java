@@ -124,7 +124,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         Button btnAddMore = (Button) view.findViewById(R.id.btnAddMore);
         Button btnCheckOut = (Button) view.findViewById(R.id.btnCheckOut);
 
+        Globals.ButtonFontTypeFace(btnAddMore,getActivity());
+        Globals.ButtonFontTypeFace(btnCheckOut,getActivity());
+
         SetVisibility();
+        SetTypeFace(view);
 
         btnAddMore.setOnClickListener(this);
         btnCheckOut.setOnClickListener(this);
@@ -278,7 +282,33 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         }
     }
 
+
     //region Private Methods and Interface
+    private void SetTypeFace(View v){
+        Globals.TextViewFontTypeFace(txtRoundingOff,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderDiscount,getActivity());
+        Globals.TextViewFontTypeFace(txtNetAmount,getActivity());
+        Globals.TextViewFontTypeFace(txtTotalAmount,getActivity());
+        Globals.TextViewFontTypeFace(txtTotalDiscount,getActivity());
+        TextView txtHeaderItem = (TextView) v.findViewById(R.id.txtHeaderItem);
+        TextView txtHeaderRate = (TextView) v.findViewById(R.id.txtHeaderRate);
+        TextView txtHeaderNo = (TextView) v.findViewById(R.id.txtHeaderNo);
+        TextView txtHeaderAmount = (TextView) v.findViewById(R.id.txtHeaderAmount);
+        TextView txtHeaderTotalAmount = (TextView) v.findViewById(R.id.txtHeaderTotalAmount);
+        TextView txtHeaderDiscount = (TextView) v.findViewById(R.id.txtHeaderDiscount);
+        TextView txtHeaderRounding = (TextView) v.findViewById(R.id.txtHeaderRounding);
+        TextView txtHeaderNetAmount = (TextView) v.findViewById(R.id.txtHeaderNetAmount);
+        Globals.TextViewFontTypeFace(txtHeaderItem,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderRate,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderNo,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderAmount,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderTotalAmount,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderDiscount,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderRounding,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderNetAmount,getActivity());
+        Globals.TextViewFontTypeFace(txtHeaderNetAmount,getActivity());
+
+    }
 
     private void SetVisibility() {
         if (lstOrderMaster == null || lstOrderMaster.size() == 0) {
@@ -413,6 +443,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             txtTaxName[i].setGravity(Gravity.START);
             txtTaxName[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
             txtTaxName[i].setTextSize(10f);
+            Globals.TextViewFontTypeFace(txtTaxName[i],getActivity());
 
             txtTaxRate[i] = new TextView(getActivity());
             LinearLayout.LayoutParams txtTaxRateParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -421,6 +452,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             txtTaxRate[i].setGravity(Gravity.END);
             txtTaxRate[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
             txtTaxRate[i].setTextSize(10f);
+            Globals.TextViewFontTypeFace(txtTaxRate[i], getActivity());
 
             if (alTaxMaster.get(i).getIsPercentage()) {
                 String str = String.valueOf(alTaxMaster.get(i).getTaxRate());

@@ -49,6 +49,9 @@ public class HotelProfileFragment extends Fragment {
         this.activityName = activityName;
     }
 
+    public HotelProfileFragment() {
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,7 +103,11 @@ public class HotelProfileFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
+            if(activityName==null){
+                getActivity().onBackPressed();
+            }else{
             getActivity().getSupportFragmentManager().popBackStack();
+            }
             return true;
         }
 
@@ -111,17 +118,21 @@ public class HotelProfileFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
-            menu.findItem(R.id.mWaiting).setVisible(false);
-        } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()!=null
-                && getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName().equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
-            menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.registration).setVisible(false);
-        } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+        if (activityName != null) {
+            if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
+                menu.findItem(R.id.mWaiting).setVisible(false);
+            } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()!=null
+                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName().equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
+                menu.findItem(R.id.login).setVisible(false);
+                menu.findItem(R.id.registration).setVisible(false);
+            } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+                menu.findItem(R.id.action_search).setVisible(false);
+                menu.findItem(R.id.viewChange).setVisible(false);
+            }
+        }else{
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
         }
-
     }
 
     //region Page Adapter

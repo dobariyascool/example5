@@ -58,6 +58,11 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
         btnReady.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
+        Globals.ButtonFontTypeFace(btnCooking, getActivity());
+        Globals.ButtonFontTypeFace(btnServed, getActivity());
+        Globals.ButtonFontTypeFace(btnReady, getActivity());
+        Globals.ButtonFontTypeFace(btnCancel,getActivity());
+
         return view;
     }
 

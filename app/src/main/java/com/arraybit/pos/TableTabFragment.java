@@ -23,7 +23,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.arraybit.adapter.TablesAdapter;
 import com.arraybit.global.Globals;
@@ -32,6 +31,7 @@ import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.SectionMaster;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.parser.TableJSONParser;
+import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,6 +80,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         View view = inflater.inflate(R.layout.fragment_table_tab, container, false);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
+        Globals.TextViewFontTypeFace(txtMsg, getActivity());
 
         rvTables = (RecyclerView) view.findViewById(R.id.rvTables);
         rvTables.setHasFixedSize(true);
@@ -113,6 +114,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override
@@ -197,6 +199,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         }
         return false;
     }
+
 
     @SuppressLint("RtlHardcoded")
     @Override
@@ -283,13 +286,27 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
 
     private void SetupRecyclerView(RecyclerView rvTables, ArrayList<TableMaster> alTableMaster) {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
-            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager());
+            if (objSectionMaster.getSectionMasterId() == 0) {
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), true);
+            } else {
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), false);
+            }
+
         } else {
-            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager());
+            if (objSectionMaster.getSectionMasterId() == 0) {
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), true);
+            } else {
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), false);
+            }
+
         }
+
         scaleInAnimationAdapter = new ScaleInAnimationAdapter(tablesAdapter);
+        scaleInAnimationAdapter.setFirstOnly(false);
+        //scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
         rvTables.setAdapter(scaleInAnimationAdapter);
         rvTables.setLayoutManager(gridLayoutManager);
+        rvTables.scheduleLayoutAnimation();
         rvTables.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -309,11 +326,11 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getActivity().getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+//            progressDialog = new ProgressDialog(getActivity());
+//            progressDialog.setMessage(getActivity().getResources().getString(R.string.MsgLoading));
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setCancelable(false);
+//            progressDialog.show();
 
         }
 
@@ -328,7 +345,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
 
             ArrayList<TableMaster> lstTableMaster = (ArrayList<TableMaster>) result;
             if (lstTableMaster == null) {

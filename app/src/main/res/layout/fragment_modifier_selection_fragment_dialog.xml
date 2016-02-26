@@ -25,7 +25,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/dialog_button_layout_height"
             android:layout_marginEnd="@dimen/control_SpecingSmall"
             android:layout_marginStart="@dimen/control_SpecingSmall"
             android:layout_marginTop="@dimen/control_SpecingTiny"
@@ -36,7 +36,7 @@
                 android:id="@+id/btnCancel"
                 style="@style/DialogButton"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/dialog_button_height"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Cancel" />
@@ -45,7 +45,7 @@
                 android:id="@+id/btnDone"
                 style="@style/DialogButton"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/dialog_button_height"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Done" />

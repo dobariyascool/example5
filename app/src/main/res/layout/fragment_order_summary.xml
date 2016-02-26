@@ -26,6 +26,7 @@
             android:padding="@dimen/control_SpecingTiny">
 
             <com.rey.material.widget.TextView
+                android:id="@+id/txtHeaderItem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
@@ -37,7 +38,7 @@
                 android:textColor="@color/primary" />
 
             <com.rey.material.widget.TextView
-                android:id="@+id/txtNo"
+                android:id="@+id/txtHeaderNo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.15"
@@ -47,6 +48,7 @@
                 android:textColor="@color/primary" />
 
             <com.rey.material.widget.TextView
+                android:id="@+id/txtHeaderRate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.22"
@@ -56,6 +58,7 @@
                 android:textColor="@color/primary" />
 
             <com.rey.material.widget.TextView
+                android:id="@+id/txtHeaderAmount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
@@ -129,6 +132,7 @@
                             android:paddingStart="@dimen/control_SpecingTiny">
 
                             <com.rey.material.widget.TextView
+                                android:id="@+id/txtHeaderTotalAmount"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
@@ -196,6 +200,7 @@
                             android:paddingStart="@dimen/control_SpecingTiny">
 
                             <com.rey.material.widget.TextView
+                                android:id="@+id/txtHeaderRounding"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
@@ -228,6 +233,7 @@
                             android:paddingStart="@dimen/control_SpecingTiny">
 
                             <com.rey.material.widget.TextView
+                                android:id="@+id/txtHeaderNetAmount"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"

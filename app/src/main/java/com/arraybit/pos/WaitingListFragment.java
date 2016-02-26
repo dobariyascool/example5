@@ -170,7 +170,6 @@ public class WaitingListFragment extends Fragment {
             progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
-
             progressDialog.show();
         }
 

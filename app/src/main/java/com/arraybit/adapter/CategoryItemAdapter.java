@@ -124,7 +124,13 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             txtItemDescription = (TextView) itemView.findViewById(R.id.txtItemDescription);
             txtItemPrice = (TextView) itemView.findViewById(R.id.txtItemPrice);
 
+            Globals.TextViewFontTypeFace(txtItemName,context);
+            Globals.TextViewFontTypeFace(txtItemDescription,context);
+            Globals.TextViewFontTypeFace(txtItemPrice,context);
+
             btnAdd = (Button) itemView.findViewById(R.id.btnAdd);
+
+            Globals.ButtonFontTypeFace(btnAdd,context);
 
             if (!isWaiterGrid && isViewChange) {
                 DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.arraybit.global.Globals;
 import com.arraybit.modal.BusinessGalleryTran;
 import com.arraybit.pos.FullViewDialogFragment;
 import com.arraybit.pos.R;
@@ -66,6 +67,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
             txtGalleryTitle = (TextView) itemView.findViewById(R.id.txtGalleryTitle);
             ivGalleryImage = (ImageView) itemView.findViewById(R.id.ivGalleryImage);
+
+            Globals.TextViewFontTypeFace(txtGalleryTitle,context);
+
             cvGallery = (CardView) itemView.findViewById(R.id.cvGallery);
 
             cvGallery.setOnClickListener(new View.OnClickListener() {

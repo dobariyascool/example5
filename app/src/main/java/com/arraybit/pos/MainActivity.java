@@ -1,17 +1,13 @@
 package com.arraybit.pos;
 
 import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
-
-import com.arraybit.global.Globals;
-import com.arraybit.global.Service;
-import com.github.clans.fab.FloatingActionButton;
+import android.widget.TextView;
 
 import org.json.JSONStringer;
 
@@ -28,24 +24,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Globals.serverName ="10.0.3.2:3653";
-        Globals.ChangeUrl();
+        TextView txt = (TextView)findViewById(R.id.txt);
+        Typeface roboto = Typeface.createFromAsset(getAssets(),
+                "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
+        txt.setTypeface(roboto);
 
-        CoordinatorLayout coordinatorlayout = (CoordinatorLayout)findViewById(R.id.coordinatorlayout);
-
-        if(Service.CheckNet(MainActivity.this)){
-            Globals.ShowSnackBar(coordinatorlayout,"meassage",MainActivity.this,1000);
-        }
-
-        //FloatingActionMenu famRoot =(FloatingActionMenu)findViewById(R.id.famRoot);
-
-        FloatingActionButton fabAdd =(FloatingActionButton)findViewById(R.id.fabAdd);
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Globals.ShowSnackBar(v,"meassage",MainActivity.this,1000);
-            }
-        });
+//        Globals.serverName ="10.0.3.2:3653";
+//        Globals.ChangeUrl();
+//
+//        CoordinatorLayout coordinatorlayout = (CoordinatorLayout)findViewById(R.id.coordinatorlayout);
+//
+//        if(Service.CheckNet(MainActivity.this)){
+//            Globals.ShowSnackBar(coordinatorlayout,"meassage",MainActivity.this,1000);
+//        }
+//
+//        //FloatingActionMenu famRoot =(FloatingActionMenu)findViewById(R.id.famRoot);
+//
+//        FloatingActionButton fabAdd =(FloatingActionButton)findViewById(R.id.fabAdd);
+//        fabAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Globals.ShowSnackBar(v,"meassage",MainActivity.this,1000);
+//            }
+//        });
 
 
 //
@@ -411,7 +412,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 //    class webCont extends WebViewClient{
 //
 //        @Override

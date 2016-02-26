@@ -45,7 +45,14 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
         btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
         btnCancel = (Button) view.findViewById(R.id.btnCancel);
 
+        Globals.ButtonFontTypeFace(btnSubmit,getActivity());
+        Globals.ButtonFontTypeFace(btnCancel,getActivity());
+        Globals.ButtonFontTypeFace(btnWaiterMode,getActivity());
+        Globals.ButtonFontTypeFace(btnGuestMode,getActivity());
+        Globals.EditTextFontTypeFace(etPassword, getActivity());
+
         SetVisibility();
+
         return view;
     }
 
@@ -81,6 +88,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
             etPassword.setVisibility(View.GONE);
             btnSubmit.setVisibility(View.GONE);
             btnCancel.setVisibility(View.GONE);
+            buttonLayout.setVisibility(View.GONE);
 
             btnWaiterMode.setOnClickListener(this);
             btnGuestMode.setOnClickListener(this);
@@ -88,6 +96,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
                 && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
                 .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
             modeLayout.setVisibility(View.GONE);
+            buttonLayout.setVisibility(View.VISIBLE);
             etPassword.setVisibility(View.VISIBLE);
             btnSubmit.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);

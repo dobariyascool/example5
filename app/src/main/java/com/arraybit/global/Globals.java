@@ -12,10 +12,12 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +27,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.transition.Fade;
 import android.transition.Slide;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -51,6 +56,8 @@ import com.arraybit.pos.MyAccountFragment;
 import com.arraybit.pos.R;
 import com.arraybit.pos.SignInActivity;
 import com.arraybit.pos.SignUpFragment;
+import com.rey.material.util.TypefaceUtil;
+import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
 import java.text.DecimalFormat;
@@ -104,6 +111,33 @@ public class Globals {
 
     public static void ChangeUrl() {
         Service.Url = "http://" + Globals.serverName + "/Service.svc/";
+    }
+
+    public static void TextViewFontTypeFace(com.rey.material.widget.TextView textView,Context context) {
+        Typeface roboto = Typeface.createFromAsset(context.getAssets(),
+                "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
+        textView.setTypeface(roboto);
+    }
+
+    public static void ButtonFontTypeFace(Button button,Context context) {
+        Typeface roboto = Typeface.createFromAsset(context.getAssets(),
+                "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
+        button.setTypeface(roboto);
+    }
+
+    public static void EditTextFontTypeFace(EditText editText,Context context) {
+        Typeface roboto = Typeface.createFromAsset(context.getAssets(),
+                "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
+        editText.setTypeface(roboto);
+    }
+
+    public static void NavigationViewFontTypeFace(NavigationView navigationView,Context context) {
+        for(int i=0;i<navigationView.getMenu().size();i++){
+            MenuItem menuItem = navigationView.getMenu().getItem(i);
+            SpannableString spannableString = new SpannableString(menuItem.getTitle());
+            spannableString.setSpan(TypefaceUtil.load(context,"fonts/Roboto-Regular.ttf",0), 0 , spannableString.length(),  Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            menuItem.setTitle(spannableString);
+        }
     }
 
     public static void SetAppBarPadding(Toolbar app_bar) {
@@ -174,12 +208,18 @@ public class Globals {
     }
 
     public static void ShowSnackBar(View view, String message, Context context, int duration) {
+        Typeface roboto = Typeface.createFromAsset(context.getAssets(),
+                "fonts/Roboto-Regular.ttf");
         Snackbar snackbar = Snackbar.make(view, message, duration);
         View snackView = snackbar.getView();
+        if(Build.VERSION.SDK_INT >= 21) {
+            snackView.setElevation(R.dimen.snackbar_elevation);
+        }
         TextView txt = (TextView) snackView.findViewById(android.support.design.R.id.snackbar_text);
         txt.setGravity(Gravity.CENTER);
         txt.setTextColor(ContextCompat.getColor(context, android.R.color.white));
         txt.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        txt.setTypeface(roboto);
         snackView.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_grey));
         snackbar.show();
     }
@@ -292,7 +332,20 @@ public class Globals {
     public static void OptionMenuItemClick(MenuItem menuItem, Activity activity, FragmentManager fragmentManager) {
         activityName = activity.getTitle().toString();
         if (menuItem.getItemId() != android.R.id.home) {
-            if (fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() != null &&
+            if(activityName.equals(activity.getResources().getString(R.string.title_fragment_about_us))){
+                if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
+                    GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+                    guestLoginDialogFragment.show(fragmentManager, "");
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
+                    Globals.ReplaceAnimatedFragment(new SignUpFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_signup));
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)) {
+                    ClearPreference(activity.getApplication());
+                    Globals.userName = null;
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
+                    Globals.ReplaceAnimatedFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
+                }
+            }
+            else if (fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() != null &&
                     fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equals(activity.getResources().getString(R.string.title_fragment_feedback))) {
                 if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
                     GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
@@ -301,8 +354,7 @@ public class Globals {
                     guestLoginDialogFragment.show(fragmentManager, "");
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
                     FeedbackFragment currentFragment = (FeedbackFragment) fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
-                    currentFragment.RemoveFragment();
-                    Globals.ReplaceFragment(new SignUpFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_signup));
+                    currentFragment.ReplaceFragment(new SignUpFragment(), activity.getResources().getString(R.string.title_fragment_signup));
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)) {
                     ClearPreference(activity.getApplication());
                     Globals.userName = null;
@@ -310,8 +362,7 @@ public class Globals {
                     currentFragment.LoginResponse();
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
                     FeedbackFragment currentFragment = (FeedbackFragment) fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
-                    currentFragment.RemoveFragment();
-                    Globals.ReplaceFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
+                    currentFragment.ReplaceFragment(new MyAccountFragment(),activity.getResources().getString(R.string.title_fragment_myaccount));
                 }
             } else if (MenuActivity.parentActivity && fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() == null) {
             }
@@ -320,16 +371,19 @@ public class Globals {
                     GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
                     guestLoginDialogFragment.show(fragmentManager, "");
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navRegistration)) {
-                    Globals.ReplaceFragment(new SignUpFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_signup));
+                    Globals.ReplaceAnimatedFragment(new SignUpFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_signup));
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)) {
                     ClearPreference(activity.getApplication());
                     Globals.userName = null;
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
-                    Globals.ReplaceFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
+                    Globals.ReplaceAnimatedFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
                 }
             }
         }
     }
+
+
+
 
     public static void ClearPreference(Context context) {
         SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
@@ -408,6 +462,21 @@ public class Globals {
         fragmentTransaction.addToBackStack(fragmentName);
         fragmentTransaction.commit();
     }
+
+    public static void ReplaceAnimatedFragment(Fragment fragment, FragmentManager fragmentManager, String fragmentName) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (Build.VERSION.SDK_INT >= 21) {
+            Fade fade = new Fade();
+            fade.setDuration(500);
+            fragment.setEnterTransition(fade);
+        } else {
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
+        fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
+        fragmentTransaction.addToBackStack(fragmentName);
+        fragmentTransaction.commit();
+    }
+
 
     public static void ReplaceFragment(Fragment fragment, FragmentManager fragmentManager, String fragmentName) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -744,6 +813,7 @@ public class Globals {
     //end
 
     //endregion
+
 }
 
 

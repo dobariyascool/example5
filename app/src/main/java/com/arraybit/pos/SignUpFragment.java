@@ -2,6 +2,7 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -79,6 +80,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         //app_bar
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
         if (app_bar != null) {
+            if(Build.VERSION.SDK_INT >=21){
+                app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
+            }
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -104,6 +108,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
         //button
         btnSignUp = (Button) view.findViewById(R.id.btnSignUp);
+        Globals.ButtonFontTypeFace(btnSignUp,getActivity());
         //end
 
         //Spinner
@@ -124,6 +129,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         //end
 
         setHasOptionsMenu(true);
+        SetTypeFace();
 
         spnrArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -201,6 +207,18 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     //region Private Methods and Interface
+    private void SetTypeFace(){
+        Globals.EditTextFontTypeFace(etEmail,getActivity());
+        Globals.EditTextFontTypeFace(etFirstName,getActivity());
+        Globals.EditTextFontTypeFace(etLastName,getActivity());
+        Globals.EditTextFontTypeFace(etPhone,getActivity());
+        Globals.EditTextFontTypeFace(etPassword,getActivity());
+        Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(),
+                "fonts/Roboto-Regular.ttf");
+        rbFemale.setTypeface(roboto);
+        rbMale.setTypeface(roboto);
+    }
+
     private boolean ValidateControls() {
         boolean IsValid = true;
 

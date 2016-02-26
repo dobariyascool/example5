@@ -94,6 +94,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         gridLayoutManager = new GridLayoutManager(getActivity(), 2);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
+        Globals.TextViewFontTypeFace(txtMsg,getActivity());
 
         Bundle bundle = getArguments();
         objCategoryMaster = bundle.getParcelable(ITEMS_COUNT_KEY);
@@ -367,6 +368,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         } else {
             txtCartNumber.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
         }
+        Globals.TextViewFontTypeFace(txtCartNumber,getActivity());
     }
 
     private ArrayList<ItemMaster> Filter(ArrayList<ItemMaster> lstItemMaster, String filterName) {

@@ -78,6 +78,9 @@ public class ModifierAdapter extends RecyclerView.Adapter<ModifierAdapter.Modifi
             super(itemView);
 
             txtRate = (TextView) itemView.findViewById(R.id.txtRate);
+
+            Globals.TextViewFontTypeFace(txtRate,context);
+
             chkModifier = (CheckBox) itemView.findViewById(R.id.chkModifier);
             chkModifier.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

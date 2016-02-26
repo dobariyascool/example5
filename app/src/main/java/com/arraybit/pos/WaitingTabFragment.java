@@ -62,6 +62,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
+        Globals.TextViewFontTypeFace(txtMsg,getActivity());
 
         return view;
     }
@@ -114,11 +115,11 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+//            progressDialog = new ProgressDialog(getActivity());
+//            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setCancelable(false);
+//            progressDialog.show();
 
         }
 
@@ -131,7 +132,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
 
         @Override
         protected void onPostExecute(Object result) {
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
             ArrayList<WaitingMaster> lstWaitingMaster = (ArrayList<WaitingMaster>) result;
             if (lstWaitingMaster == null) {
                 Globals.SetError(txtMsg, rvWaiting, getResources().getString(R.string.MsgSelectFail), true);

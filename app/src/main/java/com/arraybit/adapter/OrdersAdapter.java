@@ -223,7 +223,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
 
     class OrderViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtOrderTimeDifference, txtOrderTime, txtTableName, txtOrderNumber, txtOrderType, txtTotalItem, txtTotalAmount;
+        TextView txtOrderTimeDifference, txtOrderTime, txtTableName, txtOrderNumber, txtOrderType, txtTotalAmount;
         LinearLayout itemLayout;
         CardView cvOrder;
 
@@ -235,9 +235,15 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             txtTableName = (TextView) itemView.findViewById(R.id.txtTableName);
             txtOrderNumber = (TextView) itemView.findViewById(R.id.txtOrderNumber);
             txtOrderType = (TextView) itemView.findViewById(R.id.txtOrderType);
-            txtTotalItem = (TextView) itemView.findViewById(R.id.txtTotalItem);
             txtTotalAmount = (TextView) itemView.findViewById(R.id.txtTotalAmount);
             itemLayout = (LinearLayout) itemView.findViewById(R.id.itemLayout);
+
+            Globals.TextViewFontTypeFace(txtOrderTimeDifference,context);
+            Globals.TextViewFontTypeFace(txtOrderTime,context);
+            Globals.TextViewFontTypeFace(txtTableName,context);
+            Globals.TextViewFontTypeFace(txtOrderNumber,context);
+            Globals.TextViewFontTypeFace(txtOrderType,context);
+            Globals.TextViewFontTypeFace(txtTotalAmount,context);
 
             cvOrder = (CardView) itemView.findViewById(R.id.cvOrder);
 

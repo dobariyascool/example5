@@ -7,6 +7,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowDisablePreview">true</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListViewStyle</item>
     </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
@@ -39,13 +40,21 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="MyActionBarMenuText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu">
+    <style name="MyActionBarMenuText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">Roboto-Regular</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Popup" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:background">@android:color/white</item>
         <item name="android:textColor">@android:color/black</item>
+        <item name="android:fontFamily">Roboto-Regular</item>
+    </style>
+
+    <style name="NavigationViewStyle">
+        <item name="android:fontFamily">Roboto-Regular</item>
     </style>
 
     <style name="EditTextToogleButton">
@@ -55,6 +64,15 @@
         <item name="android:text">""</item>
         <item name="android:textOff">""</item>
         <item name="android:textOn">""</item>
+    </style>
+
+    <style name="MultiCompleteTextView" parent="AppTheme">
+
+    </style>
+
+    <style name="DropDownListViewStyle" parent="@style/Widget.AppCompat.ListView.DropDown">
+        <item name="android:divider">@android:color/white</item>
+        <item name="android:dividerHeight">0dp</item>
     </style>
 
     <style name="EditText" parent="Material.Widget.EditText.Light">
@@ -195,6 +213,13 @@
         <item name="android:textSize">@dimen/control_TextSmall</item>
     </style>
 
+    <style name="StatusTextView">
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textSize">@dimen/control_TextSmall</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">Roboto-Regular</item>
+    </style>
+
     <style name="MaterialTabLayout">android.support.design.widget.TabLayout</style>
 
     <style name="AppCompactCardView">android.support.v7.CardView</style>
@@ -209,6 +234,14 @@
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabTextColor">@android:color/white</item>
         <item name="android:background">@color/primary</item>
+        <item name="tabTextAppearance">@style/TabLayoutTextStyle</item>
+    </style>
+
+    <style name="TabLayoutTextStyle" parent="@style/TextAppearance.Design.Tab">
+        <item name="android:fontFamily">Roboto-Regular</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="Button" parent="Material.Drawable.Ripple.Touch.Light">
@@ -221,6 +254,7 @@
         <!--<item name="android:shadowDy">0.7</item>-->
         <!--<item name="android:shadowRadius">0.7</item>-->
         <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Button</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:radius">2dp</item>
         <item name="rd_rippleColor">@color/accent</item>
         <item name="rd_enable">true</item>
@@ -232,6 +266,7 @@
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
         <item name="cardElevation">@dimen/card_Elevation</item>
         <item name="cardBackgroundColor">@color/transparent_orange</item>
+        <item name="android:foreground">@drawable/offer_ripple_effect</item>
     </style>
 
     <style name="DefaultCardView" parent="AppCompactCardView">
@@ -241,11 +276,12 @@
         <!--<item name="android:layout_marginBottom">@dimen/card_Margin</item>-->
     </style>
 
-    <style name="CardViewBlock" parent="AppCompactCardView">
+    <style name="CardViewOption" parent="AppCompactCardView">
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
         <item name="cardElevation">@dimen/card_Elevation</item>
-        <item name="cardBackgroundColor">@color/transparent_orange</item>
+        <item name="cardBackgroundColor">#65000000</item>
+        <item name="android:foreground">@drawable/cardview_ripple_effect</item>
     </style>
 
     <style name="Switch">
@@ -261,6 +297,9 @@
         <item name="android:textColor">#009688</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:paddingTop">@dimen/dialog_button_padding_top</item>
+        <item name="android:paddingEnd">@dimen/dialog_button_padding_end</item>
+        <item name="android:paddingBottom">@dimen/dialog_button_padding_bottom</item>
         <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Button</item>
     </style>
 

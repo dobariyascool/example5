@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -42,6 +44,7 @@ public class CounterFragment extends Fragment {
     CounterJSONParser objCounterJSONParser;
     LinearLayout counterLayout;
     short userMasterId, userType;
+    boolean isBack;
 
     public CounterFragment(short userType) {
         this.userType = userType;
@@ -53,11 +56,22 @@ public class CounterFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_counter, container, false);
 
-        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
+        Bundle bundle = getArguments();
+        if(bundle!=null){
+            isBack = bundle.getBoolean("isBack",false);
+        }
 
+        Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            if(isBack){
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }else{
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+            if(Build.VERSION.SDK_INT >=21){
+                app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
+            }
         }
         app_bar.setTitle(getResources().getString(R.string.title_fragment_counter));
 
@@ -91,6 +105,14 @@ public class CounterFragment extends Fragment {
             menu.findItem(R.id.logout).setVisible(false);
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

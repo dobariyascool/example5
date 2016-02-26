@@ -3,8 +3,10 @@ package com.arraybit.pos;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
@@ -41,17 +44,34 @@ public class NotificationSettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notification_settings, container, false);
 
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
-
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if(Build.VERSION.SDK_INT >=21){
+                app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
+            }
         }
         app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_notification_settings));
 
         setHasOptionsMenu(true);
 
+        LinearLayout notificationLayout = (LinearLayout)view.findViewById(R.id.notificationLayout);
+
+        if(Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19){
+            notificationLayout.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.card_view_with_border));
+        }
+
+        TextView txtHeader =(TextView)view.findViewById(R.id.txtHeader);
+        TextView txtPushNotification =(TextView)view.findViewById(R.id.txtPushNotification);
+        TextView txtNotification =(TextView)view.findViewById(R.id.txtNotification);
         txtOnTime = (TextView) view.findViewById(R.id.txtOnTime);
         txtOffTime = (TextView) view.findViewById(R.id.txtOffTime);
+
+        Globals.TextViewFontTypeFace(txtHeader,getActivity());
+        Globals.TextViewFontTypeFace(txtPushNotification,getActivity());
+        Globals.TextViewFontTypeFace(txtNotification,getActivity());
+        Globals.TextViewFontTypeFace(txtOnTime,getActivity());
+        Globals.TextViewFontTypeFace(txtOffTime,getActivity());
 
         sPushNotificationOnOff = (Switch) view.findViewById(R.id.sPushNotificationOnOff);
         objSharePreferenceManage = new SharePreferenceManage();

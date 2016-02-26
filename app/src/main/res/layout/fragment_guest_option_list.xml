@@ -28,71 +28,82 @@
         android:layout_weight="2"
         android:orientation="vertical"
         android:weightSum="1">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_margin="@dimen/control_SpecingSmall"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/layoutMenu"
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvMenu"
+                style="@style/CardViewOption"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/control_SpecingSmall"
-                android:layout_weight="1"
-                android:background="@drawable/option_button"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_weight="1">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/m_menu"
-                    tools:ignore="ContentDescription" />
-
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtMenu"
+                <LinearLayout
+                    android:id="@+id/layoutMenu"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/leftHeight"
-                    android:layout_gravity="center"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:padding="@dimen/control_SpecingSmall"
-                    android:text="@string/golfMenu"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/control_TextMedium" />
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/m_menu"
+                        tools:ignore="ContentDescription" />
 
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/txtMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/leftHeight"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="@dimen/control_SpecingSmall"
+                        android:text="@string/golfMenu"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/control_TextMedium" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-            <LinearLayout
-                android:id="@+id/layoutOrders"
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvOrders"
+                style="@style/CardViewOption"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/option_button"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_weight="1">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/m_order"
-                    tools:ignore="ContentDescription" />
-
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtOrders"
+                <LinearLayout
+                    android:id="@+id/layoutOrders"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/leftHeight"
-                    android:layout_gravity="center"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:padding="@dimen/control_SpecingSmall"
-                    android:text="@string/golfOrder"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/control_TextMedium" />
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/m_order"
+                        tools:ignore="ContentDescription" />
 
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/txtOrders"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/leftHeight"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="@dimen/control_SpecingSmall"
+                        android:text="@string/golfOrder"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/control_TextMedium" />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
@@ -101,62 +112,73 @@
             android:layout_marginStart="@dimen/control_SpecingSmall"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/layoutOffers"
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvOffers"
+                style="@style/CardViewOption"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/control_SpecingSmall"
-                android:layout_weight="1"
-                android:background="@drawable/option_button"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_weight="1">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/m_offers"
-                    tools:ignore="ContentDescription" />
-
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtOffers"
+                <LinearLayout
+                    android:id="@+id/layoutOffers"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/leftHeight"
-                    android:layout_gravity="center"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:padding="@dimen/control_SpecingSmall"
-                    android:text="@string/golfOffer"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/control_TextMedium" />
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/m_offers"
+                        tools:ignore="ContentDescription" />
 
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/txtOffers"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/leftHeight"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="@dimen/control_SpecingSmall"
+                        android:text="@string/golfOffer"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/control_TextMedium" />
 
-            <LinearLayout
-                android:id="@+id/layoutFeedback"
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvFeedback"
+                style="@style/CardViewOption"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/option_button"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_weight="1">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/m_feedback"
-                    tools:ignore="ContentDescription" />
-
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtFeedback"
+                <LinearLayout
+                    android:id="@+id/layoutFeedback"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:padding="@dimen/control_SpecingSmall"
-                    android:text="@string/golfFeedback"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/control_TextMedium" />
-            </LinearLayout>
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/m_feedback"
+                        tools:ignore="ContentDescription" />
+
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/txtFeedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="@dimen/control_SpecingSmall"
+                        android:text="@string/golfFeedback"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/control_TextMedium" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

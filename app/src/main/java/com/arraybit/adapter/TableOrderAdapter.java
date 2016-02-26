@@ -126,6 +126,13 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
             txtTotalItem = (TextView) itemView.findViewById(R.id.txtTotalItem);
             txtTotalAmount = (TextView) itemView.findViewById(R.id.txtTotalAmount);
 
+            Globals.TextViewFontTypeFace(txtOrderTimeDifference,context);
+            Globals.TextViewFontTypeFace(txtOrderTime,context);
+            Globals.TextViewFontTypeFace(txtTableName,context);
+            Globals.TextViewFontTypeFace(txtTotalOrder,context);
+            Globals.TextViewFontTypeFace(txtTotalItem,context);
+            Globals.TextViewFontTypeFace(txtTotalAmount,context);
+
             cvOrder = (CardView) itemView.findViewById(R.id.cvOrder);
 
             cvOrder.setOnClickListener(new View.OnClickListener() {
