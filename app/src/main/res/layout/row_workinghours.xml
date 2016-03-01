@@ -4,62 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--<LinearLayout-->
-    <!--android:id="@+id/layoutHeader"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:background="#263238"-->
-    <!--android:gravity="center"-->
-    <!--android:padding="@dimen/control_SpecingTiny"-->
-    <!--android:visibility="visible">-->
-
-    <!--<com.rey.material.widget.TextView-->
-    <!--style="@style/PrimaryTextView"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="0.6"-->
-    <!--android:gravity="start"-->
-    <!--android:text="@string/rDayOfWeek"-->
-    <!--android:textColor="@color/white_blur" />-->
-
-    <!--<com.rey.material.widget.TextView-->
-    <!--style="@style/PrimaryTextView"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="0.5"-->
-    <!--android:gravity="end"-->
-    <!--android:text="@string/rOpeningTime"-->
-    <!--android:textColor="@color/white_blur" />-->
-
-    <!--<com.rey.material.widget.TextView-->
-    <!--style="@style/PrimaryTextView"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="0.6"-->
-    <!--android:gravity="end"-->
-    <!--android:text="@string/rBreakStartTime"-->
-    <!--android:textColor="@color/white_blur" />-->
-
-    <!--<com.rey.material.widget.TextView-->
-    <!--style="@style/PrimaryTextView"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="0.6"-->
-    <!--android:gravity="end"-->
-    <!--android:text="@string/rBreakEndTime"-->
-    <!--android:textColor="@color/white_blur" />-->
-
-    <!--<com.rey.material.widget.TextView-->
-    <!--style="@style/PrimaryTextView"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="0.5"-->
-    <!--android:gravity="end"-->
-    <!--android:text="@string/rClosingTime"-->
-    <!--android:textColor="@color/white_blur" />-->
-
-    <!--</LinearLayout>-->
-
     <com.rey.material.widget.TextView
         android:id="@+id/txtHeader"
         android:layout_width="match_parent"

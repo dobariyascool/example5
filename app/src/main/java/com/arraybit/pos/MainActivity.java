@@ -1,33 +1,21 @@
 package com.arraybit.pos;
 
 import android.app.ProgressDialog;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import org.json.JSONStringer;
 
 public class MainActivity extends AppCompatActivity {
 
     static int i = 0;
-    LinearLayout layout1;
-    JSONStringer stringer;
-    ProgressDialog  progressDialog;
+    ProgressDialog progressDialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        TextView txt = (TextView)findViewById(R.id.txt);
-        Typeface roboto = Typeface.createFromAsset(getAssets(),
-                "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
-        txt.setTypeface(roboto);
 
 //        Globals.serverName ="10.0.3.2:3653";
 //        Globals.ChangeUrl();
@@ -117,11 +105,9 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
 
-
-
         //int j = i;
 
- //       RequestQueue queue = Volley.newRequestQueue(this);
+        //       RequestQueue queue = Volley.newRequestQueue(this);
 
 //        try{
 //
@@ -207,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        String url = "http://10.0.3.2:3653/Service.svc/InsertMaster";
         //http://api.androidhive.info/volley/string_response.html
-        String url  = "file:///android_asset/privacy_policy.html";
+//        String url  = "file:///android_asset/privacy_policy.html";
 //        StringRequest stringRequest = new StringRequest(Request.Method.GET,url,new Response.Listener<String>() {
 //            @Override
 //            public void onResponse(String s) {
@@ -225,15 +211,14 @@ public class MainActivity extends AppCompatActivity {
         //queue.add(stringRequest);
 
         //WebSettings webSettings = load.getSettings();
-       // webSettings.setJavaScriptEnabled(true);
+        // webSettings.setJavaScriptEnabled(true);
         //webSettings.setDatabaseEnabled(true);
         //webSettings.setDomStorageEnabled(true);
         //webSettings.setAppCacheEnabled(true);
         //webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-       // webSettings.setBlockNetworkLoads(true);
+        // webSettings.setBlockNetworkLoads(true);
         //webSettings.setUseWideViewPort(true);
         //webSettings.setOffscreenPreRaster(true);
-
 
 
 //        load.getSettings().setJavaScriptEnabled(true); load.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
@@ -252,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 //        progressDialog.setCancelable(false);
 //        progressDialog.show();
         //load.setWebViewClient(new webCont());
- //       load.loadUrl(url);
+        //       load.loadUrl(url);
 
 
 //        JsonObjectRequest jsonObjectRequest = null;

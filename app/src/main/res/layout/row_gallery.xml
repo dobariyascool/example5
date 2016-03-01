@@ -21,8 +21,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="1"
-            android:padding="@dimen/control_SpecingTiny"
-            android:text="@string/abc_action_bar_home_description" />
+            android:padding="@dimen/control_SpecingTiny" />
 
         <ImageView
             android:id="@+id/ivGalleryImage"

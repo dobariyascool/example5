@@ -28,22 +28,4 @@
         android:textStyle="bold"
         tools:ignore="SmallSp" />
 
-    <!--    <com.rey.material.widget.TextView-->
-    <!--android:id="@+id/txtCartNumber"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:gravity="center"-->
-    <!--android:textColor="@color/error_text"-->
-    <!--android:paddingTop="5dp"-->
-    <!--android:paddingBottom="5dp"-->
-    <!--android:paddingStart="3dp"-->
-    <!--android:paddingEnd="3dp"-->
-    <!--android:textSize="9sp"-->
-    <!--android:textStyle="bold"-->
-    <!--android:background="@drawable/myaccount_selector"-->
-    <!--android:layout_alignTop="@+id/ivCart"-->
-    <!--android:layout_alignStart="@+id/ivCart"-->
-    <!--android:layout_alignEnd="@+id/ivCart"-->
-    <!--tools:ignore="SmallSp" />-->
-
 </RelativeLayout>

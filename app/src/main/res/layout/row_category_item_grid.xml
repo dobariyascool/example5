@@ -65,7 +65,8 @@
                 android:layout_height="35dp"
                 android:layout_gravity="end"
                 android:padding="@dimen/control_SpecingTiny"
-                android:text="Add"/>
+                android:text="Add"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
     </LinearLayout>

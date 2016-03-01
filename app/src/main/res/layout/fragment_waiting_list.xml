@@ -6,9 +6,6 @@
     android:orientation="vertical"
     tools:context="com.arraybit.pos.WaitingListFragment">
 
-    <!--<include-->
-    <!--android:id="@+id/error_layout"-->
-    <!--layout="@layout/error_layout" />-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
