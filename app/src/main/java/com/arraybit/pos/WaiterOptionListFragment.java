@@ -40,11 +40,6 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
         TextView txtTakeAway = (TextView)view.findViewById(R.id.txtTakeAway);
         TextView txtBill = (TextView)view.findViewById(R.id.txtBill);
 
-        Globals.TextViewFontTypeFace(txtOrders,getActivity());
-        Globals.TextViewFontTypeFace(txtDineIn,getActivity());
-        Globals.TextViewFontTypeFace(txtTakeAway,getActivity());
-        Globals.TextViewFontTypeFace(txtBill,getActivity());
-
         cvOrders.setOnClickListener(this);
         cvDineIn.setOnClickListener(this);
         cvTakeAway.setOnClickListener(this);

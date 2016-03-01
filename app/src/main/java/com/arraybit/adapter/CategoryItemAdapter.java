@@ -23,10 +23,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-
 public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapter.ItemViewHolder> {
 
+    public boolean isItemAnimate;
     int width, height;
     FragmentManager fragmentManager;
     boolean isViewChange;
@@ -37,13 +36,15 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     ItemMaster objItemMaster;
     ItemClickListener objItemClickListener;
     SharePreferenceManage objSharePreferenceManage;
+    int previousPosition;
 
-    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange, ItemClickListener objItemClickListener) {
+    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange, ItemClickListener objItemClickListener, Boolean isItemAnimate) {
         this.context = context;
         alItemMaster = result;
         this.fragmentManager = fragmentManager;
         this.isViewChange = isViewChange;
         this.objItemClickListener = objItemClickListener;
+        this.isItemAnimate = isItemAnimate;
     }
 
     @Override
@@ -68,9 +69,6 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
         objItemMaster = alItemMaster.get(position);
-        holder.cvItem.setId(position);
-        holder.btnAdd.setId(position);
-
         if (!isWaiterGrid) {
             if (objItemMaster.getImageName().equals("null")) {
                 Picasso.with(holder.ivItem.getContext()).load(R.drawable.default_image).into(holder.ivItem);
@@ -87,6 +85,15 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             holder.txtItemDescription.setText(objItemMaster.getShortDescription());
         }
         holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
+
+        //holder animation
+        if (isItemAnimate) {
+            if (position > previousPosition) {
+                Globals.SetItemAnimator(holder);
+            }
+            previousPosition = position;
+        }
+
     }
 
     @Override
@@ -94,16 +101,17 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         return alItemMaster.size();
     }
 
-    public void SetSearchFilter(ArrayList<ItemMaster> result,ScaleInAnimationAdapter scaleInAnimationAdapter) {
+    public void SetSearchFilter(ArrayList<ItemMaster> result) {
+        isItemAnimate = false;
         alItemMaster = new ArrayList<>();
         alItemMaster.addAll(result);
-        scaleInAnimationAdapter.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public interface ItemClickListener {
-      void ButtonOnClick(ItemMaster objItemMaster);
+        void ButtonOnClick(ItemMaster objItemMaster);
 
-      void CardViewOnClick(ItemMaster objItemMaster);
+        void CardViewOnClick(ItemMaster objItemMaster);
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -124,13 +132,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             txtItemDescription = (TextView) itemView.findViewById(R.id.txtItemDescription);
             txtItemPrice = (TextView) itemView.findViewById(R.id.txtItemPrice);
 
-            Globals.TextViewFontTypeFace(txtItemName,context);
-            Globals.TextViewFontTypeFace(txtItemDescription,context);
-            Globals.TextViewFontTypeFace(txtItemPrice,context);
-
             btnAdd = (Button) itemView.findViewById(R.id.btnAdd);
-
-            Globals.ButtonFontTypeFace(btnAdd,context);
 
             if (!isWaiterGrid && isViewChange) {
                 DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
@@ -148,9 +150,9 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
                     Globals.HideKeyBoard(context, v);
                     if (isWaiterGrid) {
-                        objItemClickListener.ButtonOnClick(alItemMaster.get(v.getId()));
+                        objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()));
                     } else {
-                        objItemClickListener.CardViewOnClick(alItemMaster.get(v.getId()));
+                        objItemClickListener.CardViewOnClick(alItemMaster.get(getAdapterPosition()));
                     }
 
                 }
@@ -162,7 +164,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 public void onClick(View v) {
 
                     Globals.HideKeyBoard(context, v);
-                    objItemClickListener.ButtonOnClick(alItemMaster.get(v.getId()));
+                    objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()));
                 }
             });
         }

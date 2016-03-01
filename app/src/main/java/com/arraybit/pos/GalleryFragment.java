@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.arraybit.adapter.GalleryAdapter;
-import com.arraybit.global.EndlessRecyclerOnScrollListener;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.BusinessGalleryTran;
@@ -21,8 +20,6 @@ import com.arraybit.parser.BusinessGalleryJSONParser;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
-
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 @SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
@@ -46,10 +43,9 @@ public class GalleryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        gridLayoutManager = new GridLayoutManager(getActivity(),2);
+        gridLayoutManager = new GridLayoutManager(getActivity(), 2);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
-        Globals.TextViewFontTypeFace(txtMsg,getActivity());
 
         rvGallery = (RecyclerView) view.findViewById(R.id.rvGallery);
         rvGallery.setVisibility(View.GONE);
@@ -65,20 +61,6 @@ public class GalleryFragment extends Fragment {
         } else {
             SetGalleryRecyclerView(alBusinessGalleryTran);
         }
-
-        rvGallery.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-                if (current_page > currentPage) {
-                    currentPage = current_page;
-                    if (Service.CheckNet(getActivity())) {
-                        new GalleryLoadingTask().execute();
-                    } else {
-                        Globals.ShowSnackBar(rvGallery, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
-                    }
-                }
-            }
-        });
         return view;
     }
 
@@ -90,10 +72,18 @@ public class GalleryFragment extends Fragment {
     private void SetGalleryRecyclerView(ArrayList<BusinessGalleryTran> lstBusinessGalleryTran) {
         rvGallery.setVisibility(View.VISIBLE);
         txtMsg.setVisibility(View.GONE);
-        adapter = new GalleryAdapter(getActivity(), lstBusinessGalleryTran,getActivity().getSupportFragmentManager());
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
-        rvGallery.setAdapter(scaleInAnimationAdapter);
+        adapter = new GalleryAdapter(getActivity(), lstBusinessGalleryTran, getActivity().getSupportFragmentManager(),false);
+        rvGallery.setAdapter(adapter);
         rvGallery.setLayoutManager(gridLayoutManager);
+        rvGallery.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(!adapter.isItemAnimate){
+                    adapter.isItemAnimate = true;
+                }
+            }
+        });
     }
 
 
@@ -120,7 +110,7 @@ public class GalleryFragment extends Fragment {
             if (BusinessMasterId == 0) {
                 return null;
             } else {
-                return objBusinessGalleryJSONParser.SelectAllBusinessGalleryTranPageWise(currentPage, BusinessMasterId);
+                return objBusinessGalleryJSONParser.SelectAllBusinessGalleryTranPageWise(BusinessMasterId);
             }
         }
 
@@ -134,18 +124,13 @@ public class GalleryFragment extends Fragment {
             ArrayList<BusinessGalleryTran> lstBusinessGalleryTran = (ArrayList<BusinessGalleryTran>) result;
             alBusinessGalleryTran = lstBusinessGalleryTran;
             if (lstBusinessGalleryTran == null) {
-                if (currentPage == 1) {
-                    txtMsg.setText(getResources().getString(R.string.MsgSelectFail));
-                }
+                txtMsg.setText(getResources().getString(R.string.MsgSelectFail));
+            } else if (lstBusinessGalleryTran.size() == 0) {
+                txtMsg.setText(getResources().getString(R.string.MsgGallery));
             } else {
-                if (lstBusinessGalleryTran.size() == 0) {
-                    if (currentPage == 1) {
-                        txtMsg.setText(getResources().getString(R.string.MsgGallery));
-                    }
-                } else {
-                    SetGalleryRecyclerView(lstBusinessGalleryTran);
-                }
+                SetGalleryRecyclerView(alBusinessGalleryTran);
             }
+
         }
     }
     //endregion

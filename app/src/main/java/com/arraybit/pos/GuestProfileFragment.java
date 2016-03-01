@@ -87,10 +87,8 @@ public class GuestProfileFragment extends Fragment {
         spnrArea = (AppCompatSpinner) view.findViewById(R.id.spnrArea);
 
         btnUpdateProfile = (Button) view.findViewById(R.id.btnUpdateProfile);
-        Globals.ButtonFontTypeFace(btnUpdateProfile,getActivity());
 
         SetUserName();
-        SetTypeFace();
 
         if (Service.CheckNet(getActivity())) {
             new SpinnerLoadingTask().execute();
@@ -162,16 +160,6 @@ public class GuestProfileFragment extends Fragment {
     }
 
     //region Private Methods
-    private void SetTypeFace(){
-        Globals.EditTextFontTypeFace(etDateOfBirth,getActivity());
-        Globals.EditTextFontTypeFace(etFirstName,getActivity());
-        Globals.EditTextFontTypeFace(etLastName,getActivity());
-        Globals.EditTextFontTypeFace(etPhone, getActivity());
-        Globals.TextViewFontTypeFace(txtLoginChar, getActivity());
-        Globals.TextViewFontTypeFace(txtFullName, getActivity());
-        Globals.TextViewFontTypeFace(txtEmail,getActivity());
-    }
-
     private void SetUserName() {
         SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
@@ -203,9 +191,6 @@ public class GuestProfileFragment extends Fragment {
                 }
             }
         }
-        Globals.TextViewFontTypeFace(txtLoginChar,getActivity());
-        Globals.TextViewFontTypeFace(txtFullName,getActivity());
-        Globals.TextViewFontTypeFace(txtEmail,getActivity());
     }
 
     private void CreateGuestPreference(RegisteredUserMaster objRegisteredUserMaster) {

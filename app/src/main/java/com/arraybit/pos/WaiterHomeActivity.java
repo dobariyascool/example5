@@ -151,23 +151,17 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 changeModeDialogFragment.show(getSupportFragmentManager(), "");
             } else if (menuItem.getItemId() == R.id.wHotelProfile) {
                 drawerLayout.closeDrawer(navigationView);
-                //if (Build.VERSION.SDK_INT < 21) {
                 Intent intent = new Intent(WaiterHomeActivity.this, HotelProfileActivity.class);
                 intent.putExtra("Mode",(short) 2);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                //} else {
-//                    ActivityOptions options =
-//                            ActivityOptions.
-//                                    makeSceneTransitionAnimation(WaiterHomeActivity.this);
-//                    Intent intent = new Intent(WaiterHomeActivity.this, HotelProfileActivity.class);
-//                    intent.putExtra("isWaiterMode", true);
-//                    startActivity(intent, options.toBundle());
-//                }
 
             } else if (menuItem.getItemId() == R.id.wOffers) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new OfferFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
+                Intent intent = new Intent(WaiterHomeActivity.this, OfferActivity.class);
+                intent.putExtra("Mode",(short) 2);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (menuItem.getItemId() == R.id.wFeedback) {
                 drawerLayout.closeDrawer(navigationView);
                 Globals.ReplaceFragment(new FeedbackFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
@@ -187,7 +181,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 intent.putExtra("Mode",(short) 2);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                //Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
             } else if (menuItem.getItemId() == R.id.wExit) {
                 System.exit(0);
             }
@@ -255,8 +248,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this) != null) {
             navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this));
         }
-        Globals.TextViewFontTypeFace(txtName, WaiterHomeActivity.this);
-        Globals.TextViewFontTypeFace(txtLetter, WaiterHomeActivity.this);
     }
     //endregion
 

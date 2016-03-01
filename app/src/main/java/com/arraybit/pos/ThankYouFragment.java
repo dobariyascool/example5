@@ -32,9 +32,6 @@ public class ThankYouFragment extends Fragment {
         Button btnFeedback = (Button) view.findViewById(R.id.btnFeedback);
         Button btnSkip = (Button) view.findViewById(R.id.btnSkip);
 
-        Globals.ButtonFontTypeFace(btnFeedback,getActivity());
-        Globals.ButtonFontTypeFace(btnSkip,getActivity());
-        Globals.TextViewFontTypeFace(txtTitle, getActivity());
 
         btnFeedback.setOnClickListener(new View.OnClickListener() {
             @Override

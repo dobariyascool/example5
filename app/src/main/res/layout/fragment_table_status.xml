@@ -42,15 +42,6 @@
             android:text="@string/tsOccupy" />
 
         <com.rey.material.widget.Button
-            android:id="@+id/btnBlock"
-            style="@style/StatusButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@mipmap/block"
-            android:text="@string/tsBlock" />
-
-        <com.rey.material.widget.Button
             android:id="@+id/btnDirty"
             style="@style/StatusButton"
             android:layout_width="0dp"
@@ -58,6 +49,15 @@
             android:layout_weight="1"
             android:drawableTop="@mipmap/dirty"
             android:text="@string/tsDirty" />
+
+        <com.rey.material.widget.Button
+            android:id="@+id/btnBlock"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/block"
+            android:text="@string/tsBlock" />
 
     </LinearLayout>
 </LinearLayout>

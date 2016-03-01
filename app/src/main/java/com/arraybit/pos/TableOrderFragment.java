@@ -29,15 +29,13 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-
 @SuppressLint("ValidFragment")
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class TableOrderFragment extends Fragment {
 
 
     RecyclerView rvTableOrder;
-    LinearLayout tableOrderFragment;
+    LinearLayout tableOrderFragment,errorLayout;
     TextView txtMsg;
     ArrayList<OrderMaster> alOrderMaster;
     int counterMasterId;
@@ -53,6 +51,9 @@ public class TableOrderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_table_order, container, false);
 
+        errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
+        txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+
         //app_bar
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
         if (app_bar != null) {
@@ -63,7 +64,6 @@ public class TableOrderFragment extends Fragment {
         //end
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
-        Globals.TextViewFontTypeFace(txtMsg,getActivity());
 
         rvTableOrder = (RecyclerView) view.findViewById(R.id.rvTableOrder);
         rvTableOrder.setVisibility(View.GONE);
@@ -140,12 +140,10 @@ public class TableOrderFragment extends Fragment {
             alOrderMaster = (ArrayList<OrderMaster>) result;
 
             if (alOrderMaster == null) {
-                Globals.SetError(txtMsg, rvTableOrder, getActivity().getResources().getString(R.string.MsgSelectFail), true);
+                Globals.SetErrorLayout(errorLayout,true, getActivity().getResources().getString(R.string.MsgSelectFail),rvTableOrder);
             } else if (alOrderMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvTableOrder, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetErrorLayout(errorLayout,true, getActivity().getResources().getString(R.string.MsgNoRecord),rvTableOrder);
             } else {
-                Globals.SetError(txtMsg, rvTableOrder, null, false);
-
                 if (Service.CheckNet(getActivity())) {
                     new TaxLoadingTask().execute();
                 } else {
@@ -175,14 +173,22 @@ public class TableOrderFragment extends Fragment {
 
             alTaxMaster = (ArrayList<TaxMaster>) result;
             if (alTaxMaster != null && alTaxMaster.size() != 0) {
-                orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, alTaxMaster, getActivity().getSupportFragmentManager());
+                orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, alTaxMaster, getActivity().getSupportFragmentManager(),false);
             } else {
-                orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, null, getActivity().getSupportFragmentManager());
+                orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, null, getActivity().getSupportFragmentManager(),false);
             }
-            rvTableOrder.setVisibility(View.VISIBLE);
-            ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(orderDetailAdapter);
-            rvTableOrder.setAdapter(animationAdapter);
+            Globals.SetErrorLayout(errorLayout,false,null,rvTableOrder);
+            rvTableOrder.setAdapter(orderDetailAdapter);
             rvTableOrder.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            rvTableOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if(!orderDetailAdapter.isItemAnimate){
+                        orderDetailAdapter.isItemAnimate = true;
+                    }
+                }
+            });
         }
     }
     //endregion

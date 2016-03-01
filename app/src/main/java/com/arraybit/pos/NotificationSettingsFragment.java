@@ -61,17 +61,9 @@ public class NotificationSettingsFragment extends Fragment {
             notificationLayout.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.card_view_with_border));
         }
 
-        TextView txtHeader =(TextView)view.findViewById(R.id.txtHeader);
-        TextView txtPushNotification =(TextView)view.findViewById(R.id.txtPushNotification);
-        TextView txtNotification =(TextView)view.findViewById(R.id.txtNotification);
         txtOnTime = (TextView) view.findViewById(R.id.txtOnTime);
         txtOffTime = (TextView) view.findViewById(R.id.txtOffTime);
 
-        Globals.TextViewFontTypeFace(txtHeader,getActivity());
-        Globals.TextViewFontTypeFace(txtPushNotification,getActivity());
-        Globals.TextViewFontTypeFace(txtNotification,getActivity());
-        Globals.TextViewFontTypeFace(txtOnTime,getActivity());
-        Globals.TextViewFontTypeFace(txtOffTime,getActivity());
 
         sPushNotificationOnOff = (Switch) view.findViewById(R.id.sPushNotificationOnOff);
         objSharePreferenceManage = new SharePreferenceManage();

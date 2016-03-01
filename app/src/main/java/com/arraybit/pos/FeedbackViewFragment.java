@@ -2,10 +2,8 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,7 +53,6 @@ public class FeedbackViewFragment extends Fragment {
     FeedbackMaster objFeedbackMaster;
     View focusView;
     LinearLayoutManager linearLayoutManager;
-    Context context;
 
     public FeedbackViewFragment() {
         // Required empty public constructor
@@ -77,8 +74,6 @@ public class FeedbackViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feedback_view, container, false);
-
-        //context = view.getContext();
 
         feedbackViewFragment = (LinearLayout) view.findViewById(R.id.feedbackViewFragment);
         feedbackLayout = (LinearLayout) view.findViewById(R.id.feedbackLayout);
@@ -137,9 +132,6 @@ public class FeedbackViewFragment extends Fragment {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
 
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(),
-                "fonts/Roboto-Regular.ttf");
-
         LinearLayout headerLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         headerLayoutParams.setMargins(0, 0, 0, 0);
@@ -152,7 +144,6 @@ public class FeedbackViewFragment extends Fragment {
         txtNumber.setLayoutParams(txtNumberLayoutParams);
         txtNumber.setText(position + 1 + ".");
         txtNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
-        txtNumber.setTypeface(typeface, Typeface.BOLD);
         txtNumber.setTextSize(18f);
 
         TextView txtQuestion = new TextView(getActivity());
@@ -162,7 +153,6 @@ public class FeedbackViewFragment extends Fragment {
         txtQuestion.setLayoutParams(txtQuestionLayoutParams);
         txtQuestion.setText(objFeedbackQuestionMaster.getFeedbackQuestion());
         txtQuestion.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
-        txtNumber.setTypeface(typeface, Typeface.BOLD);
         txtQuestion.setTextSize(18f);
 
         LinearLayout childLayout = new LinearLayout(getActivity());
@@ -182,7 +172,7 @@ public class FeedbackViewFragment extends Fragment {
         radioGroupLayoutParams.weight = 1f;
         radioGroup.setLayoutParams(radioGroupLayoutParams);
         radioGroup.setOrientation(LinearLayout.VERTICAL);
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             radioGroup.setBackgroundTintMode(PorterDuff.Mode.DARKEN);
         }
 
@@ -198,7 +188,6 @@ public class FeedbackViewFragment extends Fragment {
             rbAnswer[j].setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
             rbAnswer[j].setGravity(Gravity.START | Gravity.CENTER);
             rbAnswer[j].setTextSize(14f);
-            rbAnswer[j].setTypeface(typeface);
             radioGroup.addView(rbAnswer[j]);
         }
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -231,9 +220,6 @@ public class FeedbackViewFragment extends Fragment {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
 
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(),
-                "fonts/Roboto-Regular.ttf");
-
         LinearLayout headerLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         headerLayoutParams.setMargins(0, 0, 0, 0);
@@ -246,7 +232,6 @@ public class FeedbackViewFragment extends Fragment {
         txtNumber.setLayoutParams(txtNumberLayoutParams);
         txtNumber.setText(position + 1 + ".");
         txtNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
-        txtNumber.setTypeface(typeface, Typeface.BOLD);
         txtNumber.setTextSize(18f);
 
         TextView txtQuestion = new TextView(getActivity());
@@ -256,7 +241,6 @@ public class FeedbackViewFragment extends Fragment {
         txtQuestion.setLayoutParams(txtQuestionLayoutParams);
         txtQuestion.setText(objFeedbackQuestionMaster.getFeedbackQuestion());
         txtQuestion.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
-        txtNumber.setTypeface(typeface, Typeface.BOLD);
         txtQuestion.setTextSize(18f);
 
         LinearLayout childLayout = new LinearLayout(getActivity());
@@ -290,7 +274,6 @@ public class FeedbackViewFragment extends Fragment {
             cbAnswer[j].setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
             cbAnswer[j].setGravity(Gravity.START | Gravity.CENTER);
             cbAnswer[j].setTextSize(14f);
-            cbAnswer[j].setTypeface(typeface);
             cbAnswer[j].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(android.widget.CompoundButton buttonView, boolean isChecked) {
@@ -335,8 +318,6 @@ public class FeedbackViewFragment extends Fragment {
         linearLayout.setPadding(4, 4, 4, 4);
         linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
 
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(),
-                "fonts/Roboto-Regular.ttf");
 
         LinearLayout headerLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -350,7 +331,6 @@ public class FeedbackViewFragment extends Fragment {
         txtNumber.setLayoutParams(txtNumberLayoutParams);
         txtNumber.setText(position + 1 + ".");
         txtNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
-        txtNumber.setTypeface(typeface,Typeface.BOLD);
         txtNumber.setTextSize(18f);
 
         TextView txtQuestion = new TextView(getActivity());
@@ -359,7 +339,6 @@ public class FeedbackViewFragment extends Fragment {
         txtQuestion.setLayoutParams(txtQuestionLayoutParams);
         txtQuestion.setText(objFeedbackQuestionMaster.getFeedbackQuestion());
         txtQuestion.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
-        txtQuestion.setTypeface(typeface,Typeface.BOLD);
         txtQuestion.setTextSize(18f);
 
         final EditText editText = new EditText(getActivity());
@@ -367,7 +346,6 @@ public class FeedbackViewFragment extends Fragment {
         editText.setLayoutParams(editTextLayoutParams);
         editText.setPadding(30, 0, 0, 0);
         editText.applyStyle(R.style.EditText);
-        Globals.EditTextFontTypeFace(editText,getActivity());
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -405,9 +383,6 @@ public class FeedbackViewFragment extends Fragment {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
 
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(),
-                "fonts/Roboto-Regular.ttf");
-
         LinearLayout headerLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         headerLayoutParams.setMargins(0, 0, 0, 0);
@@ -420,7 +395,6 @@ public class FeedbackViewFragment extends Fragment {
         txtNumber.setLayoutParams(txtNumberLayoutParams);
         txtNumber.setText(position + 1 + ".");
         txtNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
-        txtNumber.setTypeface(typeface,Typeface.BOLD);
         txtNumber.setTextSize(18f);
 
         TextView txtQuestion = new TextView(getActivity());
@@ -429,7 +403,6 @@ public class FeedbackViewFragment extends Fragment {
         txtQuestion.setLayoutParams(txtQuestionLayoutParams);
         txtQuestion.setText(objFeedbackQuestionMaster.getFeedbackQuestion());
         txtQuestion.setTextColor(ContextCompat.getColor(getActivity(), R.color.brown));
-        txtQuestion.setTypeface(typeface,Typeface.BOLD);
         txtQuestion.setTextSize(18f);
 
         RatingBar ratingBar = new RatingBar(getActivity());
@@ -472,9 +445,6 @@ public class FeedbackViewFragment extends Fragment {
         scLayoutParams.setMargins(16, 64, 16, 64);
         scrollview.setLayoutParams(scLayoutParams);
 
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(),
-                "fonts/Roboto-Regular.ttf");
-
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParams.setMargins(16, 16, 16, 16);
@@ -492,7 +462,6 @@ public class FeedbackViewFragment extends Fragment {
         rbSuggestion.setLayoutParams(rbSuggestionLayoutParams);
         rbSuggestion.setText(Globals.FeedbackType.Suggestion.toString());
         rbSuggestion.setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
-        rbSuggestion.setTypeface(typeface);
         rbSuggestion.setChecked(true);
         checkedString = rbSuggestion.getText().toString();
 
@@ -500,14 +469,12 @@ public class FeedbackViewFragment extends Fragment {
         LinearLayout.LayoutParams rbBugReportLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         rbBugReport.setLayoutParams(rbBugReportLayoutParams);
         rbBugReport.setText(Globals.FeedbackType.BugReport.toString());
-        rbBugReport.setTypeface(typeface);
         rbBugReport.setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
 
         final RadioButton rbOtherQuery = new RadioButton(getActivity());
         LinearLayout.LayoutParams rbOtherQueryLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         rbOtherQuery.setLayoutParams(rbOtherQueryLayoutParams);
         rbOtherQuery.setText(Globals.FeedbackType.OtherQuery.toString());
-        rbOtherQuery.setTypeface(typeface);
         rbOtherQuery.setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
 
         radioGroup.addView(rbSuggestion);
@@ -539,7 +506,6 @@ public class FeedbackViewFragment extends Fragment {
         etUserName.applyStyle(R.style.EditText);
         etUserName.setHint(getActivity().getResources().getString(R.string.fbName));
         etUserName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        Globals.EditTextFontTypeFace(etUserName, getActivity());
 
         final EditText etEmail = new EditText(getActivity());
         LinearLayout.LayoutParams etEmailLayoutParams = new LinearLayout.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -547,7 +513,6 @@ public class FeedbackViewFragment extends Fragment {
         etEmail.applyStyle(R.style.EditText);
         etEmail.setHint(getActivity().getResources().getString(R.string.fbEmail));
         etEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        Globals.EditTextFontTypeFace(etEmail, getActivity());
 
         final EditText etMobileNo = new EditText(getActivity());
         LinearLayout.LayoutParams etMobileNoLayoutParams = new LinearLayout.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -555,7 +520,6 @@ public class FeedbackViewFragment extends Fragment {
         etMobileNo.applyStyle(R.style.EditText);
         etMobileNo.setHint(getActivity().getResources().getString(R.string.fbMobileNo));
         etMobileNo.setInputType(InputType.TYPE_CLASS_PHONE);
-        Globals.EditTextFontTypeFace(etMobileNo, getActivity());
 
         final EditText etFeedback = new EditText(getActivity());
         LinearLayout.LayoutParams etFeedbackLayoutParams = new LinearLayout.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -563,14 +527,12 @@ public class FeedbackViewFragment extends Fragment {
         etFeedback.applyStyle(R.style.EditText);
         etFeedback.setHint(getActivity().getResources().getString(R.string.fbFeedback));
         etFeedback.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        Globals.EditTextFontTypeFace(etFeedback, getActivity());
 
         SetUser(etEmail, etUserName);
         Button btnSubmit = new Button(getActivity());
         LinearLayout.LayoutParams btnSubmitLayoutParams = new LinearLayout.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT);
         btnSubmit.setLayoutParams(btnSubmitLayoutParams);
         btnSubmit.applyStyle(R.style.Button);
-        Globals.ButtonFontTypeFace(btnSubmit,getActivity());
         btnSubmit.setText(getActivity().getResources().getString(R.string.fbSubmit));
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -611,7 +573,7 @@ public class FeedbackViewFragment extends Fragment {
 
     private void SetUser(EditText etEmail, EditText etName) {
         objSharePreferenceManage = new SharePreferenceManage();
-        if(Globals.userName!=null) {
+        if (Globals.userName != null) {
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_home))) {
                 if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null
                         && objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) != null) {
@@ -629,7 +591,7 @@ public class FeedbackViewFragment extends Fragment {
                     etEmail.setEnabled(true);
                 }
             }
-        }else{
+        } else {
             etEmail.setText("");
             etName.setText("");
             etName.setEnabled(true);

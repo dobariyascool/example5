@@ -1,6 +1,7 @@
 package com.arraybit.global;
 
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -36,6 +37,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
@@ -382,8 +385,26 @@ public class Globals {
         }
     }
 
+    public static void SetRecyclerLayoutAnimation(boolean isGridLayoutManager,RecyclerView recyclerView,Context context){
+        if(!isGridLayoutManager){
+            Animation animation = android.view.animation.AnimationUtils.loadAnimation(context,
+                    R.anim.slide_in_down);
+            LayoutAnimationController controller = new LayoutAnimationController(animation);
+            recyclerView.setLayoutAnimation(controller);
+        }else{
+            Animation animation = android.view.animation.AnimationUtils.loadAnimation(context,
+                    R.anim.slide_in_down_grid);
+            LayoutAnimationController controller = new LayoutAnimationController(animation);
+            recyclerView.setLayoutAnimation(controller);
+        }
+    }
 
-
+    public static void SetItemAnimator(RecyclerView.ViewHolder holder){
+        //slide from bottom
+        ObjectAnimator animatorTranslateY=ObjectAnimator.ofFloat(holder.itemView,"translationY",200,0);
+        animatorTranslateY.setDuration(500);
+        animatorTranslateY.start();
+    }
 
     public static void ClearPreference(Context context) {
         SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
@@ -483,7 +504,7 @@ public class Globals {
         if (Build.VERSION.SDK_INT >= 21) {
             Slide slideTransition = new Slide();
             slideTransition.setSlideEdge(Gravity.RIGHT);
-            slideTransition.setDuration(500);
+            slideTransition.setDuration(350);
             fragment.setEnterTransition(slideTransition);
         } else {
             fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
@@ -493,15 +514,20 @@ public class Globals {
         fragmentTransaction.commit();
     }
 
-    public static void SetErrorLayout(LinearLayout layout, boolean isShow, String errorMsg) {
+    public static void SetErrorLayout(LinearLayout layout, boolean isShow, String errorMsg,RecyclerView recyclerView) {
         TextView txtMsg = (TextView) layout.findViewById(R.id.txtMsg);
         ImageView ivErrorIcon = (ImageView) layout.findViewById(R.id.ivErrorIcon);
         if (isShow) {
             layout.setVisibility(View.VISIBLE);
             txtMsg.setText(errorMsg);
+            if(recyclerView!=null){
+                recyclerView.setVisibility(View.GONE);
+            }
         } else {
             layout.setVisibility(View.GONE);
-
+            if(recyclerView!=null){
+                recyclerView.setVisibility(View.VISIBLE);
+            }
         }
     }
 

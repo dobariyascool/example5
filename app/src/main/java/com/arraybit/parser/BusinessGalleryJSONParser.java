@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class BusinessGalleryJSONParser
 {
-    public String SelectAllBusinessGalleryTran = "SelectAllBusinessGalleryTranPageWise";
+    public String SelectAllBusinessGalleryTran = "SelectAllBusinessGalleryTran";
 
     private BusinessGalleryTran SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
         BusinessGalleryTran objBusinessGalleryTran = null;
@@ -64,10 +64,10 @@ public class BusinessGalleryJSONParser
         }
     }
 
-    public ArrayList<BusinessGalleryTran> SelectAllBusinessGalleryTranPageWise(int currentPage,int BusinessMasterId) {
+    public ArrayList<BusinessGalleryTran> SelectAllBusinessGalleryTranPageWise(int BusinessMasterId) {
         ArrayList<BusinessGalleryTran> lstBusinessGalleryTran = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllBusinessGalleryTran+"/"+currentPage+"/"+BusinessMasterId);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllBusinessGalleryTran+"/"+BusinessMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllBusinessGalleryTran + "Result");
                 if (jsonArray != null) {

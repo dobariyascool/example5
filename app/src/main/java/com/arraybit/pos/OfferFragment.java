@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.arraybit.adapter.OfferAdapter;
 import com.arraybit.global.Globals;
@@ -29,7 +30,6 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 @SuppressLint("ValidFragment")
@@ -41,11 +41,16 @@ public class OfferFragment extends Fragment {
     ArrayList<OfferMaster> alOfferMaster;
     RecyclerView rvOffer;
     TextView txtMsg;
+    String strActivityName;
+    LinearLayout errorLayout;
 
     public OfferFragment(Activity activityName) {
         this.activityName = activityName;
     }
 
+    public OfferFragment(String strActivityName) {
+        this.strActivityName = strActivityName;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,23 +58,23 @@ public class OfferFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_offer, container, false);
 
+        errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
+        txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.title_fragment_offer));
-            if(Build.VERSION.SDK_INT >=21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
 
         offerFragment = (FrameLayout) view.findViewById(R.id.offerFragment);
-        Globals.SetScaleImageBackground(getActivity(),null, null,  offerFragment);
+        Globals.SetScaleImageBackground(getActivity(), null, null, offerFragment);
 
-        rvOffer = (RecyclerView)view.findViewById(R.id.rvOffer);
-        txtMsg = (TextView)view.findViewById(R.id.txtMsg);
-        Globals.TextViewFontTypeFace(txtMsg,getActivity());
-
+        rvOffer = (RecyclerView) view.findViewById(R.id.rvOffer);
         setHasOptionsMenu(true);
 
         if (Service.CheckNet(getActivity())) {
@@ -85,17 +90,19 @@ public class OfferFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
-            menu.findItem(R.id.mWaiting).setVisible(false);
-        } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+        if ((activityName != null && activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting)))
+                || (strActivityName != null && strActivityName.equals(getActivity().getResources().getString(R.string.title_activity_waiting)))) {
+            menu.findItem(R.id.viewChange).setVisible(false);
+        } else if ((activityName != null && activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))
+                || (strActivityName != null && strActivityName.equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))))) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
         }
 
-        if(getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()!=null
-                &&getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()
-                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))){
-            Globals.SetOptionMenu(Globals.userName,getActivity(),menu);
+        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName() != null
+                && getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()
+                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
+            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
         }
     }
 
@@ -111,7 +118,15 @@ public class OfferFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            getActivity().getSupportFragmentManager().popBackStack();
+            if (strActivityName != null) {
+                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
+                        .equals(getActivity().getResources().getString(R.string.title_fragment_offer))) {
+                    getActivity().finish();
+                }
+            } else {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
             Globals.HideKeyBoard(getActivity(), getView());
             return true;
         }
@@ -120,10 +135,18 @@ public class OfferFragment extends Fragment {
 
     private void SetupRecyclerView() {
 
-        offerAdapter = new OfferAdapter(getActivity(),alOfferMaster,getActivity().getSupportFragmentManager());
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(offerAdapter);
-        rvOffer.setAdapter(scaleInAnimationAdapter);
+        offerAdapter = new OfferAdapter(getActivity(), alOfferMaster, getActivity().getSupportFragmentManager(), false);
+        rvOffer.setAdapter(offerAdapter);
         rvOffer.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvOffer.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!offerAdapter.isItemAnimate) {
+                    offerAdapter.isItemAnimate = true;
+                }
+            }
+        });
     }
 
     //region LoadingTask
@@ -155,11 +178,11 @@ public class OfferFragment extends Fragment {
             progressDialog.dismiss();
             ArrayList<OfferMaster> lstOfferMaster = (ArrayList<OfferMaster>) result;
             if (lstOfferMaster == null) {
-                Globals.SetError(txtMsg, rvOffer, getActivity().getResources().getString(R.string.MsgSelectFail), true);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOffer);
             } else if (lstOfferMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvOffer, getActivity().getResources().getString(R.string.MsgOffer), true);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgOffer), rvOffer);
             } else {
-                Globals.SetError(txtMsg, rvOffer, null, false);
+                Globals.SetErrorLayout(errorLayout, false, null, rvOffer);
                 alOfferMaster = lstOfferMaster;
                 SetupRecyclerView();
             }

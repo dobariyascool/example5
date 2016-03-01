@@ -109,10 +109,6 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
             txtEndTime = (TextView) itemView.findViewById(R.id.txtEndTime);
             txtHeader = (TextView) itemView.findViewById(R.id.txtHeader);
 
-            Globals.TextViewFontTypeFace(txtHeader, context);
-            Globals.TextViewFontTypeFace(txtDayOfWeek, context);
-            Globals.TextViewFontTypeFace(txtEndTime, context);
-            Globals.TextViewFontTypeFace(txtStartTime, context);
         }
     }
 

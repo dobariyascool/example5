@@ -3,7 +3,6 @@ package com.arraybit.pos;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,8 +33,6 @@ import com.rey.material.widget.CompoundButton;
 import com.rey.material.widget.EditText;
 import com.rey.material.widget.TextView;
 
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 public class CartItemFragment extends Fragment implements CartItemAdapter.CartItemOnClickListener, View.OnClickListener {
@@ -54,7 +51,6 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     short counterMasterId, userMasterId, waiterMasterId;
     double totalAmount;
     View view;
-    ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     public CartItemFragment() {
         // Required empty public constructor
@@ -76,7 +72,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             } else {
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_cart_item));
             }
-            if(Build.VERSION.SDK_INT >=21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
@@ -85,7 +81,6 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         cvRemark = (CardView) view.findViewById(R.id.cvRemark);
 
         etRemark = (EditText) view.findViewById(R.id.etRemark);
-        Globals.EditTextFontTypeFace(etRemark,getActivity());
 
         cartItemFragment = (LinearLayout) view.findViewById(R.id.cartItemFragment);
         Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
@@ -93,15 +88,6 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         setHasOptionsMenu(true);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
-        TextView txtHeaderItem = (TextView) view.findViewById(R.id.txtHeaderItem);
-        TextView txtHeaderRate = (TextView) view.findViewById(R.id.txtHeaderRate);
-        TextView txtHeaderNo = (TextView) view.findViewById(R.id.txtHeaderNo);
-        TextView txtHeaderAmount = (TextView) view.findViewById(R.id.txtHeaderAmount);
-
-        Globals.TextViewFontTypeFace(txtHeaderAmount,getActivity());
-        Globals.TextViewFontTypeFace(txtHeaderNo,getActivity());
-        Globals.TextViewFontTypeFace(txtHeaderItem,getActivity());
-        Globals.TextViewFontTypeFace(txtHeaderRate,getActivity());
 
         cbMenu = (CompoundButton) view.findViewById(R.id.cbMenu);
 
@@ -113,14 +99,10 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         btnConfirmOrder = (Button) view.findViewById(R.id.btnConfirmOrder);
 
         SetRecyclerView();
-        SetTypeFace();
 
         cbMenu.setOnClickListener(this);
         btnAddMore.setOnClickListener(this);
         btnConfirmOrder.setOnClickListener(this);
-
-        Globals.ButtonFontTypeFace(btnAddMore,getActivity());
-        Globals.ButtonFontTypeFace(btnConfirmOrder,getActivity());
 
         return view;
     }
@@ -157,7 +139,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
 
     @Override
     public void ImageViewOnClick(int position) {
-        adapter.RemoveData(position, scaleInAnimationAdapter);
+        adapter.RemoveData(position);
         if (Globals.alOrderItemTran.size() == 0) {
             SetRecyclerView();
         }
@@ -206,23 +188,26 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     }
 
     //region Private Methods and Interface
-    private void SetTypeFace(){
-        Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(),
-                "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
-        cbMenu.setTypeface(roboto);
-        Globals.TextViewFontTypeFace(txtMsg,getActivity());
-    }
-
     private void SetRecyclerView() {
         if (Globals.alOrderItemTran.size() == 0) {
             SetVisibility();
             txtMsg.setText(getActivity().getResources().getString(R.string.MsgCart));
         } else {
             SetVisibility();
-            adapter = new CartItemAdapter(getActivity(), Globals.alOrderItemTran, this);
-            scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
-            rvCartItem.setAdapter(scaleInAnimationAdapter);
+            adapter = new CartItemAdapter(getActivity(), Globals.alOrderItemTran, this, false);
+            rvCartItem.setAdapter(adapter);
             rvCartItem.setLayoutManager(new LinearLayoutManager(getActivity()));
+            rvCartItem.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    Globals.HideKeyBoard(getActivity(), recyclerView);
+                    if (!adapter.isItemAnimate) {
+                        adapter.isItemAnimate = true;
+                        adapter.isModifierChanged = false;
+                    }
+                }
+            });
         }
     }
 

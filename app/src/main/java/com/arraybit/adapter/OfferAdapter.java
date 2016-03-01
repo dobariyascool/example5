@@ -26,16 +26,19 @@ import java.util.ArrayList;
 public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHolder> {
 
 
+    public boolean isItemAnimate;
     View view;
     Context context;
     ArrayList<OfferMaster> alOfferMaster;
     FragmentManager fragmentManager;
+    int previousPosition;
 
 
-    public OfferAdapter(Context context, ArrayList<OfferMaster> result, FragmentManager fragmentManager) {
+    public OfferAdapter(Context context, ArrayList<OfferMaster> result, FragmentManager fragmentManager, Boolean isItemAnimate) {
         this.context = context;
         alOfferMaster = result;
         this.fragmentManager = fragmentManager;
+        this.isItemAnimate = isItemAnimate;
     }
 
 
@@ -48,7 +51,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
     @Override
     public void onBindViewHolder(final OfferViewHolder holder, int position) {
         OfferMaster objOfferMaster = alOfferMaster.get(position);
-        holder.cvOffer.setId(position);
+        //holder.cvOffer.setId(position);
         holder.txtOfferTitle.setText(objOfferMaster.getOfferTitle());
         if (objOfferMaster.getOfferContent().equals("null") || objOfferMaster.getOfferContent().equals("")) {
             holder.txtOfferContent.setVisibility(View.GONE);
@@ -60,6 +63,13 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
             Picasso.with(holder.ivOffer.getContext()).load(objOfferMaster.getImagePhysicalName()).into(holder.ivOffer);
         }
 
+        //holder animation
+        if (isItemAnimate) {
+            if (position > previousPosition) {
+                Globals.SetItemAnimator(holder);
+            }
+            previousPosition = position;
+        }
     }
 
 
@@ -84,15 +94,12 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
             txtOfferTitle = (TextView) itemView.findViewById(R.id.txtOfferTitle);
             txtOfferContent = (TextView) itemView.findViewById(R.id.txtOfferContent);
 
-            Globals.TextViewFontTypeFace(txtOfferContent,context);
-            Globals.TextViewFontTypeFace(txtOfferTitle,context);
-
             cvOffer.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("RtlHardcoded")
                 @Override
                 public void onClick(View v) {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    OfferDetailFragment fragment = new OfferDetailFragment(alOfferMaster.get(v.getId()));
+                    OfferDetailFragment fragment = new OfferDetailFragment(alOfferMaster.get(getAdapterPosition()));
                     if (Build.VERSION.SDK_INT >= 21) {
                         Slide slideTransition = new Slide();
                         slideTransition.setSlideEdge(Gravity.RIGHT);

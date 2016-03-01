@@ -17,24 +17,25 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-
 
 public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartItemViewHolder> {
 
+    public boolean isItemAnimate;
+    public boolean isModifierChanged = true;
     Context context;
     ArrayList<ItemMaster> alItemMaster;
     LayoutInflater layoutInflater;
     View view;
     CartItemOnClickListener objCartItemOnClickListener;
-    boolean isModifierChanged = true;
+    int previousPosition;
 
     // Constructor
-    public CartItemAdapter(Context context, ArrayList<ItemMaster> result, CartItemOnClickListener objCartItemOnClickListener) {
+    public CartItemAdapter(Context context, ArrayList<ItemMaster> result, CartItemOnClickListener objCartItemOnClickListener,boolean isItemAnimate) {
         this.context = context;
         this.alItemMaster = result;
         this.objCartItemOnClickListener = objCartItemOnClickListener;
         this.layoutInflater = LayoutInflater.from(context);
+        this.isItemAnimate = isItemAnimate;
     }
 
     @Override
@@ -47,7 +48,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
     public void onBindViewHolder(CartItemViewHolder holder, int position) {
         ItemMaster objItemMaster = alItemMaster.get(position);
 
-        holder.ivClose.setId(position);
         holder.txtItem.setText(objItemMaster.getItemName());
         holder.txtQty.setText(String.valueOf(objItemMaster.getQuantity()));
         holder.txtAmount.setText(String.valueOf(Globals.dfWithPrecision.format(objItemMaster.getSellPrice())));
@@ -73,6 +73,13 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
                 holder.txtRemark.setText(objItemMaster.getRemark());
             }
         }
+        //holder animation
+        if (isItemAnimate) {
+            if (position > previousPosition) {
+                Globals.SetItemAnimator(holder);
+            }
+            previousPosition = position;
+        }
     }
 
     @Override
@@ -80,12 +87,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         return alItemMaster.size();
     }
 
-    public void RemoveData(int position, ScaleInAnimationAdapter scaleInAnimationAdapter) {
+    public void RemoveData(int position) {
         if (alItemMaster.size() != 0 && position >= 0) {
             isModifierChanged = false;
+            isItemAnimate = true;
             alItemMaster.remove(position);
             notifyItemRemoved(position);
-            scaleInAnimationAdapter.notifyDataSetChanged();
             Globals.counter = Globals.counter - 1;
         }
 
@@ -105,7 +112,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             txtModifierName[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
             txtModifierName[i].setMaxLines(1);
             txtModifierName[i].setText(alOrderItemModifierTran.get(i).getItemName());
-            Globals.TextViewFontTypeFace(txtModifierName[i], context);
 
             txtModifierRate[i] = new TextView(context);
             LinearLayout.LayoutParams txtModifierRateParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -115,7 +121,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             txtModifierRate[i].setMaxLines(1);
             txtModifierRate[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
             txtModifierRate[i].setText(Globals.dfWithPrecision.format(alOrderItemModifierTran.get(i).getActualSellPrice()));
-            Globals.TextViewFontTypeFace(txtModifierRate[i], context);
 
             txtModifierAmount[i] = new TextView(context);
             LinearLayout.LayoutParams txtModifierAmountParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -125,7 +130,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             txtModifierAmount[i].setMaxLines(1);
             txtModifierAmount[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
             txtModifierAmount[i].setText(Globals.dfWithPrecision.format(alOrderItemModifierTran.get(i).getMRP()));
-            Globals.TextViewFontTypeFace(txtModifierAmount[i], context);
 
             holder.modifierLayout.addView(txtModifierName[i]);
             holder.modifierRateLayout.addView(txtModifierRate[i]);
@@ -171,12 +175,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             txtRemark = (TextView) itemView.findViewById(R.id.txtRemark);
             ivClose = (ImageView) itemView.findViewById(R.id.ivClose);
 
-            Globals.TextViewFontTypeFace(txtItem, context);
-            Globals.TextViewFontTypeFace(txtAmount, context);
-            Globals.TextViewFontTypeFace(txtRate, context);
-            Globals.TextViewFontTypeFace(txtQty, context);
-            Globals.TextViewFontTypeFace(txtRemark, context);
-
             childLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -187,7 +185,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             ivClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    objCartItemOnClickListener.ImageViewOnClick(v.getId());
+                    //getAdapterPosition current position
+                    objCartItemOnClickListener.ImageViewOnClick(getAdapterPosition());
                 }
             });
         }

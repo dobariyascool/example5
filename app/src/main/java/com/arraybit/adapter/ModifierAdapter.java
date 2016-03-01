@@ -42,7 +42,7 @@ public class ModifierAdapter extends RecyclerView.Adapter<ModifierAdapter.Modifi
     @Override
     public void onBindViewHolder(ModifierViewHolder holder, int position) {
         ItemMaster objItemModifier = alItemModifier.get(position);
-        holder.chkModifier.setId(position);
+        //holder.chkModifier.setId(position);
         holder.chkModifier.setText(objItemModifier.getItemName());
         holder.txtRate.setText(Globals.dfWithPrecision.format(objItemModifier.getMRP()));
         if (ModifierSelectionFragmentDialog.alFinalCheckedModifier.size() != 0) {
@@ -79,13 +79,11 @@ public class ModifierAdapter extends RecyclerView.Adapter<ModifierAdapter.Modifi
 
             txtRate = (TextView) itemView.findViewById(R.id.txtRate);
 
-            Globals.TextViewFontTypeFace(txtRate,context);
-
             chkModifier = (CheckBox) itemView.findViewById(R.id.chkModifier);
             chkModifier.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    objModifierCheckedChangeListener.ModifierCheckedChange(isChecked, alItemModifier.get(chkModifier.getId()), isDuplicate);
+                    objModifierCheckedChangeListener.ModifierCheckedChange(isChecked, alItemModifier.get(getAdapterPosition()), isDuplicate);
                 }
             });
         }

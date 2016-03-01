@@ -45,12 +45,6 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
         btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
         btnCancel = (Button) view.findViewById(R.id.btnCancel);
 
-        Globals.ButtonFontTypeFace(btnSubmit,getActivity());
-        Globals.ButtonFontTypeFace(btnCancel,getActivity());
-        Globals.ButtonFontTypeFace(btnWaiterMode,getActivity());
-        Globals.ButtonFontTypeFace(btnGuestMode,getActivity());
-        Globals.EditTextFontTypeFace(etPassword, getActivity());
-
         SetVisibility();
 
         return view;

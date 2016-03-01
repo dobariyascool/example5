@@ -4,7 +4,6 @@ package com.arraybit.pos;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,28 +58,21 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
                 CompoundButton cbSignUp = (CompoundButton) getDialog().findViewById(R.id.cbSignUp);
                 CompoundButton cbSkip = (CompoundButton) getDialog().findViewById(R.id.cbSkip);
-                Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(),
-                        "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
-                cbSignUp.setTypeface(roboto);
-                cbSkip.setTypeface(roboto);
                 Button positive = (alertDialog).getButton(DialogInterface.BUTTON_POSITIVE);
 
                 if (getTargetFragment() != null) {
                     Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
                     if (getTargetFragment() == currentFragment) {
                         cbSkip.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         cbSkip.setVisibility(View.GONE);
                     }
                 }
-                positive.setTypeface(roboto);
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         etUserName = (EditText) getDialog().findViewById(R.id.etUserName);
                         etPassword = (EditText) getDialog().findViewById(R.id.etPassword);
-                        Globals.EditTextFontTypeFace(etPassword,getActivity());
-                        Globals.EditTextFontTypeFace(etUserName,getActivity());
                         view = v;
                         if (!ValidateControls()) {
                             Globals.ShowSnackBar(v, getResources().getString(R.string.MsgValidation), getActivity(), 1000);
@@ -96,13 +88,14 @@ public class GuestLoginDialogFragment extends DialogFragment {
                 });
 
                 Button negative = (alertDialog).getButton(DialogInterface.BUTTON_NEGATIVE);
-                negative.setTypeface(roboto);
                 negative.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (getTargetFragment() != null) {
                             Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
                             if (getTargetFragment() == currentFragment) {
+                                dismiss();
+                            } else if (getTargetFragment().getTag().equals(getResources().getString(R.string.title_fragment_offer_detail))) {
                                 dismiss();
                             } else {
                                 dismiss();
@@ -120,28 +113,25 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     public void onClick(View v) {
                         if (getTargetFragment() != null) {
                             FeedbackFragment currentFragment = (FeedbackFragment) getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_feedback));
-                            if(getTargetFragment() == currentFragment){
+                            if (getTargetFragment() == currentFragment) {
                                 currentFragment.RemoveFragment();
                                 SignUpFragment signUpFragment = new SignUpFragment();
                                 signUpFragment.setTargetFragment(getTargetFragment(), 0);
-                                Globals.ReplaceFragment(signUpFragment, getActivity().getSupportFragmentManager(), null);
-                            }
-                            else if(getTargetFragment() == getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_offer_detail))){
-                                ReplaceFragment(new SignUpFragment(), null);
-                            }
-                            else if(MenuActivity.parentActivity && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()==null) {
+                                Globals.ReplaceFragment(signUpFragment, getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_signup));
+                            } else if (getTargetFragment() == getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_offer_detail))) {
+                                ReplaceFragment(new SignUpFragment(), getResources().getString(R.string.title_fragment_signup));
+                            } else if (MenuActivity.parentActivity && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
                                 //first remove current tab and then open signup fragment
-                                objLoginResponseListener = (LoginResponseListener)getTargetFragment();
+                                objLoginResponseListener = (LoginResponseListener) getTargetFragment();
                                 objLoginResponseListener.LoginResponse();
-                            }
-                            else{
+                            } else {
                                 SignUpFragment signUpFragment = new SignUpFragment();
                                 signUpFragment.setTargetFragment(getTargetFragment(), 0);
-                                Globals.ReplaceFragment(signUpFragment, getActivity().getSupportFragmentManager(), null);
+                                Globals.ReplaceFragment(signUpFragment, getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_signup));
 
                             }
                         } else {
-                            Globals.ReplaceFragment(new SignUpFragment(), getActivity().getSupportFragmentManager(), null);
+                            Globals.ReplaceFragment(new SignUpFragment(), getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_signup));
                         }
                         dismiss();
                     }
@@ -162,12 +152,12 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
     //region Private Methods and Interface
     @SuppressLint("RtlHardcoded")
-    private void ReplaceFragment(Fragment fragment,String fragmentName){
+    private void ReplaceFragment(Fragment fragment, String fragmentName) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         if (Build.VERSION.SDK_INT >= 21) {
             Slide slideTransition = new Slide();
             slideTransition.setSlideEdge(Gravity.RIGHT);
-            slideTransition.setDuration(500);
+            slideTransition.setDuration(350);
             fragment.setEnterTransition(slideTransition);
         } else {
             fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
@@ -204,7 +194,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) == null) {
             objSharePreferenceManage.CreatePreference("RegistrationPreference", "RegisteredUserMasterId", String.valueOf(objRegisteredUserMaster.getRegisteredUserMasterId()), getActivity());
         }
-        if(!objRegisteredUserMaster.getFirstName().equals("")) {
+        if (!objRegisteredUserMaster.getFirstName().equals("")) {
             if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FullName", getActivity()) == null) {
                 objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", String.valueOf(objRegisteredUserMaster.getFirstName()) + " " + String.valueOf(objRegisteredUserMaster.getLastName()), getActivity());
             }
@@ -240,7 +230,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            objRegisteredUserMaster = objRegisteredUserJSONParser.SelectRegisteredUserMasterUserName(strUserName, strPassword,0);
+            objRegisteredUserMaster = objRegisteredUserJSONParser.SelectRegisteredUserMasterUserName(strUserName, strPassword, 0);
             return objRegisteredUserMaster;
         }
 
@@ -261,9 +251,8 @@ public class GuestLoginDialogFragment extends DialogFragment {
                             Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
                         }
                         dismiss();
-                        Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getFragmentManager(),getActivity().getResources().getString(R.string.title_fragment_feedback));
-                    }
-                    else if(getTargetFragment() == getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_offer_detail))){
+                        Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
+                    } else if (getTargetFragment() == getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_offer_detail))) {
                         CreateGuestPreference();
                         ClearControls();
                         Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
@@ -272,8 +261,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                             Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
                         }
                         dismiss();
-                    }
-                    else if(MenuActivity.parentActivity && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()==null){
+                    } else if (MenuActivity.parentActivity && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
                         CreateGuestPreference();
                         ClearControls();
                         Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
@@ -282,8 +270,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                             Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
                         }
                         dismiss();
-                    }
-                    else {
+                    } else {
                         CreateGuestPreference();
                         ClearControls();
                         Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
@@ -297,7 +284,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     }
 
                 } else {
-                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                    if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0 && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                             && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
                             .equals(getActivity().getString(R.string.title_fragment_guest_options))) {
                         CreateGuestPreference();

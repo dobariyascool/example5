@@ -149,9 +149,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-//            if (MenuActivity.parentActivity) {
-//                Globals.OptionMenuItemClick(item, getActivity(), getActivity().getSupportFragmentManager());
-//            }
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
                 if (MenuActivity.parentActivity) {
                     Globals.CategoryItemFragmentResetStaticVariable();
@@ -385,7 +382,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     //compound button signup click event form guest login
     @Override
     public void LoginResponse() {
-        //SignUpFragment signUpFragment = new SignUpFragment();
         ReplaceFragment(new SignUpFragment(), getActivity().getResources().getString(R.string.title_fragment_signup));
     }
     //endregion
@@ -480,6 +476,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 }
 
                 itemViewPager.setAdapter(itemPagerAdapter);
+                itemViewPager.setOffscreenPageLimit(1);
                 itemTabLayout.setupWithViewPager(itemViewPager);
 
                 itemTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

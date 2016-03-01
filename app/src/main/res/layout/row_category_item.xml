@@ -28,7 +28,6 @@
 
             <com.rey.material.widget.TextView
                 android:id="@+id/txtItemName"
-                style="@style/Base.TextAppearance.AppCompat.Body2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -38,7 +37,6 @@
 
             <com.rey.material.widget.TextView
                 android:id="@+id/txtItemDescription"
-                style="@style/Base.TextAppearance.AppCompat.Body2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -50,7 +48,6 @@
 
             <com.rey.material.widget.TextView
                 android:id="@+id/txtItemPrice"
-                style="@style/Base.TextAppearance.AppCompat.Body2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"

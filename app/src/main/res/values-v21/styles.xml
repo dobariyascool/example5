@@ -230,7 +230,7 @@
         <item name="rd_rippleColor">@color/accent</item>
         <item name="rd_enable">true</item>
         <item name="rd_rippleType">wave</item>
-        <item name="android:textStyle">bold</item>
+        <!--<item name="android:textStyle">bold</item>-->
     </style>
 
     <style name="CardViewTransparent" parent="AppCompactCardView">
@@ -417,6 +417,7 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Button</item>
+        <!--<item name="android:fontFamily">Roboto-Regular</item>-->
     </style>
 
     <style name="StatusButton" parent="MaterialButton">
@@ -426,6 +427,7 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textAllCaps">false</item>
         <item name="rd_enable">false</item>
+        <!--<item name="android:fontFamily">Roboto-Regular</item>-->
     </style>
 
     <style name="AddButton" parent="Material.Drawable.Ripple.Touch.Light">
@@ -442,6 +444,7 @@
         <item name="android:layout_marginBottom">2dp</item>
         <item name="android:layout_marginStart">@dimen/control_SpecingTiny</item>
         <item name="android:layout_marginEnd">@dimen/control_SpecingTiny</item>
+        <!--<item name="android:fontFamily">Roboto-Regular</item>-->
     </style>
 
     <style name="SplashScreenImage" parent="ImageView">

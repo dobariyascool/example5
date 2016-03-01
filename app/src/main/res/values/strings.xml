@@ -71,7 +71,7 @@
     <string name="MsgAddPerson">Person is added successfully</string>
     <string name="MsgUpdateProfile">Profile updated successfully</string>
     <string name="MsgUpdatePassword">Password changed successfully</string>
-    <string name="MsgOffer">Currently No offers available.</string>
+    <string name="MsgOffer">Currently no offers available.</string>
     <string name="MsgGallery">No Images Yet.</string>
     <string name="MsgItem">There is no item.</string>
     <string name="MsgChangeMode">Switch to waiter mode?</string>
@@ -383,7 +383,6 @@
     <string name="osdCancel">Cancelled</string>
     <string name="osdReady">Ready</string>
     <string name="title_activity_hotel_profile">HotelProfileActivity</string>
-    <string name="title_activity_offer">OfferActivity</string>
     <string name="title_activity_about_us">AboutUsActivity</string>
     <!-- end -->
 

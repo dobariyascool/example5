@@ -118,14 +118,6 @@ public class OfferDetailFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void SetDetailLayout() {
-        Globals.TextViewFontTypeFace(txtOfferTitle,getActivity());
-        Globals.TextViewFontTypeFace(txtOfferContent,getActivity());
-        Globals.TextViewFontTypeFace(txtAmount,getActivity());
-        Globals.TextViewFontTypeFace(txtTermsCondition,getActivity());
-        Globals.TextViewFontTypeFace(txtFromDate,getActivity());
-        Globals.TextViewFontTypeFace(txtToDate,getActivity());
-        Globals.TextViewFontTypeFace(txtHeader,getActivity());
-        Globals.TextViewFontTypeFace(txtOfferDiscount,getActivity());
         if (objOfferMaster != null) {
             txtOfferTitle.setText(objOfferMaster.getOfferTitle());
             if (objOfferMaster.getOfferContent().equals("") || objOfferMaster.getOfferContent().isEmpty() || objOfferMaster.getOfferContent() == null) {

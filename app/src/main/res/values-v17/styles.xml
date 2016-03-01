@@ -13,10 +13,10 @@
         <item name="android:foreground">@drawable/offer_ripple_effect</item>
     </style>
 
-    <style name="NavigationViewStyle">
-        <item name="android:fontFamily">Roboto-Regular</item>
-        <item name="android:textStyle">normal</item>
-    </style>
+    <!--<style name="NavigationViewStyle">-->
+        <!--<item name="android:fontFamily">Roboto-Regular</item>-->
+        <!--<item name="android:textStyle">normal</item>-->
+    <!--</style>-->
 
     <style name="DefaultCardView" parent="AppCompactCardView">
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>

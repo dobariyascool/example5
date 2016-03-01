@@ -15,22 +15,23 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-
 public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.WaitingListViewHolder> {
 
+    public boolean isItemAnimate;
     Context context;
     ArrayList<WaitingMaster> alWaitingMaster;
     LayoutInflater layoutInflater;
     View view;
     childLayoutClickListener objChildLayoutClickListener;
+    int previousPosition;
 
     // Constructor
-    public WaitingListAdapter(Context context, ArrayList<WaitingMaster> result, childLayoutClickListener objChildLayoutClickListener) {
+    public WaitingListAdapter(Context context, ArrayList<WaitingMaster> result, childLayoutClickListener objChildLayoutClickListener,boolean isItemAnimate) {
         this.context = context;
         this.alWaitingMaster = result;
         this.layoutInflater = LayoutInflater.from(context);
         this.objChildLayoutClickListener = objChildLayoutClickListener;
+        this.isItemAnimate = isItemAnimate;
     }
 
     @Override
@@ -45,11 +46,19 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
 
         WaitingMaster objWaitingMaster = alWaitingMaster.get(position);
 
-        holder.childLayout.setId(position);
+        //holder.childLayout.setId(position);
         holder.txtIndex.setText(String.valueOf(position + 1));
         holder.txtName.setText(String.valueOf(objWaitingMaster.getPersonName()));
         holder.txtMobileNo.setText(String.valueOf(objWaitingMaster.getPersonMobile()));
         holder.txtPersons.setText(String.valueOf(objWaitingMaster.getNoOfPersons()));
+
+        //holder animation
+        if (isItemAnimate) {
+            if (position > previousPosition) {
+                Globals.SetItemAnimator(holder);
+            }
+            previousPosition = position;
+        }
     }
 
     @Override
@@ -58,11 +67,10 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
     }
 
 
-    public void WaitingListDataRemove(int position,ScaleInAnimationAdapter scaleInAnimationAdapter) {
+    public void WaitingListDataRemove(int position) {
+        isItemAnimate = true;
         alWaitingMaster.remove(position);
         notifyItemRemoved(position);
-        //change the index
-        scaleInAnimationAdapter.notifyDataSetChanged();
     }
 
     //region interface
@@ -87,10 +95,6 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
             txtMobileNo = (TextView) itemView.findViewById(R.id.txtMobileNo);
             txtPersons = (TextView) itemView.findViewById(R.id.txtPersons);
 
-            Globals.TextViewFontTypeFace(txtIndex, context);
-            Globals.TextViewFontTypeFace(txtName, context);
-            Globals.TextViewFontTypeFace(txtMobileNo, context);
-            Globals.TextViewFontTypeFace(txtPersons, context);
 
             childLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,7 +104,7 @@ public class WaitingListAdapter extends RecyclerView.Adapter<WaitingListAdapter.
 
                     //fragment outside click not show the dialog
                     if(activity.getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                        objChildLayoutClickListener.ChangeStatusClick(alWaitingMaster.get(v.getId()), v.getId());
+                        objChildLayoutClickListener.ChangeStatusClick(alWaitingMaster.get(getAdapterPosition()), getAdapterPosition());
                     }
                 }
             });

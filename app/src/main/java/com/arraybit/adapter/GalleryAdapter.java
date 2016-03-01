@@ -21,17 +21,21 @@ import java.util.ArrayList;
 
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
+
+    public boolean isItemAnimate;
     Context context;
     ArrayList<BusinessGalleryTran> alBusinessGalleryTran;
     View view;
     FragmentManager fragmentManager;
+    int previousPosition;
     private LayoutInflater inflater;
 
-    public GalleryAdapter(Context context, ArrayList<BusinessGalleryTran> alBusinessGalleryTran, FragmentManager fragmentManager) {
+    public GalleryAdapter(Context context, ArrayList<BusinessGalleryTran> alBusinessGalleryTran, FragmentManager fragmentManager,boolean isItemAnimate) {
         this.context = context;
         this.alBusinessGalleryTran = alBusinessGalleryTran;
         inflater = LayoutInflater.from(context);
         this.fragmentManager = fragmentManager;
+        this.isItemAnimate = isItemAnimate;
     }
 
     @Override
@@ -45,9 +49,17 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         BusinessGalleryTran current = alBusinessGalleryTran.get(position);
         holder.txtGalleryTitle.setText(current.getImageTitle());
         holder.txtGalleryTitle.setVisibility(View.GONE);
-        holder.cvGallery.setId(position);
+        //holder.cvGallery.setId(position);
         if (current.getImagePhysicalName() != null) {
             Picasso.with(holder.ivGalleryImage.getContext()).load(current.getImagePhysicalName()).into(holder.ivGalleryImage);
+        }
+
+        //holder animation
+        if (this.isItemAnimate) {
+            if (position > previousPosition) {
+                Globals.SetItemAnimator(holder);
+            }
+            previousPosition = position;
         }
     }
 
@@ -68,8 +80,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
             txtGalleryTitle = (TextView) itemView.findViewById(R.id.txtGalleryTitle);
             ivGalleryImage = (ImageView) itemView.findViewById(R.id.ivGalleryImage);
 
-            Globals.TextViewFontTypeFace(txtGalleryTitle,context);
-
             cvGallery = (CardView) itemView.findViewById(R.id.cvGallery);
 
             cvGallery.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +87,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
                 public void onClick(View v) {
                     FullViewDialogFragment fullViewDialogFragment = new FullViewDialogFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("BusinessGallery", alBusinessGalleryTran.get(v.getId()));
+                    bundle.putParcelable("BusinessGallery", alBusinessGalleryTran.get(getAdapterPosition()));
                     fullViewDialogFragment.setArguments(bundle);
                     fullViewDialogFragment.show(fragmentManager, "");
                 }

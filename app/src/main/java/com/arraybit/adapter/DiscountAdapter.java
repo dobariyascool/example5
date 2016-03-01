@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.arraybit.global.Globals;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
@@ -58,10 +57,6 @@ public class DiscountAdapter extends ArrayAdapter<String> {
         TextView txtDiscountTitle = (TextView) view.findViewById(R.id.txtDiscountTitle);
         TextView txtDiscount = (TextView) view.findViewById(R.id.txtDiscount);
         TextView txtDiscountType = (TextView) view.findViewById(R.id.txtDiscountType);
-
-        Globals.TextViewFontTypeFace(txtDiscountTitle, context);
-        Globals.TextViewFontTypeFace(txtDiscount, context);
-        Globals.TextViewFontTypeFace(txtDiscountType, context);
 
         txtDiscountTitle.setText(alString.get(position));
 

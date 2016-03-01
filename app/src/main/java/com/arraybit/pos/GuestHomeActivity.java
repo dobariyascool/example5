@@ -135,14 +135,16 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                 changeModeDialogFragment.show(getSupportFragmentManager(), "");
             } else if (menuItem.getItemId() == R.id.profile) {
                 drawerLayout.closeDrawer(navigationView);
-                //Globals.ReplaceFragment(new HotelProfileFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
                 Intent intent = new Intent(GuestHomeActivity.this, HotelProfileActivity.class);
                 intent.putExtra("Mode",(short)3);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (menuItem.getItemId() == R.id.offers) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new OfferFragment(GuestHomeActivity.this), getSupportFragmentManager(), null);
+                Intent intent = new Intent(GuestHomeActivity.this, OfferActivity.class);
+                intent.putExtra("Mode",(short) 3);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (menuItem.getItemId() == R.id.feedback) {
                 drawerLayout.closeDrawer(navigationView);
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
@@ -164,7 +166,6 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                 }
             } else if (menuItem.getItemId() == R.id.aboutus) {
                 drawerLayout.closeDrawer(navigationView);
-                //Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
                 Intent intent = new Intent(GuestHomeActivity.this, AboutUsActivity.class);
                 intent.putExtra("Mode",(short) 3);
                 startActivity(intent);
@@ -221,10 +222,6 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_offer))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_offer), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
-//                else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-//                        && (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_summary)))) {
-//                    //getSupportFragmentManager().popBackStack();
-//                }
             }
         }
     }
@@ -281,8 +278,6 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             txtName.setVisibility(View.GONE);
             txtLetter.setVisibility(View.GONE);
         }
-        Globals.TextViewFontTypeFace(txtLetter,GuestHomeActivity.this);
-        Globals.TextViewFontTypeFace(txtName,GuestHomeActivity.this);
     }
 
     public void EditTextOnClick(View view) {

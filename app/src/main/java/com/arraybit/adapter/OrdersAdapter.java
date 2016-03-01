@@ -26,11 +26,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-
 @SuppressWarnings("ConstantConditions")
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewHolder> {
 
+    public boolean isViewFilter = false;
+    public boolean isItemAnimate;
     ArrayList<OrderMaster> alOrderMaster;
     LayoutInflater layoutInflater;
     Context context;
@@ -39,16 +39,17 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     ArrayList<OrderItemTran> alOrderItemTran;
     LayoutClickListener objLayoutClickListener;
     FragmentManager fragmentManager;
-    boolean isViewFilter = false;
     double totalModifier;
+    int previousPosition;
 
-    public OrdersAdapter(Context context, ArrayList<OrderMaster> result, ArrayList<OrderItemTran> alOrderItemTran, FragmentManager fragmentManager, LayoutClickListener objLayoutClickListener) {
+    public OrdersAdapter(Context context, ArrayList<OrderMaster> result, ArrayList<OrderItemTran> alOrderItemTran, FragmentManager fragmentManager, LayoutClickListener objLayoutClickListener, boolean isItemAnimate) {
         this.context = context;
         alOrderMaster = result;
         this.layoutInflater = LayoutInflater.from(context);
         this.alOrderItemTran = alOrderItemTran;
         this.fragmentManager = fragmentManager;
         this.objLayoutClickListener = objLayoutClickListener;
+        this.isItemAnimate = isItemAnimate;
     }
 
     @Override
@@ -61,7 +62,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
     @Override
     public void onBindViewHolder(OrderViewHolder holder, int position) {
         OrderMaster objOrderMaster = alOrderMaster.get(position);
-        holder.cvOrder.setId(position);
+        //holder.cvOrder.setId(position);
 
         try {
             String strCurrentDate = new SimpleDateFormat("d/M/yyyy HH:mm", Locale.US).format(new Date());
@@ -97,6 +98,14 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             SetItemLayout(objOrderMaster, holder, position);
         }
         holder.txtTotalAmount.setText("Rs. " + Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
+
+        //holder animation
+        if (isItemAnimate) {
+            if (position > previousPosition) {
+                Globals.SetItemAnimator(holder);
+            }
+            previousPosition = position;
+        }
     }
 
     @Override
@@ -104,15 +113,15 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         return alOrderMaster.size();
     }
 
-    public void SetSearchFilter(ArrayList<OrderMaster> result, ScaleInAnimationAdapter scaleInAnimationAdapter) {
+    public void SetSearchFilter(ArrayList<OrderMaster> result) {
         alOrderMaster = new ArrayList<>();
         alOrderMaster.addAll(result);
         isViewFilter = true;
-        scaleInAnimationAdapter.notifyDataSetChanged();
-        //notifyDataSetChanged();
+        isItemAnimate = false;
+        notifyDataSetChanged();
     }
 
-    public void UpdateOrderItemTran(int position, int orderPosition, OrderItemTran objOrderItemTran, boolean isTotalUpdate, ScaleInAnimationAdapter scaleInAnimationAdapter) {
+    public void UpdateOrderItemTran(int position, int orderPosition, OrderItemTran objOrderItemTran, boolean isTotalUpdate) {
         alOrderItemTran.get(position).setlinktoOrderStatusMasterId(objOrderItemTran.getlinktoOrderStatusMasterId());
         if (isTotalUpdate) {
             if (objOrderItemTran != null && !objOrderItemTran.getModifierRates().equals("")) {
@@ -130,17 +139,16 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             }
         }
         isViewFilter = true;
-        //notifyDataSetChanged();
-        scaleInAnimationAdapter.notifyDataSetChanged();
+        isItemAnimate = false;
+        notifyDataSetChanged();
         totalModifier = 0;
     }
 
-    public void RemoveOrder(int position, ScaleInAnimationAdapter scaleInAnimationAdapter) {
+    public void RemoveOrder(int position) {
         alOrderMaster.remove(position);
         notifyItemRemoved(position);
         isViewFilter = true;
-        //notifyDataSetChanged();
-        scaleInAnimationAdapter.notifyDataSetChanged();
+        isItemAnimate = true;
     }
 
     private void SetItemLayout(final OrderMaster objOrderMaster, OrderViewHolder holder, final int position) {
@@ -238,13 +246,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             txtTotalAmount = (TextView) itemView.findViewById(R.id.txtTotalAmount);
             itemLayout = (LinearLayout) itemView.findViewById(R.id.itemLayout);
 
-            Globals.TextViewFontTypeFace(txtOrderTimeDifference,context);
-            Globals.TextViewFontTypeFace(txtOrderTime,context);
-            Globals.TextViewFontTypeFace(txtTableName,context);
-            Globals.TextViewFontTypeFace(txtOrderNumber,context);
-            Globals.TextViewFontTypeFace(txtOrderType,context);
-            Globals.TextViewFontTypeFace(txtTotalAmount,context);
-
             cvOrder = (CardView) itemView.findViewById(R.id.cvOrder);
 
             cvOrder.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +253,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                 public void onClick(View v) {
 
                     Globals.HideKeyBoard(context, v);
-                    objLayoutClickListener.ChangeOrderItemStatusClick(null, alOrderMaster.get(v.getId()), 0, v.getId(), true);
+                    objLayoutClickListener.ChangeOrderItemStatusClick(null, alOrderMaster.get(getAdapterPosition()), 0, getAdapterPosition(), true);
                 }
             });
         }

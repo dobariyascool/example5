@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,13 +15,13 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 
 import com.arraybit.adapter.ModifierAdapter;
-import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
 import com.rey.material.widget.Button;
 
 import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
+@SuppressLint("ValidFragment")
 public class ModifierSelectionFragmentDialog extends DialogFragment implements View.OnClickListener, ModifierAdapter.ModifierCheckedChangeListener {
 
     public static ArrayList<ItemMaster> alFinalCheckedModifier = new ArrayList<>();
@@ -30,6 +31,7 @@ public class ModifierSelectionFragmentDialog extends DialogFragment implements V
     ModifierResponseListener objModifierResponseListener;
     ArrayList<ItemMaster> alCheckedModifier;
     boolean isDuplicate = false;
+
 
     public ModifierSelectionFragmentDialog(ArrayList<ItemMaster> alItemModifier) {
         this.alItemModifier = alItemModifier;
@@ -54,9 +56,6 @@ public class ModifierSelectionFragmentDialog extends DialogFragment implements V
 
         btnCancel.setOnClickListener(this);
         btnDone.setOnClickListener(this);
-
-        Globals.ButtonFontTypeFace(btnCancel, getActivity());
-        Globals.ButtonFontTypeFace(btnDone,getActivity());
 
         SetRecyclerViewElevation();
         return view;

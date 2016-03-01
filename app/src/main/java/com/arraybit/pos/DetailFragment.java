@@ -3,7 +3,6 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,7 +43,7 @@ import java.util.ArrayList;
 public class DetailFragment extends Fragment implements View.OnClickListener, ModifierSelectionFragmentDialog.ModifierResponseListener {
 
     ImageView ivItemImage, ivModifier;
-    TextView txtItemName, txtDescription, txtItemPrice, txtModifier,txtHeaderModifier;
+    TextView txtItemName, txtDescription, txtItemPrice, txtModifier, txtHeaderModifier;
     EditText etQuantity;
     int ItemMasterId, counterMasterId;
     ItemJSONParser objItemJSONParser;
@@ -86,7 +85,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             } else {
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_detail));
             }
-            if(Build.VERSION.SDK_INT >=21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
@@ -147,18 +146,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         btnNum8.setOnClickListener(this);
         btnNum9.setOnClickListener(this);
         ivModifier.setOnClickListener(this);
-
-        Globals.ButtonFontTypeFace(btnOrder, getActivity());
-        Globals.ButtonFontTypeFace(btnCancel, getActivity());
-        Globals.ButtonFontTypeFace(btnNum1, getActivity());
-        Globals.ButtonFontTypeFace(btnNum2, getActivity());
-        Globals.ButtonFontTypeFace(btnNum3, getActivity());
-        Globals.ButtonFontTypeFace(btnNum4, getActivity());
-        Globals.ButtonFontTypeFace(btnNum5, getActivity());
-        Globals.ButtonFontTypeFace(btnNum6, getActivity());
-        Globals.ButtonFontTypeFace(btnNum7, getActivity());
-        Globals.ButtonFontTypeFace(btnNum8, getActivity());
-        Globals.ButtonFontTypeFace(btnNum9, getActivity());
         //end
 
         objSharePreferenceManage = new SharePreferenceManage();
@@ -169,7 +156,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         setHasOptionsMenu(true);
         SetLoadingTask(container);
         SetDetail();
-        SetTypeFace();
 
         return view;
     }
@@ -321,18 +307,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     }
 
     //region Private Methods and Interface
-    private void SetTypeFace(){
-        Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(),
-                "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
-        actRemark.setTypeface(roboto);
-        textInputLayout.setTypeface(roboto);
-        txtItemName.setTypeface(roboto);
-        txtModifier.setTypeface(roboto);
-        txtDescription.setTypeface(roboto);
-        txtHeaderModifier.setTypeface(roboto);
-        txtItemPrice.setTypeface(roboto);
-    }
-
     private int IncrementDecrementValue(int id, int value) {
         if (id == R.id.ibPlus) {
             value++;

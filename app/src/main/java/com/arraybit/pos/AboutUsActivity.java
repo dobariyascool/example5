@@ -43,7 +43,7 @@ public class AboutUsActivity extends AppCompatActivity {
         }
 
         Intent getData = getIntent();
-        mode = getData.getShortExtra("Mode",(short)0);
+        mode = getData.getShortExtra("Mode", (short) 0);
 
         LinearLayout versionLayout = (LinearLayout) findViewById(R.id.versionLayout);
 
@@ -53,8 +53,6 @@ public class AboutUsActivity extends AppCompatActivity {
         TextView txtCardPolicy = (TextView) findViewById(R.id.txtCardPolicy);
         TextView txtCardTerms = (TextView) findViewById(R.id.txtCardTerms);
         TextView txtVersionCode = (TextView) findViewById(R.id.txtVersionCode);
-        TextView txtLegal = (TextView) findViewById(R.id.txtLegal);
-        TextView txtAboutThis = (TextView) findViewById(R.id.txtAboutThis);
 
         if (Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19) {
             versionLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.card_view_with_border));
@@ -79,18 +77,17 @@ public class AboutUsActivity extends AppCompatActivity {
             }
         });
 
-        Globals.TextViewFontTypeFace(txtCardPolicy, this);
-        Globals.TextViewFontTypeFace(txtCardTerms, this);
-        Globals.TextViewFontTypeFace(txtVersionCode, this);
-        Globals.TextViewFontTypeFace(txtLegal, this);
-        Globals.TextViewFontTypeFace(txtAboutThis, this);
-
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (mode == 1) {
-            menu.findItem(R.id.mWaiting).setVisible(false);
+            menu.findItem(R.id.viewChange).setVisible(false);
+        } else if (mode == 2) {
+            menu.findItem(R.id.action_search).setVisible(false);
+            menu.findItem(R.id.viewChange).setVisible(false);
+        } else if (mode == 3) {
+            Globals.SetOptionMenu(Globals.userName, this, menu);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -110,11 +107,7 @@ public class AboutUsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-//            if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
-//                    .equals(getActivity().getResources().getString(R.string.title_fragment_about_us))) {
-//                getActivity().getSupportFragmentManager().popBackStack();
-//            }
-            if(getSupportFragmentManager().getBackStackEntryCount()==0){
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 finish();
             }
 
@@ -123,7 +116,7 @@ public class AboutUsActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.logout) {
                 Globals.ClearPreference(AboutUsActivity.this);
             }
-        } else if(mode == 3) {
+        } else if (mode == 3) {
             Globals.OptionMenuItemClick(item, AboutUsActivity.this, getSupportFragmentManager());
         }
         return super.onOptionsItemSelected(item);
@@ -136,7 +129,7 @@ public class AboutUsActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 21) {
             Slide slideTransition = new Slide();
             slideTransition.setSlideEdge(Gravity.RIGHT);
-            slideTransition.setDuration(500);
+            slideTransition.setDuration(350);
             fragment.setEnterTransition(slideTransition);
         } else {
             fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);

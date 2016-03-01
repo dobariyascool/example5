@@ -22,8 +22,6 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-
 
 @SuppressLint("ValidFragment")
 @SuppressWarnings("unchecked")
@@ -46,22 +44,10 @@ public class InformationFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_information, container, false);
 
-        TextView txtHeaderPhone = (TextView) view.findViewById(R.id.txtHeaderPhone);
-        TextView txtHeaderEmail = (TextView) view.findViewById(R.id.txtHeaderEmail);
-        TextView txtHeaderWebSite = (TextView) view.findViewById(R.id.txtHeaderWebSite);
-
         txtAddress = (TextView) view.findViewById(R.id.txtAddress);
         txtPhone = (TextView) view.findViewById(R.id.txtPhone);
         txtEmail = (TextView) view.findViewById(R.id.txtEmail);
         txtWebSite = (TextView) view.findViewById(R.id.txtWebSite);
-
-        Globals.TextViewFontTypeFace(txtPhone,getActivity());
-        Globals.TextViewFontTypeFace(txtWebSite,getActivity());
-        Globals.TextViewFontTypeFace(txtAddress,getActivity());
-        Globals.TextViewFontTypeFace(txtEmail,getActivity());
-        Globals.TextViewFontTypeFace(txtHeaderEmail,getActivity());
-        Globals.TextViewFontTypeFace(txtHeaderPhone,getActivity());
-        Globals.TextViewFontTypeFace(txtHeaderWebSite,getActivity());
 
         phoneLayout = (LinearLayout) view.findViewById(R.id.phoneLayout);
         emailLayout = (LinearLayout) view.findViewById(R.id.emailLayout);
@@ -100,8 +86,7 @@ public class InformationFragment extends Fragment {
     private void SetWorkingHoursRecyclerView(ArrayList<BusinessHoursTran> lstBusinessHoursTran) {
         rvWorkingHours.setVisibility(View.VISIBLE);
         adapter = new WorkingHoursAdapter(getActivity(), lstBusinessHoursTran);
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
-        rvWorkingHours.setAdapter(scaleInAnimationAdapter);
+        rvWorkingHours.setAdapter(adapter);
         rvWorkingHours.setLayoutManager(linearLayoutManager);
     }
 

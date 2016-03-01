@@ -55,7 +55,6 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
     FrameLayout feedbackFragment;
     short cnt = 0;
     FeedbackPagerAdapter adapter;
-    boolean isFilter;
 
     public FeedbackFragment(Activity activityName) {
         this.activityName = activityName;
@@ -99,10 +98,6 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
         } else {
             Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
         }
-
-        Globals.TextViewFontTypeFace(txtFeedbackGroup,getActivity());
-        Globals.TextViewFontTypeFace(txtNext,getActivity());
-        Globals.TextViewFontTypeFace(txtPrevious,getActivity());
 
         return view;
     }

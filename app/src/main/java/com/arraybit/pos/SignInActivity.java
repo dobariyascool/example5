@@ -62,13 +62,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //edittext
         etName = (EditText) findViewById(R.id.etName);
         etPassword = (EditText) findViewById(R.id.etPassword);
-        Globals.EditTextFontTypeFace(etName,SignInActivity.this);
-        Globals.EditTextFontTypeFace(etPassword,SignInActivity.this);
         //end
 
         //button
         Button btnSignIn = (Button) findViewById(R.id.btnSignIn);
-        Globals.ButtonFontTypeFace(btnSignIn,this);
         tbPasswordShow = (ToggleButton) findViewById(R.id.tbPasswordShow);
         ibClear = (ImageButton) findViewById(R.id.ibClear);
         //end

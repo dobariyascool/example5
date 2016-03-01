@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+@SuppressLint("ValidFragment")
 @SuppressWarnings("ConstantConditions")
 public class PolicyFragment extends Fragment {
 

@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CounterMaster;
 import com.arraybit.pos.R;
@@ -42,7 +41,6 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
     @Override
     public void onBindViewHolder(CounterViewHolder holder, int position) {
         CounterMaster current = alCounterMaster.get(position);
-        holder.cvCounter.setId(position);
         holder.txtCounterTitle.setText(current.getCounterName());
     }
 
@@ -58,7 +56,6 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
         public CounterViewHolder(View itemView) {
             super(itemView);
             txtCounterTitle = (TextView) itemView.findViewById(R.id.txtCounterTitle);
-            Globals.TextViewFontTypeFace(txtCounterTitle, context);
 
             cvCounter = (CardView) itemView.findViewById(R.id.cvCounter);
 
@@ -66,8 +63,8 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
                 @Override
                 public void onClick(View view) {
                     objSharePreferenceManage = new SharePreferenceManage();
-                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterMasterId", String.valueOf(alCounterMaster.get(view.getId()).getCounterMasterId()), context);
-                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterName", alCounterMaster.get(view.getId()).getCounterName(), context);
+                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterMasterId", String.valueOf(alCounterMaster.get(getAdapterPosition()).getCounterMasterId()), context);
+                    objSharePreferenceManage.CreatePreference("CounterPreference", "CounterName", alCounterMaster.get(getAdapterPosition()).getCounterName(), context);
 
                     Intent intent = new Intent(context, WelcomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

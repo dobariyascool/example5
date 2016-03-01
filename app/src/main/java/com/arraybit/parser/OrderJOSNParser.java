@@ -71,6 +71,7 @@ public class OrderJOSNParser {
                 if (!jsonObject.getString("linktoUserMasterIdUpdatedBy").equals("null")) {
                     objOrderMaster.setlinktoUserMasterIdUpdatedBy((short)jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
                 }
+                objOrderMaster.setlinktoOrderTypeMasterId((short)jsonObject.getInt("linktoOrderTypeMasterId"));
 
                 /// Extra
                 objOrderMaster.setCounter(jsonObject.getString("Counter"));
@@ -128,6 +129,7 @@ public class OrderJOSNParser {
                 if (!jsonArray.getJSONObject(i).getString("linktoUserMasterIdUpdatedBy").equals("null")) {
                     objOrderMaster.setlinktoUserMasterIdUpdatedBy((short)jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
                 }
+                objOrderMaster.setlinktoOrderTypeMasterId((short)jsonArray.getJSONObject(i).getInt("linktoOrderTypeMasterId"));
 
                 /// Extra
                 objOrderMaster.setCounter(jsonArray.getJSONObject(i).getString("Counter"));

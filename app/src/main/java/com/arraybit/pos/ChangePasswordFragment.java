@@ -81,10 +81,8 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         tbPasswordShowOld.setOnClickListener(this);
         tbPasswordShowNew.setOnClickListener(this);
         tbPasswordShowConfirm.setOnClickListener(this);
-        Globals.ButtonFontTypeFace(btnChangePassword,getActivity());
         //end
 
-        SetTypeFace();
 
         //region TextChange Event
         etOldPassword.addTextChangedListener(new TextWatcher() {
@@ -206,12 +204,6 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     }
 
     //region Private Methods
-    private void SetTypeFace(){
-        Globals.EditTextFontTypeFace(etConfirmPassword,getActivity());
-        Globals.EditTextFontTypeFace(etNewPassword,getActivity());
-        Globals.EditTextFontTypeFace(etOldPassword,getActivity());
-    }
-
     private boolean Validation() {
         boolean IsValid = true;
         if (etOldPassword.getText().toString().equals("") && etNewPassword.getText().toString().equals("") && etConfirmPassword.getText().toString().equals("")) {

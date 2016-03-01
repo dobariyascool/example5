@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.arraybit.global.Globals;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
@@ -41,7 +40,7 @@ public class MyAccountAdapter extends RecyclerView.Adapter<MyAccountAdapter.MyAc
     @Override
     public void onBindViewHolder(MyAccountViewHolder holder, int position) {
         holder.txtTitle.setText(alString.get(position));
-        holder.cvOptions.setId(position);
+        //holder.cvOptions.setId(position);
     }
 
     @Override
@@ -67,8 +66,6 @@ public class MyAccountAdapter extends RecyclerView.Adapter<MyAccountAdapter.MyAc
             cvOptions = (CardView) itemView.findViewById(R.id.cvOptions);
             txtTitle = (TextView) itemView.findViewById(R.id.txtTitle);
 
-            Globals.TextViewFontTypeFace(txtTitle, context);
-
             if(Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19){
                 titleLayout.setBackground(ContextCompat.getDrawable(context,R.drawable.card_view_with_border));
             }
@@ -76,7 +73,7 @@ public class MyAccountAdapter extends RecyclerView.Adapter<MyAccountAdapter.MyAc
             cvOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    objOptionClickListener.OptionClick(v.getId());
+                    objOptionClickListener.OptionClick(getAdapterPosition());
 
                 }
             });

@@ -198,10 +198,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             return tableFragmentList.get(position);
         }
 
-//        public SectionMaster GetCurrentSection(int position) {
-//            return tableFragmentTitleList.get(position);
-//        }
-
         @Override
         public Fragment getItem(int position) {
             return tableFragmentList.get(position);

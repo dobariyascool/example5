@@ -36,7 +36,7 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
     @Override
     public void onBindViewHolder(OptionViewHolder holder, int position) {
         holder.txtTitle.setText(alString.get(position));
-        holder.cvOptions.setId(position);
+        //holder.cvOptions.setId(position);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
                 @Override
                 public void onClick(View v) {
                     objOptionListClickListener = (OptionListClickListener) context;
-                    objOptionListClickListener.onClick(v.getId());
+                    objOptionListClickListener.onClick(getAdapterPosition());
                 }
             });
 

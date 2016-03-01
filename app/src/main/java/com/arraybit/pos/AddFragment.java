@@ -65,10 +65,6 @@ public class AddFragment extends Fragment {
 
         btnAdd = (Button) view.findViewById(R.id.btnAdd);
 
-        Globals.ButtonFontTypeFace(btnAdd,getActivity());
-        Globals.EditTextFontTypeFace(etName, getActivity());
-        Globals.EditTextFontTypeFace(etMobileNo, getActivity());
-        Globals.EditTextFontTypeFace(etPersons, getActivity());
         return view;
     }
 

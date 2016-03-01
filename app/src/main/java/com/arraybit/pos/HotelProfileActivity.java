@@ -111,8 +111,9 @@ public class HotelProfileActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
-            //supportFinishAfterTransition();
             finish();
+            GalleryFragment.alBusinessGalleryTran = null;
+            InformationFragment.lstBusinessHoursTran = null;
         }
 
         if (mode==1||mode==2) {
@@ -128,10 +129,10 @@ public class HotelProfileActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-
-        } else {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             super.onBackPressed();
+            GalleryFragment.alBusinessGalleryTran = null;
+            InformationFragment.lstBusinessHoursTran = null;
         }
     }
 

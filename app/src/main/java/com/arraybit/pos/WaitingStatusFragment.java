@@ -67,10 +67,6 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         btnCancel.setOnClickListener(this);
         btnCall.setOnClickListener(this);
 
-        Globals.ButtonFontTypeFace(btnServe, getActivity());
-        Globals.ButtonFontTypeFace(btnNot, getActivity());
-        Globals.ButtonFontTypeFace(btnCancel, getActivity());
-        Globals.ButtonFontTypeFace(btnCall, getActivity());
 
         objUpdateStatusListener = (UpdateStatusListener) getTargetFragment();
 

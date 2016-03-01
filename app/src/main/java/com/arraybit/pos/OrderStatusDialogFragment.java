@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.arraybit.parser.OrderItemJSONParser;
 import com.arraybit.parser.OrderJOSNParser;
 import com.rey.material.widget.Button;
 
+@SuppressLint("ValidFragment")
 @SuppressWarnings("unchecked")
 public class OrderStatusDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -57,11 +59,6 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
         btnCooking.setOnClickListener(this);
         btnReady.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
-
-        Globals.ButtonFontTypeFace(btnCooking, getActivity());
-        Globals.ButtonFontTypeFace(btnServed, getActivity());
-        Globals.ButtonFontTypeFace(btnReady, getActivity());
-        Globals.ButtonFontTypeFace(btnCancel,getActivity());
 
         return view;
     }

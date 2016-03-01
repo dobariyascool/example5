@@ -17,10 +17,9 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-
 public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewHolder> {
 
+    public boolean isItemAnimate;
     Context context;
     ArrayList<TableMaster> alTableMaster;
     LayoutInflater layoutInflater;
@@ -29,9 +28,10 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     LayoutClickListener objLayoutClickListener;
     FragmentManager fragmentManager;
     Boolean isAll;
+    int previousPosition;
 
     // Constructor
-    public TablesAdapter(Context context, ArrayList<TableMaster> result, boolean isClickEnable, LayoutClickListener objLayoutClickListener, FragmentManager fragmentManager,Boolean isAll) {
+    public TablesAdapter(Context context, ArrayList<TableMaster> result, boolean isClickEnable, LayoutClickListener objLayoutClickListener, FragmentManager fragmentManager, Boolean isAll, boolean isItemAnimate) {
         this.context = context;
         alTableMaster = result;
         this.isClickEnable = isClickEnable;
@@ -39,6 +39,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         this.objLayoutClickListener = objLayoutClickListener;
         this.fragmentManager = fragmentManager;
         this.isAll = isAll;
+        this.isItemAnimate = isItemAnimate;
     }
 
     @Override
@@ -61,12 +62,19 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         holder.txtPersons.setText(String.valueOf(objTableMaster.getMaxPerson()));
         holder.txtTableStatus.setText(objTableMaster.getTableStatus());
         holder.txtTableStatus.setTextColor(Color.parseColor("#" + objTableMaster.getStatusColor()));
-        if(isAll){
+        if (isAll) {
             holder.txtSection.setVisibility(View.VISIBLE);
             holder.txtSection.setText(objTableMaster.getSection());
-        }
-        else{
+        } else {
             holder.txtSection.setVisibility(View.GONE);
+        }
+
+        //holder animation
+        if (isItemAnimate) {
+            if (position > previousPosition) {
+                Globals.SetItemAnimator(holder);
+            }
+            previousPosition = position;
         }
     }
 
@@ -75,18 +83,18 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         return alTableMaster.size();
     }
 
-    public void UpdateData(int position, TableMaster objTableMaster,ScaleInAnimationAdapter animationAdapter) {
+    public void UpdateData(int position, TableMaster objTableMaster) {
+        isItemAnimate = false;
         alTableMaster.get(position).setTableStatus(objTableMaster.getTableStatus());
         alTableMaster.get(position).setStatusColor(objTableMaster.getStatusColor());
-        animationAdapter.notifyDataSetChanged();
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
-    public void SetSearchFilter(ArrayList<TableMaster> result,ScaleInAnimationAdapter animationAdapter) {
+    public void SetSearchFilter(ArrayList<TableMaster> result) {
+        isItemAnimate = false;
         alTableMaster = new ArrayList<>();
         alTableMaster.addAll(result);
-        animationAdapter.notifyDataSetChanged();
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     //region interface
@@ -97,21 +105,17 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
 
     class TableViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtTableName, txtPersons, txtTableStatus,txtSection;
+        TextView txtTableName, txtPersons, txtTableStatus, txtSection;
         CardView cvTable;
 
         public TableViewHolder(View itemView) {
             super(itemView);
 
             txtTableName = (TextView) itemView.findViewById(R.id.txtTableName);
-            txtSection = (TextView)itemView.findViewById(R.id.txtSection);
+            txtSection = (TextView) itemView.findViewById(R.id.txtSection);
             txtPersons = (TextView) itemView.findViewById(R.id.txtPersons);
             txtTableStatus = (TextView) itemView.findViewById(R.id.txtTableStatus);
             cvTable = (CardView) itemView.findViewById(R.id.cvTable);
-
-            Globals.TextViewFontTypeFace(txtPersons,context);
-            Globals.TextViewFontTypeFace(txtTableName,context);
-            Globals.TextViewFontTypeFace(txtTableStatus,context);
 
             if (isClickEnable) {
 

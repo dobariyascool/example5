@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.arraybit.adapter.OrdersAdapter;
 import com.arraybit.global.Globals;
@@ -31,11 +32,9 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-
 
 @SuppressWarnings("unchecked")
-public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTextListener,OrdersAdapter.LayoutClickListener,OrderStatusDialogFragment.UpdateStatusListener {
+public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTextListener, OrdersAdapter.LayoutClickListener, OrderStatusDialogFragment.UpdateStatusListener {
 
     public final static String ITEMS_COUNT_KEY = "OrdersTabFragment$ItemsCount";
     public TextView txtMsg;
@@ -46,12 +45,12 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     GridLayoutManager gridLayoutManager;
     SharePreferenceManage objSharePreferenceManage;
     OrdersAdapter ordersAdapter;
-    int id,itemPosition,orderPosition;
+    int id, itemPosition, orderPosition;
     DisplayMetrics displayMetrics;
     String orderTypeMasterId;
     StringBuilder sbOrderMasterIds;
     ArrayList<OrderItemTran> alOrderItemTran;
-    ScaleInAnimationAdapter scaleInAnimationAdapter;
+    LinearLayout errorLayout;
 
 
     public OrdersTabFragment() {
@@ -73,13 +72,13 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders_tab, container, false);
 
+        errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
+        txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+
         rvOrder = (RecyclerView) view.findViewById(R.id.rvOrder);
         rvOrder.setVisibility(View.GONE);
 
         setHasOptionsMenu(true);
-
-        txtMsg = (TextView) view.findViewById(R.id.txtMsg);
-        Globals.TextViewFontTypeFace(txtMsg,getActivity());
 
         displayMetrics = getActivity().getResources().getDisplayMetrics();
 
@@ -115,16 +114,16 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                 }
             }
             if (alOrderMasterFilter.size() == 0) {
-                Globals.SetError(txtMsg, rvOrder, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvOrder);
             } else {
-                Globals.SetError(txtMsg, rvOrder, null, false);
+                Globals.SetErrorLayout(errorLayout, false, null, rvOrder);
                 SetupRecyclerView(rvOrder, alOrderMasterFilter, alOrderItemTran);
             }
         } else {
             if (alOrderMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvOrder, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvOrder);
             } else {
-                Globals.SetError(txtMsg, rvOrder, null, false);
+                Globals.SetErrorLayout(errorLayout, false, null, rvOrder);
                 SetupRecyclerView(rvOrder, alOrderMaster, alOrderItemTran);
             }
         }
@@ -146,7 +145,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         // Do something when collapsed
                         if (alOrderMaster.size() != 0 && alOrderMaster != null) {
-                            ordersAdapter.SetSearchFilter(alOrderMaster,scaleInAnimationAdapter);
+                            ordersAdapter.SetSearchFilter(alOrderMaster);
                             Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
                         }
                         return true; // Return true to collapse action view
@@ -180,32 +179,32 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     public boolean onQueryTextChange(String newText) {
         if (alOrderMaster.size() != 0 && alOrderMaster != null) {
             final ArrayList<OrderMaster> filteredList = Filter(alOrderMaster, newText);
-            ordersAdapter.SetSearchFilter(filteredList,scaleInAnimationAdapter);
+            ordersAdapter.SetSearchFilter(filteredList);
         }
         return false;
     }
 
     @Override
-    public void ChangeOrderItemStatusClick(OrderItemTran objOrderItemTran,OrderMaster objOrderMaster,int itemPosition,int orderPosition,boolean isOrder) {
+    public void ChangeOrderItemStatusClick(OrderItemTran objOrderItemTran, OrderMaster objOrderMaster, int itemPosition, int orderPosition, boolean isOrder) {
         this.itemPosition = itemPosition;
         this.orderPosition = orderPosition;
-        OrderStatusDialogFragment orderStatusDialogFragment = new OrderStatusDialogFragment(objOrderItemTran,objOrderMaster,isOrder);
-        orderStatusDialogFragment.setTargetFragment(this,0);
-        orderStatusDialogFragment.show(getActivity().getSupportFragmentManager(),"");
+        OrderStatusDialogFragment orderStatusDialogFragment = new OrderStatusDialogFragment(objOrderItemTran, objOrderMaster, isOrder);
+        orderStatusDialogFragment.setTargetFragment(this, 0);
+        orderStatusDialogFragment.show(getActivity().getSupportFragmentManager(), "");
     }
 
     @Override
-    public void UpdateStatus(boolean flag,boolean isOrder,OrderItemTran objOrderItemTran,boolean isTotalUpdate) {
-        if(isOrder){
-            if(flag){
-                if(!orderStatus.equals(Globals.OrderStatus.All.toString())){
-                    ordersAdapter.RemoveOrder(orderPosition,scaleInAnimationAdapter);
+    public void UpdateStatus(boolean flag, boolean isOrder, OrderItemTran objOrderItemTran, boolean isTotalUpdate) {
+        if (isOrder) {
+            if (flag) {
+                if (!orderStatus.equals(Globals.OrderStatus.All.toString())) {
+                    ordersAdapter.RemoveOrder(orderPosition);
                 }
             }
 
-        }else{
-            if(flag) {
-                ordersAdapter.UpdateOrderItemTran(itemPosition,orderPosition, objOrderItemTran,isTotalUpdate,scaleInAnimationAdapter);
+        } else {
+            if (flag) {
+                ordersAdapter.UpdateOrderItemTran(itemPosition, orderPosition, objOrderItemTran, isTotalUpdate);
             }
         }
     }
@@ -227,15 +226,18 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
 
     private void SetupRecyclerView(RecyclerView rvOrder, ArrayList<OrderMaster> alOrderMaster, ArrayList<OrderItemTran> alOrderItemTran) {
 
-        ordersAdapter = new OrdersAdapter(getActivity(), alOrderMaster, alOrderItemTran,getActivity().getSupportFragmentManager(),this);
-        scaleInAnimationAdapter = new ScaleInAnimationAdapter(ordersAdapter);
-        rvOrder.setAdapter(scaleInAnimationAdapter);
+        ordersAdapter = new OrdersAdapter(getActivity(), alOrderMaster, alOrderItemTran, getActivity().getSupportFragmentManager(), this, false);
+        rvOrder.setAdapter(ordersAdapter);
         rvOrder.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         rvOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 Globals.HideKeyBoard(getActivity(), recyclerView);
+                if (!ordersAdapter.isItemAnimate) {
+                    ordersAdapter.isItemAnimate = true;
+                    ordersAdapter.isViewFilter = true;
+                }
             }
         });
     }
@@ -270,11 +272,10 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
             progressDialog.dismiss();
             ArrayList<OrderMaster> lstOrderMaster = (ArrayList<OrderMaster>) result;
             if (lstOrderMaster == null) {
-                Globals.SetError(txtMsg, rvOrder, getActivity().getResources().getString(R.string.MsgSelectFail), true);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOrder);
             } else if (lstOrderMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvOrder, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvOrder);
             } else {
-                Globals.SetError(txtMsg, rvOrder, null, false);
                 alOrderMaster = lstOrderMaster;
                 sbOrderMasterIds = new StringBuilder();
                 for (int i = 0; i < alOrderMaster.size(); i++) {
@@ -283,7 +284,6 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                 if (!sbOrderMasterIds.toString().equals("")) {
                     new OrderItemTranLoadingTask().execute();
                 }
-                //SetupRecyclerView(rvOrder, alOrderMaster);
             }
         }
     }
@@ -309,6 +309,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         protected void onPostExecute(Object result) {
             alOrderItemTran = (ArrayList<OrderItemTran>) result;
             if (alOrderItemTran != null && alOrderItemTran.size() != 0) {
+                Globals.SetErrorLayout(errorLayout, false, null, rvOrder);
                 SetupRecyclerView(rvOrder, alOrderMaster, alOrderItemTran);
             }
         }

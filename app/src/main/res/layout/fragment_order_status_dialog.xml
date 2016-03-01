@@ -33,15 +33,6 @@
             android:text="@string/osdCooking" />
 
         <com.rey.material.widget.Button
-            android:id="@+id/btnServed"
-            style="@style/StatusButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@mipmap/os_served"
-            android:text="@string/osdServed" />
-
-        <com.rey.material.widget.Button
             android:id="@+id/btnReady"
             style="@style/StatusButton"
             android:layout_width="0dp"
@@ -50,6 +41,17 @@
             android:drawableTop="@mipmap/os_ready"
             android:padding="@dimen/control_SpecingSmall"
             android:text="@string/osdReady" />
+
+
+        <com.rey.material.widget.Button
+            android:id="@+id/btnServed"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/os_served"
+            android:text="@string/osdServed" />
+
 
         <com.rey.material.widget.Button
             android:id="@+id/btnCancel"

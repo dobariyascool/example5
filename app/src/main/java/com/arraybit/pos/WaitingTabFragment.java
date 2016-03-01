@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.arraybit.adapter.WaitingListAdapter;
 import com.arraybit.global.Globals;
@@ -20,8 +21,6 @@ import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
-
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 
 @SuppressWarnings("unchecked")
@@ -35,7 +34,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
     int position;
     WaitingListAdapter waitingListAdapter;
     WaitingStatusMaster objWaitingStatusMaster;
-    ScaleInAnimationAdapter scaleInAnimationAdapter;
+    LinearLayout errorLayout;
 
     public WaitingTabFragment() {
     }
@@ -55,14 +54,14 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_waiting_tab, container, false);
 
+        errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
+        txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+
         rvWaiting = (RecyclerView) view.findViewById(R.id.rvWaiting);
         rvWaiting.setVisibility(View.GONE);
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        txtMsg = (TextView) view.findViewById(R.id.txtMsg);
-        Globals.TextViewFontTypeFace(txtMsg,getActivity());
 
         return view;
     }
@@ -92,16 +91,24 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
     @Override
     public void UpdateStatus(boolean flag) {
         if (flag) {
-            waitingListAdapter.WaitingListDataRemove(this.position, scaleInAnimationAdapter);
+            waitingListAdapter.WaitingListDataRemove(this.position);
         }
     }
 
     //region Private Methods
     private void SetupRecyclerView(RecyclerView rvWaiting) {
-        waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this);
-        scaleInAnimationAdapter = new ScaleInAnimationAdapter(waitingListAdapter);
-        rvWaiting.setAdapter(scaleInAnimationAdapter);
+        waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this, false);
+        rvWaiting.setAdapter(waitingListAdapter);
         rvWaiting.setLayoutManager(linearLayoutManager);
+        rvWaiting.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!waitingListAdapter.isItemAnimate) {
+                    waitingListAdapter.isItemAnimate = true;
+                }
+            }
+        });
     }
     //endregion
 
@@ -114,13 +121,6 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-//            progressDialog = new ProgressDialog(getActivity());
-//            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-//            progressDialog.setIndeterminate(true);
-//            progressDialog.setCancelable(false);
-//            progressDialog.show();
-
         }
 
         @Override
@@ -132,14 +132,13 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
 
         @Override
         protected void onPostExecute(Object result) {
-            //progressDialog.dismiss();
             ArrayList<WaitingMaster> lstWaitingMaster = (ArrayList<WaitingMaster>) result;
             if (lstWaitingMaster == null) {
-                Globals.SetError(txtMsg, rvWaiting, getResources().getString(R.string.MsgSelectFail), true);
+                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgSelectFail), rvWaiting);
             } else if (lstWaitingMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvWaiting, getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgNoRecord), rvWaiting);
             } else {
-                Globals.SetError(txtMsg, rvWaiting, null, false);
+                Globals.SetErrorLayout(errorLayout, false, null, rvWaiting);
                 alWaitingMaster = lstWaitingMaster;
                 SetupRecyclerView(rvWaiting);
             }

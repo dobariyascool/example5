@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.arraybit.adapter.TablesAdapter;
 import com.arraybit.global.Globals;
@@ -35,8 +36,6 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
@@ -57,7 +56,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     boolean isFilter;
     Bundle bundle;
     String linktoOrderTypeMasterId;
-    ScaleInAnimationAdapter scaleInAnimationAdapter;
+    LinearLayout errorLayout;
 
     public TableTabFragment() {
         // Required empty public constructor
@@ -79,8 +78,8 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_table_tab, container, false);
 
-        txtMsg = (TextView) view.findViewById(R.id.txtMsg);
-        Globals.TextViewFontTypeFace(txtMsg, getActivity());
+        errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
+        txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
 
         rvTables = (RecyclerView) view.findViewById(R.id.rvTables);
         rvTables.setHasFixedSize(true);
@@ -134,7 +133,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                         public boolean onMenuItemActionCollapse(MenuItem item) {
                             // Do something when collapsed
                             if (alTableMaster.size() != 0 && alTableMaster != null) {
-                                tablesAdapter.SetSearchFilter(alTableMaster, scaleInAnimationAdapter);
+                                tablesAdapter.SetSearchFilter(alTableMaster);
                                 Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
                             }
                             return true; // Return true to collapse action view
@@ -170,16 +169,16 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                 }
             }
             if (alTableMasterFilter.size() == 0) {
-                Globals.SetError(txtMsg, rvTables, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetErrorLayout(errorLayout,true,getActivity().getResources().getString(R.string.MsgNoRecord),rvTables);
             } else {
-                Globals.SetError(txtMsg, rvTables, null, false);
+                Globals.SetErrorLayout(errorLayout, false, null, rvTables);
                 SetupRecyclerView(rvTables, alTableMasterFilter);
             }
         } else {
             if (alTableMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvTables, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetErrorLayout(errorLayout,true,getActivity().getResources().getString(R.string.MsgNoRecord),rvTables);
             } else {
-                Globals.SetError(txtMsg, rvTables, null, false);
+                Globals.SetErrorLayout(errorLayout, false, null, rvTables);
                 SetupRecyclerView(rvTables, alTableMaster);
             }
 
@@ -195,7 +194,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     public boolean onQueryTextChange(String newText) {
         if (alTableMaster.size() != 0 && alTableMaster != null) {
             final ArrayList<TableMaster> filteredList = Filter(alTableMaster, newText);
-            tablesAdapter.SetSearchFilter(filteredList, scaleInAnimationAdapter);
+            tablesAdapter.SetSearchFilter(filteredList);
         }
         return false;
     }
@@ -257,7 +256,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     @Override
     public void UpdateTableStatus(boolean flag, TableMaster objTableMaster) {
         if (flag) {
-            tablesAdapter.UpdateData(position, objTableMaster, scaleInAnimationAdapter);
+            tablesAdapter.UpdateData(position, objTableMaster);
         }
     }
 
@@ -287,31 +286,30 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     private void SetupRecyclerView(RecyclerView rvTables, ArrayList<TableMaster> alTableMaster) {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             if (objSectionMaster.getSectionMasterId() == 0) {
-                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), true);
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), true,false);
             } else {
-                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), false);
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), false,false);
             }
 
         } else {
             if (objSectionMaster.getSectionMasterId() == 0) {
-                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), true);
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), true,false);
             } else {
-                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), false);
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), false,false);
             }
 
         }
 
-        scaleInAnimationAdapter = new ScaleInAnimationAdapter(tablesAdapter);
-        scaleInAnimationAdapter.setFirstOnly(false);
-        //scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
-        rvTables.setAdapter(scaleInAnimationAdapter);
+        rvTables.setAdapter(tablesAdapter);
         rvTables.setLayoutManager(gridLayoutManager);
-        rvTables.scheduleLayoutAnimation();
         rvTables.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 Globals.HideKeyBoard(getActivity(), recyclerView);
+                if (!tablesAdapter.isItemAnimate) {
+                    tablesAdapter.isItemAnimate = true;
+                }
             }
         });
     }
@@ -325,13 +323,6 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-//            progressDialog = new ProgressDialog(getActivity());
-//            progressDialog.setMessage(getActivity().getResources().getString(R.string.MsgLoading));
-//            progressDialog.setIndeterminate(true);
-//            progressDialog.setCancelable(false);
-//            progressDialog.show();
-
         }
 
         @Override
@@ -345,15 +336,13 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
-            //progressDialog.dismiss();
-
             ArrayList<TableMaster> lstTableMaster = (ArrayList<TableMaster>) result;
             if (lstTableMaster == null) {
-                Globals.SetError(txtMsg, rvTables, getActivity().getResources().getString(R.string.MsgSelectFail), true);
+                Globals.SetErrorLayout(errorLayout,true,getActivity().getResources().getString(R.string.MsgSelectFail),rvTables);
             } else if (lstTableMaster.size() == 0) {
-                Globals.SetError(txtMsg, rvTables, getActivity().getResources().getString(R.string.MsgNoRecord), true);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
             } else {
-                Globals.SetError(txtMsg, rvTables, null, false);
+                Globals.SetErrorLayout(errorLayout, false, null, rvTables);
                 alTableMaster = lstTableMaster;
                 SetupRecyclerView(rvTables, alTableMaster);
             }

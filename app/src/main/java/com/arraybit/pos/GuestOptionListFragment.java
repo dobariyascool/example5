@@ -13,12 +13,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
-import com.rey.material.widget.TextView;
 
-public class GuestOptionListFragment extends Fragment implements View.OnClickListener {
+public class GuestOptionListFragment extends Fragment implements View.OnClickListener{
 
 
     LinearLayout guestOptionLayout;
+    GuestLoginDialogFragment.LoginResponseListener objLoginResponseListener;
 
 
     public GuestOptionListFragment() {
@@ -34,20 +34,10 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         guestOptionLayout = (LinearLayout) view.findViewById(R.id.guestOptionLayout);
         Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
 
-        CardView cvMenu = (CardView)view.findViewById(R.id.cvMenu);
-        CardView cvOrders = (CardView)view.findViewById(R.id.cvOrders);
-        CardView cvOffers = (CardView)view.findViewById(R.id.cvOffers);
-        CardView cvFeedback = (CardView)view.findViewById(R.id.cvFeedback);
-
-        TextView txtMenu = (TextView)view.findViewById(R.id.txtMenu);
-        TextView txtOrders = (TextView)view.findViewById(R.id.txtOrders);
-        TextView txtOffers = (TextView)view.findViewById(R.id.txtOffers);
-        TextView txtFeedback = (TextView)view.findViewById(R.id.txtFeedback);
-
-        Globals.TextViewFontTypeFace(txtMenu,getActivity());
-        Globals.TextViewFontTypeFace(txtOrders,getActivity());
-        Globals.TextViewFontTypeFace(txtOffers,getActivity());
-        Globals.TextViewFontTypeFace(txtFeedback,getActivity());
+        CardView cvMenu = (CardView) view.findViewById(R.id.cvMenu);
+        CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);
+        CardView cvOffers = (CardView) view.findViewById(R.id.cvOffers);
+        CardView cvFeedback = (CardView) view.findViewById(R.id.cvFeedback);
 
         cvMenu.setOnClickListener(this);
         cvOrders.setOnClickListener(this);
@@ -63,7 +53,6 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
-
     }
 
 
@@ -73,6 +62,17 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        objLoginResponseListener = (GuestLoginDialogFragment.LoginResponseListener)getActivity();
+        objLoginResponseListener.LoginResponse();
+    }
 
     @Override
     public void onClick(View v) {
@@ -90,7 +90,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                     guestLoginDialogFragment.setTargetFragment(this, 0);
                     guestLoginDialogFragment.show(getActivity().getSupportFragmentManager(), "");
                 } else {
-                    Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(),getActivity().getResources().getString(R.string.title_fragment_feedback));
+                    Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
                 }
             } else if (v.getId() == R.id.cvMenu) {
                 Intent intent = new Intent(getActivity(), MenuActivity.class);

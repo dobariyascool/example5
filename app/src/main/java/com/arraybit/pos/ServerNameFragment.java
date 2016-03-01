@@ -42,8 +42,6 @@ public class ServerNameFragment extends Fragment {
         etServerName = (EditText) view.findViewById(R.id.etServerName);
         btnSave = (com.rey.material.widget.Button) view.findViewById(R.id.btnSave);
 
-        Globals.ButtonFontTypeFace(btnSave,getActivity());
-        Globals.EditTextFontTypeFace(etServerName,getActivity());
 
         return view;
 

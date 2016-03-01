@@ -171,10 +171,12 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             intent.putExtra("Mode", (short)1);
             startActivity(intent);
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
-           /// Globals.ReplaceFragment(new HotelProfileFragment(WaitingActivity.this), getSupportFragmentManager(), null);
         } else if (menuItem.getItemId() == R.id.wOffers) {
             drawerLayout.closeDrawer(navigationView);
-            Globals.ReplaceFragment(new OfferFragment(WaitingActivity.this), getSupportFragmentManager(), null);
+            Intent intent = new Intent(WaitingActivity.this, OfferActivity.class);
+            intent.putExtra("Mode",(short) 1);
+            startActivity(intent);
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
         } else if (menuItem.getItemId() == R.id.wRate) {
             Uri uri = Uri.parse("market://details?id=" + getPackageName());
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -186,10 +188,9 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         } else if (menuItem.getItemId() == R.id.wAbout) {
             drawerLayout.closeDrawer(navigationView);
             Intent intent = new Intent(WaitingActivity.this, AboutUsActivity.class);
-            intent.putExtra("Mode",(short) 2);
+            intent.putExtra("Mode",(short) 1);
             startActivity(intent);
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            //Globals.ReplaceFragment(new AboutUsFragment(), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_about_us));
         }
         return false;
     }
@@ -242,8 +243,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaitingActivity.this) != null) {
             navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaitingActivity.this));
         }
-        Globals.TextViewFontTypeFace(txtLetter, WaitingActivity.this);
-        Globals.TextViewFontTypeFace(txtName, WaitingActivity.this);
+
     }
 
     private void ConfirmMessage() {

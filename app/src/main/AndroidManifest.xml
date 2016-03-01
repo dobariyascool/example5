@@ -65,7 +65,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".OfferActivity"
-            android:label="@string/title_activity_offer"
+            android:label="@string/title_fragment_offer"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".AboutUsActivity"

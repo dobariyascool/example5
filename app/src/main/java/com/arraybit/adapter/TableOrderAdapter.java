@@ -27,6 +27,7 @@ import java.util.Locale;
 @SuppressWarnings("ConstantConditions")
 public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.TableOrderViewHolder> {
 
+    public boolean isItemAnimate;
     ArrayList<OrderMaster> alOrderMaster;
     LayoutInflater layoutInflater;
     Context context;
@@ -35,13 +36,15 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
     ArrayList<TaxMaster> alTaxMaster;
     FragmentManager fragmentManager;
     double totalTaxPercentage, totalTaxAmount, totalNetAmount;
+    int previousPosition;
 
-    public TableOrderAdapter(Context context, ArrayList<OrderMaster> result, ArrayList<TaxMaster> alTaxMaster, FragmentManager fragmentManager) {
+    public TableOrderAdapter(Context context, ArrayList<OrderMaster> result, ArrayList<TaxMaster> alTaxMaster, FragmentManager fragmentManager,boolean isItemAnimate) {
         this.context = context;
         alOrderMaster = result;
         this.layoutInflater = LayoutInflater.from(context);
         this.alTaxMaster = alTaxMaster;
         this.fragmentManager = fragmentManager;
+        this.isItemAnimate = isItemAnimate;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
     @Override
     public void onBindViewHolder(TableOrderViewHolder holder, int position) {
         OrderMaster objOrderMaster = alOrderMaster.get(position);
-        holder.cvOrder.setId(position);
+        //holder.cvOrder.setId(position);
 
         try {
             String strCurrentDate = new SimpleDateFormat("d/M/yyyy HH:mm", Locale.US).format(new Date());
@@ -88,6 +91,13 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
             CalculateTax(objOrderMaster, holder);
         }
 
+        //holder animation
+        if(isItemAnimate) {
+            if (position > previousPosition) {
+                Globals.SetItemAnimator(holder);
+            }
+            previousPosition = position;
+        }
     }
 
     @Override
@@ -126,13 +136,6 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
             txtTotalItem = (TextView) itemView.findViewById(R.id.txtTotalItem);
             txtTotalAmount = (TextView) itemView.findViewById(R.id.txtTotalAmount);
 
-            Globals.TextViewFontTypeFace(txtOrderTimeDifference,context);
-            Globals.TextViewFontTypeFace(txtOrderTime,context);
-            Globals.TextViewFontTypeFace(txtTableName,context);
-            Globals.TextViewFontTypeFace(txtTotalOrder,context);
-            Globals.TextViewFontTypeFace(txtTotalItem,context);
-            Globals.TextViewFontTypeFace(txtTotalAmount,context);
-
             cvOrder = (CardView) itemView.findViewById(R.id.cvOrder);
 
             cvOrder.setOnClickListener(new View.OnClickListener() {
@@ -142,12 +145,12 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
                     Globals.HideKeyBoard(context, v);
 
                     TableMaster objTableMaster = new TableMaster();
-                    if (alOrderMaster.get(v.getId()).getlinktoTableMasterIds().length() > 0) {
-                        String[] strTableMasterId = alOrderMaster.get(v.getId()).getlinktoTableMasterIds().split(",");
+                    if (alOrderMaster.get(getAdapterPosition()).getlinktoTableMasterIds().length() > 0) {
+                        String[] strTableMasterId = alOrderMaster.get(getAdapterPosition()).getlinktoTableMasterIds().split(",");
                         objTableMaster.setTableMasterId(Short.valueOf(strTableMasterId[0]));
                     }
-                    objTableMaster.setTableName(alOrderMaster.get(v.getId()).getTableName());
-                    objTableMaster.setlinktoOrderTypeMasterId(alOrderMaster.get(v.getId()).getlinktoOrderTypeMasterId());
+                    objTableMaster.setTableName(alOrderMaster.get(getAdapterPosition()).getTableName());
+                    objTableMaster.setlinktoOrderTypeMasterId(alOrderMaster.get(getAdapterPosition()).getlinktoOrderTypeMasterId());
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("TableMaster", objTableMaster);
                     OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
