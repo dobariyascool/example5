@@ -682,8 +682,8 @@ public class FeedbackViewFragment extends Fragment {
                 if (MenuActivity.parentActivity) {
                     Globals.userName = null;
                     Intent intent = new Intent(getActivity(), WelcomeActivity.class);
-                    intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
                     intent.putExtra("GuestScreen", true);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);

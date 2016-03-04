@@ -2,14 +2,11 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Slide;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -41,14 +38,6 @@ public class OfferActivity extends AppCompatActivity {
     @SuppressLint("RtlHardcoded")
     private void ReplaceFragment(Fragment fragment, String fragmentName) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >= 21) {
-            Slide slideTransition = new Slide();
-            slideTransition.setSlideEdge(Gravity.RIGHT);
-            slideTransition.setDuration(350);
-            fragment.setEnterTransition(slideTransition);
-        } else {
-            fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
-        }
         fragmentTransaction.replace(R.id.fragmentLayout, fragment, fragmentName);
         fragmentTransaction.addToBackStack(fragmentName);
         fragmentTransaction.commit();

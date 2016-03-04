@@ -117,6 +117,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
                         objSharePreferenceManage.ClearPreference("GuestModePreference", getActivity());
 
                         Globals.ClearPreference(getActivity().getApplicationContext());
+                        MenuActivity.parentActivity = false;
 
                         Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

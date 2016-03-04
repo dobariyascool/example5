@@ -145,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/control_SpecingSmall"
-                    android:src="@drawable/edit_accent"
+                    android:src="@drawable/edit_accent_vector_drawable"
                     tools:ignore="ContentDescription" />
 
             </LinearLayout>

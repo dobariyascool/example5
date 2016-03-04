@@ -108,7 +108,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/control_SpecingSmall"
-                            android:src="@drawable/edit_accent"
+                            android:src="@drawable/edit_accent_vector_drawable"
                             tools:ignore="ContentDescription" />
 
                     </LinearLayout>
@@ -143,7 +143,7 @@
                         android:id="@+id/actRemark"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:drawableEnd="@drawable/arrow_drop_down"
+                        android:drawableEnd="@drawable/arrow_drop_down_vector_drawable"
                         android:dropDownHeight="190dp"
                         android:gravity="top"
                         android:imeOptions="actionDone"

@@ -106,7 +106,7 @@
                 android:layout_height="24dp"
                 android:paddingEnd="@dimen/control_SpecingTiny"
                 android:paddingStart="@dimen/control_SpecingTiny"
-                android:src="@drawable/remove_white"
+                android:src="@drawable/remove_accent_vector_drawable"
                 tools:ignore="ContentDescription" />
 
         </LinearLayout>

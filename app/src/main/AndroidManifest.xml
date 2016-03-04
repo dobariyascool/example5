@@ -60,16 +60,13 @@
 
         <activity
             android:name=".HotelProfileActivity"
-            android:label="@string/title_fragment_profile"
-            android:theme="@style/AppTheme" />
+            android:label="@string/title_fragment_profile" />
         <activity
             android:name=".OfferActivity"
-            android:label="@string/title_fragment_offer"
-            android:theme="@style/AppTheme" />
+            android:label="@string/title_fragment_offer" />
         <activity
             android:name=".AboutUsActivity"
-            android:label="@string/title_fragment_about_us"
-            android:theme="@style/AppTheme" />
+            android:label="@string/title_fragment_about_us" />
     </application>
 
 </manifest>
