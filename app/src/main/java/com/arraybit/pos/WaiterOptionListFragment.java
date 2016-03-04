@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
-import com.rey.material.widget.TextView;
 
 public class WaiterOptionListFragment extends Fragment implements View.OnClickListener {
 
@@ -30,15 +29,10 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
         waiterOptionLayout = (LinearLayout) view.findViewById(R.id.waiterOptionLayout);
         Globals.SetHomePageBackground(getActivity(), waiterOptionLayout, null, null);
 
-        CardView cvOrders = (CardView)view.findViewById(R.id.cvOrders);
-        CardView cvDineIn = (CardView)view.findViewById(R.id.cvDineIn);
-        CardView cvTakeAway = (CardView)view.findViewById(R.id.cvTakeAway);
-        CardView cvBill = (CardView)view.findViewById(R.id.cvBill);
-
-        TextView txtOrders = (TextView)view.findViewById(R.id.txtOrders);
-        TextView txtDineIn = (TextView)view.findViewById(R.id.txtDineIn);
-        TextView txtTakeAway = (TextView)view.findViewById(R.id.txtTakeAway);
-        TextView txtBill = (TextView)view.findViewById(R.id.txtBill);
+        CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);
+        CardView cvDineIn = (CardView) view.findViewById(R.id.cvDineIn);
+        CardView cvTakeAway = (CardView) view.findViewById(R.id.cvTakeAway);
+        CardView cvBill = (CardView) view.findViewById(R.id.cvBill);
 
         cvOrders.setOnClickListener(this);
         cvDineIn.setOnClickListener(this);
@@ -67,7 +61,7 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
             } else if (v.getId() == R.id.cvTakeAway) {
                 Globals.ReplaceFragment(new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.TakeAway.getValue())), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_all_tables));
             } else if (v.getId() == R.id.cvBill) {
-                Globals.ReplaceFragment(new TableOrderFragment(),getActivity().getSupportFragmentManager(),null);
+                Globals.ReplaceFragment(new TableOrderFragment(), getActivity().getSupportFragmentManager(), null);
             }
         }
     }

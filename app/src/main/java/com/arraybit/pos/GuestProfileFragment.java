@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -182,10 +181,10 @@ public class GuestProfileFragment extends Fragment {
             } else {
                 rbMale.setChecked(true);
             }
-            if(MyAccountFragment.objRegisteredUserMaster.getBirthDate()!=null){
+            if (MyAccountFragment.objRegisteredUserMaster.getBirthDate() != null) {
                 try {
-                    birthDate = new SimpleDateFormat(Globals.DateFormat,Locale.US).parse(MyAccountFragment.objRegisteredUserMaster.getBirthDate());
-                    etDateOfBirth.setText(new SimpleDateFormat(Globals.DateFormat,Locale.US).format(birthDate));
+                    birthDate = new SimpleDateFormat(Globals.DateFormat, Locale.US).parse(MyAccountFragment.objRegisteredUserMaster.getBirthDate());
+                    etDateOfBirth.setText(new SimpleDateFormat(Globals.DateFormat, Locale.US).format(birthDate));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -214,7 +213,7 @@ public class GuestProfileFragment extends Fragment {
         return IsValid;
     }
 
-    interface UpdateResponseListener{
+    interface UpdateResponseListener {
         void UpdateResponse();
     }
     //endregion
@@ -222,7 +221,7 @@ public class GuestProfileFragment extends Fragment {
     //region LoadingTask
     class UpdateLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
         SharePreferenceManage objSharePreferenceManage;
         RegisteredUserMaster objRegisteredUserMaster;
         String status;
@@ -230,11 +229,9 @@ public class GuestProfileFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             objRegisteredUserMaster = new RegisteredUserMaster();
             objRegisteredUserMaster.setRegisteredUserMasterId(MyAccountFragment.objRegisteredUserMaster.getRegisteredUserMasterId());
@@ -280,7 +277,7 @@ public class GuestProfileFragment extends Fragment {
                 case "0":
                     Globals.ShowSnackBar(view, getResources().getString(R.string.MsgUpdateProfile), getActivity(), 1000);
                     CreateGuestPreference(objRegisteredUserMaster);
-                    if(getTargetFragment()!=null){
+                    if (getTargetFragment() != null) {
                         objUpdateResponseListener = (UpdateResponseListener) getTargetFragment();
                         objUpdateResponseListener.UpdateResponse();
                     }
@@ -314,7 +311,7 @@ public class GuestProfileFragment extends Fragment {
                 //alSpinnerItem.add(objSpinnerItem);
                 //lstSpinnerItem.addAll(0, alSpinnerItem);
 
-                SpinnerAdapter adapter = new SpinnerAdapter(getActivity(), lstSpinnerItem,false);
+                SpinnerAdapter adapter = new SpinnerAdapter(getActivity(), lstSpinnerItem, false);
                 spnrArea.setAdapter(adapter);
                 for (int i = 0; i < lstSpinnerItem.size(); i++) {
                     if (MyAccountFragment.objRegisteredUserMaster.getlinktoAreaMasterId() == lstSpinnerItem.get(i).getValue()) {

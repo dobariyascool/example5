@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.TableOrderAdapter;
@@ -35,7 +35,8 @@ public class TableOrderFragment extends Fragment {
 
 
     RecyclerView rvTableOrder;
-    LinearLayout tableOrderFragment,errorLayout;
+    FrameLayout tableOrderFragment;
+    LinearLayout errorLayout;
     TextView txtMsg;
     ArrayList<OrderMaster> alOrderMaster;
     int counterMasterId;
@@ -68,8 +69,8 @@ public class TableOrderFragment extends Fragment {
         rvTableOrder = (RecyclerView) view.findViewById(R.id.rvTableOrder);
         rvTableOrder.setVisibility(View.GONE);
 
-        tableOrderFragment = (LinearLayout) view.findViewById(R.id.tableOrderFragment);
-        Globals.SetScaleImageBackground(getActivity(), tableOrderFragment, null, null);
+        tableOrderFragment = (FrameLayout) view.findViewById(R.id.tableOrderFragment);
+        Globals.SetScaleImageBackground(getActivity(), null, null, tableOrderFragment);
 
         setHasOptionsMenu(true);
 
@@ -86,7 +87,9 @@ public class TableOrderFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            getActivity().getSupportFragmentManager().popBackStack();
+            if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -94,7 +97,7 @@ public class TableOrderFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), tableOrderFragment, null, null);
+        Globals.SetScaleImageBackground(getActivity(), null, null, tableOrderFragment);
     }
 
     @Override
@@ -106,17 +109,14 @@ public class TableOrderFragment extends Fragment {
     //region LoadingTask
     class OrdersLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()) != null) {
@@ -140,9 +140,9 @@ public class TableOrderFragment extends Fragment {
             alOrderMaster = (ArrayList<OrderMaster>) result;
 
             if (alOrderMaster == null) {
-                Globals.SetErrorLayout(errorLayout,true, getActivity().getResources().getString(R.string.MsgSelectFail),rvTableOrder);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvTableOrder);
             } else if (alOrderMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout,true, getActivity().getResources().getString(R.string.MsgNoRecord),rvTableOrder);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTableOrder);
             } else {
                 if (Service.CheckNet(getActivity())) {
                     new TaxLoadingTask().execute();
@@ -173,18 +173,18 @@ public class TableOrderFragment extends Fragment {
 
             alTaxMaster = (ArrayList<TaxMaster>) result;
             if (alTaxMaster != null && alTaxMaster.size() != 0) {
-                orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, alTaxMaster, getActivity().getSupportFragmentManager(),false);
+                orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, alTaxMaster, getActivity().getSupportFragmentManager(), false);
             } else {
-                orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, null, getActivity().getSupportFragmentManager(),false);
+                orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, null, getActivity().getSupportFragmentManager(), false);
             }
-            Globals.SetErrorLayout(errorLayout,false,null,rvTableOrder);
+            Globals.SetErrorLayout(errorLayout, false, null, rvTableOrder);
             rvTableOrder.setAdapter(orderDetailAdapter);
             rvTableOrder.setLayoutManager(new GridLayoutManager(getActivity(), 2));
             rvTableOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-                    if(!orderDetailAdapter.isItemAnimate){
+                    if (!orderDetailAdapter.isItemAnimate) {
                         orderDetailAdapter.isItemAnimate = true;
                     }
                 }

@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -116,11 +115,14 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
     @SuppressWarnings("ResourceType")
     class WaitingMasterLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
         }
 
         @Override
@@ -132,6 +134,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
 
         @Override
         protected void onPostExecute(Object result) {
+            progressDialog.dismiss();
             ArrayList<WaitingMaster> lstWaitingMaster = (ArrayList<WaitingMaster>) result;
             if (lstWaitingMaster == null) {
                 Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgSelectFail), rvWaiting);

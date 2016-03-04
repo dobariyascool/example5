@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
@@ -633,7 +632,7 @@ public class FeedbackViewFragment extends Fragment {
     //region LoadingTask
     class FeedbackLodingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
         String status;
         ArrayList<FeedbackAnswerMaster> alFinalAnswer, lstFeedbackAnswerMaster;
 
@@ -641,11 +640,8 @@ public class FeedbackViewFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             alFinalAnswer = new ArrayList<>();
             for (int i = 0; i < FeedbackFragment.alFinalFeedbackAnswers.size(); i++) {
@@ -690,6 +686,7 @@ public class FeedbackViewFragment extends Fragment {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("GuestScreen", true);
                     startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                     getActivity().finish();
                 } else {
                     getActivity().getSupportFragmentManager().popBackStack();

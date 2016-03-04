@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -160,17 +159,14 @@ public class WaitingListFragment extends Fragment {
     //region LoadingTask
     class WaitingStatusLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
         }
 
         @Override

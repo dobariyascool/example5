@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,7 +50,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if(Build.VERSION.SDK_INT >=21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
@@ -265,7 +264,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
 
     //region LoadingTask
     class ChangePasswordLoadTask extends AsyncTask {
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
         String status;
         SharePreferenceManage objSharePreferenceManage;
         RegisteredUserMaster objRegisteredUserMaster;
@@ -273,12 +272,9 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
 
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             objSharePreferenceManage = new SharePreferenceManage();
             objRegisteredUserMaster = new RegisteredUserMaster();
@@ -304,6 +300,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
 
+            progressDialog.dismiss();
             switch (status) {
                 case "-3":
                     Globals.ShowSnackBar(view, getActivity().getResources().getString(R.string.cpOldPassword) + " is incorrect", getActivity(), 2000);
@@ -317,7 +314,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
                     break;
             }
 
-            progressDialog.dismiss();
+
         }
     }
     //endregion

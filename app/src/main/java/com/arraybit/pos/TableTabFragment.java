@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -32,6 +31,7 @@ import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.SectionMaster;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.parser.TableJSONParser;
+import com.rey.material.widget.ProgressView;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -57,6 +57,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     Bundle bundle;
     String linktoOrderTypeMasterId;
     LinearLayout errorLayout;
+    ProgressView progressView;
 
     public TableTabFragment() {
         // Required empty public constructor
@@ -80,6 +81,8 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
 
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
         txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+
+        progressView = (ProgressView) view.findViewById(R.id.progressView);
 
         rvTables = (RecyclerView) view.findViewById(R.id.rvTables);
         rvTables.setHasFixedSize(true);
@@ -169,14 +172,14 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                 }
             }
             if (alTableMasterFilter.size() == 0) {
-                Globals.SetErrorLayout(errorLayout,true,getActivity().getResources().getString(R.string.MsgNoRecord),rvTables);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
             } else {
                 Globals.SetErrorLayout(errorLayout, false, null, rvTables);
                 SetupRecyclerView(rvTables, alTableMasterFilter);
             }
         } else {
             if (alTableMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout,true,getActivity().getResources().getString(R.string.MsgNoRecord),rvTables);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
             } else {
                 Globals.SetErrorLayout(errorLayout, false, null, rvTables);
                 SetupRecyclerView(rvTables, alTableMaster);
@@ -225,6 +228,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
             AllTablesFragment.isRefresh = true;
             Bundle bundle = new Bundle();
             bundle.putParcelable("TableMaster", objTableMaster);
+            bundle.putBoolean("isHomeShow", true);
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
             orderSummaryFragment.setArguments(bundle);
@@ -286,16 +290,16 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     private void SetupRecyclerView(RecyclerView rvTables, ArrayList<TableMaster> alTableMaster) {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             if (objSectionMaster.getSectionMasterId() == 0) {
-                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), true,false);
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), true, false);
             } else {
-                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), false,false);
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), false, false);
             }
 
         } else {
             if (objSectionMaster.getSectionMasterId() == 0) {
-                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), true,false);
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), true, false);
             } else {
-                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), false,false);
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), false, false);
             }
 
         }
@@ -318,11 +322,13 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
     //region LoadingTask
     class TableMasterLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
         }
 
         @Override
@@ -336,9 +342,10 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
+            progressDialog.dismiss();
             ArrayList<TableMaster> lstTableMaster = (ArrayList<TableMaster>) result;
             if (lstTableMaster == null) {
-                Globals.SetErrorLayout(errorLayout,true,getActivity().getResources().getString(R.string.MsgSelectFail),rvTables);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvTables);
             } else if (lstTableMaster.size() == 0) {
                 Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
             } else {

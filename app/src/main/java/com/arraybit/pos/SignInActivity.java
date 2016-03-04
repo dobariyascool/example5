@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -47,13 +46,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
-        setupWindowAnimations();
 
+        //setupWindowAnimations();
+
+        setContentView(R.layout.activity_sign_in);
 
         //app_bar
         Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
-        if(Build.VERSION.SDK_INT >=21){
+        if (Build.VERSION.SDK_INT >= 21) {
             app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
         }
         setSupportActionBar(app_bar);
@@ -174,6 +174,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 getSupportFragmentManager().popBackStack();
             } else {
                 finish();
+                overridePendingTransition(0, R.anim.right_exit);
             }
             return true;
         } else if (id == R.id.changeMode) {
@@ -209,7 +210,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             //getSupportFragmentManager().popBackStack();
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
+            finish();
+            overridePendingTransition(0, R.anim.right_exit);
         }
     }
     //end
@@ -276,7 +279,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         if (Build.VERSION.SDK_INT >= 21) {
             Slide slideTransition = new Slide();
             slideTransition.setSlideEdge(Gravity.RIGHT);
-            slideTransition.setDuration(500);
+            slideTransition.setDuration(350);
+            //getWindow().setSharedElementEnterTransition(slideTransition);
             getWindow().setEnterTransition(slideTransition);
         }
     }
@@ -285,18 +289,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     //region LoadingTask
     class SignInLodingTask extends AsyncTask {
 
-        ProgressDialog pDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
         String strName, strPassword;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog = new ProgressDialog(SignInActivity.this);
-            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getSupportFragmentManager(), "");
 
             strName = etName.getText().toString();
             strPassword = etPassword.getText().toString();
@@ -314,7 +315,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
-            pDialog.dismiss();
+            progressDialog.dismiss();
             if (result == null) {
                 Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginFailedMsg), SignInActivity.this, 1000);
 
@@ -335,7 +336,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public class CounterLoadingTask extends AsyncTask {
-        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {

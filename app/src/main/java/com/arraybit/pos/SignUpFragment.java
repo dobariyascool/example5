@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,7 +44,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     RadioButton rbMale, rbFemale;
     Button btnSignUp;
     AppCompatSpinner spnrArea;
-    ProgressDialog pDialog;
     RegisteredUserJSONParser objRegisteredUserJSONParser;
     RegisteredUserMaster objRegisteredUserMaster;
     AreaJSONParser objAreaJSONParser;
@@ -79,7 +77,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         //app_bar
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
         if (app_bar != null) {
-            if(Build.VERSION.SDK_INT >=21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
@@ -339,14 +337,14 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     //region LoadingTask
     class SignUpLoadingTask extends AsyncTask {
 
+        com.arraybit.pos.ProgressDialog progressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
+
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             objRegisteredUserMaster = new RegisteredUserMaster();
             objSharePreferenceManage = new SharePreferenceManage();
@@ -380,7 +378,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-
+            progressDialog.dismiss();
             switch (status) {
                 case "-1":
                     Globals.ShowSnackBar(view, getResources().getString(R.string.MsgServerNotResponding), getActivity(), 1000);
@@ -410,7 +408,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     }
                     break;
             }
-            pDialog.dismiss();
         }
     }
 

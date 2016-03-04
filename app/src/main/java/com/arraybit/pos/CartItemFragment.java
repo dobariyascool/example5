@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -18,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.CartItemAdapter;
@@ -30,18 +30,16 @@ import com.arraybit.parser.OrderJOSNParser;
 import com.arraybit.parser.TableJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.CompoundButton;
-import com.rey.material.widget.EditText;
 import com.rey.material.widget.TextView;
 
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
-public class CartItemFragment extends Fragment implements CartItemAdapter.CartItemOnClickListener, View.OnClickListener {
+public class CartItemFragment extends Fragment implements CartItemAdapter.CartItemOnClickListener, View.OnClickListener, RemarkDialogFragment.RemarkResponseListener {
 
     TextView txtMsg;
     CompoundButton cbMenu;
     LinearLayout headerLayout, cartItemFragment;
     RecyclerView rvCartItem;
-    EditText etRemark;
     CardView cvRemark;
     Button btnAddMore, btnConfirmOrder;
     CartItemAdapter adapter;
@@ -51,6 +49,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     short counterMasterId, userMasterId, waiterMasterId;
     double totalAmount;
     View view;
+    TextView txtRemark;
 
     public CartItemFragment() {
         // Required empty public constructor
@@ -78,9 +77,11 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         }
         //end
 
-        cvRemark = (CardView) view.findViewById(R.id.cvRemark);
+        ImageView ivRemark = (ImageView) view.findViewById(R.id.ivRemark);
 
-        etRemark = (EditText) view.findViewById(R.id.etRemark);
+        txtRemark = (TextView) view.findViewById(R.id.txtRemark);
+
+        cvRemark = (CardView) view.findViewById(R.id.cvRemark);
 
         cartItemFragment = (LinearLayout) view.findViewById(R.id.cartItemFragment);
         Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
@@ -103,6 +104,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         cbMenu.setOnClickListener(this);
         btnAddMore.setOnClickListener(this);
         btnConfirmOrder.setOnClickListener(this);
+        ivRemark.setOnClickListener(this);
 
         return view;
     }
@@ -113,7 +115,9 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                     && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_cart_item))) {
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                RemarkDialogFragment.strRemark = null;
             } else {
+                RemarkDialogFragment.strRemark = null;
                 getFragmentManager().popBackStack();
             }
         }
@@ -173,6 +177,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                 }
             }
         } else if (v.getId() == R.id.cbMenu) {
+            RemarkDialogFragment.strRemark = null;
             if (MenuActivity.parentActivity) {
                 if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_cart_item))) {
@@ -184,6 +189,21 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                     getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             }
+        } else if (v.getId() == R.id.ivRemark) {
+            RemarkDialogFragment remarkDialogFragment = new RemarkDialogFragment();
+            remarkDialogFragment.setTargetFragment(this, 0);
+            remarkDialogFragment.show(getActivity().getSupportFragmentManager(), "");
+        }
+    }
+
+    @Override
+    public void RemarkResponse() {
+        if (RemarkDialogFragment.strRemark != null) {
+            txtRemark.setVisibility(View.VISIBLE);
+            txtRemark.setText(RemarkDialogFragment.strRemark);
+        } else {
+            txtRemark.setVisibility(View.GONE);
+            txtRemark.setText("");
         }
     }
 
@@ -248,17 +268,14 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     //region LoadingTask
     class OrderLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             if (Globals.alOrderItemTran.size() != 0) {
                 for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
@@ -283,8 +300,8 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             objOrderMaster.setTotalDeductedPoint((short) 0);
             objOrderMaster.setlinktoWaiterMasterId(waiterMasterId);
             objOrderMaster.setlinktoUserMasterIdCreatedBy(userMasterId);
-            if (!etRemark.getText().toString().isEmpty()) {
-                objOrderMaster.setRemark(etRemark.getText().toString());
+            if (RemarkDialogFragment.strRemark != null) {
+                objOrderMaster.setRemark(RemarkDialogFragment.strRemark);
             }
         }
 
@@ -305,6 +322,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                 if (!AllTablesFragment.isRefresh) {
                     new TableStatusLoadingTask().execute();
                 }
+                RemarkDialogFragment.strRemark = null;
                 Globals.ShowSnackBar(view, getResources().getString(R.string.MsgCartItem), getActivity(), 1000);
                 if (MenuActivity.parentActivity) {
 
@@ -312,6 +330,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                     intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                     Globals.counter = 0;
                     Globals.alOrderItemTran.clear();
                 } else {

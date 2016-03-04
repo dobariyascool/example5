@@ -110,6 +110,7 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
                 getActivity().getSupportFragmentManager().popBackStack();
             } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
                 getActivity().finish();
+                getActivity().overridePendingTransition(0,R.anim.right_exit);
             } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null &&
                     getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);

@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -194,10 +193,14 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     }
 
     @Override
-    public void UpdateStatus(boolean flag, boolean isOrder, OrderItemTran objOrderItemTran, boolean isTotalUpdate) {
+    public void UpdateStatus(boolean flag, boolean isOrder, OrderItemTran objOrderItemTran, short linktoOrderStatusMasterId, boolean isTotalUpdate) {
         if (isOrder) {
             if (flag) {
-                if (!orderStatus.equals(Globals.OrderStatus.All.toString())) {
+                if (orderStatus.equals(Globals.OrderStatus.All.toString())) {
+                    if (linktoOrderStatusMasterId != 0) {
+                        ordersAdapter.UpdateOrder(orderPosition, linktoOrderStatusMasterId);
+                    }
+                } else {
                     ordersAdapter.RemoveOrder(orderPosition);
                 }
             }
@@ -246,17 +249,14 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     //region LoadingTask
     class OrderMasterLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getActivity().getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
         }
 
@@ -290,7 +290,6 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
 
     class OrderItemTranLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {

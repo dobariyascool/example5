@@ -1,48 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:ignore="UselessParent">
+    android:id="@+id/childLayout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/leftHeight"
+    android:layout_marginBottom="@dimen/control_SpecingTiny"
+    android:background="@color/transparent_orange"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="@dimen/control_SpecingTiny">
 
-    <LinearLayout
-        android:id="@+id/childLayout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/leftHeight"
-        android:layout_marginBottom="@dimen/control_SpecingTiny"
-        android:background="@color/transparent_orange"
+    <com.rey.material.widget.TextView
+        android:id="@+id/txtIndex"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:textColor="@android:color/white" />
+
+    <com.rey.material.widget.TextView
+        android:id="@+id/txtName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:textColor="@android:color/white" />
+
+    <com.rey.material.widget.TextView
+        android:id="@+id/txtMobileNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:textColor="@android:color/white" />
+
+    <com.rey.material.widget.TextView
+        android:id="@+id/txtPersons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.16"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="@dimen/control_SpecingTiny">
+        android:textColor="@android:color/white" />
 
-        <com.rey.material.widget.TextView
-            android:id="@+id/txtIndex"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:textColor="@android:color/white"/>
-
-        <com.rey.material.widget.TextView
-            android:id="@+id/txtName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:textColor="@android:color/white"/>
-
-        <com.rey.material.widget.TextView
-            android:id="@+id/txtMobileNo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:textColor="@android:color/white"/>
-
-        <com.rey.material.widget.TextView
-            android:id="@+id/txtPersons"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.16"
-            android:gravity="center"
-            android:textColor="@android:color/white"/>
-
-    </LinearLayout>
 </LinearLayout>

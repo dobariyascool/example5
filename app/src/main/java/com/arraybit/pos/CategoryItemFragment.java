@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -153,11 +152,13 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 if (MenuActivity.parentActivity) {
                     Globals.CategoryItemFragmentResetStaticVariable();
                     getActivity().finish();
+                    getActivity().overridePendingTransition(0, R.anim.right_exit);
                 } else {
                     Globals.CategoryItemFragmentResetStaticVariable();
                     Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                     && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
@@ -430,17 +431,13 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     //region Loading Task
     public class GuestHomeCategoryLodingTask extends AsyncTask {
         ArrayList<CategoryMaster> alCategoryMaster;
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
         }
 
         @Override
@@ -453,15 +450,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-
+            progressDialog.dismiss();
             if (alCategoryMaster == null) {
-                progressDialog.dismiss();
                 Globals.ShowSnackBar(categoryItemFragment, getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
             } else if (alCategoryMaster.size() == 0) {
-                progressDialog.dismiss();
                 Globals.ShowSnackBar(categoryItemFragment, getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
             } else {
-
                 itemPagerAdapter = new ItemPagerAdapter(getFragmentManager());
 
                 CategoryMaster objCategoryMaster = new CategoryMaster();
@@ -476,7 +470,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 }
 
                 itemViewPager.setAdapter(itemPagerAdapter);
-                itemViewPager.setOffscreenPageLimit(1);
                 itemTabLayout.setupWithViewPager(itemViewPager);
 
                 itemTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -517,8 +510,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
                     }
                 });
-
-                progressDialog.dismiss();
             }
         }
     }

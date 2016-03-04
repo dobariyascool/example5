@@ -138,11 +138,13 @@ public class MenuActivity extends AppCompatActivity{
                 if (MenuActivity.parentActivity) {
                     Globals.CategoryItemFragmentResetStaticVariable();
                     finish();
+                    overridePendingTransition(0, R.anim.right_exit);
                 } else {
                     Globals.CategoryItemFragmentResetStaticVariable();
                     Intent intent = new Intent(MenuActivity.this, WaiterHomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             }
         }

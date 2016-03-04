@@ -2,7 +2,6 @@ package com.arraybit.pos;
 
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -641,17 +640,14 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     @SuppressWarnings("unused")
     public class DetailLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getActivity().getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             objItemMaster = new ItemMaster();
         }

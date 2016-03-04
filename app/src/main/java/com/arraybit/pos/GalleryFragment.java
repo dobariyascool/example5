@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,7 +27,7 @@ public class GalleryFragment extends Fragment {
     static ArrayList<BusinessGalleryTran> alBusinessGalleryTran;
     RecyclerView rvGallery;
     TextView txtMsg;
-    int currentPage = 1, BusinessMasterId;
+    int BusinessMasterId;
     GalleryAdapter adapter;
     GridLayoutManager gridLayoutManager;
 
@@ -72,14 +71,14 @@ public class GalleryFragment extends Fragment {
     private void SetGalleryRecyclerView(ArrayList<BusinessGalleryTran> lstBusinessGalleryTran) {
         rvGallery.setVisibility(View.VISIBLE);
         txtMsg.setVisibility(View.GONE);
-        adapter = new GalleryAdapter(getActivity(), lstBusinessGalleryTran, getActivity().getSupportFragmentManager(),false);
+        adapter = new GalleryAdapter(getActivity(), lstBusinessGalleryTran, getActivity().getSupportFragmentManager(), false);
         rvGallery.setAdapter(adapter);
         rvGallery.setLayoutManager(gridLayoutManager);
         rvGallery.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if(!adapter.isItemAnimate){
+                if (!adapter.isItemAnimate) {
                     adapter.isItemAnimate = true;
                 }
             }
@@ -89,19 +88,16 @@ public class GalleryFragment extends Fragment {
 
     //region LoadingTask
     class GalleryLoadingTask extends AsyncTask {
-        ProgressDialog progressDialog;
+
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (currentPage > 1) {
-                progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-                progressDialog.setIndeterminate(true);
-                progressDialog.setCancelable(false);
 
-                progressDialog.show();
-            }
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
+
         }
 
         @Override
@@ -118,9 +114,8 @@ public class GalleryFragment extends Fragment {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
-            if (currentPage > 1) {
-                progressDialog.dismiss();
-            }
+            progressDialog.dismiss();
+
             ArrayList<BusinessGalleryTran> lstBusinessGalleryTran = (ArrayList<BusinessGalleryTran>) result;
             alBusinessGalleryTran = lstBusinessGalleryTran;
             if (lstBusinessGalleryTran == null) {

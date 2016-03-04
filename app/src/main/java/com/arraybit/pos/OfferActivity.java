@@ -121,6 +121,7 @@ public class OfferActivity extends AppCompatActivity {
                 getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             } else {
                 finish();
+                overridePendingTransition(0, R.anim.right_exit);
             }
 
         }
@@ -175,6 +176,7 @@ public class OfferActivity extends AppCompatActivity {
 
         } else {
             finish();
+            overridePendingTransition(0, R.anim.right_exit);
         }
     }
 

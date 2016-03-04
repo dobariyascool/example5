@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -399,20 +398,16 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     //region LoadingTask
     class GuestHomeItemLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-
             if (objCategoryMaster.getCategoryName().equals("All") && cnt == 0) {
-                progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-                progressDialog.setIndeterminate(true);
-                progressDialog.setCancelable(false);
-                progressDialog.show();
+                progressDialog = new com.arraybit.pos.ProgressDialog();
+                progressDialog.show(getActivity().getSupportFragmentManager(), "");
             }
 
         }
@@ -428,9 +423,11 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
-            if (objCategoryMaster.getCategoryName().equals("All") && cnt == 0) {
+            if (cnt == 0 && (progressDialog != null && progressDialog.isVisible())) {
                 progressDialog.dismiss();
+                cnt = 1;
             }
+
             ArrayList<ItemMaster> lstItemMaster = (ArrayList<ItemMaster>) result;
             if (lstItemMaster == null) {
                 Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvItem);
@@ -441,10 +438,10 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 alItemMaster = lstItemMaster;
                 if (CategoryItemFragment.sbItemTypeMasterId.toString().equals("")) {
                     SetupRecyclerView(false, alItemMaster);
-                    cnt = 1;
+                    // cnt = 1;
                 } else {
                     ItemDataFilter(CategoryItemFragment.sbItemTypeMasterId.toString());
-                    cnt = 1;
+                    //cnt = 1;
                 }
             }
         }

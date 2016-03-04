@@ -62,6 +62,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     ProgressDialog progressDialog;
     String strNetAmount;
     OrderSummaryAdapter orderSummeryAdapter;
+    boolean isHomeShow = false;
 
     public OrderSummaryFragment() {
     }
@@ -80,6 +81,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             Bundle bundle = getArguments();
             if (bundle != null && bundle.getParcelable("TableMaster") != null) {
                 objTableMaster = bundle.getParcelable("TableMaster");
+                isHomeShow = bundle.getBoolean("isHomeShow");
             }
         }
 
@@ -94,7 +96,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                     .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             } else {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                if (isHomeShow) {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                } else {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
             }
             if (objTableMaster != null && objTableMaster.getTableName() != null) {
                 app_bar.setTitle(objTableMaster.getTableName() + "  Summary");
@@ -158,7 +164,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             menu.findItem(R.id.action_search).setVisible(false);
             Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
         } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
-            menu.findItem(R.id.home).setVisible(true);
+            if (isHomeShow) {
+                menu.findItem(R.id.home).setVisible(true);
+            } else {
+                menu.findItem(R.id.home).setVisible(false);
+            }
             menu.findItem(R.id.action_search).setVisible(false);
         } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
             menu.findItem(R.id.home).setVisible(true);
@@ -435,17 +445,15 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     //region LoadingTask
     class AllOrdersLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
+
         }
 
         @Override
@@ -472,17 +480,14 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
     class OrderSummeryLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
         }
 
         @Override
@@ -500,7 +505,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             ArrayList<ItemMaster> lstOrderItemTran = (ArrayList<ItemMaster>) result;
 
             if (lstOrderItemTran != null) {
-                orderSummeryAdapter = new OrderSummaryAdapter(getActivity(), lstOrderItemTran, lstOrderMaster,false);
+                orderSummeryAdapter = new OrderSummaryAdapter(getActivity(), lstOrderItemTran, lstOrderMaster, false);
                 SetVisibility();
                 rvOrderItemSummery.setAdapter(orderSummeryAdapter);
                 rvOrderItemSummery.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -510,7 +515,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                     @Override
                     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
-                        if(!orderSummeryAdapter.isItemAnimate){
+                        if (!orderSummeryAdapter.isItemAnimate) {
                             orderSummeryAdapter.isItemAnimate = true;
                         }
                     }
@@ -522,15 +527,14 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
     class BillNumberLoadingTask extends AsyncTask {
 
+        com.arraybit.pos.ProgressDialog progressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
         }
 
         @Override
@@ -641,6 +645,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                     Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             }
         }

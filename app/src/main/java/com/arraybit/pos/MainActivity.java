@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,14 +7,21 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    static int i = 0;
-    ProgressDialog progressDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+//        progressView = (ProgressView) findViewById(R.id.progressView);
+//
+//        if (Service.CheckNet(this)) {
+//            new TableSectionLoadingTask().execute();
+//        } else {
+//            Globals.ShowSnackBar(getCurrentFocus(), getResources().getString(R.string.MsgCheckConnection), this, 1000);
+//        }
+
 
 //        Globals.serverName ="10.0.3.2:3653";
 //        Globals.ChangeUrl();
@@ -410,4 +416,103 @@ public class MainActivity extends AppCompatActivity {
 //            progressDialog.dismiss();
 //        }
 //    }
+
+
+//    class TableSectionLoadingTask extends AsyncTask {
+//
+//        ProgressDialog progressDialog;
+//        ArrayList<SectionMaster> alSectionMaster;
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//
+////            progressDialog = new ProgressDialog(getActivity());
+////            progressDialog.setMessage(getActivity().getResources().getString(R.string.MsgLoading));
+////            progressDialog.setIndeterminate(true);
+////            progressDialog.setCancelable(false);
+////            progressDialog.show();
+//            Service.Url = "http://" + "10.0.3.2:6497" + "/Service.svc/";
+//            progressView.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//
+//            SectionJSONParser objSectionJSONParser = new SectionJSONParser();
+//            alSectionMaster = objSectionJSONParser.SelectAllSectionMaster();
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Object result) {
+//
+//            // progressDialog.dismiss();
+//            // progressView.setVisibility(View.GONE);
+//            if (alSectionMaster == null) {
+//                ///Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
+//
+//            } else if (alSectionMaster.size() == 0) {
+//                //Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
+//
+//            } else {
+//                tableViewPager.setVisibility(View.VISIBLE);
+//                tableTabLayout.setVisibility(View.VISIBLE);
+//                if (isVacant) {
+//                    famRoot.setVisibility(View.GONE);
+//                } else {
+//                    famRoot.setVisibility(View.VISIBLE);
+//                }
+//
+//                tablePagerAdapter = new TablePagerAdapter(getFragmentManager());
+//
+//                SectionMaster objSectionMaster = new SectionMaster();
+//                objSectionMaster.setSectionMasterId((short) 0);
+//                objSectionMaster.setSectionName("All");
+//                ArrayList<SectionMaster> alSection = new ArrayList<>();
+//                alSection.add(objSectionMaster);
+//
+//                alSectionMaster.addAll(0, alSection);
+//                for (int i = 0; i < alSectionMaster.size(); i++) {
+//                    tablePagerAdapter.AddFragment(TableTabFragment.createInstance(alSectionMaster.get(i), isChangeMode, linktoOrderTypeMasterId), alSectionMaster.get(i));
+//                }
+//                tableViewPager.setAdapter(tablePagerAdapter);
+//                tableTabLayout.setupWithViewPager(tableViewPager);
+//
+//                TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(0);
+//                if (isVacant) {
+//                    tableTabFragment.LoadTableData(String.valueOf(Globals.TableStatus.Vacant.getValue()));
+//                } else {
+//                    tableTabFragment.LoadTableData(null);
+//                }
+//
+//                tableViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//                    @Override
+//                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                    }
+//
+//                    @Override
+//                    public void onPageSelected(int position) {
+//                        if(famRoot.isMenuButtonHidden()){
+//                            famRoot.showMenuButton(true);
+//                        }
+//                        tableViewPager.setCurrentItem(position);
+//                        //load data when tab is change
+//                        TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(position);
+//                        if (isVacant) {
+//                            tableTabFragment.LoadTableData(String.valueOf(Globals.TableStatus.Vacant.getValue()));
+//                        } else {
+//                            tableTabFragment.LoadTableData(null);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onPageScrollStateChanged(int state) {
+//
+//                    }
+//                });
+//            }
+//        }
+//    }
+
 }

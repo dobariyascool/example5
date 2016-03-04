@@ -2,7 +2,6 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -168,13 +167,13 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         } else if (menuItem.getItemId() == R.id.wHotelProfile) {
             drawerLayout.closeDrawer(navigationView);
             Intent intent = new Intent(WaitingActivity.this, HotelProfileActivity.class);
-            intent.putExtra("Mode", (short)1);
+            intent.putExtra("Mode", (short) 1);
             startActivity(intent);
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
         } else if (menuItem.getItemId() == R.id.wOffers) {
             drawerLayout.closeDrawer(navigationView);
             Intent intent = new Intent(WaitingActivity.this, OfferActivity.class);
-            intent.putExtra("Mode",(short) 1);
+            intent.putExtra("Mode", (short) 1);
             startActivity(intent);
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
         } else if (menuItem.getItemId() == R.id.wRate) {
@@ -188,7 +187,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         } else if (menuItem.getItemId() == R.id.wAbout) {
             drawerLayout.closeDrawer(navigationView);
             Intent intent = new Intent(WaitingActivity.this, AboutUsActivity.class);
-            intent.putExtra("Mode",(short) 1);
+            intent.putExtra("Mode", (short) 1);
             startActivity(intent);
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
         }
@@ -277,7 +276,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
     //region LoadingTask
     class CounterLoadingTask extends AsyncTask {
-        ProgressDialog progressDialog;
         short userMasterId;
 
         @Override

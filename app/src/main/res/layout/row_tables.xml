@@ -1,73 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cvTable"
+    style="@style/CardViewTransparent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="90dp"
+    android:layout_marginBottom="@dimen/control_SpecingTiny"
+    android:layout_marginEnd="@dimen/control_SpecingTiny"
+    android:layout_marginStart="@dimen/control_SpecingTiny"
+    android:layout_marginTop="@dimen/control_SpecingTiny">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cvTable"
-        style="@style/CardViewTransparent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_marginBottom="@dimen/control_SpecingTiny"
-        android:layout_marginEnd="@dimen/control_SpecingTiny"
-        android:layout_marginStart="@dimen/control_SpecingTiny"
-        android:layout_marginTop="@dimen/control_SpecingTiny">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/control_SpecingTiny">
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtTableStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:paddingEnd="@dimen/control_SpecingTiny"
+            android:paddingStart="0dp"
+            android:textColor="@color/orange" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="@dimen/control_SpecingTiny">
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <com.rey.material.widget.TextView
-                android:id="@+id/txtTableStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="end"
-                android:layout_weight="1"
-                android:paddingEnd="@dimen/control_SpecingTiny"
-                android:paddingStart="0dp"
-                android:textColor="@color/orange" />
-
-            <LinearLayout
+                android:id="@+id/txtTableName"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.5"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical">
-
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtTableName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:minLines="1"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/control_TextMedium" />
-
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtSection"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:minLines="1"
-                    android:textColor="@color/grey"
-                    android:textSize="@dimen/control_TextSmall" />
-
-            </LinearLayout>
+                android:minLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/control_TextMedium" />
 
             <com.rey.material.widget.TextView
-                android:id="@+id/txtPersons"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="end"
-                android:layout_weight="1"
-                android:paddingEnd="@dimen/control_SpecingTiny"
-                android:paddingStart="0dp"
-                android:textColor="@color/grey" />
+                android:id="@+id/txtSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minLines="1"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/control_TextSmall" />
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtPersons"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:paddingEnd="@dimen/control_SpecingTiny"
+            android:paddingStart="0dp"
+            android:textColor="@color/grey" />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

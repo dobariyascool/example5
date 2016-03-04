@@ -28,6 +28,15 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
+    <style name="ProgressDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:minWidth">50dp</item>
+        <item name="android:maxWidth">50dp</item>
+        <item name="android:maxHeight">50dp</item>
+        <item name="android:minHeight">50dp</item>
+    </style>
+
     <style name="ToolBar" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
@@ -68,6 +77,11 @@
 
     <style name="MultiCompleteTextView" parent="AppTheme">
 
+    </style>
+
+    <style name="ProgressView" parent="@style/Material.Drawable.CircularProgress">
+        <item name="cpd_strokeColor">@color/accent_secondary</item>
+        <item name="cpd_strokeSecondaryColor">@color/grey</item>
     </style>
 
     <style name="DropDownListViewStyle" parent="@style/Widget.AppCompat.ListView.DropDown">

@@ -386,4 +386,9 @@
     <string name="title_activity_about_us">AboutUsActivity</string>
     <!-- end -->
 
+    <!-- modifier selection dialog -->
+    <string name="msdDone">Done</string>
+    <string name="msdCancel">Cancel</string>
+    <!-- end -->
+
 </resources>

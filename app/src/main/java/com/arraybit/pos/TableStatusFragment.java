@@ -2,7 +2,6 @@ package com.arraybit.pos;
 
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -138,18 +137,15 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
     //region Loading Task
     class UpdateTableStatusLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
         String status;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
         }
 
         @Override
@@ -163,12 +159,12 @@ public class TableStatusFragment extends DialogFragment implements View.OnClickL
 
         @Override
         protected void onPostExecute(Object result) {
+            progressDialog.dismiss();
             if (status.equals("-1")) {
                 objUpdateTableStatusListener.UpdateTableStatus(false, objTable);
             } else if (status.equals("0")) {
                 objUpdateTableStatusListener.UpdateTableStatus(true, objTable);
             }
-            progressDialog.dismiss();
             getDialog().dismiss();
         }
     }

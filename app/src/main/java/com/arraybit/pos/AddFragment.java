@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -29,7 +28,6 @@ public class AddFragment extends Fragment {
 
     EditText etName, etMobileNo, etPersons;
     Button btnAdd;
-    ProgressDialog pDialog;
     WaitingMaster objWaitingMaster;
     WaitingJSONParser objWaitingJSONParser;
     SharePreferenceManage objSharePreferenceManage;
@@ -51,7 +49,7 @@ public class AddFragment extends Fragment {
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if(Build.VERSION.SDK_INT >=21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
@@ -160,15 +158,14 @@ public class AddFragment extends Fragment {
     //region LoadingTask
     public class AddLodingTask extends AsyncTask {
 
+        com.arraybit.pos.ProgressDialog progressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            pDialog.setIndeterminate(true);
-            pDialog.setCancelable(false);
-            pDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             objWaitingMaster = new WaitingMaster();
             objWaitingMaster.setPersonName(etName.getText().toString());
@@ -194,6 +191,7 @@ public class AddFragment extends Fragment {
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
 
+            progressDialog.dismiss();
             if (status.equals("-1")) {
                 Globals.ShowSnackBar(view, getResources().getString(R.string.MsgServerNotResponding), getActivity(), 1000);
             } else if (status.equals("0")) {
@@ -205,7 +203,7 @@ public class AddFragment extends Fragment {
                 getActivity().startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
-            pDialog.dismiss();
+
         }
     }
     //endregion

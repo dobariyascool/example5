@@ -11,7 +11,7 @@
     tools:ignore="HardcodedText,NestedWeights">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:ignore="UselessParent">
@@ -39,7 +39,7 @@
                 android:layout_height="@dimen/dialog_button_height"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Cancel" />
+                android:text="@string/msdCancel" />
 
             <com.rey.material.widget.Button
                 android:id="@+id/btnDone"
@@ -48,7 +48,7 @@
                 android:layout_height="@dimen/dialog_button_height"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Done" />
+                android:text="@string/msdDone" />
 
         </LinearLayout>
     </LinearLayout>

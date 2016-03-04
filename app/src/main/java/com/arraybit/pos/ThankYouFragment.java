@@ -51,6 +51,7 @@ public class ThankYouFragment extends Fragment {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("GuestScreen", true);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_in,R.anim.left_out);
                 getActivity().finish();
             }
         });

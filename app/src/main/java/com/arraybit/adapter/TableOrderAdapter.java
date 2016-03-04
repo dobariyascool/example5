@@ -2,10 +2,15 @@ package com.arraybit.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,6 +126,22 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
         }
     }
 
+    @SuppressLint("RtlHardcoded")
+    private void ReplaceFragment(Fragment fragment,String fragmentName){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (Build.VERSION.SDK_INT >= 21) {
+            Slide slideTransition = new Slide();
+            slideTransition.setSlideEdge(Gravity.RIGHT);
+            slideTransition.setDuration(350);
+            fragment.setEnterTransition(slideTransition);
+        } else {
+            fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
+        }
+        fragmentTransaction.replace(R.id.tableOrderFragment, fragment, fragmentName);
+        fragmentTransaction.addToBackStack(fragmentName);
+        fragmentTransaction.commit();
+    }
+
     class TableOrderViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtOrderTimeDifference, txtOrderTime, txtTableName, txtTotalOrder, txtTotalItem, txtTotalAmount;
@@ -156,7 +177,8 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
                     OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
                     orderSummaryFragment.setArguments(bundle);
 
-                    Globals.ReplaceFragment(orderSummaryFragment, fragmentManager, context.getResources().getString(R.string.title_fragment_order_summary));
+                    ReplaceFragment(orderSummaryFragment,context.getResources().getString(R.string.title_fragment_order_summary));
+                    //Globals.ReplaceFragment(orderSummaryFragment, fragmentManager, context.getResources().getString(R.string.title_fragment_order_summary));
                 }
             });
         }

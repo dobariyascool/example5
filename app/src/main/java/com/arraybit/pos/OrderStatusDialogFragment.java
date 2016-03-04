@@ -2,14 +2,18 @@ package com.arraybit.pos;
 
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.Window;
+import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -19,6 +23,7 @@ import com.arraybit.modal.OrderMaster;
 import com.arraybit.parser.OrderItemJSONParser;
 import com.arraybit.parser.OrderJOSNParser;
 import com.rey.material.widget.Button;
+import com.rey.material.widget.TextView;
 
 @SuppressLint("ValidFragment")
 @SuppressWarnings("unchecked")
@@ -38,12 +43,50 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order_status_dialog, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+        TextView txtTableName = (TextView) view.findViewById(R.id.txtTableName);
+        TextView txtItemName = (TextView) view.findViewById(R.id.txtItemName);
+
+        LinearLayout nameLayout = (LinearLayout) view.findViewById(R.id.nameLayout);
+        if (Build.VERSION.SDK_INT >= 21) {
+            nameLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
+            nameLayout.setElevation(8f);
+            nameLayout.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+        } else {
+            nameLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.card_view_with_border));
+        }
+
+        if (isOrder) {
+            if (Build.VERSION.SDK_INT >= 21) {
+                nameLayout.setPadding(16, 10, 16, 20);
+                txtTableName.setPadding(16, 10, 16, 0);
+            } else {
+                txtTableName.setPadding(24, 20, 24, 20);
+            }
+            txtTableName.setText(objOrderMaster.getTableName() + " [ " + objOrderMaster.getOrderNumber() + " ]");
+            txtTableName.setTypeface(null, Typeface.BOLD);
+            txtItemName.setVisibility(View.GONE);
+        } else {
+            if (Build.VERSION.SDK_INT >= 21) {
+                nameLayout.setPadding(16, 10, 16, 20);
+                txtTableName.setPadding(16, 10, 16, 0);
+                txtItemName.setPadding(16, 0, 16, 0);
+            } else {
+                txtTableName.setPadding(24, 20, 24, 0);
+                txtItemName.setPadding(24, 0, 24, 20);
+            }
+            txtItemName.setVisibility(View.VISIBLE);
+            txtTableName.setText(objOrderMaster.getTableName() + " [ " + objOrderMaster.getOrderNumber() + " ]");
+            txtItemName.setTypeface(null, Typeface.BOLD);
+            txtItemName.setText(objOrderItemTran.getItem());
+        }
 
         btnCooking = (Button) view.findViewById(R.id.btnCooking);
         btnServed = (Button) view.findViewById(R.id.btnServed);
@@ -129,7 +172,7 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
     //region Private Methods and Interface
     private void SetButtonVisibility() {
         if (isOrder) {
-            if(objOrderMaster.getlinktoOrderStatusMasterId()!=null) {
+            if (objOrderMaster.getlinktoOrderStatusMasterId() != null) {
                 if (objOrderMaster.getlinktoOrderStatusMasterId() == Globals.OrderStatus.Cooking.getValue()) {
                     btnCooking.setSelected(true);
                 } else if (objOrderMaster.getlinktoOrderStatusMasterId() == Globals.OrderStatus.Cancelled.getValue()) {
@@ -141,7 +184,7 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
                 }
             }
         } else {
-            if(objOrderItemTran.getlinktoOrderStatusMasterId()!=null) {
+            if (objOrderItemTran.getlinktoOrderStatusMasterId() != null) {
                 if (objOrderItemTran.getlinktoOrderStatusMasterId() == Globals.OrderStatus.Cooking.getValue()) {
                     btnCooking.setSelected(true);
                 } else if (objOrderItemTran.getlinktoOrderStatusMasterId() == Globals.OrderStatus.Cancelled.getValue()) {
@@ -166,7 +209,7 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
     }
 
     interface UpdateStatusListener {
-        void UpdateStatus(boolean flag,boolean isOrder, OrderItemTran objOrderItemTran,boolean isTotalUpdate);
+        void UpdateStatus(boolean flag, boolean isOrder, OrderItemTran objOrderItemTran, short linktoOrderStatusMasterId, boolean isTotalUpdate);
     }
     //endregion
 
@@ -174,7 +217,7 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
     @SuppressWarnings("ConstantConditions")
     class UpdateOrderStatusLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
         String status;
         Short linktoOrderMasterId;
 
@@ -182,14 +225,11 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
-            if(!isOrder) {
-                if(objOrderItemTran.getlinktoOrderStatusMasterId()!=null) {
+            if (!isOrder) {
+                if (objOrderItemTran.getlinktoOrderStatusMasterId() != null) {
                     linktoOrderMasterId = objOrderItemTran.getlinktoOrderStatusMasterId();
                 }
             }
@@ -200,7 +240,7 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
 
             if (isOrder) {
                 OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-                status = objOrderJOSNParser.UpdateOrderMasterStatus(objOrder,false);
+                status = objOrderJOSNParser.UpdateOrderMasterStatus(objOrder, false);
             } else {
                 OrderItemJSONParser objOrderItemJSONParser = new OrderItemJSONParser();
                 status = objOrderItemJSONParser.UpdateOrderItemTranStatus(objOrderItem);
@@ -211,28 +251,26 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
 
         @Override
         protected void onPostExecute(Object result) {
+            progressDialog.dismiss();
             if (status.equals("-1")) {
-                objUpdateStatusListener.UpdateStatus(false, isOrder, null,false);
+                objUpdateStatusListener.UpdateStatus(false, isOrder, null, (short) 0, false);
             } else if (status.equals("0")) {
                 if (isOrder) {
-                    objUpdateStatusListener.UpdateStatus(true, isOrder, null,false);
+                    objUpdateStatusListener.UpdateStatus(true, isOrder, null, objOrder.getlinktoOrderStatusMasterId(), false);
                 } else {
-                    if(objOrderItem.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Cancelled.getValue()){
+                    if (objOrderItem.getlinktoOrderStatusMasterId() == Globals.OrderStatus.Cancelled.getValue()) {
                         new UpdateOrderMasterTotalLoadingTask().execute();
-                    }else if(linktoOrderMasterId!=null && linktoOrderMasterId == Globals.OrderStatus.Cancelled.getValue()){
+                    } else if (linktoOrderMasterId != null && linktoOrderMasterId == Globals.OrderStatus.Cancelled.getValue()) {
                         new UpdateOrderMasterTotalLoadingTask().execute();
-                    }else {
-                        objUpdateStatusListener.UpdateStatus(true,isOrder, objOrderItem,false);
+                    } else {
+                        objUpdateStatusListener.UpdateStatus(true, isOrder, objOrderItem, (short) 0, false);
                     }
                 }
             }
-            progressDialog.dismiss();
         }
     }
 
     class UpdateOrderMasterTotalLoadingTask extends AsyncTask {
-
-        ProgressDialog progressDialog;
         String status;
         OrderMaster objOrderFilter;
         double totalModifier;
@@ -243,15 +281,15 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
 
             objOrderFilter = new OrderMaster();
             objOrderFilter.setOrderMasterId(objOrderMaster.getOrderMasterId());
-            if(!objOrderItemTran.getModifierRates().equals("")){
+            if (!objOrderItemTran.getModifierRates().equals("")) {
                 String[] strModifier = objOrderItemTran.getModifierRates().split(",");
                 for (String strModifierPrice : strModifier) {
                     totalModifier = totalModifier + (Double.valueOf(strModifierPrice) * objOrderItemTran.getQuantity());
                 }
             }
-            if(objOrderItem.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Cancelled.getValue()){
-                objOrderFilter.setTotalAmount((objOrderMaster.getTotalAmount()) - (objOrderItemTran.getRate() * objOrderItemTran.getQuantity())  - totalModifier);
-            }else{
+            if (objOrderItem.getlinktoOrderStatusMasterId() == Globals.OrderStatus.Cancelled.getValue()) {
+                objOrderFilter.setTotalAmount((objOrderMaster.getTotalAmount()) - (objOrderItemTran.getRate() * objOrderItemTran.getQuantity()) - totalModifier);
+            } else {
                 objOrderFilter.setTotalAmount(objOrderMaster.getTotalAmount() + (objOrderItemTran.getRate() * objOrderItemTran.getQuantity()) + totalModifier);
             }
             objOrderFilter.setlinktoWaiterMasterId(waiterMasterId);
@@ -262,7 +300,7 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
         protected Object doInBackground(Object[] objects) {
 
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-            status = objOrderJOSNParser.UpdateOrderMasterStatus(objOrderFilter,true);
+            status = objOrderJOSNParser.UpdateOrderMasterStatus(objOrderFilter, true);
             return status;
         }
 
@@ -271,7 +309,7 @@ public class OrderStatusDialogFragment extends DialogFragment implements View.On
             super.onPostExecute(o);
             if (status.equals("0")) {
                 objOrderItemTran.setlinktoOrderStatusMasterId(objOrderItem.getlinktoOrderStatusMasterId());
-                objUpdateStatusListener.UpdateStatus(true,isOrder,objOrderItemTran,true);
+                objUpdateStatusListener.UpdateStatus(true, isOrder, objOrderItemTran, (short) 0, true);
             }
         }
     }

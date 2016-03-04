@@ -4,7 +4,6 @@ package com.arraybit.global;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -73,7 +72,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("ResourceType")
+@SuppressWarnings({"ResourceType", "unchecked"})
 public class Globals {
 
 
@@ -551,20 +550,20 @@ public class Globals {
 
         activityName = activity.getTitle().toString();
 
-        if (Build.VERSION.SDK_INT < 21) {
+       // if (Build.VERSION.SDK_INT < 21) {
             Intent intent = new Intent(activity, SignInActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
             activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
             activity.finish();
-        } else {
-            ActivityOptions options =
-                    ActivityOptions.
-                            makeSceneTransitionAnimation(activity);
-            Intent intent = new Intent(activity, SignInActivity.class);
-            activity.startActivity(intent, options.toBundle());
-            activity.finish();
-        }
+      //  } else {
+//            ActivityOptions options =
+//                    ActivityOptions.
+//                            makeSceneTransitionAnimation(activity);
+//            Intent intent = new Intent(activity, SignInActivity.class);
+//            activity.startActivity(intent, options.toBundle());
+//            activity.finish();
+//        }
 
         SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
         objSharePreferenceManage.RemovePreference("WaiterPreference", "UserName", activity);

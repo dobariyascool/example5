@@ -1,8 +1,6 @@
 package com.arraybit.pos;
 
-
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -28,8 +26,6 @@ import com.arraybit.modal.CounterMaster;
 import com.arraybit.parser.CounterJSONParser;
 
 import java.util.ArrayList;
-
-import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 @SuppressLint("ValidFragment")
@@ -57,19 +53,19 @@ public class CounterFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_counter, container, false);
 
         Bundle bundle = getArguments();
-        if(bundle!=null){
-            isBack = bundle.getBoolean("isBack",false);
+        if (bundle != null) {
+            isBack = bundle.getBoolean("isBack", false);
         }
 
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
-            if(isBack){
+            if (isBack) {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }else{
+            } else {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
-            if(Build.VERSION.SDK_INT >=21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
@@ -109,7 +105,7 @@ public class CounterFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
         return super.onOptionsItemSelected(item);
@@ -123,16 +119,15 @@ public class CounterFragment extends Fragment {
 
     //region LoadingTask
     public class CounterLoadingTask extends AsyncTask {
-        ProgressDialog progressDialog;
+
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             objSharePreferenceManage = new SharePreferenceManage();
             if (userType != 0) {
@@ -162,8 +157,7 @@ public class CounterFragment extends Fragment {
 
                 rvCounter.setVisibility(View.VISIBLE);
                 adapter = new CounterAdapter(getActivity(), alCounterMaster, userType);
-                ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
-                rvCounter.setAdapter(scaleInAnimationAdapter);
+                rvCounter.setAdapter(adapter);
                 rvCounter.setLayoutManager(linearLayoutManager);
             }
         }

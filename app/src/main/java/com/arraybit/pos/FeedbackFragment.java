@@ -3,7 +3,6 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,7 +40,7 @@ import java.util.List;
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 @SuppressLint("ValidFragment")
-public class FeedbackFragment extends Fragment implements View.OnClickListener,GuestLoginDialogFragment.LoginResponseListener {
+public class FeedbackFragment extends Fragment implements View.OnClickListener, GuestLoginDialogFragment.LoginResponseListener {
 
     public static ArrayList<ArrayList<FeedbackAnswerMaster>> alFinalFeedbackAnswers;
     Activity activityName;
@@ -140,16 +139,16 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
         } else if (v.getId() == R.id.ivPrevious) {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-        }else if(v.getId() == R.id.txtNext){
+        } else if (v.getId() == R.id.txtNext) {
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-        }else if (v.getId() == R.id.txtPrevious) {
+        } else if (v.getId() == R.id.txtPrevious) {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
     }
 
     @Override
     public void LoginResponse() {
-        FeedbackViewFragment feedbackViewFragment = (FeedbackViewFragment)adapter.GetCurrentFragment(cnt - 1);
+        FeedbackViewFragment feedbackViewFragment = (FeedbackViewFragment) adapter.GetCurrentFragment(cnt - 1);
         feedbackViewFragment.SetSimpleFeedbackLayout();
     }
 
@@ -166,13 +165,13 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
     }
 
     private void SetViewPagerElevation() {
-        if(Build.VERSION.SDK_INT >= 21){
-            viewPager.setPadding(0,0,0,8);
-            viewPager.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.offwhite));
+        if (Build.VERSION.SDK_INT >= 21) {
+            viewPager.setPadding(0, 0, 0, 8);
+            viewPager.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.offwhite));
             viewPager.setElevation(8f);
             viewPager.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-        }else{
-            viewPager.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.bottom_border));
+        } else {
+            viewPager.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bottom_border));
             viewPager.setPadding(0, 0, 0, 16);
         }
     }
@@ -205,7 +204,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
 
     public void RemoveFragment() {
         cnt = 0;
-        for(int i=0;i<viewPager.getOffscreenPageLimit();i++){
+        for (int i = 0; i < viewPager.getOffscreenPageLimit(); i++) {
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             FeedbackViewFragment CurrentFeedbackViewFragment = (FeedbackViewFragment) adapter.GetCurrentFragment(i);
             fragmentTransaction.remove(CurrentFeedbackViewFragment);
@@ -275,17 +274,15 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
 
     class FeedbackQuestionGroupLodingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
+
         }
 
         @Override
@@ -327,14 +324,6 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,G
     }
 
     class FeedbackQuestionLodingTask extends AsyncTask {
-
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
 
         @Override
         protected Object doInBackground(Object[] params) {

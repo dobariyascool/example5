@@ -3,7 +3,6 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -76,7 +75,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             }
 
             allTablesFragment = (CoordinatorLayout) view.findViewById(R.id.allTablesFragment);
-            Globals.SetScaleImageBackground(getActivity(),allTablesFragment);
+            Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
 
             setHasOptionsMenu(true);
         }
@@ -128,6 +127,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
                 getActivity().getSupportFragmentManager().popBackStack();
             } else {
                 getActivity().finish();
+                getActivity().overridePendingTransition(0, R.anim.right_exit);
             }
         }
         return super.onOptionsItemSelected(item);
@@ -152,7 +152,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(),allTablesFragment);
+        Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
     }
 
     @Override
@@ -218,17 +218,15 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     //region Loading Task
     class TableSectionLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getActivity().getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
+
         }
 
         @Override
@@ -244,15 +242,12 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
 
             progressDialog.dismiss();
             if (alSectionMaster == null) {
-                progressDialog.dismiss();
                 Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
 
             } else if (alSectionMaster.size() == 0) {
-                progressDialog.dismiss();
                 Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
 
             } else {
-
                 if (isVacant) {
                     famRoot.setVisibility(View.GONE);
                 } else {
@@ -284,13 +279,15 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
                 tableViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
                     }
 
                     @Override
                     public void onPageSelected(int position) {
-                        if(famRoot.isMenuButtonHidden()){
+                        if (famRoot.isMenuButtonHidden()) {
                             famRoot.showMenuButton(true);
                         }
+
                         tableViewPager.setCurrentItem(position);
                         //load data when tab is change
                         TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(position);
@@ -299,6 +296,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
                         } else {
                             tableTabFragment.LoadTableData(null);
                         }
+
                     }
 
                     @Override

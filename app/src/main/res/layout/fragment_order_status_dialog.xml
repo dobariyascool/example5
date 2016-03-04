@@ -3,22 +3,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context="com.arraybit.pos.OrderStatusDialogFragment"
     tools:ignore="HardcodedText">
 
-    <com.rey.material.widget.TextView
-        style="@style/TextView"
+    <LinearLayout
+        android:id="@+id/nameLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:text="@string/wsdTitle"
-        android:textAllCaps="false"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtTableName"
+            style="@style/StatusTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textAllCaps="false"
+            android:textSize="@dimen/control_TextMedium" />
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtItemName"
+            style="@style/StatusTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textAllCaps="false" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/control_SpecingMedium"
         android:gravity="center"
         android:orientation="horizontal">

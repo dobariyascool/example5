@@ -109,6 +109,7 @@ public class AboutUsActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 finish();
+                overridePendingTransition(0, R.anim.right_exit);
             }
 
         }
@@ -137,5 +138,11 @@ public class AboutUsActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.aboutFragment, fragment, fragmentName);
         fragmentTransaction.addToBackStack(fragmentName);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, R.anim.right_exit);
     }
 }

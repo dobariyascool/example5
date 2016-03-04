@@ -3,110 +3,93 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context="com.arraybit.pos.WaitingStatusFragment"
     tools:ignore="HardcodedText">
 
-    <com.rey.material.widget.TextView
-        style="@style/TextView"
+    <LinearLayout
+        android:id="@+id/nameLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:text="@string/wsdTitle"
-        android:textAllCaps="false"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="horizontal">
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtPersonName"
+            style="@style/StatusTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:padding="@dimen/control_SpecingMedium"
+            android:textAllCaps="false" />
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtPersonNo"
+            style="@style/StatusTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|end"
+            android:padding="@dimen/control_SpecingMedium"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/control_SpecingMedium"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/nameLayout"
-            android:layout_width="match_parent"
+        <com.rey.material.widget.Button
+            android:id="@+id/btnWaiting"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="top"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/waiting_mode"
+            android:text="@string/wsdWaiting" />
 
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtPersonName"
-                style="@style/StatusTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center|start"
-                android:padding="@dimen/control_SpecingMedium"
-                android:text="@string/wsdTitle"
-                android:textAllCaps="false" />
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtPersonNo"
-                style="@style/StatusTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center|end"
-                android:padding="@dimen/control_SpecingMedium"
-                android:text="@string/wsdTitle"
-                android:textAllCaps="false" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.rey.material.widget.Button
+            android:id="@+id/btnServe"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/control_SpecingMedium"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/serve"
+            android:text="@string/wsdServe" />
 
-            <com.rey.material.widget.Button
-                android:id="@+id/btnWaiting"
-                style="@style/StatusButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@mipmap/waiting_mode"
-                android:text="@string/wsdWaiting" />
+        <com.rey.material.widget.Button
+            android:id="@+id/btnCancel"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/close"
+            android:padding="@dimen/control_SpecingSmall"
+            android:text="@string/wsdCancel"
+            android:textSize="@dimen/control_TextSmall" />
 
-            <com.rey.material.widget.Button
-                android:id="@+id/btnServe"
-                style="@style/StatusButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@mipmap/serve"
-                android:text="@string/wsdServe" />
-
-            <com.rey.material.widget.Button
-                android:id="@+id/btnCancel"
-                style="@style/StatusButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@mipmap/close"
-                android:padding="@dimen/control_SpecingSmall"
-                android:text="@string/wsdCancel"
-                android:textSize="@dimen/control_TextSmall" />
-
-            <com.rey.material.widget.Button
-                android:id="@+id/btnNot"
-                style="@style/StatusButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@mipmap/not_available"
-                android:text="@string/wsdNot" />
+        <com.rey.material.widget.Button
+            android:id="@+id/btnNot"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/not_available"
+            android:text="@string/wsdNot" />
 
 
-            <com.rey.material.widget.Button
-                android:id="@+id/btnCall"
-                style="@style/StatusButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@mipmap/call"
-                android:padding="@dimen/control_SpecingSmall"
-                android:text="@string/wsdCall" />
-        </LinearLayout>
+        <com.rey.material.widget.Button
+            android:id="@+id/btnCall"
+            style="@style/StatusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/call"
+            android:padding="@dimen/control_SpecingSmall"
+            android:text="@string/wsdCall" />
     </LinearLayout>
 </LinearLayout>

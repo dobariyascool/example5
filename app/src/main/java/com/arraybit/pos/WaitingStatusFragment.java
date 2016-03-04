@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -27,7 +26,7 @@ import com.rey.material.widget.TextView;
 @SuppressLint("ValidFragment")
 public class WaitingStatusFragment extends DialogFragment implements View.OnClickListener {
 
-    Button btnServe, btnNot, btnCancel, btnCall,btnWaiting;
+    Button btnServe, btnNot, btnCancel, btnCall, btnWaiting;
     UpdateStatusListener objUpdateStatusListener;
 
     WaitingMaster objWaitingMaster = null, objWaiting;
@@ -45,12 +44,12 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         LinearLayout nameLayout = (LinearLayout) view.findViewById(R.id.nameLayout);
-        if(Build.VERSION.SDK_INT >= 21){
-            nameLayout.setBackgroundColor(ContextCompat.getColor(getActivity(),android.R.color.white));
+        if (Build.VERSION.SDK_INT >= 21) {
+            nameLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
             nameLayout.setElevation(8f);
             nameLayout.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
-        }else{
-            nameLayout.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.card_view_with_border));
+        } else {
+            nameLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.card_view_with_border));
         }
 
         btnWaiting = (Button) view.findViewById(R.id.btnWaiting);
@@ -70,15 +69,15 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
         objUpdateStatusListener = (UpdateStatusListener) getTargetFragment();
 
-        TextView txtPersonName =(TextView)view.findViewById(R.id.txtPersonName);
-        TextView txtPersonNo =(TextView)view.findViewById(R.id.txtPersonNo);
+        TextView txtPersonName = (TextView) view.findViewById(R.id.txtPersonName);
+        TextView txtPersonNo = (TextView) view.findViewById(R.id.txtPersonNo);
 
         txtPersonName.setText(objWaiting.getPersonName());
-        if(objWaiting.getPersonMobile()!=null){
+        if (objWaiting.getPersonMobile() != null) {
             txtPersonNo.setVisibility(View.VISIBLE);
             txtPersonNo.setText(objWaiting.getPersonMobile());
 
-        }else{
+        } else {
             txtPersonNo.setVisibility(View.GONE);
         }
         return view;
@@ -95,7 +94,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             if (Service.CheckNet(getActivity())) {
                 new UpdateWaitingStatusLoadingTask().execute();
             } else {
-                Globals.ShowSnackBar(v,getResources().getString(R.string.MsgCheckConnection),getActivity(),1000);
+                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
             dismiss();
         }
@@ -106,7 +105,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             if (Service.CheckNet(getActivity())) {
                 new UpdateWaitingStatusLoadingTask().execute();
             } else {
-                Globals.ShowSnackBar(v,getResources().getString(R.string.MsgCheckConnection),getActivity(),1000);
+                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
             dismiss();
         }
@@ -117,7 +116,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             if (Service.CheckNet(getActivity())) {
                 new UpdateWaitingStatusLoadingTask().execute();
             } else {
-                Globals.ShowSnackBar(v,getResources().getString(R.string.MsgCheckConnection),getActivity(),1000);
+                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
             dismiss();
         }
@@ -129,7 +128,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             if (Service.CheckNet(getActivity())) {
                 new UpdateWaitingStatusLoadingTask().execute();
             } else {
-                Globals.ShowSnackBar(v,getResources().getString(R.string.MsgCheckConnection),getActivity(),1000);
+                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
             dismiss();
         }
@@ -139,6 +138,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             Intent intent = new Intent(Intent.ACTION_DIAL);
             intent.setData(Uri.parse("tel:" + objWaiting.getPersonMobile()));
             startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             dismiss();
         }
     }
@@ -150,8 +150,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             btnServe.setVisibility(View.VISIBLE);
             btnNot.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);
-        }
-        else if (objWaiting.getWaitingStatus().equals(btnServe.getText().toString())) {
+        } else if (objWaiting.getWaitingStatus().equals(btnServe.getText().toString())) {
             btnWaiting.setVisibility(View.VISIBLE);
             btnServe.setVisibility(View.GONE);
             btnNot.setVisibility(View.VISIBLE);
@@ -174,7 +173,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         }
     }
 
-   interface UpdateStatusListener {
+    interface UpdateStatusListener {
         void UpdateStatus(boolean flag);
     }
     //endregion
@@ -182,18 +181,15 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
     //region LoadingTask
     class UpdateWaitingStatusLoadingTask extends AsyncTask {
 
-        ProgressDialog progressDialog;
+        com.arraybit.pos.ProgressDialog progressDialog;
         String status;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage(getResources().getString(R.string.MsgLoading));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
         }
 
         @Override
