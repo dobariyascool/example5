@@ -12,6 +12,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -32,6 +34,7 @@ public class WaitingListFragment extends Fragment {
 
     ArrayList<WaitingStatusMaster> alWaitingStatusMaster;
     WaitingListPagerAdapter waitingListPagerAdapter;
+    LinearLayout errorLayout,headerLayout;
 
     public WaitingListFragment() {
         // Required empty public constructor
@@ -52,10 +55,13 @@ public class WaitingListFragment extends Fragment {
         fabAdd = (FloatingActionButton) view.findViewById(R.id.fabAdd);
         //end
 
+        errorLayout = (LinearLayout)view.findViewById(R.id.errorLayout);
+        headerLayout = (LinearLayout)view.findViewById(R.id.headerLayout);
+
         if (Service.CheckNet(getActivity())) {
             new WaitingStatusLoadingTask().execute();
         } else {
-            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            SetErrorLayout(true,getResources().getString(R.string.MsgCheckConnection));
         }
 
         return view;
@@ -75,6 +81,25 @@ public class WaitingListFragment extends Fragment {
     }
 
     //region Private Methods
+    private void SetErrorLayout(boolean isShow, String errorMsg) {
+        TextView txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        if (isShow) {
+            errorLayout.setVisibility(View.VISIBLE);
+            txtMsg.setText(errorMsg);
+            waitingTabLayout.setVisibility(View.GONE);
+            waitingViewPager.setVisibility(View.GONE);
+            fabAdd.setVisibility(View.GONE);
+            headerLayout.setVisibility(View.GONE);
+
+        } else {
+            errorLayout.setVisibility(View.GONE);
+            waitingTabLayout.setVisibility(View.VISIBLE);
+            waitingViewPager.setVisibility(View.VISIBLE);
+            fabAdd.setVisibility(View.VISIBLE);
+            headerLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void SetTabLayout(ArrayList<WaitingStatusMaster> alWaitingStatusMaster, final WaitingListPagerAdapter waitingListPagerAdapter) {
 
         for (int i = 0; i < alWaitingStatusMaster.size(); i++) {
@@ -181,10 +206,15 @@ public class WaitingListFragment extends Fragment {
         protected void onPostExecute(Object result) {
 
             progressDialog.dismiss();
-            if (alWaitingStatusMaster != null && alWaitingStatusMaster.size() != 0) {
+            if(alWaitingStatusMaster==null){
+                SetErrorLayout(true,getResources().getString(R.string.MsgSelectFail));
+            }
+            else if(alWaitingStatusMaster.size()==0){
+                SetErrorLayout(true,getResources().getString(R.string.MsgNoRecord));
+            }else{
+                SetErrorLayout(false,null);
                 waitingListPagerAdapter = new WaitingListPagerAdapter(getChildFragmentManager());
                 SetTabLayout(alWaitingStatusMaster, waitingListPagerAdapter);
-
             }
         }
     }

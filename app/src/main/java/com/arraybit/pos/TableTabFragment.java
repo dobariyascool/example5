@@ -158,7 +158,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         if (Service.CheckNet(getActivity())) {
             new TableMasterLoadingTask().execute();
         } else {
-            Globals.ShowSnackBar(rvTables, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvTables);
         }
 
     }

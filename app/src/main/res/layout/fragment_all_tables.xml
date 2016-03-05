@@ -16,6 +16,10 @@
             android:id="@+id/app_bar"
             layout="@layout/app_bar" />
 
+        <include android:id="@+id/errorLayout"
+            layout="@layout/error_layout"
+            android:visibility="gone"/>
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tableTabLayout"
             style="@style/TabLayout"

@@ -11,8 +11,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include android:id="@+id/app_bar"
-            layout="@layout/app_bar"/>
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
+
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/error_layout"
+            android:visibility="gone" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/itemTabLayout"
@@ -27,8 +33,8 @@
             android:layout_height="match_parent"
             android:visibility="visible" />
     </LinearLayout>
-    <com.github.clans.fab.FloatingActionMenu
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
+
+    <com.github.clans.fab.FloatingActionMenu xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/famRoot"
         style="@style/FloatingMenu"
         android:layout_width="match_parent"

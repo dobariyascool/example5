@@ -112,6 +112,8 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
 
     private void CalculateTax(OrderMaster objOrderMaster, TableOrderViewHolder holder) {
         try {
+            totalTaxPercentage = 0;
+            totalNetAmount = 0;
             for (int i = 0; i < alTaxMaster.size(); i++) {
                 if (alTaxMaster.get(i).getIsPercentage()) {
                     totalTaxPercentage = totalTaxPercentage + alTaxMaster.get(i).getTaxRate();

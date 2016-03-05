@@ -38,7 +38,7 @@ public class CounterFragment extends Fragment {
     GridLayoutManager gridLayoutManager;
     SharePreferenceManage objSharePreferenceManage;
     CounterJSONParser objCounterJSONParser;
-    LinearLayout counterLayout;
+    LinearLayout counterLayout, errorLayout;
     short userMasterId, userType;
     boolean isBack;
 
@@ -72,6 +72,7 @@ public class CounterFragment extends Fragment {
         app_bar.setTitle(getResources().getString(R.string.title_fragment_counter));
 
         counterLayout = (LinearLayout) view.findViewById(R.id.counterLayout);
+        errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
         Globals.SetScaleImageBackground(getActivity(), counterLayout, null, null);
 
         rvCounter = (RecyclerView) view.findViewById(R.id.rvCounter);
@@ -85,7 +86,7 @@ public class CounterFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new CounterLoadingTask().execute();
         } else {
-            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvCounter);
         }
 
         return view;
@@ -150,12 +151,11 @@ public class CounterFragment extends Fragment {
             progressDialog.dismiss();
 
             if (alCounterMaster == null) {
-                Globals.ShowSnackBar(counterLayout, getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
+                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgSelectFail), rvCounter);
             } else if (alCounterMaster.size() == 0) {
-                Globals.ShowSnackBar(counterLayout, getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
+                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgNoRecord), rvCounter);
             } else {
-
-                rvCounter.setVisibility(View.VISIBLE);
+                Globals.SetErrorLayout(errorLayout, false,null, rvCounter);
                 adapter = new CounterAdapter(getActivity(), alCounterMaster, userType);
                 rvCounter.setAdapter(adapter);
                 rvCounter.setLayoutManager(linearLayoutManager);

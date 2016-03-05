@@ -118,6 +118,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
 
                         Globals.ClearPreference(getActivity().getApplicationContext());
                         MenuActivity.parentActivity = false;
+                        Globals.ClearData();
 
                         Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

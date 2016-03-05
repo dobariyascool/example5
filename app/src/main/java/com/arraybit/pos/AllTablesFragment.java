@@ -21,6 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -46,6 +48,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     CoordinatorLayout allTablesFragment;
     boolean isChangeMode, isVacant = false;
     String linktoOrderTypeMasterId;
+    LinearLayout errorLayout;
 
 
     public AllTablesFragment(Activity activityName, boolean isChangeMode, String linktoOrderTypeMasterId) {
@@ -80,6 +83,8 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             setHasOptionsMenu(true);
         }
 
+        errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             isVacant = bundle.getBoolean("IsVacant");
@@ -108,7 +113,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         if (Service.CheckNet(getActivity())) {
             new TableSectionLoadingTask().execute();
         } else {
-            Globals.ShowSnackBar(getActivity().getCurrentFocus(), getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), tableTabLayout, tableViewPager);
         }
 
         return view;
@@ -179,6 +184,25 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         }
     }
 
+    //region Private Methods
+    private void SetErrorLayout(boolean isShow, String errorMsg, TabLayout tabLayout, ViewPager viewPager) {
+        TextView txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        if (isShow) {
+            errorLayout.setVisibility(View.VISIBLE);
+            txtMsg.setText(errorMsg);
+            tabLayout.setVisibility(View.GONE);
+            viewPager.setVisibility(View.GONE);
+            famRoot.setVisibility(View.GONE);
+
+        } else {
+            errorLayout.setVisibility(View.GONE);
+            tabLayout.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.VISIBLE);
+            famRoot.setVisibility(View.VISIBLE);
+        }
+    }
+    //endregion
+
     //region PagerAdapter
     static class TablePagerAdapter extends FragmentStatePagerAdapter {
 
@@ -242,12 +266,13 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
 
             progressDialog.dismiss();
             if (alSectionMaster == null) {
-                Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
-
+                //Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
+                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail), tableTabLayout, tableViewPager);
             } else if (alSectionMaster.size() == 0) {
-                Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
-
+                //Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
+                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord), tableTabLayout, tableViewPager);
             } else {
+                SetErrorLayout(false, null, tableTabLayout, tableViewPager);
                 if (isVacant) {
                     famRoot.setVisibility(View.GONE);
                 } else {

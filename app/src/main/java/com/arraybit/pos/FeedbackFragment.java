@@ -95,6 +95,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
         if (Service.CheckNet(getActivity())) {
             new FeedbackQuestionGroupLodingTask().execute();
         } else {
+            SetNextPreviousEnable(false);
             Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
         }
 
@@ -161,6 +162,20 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
             if (alFeedbackQuestionMaster.get(i).getLinktoFeedbackQuestionGroupMasterId() == linktoFeedbackQuestionGroupMasterId) {
                 alFeedbackQuestionMasterFilter.add(alFeedbackQuestionMaster.get(i));
             }
+        }
+    }
+
+    private void SetNextPreviousEnable(boolean isEnable){
+        if(isEnable){
+           ivNext.setEnabled(true);
+           txtNext.setEnabled(true);
+           ivPrevious.setEnabled(true);
+           txtPrevious.setEnabled(true);
+        }else{
+            ivNext.setEnabled(false);
+            txtNext.setEnabled(false);
+            ivPrevious.setEnabled(false);
+            txtPrevious.setEnabled(false);
         }
     }
 
@@ -298,8 +313,10 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
             progressDialog.dismiss();
             ArrayList<FeedbackQuestionGroupMaster> lstFeedbackQuestionGroupMaster = (ArrayList<FeedbackQuestionGroupMaster>) result;
             if (lstFeedbackQuestionGroupMaster == null) {
+                SetNextPreviousEnable(false);
                 Globals.ShowSnackBar(feedbackFragment, getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
             } else if (lstFeedbackQuestionGroupMaster.size() == 0) {
+                SetNextPreviousEnable(false);
                 Globals.ShowSnackBar(feedbackFragment, getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
             } else {
                 alFeedbackQuestionGroupMaster = lstFeedbackQuestionGroupMaster;

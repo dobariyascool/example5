@@ -22,6 +22,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -51,6 +53,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     boolean isForceToChange = false;
     short isVegCheck = 0, isNonVegCheck = 0, isJainCheck = 0;
     CoordinatorLayout categoryItemFragment;
+    LinearLayout errorLayout;
 
     public CategoryItemFragment() {
 
@@ -75,6 +78,8 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             categoryItemFragment = (CoordinatorLayout) view.findViewById(R.id.categoryItemFragment);
             Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
         }
+
+        errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
 
         //floating action menu
         famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
@@ -105,7 +110,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         if (Service.CheckNet(getActivity())) {
             new GuestHomeCategoryLodingTask().execute();
         } else {
-            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), itemTabLayout, itemViewPager);
         }
 
         setHasOptionsMenu(true);
@@ -165,35 +170,37 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_category_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         } else if (item.getItemId() == R.id.viewChange) {
-            ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
-            i = (short) (i + 1);
-            if (i == 1) {
-                item.setIcon(R.drawable.view_grid);
-                isViewChange = true;
-                isForceToChange = true;
-                if (fabJain.isSelected() || fabNonVeg.isSelected() || fabVeg.isSelected()) {
-                    itemTabFragment.SetupRecyclerView(true, null);
+            if (!errorLayout.isShown()) {
+                ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
+                i = (short) (i + 1);
+                if (i == 1) {
+                    item.setIcon(R.drawable.view_grid);
+                    isViewChange = true;
+                    isForceToChange = true;
+                    if (fabJain.isSelected() || fabNonVeg.isSelected() || fabVeg.isSelected()) {
+                        itemTabFragment.SetupRecyclerView(true, null);
+                    } else {
+                        itemTabFragment.SetupRecyclerView(false, null);
+                    }
+                } else if (i == 2) {
+                    item.setIcon(R.drawable.view_grid_two);
+                    isViewChange = true;
+                    isForceToChange = true;
+                    if (fabJain.isSelected() || fabNonVeg.isSelected() || fabVeg.isSelected()) {
+                        itemTabFragment.SetupRecyclerView(true, null);
+                    } else {
+                        itemTabFragment.SetupRecyclerView(false, null);
+                    }
                 } else {
-                    itemTabFragment.SetupRecyclerView(false, null);
-                }
-            } else if (i == 2) {
-                item.setIcon(R.drawable.view_grid_two);
-                isViewChange = true;
-                isForceToChange = true;
-                if (fabJain.isSelected() || fabNonVeg.isSelected() || fabVeg.isSelected()) {
-                    itemTabFragment.SetupRecyclerView(true, null);
-                } else {
-                    itemTabFragment.SetupRecyclerView(false, null);
-                }
-            } else {
-                i = 0;
-                item.setIcon(R.drawable.view_list);
-                isViewChange = false;
-                isForceToChange = true;
-                if (fabJain.isSelected() || fabNonVeg.isSelected() || fabVeg.isSelected()) {
-                    itemTabFragment.SetupRecyclerView(true, null);
-                } else {
-                    itemTabFragment.SetupRecyclerView(false, null);
+                    i = 0;
+                    item.setIcon(R.drawable.view_list);
+                    isViewChange = false;
+                    isForceToChange = true;
+                    if (fabJain.isSelected() || fabNonVeg.isSelected() || fabVeg.isSelected()) {
+                        itemTabFragment.SetupRecyclerView(true, null);
+                    } else {
+                        itemTabFragment.SetupRecyclerView(false, null);
+                    }
                 }
             }
         }
@@ -266,7 +273,9 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void CartIconOnClick() {
-        ReplaceFragment(new CartItemFragment(), getActivity().getResources().getString(R.string.title_fragment_cart_item));
+        if(!errorLayout.isShown()) {
+            ReplaceFragment(new CartItemFragment(), getActivity().getResources().getString(R.string.title_fragment_cart_item));
+        }
     }
 
     @Override
@@ -282,6 +291,24 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     }
 
     //region Private Methods and Interface
+    private void SetErrorLayout(boolean isShow, String errorMsg, TabLayout tabLayout, ViewPager viewPager) {
+        TextView txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        if (isShow) {
+            errorLayout.setVisibility(View.VISIBLE);
+            txtMsg.setText(errorMsg);
+            tabLayout.setVisibility(View.GONE);
+            viewPager.setVisibility(View.GONE);
+            famRoot.setVisibility(View.GONE);
+
+        } else {
+            errorLayout.setVisibility(View.GONE);
+            tabLayout.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.VISIBLE);
+            famRoot.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     @SuppressLint("CommitTransaction")
     public void ReplaceFragment(Fragment fragment, String fragmentName) {
         if (Build.VERSION.SDK_INT >= 21) {
@@ -452,10 +479,13 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             super.onPostExecute(o);
             progressDialog.dismiss();
             if (alCategoryMaster == null) {
-                Globals.ShowSnackBar(categoryItemFragment, getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
+                SetErrorLayout(true, getResources().getString(R.string.MsgSelectFail), itemTabLayout, itemViewPager);
             } else if (alCategoryMaster.size() == 0) {
-                Globals.ShowSnackBar(categoryItemFragment, getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
+                SetErrorLayout(true, getResources().getString(R.string.MsgNoRecord), itemTabLayout, itemViewPager);
             } else {
+
+                SetErrorLayout(false, null, itemTabLayout, itemViewPager);
+
                 itemPagerAdapter = new ItemPagerAdapter(getFragmentManager());
 
                 CategoryMaster objCategoryMaster = new CategoryMaster();

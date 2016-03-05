@@ -77,7 +77,7 @@ public class TableOrderFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new OrdersLoadingTask().execute();
         } else {
-            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvTableOrder);
         }
 
 
@@ -147,7 +147,7 @@ public class TableOrderFragment extends Fragment {
                 if (Service.CheckNet(getActivity())) {
                     new TaxLoadingTask().execute();
                 } else {
-                    Globals.ShowSnackBar(tableOrderFragment, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                    Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder);
                 }
             }
         }

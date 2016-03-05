@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -48,7 +47,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
 
     RecyclerView rvOrderItemSummery;
-    LinearLayout headerLayout, amountLayout, taxLayout;
+    LinearLayout headerLayout, amountLayout, taxLayout,errorLayout;
     FrameLayout orderSummeryLayout;
     TableMaster objTableMaster;
     SharePreferenceManage objSharePreferenceManage;
@@ -59,10 +58,10 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     String billNumber;
     ArrayList<TaxMaster> alTaxMaster;
     TextView txtTotalAmount, txtTotalDiscount, txtNetAmount, txtHeaderDiscount, txtRoundingOff;
-    ProgressDialog progressDialog;
     String strNetAmount;
     OrderSummaryAdapter orderSummeryAdapter;
     boolean isHomeShow = false;
+    com.arraybit.pos.ProgressDialog progressDialog;
 
     public OrderSummaryFragment() {
     }
@@ -116,6 +115,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         headerLayout = (LinearLayout) view.findViewById(R.id.headerLayout);
         amountLayout = (LinearLayout) view.findViewById(R.id.amountLayout);
         taxLayout = (LinearLayout) view.findViewById(R.id.taxLayout);
+        errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
 
         txtTotalAmount = (TextView) view.findViewById(R.id.txtTotalAmount);
         txtTotalDiscount = (TextView) view.findViewById(R.id.txtTotalDiscount);
@@ -128,8 +128,6 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
         Button btnAddMore = (Button) view.findViewById(R.id.btnAddMore);
         Button btnCheckOut = (Button) view.findViewById(R.id.btnCheckOut);
-
-        SetVisibility();
 
         btnAddMore.setOnClickListener(this);
         btnCheckOut.setOnClickListener(this);
@@ -147,7 +145,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         if (Service.CheckNet(getActivity())) {
             new AllOrdersLoadingTask().execute();
         } else {
-            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            SetErrorLayout(true,getResources().getString(R.string.MsgCheckConnection));
         }
 
 
@@ -274,18 +272,22 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
 
     //region Private Methods and Interface
-    private void SetVisibility() {
-        if (lstOrderMaster == null || lstOrderMaster.size() == 0) {
+    private void SetErrorLayout(boolean isShow,String errorMsg){
+        android.widget.TextView txtMsg = (android.widget.TextView) errorLayout.findViewById(R.id.txtMsg);
+        if (isShow) {
+            errorLayout.setVisibility(View.VISIBLE);
+            txtMsg.setText(errorMsg);
             rvOrderItemSummery.setVisibility(View.GONE);
             headerLayout.setVisibility(View.GONE);
             amountLayout.setVisibility(View.GONE);
+
         } else {
+            errorLayout.setVisibility(View.GONE);
             rvOrderItemSummery.setVisibility(View.VISIBLE);
             headerLayout.setVisibility(View.VISIBLE);
             amountLayout.setVisibility(View.VISIBLE);
         }
     }
-
 
     private void SetSalesList(ArrayList<OrderMaster> lstOrderMaster, ArrayList<ItemMaster> lstOrderItemTran) {
         alOrderItemTran = new ArrayList<>();
@@ -445,8 +447,6 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     //region LoadingTask
     class AllOrdersLoadingTask extends AsyncTask {
 
-        com.arraybit.pos.ProgressDialog progressDialog;
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -470,8 +470,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
             lstOrderMaster = (ArrayList<OrderMaster>) result;
 
-            if (lstOrderMaster != null) {
-
+            if(lstOrderMaster==null){
+                SetErrorLayout(true,getActivity().getResources().getString(R.string.MsgSelectFail));
+            }else if(lstOrderMaster.size()==0){
+                SetErrorLayout(true,getActivity().getResources().getString(R.string.MsgNoRecord));
+            }else{
                 new TaxLoadingTask().execute();
                 new OrderSummeryLoadingTask().execute();
             }
@@ -479,8 +482,6 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     }
 
     class OrderSummeryLoadingTask extends AsyncTask {
-
-        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
@@ -504,9 +505,13 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
             ArrayList<ItemMaster> lstOrderItemTran = (ArrayList<ItemMaster>) result;
 
-            if (lstOrderItemTran != null) {
+            if(lstOrderItemTran ==null){
+                SetErrorLayout(true,getActivity().getResources().getString(R.string.MsgSelectFail));
+            }else if(lstOrderItemTran.size()==0) {
+                SetErrorLayout(true,getActivity().getResources().getString(R.string.MsgNoRecord));
+            }else{
+                SetErrorLayout(false,null);
                 orderSummeryAdapter = new OrderSummaryAdapter(getActivity(), lstOrderItemTran, lstOrderMaster, false);
-                SetVisibility();
                 rvOrderItemSummery.setAdapter(orderSummeryAdapter);
                 rvOrderItemSummery.setLayoutManager(new LinearLayoutManager(getActivity()));
                 SetSalesList(lstOrderMaster, lstOrderItemTran);
@@ -522,12 +527,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 });
 
             }
+
         }
     }
 
     class BillNumberLoadingTask extends AsyncTask {
-
-        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
@@ -596,7 +600,6 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            progressDialog.dismiss();
             if (status.equals("-1")) {
                 Globals.ShowSnackBar(orderSummeryLayout, getResources().getString(R.string.MsgServerNotResponding), getActivity(), 1000);
             } else if (status.equals("0")) {
@@ -629,6 +632,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
+            progressDialog.dismiss();
             if (status.equals("0")) {
                 if (MenuActivity.parentActivity) {
                     Globals.counter = 0;

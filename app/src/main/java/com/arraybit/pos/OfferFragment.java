@@ -79,7 +79,7 @@ public class OfferFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new OfferLoadingTask().execute();
         } else {
-            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvOffer);
         }
 
         return view;
@@ -132,6 +132,7 @@ public class OfferFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    //region Private Methods
     private void SetupRecyclerView() {
 
         offerAdapter = new OfferAdapter(getActivity(), alOfferMaster, getActivity().getSupportFragmentManager(), false);
@@ -147,6 +148,7 @@ public class OfferFragment extends Fragment {
             }
         });
     }
+    //endregion
 
     //region LoadingTask
     class OfferLoadingTask extends AsyncTask {

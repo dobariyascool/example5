@@ -74,7 +74,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         if (Service.CheckNet(getActivity())) {
             new WaitingMasterLoadingTask().execute();
         } else {
-            Globals.ShowSnackBar(rvWaiting, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvWaiting);
         }
 
     }

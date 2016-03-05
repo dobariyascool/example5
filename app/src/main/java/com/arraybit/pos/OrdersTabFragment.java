@@ -164,7 +164,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         if (Service.CheckNet(getActivity())) {
             new OrderMasterLoadingTask().execute();
         } else {
-            Globals.ShowSnackBar(rvOrder, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvOrder);
         }
 
     }

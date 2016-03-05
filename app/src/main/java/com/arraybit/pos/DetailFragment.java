@@ -324,7 +324,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             modifierLayout.setVisibility(View.GONE);
             if (Service.CheckNet(getActivity())) {
                 new RemarkLoadingTask().execute();
-
             } else {
                 Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
@@ -333,7 +332,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             if (Service.CheckNet(getActivity())) {
                 new RemarkLoadingTask().execute();
                 new ModifierLoadingTask().execute();
-
             } else {
                 Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }

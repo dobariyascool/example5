@@ -15,6 +15,11 @@
             android:id="@+id/app_bar"
             layout="@layout/app_bar" />
 
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/error_layout"
+            android:visibility="gone"/>
+
         <LinearLayout
             android:id="@+id/headerLayout"
             android:layout_width="match_parent"

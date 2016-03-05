@@ -11,6 +11,11 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
+    <include
+        android:id="@+id/errorLayout"
+        layout="@layout/error_layout"
+        android:visibility="gone" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvCounter"
         android:layout_width="match_parent"
