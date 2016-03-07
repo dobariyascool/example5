@@ -210,8 +210,6 @@ public class Globals {
     }
 
     public static void ShowSnackBar(View view, String message, Context context, int duration) {
-        Typeface roboto = Typeface.createFromAsset(context.getAssets(),
-                "fonts/Roboto-Regular.ttf");
         Snackbar snackbar = Snackbar.make(view, message, duration);
         View snackView = snackbar.getView();
         if(Build.VERSION.SDK_INT >= 21) {
@@ -221,7 +219,6 @@ public class Globals {
         txt.setGravity(Gravity.CENTER);
         txt.setTextColor(ContextCompat.getColor(context, android.R.color.white));
         txt.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        txt.setTypeface(roboto);
         snackView.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_grey));
         snackbar.show();
     }

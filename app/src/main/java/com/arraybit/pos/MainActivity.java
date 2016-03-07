@@ -1,13 +1,27 @@
 package com.arraybit.pos;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.arraybit.global.Service;
+import com.arraybit.modal.ItemMaster;
+import com.arraybit.parser.ItemJSONParser;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
         //int j = i;
 
-        //       RequestQueue queue = Volley.newRequestQueue(this);
+               RequestQueue queue = Volley.newRequestQueue(this);
 
 //        try{
 //
@@ -265,21 +279,27 @@ public class MainActivity extends AppCompatActivity {
 
 
 //
+//        new HotelLoadingTask().execute();
+        progressDialog = new ProgressDialog();
+        progressDialog.show(getSupportFragmentManager(), "");
+        System.out.println("response" + "text");
+        String url = "http://10.0.3.2:2293/Service.svc/SelectAllItemMasterByCategoryMasterId/1/0/1/null/null";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET,url,new JSONObject(),new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                progressDialog.dismiss();
+                System.out.println("response" + "text1");
+                JSONObject object = jsonObject;
+                JSONObject jsonObject1 = object;
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                progressDialog.dismiss();
+            }
+        });
 
-
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET,url,new JSONObject(),new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject jsonObject) {
-//                JSONObject object = jsonObject;
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//
-//            }
-//        });
-
-        //queue.add(jsonObjectRequest);
+        queue.add(jsonObjectRequest);
 
 
         //WebView web = (WebView) findViewById(R.id.webview);
@@ -514,5 +534,37 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }
 //    }
+        //537-681-144 537-785-248
+    //693-817 709-937 09:31:07.829 09:31:09.073 893 761
+    class HotelLoadingTask extends AsyncTask {
+
+        ItemMaster objItemMaster;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new ProgressDialog();
+            progressDialog.show(getSupportFragmentManager(), "");
+            System.out.println("response" + "text");
+           // String url = "http://10.0.3.2:2293/Service.svc/SelectAllBusinessMaster";
+            Service.Url = "http://10.0.3.2:2293/Service.svc/";
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            ItemJSONParser objItemJSONParser = new ItemJSONParser();
+            return objItemJSONParser.SelectAllItemMaster(1,0,1,0,null);
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            ArrayList<ItemMaster> arrayList = (ArrayList<ItemMaster>) result;
+            System.out.println("response" + "text");
+        }
+    }
 
 }
