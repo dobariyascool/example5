@@ -61,10 +61,10 @@ public class FeedbackQuestionJSONParser {
         }
     }
 
-    public ArrayList<FeedbackQuestionMaster> SelectAllFeedbackQuestionMaster() {
+    public ArrayList<FeedbackQuestionMaster> SelectAllFeedbackQuestionMaster(String businessMasterId) {
         ArrayList<FeedbackQuestionMaster> lstFeedbackQuestionMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllFeedbackQuestionMaster);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllFeedbackQuestionMaster + "/" + businessMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllFeedbackQuestionMaster + "Result");
                 if (jsonArray != null) {

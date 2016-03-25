@@ -43,7 +43,6 @@ public class ItemJSONParser {
                 objItemMaster.setlinktoUnitMasterId((short) jsonObject.getInt("linktoUnitMasterId"));
                 objItemMaster.setSearchWords(jsonObject.getString("SearchWords"));
                 objItemMaster.setImageName(jsonObject.getString("ImageName"));
-                objItemMaster.setlinktoItemStatusMasterId((short) jsonObject.getInt("linktoItemStatusMasterId"));
                 if (!jsonObject.getString("SortOrder").equals("null")) {
                     objItemMaster.setSortOrder(jsonObject.getInt("SortOrder"));
                 }
@@ -60,7 +59,6 @@ public class ItemJSONParser {
                 /// Extra
                 //objItemMaster.setItemType(jsonObject.getString("ItemType"));
                 objItemMaster.setUnit(jsonObject.getString("Unit"));
-                objItemMaster.setItemStatus(jsonObject.getString("ItemStatus"));
                 objItemMaster.setActualSellPrice(jsonObject.getDouble("ActualSellPrice"));
                 objItemMaster.setLinktoOrderMasterId(jsonObject.getLong("linktoOrderMasterId"));
                 objItemMaster.setItemModifierIds(jsonObject.getString("ItemModifierMasterIds"));
@@ -94,7 +92,6 @@ public class ItemJSONParser {
                 objItemMaster.setlinktoUnitMasterId((short) jsonArray.getJSONObject(i).getInt("linktoUnitMasterId"));
                 objItemMaster.setSearchWords(jsonArray.getJSONObject(i).getString("SearchWords"));
                 objItemMaster.setImageName(jsonArray.getJSONObject(i).getString("ImageName"));
-                objItemMaster.setlinktoItemStatusMasterId((short) jsonArray.getJSONObject(i).getInt("linktoItemStatusMasterId"));
                 if (!jsonArray.getJSONObject(i).getString("SortOrder").equals("null")) {
                     objItemMaster.setSortOrder(jsonArray.getJSONObject(i).getInt("SortOrder"));
                 }
@@ -111,7 +108,6 @@ public class ItemJSONParser {
                 /// Extra
                 //objItemMaster.setItemType(jsonArray.getJSONObject(i).getString("ItemType"));
                 objItemMaster.setUnit(jsonArray.getJSONObject(i).getString("Unit"));
-                objItemMaster.setItemStatus(jsonArray.getJSONObject(i).getString("ItemStatus"));
                 objItemMaster.setActualSellPrice(jsonArray.getJSONObject(i).getDouble("ActualSellPrice"));
                 objItemMaster.setLinktoOrderMasterId(jsonArray.getJSONObject(i).getLong("linktoOrderMasterId"));
                 objItemMaster.setItemModifierIds(jsonArray.getJSONObject(i).getString("ItemModifierMasterIds"));

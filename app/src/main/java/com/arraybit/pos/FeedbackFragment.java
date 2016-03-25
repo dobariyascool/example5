@@ -345,7 +345,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
         @Override
         protected Object doInBackground(Object[] params) {
             FeedbackQuestionJSONParser objFeedbackQuestionJSONParser = new FeedbackQuestionJSONParser();
-            return objFeedbackQuestionJSONParser.SelectAllFeedbackQuestionMaster();
+            return objFeedbackQuestionJSONParser.SelectAllFeedbackQuestionMaster(String.valueOf(Globals.businessMasterId));
         }
 
         @Override

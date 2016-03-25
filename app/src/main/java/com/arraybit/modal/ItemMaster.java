@@ -25,7 +25,6 @@ public class ItemMaster implements Parcelable {
     String SearchWords;
     String ImageNameBytes;
     String ImageName;
-    short linktoItemStatusMasterId;
     int SortOrder;
     String CreateDateTime;
     short linktoUserMasterIdCreatedBy;
@@ -40,7 +39,6 @@ public class ItemMaster implements Parcelable {
     /// Extra
     //String ItemType;
     String Unit;
-    String ItemStatus;
     String ItemModifierIds;
     String OptionValueTranIds;
     double ActualSellPrice;
@@ -64,7 +62,6 @@ public class ItemMaster implements Parcelable {
             objItemMaster.SearchWords = source.readString();
             objItemMaster.ImageNameBytes = source.readString();
             objItemMaster.ImageName = source.readString();
-            objItemMaster.linktoItemStatusMasterId = (short) source.readInt();
             objItemMaster.SortOrder = source.readInt();
             objItemMaster.CreateDateTime = source.readString();
             objItemMaster.linktoUserMasterIdCreatedBy = (short) source.readInt();
@@ -80,7 +77,6 @@ public class ItemMaster implements Parcelable {
             /// Extra
             //objItemMaster.ItemType = source.readString();
             objItemMaster.Unit = source.readString();
-            objItemMaster.ItemStatus = source.readString();
             objItemMaster.ActualSellPrice = source.readDouble();
             objItemMaster.linktoOrderMasterId = source.readLong();
             objItemMaster.ItemModifierIds= source.readString();
@@ -197,14 +193,6 @@ public class ItemMaster implements Parcelable {
         this.ImageName = imageName;
     }
 
-    public short getlinktoItemStatusMasterId() {
-        return this.linktoItemStatusMasterId;
-    }
-
-    public void setlinktoItemStatusMasterId(short linktoItemStatusMasterId) {
-        this.linktoItemStatusMasterId = linktoItemStatusMasterId;
-    }
-
     public int getSortOrder() {
         return this.SortOrder;
     }
@@ -279,14 +267,6 @@ public class ItemMaster implements Parcelable {
 
     public void setUnit(String unit) {
         this.Unit = unit;
-    }
-
-    public String getItemStatus() {
-        return this.ItemStatus;
-    }
-
-    public void setItemStatus(String itemStatus) {
-        this.ItemStatus = itemStatus;
     }
 
     public boolean isFavourite() {
@@ -408,7 +388,6 @@ public class ItemMaster implements Parcelable {
         parcel.writeString(SearchWords);
         parcel.writeString(ImageNameBytes);
         parcel.writeString(ImageName);
-        parcel.writeInt(linktoItemStatusMasterId);
         parcel.writeInt(SortOrder);
         parcel.writeString(CreateDateTime);
         parcel.writeInt(linktoUserMasterIdCreatedBy);
@@ -424,7 +403,6 @@ public class ItemMaster implements Parcelable {
         /// Extra
         //parcel.writeString(ItemType);
         parcel.writeString(Unit);
-        parcel.writeString(ItemStatus);
         parcel.writeInt(Quantity);
         parcel.writeDouble(ActualSellPrice);
         parcel.writeLong(linktoOrderMasterId);
