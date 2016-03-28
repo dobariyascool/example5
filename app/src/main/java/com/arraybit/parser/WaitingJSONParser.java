@@ -226,12 +226,12 @@ public class WaitingJSONParser {
         }
     }
 
-    public ArrayList<WaitingMaster> SelectAllWaitingMasterByWaitingStatusMasterId(int linktoWaitingStatusMasterId) {
+    public ArrayList<WaitingMaster> SelectAllWaitingMasterByWaitingStatusMasterId(int linktoWaitingStatusMasterId, int linktoBusinessMasterId) {
         ArrayList<WaitingMaster> lstWaitingMaster = null;
         Date date;
         try {
             date = new Date();
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMasterByWaitingStatusId + "/" + linktoWaitingStatusMasterId + "/" + sdfControlDateFormat.format(date));
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMasterByWaitingStatusId + "/" + linktoWaitingStatusMasterId + "/" + sdfControlDateFormat.format(date) + "/" + linktoBusinessMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllWaitingMasterByWaitingStatusId + "Result");
                 if (jsonArray != null) {
