@@ -40,6 +40,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
                     } else {
+                        Globals.SetBusinessMasterId(SplashScreenActivity.this);
                         RedirectActivity(WelcomeActivity.class);
                     }
                     //get server name

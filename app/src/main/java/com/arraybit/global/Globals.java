@@ -82,7 +82,7 @@ public class Globals {
     public static String TimeFormat = "hh:mm";
     public static String DisplayTimeFormat = "h:mm a";
     public static int sourceMasterId = 2;
-    public static short businessMasterId = 1;
+    public static short businessMasterId;
     public static short itemType = 2;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
     public static int counter = 0;
@@ -109,6 +109,19 @@ public class Globals {
         DisplayMetrics dm = resources.getDisplayMetrics();
         float dp = px * (dm.densityDpi) / 160.0F;
         return dp;
+    }
+
+    public static void SetBusinessMasterId(Context context){
+        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+        if(objSharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId",context)!=null){
+            String str = objSharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId",context);
+            if(str!=null && !str.equals("")) {
+                Globals.businessMasterId = Short.parseShort(str);
+            }
+        }
+        else{
+            Globals.businessMasterId = 1;
+        }
     }
 
     public static void ChangeUrl() {

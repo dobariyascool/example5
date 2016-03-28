@@ -270,6 +270,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 objSharePreferenceManage.CreatePreference("WaiterPreference", "WaiterMasterId", String.valueOf(objUserMaster.getWaiterMasterId()), SignInActivity.this);
             }
 
+            objSharePreferenceManage.CreatePreference("WaiterPreference", "linktoBusinessMasterId", String.valueOf(objUserMaster.getLinktoBusinessMasterId()), SignInActivity.this);
         }
     }
 
@@ -322,7 +323,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             } else {
                 Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), SignInActivity.this, 2000);
                 CreateUserPreference();
-
+                Globals.SetBusinessMasterId(SignInActivity.this);
                 if (Service.CheckNet(SignInActivity.this)) {
                     new CounterLoadingTask().execute();
                     ClearControls();

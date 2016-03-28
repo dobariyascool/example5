@@ -28,7 +28,8 @@ public class UserMasterJSONParser {
                 objUserMaster.setLinktoRoleMasterId((short) jsonObject.getInt("linktoRoleMasterId"));
                 objUserMaster.setLinktoUserTypeMasterId((short) jsonObject.getInt("linktoUserTypeMasterId"));
                 objUserMaster.setRole(jsonObject.getString("Role"));
-                objUserMaster.setWaiterMasterId((short)jsonObject.getInt("WaiterMasterId"));
+                objUserMaster.setWaiterMasterId((short) jsonObject.getInt("WaiterMasterId"));
+                objUserMaster.setLinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
             }
             return objUserMaster;
         } catch (JSONException e) {
@@ -50,6 +51,7 @@ public class UserMasterJSONParser {
                 objUserMaster.setLinktoUserTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoUserTypeMasterId"));
                 objUserMaster.setRole(jsonArray.getJSONObject(i).getString("Role"));
                 objUserMaster.setWaiterMasterId((short) jsonArray.getJSONObject(i).getInt("WaiterMasterId"));
+                objUserMaster.setLinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 lstUserMaster.add(objUserMaster);
             }
             return lstUserMaster;
@@ -63,7 +65,7 @@ public class UserMasterJSONParser {
     public UserMaster SelectRegisteredUserName(String username,String password)
     {
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectRegisteredUserMasterUserName + "/" + username + "/" + password);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectRegisteredUserMasterUserName + "/" + username + "/" + password + "/" + null);
             if (jsonResponse != null) {
                 JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectRegisteredUserMasterUserName + "Result");
                 if (jsonObject != null) {

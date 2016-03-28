@@ -85,6 +85,7 @@ public class WelcomeActivity extends Activity {
                     count++;
                     objSharePreferenceManage = new SharePreferenceManage();
                     String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
+                    Globals.SetBusinessMasterId(WelcomeActivity.this);
                     if (userTypeMasterId != null && (userTypeMasterId.equals(String.valueOf(Globals.UserType.valueOf("Waiter").getValue())) ||
                             (userTypeMasterId.equals(String.valueOf(Globals.UserType.valueOf("Captain").getValue()))))) {
                         Intent intent = getIntent();
