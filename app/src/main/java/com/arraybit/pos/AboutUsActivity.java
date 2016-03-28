@@ -25,6 +25,7 @@ public class AboutUsActivity extends AppCompatActivity {
 
     CardView cardPolicy, cardTerms;
     short mode;
+    //test
 
     @SuppressLint("SetTextI18n")
     @Override
