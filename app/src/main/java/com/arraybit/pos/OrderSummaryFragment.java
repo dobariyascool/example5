@@ -570,7 +570,13 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             objSalesMaster.setlinktoCounterMasterId(counterMasterId);
             objSalesMaster.setlinktoTableMasterIds(String.valueOf(objTableMaster.getTableMasterId()));
             objSalesMaster.setlinktoWaiterMasterId(waiterMasterId);
-            objSalesMaster.setlinktoCustomerMasterId(0);
+            if(Globals.userName!=null){
+                objSharePreferenceManage = new SharePreferenceManage();
+                if(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity())!=null){
+                    int customerMasterId = Integer.parseInt(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()));
+                    objSalesMaster.setlinktoCustomerMasterId((short) customerMasterId);
+                }
+            }
             objSalesMaster.setlinktoOrderTypeMasterId(objTableMaster.getlinktoOrderTypeMasterId());
             objSalesMaster.setTotalAmount(totalAmount);
             objSalesMaster.setTotalTax(totalTax);

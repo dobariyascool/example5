@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
-import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.R;
@@ -35,7 +34,6 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     ArrayList<ItemMaster> alItemMaster;
     ItemMaster objItemMaster;
     ItemClickListener objItemClickListener;
-    SharePreferenceManage objSharePreferenceManage;
     int previousPosition;
 
     public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange, ItemClickListener objItemClickListener, Boolean isItemAnimate) {
@@ -49,7 +47,6 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        objSharePreferenceManage = new SharePreferenceManage();
         if (isViewChange) {
             if (CategoryItemFragment.i == 1) {
                 view = LayoutInflater.from(context).inflate(R.layout.row_category_item_grid, parent, false);

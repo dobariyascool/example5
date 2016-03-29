@@ -16,7 +16,7 @@ public class FeedbackMaster implements Parcelable {
     String Feedback;
     String FeedbackDateTime;
     short linktoFeedbackTypeMasterId;
-    int linktoRegisteredUserMasterId;
+    int linktoCustomerMasterId;
     short linktoBusinessMasterId;
     /// Extra
     String FeedbackType;
@@ -31,7 +31,7 @@ public class FeedbackMaster implements Parcelable {
             objFeedbackMaster.Feedback = source.readString();
             objFeedbackMaster.FeedbackDateTime = source.readString();
             objFeedbackMaster.linktoFeedbackTypeMasterId = (short)source.readInt();
-            objFeedbackMaster.linktoRegisteredUserMasterId = source.readInt();
+            objFeedbackMaster.linktoCustomerMasterId = source.readInt();
             objFeedbackMaster.linktoBusinessMasterId = (short)source.readInt();
 
             /// Extra
@@ -73,9 +73,9 @@ public class FeedbackMaster implements Parcelable {
 
     public void setlinktoFeedbackTypeMasterId(short linktoFeedbackTypeMasterId) { this.linktoFeedbackTypeMasterId = linktoFeedbackTypeMasterId; }
 
-    public int getlinktoRegisteredUserMasterId() { return this.linktoRegisteredUserMasterId; }
+    public int getlinktoCustomerMasterId() { return this.linktoCustomerMasterId; }
 
-    public void setlinktoRegisteredUserMasterId(int linktoRegisteredUserMasterId) { this.linktoRegisteredUserMasterId = linktoRegisteredUserMasterId; }
+    public void setlinktoCustomerMasterId(int linktoCustomerMasterId) { this.linktoCustomerMasterId = linktoCustomerMasterId; }
 
     public short getlinktoBusinesseMasterId() { return this.linktoBusinessMasterId; }
 
@@ -103,7 +103,7 @@ public class FeedbackMaster implements Parcelable {
         parcel.writeString(Feedback);
         parcel.writeString(FeedbackDateTime);
         parcel.writeInt(linktoFeedbackTypeMasterId);
-        parcel.writeInt(linktoRegisteredUserMasterId);
+        parcel.writeInt(linktoCustomerMasterId);
         parcel.writeInt(linktoBusinessMasterId);
 
         /// Extra

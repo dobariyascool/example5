@@ -20,12 +20,9 @@ import java.util.Locale;
 public class CustomerJSONParser {
 
     public String InsertCustomerMaster = "InsertCustomerMaster";
-    public String UpdateRegisteredUserMaster = "UpdateRegisteredUserMaster";
+    public String UpdateCustomerMaster = "UpdateCustomerMaster";
     public String UpdateRegisteredUserMasterPassword = "UpdateRegisteredUserMasterPassword";
-    public String SelectRegisteredUserMaster = "SelectRegisteredUserMaster";
     public String SelectCustomerMaster = "SelectCustomerMaster";
-    public String SelectAllRegisteredUserMaster = "SelectAllRegisteredUserMasterPageWise";
-    public String SelectRegisteredUserMasterUserName = "GetRegisteredUserMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     Date dt = null;
@@ -195,8 +192,12 @@ public class CustomerJSONParser {
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertCustomerMaster, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertCustomerMaster + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
+            if(jsonResponse!=null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertCustomerMaster + "Result");
+                return String.valueOf(jsonObject.getInt("ErrorCode"));
+            }else{
+                return "-1";
+            }
         } catch (Exception ex) {
             return "-1";
         }
@@ -205,35 +206,38 @@ public class CustomerJSONParser {
     //endregion
 
     //region Update
-    public String UpdateRegisteredUserMaster(RegisteredUserMaster objRegisteredUserMaster) {
+    public String UpdateCustomerMaster(CustomerMaster objCustomerMaster) {
         dt = new Date();
         try {
             JSONStringer stringer = new JSONStringer();
             stringer.object();
 
-            stringer.key("registeredUserMaster");
+            stringer.key("customerMaster");
             stringer.object();
 
-            stringer.key("RegisteredUserMasterId").value(objRegisteredUserMaster.getRegisteredUserMasterId());
-            stringer.key("Phone").value(objRegisteredUserMaster.getPhone());
-            stringer.key("FirstName").value(objRegisteredUserMaster.getFirstName());
-            stringer.key("LastName").value(objRegisteredUserMaster.getLastName());
-            stringer.key("Gender").value(objRegisteredUserMaster.getGender());
-            if(objRegisteredUserMaster.getBirthDate()!=null) {
-                stringer.key("BirthDate").value(objRegisteredUserMaster.getBirthDate());
+            stringer.key("CustomerMasterId").value(objCustomerMaster.getCustomerMasterId());
+            stringer.key("Phone1").value(objCustomerMaster.getPhone1());
+            stringer.key("CustomerName").value(objCustomerMaster.getCustomerName());
+            stringer.key("Gender").value(objCustomerMaster.getGender());
+            if(objCustomerMaster.getBirthDate()!=null) {
+                stringer.key("BirthDate").value(objCustomerMaster.getBirthDate());
             }
-            stringer.key("linktoAreaMasterId").value(objRegisteredUserMaster.getlinktoAreaMasterId());
             stringer.key("UpdateDateTime").value(sdfDateTimeFormat.format(dt));
-            stringer.key("Comment").value(objRegisteredUserMaster.getComment());
-            stringer.key("linktoUserMasterIdUpdatedBy").value(objRegisteredUserMaster.getlinktoUserMasterIdUpdatedBy());
-
+            stringer.key("linktoUserMasterIdUpdatedBy").value(objCustomerMaster.getlinktoUserMasterIdUpdatedBy());
+            stringer.key("ShortName").value(objCustomerMaster.getCustomerName());
+            stringer.key("CustomerType").value(objCustomerMaster.getCustomerType());
             stringer.endObject();
 
             stringer.endObject();
 
-            JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateRegisteredUserMaster, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateRegisteredUserMaster + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
+            JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateCustomerMaster, stringer);
+            if(jsonResponse!=null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateCustomerMaster + "Result");
+                return String.valueOf(jsonObject.getInt("ErrorCode"));
+            }else{
+                return "-1";
+            }
+
         } catch (Exception ex) {
             return "-1";
         }
@@ -259,8 +263,12 @@ public class CustomerJSONParser {
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateRegisteredUserMasterPassword, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateRegisteredUserMasterPassword + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
+            if(jsonResponse!=null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateRegisteredUserMasterPassword + "Result");
+                return String.valueOf(jsonObject.getInt("ErrorCode"));
+            }else{
+                return "-1";
+            }
         } catch (Exception ex) {
             return "-1";
         }

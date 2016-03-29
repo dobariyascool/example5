@@ -26,7 +26,6 @@ import android.widget.ImageView;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
-import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.FeedbackAnswerMaster;
 import com.arraybit.modal.FeedbackQuestionGroupMaster;
 import com.arraybit.modal.FeedbackQuestionMaster;
@@ -45,7 +44,6 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
     public static ArrayList<ArrayList<FeedbackAnswerMaster>> alFinalFeedbackAnswers;
     Activity activityName;
     TextView txtFeedbackGroup, txtPrevious, txtNext;
-    SharePreferenceManage objSharePreferenceManage;
     ArrayList<FeedbackQuestionGroupMaster> alFeedbackQuestionGroupMaster;
     ArrayList<FeedbackQuestionMaster> alFeedbackQuestionMaster, alFeedbackQuestionMasterFilter;
     ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, alFeedbackAnswer;

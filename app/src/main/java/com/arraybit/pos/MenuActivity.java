@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.arraybit.global.Globals;
-import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.TableMaster;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ public class MenuActivity extends AppCompatActivity{
 
     public static TableMaster objTableMaster = null;
     public static boolean parentActivity = false;
-    SharePreferenceManage objSharePreferenceManage;
     FrameLayout mainLayout;
 
     @Override

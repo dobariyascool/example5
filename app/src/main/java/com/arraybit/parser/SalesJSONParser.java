@@ -175,7 +175,9 @@ public class SalesJSONParser
             stringer.key("linktoTableMasterIds").value(objSalesMaster.getlinktoTableMasterIds());
             stringer.key("linktoWaiterMasterId").value(objSalesMaster.getlinktoWaiterMasterId());
             stringer.key("linktoWaiterMasterIdCaptain").value(objSalesMaster.getlinktoWaiterMasterIdCaptain());
-            stringer.key("linktoCustomerMasterId").value(objSalesMaster.getlinktoCustomerMasterId());
+            if(objSalesMaster.getlinktoCustomerMasterId()>0) {
+                stringer.key("linktoCustomerMasterId").value(objSalesMaster.getlinktoCustomerMasterId());
+            }
             stringer.key("linktoOrderTypeMasterId").value(objSalesMaster.getlinktoOrderTypeMasterId());
             stringer.key("linktoOrderStatusMasterId").value(null);
             stringer.key("TotalAmount").value(objSalesMaster.getTotalAmount());

@@ -14,6 +14,7 @@ public class BusinessGalleryJSONParser
 {
     public String SelectAllBusinessGalleryTran = "SelectAllBusinessGalleryTran";
 
+    //region Class Method
     private BusinessGalleryTran SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
         BusinessGalleryTran objBusinessGalleryTran = null;
         try {
@@ -63,7 +64,9 @@ public class BusinessGalleryJSONParser
             return null;
         }
     }
+    //endregion
 
+    //region SelectAll
     public ArrayList<BusinessGalleryTran> SelectAllBusinessGalleryTranPageWise(int BusinessMasterId) {
         ArrayList<BusinessGalleryTran> lstBusinessGalleryTran = null;
         try {
@@ -80,4 +83,5 @@ public class BusinessGalleryJSONParser
             return null;
         }
     }
+    //endregion
 }

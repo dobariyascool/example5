@@ -42,8 +42,8 @@ public class FeedbackJSONParser {
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("FeedbackDateTime"));
                 objFeedbackMaster.setFeedbackDateTime(sdfControlDateFormat.format(dt));
                 objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) jsonObject.getInt("linktoFeedbackTypeMasterId"));
-                if (!jsonObject.getString("linktoRegisteredUserMasterId").equals("null")) {
-                    objFeedbackMaster.setlinktoRegisteredUserMasterId(jsonObject.getInt("linktoRegisteredUserMasterId"));
+                if (!jsonObject.getString("linktoCustomerMasterId").equals("null")) {
+                    objFeedbackMaster.setlinktoCustomerMasterId(jsonObject.getInt("linktoCustomerMasterId"));
                 }
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("ReplyDateTime"));
                 objFeedbackMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
@@ -74,8 +74,8 @@ public class FeedbackJSONParser {
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("FeedbackDateTime"));
                 objFeedbackMaster.setFeedbackDateTime(sdfControlDateFormat.format(dt));
                 objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoFeedbackTypeMasterId"));
-                if (!jsonArray.getJSONObject(i).getString("linktoRegisteredUserMasterId").equals("null")) {
-                    objFeedbackMaster.setlinktoRegisteredUserMasterId(jsonArray.getJSONObject(i).getInt("linktoRegisteredUserMasterId"));
+                if (!jsonArray.getJSONObject(i).getString("linktoCustomerMasterId").equals("null")) {
+                    objFeedbackMaster.setlinktoCustomerMasterId(jsonArray.getJSONObject(i).getInt("linktoCustomerMasterId"));
                 }
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("ReplyDateTime"));
                 objFeedbackMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
@@ -108,7 +108,7 @@ public class FeedbackJSONParser {
             stringer.key("Feedback").value(objFeedbackMaster.getFeedback());
             stringer.key("FeedbackDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoFeedbackTypeMasterId").value(objFeedbackMaster.getlinktoFeedbackTypeMasterId());
-            stringer.key("linktoRegisteredUserMasterId").value(objFeedbackMaster.getlinktoRegisteredUserMasterId());
+            stringer.key("linktoCustomerMasterId").value(objFeedbackMaster.getlinktoCustomerMasterId());
             stringer.key("ReplyDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoBusinessMasterId").value(objFeedbackMaster.getlinktoBusinesseMasterId());
 
@@ -132,74 +132,13 @@ public class FeedbackJSONParser {
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertFeedbackMaster, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertFeedbackMaster + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
-            //return "-1";
+            if(jsonResponse!=null){
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertFeedbackMaster + "Result");
+                return String.valueOf(jsonObject.getInt("ErrorCode"));
+            }
+            return "-1";
         } catch (Exception ex) {
             return "-1";
         }
     }
-
-    public String UpdateFeedbackMaster(FeedbackMaster objFeedbackMaster) {
-        try {
-            JSONStringer stringer = new JSONStringer();
-            stringer.object();
-
-            stringer.key("feedbackMaster");
-            stringer.object();
-
-            stringer.key("FeedbackMasterId").value(objFeedbackMaster.getFeedbackMasterId());
-            stringer.key("Name").value(objFeedbackMaster.getName());
-            stringer.key("Email").value(objFeedbackMaster.getEmail());
-            stringer.key("Phone").value(objFeedbackMaster.getPhone());
-            stringer.key("Feedback").value(objFeedbackMaster.getFeedback());
-            dt = sdfControlDateFormat.parse(objFeedbackMaster.getFeedbackDateTime());
-            stringer.key("FeedbackDateTime").value(sdfDateTimeFormat.format(dt));
-            stringer.key("linktoFeedbackTypeMasterId").value(objFeedbackMaster.getlinktoFeedbackTypeMasterId());
-            stringer.key("linktoRegisteredUserMasterId").value(objFeedbackMaster.getlinktoRegisteredUserMasterId());
-            stringer.key("linktoBusinessMasterId").value(objFeedbackMaster.getlinktoBusinesseMasterId());
-
-            stringer.endObject();
-
-            stringer.endObject();
-
-            JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateFeedbackMaster, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateFeedbackMaster + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
-        } catch (Exception ex) {
-            return "-1";
-        }
-    }
-
-    public FeedbackMaster SelectFeedbackMaster(int feedbackMasterId) {
-        try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectFeedbackMaster + "/" + feedbackMasterId);
-            if (jsonResponse != null) {
-                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectFeedbackMaster + "Result");
-                if (jsonObject != null) {
-                    return SetClassPropertiesFromJSONObject(jsonObject);
-                }
-            }
-            return null;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    public ArrayList<FeedbackMaster> SelectAllFeedbackMasterPageWise(int currentPage) {
-        ArrayList<FeedbackMaster> lstFeedbackMaster = null;
-        try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllFeedbackMaster);
-            if (jsonResponse != null) {
-                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllFeedbackMaster + "PageWiseResult");
-                if (jsonArray != null) {
-                    lstFeedbackMaster = SetListPropertiesFromJSONArray(jsonArray);
-                }
-            }
-            return lstFeedbackMaster;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
 }

@@ -18,6 +18,7 @@ public class OrderMaster implements Parcelable {
     short linktoCustomerMasterId;
     short linktoOrderTypeMasterId;
     Short linktoOrderStatusMasterId;
+    short linktoBusinessMasterId;
     double TotalAmount;
     double TotalTax;
     double Discount;
@@ -52,6 +53,7 @@ public class OrderMaster implements Parcelable {
             objOrderMaster.linktoCustomerMasterId = (short) source.readInt();
             objOrderMaster.linktoOrderTypeMasterId = (short) source.readInt();
             objOrderMaster.linktoOrderStatusMasterId = (short) source.readInt();
+            objOrderMaster.linktoBusinessMasterId = (short) source.readInt();
             objOrderMaster.TotalAmount = source.readDouble();
             objOrderMaster.TotalTax = source.readDouble();
             objOrderMaster.Discount = source.readDouble();
@@ -325,6 +327,14 @@ public class OrderMaster implements Parcelable {
         TotalKOT = totalKOT;
     }
 
+    public short getLinktoBusinessMasterId() {
+        return linktoBusinessMasterId;
+    }
+
+    public void setLinktoBusinessMasterId(short linktoBusinessMasterId) {
+        this.linktoBusinessMasterId = linktoBusinessMasterId;
+    }
+
     //endregion
 
     @Override
@@ -343,6 +353,7 @@ public class OrderMaster implements Parcelable {
         parcel.writeInt(linktoCustomerMasterId);
         parcel.writeInt(linktoOrderTypeMasterId);
         parcel.writeInt(linktoOrderStatusMasterId);
+        parcel.writeInt(linktoBusinessMasterId);
         parcel.writeDouble(TotalAmount);
         parcel.writeDouble(TotalTax);
         parcel.writeDouble(Discount);

@@ -550,7 +550,7 @@ public class FeedbackViewFragment extends Fragment {
                         objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.valueOf(checkedString).getValue());
                         objFeedbackMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
                         if (userMasterId != 0) {
-                            objFeedbackMaster.setlinktoRegisteredUserMasterId(userMasterId);
+                            objFeedbackMaster.setlinktoCustomerMasterId(userMasterId);
                         }
                         new FeedbackLodingTask().execute();
                     } else {
@@ -575,8 +575,8 @@ public class FeedbackViewFragment extends Fragment {
         if (Globals.userName != null) {
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_home))) {
                 if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null
-                        && objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) != null) {
-                    userMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()));
+                        && objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()) != null) {
+                    userMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()));
                     etEmail.setText(objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()));
                     etEmail.setEnabled(false);
                     if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()) != null) {

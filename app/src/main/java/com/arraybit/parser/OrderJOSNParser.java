@@ -164,7 +164,10 @@ public class OrderJOSNParser {
             stringer.key("linktoCounterMasterId").value(objOrderMaster.getlinktoCounterMasterId());
             stringer.key("linktoTableMasterIds").value(objOrderMaster.getlinktoTableMasterIds());
             stringer.key("linktoWaiterMasterId").value(objOrderMaster.getlinktoWaiterMasterId());
-            //stringer.key("linktoCustomerMasterId").value(1);
+            stringer.key("linktoBusinessMasterId").value(objOrderMaster.getLinktoBusinessMasterId());
+            if(objOrderMaster.getlinktoCustomerMasterId() > 0) {
+                stringer.key("linktoCustomerMasterId").value(objOrderMaster.getlinktoCustomerMasterId());
+            }
             stringer.key("linktoOrderTypeMasterId").value(objOrderMaster.getlinktoOrderTypeMasterId());
             stringer.key("linktoOrderStatusMasterId").value(null);
             stringer.key("TotalAmount").value(objOrderMaster.getTotalAmount());

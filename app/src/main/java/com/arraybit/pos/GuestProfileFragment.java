@@ -17,14 +17,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.RadioButton;
 
-import com.arraybit.adapter.SpinnerAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
-import com.arraybit.global.SpinnerItem;
 import com.arraybit.modal.CustomerMaster;
-import com.arraybit.modal.RegisteredUserMaster;
-import com.arraybit.parser.AreaJSONParser;
 import com.arraybit.parser.CustomerJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
@@ -32,7 +28,6 @@ import com.rey.material.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -76,6 +71,7 @@ public class GuestProfileFragment extends Fragment {
 
         etFirstName = (EditText) view.findViewById(R.id.etFirstName);
         etLastName = (EditText) view.findViewById(R.id.etLastName);
+        etLastName.setVisibility(View.GONE);
         etPhone = (EditText) view.findViewById(R.id.etPhone);
         etDateOfBirth = (EditText) view.findViewById(R.id.etDateOfBirth);
         //hide keyboard
@@ -89,12 +85,6 @@ public class GuestProfileFragment extends Fragment {
         btnUpdateProfile = (Button) view.findViewById(R.id.btnUpdateProfile);
 
         SetUserName(container);
-
-        if (Service.CheckNet(getActivity())) {
-            new SpinnerLoadingTask().execute();
-        } else {
-            Globals.ShowSnackBar(container, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
-        }
 
         spnrArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -175,7 +165,7 @@ public class GuestProfileFragment extends Fragment {
 
         if (MyAccountFragment.objCustomerMaster != null) {
             etFirstName.setText(MyAccountFragment.objCustomerMaster.getCustomerName());
-            etLastName.setText(MyAccountFragment.objCustomerMaster.getCustomerName());
+            //etLastName.setText(MyAccountFragment.objCustomerMaster.getCustomerName());
             etPhone.setText(MyAccountFragment.objCustomerMaster.getPhone1());
             if (MyAccountFragment.objCustomerMaster.getGender().equals(rbFemale.getText().toString())) {
                 rbFemale.setChecked(true);
@@ -200,13 +190,13 @@ public class GuestProfileFragment extends Fragment {
         }
     }
 
-    private void CreateGuestPreference(RegisteredUserMaster objRegisteredUserMaster) {
+    private void CreateGuestPreference(CustomerMaster objCustomerMaster) {
         SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
         objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", getActivity());
         objSharePreferenceManage.RemovePreference("RegistrationPreference", "FirstName", getActivity());
         if (!etFirstName.getText().toString().isEmpty()) {
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", String.valueOf(objRegisteredUserMaster.getFirstName()) + " " + String.valueOf(objRegisteredUserMaster.getLastName()), getActivity());
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName", String.valueOf(objRegisteredUserMaster.getFirstName()), getActivity());
+            objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", objCustomerMaster.getCustomerName(), getActivity());
+            objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName",  objCustomerMaster.getCustomerName(), getActivity());
         }
     }
 
@@ -242,7 +232,7 @@ public class GuestProfileFragment extends Fragment {
         @Override
         protected Object doInBackground(Object[] objects) {
             CustomerJSONParser objCustomerJSONParser = new CustomerJSONParser();
-            objCustomerMaster = objCustomerJSONParser.SelectCustomerMaster(null, null,customerMasterId);
+            objCustomerMaster = objCustomerJSONParser.SelectCustomerMaster(null, null, customerMasterId);
             return objCustomerMaster;
         }
 
@@ -259,7 +249,8 @@ public class GuestProfileFragment extends Fragment {
 
         com.arraybit.pos.ProgressDialog progressDialog;
         SharePreferenceManage objSharePreferenceManage;
-        RegisteredUserMaster objRegisteredUserMaster;
+        //RegisteredUserMaster objRegisteredUserMaster;
+        CustomerMaster objCustomerMaster;
         String status;
 
         @Override
@@ -269,36 +260,34 @@ public class GuestProfileFragment extends Fragment {
             progressDialog = new com.arraybit.pos.ProgressDialog();
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
-            objRegisteredUserMaster = new RegisteredUserMaster();
-            //objRegisteredUserMaster.setRegisteredUserMasterId(MyAccountFragment.objRegisteredUserMaster.getRegisteredUserMasterId());
-            objRegisteredUserMaster.setFirstName(etFirstName.getText().toString());
-            objRegisteredUserMaster.setLastName(etLastName.getText().toString());
+            objCustomerMaster = new CustomerMaster();
+            objCustomerMaster.setCustomerMasterId(MyAccountFragment.objCustomerMaster.getCustomerMasterId());
+            objCustomerMaster.setCustomerName(etFirstName.getText().toString());
             if (rbMale.isChecked()) {
-                objRegisteredUserMaster.setGender(rbMale.getText().toString());
+                objCustomerMaster.setGender(rbMale.getText().toString());
             }
             if (rbFemale.isChecked()) {
-                objRegisteredUserMaster.setGender(rbFemale.getText().toString());
+                objCustomerMaster.setGender(rbFemale.getText().toString());
             }
-            objRegisteredUserMaster.setPhone(etPhone.getText().toString());
-            if (AreaMasterId != 0) {
-                objRegisteredUserMaster.setlinktoAreaMasterId((short) AreaMasterId);
-            }
+            objCustomerMaster.setPhone1(etPhone.getText().toString());
             if (!etDateOfBirth.getText().toString().isEmpty()) {
                 try {
                     birthDate = new SimpleDateFormat("d/M/yyyy", Locale.US).parse(etDateOfBirth.getText().toString());
-                    objRegisteredUserMaster.setBirthDate(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(birthDate));
+                    objCustomerMaster.setBirthDate(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(birthDate));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
+            objCustomerMaster.setCustomerType(Globals.customerType);
+            objCustomerMaster.setShortName(MyAccountFragment.objCustomerMaster.getShortName());
             objSharePreferenceManage = new SharePreferenceManage();
-            objRegisteredUserMaster.setlinktoUserMasterIdUpdatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
+            objCustomerMaster.setlinktoUserMasterIdUpdatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
         }
 
         @Override
         protected Object doInBackground(Object[] params) {
             CustomerJSONParser objCustomerJSONParser = new CustomerJSONParser();
-            status = objCustomerJSONParser.UpdateRegisteredUserMaster(objRegisteredUserMaster);
+            status = objCustomerJSONParser.UpdateCustomerMaster(objCustomerMaster);
             return null;
         }
 
@@ -312,7 +301,7 @@ public class GuestProfileFragment extends Fragment {
                     break;
                 case "0":
                     Globals.ShowSnackBar(view, getResources().getString(R.string.MsgUpdateProfile), getActivity(), 1000);
-                    CreateGuestPreference(objRegisteredUserMaster);
+                    CreateGuestPreference(objCustomerMaster);
                     if (getTargetFragment() != null) {
                         objUpdateResponseListener = (UpdateResponseListener) getTargetFragment();
                         objUpdateResponseListener.UpdateResponse();
@@ -320,42 +309,6 @@ public class GuestProfileFragment extends Fragment {
                     getActivity().getSupportFragmentManager().popBackStack();
             }
 
-        }
-    }
-
-    class SpinnerLoadingTask extends AsyncTask {
-
-        ArrayList<SpinnerItem> lstSpinnerItem = new ArrayList<>();
-
-        @Override
-        protected Object doInBackground(Object[] params) {
-            AreaJSONParser objAreaJSONParser = new AreaJSONParser();
-            lstSpinnerItem = objAreaJSONParser.SelectAllAreaMaster();
-            return lstSpinnerItem;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
-
-            if (lstSpinnerItem != null) {
-                //SpinnerItem objSpinnerItem = new SpinnerItem();
-                //objSpinnerItem.setText("--------SELECT AREA--------");
-                //objSpinnerItem.setValue(0);
-
-                //ArrayList<SpinnerItem> alSpinnerItem = new ArrayList<>();
-                //alSpinnerItem.add(objSpinnerItem);
-                //lstSpinnerItem.addAll(0, alSpinnerItem);
-
-                SpinnerAdapter adapter = new SpinnerAdapter(getActivity(), lstSpinnerItem, false);
-                spnrArea.setAdapter(adapter);
-                for (int i = 0; i < lstSpinnerItem.size(); i++) {
-                    //if (MyAccountFragment.objRegisteredUserMaster.getlinktoAreaMasterId() == lstSpinnerItem.get(i).getValue()) {
-                        spnrArea.setSelection(i);
-                        break;
-                    //}
-                }
-            }
         }
     }
     //endregion

@@ -362,7 +362,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         } else if (menuItem.getTitle() == getActivity().getResources().getString(R.string.wmLogout)) {
             SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
             objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", getActivity());
-            objSharePreferenceManage.RemovePreference("RegistrationPreference", "RegisteredUserMasterId", getActivity());
+            objSharePreferenceManage.RemovePreference("RegistrationPreference", "CustomerMasterId", getActivity());
             objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", getActivity());
             objSharePreferenceManage.ClearPreference("RegistrationPreference", getActivity());
             Globals.userName = null;

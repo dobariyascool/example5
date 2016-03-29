@@ -300,6 +300,14 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             objOrderMaster.setTotalDeductedPoint((short) 0);
             objOrderMaster.setlinktoWaiterMasterId(waiterMasterId);
             objOrderMaster.setlinktoUserMasterIdCreatedBy(userMasterId);
+            if(Globals.userName!=null){
+                objSharePreferenceManage = new SharePreferenceManage();
+                if(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity())!=null){
+                    int customerMasterId = Integer.parseInt(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()));
+                    objOrderMaster.setlinktoCustomerMasterId((short) customerMasterId);
+                }
+            }
+            objOrderMaster.setLinktoBusinessMasterId(Globals.businessMasterId);
             if (RemarkDialogFragment.strRemark != null) {
                 objOrderMaster.setRemark(RemarkDialogFragment.strRemark);
             }
