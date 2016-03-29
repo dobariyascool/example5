@@ -3,7 +3,6 @@ package com.arraybit.parser;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.CustomerMaster;
-import com.arraybit.modal.RegisteredUserMaster;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -275,42 +274,6 @@ public class CustomerJSONParser {
 
     //region Select
 
-//    public RegisteredUserMaster SelectRegisteredUserMaster(int registeredUserMasterId) {
-//        try {
-//            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectRegisteredUserMaster + "/" + registeredUserMasterId);
-//            if (jsonResponse != null) {
-//                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectRegisteredUserMaster + "Result");
-//                if (jsonObject != null) {
-//                    return SetClassPropertiesFromJSONObject(jsonObject);
-//                }
-//            }
-//            return null;
-//        } catch (Exception ex) {
-//            return null;
-//        }
-//    }
-
-//    public RegisteredUserMaster SelectRegisteredUserMasterUserName(String name, String password, int registeredUserMasterId) {
-//        try {
-//
-//            JSONObject jsonResponse;
-//            if (registeredUserMasterId == 0) {
-//                jsonResponse = Service.HttpGetService(Service.Url + this.SelectRegisteredUserMasterUserName + "/" + URLEncoder.encode(name, "utf-8").replace(".", "2E") + "/" + URLEncoder.encode(password, "utf-8").replace(".", "2E") + "/" + null);
-//            } else {
-//                jsonResponse = Service.HttpGetService(Service.Url + this.SelectRegisteredUserMasterUserName + "/" + null + "/" + null + "/" + registeredUserMasterId);
-//            }
-//            if (jsonResponse != null) {
-//                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectRegisteredUserMasterUserName + "Result");
-//                if (jsonObject != null) {
-//                    return SetClassPropertiesFromJSONObject(jsonObject);
-//                }
-//            }
-//            return null;
-//        } catch (Exception ex) {
-//            return null;
-//        }
-//    }
-
     public CustomerMaster SelectCustomerMaster(String name, String password, int customerMasterId) {
         try {
 
@@ -331,26 +294,6 @@ public class CustomerJSONParser {
             return null;
         }
     }
-
-    //endregion
-
-    //region SelectAll
-
-//    public ArrayList<RegisteredUserMaster> SelectAllRegisteredUserMasterPageWise(int currentPage) {
-//        ArrayList<RegisteredUserMaster> lstRegisteredUserMaster = null;
-//        try {
-//            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllRegisteredUserMaster);
-//            if (jsonResponse != null) {
-//                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllRegisteredUserMaster + "PageWiseResult");
-//                if (jsonArray != null) {
-//                    lstRegisteredUserMaster = SetListPropertiesFromJSONArray(jsonArray);
-//                }
-//            }
-//            return lstRegisteredUserMaster;
-//        } catch (Exception ex) {
-//            return null;
-//        }
-//    }
 
     //endregion
 }
