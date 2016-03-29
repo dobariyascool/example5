@@ -22,6 +22,7 @@ public class CustomerJSONParser {
     public String InsertCustomerMaster = "InsertCustomerMaster";
     public String UpdateRegisteredUserMaster = "UpdateRegisteredUserMaster";
     public String UpdateRegisteredUserMasterPassword = "UpdateRegisteredUserMasterPassword";
+    public String UpdateCustomerMasterPassword = "UpdateCustomerMasterPassword";
     public String SelectRegisteredUserMaster = "SelectRegisteredUserMaster";
     public String SelectCustomerMaster = "SelectCustomerMaster";
     public String SelectAllRegisteredUserMaster = "SelectAllRegisteredUserMasterPageWise";
@@ -62,7 +63,7 @@ public class CustomerJSONParser {
                     dt = sdfDateFormat.parse(jsonObject.getString("AnniversaryDate"));
                     objCustomerMaster.setAnniversaryDate(sdfControlDateFormat.format(dt));
                 }
-                objCustomerMaster.setCustomerType((short)jsonObject.getInt("CustomerType"));
+                objCustomerMaster.setCustomerType((short) jsonObject.getInt("CustomerType"));
                 if (!jsonObject.getString("IsFavourite").equals("null")) {
                     objCustomerMaster.setIsFavourite(jsonObject.getBoolean("IsFavourite"));
                 }
@@ -78,13 +79,13 @@ public class CustomerJSONParser {
                 objCustomerMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objCustomerMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
                 if (!jsonObject.getString("linktoUserMasterIdUpdatedBy").equals("null")) {
-                    objCustomerMaster.setlinktoUserMasterIdUpdatedBy((short)jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
+                    objCustomerMaster.setlinktoUserMasterIdUpdatedBy((short) jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
                 }
                 objCustomerMaster.setIsEnabled(jsonObject.getBoolean("IsEnabled"));
                 objCustomerMaster.setIsDeleted(jsonObject.getBoolean("IsDeleted"));
                 objCustomerMaster.setGender(jsonObject.getString("Gender"));
                 objCustomerMaster.setPassword(jsonObject.getString("Password"));
-                objCustomerMaster.setlinktoSourceMasterId((short)jsonObject.getInt("linktoSourceMasterId"));
+                objCustomerMaster.setlinktoSourceMasterId((short) jsonObject.getInt("linktoSourceMasterId"));
             }
             return objCustomerMaster;
         } catch (JSONException e) {
@@ -124,7 +125,7 @@ public class CustomerJSONParser {
                     dt = sdfDateFormat.parse(jsonArray.getJSONObject(i).getString("AnniversaryDate"));
                     objCustomerMaster.setAnniversaryDate(sdfControlDateFormat.format(dt));
                 }
-                objCustomerMaster.setCustomerType((short)jsonArray.getJSONObject(i).getInt("CustomerType"));
+                objCustomerMaster.setCustomerType((short) jsonArray.getJSONObject(i).getInt("CustomerType"));
                 if (!jsonArray.getJSONObject(i).getString("IsFavourite").equals("null")) {
                     objCustomerMaster.setIsFavourite(jsonArray.getJSONObject(i).getBoolean("IsFavourite"));
                 }
@@ -140,7 +141,7 @@ public class CustomerJSONParser {
                 objCustomerMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objCustomerMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
                 if (!jsonArray.getJSONObject(i).getString("linktoUserMasterIdUpdatedBy").equals("null")) {
-                    objCustomerMaster.setlinktoUserMasterIdUpdatedBy((short)jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
+                    objCustomerMaster.setlinktoUserMasterIdUpdatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
                 }
                 objCustomerMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
                 objCustomerMaster.setIsDeleted(jsonArray.getJSONObject(i).getBoolean("IsDeleted"));
@@ -179,7 +180,7 @@ public class CustomerJSONParser {
             stringer.key("ShortName").value(objCustomerMaster.getCustomerName());
             stringer.key("CustomerName").value(objCustomerMaster.getCustomerName());
             stringer.key("Gender").value(objCustomerMaster.getGender());
-            if(objCustomerMaster.getBirthDate()!=null) {
+            if (objCustomerMaster.getBirthDate() != null) {
                 stringer.key("BirthDate").value(objCustomerMaster.getBirthDate());
             }
             stringer.key("linktoCityMasterId").value(objCustomerMaster.getLinktoCityMasterId());
@@ -219,7 +220,7 @@ public class CustomerJSONParser {
             stringer.key("FirstName").value(objRegisteredUserMaster.getFirstName());
             stringer.key("LastName").value(objRegisteredUserMaster.getLastName());
             stringer.key("Gender").value(objRegisteredUserMaster.getGender());
-            if(objRegisteredUserMaster.getBirthDate()!=null) {
+            if (objRegisteredUserMaster.getBirthDate() != null) {
                 stringer.key("BirthDate").value(objRegisteredUserMaster.getBirthDate());
             }
             stringer.key("linktoAreaMasterId").value(objRegisteredUserMaster.getlinktoAreaMasterId());
@@ -260,6 +261,33 @@ public class CustomerJSONParser {
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateRegisteredUserMasterPassword, stringer);
             JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateRegisteredUserMasterPassword + "Result");
+            return String.valueOf(jsonObject.getInt("ErrorCode"));
+        } catch (Exception ex) {
+            return "-1";
+        }
+    }
+
+    public String UpdateCustomerMasterPassword(CustomerMaster objCustomerMaster, String OldPassword) {
+        dt = new Date();
+        try {
+            JSONStringer stringer = new JSONStringer();
+            stringer.object();
+
+            stringer.key("customerMaster");
+            stringer.object();
+
+            stringer.key("CustomerMasterId").value(objCustomerMaster.getCustomerMasterId());
+            stringer.key("Password").value(objCustomerMaster.getPassword());
+            stringer.key("OldPassword").value(OldPassword);
+            stringer.key("UpdateDateTime").value(sdfDateTimeFormat.format(dt));
+            stringer.key("linktoUserMasterIdUpdatedBy").value(objCustomerMaster.getlinktoUserMasterIdUpdatedBy());
+
+            stringer.endObject();
+
+            stringer.endObject();
+
+            JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateCustomerMasterPassword, stringer);
+            JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateCustomerMasterPassword + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
         } catch (Exception ex) {
             return "-1";
