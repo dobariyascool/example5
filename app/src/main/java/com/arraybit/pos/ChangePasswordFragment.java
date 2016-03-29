@@ -20,7 +20,7 @@ import android.widget.ToggleButton;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
-import com.arraybit.modal.RegisteredUserMaster;
+import com.arraybit.modal.CustomerMaster;
 import com.arraybit.parser.CustomerJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
@@ -265,9 +265,10 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     //region LoadingTask
     class ChangePasswordLoadTask extends AsyncTask {
         com.arraybit.pos.ProgressDialog progressDialog;
-        String status;
+        String status, password;
+
         SharePreferenceManage objSharePreferenceManage;
-        RegisteredUserMaster objRegisteredUserMaster;
+        CustomerMaster objCustomerMaster;
 
         @Override
         protected void onPreExecute() {
@@ -277,22 +278,22 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             objSharePreferenceManage = new SharePreferenceManage();
-            objRegisteredUserMaster = new RegisteredUserMaster();
+            objCustomerMaster = new CustomerMaster();
 
-            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) != null) {
-                objRegisteredUserMaster.setRegisteredUserMasterId(Short.parseShort(objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity())));
+            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()) != null) {
+                objCustomerMaster.setCustomerMasterId(Short.parseShort(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity())));
             } else {
-                objRegisteredUserMaster.setRegisteredUserMasterId(0);
+                objCustomerMaster.setCustomerMasterId(0);
             }
-            objRegisteredUserMaster.setPassword(etNewPassword.getText().toString());
-            objRegisteredUserMaster.setOldPassword(etOldPassword.getText().toString());
-            objRegisteredUserMaster.setlinktoUserMasterIdUpdatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
+            objCustomerMaster.setPassword(etNewPassword.getText().toString());
+            password = etOldPassword.getText().toString();
+            objCustomerMaster.setlinktoUserMasterIdUpdatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
             CustomerJSONParser customerJsonParser = new CustomerJSONParser();
-            status = customerJsonParser.UpdateRegisteredUserMasterPassword(objRegisteredUserMaster);
+            status = customerJsonParser.UpdateCustomerMasterPassword(objCustomerMaster, password);
             return null;
         }
 
