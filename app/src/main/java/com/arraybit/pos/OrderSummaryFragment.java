@@ -459,7 +459,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         @Override
         protected Object doInBackground(Object[] params) {
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, 0, String.valueOf(objTableMaster.getTableMasterId()), null);
+            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, 0, String.valueOf(objTableMaster.getTableMasterId()), null,Globals.businessMasterId);
         }
 
         @Override

@@ -733,7 +733,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         protected Object doInBackground(Object[] objects) {
 
             ItemJSONParser objItemMasterJSONParser = new ItemJSONParser();
-            alItemMasterModifier = objItemMasterJSONParser.SelectAllItemMasterModifier();
+            alItemMasterModifier = objItemMasterJSONParser.SelectAllItemMasterModifier(Globals.businessMasterId);
             return null;
         }
     }

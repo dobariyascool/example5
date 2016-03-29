@@ -267,13 +267,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             } else {
                 itemTabFragment.ItemDataFilter(sbItemTypeMasterId.toString());
             }
-
         }
     }
 
     @Override
     public void CartIconOnClick() {
-        if(!errorLayout.isShown()) {
+        if (!errorLayout.isShown()) {
             ReplaceFragment(new CartItemFragment(), getActivity().getResources().getString(R.string.title_fragment_cart_item));
         }
     }
@@ -470,7 +469,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         @Override
         protected Object doInBackground(Object[] params) {
             CategoryJSONParser objCategoryJSONParser = new CategoryJSONParser();
-            alCategoryMaster = objCategoryJSONParser.SelectAllCategoryMaster();
+            alCategoryMaster = objCategoryJSONParser.SelectAllCategoryMaster(Globals.businessMasterId);
             return alCategoryMaster;
         }
 

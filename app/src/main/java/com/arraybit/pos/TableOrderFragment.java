@@ -77,7 +77,7 @@ public class TableOrderFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new OrdersLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvTableOrder);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder);
         }
 
 
@@ -128,7 +128,7 @@ public class TableOrderFragment extends Fragment {
         @Override
         protected Object doInBackground(Object[] params) {
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-            return objOrderJOSNParser.SelectAllOrderMasterByFromDate(counterMasterId);
+            return objOrderJOSNParser.SelectAllOrderMasterByFromDate(counterMasterId, Globals.businessMasterId);
         }
 
         @Override

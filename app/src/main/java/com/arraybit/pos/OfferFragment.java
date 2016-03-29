@@ -168,7 +168,7 @@ public class OfferFragment extends Fragment {
         protected Object doInBackground(Object[] objects) {
 
             OfferJSONParser objOfferJSONParser = new OfferJSONParser();
-            return objOfferJSONParser.SelectAllOfferMaster();
+            return objOfferJSONParser.SelectAllOfferMaster(Globals.businessMasterId);
         }
 
         @Override

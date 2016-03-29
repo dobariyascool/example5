@@ -25,7 +25,7 @@ public class CategoryJSONParser {
                 if (!jsonObject.getString("linktoCategoryMasterIdParent").equals("null")) {
                     objCategoryMaster.setlinktoCategoryMasterIdParent((short) jsonObject.getInt("linktoCategoryMasterIdParent"));
                 }
-                if(!jsonObject.getString("ImageName").equals("")) {
+                if (!jsonObject.getString("ImageName").equals("")) {
                     objCategoryMaster.setImagelName(jsonObject.getString("ImageName"));
                 }
                 objCategoryMaster.setCategoryColor(jsonObject.getString("CategoryColor"));
@@ -57,7 +57,7 @@ public class CategoryJSONParser {
                 if (!jsonArray.getJSONObject(i).getString("linktoCategoryMasterIdParent").equals("null")) {
                     objCategoryMaster.setlinktoCategoryMasterIdParent((short) jsonArray.getJSONObject(i).getInt("linktoCategoryMasterIdParent"));
                 }
-                if(!jsonArray.getJSONObject(i).getString("ImageName").equals("")){
+                if (!jsonArray.getJSONObject(i).getString("ImageName").equals("")) {
                     objCategoryMaster.setImagelName(jsonArray.getJSONObject(i).getString("ImageName"));
                 }
                 objCategoryMaster.setCategoryColor(jsonArray.getJSONObject(i).getString("CategoryColor"));
@@ -79,10 +79,10 @@ public class CategoryJSONParser {
         }
     }
 
-    public ArrayList<CategoryMaster> SelectAllCategoryMaster() {
+    public ArrayList<CategoryMaster> SelectAllCategoryMaster(int linktoBusinessMasterId) {
         ArrayList<CategoryMaster> lstCategoryMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllCategoryMaster);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllCategoryMaster + "/" + linktoBusinessMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllCategoryMaster + "Result");
                 if (jsonArray != null) {

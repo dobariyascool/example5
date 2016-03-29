@@ -35,19 +35,19 @@ public class OfferJSONParser {
                 objOfferMaster.setlinktoOfferTypeMasterId((short) jsonObject.getInt("linktoOfferTypeMasterId"));
                 objOfferMaster.setOfferTitle(jsonObject.getString("OfferTitle"));
                 objOfferMaster.setOfferContent(jsonObject.getString("OfferContent"));
-                if(!jsonObject.getString("FromDate").equals("null")) {
+                if (!jsonObject.getString("FromDate").equals("null")) {
                     dt = sdfDateFormat.parse(jsonObject.getString("FromDate"));
                     objOfferMaster.setFromDate(sdfControlDateFormat.format(dt));
                 }
-                if(!jsonObject.getString("ToDate").equals("null")) {
+                if (!jsonObject.getString("ToDate").equals("null")) {
                     dt = sdfDateFormat.parse(jsonObject.getString("ToDate"));
                     objOfferMaster.setToDate(sdfControlDateFormat.format(dt));
                 }
-                if(!jsonObject.getString("FromTime").equals("null")) {
+                if (!jsonObject.getString("FromTime").equals("null")) {
                     dt = sdfTimeFormat.parse(jsonObject.getString("FromTime"));
                     objOfferMaster.setFromTime(sdfControlTimeFormat.format(dt));
                 }
-                if(!jsonObject.getString("ToTime").equals("null")) {
+                if (!jsonObject.getString("ToTime").equals("null")) {
                     dt = sdfTimeFormat.parse(jsonObject.getString("ToTime"));
                     objOfferMaster.setToTime(sdfControlTimeFormat.format(dt));
                 }
@@ -100,19 +100,19 @@ public class OfferJSONParser {
                 objOfferMaster.setlinktoOfferTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoOfferTypeMasterId"));
                 objOfferMaster.setOfferTitle(jsonArray.getJSONObject(i).getString("OfferTitle"));
                 objOfferMaster.setOfferContent(jsonArray.getJSONObject(i).getString("OfferContent"));
-                if(!jsonArray.getJSONObject(i).getString("FromDate").equals("null")) {
+                if (!jsonArray.getJSONObject(i).getString("FromDate").equals("null")) {
                     dt = sdfDateFormat.parse(jsonArray.getJSONObject(i).getString("FromDate"));
                     objOfferMaster.setFromDate(sdfControlDateFormat.format(dt));
                 }
-                if(!jsonArray.getJSONObject(i).getString("ToDate").equals("null")) {
+                if (!jsonArray.getJSONObject(i).getString("ToDate").equals("null")) {
                     dt = sdfDateFormat.parse(jsonArray.getJSONObject(i).getString("ToDate"));
                     objOfferMaster.setToDate(sdfControlDateFormat.format(dt));
                 }
-                if(!jsonArray.getJSONObject(i).getString("FromTime").equals("null")) {
+                if (!jsonArray.getJSONObject(i).getString("FromTime").equals("null")) {
                     dt = sdfTimeFormat.parse(jsonArray.getJSONObject(i).getString("FromTime"));
                     objOfferMaster.setFromTime(sdfControlTimeFormat.format(dt));
                 }
-                if(!jsonArray.getJSONObject(i).getString("ToTime").equals("null")) {
+                if (!jsonArray.getJSONObject(i).getString("ToTime").equals("null")) {
                     dt = sdfTimeFormat.parse(jsonArray.getJSONObject(i).getString("ToTime"));
                     objOfferMaster.setToTime(sdfControlTimeFormat.format(dt));
                 }
@@ -172,11 +172,11 @@ public class OfferJSONParser {
         }
     }
 
-    public ArrayList<OfferMaster> SelectAllOfferMaster() {
+    public ArrayList<OfferMaster> SelectAllOfferMaster(int linktoBusinessMasterId) {
         ArrayList<OfferMaster> lstOfferMaster = null;
         dt = new Date();
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOfferMaster + "/" + sdfControlDateFormat.format(dt) + "/" + Globals.GetCurrentTime());
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOfferMaster + "/" + sdfControlDateFormat.format(dt) + "/" + Globals.GetCurrentTime() + "/" + linktoBusinessMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllOfferMaster + "Result");
                 if (jsonArray != null) {

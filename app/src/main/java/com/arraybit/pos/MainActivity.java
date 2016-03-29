@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.parser.ItemJSONParser;
@@ -554,7 +555,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-            return objItemJSONParser.SelectAllItemMaster(1,0,1,0,null);
+            return objItemJSONParser.SelectAllItemMaster(1,0,1,0,null, Globals.businessMasterId);
         }
 
         @Override

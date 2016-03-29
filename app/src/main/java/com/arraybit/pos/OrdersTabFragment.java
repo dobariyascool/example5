@@ -264,7 +264,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         protected Object doInBackground(Object[] objects) {
 
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, Globals.OrderStatus.valueOf(orderStatus).getValue(), linktoTableMasterIds, orderTypeMasterId);
+            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, Globals.OrderStatus.valueOf(orderStatus).getValue(), linktoTableMasterIds, orderTypeMasterId,Globals.businessMasterId);
         }
 
         @Override

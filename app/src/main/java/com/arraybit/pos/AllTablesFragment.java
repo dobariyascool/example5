@@ -257,7 +257,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         protected Object doInBackground(Object[] objects) {
 
             SectionJSONParser objSectionJSONParser = new SectionJSONParser();
-            alSectionMaster = objSectionJSONParser.SelectAllSectionMaster();
+            alSectionMaster = objSectionJSONParser.SelectAllSectionMaster(Globals.businessMasterId);
             return null;
         }
 

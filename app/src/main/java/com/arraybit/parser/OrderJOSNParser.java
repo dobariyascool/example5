@@ -265,16 +265,16 @@ public class OrderJOSNParser {
         }
     }
 
-    public ArrayList<OrderMaster> SelectAllOrderMaster(int linktoCounterMasterId, int linktoOrderStatusMasterId, String linktoTableMasterIds, String linktoOrderTypeMasterId) {
+    public ArrayList<OrderMaster> SelectAllOrderMaster(int linktoCounterMasterId, int linktoOrderStatusMasterId, String linktoTableMasterIds, String linktoOrderTypeMasterId, int linktoBusinessMasterId) {
         ArrayList<OrderMaster> lstOrderMaster = null;
         JSONObject jsonResponse;
         Date date;
         try {
             date = new Date();
             if (linktoOrderStatusMasterId == 0) {
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster + "/" + linktoCounterMasterId + "/" + null + "/" + linktoTableMasterIds + "/" + linktoOrderTypeMasterId + "/" + sdfControlDateFormat.format(date));
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster + "/" + linktoCounterMasterId + "/" + null + "/" + linktoTableMasterIds + "/" + linktoOrderTypeMasterId + "/" + sdfControlDateFormat.format(date) + "/" + linktoBusinessMasterId);
             } else {
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster + "/" + linktoCounterMasterId + "/" + linktoOrderStatusMasterId + "/" + linktoTableMasterIds + "/" + linktoOrderTypeMasterId + "/" + sdfControlDateFormat.format(date));
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMaster + "/" + linktoCounterMasterId + "/" + linktoOrderStatusMasterId + "/" + linktoTableMasterIds + "/" + linktoOrderTypeMasterId + "/" + sdfControlDateFormat.format(date) + "/" + linktoBusinessMasterId);
             }
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllOrderMaster + "Result");
@@ -288,12 +288,12 @@ public class OrderJOSNParser {
         }
     }
 
-    public ArrayList<OrderMaster> SelectAllOrderMasterByFromDate(int linktoCounterMasterId) {
+    public ArrayList<OrderMaster> SelectAllOrderMasterByFromDate(int linktoCounterMasterId, int linktoBusinessMasterId) {
         ArrayList<OrderMaster> lstOrderMaster = null;
         Date date;
         try {
             date = new Date();
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMasterByFromDate + "/" + linktoCounterMasterId + "/" + sdfControlDateFormat.format(date));
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllOrderMasterByFromDate + "/" + linktoCounterMasterId + "/" + sdfControlDateFormat.format(date) + "/" + linktoBusinessMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllOrderMasterByFromDate + "Result");
                 if (jsonArray != null) {

@@ -26,10 +26,10 @@ public class SectionJSONParser {
         try {
             if (jsonObject != null) {
                 objSectionMaster = new SectionMaster();
-                objSectionMaster.setSectionMasterId((short)jsonObject.getInt("SectionMasterId"));
+                objSectionMaster.setSectionMasterId((short) jsonObject.getInt("SectionMasterId"));
                 objSectionMaster.setSectionName(jsonObject.getString("SectionName"));
                 objSectionMaster.setDescription(jsonObject.getString("Description"));
-                objSectionMaster.setlinktoBusinessMasterId((short)jsonObject.getInt("linktoBusinessMasterId"));
+                objSectionMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
                 objSectionMaster.setIsEnabled(jsonObject.getBoolean("IsEnabled"));
 
                 /// Extra
@@ -49,10 +49,10 @@ public class SectionJSONParser {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 objSectionMaster = new SectionMaster();
-                objSectionMaster.setSectionMasterId((short)jsonArray.getJSONObject(i).getInt("SectionMasterId"));
+                objSectionMaster.setSectionMasterId((short) jsonArray.getJSONObject(i).getInt("SectionMasterId"));
                 objSectionMaster.setSectionName(jsonArray.getJSONObject(i).getString("SectionName"));
                 objSectionMaster.setDescription(jsonArray.getJSONObject(i).getString("Description"));
-                objSectionMaster.setlinktoBusinessMasterId((short)jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
+                objSectionMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 objSectionMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
 
                 /// Extra
@@ -91,8 +91,7 @@ public class SectionJSONParser {
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertSectionMaster, stringer);
             JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertSectionMaster + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return "-1";
         }
     }
@@ -122,8 +121,7 @@ public class SectionJSONParser {
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateSectionMaster, stringer);
             JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateSectionMaster + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return "-1";
         }
     }
@@ -142,8 +140,7 @@ public class SectionJSONParser {
                 }
             }
             return null;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -152,10 +149,10 @@ public class SectionJSONParser {
 
     //region SelectAll
 
-    public ArrayList<SectionMaster> SelectAllSectionMaster() {
+    public ArrayList<SectionMaster> SelectAllSectionMaster(int linktoBusinessMasterId) {
         ArrayList<SectionMaster> lstSectionMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllSectionMaster);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllSectionMaster + "/" + linktoBusinessMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllSectionMaster + "Result");
                 if (jsonArray != null) {
@@ -163,8 +160,7 @@ public class SectionJSONParser {
                 }
             }
             return lstSectionMaster;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
