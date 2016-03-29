@@ -96,7 +96,6 @@ public class Globals {
     public static String userName;
     static FragmentManager fragmentManager;
     static int y, M, d, H, m;
-    //test
 
 
     public static float ConvertDp(float dp, Context context) {
