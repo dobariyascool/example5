@@ -22,9 +22,10 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.global.SpinnerItem;
+import com.arraybit.modal.CustomerMaster;
 import com.arraybit.modal.RegisteredUserMaster;
 import com.arraybit.parser.AreaJSONParser;
-import com.arraybit.parser.RegisteredUserJSONParser;
+import com.arraybit.parser.CustomerJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 import com.rey.material.widget.TextView;
@@ -87,7 +88,7 @@ public class GuestProfileFragment extends Fragment {
 
         btnUpdateProfile = (Button) view.findViewById(R.id.btnUpdateProfile);
 
-        SetUserName();
+        SetUserName(container);
 
         if (Service.CheckNet(getActivity())) {
             new SpinnerLoadingTask().execute();
@@ -159,7 +160,7 @@ public class GuestProfileFragment extends Fragment {
     }
 
     //region Private Methods
-    private void SetUserName() {
+    private void SetUserName(View view) {
         SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
             txtEmail.setText(objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()));
@@ -172,23 +173,30 @@ public class GuestProfileFragment extends Fragment {
             txtFullName.setVisibility(View.GONE);
         }
 
-        if (MyAccountFragment.objRegisteredUserMaster != null) {
-            etFirstName.setText(MyAccountFragment.objRegisteredUserMaster.getFirstName());
-            etLastName.setText(MyAccountFragment.objRegisteredUserMaster.getLastName());
-            etPhone.setText(MyAccountFragment.objRegisteredUserMaster.getPhone());
-            if (MyAccountFragment.objRegisteredUserMaster.getGender().equals(rbFemale.getText().toString())) {
+        if (MyAccountFragment.objCustomerMaster != null) {
+            etFirstName.setText(MyAccountFragment.objCustomerMaster.getCustomerName());
+            etLastName.setText(MyAccountFragment.objCustomerMaster.getCustomerName());
+            etPhone.setText(MyAccountFragment.objCustomerMaster.getPhone1());
+            if (MyAccountFragment.objCustomerMaster.getGender().equals(rbFemale.getText().toString())) {
                 rbFemale.setChecked(true);
             } else {
                 rbMale.setChecked(true);
             }
-            if (MyAccountFragment.objRegisteredUserMaster.getBirthDate() != null) {
+            if (MyAccountFragment.objCustomerMaster.getBirthDate() != null) {
                 try {
-                    birthDate = new SimpleDateFormat(Globals.DateFormat, Locale.US).parse(MyAccountFragment.objRegisteredUserMaster.getBirthDate());
+                    birthDate = new SimpleDateFormat(Globals.DateFormat, Locale.US).parse(MyAccountFragment.objCustomerMaster.getBirthDate());
                     etDateOfBirth.setText(new SimpleDateFormat(Globals.DateFormat, Locale.US).format(birthDate));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
+        }else{
+            if (Service.CheckNet(getActivity())) {
+                new UserInformationLoading().execute();
+            } else {
+                Globals.ShowSnackBar(view, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            }
+
         }
     }
 
@@ -219,6 +227,34 @@ public class GuestProfileFragment extends Fragment {
     //endregion
 
     //region LoadingTask
+    class UserInformationLoading extends AsyncTask {
+         int customerMasterId;
+        CustomerMaster objCustomerMaster;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()) != null) {
+                customerMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()));
+            }
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            CustomerJSONParser objCustomerJSONParser = new CustomerJSONParser();
+            objCustomerMaster = objCustomerJSONParser.SelectCustomerMaster(null, null,customerMasterId);
+            return objCustomerMaster;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            if(objCustomerMaster!=null){
+                MyAccountFragment.objCustomerMaster = objCustomerMaster;
+            }
+        }
+
+    }
     class UpdateLoadingTask extends AsyncTask {
 
         com.arraybit.pos.ProgressDialog progressDialog;
@@ -234,7 +270,7 @@ public class GuestProfileFragment extends Fragment {
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             objRegisteredUserMaster = new RegisteredUserMaster();
-            objRegisteredUserMaster.setRegisteredUserMasterId(MyAccountFragment.objRegisteredUserMaster.getRegisteredUserMasterId());
+            //objRegisteredUserMaster.setRegisteredUserMasterId(MyAccountFragment.objRegisteredUserMaster.getRegisteredUserMasterId());
             objRegisteredUserMaster.setFirstName(etFirstName.getText().toString());
             objRegisteredUserMaster.setLastName(etLastName.getText().toString());
             if (rbMale.isChecked()) {
@@ -261,8 +297,8 @@ public class GuestProfileFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            RegisteredUserJSONParser objRegisteredUserJSONParser = new RegisteredUserJSONParser();
-            status = objRegisteredUserJSONParser.UpdateRegisteredUserMaster(objRegisteredUserMaster);
+            CustomerJSONParser objCustomerJSONParser = new CustomerJSONParser();
+            status = objCustomerJSONParser.UpdateRegisteredUserMaster(objRegisteredUserMaster);
             return null;
         }
 
@@ -314,10 +350,10 @@ public class GuestProfileFragment extends Fragment {
                 SpinnerAdapter adapter = new SpinnerAdapter(getActivity(), lstSpinnerItem, false);
                 spnrArea.setAdapter(adapter);
                 for (int i = 0; i < lstSpinnerItem.size(); i++) {
-                    if (MyAccountFragment.objRegisteredUserMaster.getlinktoAreaMasterId() == lstSpinnerItem.get(i).getValue()) {
+                    //if (MyAccountFragment.objRegisteredUserMaster.getlinktoAreaMasterId() == lstSpinnerItem.get(i).getValue()) {
                         spnrArea.setSelection(i);
                         break;
-                    }
+                    //}
                 }
             }
         }

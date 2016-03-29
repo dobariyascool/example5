@@ -27,9 +27,9 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.global.SpinnerItem;
-import com.arraybit.modal.RegisteredUserMaster;
+import com.arraybit.modal.CustomerMaster;
 import com.arraybit.parser.AreaJSONParser;
-import com.arraybit.parser.RegisteredUserJSONParser;
+import com.arraybit.parser.CustomerJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
@@ -44,13 +44,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     RadioButton rbMale, rbFemale;
     Button btnSignUp;
     AppCompatSpinner spnrArea;
-    RegisteredUserJSONParser objRegisteredUserJSONParser;
-    RegisteredUserMaster objRegisteredUserMaster;
     AreaJSONParser objAreaJSONParser;
     SharePreferenceManage objSharePreferenceManage;
     String status;
     int AreaMasterId;
     View view;
+    CustomerMaster objCustomerMaster;
 
     SpinnerAdapter adapter;
     ArrayList<SpinnerItem> lstSpinnerItem = new ArrayList<>();
@@ -316,20 +315,20 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private void CreateGuestPreference() {
         objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) == null) {
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "UserName", objRegisteredUserMaster.getEmail(), getActivity());
+            objSharePreferenceManage.CreatePreference("RegistrationPreference", "UserName", objCustomerMaster.getEmail1(), getActivity());
         }
-        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) == null) {
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "RegisteredUserMasterId", String.valueOf(objRegisteredUserMaster.getRegisteredUserMasterId()), getActivity());
+        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()) == null) {
+            objSharePreferenceManage.CreatePreference("RegistrationPreference", "CustomerMasterId", String.valueOf(objCustomerMaster.getCustomerMasterId()), getActivity());
         }
-        if (objRegisteredUserMaster.getFirstName() != null) {
+        if (objCustomerMaster.getCustomerName() != null) {
             if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FullName", getActivity()) == null) {
-                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", String.valueOf(objRegisteredUserMaster.getFirstName()) + " " + String.valueOf(objRegisteredUserMaster.getLastName()), getActivity());
+                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", objCustomerMaster.getCustomerName(), getActivity());
             }
             if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()) == null) {
-                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName", String.valueOf(objRegisteredUserMaster.getFirstName()), getActivity());
+                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName", objCustomerMaster.getCustomerName(), getActivity());
             }
         }
-        Globals.userName = objRegisteredUserMaster.getEmail();
+        Globals.userName = objCustomerMaster.getEmail1();
     }
 
     //endregion
@@ -346,32 +345,30 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             progressDialog = new com.arraybit.pos.ProgressDialog();
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
-            objRegisteredUserMaster = new RegisteredUserMaster();
+            objCustomerMaster = new CustomerMaster();
             objSharePreferenceManage = new SharePreferenceManage();
-            objRegisteredUserMaster.setFirstName(etFirstName.getText().toString());
-            objRegisteredUserMaster.setLastName(etLastName.getText().toString());
-            objRegisteredUserMaster.setPassword(etPassword.getText().toString());
+            objCustomerMaster.setCustomerName(etFirstName.getText().toString() + " " + etLastName.getText().toString());
+            objCustomerMaster.setPassword(etPassword.getText().toString());
             if (rbMale.isChecked()) {
-                objRegisteredUserMaster.setGender(rbMale.getText().toString());
+                objCustomerMaster.setGender(rbMale.getText().toString());
             }
             if (rbFemale.isChecked()) {
-                objRegisteredUserMaster.setGender(rbFemale.getText().toString());
+                objCustomerMaster.setGender(rbFemale.getText().toString());
             }
-            objRegisteredUserMaster.setEmail(etEmail.getText().toString());
-            objRegisteredUserMaster.setPhone(etPhone.getText().toString());
-            objRegisteredUserMaster.setlinktoAreaMasterId((short) AreaMasterId);
-            objRegisteredUserMaster.setlinktoSourceMasterId((short) Globals.sourceMasterId);
-            objRegisteredUserMaster.setLinktoBusinessMasterId(Globals.businessMasterId);
-            objRegisteredUserMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
-            objRegisteredUserMaster.setIsEnabled(true);
-
-            objRegisteredUserJSONParser = new RegisteredUserJSONParser();
+            objCustomerMaster.setEmail1(etEmail.getText().toString());
+            objCustomerMaster.setPhone1(etPhone.getText().toString());
+            objCustomerMaster.setLinktoAreaMasterId((short) AreaMasterId);
+            objCustomerMaster.setlinktoSourceMasterId((short) Globals.sourceMasterId);
+            objCustomerMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
+            objCustomerMaster.setCustomerType(Globals.customerType);
+            objCustomerMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
+            objCustomerMaster.setIsEnabled(true);
         }
 
         @Override
         protected Object doInBackground(Object[] params) {
-
-            status = objRegisteredUserJSONParser.InsertRegisteredUserMaster(objRegisteredUserMaster);
+            CustomerJSONParser objCustomerJSONParser = new CustomerJSONParser();
+            status = objCustomerJSONParser.InsertCustomerMaster(objCustomerMaster);
             return null;
         }
 

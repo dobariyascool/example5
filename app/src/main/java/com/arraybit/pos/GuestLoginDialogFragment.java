@@ -21,8 +21,8 @@ import android.widget.CompoundButton;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
-import com.arraybit.modal.RegisteredUserMaster;
-import com.arraybit.parser.RegisteredUserJSONParser;
+import com.arraybit.modal.CustomerMaster;
+import com.arraybit.parser.CustomerJSONParser;
 import com.rey.material.widget.EditText;
 
 @SuppressWarnings("unchecked")
@@ -31,9 +31,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
     EditText etUserName = null, etPassword = null;
     View view;
     SharePreferenceManage objSharePreferenceManage;
-
-    RegisteredUserJSONParser objRegisteredUserJSONParser;
-    RegisteredUserMaster objRegisteredUserMaster;
+    CustomerMaster objCustomerMaster;
     LoginResponseListener objLoginResponseListener;
 
     public GuestLoginDialogFragment() {
@@ -191,15 +189,15 @@ public class GuestLoginDialogFragment extends DialogFragment {
         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) == null) {
             objSharePreferenceManage.CreatePreference("RegistrationPreference", "UserName", etUserName.getText().toString(), getActivity());
         }
-        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) == null) {
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "RegisteredUserMasterId", String.valueOf(objRegisteredUserMaster.getRegisteredUserMasterId()), getActivity());
+        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()) == null) {
+            objSharePreferenceManage.CreatePreference("RegistrationPreference", "CustomerMasterId", String.valueOf(objCustomerMaster.getCustomerMasterId()), getActivity());
         }
-        if (!objRegisteredUserMaster.getFirstName().equals("")) {
+        if (objCustomerMaster.getCustomerName()!=null && !objCustomerMaster.getCustomerName().equals("")) {
             if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FullName", getActivity()) == null) {
-                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", String.valueOf(objRegisteredUserMaster.getFirstName()) + " " + String.valueOf(objRegisteredUserMaster.getLastName()), getActivity());
+                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", objCustomerMaster.getCustomerName(), getActivity());
             }
             if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FirstName", getActivity()) == null) {
-                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName", String.valueOf(objRegisteredUserMaster.getFirstName()), getActivity());
+                objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName", objCustomerMaster.getCustomerName(), getActivity());
             }
         }
     }
@@ -225,13 +223,14 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
             strUserName = etUserName.getText().toString();
             strPassword = etPassword.getText().toString();
-            objRegisteredUserJSONParser = new RegisteredUserJSONParser();
+
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            objRegisteredUserMaster = objRegisteredUserJSONParser.SelectRegisteredUserMasterUserName(strUserName, strPassword, 0);
-            return objRegisteredUserMaster;
+            CustomerJSONParser objCustomerJSONParser = new CustomerJSONParser();
+            objCustomerMaster = objCustomerJSONParser.SelectCustomerMaster(strUserName, strPassword, 0);
+            return objCustomerMaster;
         }
 
         @Override

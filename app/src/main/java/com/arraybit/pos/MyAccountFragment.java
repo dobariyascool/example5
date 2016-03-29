@@ -23,8 +23,8 @@ import com.arraybit.adapter.MyAccountAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
-import com.arraybit.modal.RegisteredUserMaster;
-import com.arraybit.parser.RegisteredUserJSONParser;
+import com.arraybit.modal.CustomerMaster;
+import com.arraybit.parser.CustomerJSONParser;
 import com.github.clans.fab.FloatingActionButton;
 import com.rey.material.widget.TextView;
 
@@ -33,12 +33,12 @@ import java.util.ArrayList;
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 public class MyAccountFragment extends Fragment implements GuestProfileFragment.UpdateResponseListener, MyAccountAdapter.OptionClickListener {
 
-    public static RegisteredUserMaster objRegisteredUserMaster;
+    public static CustomerMaster objCustomerMaster;
     RecyclerView rvOptions;
     ArrayList<String> alString;
     TextView txtLoginChar, txtFullName, txtEmail;
     FloatingActionButton fabEdit;
-    int registeredUserId;
+    int customerMasterId;
 
     public MyAccountFragment() {
         // Required empty public constructor
@@ -108,7 +108,7 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
             if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
                     .equals(getActivity().getResources().getString(R.string.title_fragment_myaccount))) {
                 getActivity().getSupportFragmentManager().popBackStack();
-                objRegisteredUserMaster = null;
+                objCustomerMaster = null;
             }
         }
         return super.onOptionsItemSelected(item);
@@ -200,16 +200,16 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
         protected void onPreExecute() {
             super.onPreExecute();
             SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()) != null) {
-                registeredUserId = Integer.valueOf(objSharePreferenceManage.GetPreference("RegistrationPreference", "RegisteredUserMasterId", getActivity()));
+            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()) != null) {
+                customerMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()));
             }
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            RegisteredUserJSONParser objRegisteredUserJSONParser = new RegisteredUserJSONParser();
-            objRegisteredUserMaster = objRegisteredUserJSONParser.SelectRegisteredUserMasterUserName(null, null, registeredUserId);
-            return objRegisteredUserMaster;
+            CustomerJSONParser objCustomerJSONParser = new CustomerJSONParser();
+            objCustomerMaster = objCustomerJSONParser.SelectCustomerMaster(null, null,customerMasterId);
+            return objCustomerMaster;
         }
 
     }

@@ -81,7 +81,8 @@ public class Globals {
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "hh:mm";
     public static String DisplayTimeFormat = "h:mm a";
-    public static int sourceMasterId = 2;
+    public static int sourceMasterId = 3;
+    public static short customerType = 3;
     public static short businessMasterId;
     public static short itemType = 2;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
@@ -418,7 +419,7 @@ public class Globals {
     public static void ClearPreference(Context context) {
         SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
         objSharePreferenceManage.RemovePreference("RegistrationPreference", "UserName", context);
-        objSharePreferenceManage.RemovePreference("RegistrationPreference", "RegisteredUserMasterId", context);
+        objSharePreferenceManage.RemovePreference("RegistrationPreference", "CustomerMasterId", context);
         objSharePreferenceManage.RemovePreference("RegistrationPreference", "FullName", context);
         objSharePreferenceManage.RemovePreference("RegistrationPreference", "FirstName", context);
         objSharePreferenceManage.RemovePreference("NotificationOnTimePreference", "OnTime", context);

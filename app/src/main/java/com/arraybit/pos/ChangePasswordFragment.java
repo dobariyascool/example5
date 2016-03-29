@@ -21,7 +21,7 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.RegisteredUserMaster;
-import com.arraybit.parser.RegisteredUserJSONParser;
+import com.arraybit.parser.CustomerJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
@@ -291,8 +291,8 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            RegisteredUserJSONParser registeredUserJsonParser = new RegisteredUserJSONParser();
-            status = registeredUserJsonParser.UpdateRegisteredUserMasterPassword(objRegisteredUserMaster);
+            CustomerJSONParser customerJsonParser = new CustomerJSONParser();
+            status = customerJsonParser.UpdateRegisteredUserMasterPassword(objRegisteredUserMaster);
             return null;
         }
 
