@@ -17,10 +17,7 @@ import java.util.Locale;
 
 public class WaitingJSONParser {
     public String InsertWaitingMaster = "InsertWaitingMaster";
-    public String UpdateWaitingMaster = "UpdateWaitingMaster";
     public String UpdateWaitingStatus = "UpdateWaitingStatus";
-    public String SelectWaitingMaster = "SelectWaitingMaster";
-    public String SelectAllWaitingMaster = "SelectAllWaitingMaster";
     public String SelectAllWaitingMasterByWaitingStatusId = "SelectAllWaitingMasterByWaitingStatusMasterId";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
@@ -123,32 +120,6 @@ public class WaitingJSONParser {
 
     //region Update
 
-    public String UpdateWaitingMaster(WaitingMaster objWaitingMaster) {
-        try {
-            JSONStringer stringer = new JSONStringer();
-            stringer.object();
-
-            stringer.key("waitingMaster");
-            stringer.object();
-
-            stringer.key("WaitingMasterId").value(objWaitingMaster.getWaitingMasterId());
-            stringer.key("PersonName").value(objWaitingMaster.getPersonName());
-            stringer.key("PersonMobile").value(objWaitingMaster.getPersonMobile());
-            stringer.key("NoOfPersons").value(objWaitingMaster.getNoOfPersons());
-            stringer.key("linktoWaitingStatusMasterId").value(objWaitingMaster.getlinktoWaitingStatusMasterId());
-
-            stringer.endObject();
-
-            stringer.endObject();
-
-            JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateWaitingMaster, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateWaitingMaster + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
-        } catch (Exception ex) {
-            return "-1";
-        }
-    }
-
     public String UpdateWaitingStatus(WaitingMaster objWaitingMaster) {
         try {
             JSONStringer stringer = new JSONStringer();
@@ -165,9 +136,11 @@ public class WaitingJSONParser {
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateWaitingStatus, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateWaitingStatus + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
-
+            if (jsonResponse != null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateWaitingStatus + "Result");
+                return String.valueOf(jsonObject.getInt("ErrorCode"));
+            }
+            return "-1";
         } catch (Exception ex) {
             return "-1";
         }
@@ -175,56 +148,7 @@ public class WaitingJSONParser {
 
     //endregion
 
-    //region Select
-    public WaitingMaster SelectWaitingMaster(long waitingMasterId) {
-        try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectWaitingMaster + "/" + waitingMasterId);
-            if (jsonResponse != null) {
-                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectWaitingMaster + "Result");
-                if (jsonObject != null) {
-                    return SetClassPropertiesFromJSONObject(jsonObject);
-                }
-            }
-            return null;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-    //endregion
-
     //region SelectAll
-
-    public ArrayList<WaitingMaster> SelectAllWaitingMasterPageWise(int currentPage) {
-        ArrayList<WaitingMaster> lstWaitingMaster = null;
-        try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMaster);
-            if (jsonResponse != null) {
-                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllWaitingMaster + "PageWiseResult");
-                if (jsonArray != null) {
-                    lstWaitingMaster = SetListPropertiesFromJSONArray(jsonArray);
-                }
-            }
-            return lstWaitingMaster;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    public ArrayList<WaitingMaster> SelectAllWaitingMaster(int currentPage) {
-        ArrayList<WaitingMaster> lstWaitingMaster = null;
-        try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMaster + "/" + currentPage);
-            if (jsonResponse != null) {
-                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllWaitingMaster + "Result");
-                if (jsonArray != null) {
-                    lstWaitingMaster = SetListPropertiesFromJSONArray(jsonArray);
-                }
-            }
-            return lstWaitingMaster;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
 
     public ArrayList<WaitingMaster> SelectAllWaitingMasterByWaitingStatusMasterId(int linktoWaitingStatusMasterId, int linktoBusinessMasterId) {
         ArrayList<WaitingMaster> lstWaitingMaster = null;

@@ -16,9 +16,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class TableJSONParser {
-    public String InsertTableMaster = "InsertTableMaster";
     public String UpdateTableMaster = "UpdateTableStatus";
-    public String SelectTableMaster = "SelectTableMaster";
     public String SelectAllTableMasterBySectionId = "SelectAllTableMasterBySectionMasterId";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
@@ -127,52 +125,6 @@ public class TableJSONParser {
 
     //endregion
 
-    //region Insert
-
-    public String InsertTableMaster(TableMaster objTableMaster) {
-        try {
-            JSONStringer stringer = new JSONStringer();
-            stringer.object();
-
-            stringer.key("tableMaster");
-            stringer.object();
-
-            stringer.key("TableName").value(objTableMaster.getTableName());
-            stringer.key("ShortName").value(objTableMaster.getShortName());
-            stringer.key("Description").value(objTableMaster.getDescription());
-            stringer.key("MinPerson").value(objTableMaster.getMinPerson());
-            stringer.key("MaxPerson").value(objTableMaster.getMaxPerson());
-            stringer.key("linktoTableStatusMasterId").value(objTableMaster.getlinktoTableStatusMasterId());
-            stringer.key("linktoOrderTypeMasterId").value(objTableMaster.getlinktoOrderTypeMasterId());
-            stringer.key("linktoSectionMasterId").value(objTableMaster.getlinktoSectionMasterId());
-            stringer.key("OriginX").value(objTableMaster.getOriginX());
-            stringer.key("OriginY").value(objTableMaster.getOriginY());
-            stringer.key("Height").value(objTableMaster.getHeight());
-            stringer.key("Width").value(objTableMaster.getWidth());
-            stringer.key("TableColor").value(objTableMaster.getTableColor());
-            dt = sdfControlDateFormat.parse(objTableMaster.getCreateDateTime());
-            stringer.key("CreateDateTime").value(sdfDateTimeFormat.format(dt));
-            stringer.key("linktoUserMasterIdCreatedBy").value(objTableMaster.getlinktoUserMasterIdCreatedBy());
-            stringer.key("linktoBusinessMasterId").value(objTableMaster.getlinktoBusinessMasterId());
-            stringer.key("IsEnabled").value(objTableMaster.getIsEnabled());
-
-            stringer.endObject();
-
-            stringer.endObject();
-
-            JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertTableMaster, stringer);
-            if (jsonResponse != null) {
-                JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertTableMaster + "Result");
-                return String.valueOf(jsonObject.getInt("ErrorCode"));
-            }
-            return "-1";
-        } catch (Exception ex) {
-            return "-1";
-        }
-    }
-
-    //endregion
-
     //region Update
 
     public String UpdateTableStatus(TableMaster objTableMaster) {
@@ -191,32 +143,15 @@ public class TableJSONParser {
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateTableMaster, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateTableMaster + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
-
+            if (jsonResponse != null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateTableMaster + "Result");
+                return String.valueOf(jsonObject.getInt("ErrorCode"));
+            }
+            return "-1";
         } catch (Exception ex) {
             return "-1";
         }
     }
-    //endregion
-
-    //region Select
-
-    public TableMaster SelectTableMaster(short tableMasterId) {
-        try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectTableMaster + "/" + tableMasterId);
-            if (jsonResponse != null) {
-                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectTableMaster + "Result");
-                if (jsonObject != null) {
-                    return SetClassPropertiesFromJSONObject(jsonObject);
-                }
-            }
-            return null;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
     //endregion
 
     //region  SelectAll

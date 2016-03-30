@@ -21,9 +21,6 @@ import java.util.Locale;
 /// </summary>
 public class FeedbackJSONParser {
     public String InsertFeedbackMaster = "InsertFeedbackMaster";
-    public String UpdateFeedbackMaster = "UpdateFeedbackMaster";
-    public String SelectFeedbackMaster = "SelectFeedbackMaster";
-    public String SelectAllFeedbackMaster = "SelectAllFeedbackMasterPageWise";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     Date dt = null;

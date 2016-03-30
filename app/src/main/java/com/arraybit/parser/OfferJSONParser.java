@@ -16,7 +16,6 @@ import java.util.Locale;
 
 public class OfferJSONParser {
 
-    public String SelectOfferMaster = "SelectOfferMaster";
     public String SelectAllOfferMaster = "SelectAllOfferMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
@@ -153,21 +152,6 @@ public class OfferJSONParser {
         } catch (JSONException e) {
             return null;
         } catch (ParseException e) {
-            return null;
-        }
-    }
-
-    public OfferMaster SelectOfferMaster(int offerMasterId) {
-        try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectOfferMaster + "/" + offerMasterId);
-            if (jsonResponse != null) {
-                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectOfferMaster + "Result");
-                if (jsonObject != null) {
-                    return SetClassPropertiesFromJSONObject(jsonObject);
-                }
-            }
-            return null;
-        } catch (Exception ex) {
             return null;
         }
     }

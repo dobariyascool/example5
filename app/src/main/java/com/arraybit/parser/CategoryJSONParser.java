@@ -1,7 +1,6 @@
 package com.arraybit.parser;
 
 import com.arraybit.global.Service;
-import com.arraybit.global.SpinnerItem;
 import com.arraybit.modal.CategoryMaster;
 
 import org.json.JSONArray;
@@ -12,8 +11,6 @@ import java.util.ArrayList;
 
 public class CategoryJSONParser {
     public String SelectAllCategoryMaster = "SelectAllCategoryMaster";
-    public String SelectAllCategoryMasterCategoryName = "SelectAllCategoryMasterCategoryName";
-
 
     private CategoryMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
         CategoryMaster objCategoryMaster = null;
@@ -94,28 +91,4 @@ public class CategoryJSONParser {
             return null;
         }
     }
-
-    public ArrayList<SpinnerItem> SelectAllCategoryMasterCategoryName() {
-        ArrayList<SpinnerItem> lstSpinnerItem = null;
-        try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllCategoryMasterCategoryName);
-            if (jsonResponse != null) {
-                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllCategoryMasterCategoryName + "Result");
-                if (jsonArray != null) {
-                    lstSpinnerItem = new ArrayList<>();
-                    SpinnerItem objSpinnerItem;
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        objSpinnerItem = new SpinnerItem();
-                        objSpinnerItem.setText(jsonArray.getJSONObject(i).getString("CategoryName"));
-                        objSpinnerItem.setValue(jsonArray.getJSONObject(i).getInt("CategoryMasterId"));
-                        lstSpinnerItem.add(objSpinnerItem);
-                    }
-                }
-            }
-            return lstSpinnerItem;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
 }
