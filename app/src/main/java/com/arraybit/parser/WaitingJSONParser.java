@@ -24,6 +24,7 @@ public class WaitingJSONParser {
     Date dt = null;
     SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
+
     //region Class Methods
 
     private WaitingMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
