@@ -653,7 +653,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         @Override
         protected Object doInBackground(Object[] params) {
             objItemJSONParser = new ItemJSONParser();
-            objItemMaster = objItemJSONParser.SelectItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoSectionMasterId(), MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), ItemMasterId);
+            objItemMaster = objItemJSONParser.SelectItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), ItemMasterId);
             return objItemMaster;
         }
 

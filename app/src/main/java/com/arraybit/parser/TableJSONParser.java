@@ -156,23 +156,20 @@ public class TableJSONParser {
 
     //region  SelectAll
 
-    public ArrayList<TableMaster> SelectAllTableMasterBySectionMasterId(int linktoCounterMasterId, int linktoSectionMasterId, String linktoTableStatusMasterId, String linktoOrderTypeMasterId, int linktoBusinessMasterId) {
+    public ArrayList<TableMaster> SelectAllTableMasterBySectionMasterId(int linktoCounterMasterId, String linktoTableStatusMasterId, String linktoOrderTypeMasterId, int linktoBusinessMasterId) {
         ArrayList<TableMaster> lstTableMaster = null;
         JSONObject jsonResponse;
         try {
-            if (linktoSectionMasterId == 0) {
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId + "/" + linktoCounterMasterId + "/" + null + "/" + linktoTableStatusMasterId + "/" + linktoOrderTypeMasterId + "/" + linktoBusinessMasterId);
-            } else {
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId + "/" + linktoCounterMasterId + "/" + linktoSectionMasterId + "/" + linktoTableStatusMasterId + "/" + linktoOrderTypeMasterId + "/" + linktoBusinessMasterId);
-            }
-            if (jsonResponse != null) {
-                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllTableMasterBySectionId + "Result");
-                if (jsonArray != null) {
-                    lstTableMaster = SetListPropertiesFromJSONArray(jsonArray);
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId + "/" + linktoCounterMasterId + "/" + linktoTableStatusMasterId + "/" + linktoOrderTypeMasterId + "/" + linktoBusinessMasterId);
+
+                if (jsonResponse != null) {
+                    JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllTableMasterBySectionId + "Result");
+                    if (jsonArray != null) {
+                        lstTableMaster = SetListPropertiesFromJSONArray(jsonArray);
+                    }
                 }
-            }
-            return lstTableMaster;
-        } catch (Exception ex) {
+                return lstTableMaster;
+            } catch (Exception ex) {
             return null;
         }
     }

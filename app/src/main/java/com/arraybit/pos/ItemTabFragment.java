@@ -415,7 +415,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-            return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoSectionMasterId(), MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId);
+            return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId);
 
         }
 

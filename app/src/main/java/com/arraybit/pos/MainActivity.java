@@ -555,7 +555,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-            return objItemJSONParser.SelectAllItemMaster(1,0,1,0,null, Globals.businessMasterId);
+            return objItemJSONParser.SelectAllItemMaster(1,1,0,null, Globals.businessMasterId);
         }
 
         @Override
