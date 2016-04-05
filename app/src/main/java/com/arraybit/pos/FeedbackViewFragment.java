@@ -75,7 +75,7 @@ public class FeedbackViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feedback_view, container, false);
 
         feedbackViewFragment = (LinearLayout) view.findViewById(R.id.feedbackViewFragment);
-        feedbackLayout = (LinearLayout) view.findViewById(R.id.feedbackLayout);
+        //feedbackLayout = (LinearLayout) view.findViewById(R.id.feedbackLayout);
 
         Bundle bundle = getArguments();
         alFeedbackQuestionMaster = bundle.getParcelableArrayList(ITEMS_COUNT_KEY);
