@@ -3,18 +3,27 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.transition.Slide;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,31 +33,42 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.arraybit.adapter.TablesAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.SectionMaster;
-import com.arraybit.parser.SectionJSONParser;
+import com.arraybit.modal.TableMaster;
+import com.arraybit.parser.TableJSONParser;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 @SuppressLint("ValidFragment")
-public class AllTablesFragment extends Fragment implements View.OnClickListener {
+public class AllTablesFragment extends Fragment implements View.OnClickListener, TablesAdapter.LayoutClickListener, SearchView.OnQueryTextListener {
 
     static boolean isRefresh = false;
-    TabLayout tableTabLayout;
-    ViewPager tableViewPager;
+    boolean isFilter;
     ArrayList<SectionMaster> alSectionMaster;
     TablePagerAdapter tablePagerAdapter;
+    TablesAdapter tablesAdapter;
+    ArrayList<TableMaster> alTableMaster;
     FloatingActionMenu famRoot;
     Activity activityName;
     CoordinatorLayout allTablesFragment;
     boolean isChangeMode, isVacant = false;
-    String linktoOrderTypeMasterId;
+    String linktoOrderTypeMasterId, tableStatusMasterId;
     LinearLayout errorLayout;
+    RecyclerView rvTables;
+    GridLayoutManager gridLayoutManager;
+    int counterMasterId, position;
+    SharePreferenceManage objSharePreferenceManage;
+    Bundle bundle;
+    DisplayMetrics displayMetrics;
 
 
     public AllTablesFragment(Activity activityName, boolean isChangeMode, String linktoOrderTypeMasterId) {
@@ -83,15 +103,28 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
             setHasOptionsMenu(true);
         }
 
+        displayMetrics = getActivity().getResources().getDisplayMetrics();
+
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
 
-        Bundle bundle = getArguments();
+        rvTables = (RecyclerView) view.findViewById(R.id.rvTables);
+        rvTables.setHasFixedSize(true);
+        rvTables.setVisibility(View.GONE);
+
+        gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+
+        //get counterMasterId
+        objSharePreferenceManage = new SharePreferenceManage();
+        if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()) != null) {
+            counterMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()));
+        }
+        //end
+        bundle = getArguments();
         if (bundle != null) {
             isVacant = bundle.getBoolean("IsVacant");
         }
 
-        tableTabLayout = (TabLayout) view.findViewById(R.id.tableTabLayout);
-        tableViewPager = (ViewPager) view.findViewById(R.id.tableViewPager);
 
         //floating action menu
         famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
@@ -111,9 +144,9 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         //end
 
         if (Service.CheckNet(getActivity())) {
-            new TableSectionLoadingTask().execute();
+            new TableMasterLoadingTask().execute();
         } else {
-            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), tableTabLayout, tableViewPager);
+            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection));
         }
 
         return view;
@@ -139,11 +172,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
@@ -162,17 +190,15 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-
-        TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(tableTabLayout.getSelectedTabPosition());
         if (v.getId() == R.id.fabVacant) {
             famRoot.close(true);
-            tableTabFragment.TableDataFilter(String.valueOf(Globals.TableStatus.Vacant.getValue()));
+            TableDataFilter(String.valueOf(Globals.TableStatus.Vacant.getValue()));
         } else if (v.getId() == R.id.fabBusy) {
             famRoot.close(true);
-            tableTabFragment.TableDataFilter(String.valueOf(Globals.TableStatus.Occupied.getValue()));
+            TableDataFilter(String.valueOf(Globals.TableStatus.Occupied.getValue()));
         } else if (v.getId() == R.id.fabAll) {
             famRoot.close(true);
-            tableTabFragment.TableDataFilter(null);
+            TableDataFilter(null);
         }
     }
 
@@ -184,21 +210,192 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+            final MenuItem searchItem = menu.findItem(R.id.action_search);
+            final SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            mSearchView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
+            mSearchView.setMaxWidth(displayMetrics.widthPixels);
+            mSearchView.setOnQueryTextListener(this);
+
+            MenuItemCompat.setOnActionExpandListener(searchItem,
+                    new MenuItemCompat.OnActionExpandListener() {
+                        @Override
+                        public boolean onMenuItemActionCollapse(MenuItem item) {
+                            // Do something when collapsed
+                            if (alTableMaster.size() != 0 && alTableMaster != null) {
+                                tablesAdapter.SetSearchFilter(alTableMaster);
+                                Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                            }
+                            return true; // Return true to collapse action view
+                        }
+
+                        @Override
+                        public boolean onMenuItemActionExpand(MenuItem item) {
+                            // Do something when expanded
+                            return true; // Return true to expand action view
+                        }
+                    });
+        }
+
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (alTableMaster.size() != 0 && alTableMaster != null) {
+            final ArrayList<TableMaster> filteredList = Filter(alTableMaster, newText);
+            tablesAdapter.SetSearchFilter(filteredList);
+        }
+        return false;
+    }
+
+    @Override
+    public void ChangeTableStatusClick(TableMaster objTableMaster, int position) {
+        this.position = position;
+        if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Vacant.toString())) {
+            if (isChangeMode) {
+                Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+                intent.putExtra("TableMaster", objTableMaster);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            } else {
+                if (Globals.selectTableMasterId == 0) {
+                    Globals.selectTableMasterId = objTableMaster.getTableMasterId();
+                }
+                Intent intent = new Intent(getActivity(), MenuActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("TableMaster", objTableMaster);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            }
+        } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Occupied.toString())) {
+
+            AllTablesFragment.isRefresh = true;
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("TableMaster", objTableMaster);
+            bundle.putBoolean("isHomeShow", true);
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
+            orderSummaryFragment.setArguments(bundle);
+            if (Build.VERSION.SDK_INT >= 21) {
+                Slide slideTransition = new Slide();
+                slideTransition.setSlideEdge(Gravity.RIGHT);
+                slideTransition.setDuration(500);
+
+                orderSummaryFragment.setEnterTransition(slideTransition);
+            } else {
+                fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+            }
+
+            fragmentTransaction.replace(R.id.allTablesFragment, orderSummaryFragment, getActivity().getResources().getString(R.string.title_fragment_order_summary));
+            fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
+            fragmentTransaction.commit();
+
+        } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Block.toString())) {
+            TableStatusFragment tableStatusFragment = new TableStatusFragment(objTableMaster);
+            tableStatusFragment.setTargetFragment(this, 0);
+            tableStatusFragment.show(getFragmentManager(), "");
+        } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Dirty.toString())) {
+            TableStatusFragment tableStatusFragment = new TableStatusFragment(objTableMaster);
+            tableStatusFragment.setTargetFragment(this, 0);
+            tableStatusFragment.show(getFragmentManager(), "");
+        }
+    }
+
     //region Private Methods
-    private void SetErrorLayout(boolean isShow, String errorMsg, TabLayout tabLayout, ViewPager viewPager) {
+    private void SetErrorLayout(boolean isShow, String errorMsg) {
         TextView txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
         if (isShow) {
             errorLayout.setVisibility(View.VISIBLE);
             txtMsg.setText(errorMsg);
-            tabLayout.setVisibility(View.GONE);
-            viewPager.setVisibility(View.GONE);
+            rvTables.setVisibility(View.GONE);
             famRoot.setVisibility(View.GONE);
 
         } else {
             errorLayout.setVisibility(View.GONE);
-            tabLayout.setVisibility(View.VISIBLE);
-            viewPager.setVisibility(View.VISIBLE);
-            famRoot.setVisibility(View.VISIBLE);
+            rvTables.setVisibility(View.VISIBLE);
+            if (isVacant) {
+                famRoot.setVisibility(View.GONE);
+            } else {
+                famRoot.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private ArrayList<TableMaster> Filter(ArrayList<TableMaster> lstTableMaster, String filterName) {
+        filterName = filterName.toLowerCase();
+        final ArrayList<TableMaster> filteredList = new ArrayList<>();
+        for (TableMaster objTableMaster : lstTableMaster) {
+            isFilter = false;
+            ArrayList<String> alString = new ArrayList<>(Arrays.asList(objTableMaster.getShortName().toLowerCase().split(" ")));
+            alString.add(0, objTableMaster.getShortName().toLowerCase());
+            for (String str : alString) {
+                if (str.length() >= filterName.length()) {
+                    final String strItem = str.substring(0, filterName.length()).toLowerCase();
+                    if (!isFilter) {
+                        if (strItem.contains(filterName)) {
+                            filteredList.add(objTableMaster);
+                            isFilter = true;
+                        }
+                    }
+                }
+            }
+        }
+        return filteredList;
+    }
+
+
+    private void SetupRecyclerView(RecyclerView rvTables, ArrayList<TableMaster> alTableMaster) {
+        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
+            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), true, false);
+        } else {
+            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), true, false);
+        }
+
+        rvTables.setAdapter(tablesAdapter);
+        rvTables.setLayoutManager(gridLayoutManager);
+        rvTables.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Globals.HideKeyBoard(getActivity(), recyclerView);
+                if (!tablesAdapter.isItemAnimate) {
+                    tablesAdapter.isItemAnimate = true;
+                }
+            }
+        });
+    }
+
+    public void TableDataFilter(String tableStatusMasterId) {
+        ArrayList<TableMaster> alTableMasterFilter = new ArrayList<>();
+        if (tableStatusMasterId != null) {
+            for (int i = 0; i < alTableMaster.size(); i++) {
+                if (alTableMaster.get(i).getlinktoTableStatusMasterId() == Short.valueOf(tableStatusMasterId)) {
+                    alTableMasterFilter.add(alTableMaster.get(i));
+                }
+            }
+            if (alTableMasterFilter.size() == 0) {
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
+            } else {
+                Globals.SetErrorLayout(errorLayout, false, null, rvTables);
+                SetupRecyclerView(rvTables, alTableMasterFilter);
+            }
+        } else {
+            if (alTableMaster.size() == 0) {
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
+            } else {
+                Globals.SetErrorLayout(errorLayout, false, null, rvTables);
+                SetupRecyclerView(rvTables, alTableMaster);
+            }
+
         }
     }
     //endregion
@@ -240,97 +437,135 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener 
     //endregion
 
     //region Loading Task
-    class TableSectionLoadingTask extends AsyncTask {
+    class TableMasterLoadingTask extends AsyncTask {
 
         com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
             progressDialog = new com.arraybit.pos.ProgressDialog();
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
-
+            if(isVacant){
+                tableStatusMasterId = String.valueOf(Globals.TableStatus.Vacant.getValue());
+            }
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
 
-            SectionJSONParser objSectionJSONParser = new SectionJSONParser();
-            alSectionMaster = objSectionJSONParser.SelectAllSectionMaster(Globals.businessMasterId);
-            return null;
+            TableJSONParser objTableJSONParser = new TableJSONParser();
+            return objTableJSONParser.SelectAllTableMaster(counterMasterId, tableStatusMasterId, linktoOrderTypeMasterId, Globals.businessMasterId);
         }
 
         @Override
         protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
 
             progressDialog.dismiss();
-            if (alSectionMaster == null) {
-                //Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
-                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail), tableTabLayout, tableViewPager);
-            } else if (alSectionMaster.size() == 0) {
-                //Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
-                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord), tableTabLayout, tableViewPager);
+            ArrayList<TableMaster> lstTableMaster = (ArrayList<TableMaster>) result;
+            if (lstTableMaster == null) {
+                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail));
+            } else if (lstTableMaster.size() == 0) {
+                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord));
             } else {
-                SetErrorLayout(false, null, tableTabLayout, tableViewPager);
-                if (isVacant) {
-                    famRoot.setVisibility(View.GONE);
-                } else {
-                    famRoot.setVisibility(View.VISIBLE);
-                }
-
-                tablePagerAdapter = new TablePagerAdapter(getFragmentManager());
-
-                SectionMaster objSectionMaster = new SectionMaster();
-                objSectionMaster.setSectionMasterId((short) 0);
-                objSectionMaster.setSectionName("All");
-                ArrayList<SectionMaster> alSection = new ArrayList<>();
-                alSection.add(objSectionMaster);
-
-                alSectionMaster.addAll(0, alSection);
-                for (int i = 0; i < alSectionMaster.size(); i++) {
-                    tablePagerAdapter.AddFragment(TableTabFragment.createInstance(alSectionMaster.get(i), isChangeMode, linktoOrderTypeMasterId), alSectionMaster.get(i));
-                }
-                tableViewPager.setAdapter(tablePagerAdapter);
-                tableTabLayout.setupWithViewPager(tableViewPager);
-
-                TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(0);
-                if (isVacant) {
-                    tableTabFragment.LoadTableData(String.valueOf(Globals.TableStatus.Vacant.getValue()));
-                } else {
-                    tableTabFragment.LoadTableData(null);
-                }
-
-                tableViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                    }
-
-                    @Override
-                    public void onPageSelected(int position) {
-                        if (famRoot.isMenuButtonHidden()) {
-                            famRoot.showMenuButton(true);
-                        }
-
-                        tableViewPager.setCurrentItem(position);
-                        //load data when tab is change
-                        TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(position);
-                        if (isVacant) {
-                            tableTabFragment.LoadTableData(String.valueOf(Globals.TableStatus.Vacant.getValue()));
-                        } else {
-                            tableTabFragment.LoadTableData(null);
-                        }
-
-                    }
-
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-
-                    }
-                });
+                SetErrorLayout(false, null);
+                alTableMaster = lstTableMaster;
+                SetupRecyclerView(rvTables, alTableMaster);
             }
         }
     }
+//    class TableSectionLoadingTask extends AsyncTask {
+//
+//        com.arraybit.pos.ProgressDialog progressDialog;
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//
+//            progressDialog = new com.arraybit.pos.ProgressDialog();
+//            progressDialog.show(getActivity().getSupportFragmentManager(), "");
+//
+//        }
+//
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//
+//            SectionJSONParser objSectionJSONParser = new SectionJSONParser();
+//            alSectionMaster = objSectionJSONParser.SelectAllSectionMaster(Globals.businessMasterId);
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Object result) {
+//
+//            progressDialog.dismiss();
+//            if (alSectionMaster == null) {
+//                //Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgSelectFail), getActivity(), 1000);
+//                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail), tableTabLayout, tableViewPager);
+//            } else if (alSectionMaster.size() == 0) {
+//                //Globals.ShowSnackBar(allTablesFragment, getActivity().getResources().getString(R.string.MsgNoRecord), getActivity(), 1000);
+//                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord), tableTabLayout, tableViewPager);
+//            } else {
+//                SetErrorLayout(false, null, tableTabLayout, tableViewPager);
+//                if (isVacant) {
+//                    famRoot.setVisibility(View.GONE);
+//                } else {
+//                    famRoot.setVisibility(View.VISIBLE);
+//                }
+//
+//                tablePagerAdapter = new TablePagerAdapter(getFragmentManager());
+//
+//                SectionMaster objSectionMaster = new SectionMaster();
+//                objSectionMaster.setSectionMasterId((short) 0);
+//                objSectionMaster.setSectionName("All");
+//                ArrayList<SectionMaster> alSection = new ArrayList<>();
+//                alSection.add(objSectionMaster);
+//
+//                alSectionMaster.addAll(0, alSection);
+//                for (int i = 0; i < alSectionMaster.size(); i++) {
+//                    tablePagerAdapter.AddFragment(TableTabFragment.createInstance(alSectionMaster.get(i), isChangeMode, linktoOrderTypeMasterId), alSectionMaster.get(i));
+//                }
+//                tableViewPager.setAdapter(tablePagerAdapter);
+//                tableTabLayout.setupWithViewPager(tableViewPager);
+//
+//                TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(0);
+//                if (isVacant) {
+//                    tableTabFragment.LoadTableData(String.valueOf(Globals.TableStatus.Vacant.getValue()));
+//                } else {
+//                    tableTabFragment.LoadTableData(null);
+//                }
+//
+//                tableViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//                    @Override
+//                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onPageSelected(int position) {
+//                        if (famRoot.isMenuButtonHidden()) {
+//                            famRoot.showMenuButton(true);
+//                        }
+//
+//                        tableViewPager.setCurrentItem(position);
+//                        //load data when tab is change
+//                        TableTabFragment tableTabFragment = (TableTabFragment) tablePagerAdapter.GetCurrentFragment(position);
+//                        if (isVacant) {
+//                            tableTabFragment.LoadTableData(String.valueOf(Globals.TableStatus.Vacant.getValue()));
+//                        } else {
+//                            tableTabFragment.LoadTableData(null);
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onPageScrollStateChanged(int state) {
+//
+//                    }
+//                });
+//            }
+//        }
+//    }
     //endregion
 }

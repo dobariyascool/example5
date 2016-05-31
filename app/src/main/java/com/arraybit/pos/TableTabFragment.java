@@ -335,7 +335,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         protected Object doInBackground(Object[] objects) {
 
             TableJSONParser objTableJSONParser = new TableJSONParser();
-            return objTableJSONParser.SelectAllTableMasterBySectionMasterId(counterMasterId, tableStatusMasterId, linktoOrderTypeMasterId,Globals.businessMasterId);
+            return objTableJSONParser.SelectAllTableMaster(counterMasterId, tableStatusMasterId, linktoOrderTypeMasterId, Globals.businessMasterId);
         }
 
         @Override

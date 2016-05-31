@@ -17,7 +17,7 @@ import java.util.Locale;
 
 public class TableJSONParser {
     public String UpdateTableMaster = "UpdateTableStatus";
-    public String SelectAllTableMasterBySectionId = "SelectAllTableMasterBySectionMasterId";
+    public String SelectAllTableMaster = "SelectAllTableMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     Date dt = null;
@@ -62,7 +62,6 @@ public class TableJSONParser {
                 /// Extra
                 objTableMaster.setTableStatus(jsonObject.getString("TableStatus"));
                 objTableMaster.setStatusColor(jsonObject.getString("StatusColor"));
-                objTableMaster.setSection(jsonObject.getString("Section"));
                 objTableMaster.setBusiness(jsonObject.getString("Business"));
             }
             return objTableMaster;
@@ -111,7 +110,6 @@ public class TableJSONParser {
                 /// Extra
                 objTableMaster.setTableStatus(jsonArray.getJSONObject(i).getString("TableStatus"));
                 objTableMaster.setStatusColor(jsonArray.getJSONObject(i).getString("StatusColor"));
-                objTableMaster.setSection(jsonArray.getJSONObject(i).getString("Section"));
                 objTableMaster.setBusiness(jsonArray.getJSONObject(i).getString("Business"));
                 lstTableMaster.add(objTableMaster);
             }
@@ -156,14 +154,14 @@ public class TableJSONParser {
 
     //region  SelectAll
 
-    public ArrayList<TableMaster> SelectAllTableMasterBySectionMasterId(int linktoCounterMasterId, String linktoTableStatusMasterId, String linktoOrderTypeMasterId, int linktoBusinessMasterId) {
+    public ArrayList<TableMaster> SelectAllTableMaster(int linktoCounterMasterId, String linktoTableStatusMasterId, String linktoOrderTypeMasterId, int linktoBusinessMasterId) {
         ArrayList<TableMaster> lstTableMaster = null;
         JSONObject jsonResponse;
         try {
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMasterBySectionId + "/" + linktoCounterMasterId + "/" + linktoTableStatusMasterId + "/" + linktoOrderTypeMasterId + "/" + linktoBusinessMasterId);
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMaster + "/" + linktoCounterMasterId + "/" + linktoTableStatusMasterId + "/" + linktoOrderTypeMasterId + "/" + linktoBusinessMasterId);
 
                 if (jsonResponse != null) {
-                    JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllTableMasterBySectionId + "Result");
+                    JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllTableMaster + "Result");
                     if (jsonArray != null) {
                         lstTableMaster = SetListPropertiesFromJSONArray(jsonArray);
                     }
