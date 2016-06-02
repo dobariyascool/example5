@@ -25,6 +25,11 @@ public class ItemMaster implements Parcelable {
     String SearchWords;
     String ImageNameBytes;
     String ImageName;
+    String XS_ImagePhysicalName;
+    String SM_ImagePhysicalName;
+    String MD_ImagePhysicalName;
+    String LG_ImagePhysicalName;
+    String XL_ImagePhysicalName;
     int SortOrder;
     String CreateDateTime;
     short linktoUserMasterIdCreatedBy;
@@ -62,6 +67,11 @@ public class ItemMaster implements Parcelable {
             objItemMaster.SearchWords = source.readString();
             objItemMaster.ImageNameBytes = source.readString();
             objItemMaster.ImageName = source.readString();
+            objItemMaster.XS_ImagePhysicalName = source.readString();
+            objItemMaster.SM_ImagePhysicalName = source.readString();
+            objItemMaster.MD_ImagePhysicalName = source.readString();
+            objItemMaster.LG_ImagePhysicalName = source.readString();
+            objItemMaster.XL_ImagePhysicalName = source.readString();
             objItemMaster.SortOrder = source.readInt();
             objItemMaster.CreateDateTime = source.readString();
             objItemMaster.linktoUserMasterIdCreatedBy = (short) source.readInt();
@@ -368,6 +378,47 @@ public class ItemMaster implements Parcelable {
         OptionValueTranIds = optionValueTranIds;
     }
 
+    public String getXL_ImagePhysicalName() {
+        return XL_ImagePhysicalName;
+    }
+
+    public void setXL_ImagePhysicalName(String XL_ImagePhysicalName) {
+        this.XL_ImagePhysicalName = XL_ImagePhysicalName;
+    }
+
+    public String getLG_ImagePhysicalName() {
+        return LG_ImagePhysicalName;
+    }
+
+    public void setLG_ImagePhysicalName(String LG_ImagePhysicalName) {
+        this.LG_ImagePhysicalName = LG_ImagePhysicalName;
+    }
+
+    public String getMD_ImagePhysicalName() {
+        return MD_ImagePhysicalName;
+    }
+
+    public void setMD_ImagePhysicalName(String MD_ImagePhysicalName) {
+        this.MD_ImagePhysicalName = MD_ImagePhysicalName;
+    }
+
+    public String getSM_ImagePhysicalName() {
+        return SM_ImagePhysicalName;
+    }
+
+    public void setSM_ImagePhysicalName(String SM_ImagePhysicalName) {
+        this.SM_ImagePhysicalName = SM_ImagePhysicalName;
+    }
+
+    public String getXS_ImagePhysicalName() {
+        return XS_ImagePhysicalName;
+    }
+
+    public void setXS_ImagePhysicalName(String XS_ImagePhysicalName) {
+        this.XS_ImagePhysicalName = XS_ImagePhysicalName;
+    }
+
+
     //endregion
     public int describeContents() {
         return 0;
@@ -388,6 +439,11 @@ public class ItemMaster implements Parcelable {
         parcel.writeString(SearchWords);
         parcel.writeString(ImageNameBytes);
         parcel.writeString(ImageName);
+        parcel.writeString(XS_ImagePhysicalName);
+        parcel.writeString(SM_ImagePhysicalName);
+        parcel.writeString(MD_ImagePhysicalName);
+        parcel.writeString(LG_ImagePhysicalName);
+        parcel.writeString(XL_ImagePhysicalName);
         parcel.writeInt(SortOrder);
         parcel.writeString(CreateDateTime);
         parcel.writeInt(linktoUserMasterIdCreatedBy);

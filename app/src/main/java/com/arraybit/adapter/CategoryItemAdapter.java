@@ -67,10 +67,10 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
         objItemMaster = alItemMaster.get(position);
         if (!isWaiterGrid) {
-            if (objItemMaster.getImageName().equals("null")) {
+            if (objItemMaster.getMD_ImagePhysicalName()== null || objItemMaster.getMD_ImagePhysicalName().equals("")) {
                 Picasso.with(holder.ivItem.getContext()).load(R.drawable.default_image).into(holder.ivItem);
             } else {
-                Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getImageName()).into(holder.ivItem);
+                Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getMD_ImagePhysicalName()).into(holder.ivItem);
             }
         }
 

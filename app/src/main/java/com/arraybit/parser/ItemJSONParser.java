@@ -43,6 +43,11 @@ public class ItemJSONParser {
                 objItemMaster.setlinktoUnitMasterId((short) jsonObject.getInt("linktoUnitMasterId"));
                 objItemMaster.setSearchWords(jsonObject.getString("SearchWords"));
                 objItemMaster.setImageName(jsonObject.getString("ImageName"));
+                objItemMaster.setXS_ImagePhysicalName(jsonObject.getString("xs_ImagePhysicalName"));
+                objItemMaster.setSM_ImagePhysicalName(jsonObject.getString("sm_ImagePhysicalName"));
+                objItemMaster.setMD_ImagePhysicalName(jsonObject.getString("md_ImagePhysicalName"));
+                objItemMaster.setLG_ImagePhysicalName(jsonObject.getString("lg_ImagePhysicalName"));
+                objItemMaster.setXL_ImagePhysicalName(jsonObject.getString("xl_ImagePhysicalName"));
                 if (!jsonObject.getString("SortOrder").equals("null")) {
                     objItemMaster.setSortOrder(jsonObject.getInt("SortOrder"));
                 }
@@ -92,6 +97,11 @@ public class ItemJSONParser {
                 objItemMaster.setlinktoUnitMasterId((short) jsonArray.getJSONObject(i).getInt("linktoUnitMasterId"));
                 objItemMaster.setSearchWords(jsonArray.getJSONObject(i).getString("SearchWords"));
                 objItemMaster.setImageName(jsonArray.getJSONObject(i).getString("ImageName"));
+                objItemMaster.setXS_ImagePhysicalName(jsonArray.getJSONObject(i).getString("xs_ImagePhysicalName"));
+                objItemMaster.setSM_ImagePhysicalName(jsonArray.getJSONObject(i).getString("sm_ImagePhysicalName"));
+                objItemMaster.setMD_ImagePhysicalName(jsonArray.getJSONObject(i).getString("md_ImagePhysicalName"));
+                objItemMaster.setLG_ImagePhysicalName(jsonArray.getJSONObject(i).getString("lg_ImagePhysicalName"));
+                objItemMaster.setXL_ImagePhysicalName(jsonArray.getJSONObject(i).getString("xl_ImagePhysicalName"));
                 if (!jsonArray.getJSONObject(i).getString("SortOrder").equals("null")) {
                     objItemMaster.setSortOrder(jsonArray.getJSONObject(i).getInt("SortOrder"));
                 }
