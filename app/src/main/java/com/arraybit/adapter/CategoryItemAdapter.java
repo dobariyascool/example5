@@ -67,11 +67,20 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
         objItemMaster = alItemMaster.get(position);
         if (!isWaiterGrid) {
-            if (objItemMaster.getMD_ImagePhysicalName()== null || objItemMaster.getMD_ImagePhysicalName().equals("")) {
-                Picasso.with(holder.ivItem.getContext()).load(R.drawable.default_image).into(holder.ivItem);
+            if (isViewChange) {
+                if (objItemMaster.getMD_ImagePhysicalName() == null || objItemMaster.getMD_ImagePhysicalName().equals("")) {
+                    Picasso.with(holder.ivItem.getContext()).load(R.drawable.default_image).into(holder.ivItem);
+                } else {
+                    Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getMD_ImagePhysicalName()).into(holder.ivItem);
+                }
             } else {
-                Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getMD_ImagePhysicalName()).into(holder.ivItem);
+                if (objItemMaster.getSM_ImagePhysicalName() == null || objItemMaster.getSM_ImagePhysicalName().equals("")) {
+                    Picasso.with(holder.ivItem.getContext()).load(R.drawable.default_image).into(holder.ivItem);
+                } else {
+                    Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getSM_ImagePhysicalName()).into(holder.ivItem);
+                }
             }
+
         }
 
         holder.txtItemName.setText(objItemMaster.getItemName());
@@ -81,7 +90,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             holder.txtItemDescription.setVisibility(View.VISIBLE);
             holder.txtItemDescription.setText(objItemMaster.getShortDescription());
         }
-        holder.txtItemPrice.setText("Rs. " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
+        holder.txtItemPrice.setText(context.getResources().getString(R.string.dfRupee) +" "+ Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
 
         //holder animation
         if (isItemAnimate) {

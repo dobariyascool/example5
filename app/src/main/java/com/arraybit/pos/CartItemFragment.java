@@ -26,11 +26,15 @@ import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.modal.TableMaster;
+import com.arraybit.modal.TaxMaster;
 import com.arraybit.parser.OrderJOSNParser;
 import com.arraybit.parser.TableJSONParser;
+import com.arraybit.parser.TaxJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.CompoundButton;
 import com.rey.material.widget.TextView;
+
+import java.util.ArrayList;
 
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
@@ -47,9 +51,10 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     String orderNumber, orderMasterId;
     SharePreferenceManage objSharePreferenceManage;
     short counterMasterId, userMasterId, waiterMasterId;
-    double totalAmount;
+    double totalAmount, totalTax, netAmount;
     View view;
     TextView txtRemark;
+    ArrayList<TaxMaster> alTaxMaster;
 
     public CartItemFragment() {
         // Required empty public constructor
@@ -162,7 +167,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
 
                 if (Service.CheckNet(getActivity())) {
                     view = v;
-                    new OrderNumberLoadingTask().execute();
+                    new TaxLoadingTask().execute();
                 } else {
                     Globals.ShowSnackBar(v, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                 }
@@ -171,7 +176,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                 GetValueFromSharePreference();
                 if (Service.CheckNet(getActivity())) {
                     view = v;
-                    new OrderNumberLoadingTask().execute();
+                    new TaxLoadingTask().execute();
                 } else {
                     Globals.ShowSnackBar(v, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                 }
@@ -281,8 +286,12 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                 for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
                     if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() != 0) {
                         totalAmount = totalAmount + Globals.alOrderItemTran.get(i).getTotalAmount();
+                        totalTax = totalTax + Globals.alOrderItemTran.get(i).getTotalTax();
+                        netAmount = totalAmount + totalTax;
                     } else {
                         totalAmount = totalAmount + Globals.alOrderItemTran.get(i).getSellPrice();
+                        totalTax = totalTax + Globals.alOrderItemTran.get(i).getTotalTax();
+                        netAmount = totalAmount + totalTax;
                     }
                 }
             }
@@ -293,16 +302,18 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             objOrderMaster.setlinktoTableMasterIds(String.valueOf(MenuActivity.objTableMaster.getTableMasterId()));
             objOrderMaster.setlinktoOrderTypeMasterId(MenuActivity.objTableMaster.getlinktoOrderTypeMasterId());
             objOrderMaster.setTotalAmount(totalAmount);
-            objOrderMaster.setTotalTax(0.00);
+            objOrderMaster.setTotalTax(totalTax);
             objOrderMaster.setDiscount(0.00);
             objOrderMaster.setExtraAmount(0.00);
+            objOrderMaster.setNetAmount(netAmount);
             objOrderMaster.setTotalItemPoint((short) 0);
             objOrderMaster.setTotalDeductedPoint((short) 0);
             objOrderMaster.setlinktoWaiterMasterId(waiterMasterId);
             objOrderMaster.setlinktoUserMasterIdCreatedBy(userMasterId);
-            if(Globals.userName!=null){
+            objOrderMaster.setRateIndex(Globals.alOrderItemTran.get(0).getRateIndex());
+            if (Globals.userName != null) {
                 objSharePreferenceManage = new SharePreferenceManage();
-                if(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity())!=null){
+                if (objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()) != null) {
                     int customerMasterId = Integer.parseInt(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()));
                     objOrderMaster.setlinktoCustomerMasterId((short) customerMasterId);
                 }
@@ -317,7 +328,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         protected Object doInBackground(Object[] objects) {
 
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-            orderMasterId = objOrderJOSNParser.InsertOrderMaster(objOrderMaster, Globals.alOrderItemTran);
+            orderMasterId = objOrderJOSNParser.InsertOrderMaster(objOrderMaster, Globals.alOrderItemTran, alTaxMaster);
             return null;
         }
 
@@ -402,5 +413,29 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             AllTablesFragment.isRefresh = true;
         }
     }
+
+    class TaxLoadingTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            TaxJSONParser objTaxJSONParser = new TaxJSONParser();
+            return objTaxJSONParser.SelectAllTaxMaster(Globals.businessMasterId);
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
+            alTaxMaster = (ArrayList<TaxMaster>) result;
+            new OrderNumberLoadingTask().execute();
+        }
+    }
+
     //endregion
 }

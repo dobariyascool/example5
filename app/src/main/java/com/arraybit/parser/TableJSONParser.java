@@ -38,7 +38,6 @@ public class TableJSONParser {
                 objTableMaster.setMaxPerson((short) jsonObject.getInt("MaxPerson"));
                 objTableMaster.setlinktoTableStatusMasterId((short) jsonObject.getInt("linktoTableStatusMasterId"));
                 objTableMaster.setlinktoOrderTypeMasterId((short) jsonObject.getInt("linktoOrderTypeMasterId"));
-                objTableMaster.setlinktoSectionMasterId((short) jsonObject.getInt("linktoSectionMasterId"));
                 objTableMaster.setOriginX(jsonObject.getInt("OriginX"));
                 objTableMaster.setOriginY(jsonObject.getInt("OriginY"));
                 objTableMaster.setHeight(jsonObject.getDouble("Height"));
@@ -86,7 +85,6 @@ public class TableJSONParser {
                 objTableMaster.setMaxPerson((short) jsonArray.getJSONObject(i).getInt("MaxPerson"));
                 objTableMaster.setlinktoTableStatusMasterId((short) jsonArray.getJSONObject(i).getInt("linktoTableStatusMasterId"));
                 objTableMaster.setlinktoOrderTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoOrderTypeMasterId"));
-                objTableMaster.setlinktoSectionMasterId((short) jsonArray.getJSONObject(i).getInt("linktoSectionMasterId"));
                 objTableMaster.setOriginX(jsonArray.getJSONObject(i).getInt("OriginX"));
                 objTableMaster.setOriginY(jsonArray.getJSONObject(i).getInt("OriginY"));
                 objTableMaster.setHeight(jsonArray.getJSONObject(i).getDouble("Height"));

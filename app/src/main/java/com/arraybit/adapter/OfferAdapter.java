@@ -59,8 +59,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
             holder.txtOfferContent.setVisibility(View.VISIBLE);
             holder.txtOfferContent.setText(objOfferMaster.getOfferContent());
         }
-        if (!objOfferMaster.getImagePhysicalName().equals("")) {
-            Picasso.with(holder.ivOffer.getContext()).load(objOfferMaster.getImagePhysicalName()).into(holder.ivOffer);
+        if (objOfferMaster.getMD_ImagePhysicalName()!=null && !objOfferMaster.getMD_ImagePhysicalName().equals("")) {
+            Picasso.with(holder.ivOffer.getContext()).load(objOfferMaster.getMD_ImagePhysicalName()).into(holder.ivOffer);
         }
 
         //holder animation

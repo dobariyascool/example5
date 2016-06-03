@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +35,6 @@ import com.arraybit.adapter.TablesAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
-import com.arraybit.modal.SectionMaster;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.parser.TableJSONParser;
 import com.github.clans.fab.FloatingActionButton;
@@ -45,16 +42,13 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 @SuppressLint("ValidFragment")
-public class AllTablesFragment extends Fragment implements View.OnClickListener, TablesAdapter.LayoutClickListener, SearchView.OnQueryTextListener {
+public class AllTablesFragment extends Fragment implements View.OnClickListener, TablesAdapter.LayoutClickListener, SearchView.OnQueryTextListener, TableStatusFragment.UpdateTableStatusListener {
 
     static boolean isRefresh = false;
     boolean isFilter;
-    ArrayList<SectionMaster> alSectionMaster;
-    TablePagerAdapter tablePagerAdapter;
     TablesAdapter tablesAdapter;
     ArrayList<TableMaster> alTableMaster;
     FloatingActionMenu famRoot;
@@ -258,6 +252,14 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
+    public void UpdateTableStatus(boolean flag, TableMaster objTableMaster) {
+        if (flag) {
+            tablesAdapter.UpdateData(position, objTableMaster);
+        }
+    }
+
+    @SuppressLint("RtlHardcoded")
+    @Override
     public void ChangeTableStatusClick(TableMaster objTableMaster, int position) {
         this.position = position;
         if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Vacant.toString())) {
@@ -400,42 +402,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
     }
     //endregion
 
-    //region PagerAdapter
-    static class TablePagerAdapter extends FragmentStatePagerAdapter {
-
-        private final List<Fragment> tableFragmentList = new ArrayList<>();
-        private final List<SectionMaster> tableFragmentTitleList = new ArrayList<>();
-
-        public TablePagerAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
-        }
-
-        public void AddFragment(Fragment fragment, SectionMaster title) {
-            tableFragmentList.add(fragment);
-            tableFragmentTitleList.add(title);
-        }
-
-        public Fragment GetCurrentFragment(int position) {
-            return tableFragmentList.get(position);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return tableFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return tableFragmentList.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return tableFragmentTitleList.get(position).getSectionName();
-        }
-    }
-    //endregion
-
     //region Loading Task
     class TableMasterLoadingTask extends AsyncTask {
 
@@ -446,7 +412,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             super.onPreExecute();
             progressDialog = new com.arraybit.pos.ProgressDialog();
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
-            if(isVacant){
+            if (isVacant) {
                 tableStatusMasterId = String.valueOf(Globals.TableStatus.Vacant.getValue());
             }
         }

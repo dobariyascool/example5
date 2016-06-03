@@ -23,6 +23,7 @@ public class OrderMaster implements Parcelable {
     double TotalTax;
     double Discount;
     double ExtraAmount;
+    double NetAmount;
     short TotalItemPoint;
     short TotalDeductedPoint;
     String Remark;
@@ -40,7 +41,6 @@ public class OrderMaster implements Parcelable {
     String TableName;
     int TotalItem;
     int TotalKOT;
-
     public static final Parcelable.Creator<OrderMaster> CREATOR = new Creator<OrderMaster>() {
         public OrderMaster createFromParcel(Parcel source) {
             OrderMaster objOrderMaster = new OrderMaster();
@@ -85,6 +85,7 @@ public class OrderMaster implements Parcelable {
             return new OrderMaster[size];
         }
     };
+    short RateIndex;
     ArrayList<ItemMaster> AlOrderItemTran;
 
     public long getOrderMasterId() {
@@ -333,6 +334,22 @@ public class OrderMaster implements Parcelable {
 
     public void setLinktoBusinessMasterId(short linktoBusinessMasterId) {
         this.linktoBusinessMasterId = linktoBusinessMasterId;
+    }
+    public short getRateIndex() {
+        return RateIndex;
+    }
+
+    public void setRateIndex(short rateIndex) {
+        RateIndex = rateIndex;
+    }
+
+
+    public double getNetAmount() {
+        return NetAmount;
+    }
+
+    public void setNetAmount(double netAmount) {
+        NetAmount = netAmount;
     }
 
     //endregion

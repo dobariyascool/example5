@@ -60,6 +60,11 @@ public class OfferJSONParser {
                 }
                 objOfferMaster.setOfferCode(jsonObject.getString("OfferCode"));
                 objOfferMaster.setImagePhysicalName(jsonObject.getString("ImagePhysicalName"));
+                objOfferMaster.setXS_ImagePhysicalName(jsonObject.getString("xs_ImagePhysicalName"));
+                objOfferMaster.setSM_ImagePhysicalName(jsonObject.getString("sm_ImagePhysicalName"));
+                objOfferMaster.setMD_ImagePhysicalName(jsonObject.getString("md_ImagePhysicalName"));
+                objOfferMaster.setLG_ImagePhysicalName(jsonObject.getString("lg_ImagePhysicalName"));
+                objOfferMaster.setXL_ImagePhysicalName(jsonObject.getString("xl_ImagePhysicalName"));
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
                 objOfferMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objOfferMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
@@ -125,6 +130,11 @@ public class OfferJSONParser {
                 }
                 objOfferMaster.setOfferCode(jsonArray.getJSONObject(i).getString("OfferCode"));
                 objOfferMaster.setImagePhysicalName(jsonArray.getJSONObject(i).getString("ImagePhysicalName"));
+                objOfferMaster.setXS_ImagePhysicalName(jsonArray.getJSONObject(i).getString("xs_ImagePhysicalName"));
+                objOfferMaster.setSM_ImagePhysicalName(jsonArray.getJSONObject(i).getString("sm_ImagePhysicalName"));
+                objOfferMaster.setMD_ImagePhysicalName(jsonArray.getJSONObject(i).getString("md_ImagePhysicalName"));
+                objOfferMaster.setLG_ImagePhysicalName(jsonArray.getJSONObject(i).getString("lg_ImagePhysicalName"));
+                objOfferMaster.setXL_ImagePhysicalName(jsonArray.getJSONObject(i).getString("xl_ImagePhysicalName"));
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
                 objOfferMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objOfferMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));

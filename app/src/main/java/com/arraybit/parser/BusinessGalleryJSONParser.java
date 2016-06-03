@@ -22,7 +22,12 @@ public class BusinessGalleryJSONParser
                 objBusinessGalleryTran = new BusinessGalleryTran();
                 objBusinessGalleryTran.setBusinessGalleryTranId(jsonObject.getInt("BusinessGalleryTranId"));
                 objBusinessGalleryTran.setImageTitle(jsonObject.getString("ImageTitle"));
-                objBusinessGalleryTran.setImagePhysicalName(jsonObject.getString("ImagePhysicalName"));
+                objBusinessGalleryTran.setImagePhysicalName(jsonObject.getString("ImageName"));
+                objBusinessGalleryTran.setXS_ImagePhysicalName(jsonObject.getString("xs_ImagePhysicalName"));
+                objBusinessGalleryTran.setSM_ImagePhysicalName(jsonObject.getString("sm_ImagePhysicalName"));
+                objBusinessGalleryTran.setMD_ImagePhysicalName(jsonObject.getString("md_ImagePhysicalName"));
+                objBusinessGalleryTran.setLG_ImagePhysicalName(jsonObject.getString("lg_ImagePhysicalName"));
+                objBusinessGalleryTran.setXL_ImagePhysicalName(jsonObject.getString("xl_ImagePhysicalName"));
                 objBusinessGalleryTran.setlinktoBusinessMasterId(jsonObject.getInt("linktoBusinessMasterId"));
                 if (!jsonObject.getString("SortOrder").equals("null")) {
                     objBusinessGalleryTran.setSortOrder((short)jsonObject.getInt("SortOrder"));
@@ -47,7 +52,12 @@ public class BusinessGalleryJSONParser
                 objBusinessGalleryTran = new BusinessGalleryTran();
                 objBusinessGalleryTran.setBusinessGalleryTranId(jsonArray.getJSONObject(i).getInt("BusinessGalleryTranId"));
                 objBusinessGalleryTran.setImageTitle(jsonArray.getJSONObject(i).getString("ImageTitle"));
-                objBusinessGalleryTran.setImagePhysicalName(jsonArray.getJSONObject(i).getString("ImagePhysicalName"));
+                objBusinessGalleryTran.setImagePhysicalName(jsonArray.getJSONObject(i).getString("ImageName"));
+                objBusinessGalleryTran.setXS_ImagePhysicalName(jsonArray.getJSONObject(i).getString("xs_ImagePhysicalName"));
+                objBusinessGalleryTran.setSM_ImagePhysicalName(jsonArray.getJSONObject(i).getString("sm_ImagePhysicalName"));
+                objBusinessGalleryTran.setMD_ImagePhysicalName(jsonArray.getJSONObject(i).getString("md_ImagePhysicalName"));
+                objBusinessGalleryTran.setLG_ImagePhysicalName(jsonArray.getJSONObject(i).getString("lg_ImagePhysicalName"));
+                objBusinessGalleryTran.setXL_ImagePhysicalName(jsonArray.getJSONObject(i).getString("xl_ImagePhysicalName"));
                 objBusinessGalleryTran.setlinktoBusinessMasterId(jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 if (!jsonArray.getJSONObject(i).getString("SortOrder").equals("null")) {
                     objBusinessGalleryTran.setSortOrder((short)jsonArray.getJSONObject(i).getInt("SortOrder"));

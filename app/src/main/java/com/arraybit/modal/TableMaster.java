@@ -15,7 +15,6 @@ public class TableMaster implements Parcelable {
     short MaxPerson;
     short linktoTableStatusMasterId;
     short linktoOrderTypeMasterId;
-    short linktoSectionMasterId;
     int OriginX;
     int OriginY;
     double Height;
@@ -43,7 +42,6 @@ public class TableMaster implements Parcelable {
             objTableMaster.MaxPerson = (short)source.readInt();
             objTableMaster.linktoTableStatusMasterId = (short)source.readInt();
             objTableMaster.linktoOrderTypeMasterId = (short)source.readInt();
-            objTableMaster.linktoSectionMasterId = (short)source.readInt();
             objTableMaster.OriginX = source.readInt();
             objTableMaster.OriginY = source.readInt();
             objTableMaster.Height = source.readDouble();
@@ -59,7 +57,6 @@ public class TableMaster implements Parcelable {
             /// Extra
             objTableMaster.TableStatus = source.readString();
             objTableMaster.StatusColor = source.readString();
-            objTableMaster.Section = source.readString();
             objTableMaster.Business = source.readString();
             return objTableMaster;
         }
@@ -100,10 +97,6 @@ public class TableMaster implements Parcelable {
     public short getlinktoOrderTypeMasterId() { return this.linktoOrderTypeMasterId; }
 
     public void setlinktoOrderTypeMasterId(short linktoTableTypeMasterId) { this.linktoOrderTypeMasterId = linktoTableTypeMasterId; }
-
-    public short getlinktoSectionMasterId() { return this.linktoSectionMasterId; }
-
-    public void setlinktoSectionMasterId(short linktoSectionMasterId) { this.linktoSectionMasterId = linktoSectionMasterId; }
 
     public int getOriginX() { return this.OriginX; }
 
@@ -184,7 +177,6 @@ public class TableMaster implements Parcelable {
         parcel.writeInt(MaxPerson);
         parcel.writeInt(linktoTableStatusMasterId);
         parcel.writeInt(linktoOrderTypeMasterId);
-        parcel.writeInt(linktoSectionMasterId);
         parcel.writeInt(OriginX);
         parcel.writeInt(OriginY);
         parcel.writeDouble(Height);
@@ -200,7 +192,6 @@ public class TableMaster implements Parcelable {
         /// Extra
         parcel.writeString(TableStatus);
         parcel.writeString(StatusColor);
-        parcel.writeString(Section);
         parcel.writeString(Business);
     }
 

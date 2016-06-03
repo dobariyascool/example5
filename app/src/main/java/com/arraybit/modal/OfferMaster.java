@@ -22,6 +22,11 @@ public class OfferMaster implements Parcelable {
     String OfferCode;
     String ImagePhysicalNameBytes;
     String ImagePhysicalName;
+    String XS_ImagePhysicalName;
+    String SM_ImagePhysicalName;
+    String MD_ImagePhysicalName;
+    String LG_ImagePhysicalName;
+    String XL_ImagePhysicalName;
     String CreateDateTime;
     short linktoUserMasterIdCreatedBy;
     String UpdateDateTime;
@@ -58,6 +63,11 @@ public class OfferMaster implements Parcelable {
             objOfferMaster.OfferCode = source.readString();
             objOfferMaster.ImagePhysicalNameBytes = source.readString();
             objOfferMaster.ImagePhysicalName = source.readString();
+            objOfferMaster.XS_ImagePhysicalName = source.readString();
+            objOfferMaster.SM_ImagePhysicalName = source.readString();
+            objOfferMaster.MD_ImagePhysicalName = source.readString();
+            objOfferMaster.LG_ImagePhysicalName = source.readString();
+            objOfferMaster.XL_ImagePhysicalName = source.readString();
             objOfferMaster.CreateDateTime = source.readString();
             objOfferMaster.linktoUserMasterIdCreatedBy = (short)source.readInt();
             objOfferMaster.UpdateDateTime = source.readString();
@@ -220,9 +230,51 @@ public class OfferMaster implements Parcelable {
 
     public short getOrderType() { return this.OrderType; }
 
+    public void setOrderType(short orderType) { this.OrderType = orderType;
+    }
+
+    public String getXS_ImagePhysicalName() {
+        return XS_ImagePhysicalName;
+    }
+
+    public void setXS_ImagePhysicalName(String XS_ImagePhysicalName) {
+        this.XS_ImagePhysicalName = XS_ImagePhysicalName;
+    }
+
+    public String getSM_ImagePhysicalName() {
+        return SM_ImagePhysicalName;
+    }
+
+    public void setSM_ImagePhysicalName(String SM_ImagePhysicalName) {
+        this.SM_ImagePhysicalName = SM_ImagePhysicalName;
+    }
+
+    public String getMD_ImagePhysicalName() {
+        return MD_ImagePhysicalName;
+    }
+
+    public void setMD_ImagePhysicalName(String MD_ImagePhysicalName) {
+        this.MD_ImagePhysicalName = MD_ImagePhysicalName;
+    }
+
+    public String getLG_ImagePhysicalName() {
+        return LG_ImagePhysicalName;
+    }
+
+    public void setLG_ImagePhysicalName(String LG_ImagePhysicalName) {
+        this.LG_ImagePhysicalName = LG_ImagePhysicalName;
+    }
+
+    public String getXL_ImagePhysicalName() {
+        return XL_ImagePhysicalName;
+    }
+
+
     //endregion
 
-    public void setOrderType(short orderType) { this.OrderType = orderType; }
+    public void setXL_ImagePhysicalName(String XL_ImagePhysicalName) {
+        this.XL_ImagePhysicalName = XL_ImagePhysicalName;
+    }
 
     public int describeContents() {
         return 0;
@@ -245,6 +297,11 @@ public class OfferMaster implements Parcelable {
         parcel.writeString(OfferCode);
         parcel.writeString(ImagePhysicalNameBytes);
         parcel.writeString(ImagePhysicalName);
+        parcel.writeString(XS_ImagePhysicalName);
+        parcel.writeString(SM_ImagePhysicalName);
+        parcel.writeString(MD_ImagePhysicalName);
+        parcel.writeString(LG_ImagePhysicalName);
+        parcel.writeString(XL_ImagePhysicalName);
         parcel.writeString(CreateDateTime);
         parcel.writeInt(linktoUserMasterIdCreatedBy);
         parcel.writeString(UpdateDateTime);

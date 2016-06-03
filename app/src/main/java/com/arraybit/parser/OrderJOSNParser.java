@@ -4,6 +4,7 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderMaster;
+import com.arraybit.modal.TaxMaster;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -150,7 +151,7 @@ public class OrderJOSNParser {
         }
     }
 
-    public String InsertOrderMaster(OrderMaster objOrderMaster, ArrayList<ItemMaster> alOrderItemTran) {
+    public String InsertOrderMaster(OrderMaster objOrderMaster, ArrayList<ItemMaster> alOrderItemTran ,ArrayList<TaxMaster> alTaxMaster) {
         dt = new Date();
         try {
             JSONStringer stringer = new JSONStringer();
@@ -177,6 +178,8 @@ public class OrderJOSNParser {
             stringer.key("TotalItemPoint").value(objOrderMaster.getTotalItemPoint());
             stringer.key("TotalDeductedPoint").value(objOrderMaster.getTotalDeductedPoint());
             stringer.key("Remark").value(objOrderMaster.getRemark());
+            stringer.key("NetAmount").value(objOrderMaster.getNetAmount());
+            stringer.key("RateIndex").value(objOrderMaster.getRateIndex());
             //stringer.key("linktoSalesMasterId").value(null);
             stringer.key("CreateDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoUserMasterIdCreatedBy").value(objOrderMaster.getlinktoUserMasterIdCreatedBy());
@@ -192,6 +195,12 @@ public class OrderJOSNParser {
                 stringer.key("Quantity").value(alOrderItemTran.get(i).getQuantity());
                 stringer.key("ActualSellPrice").value(alOrderItemTran.get(i).getActualSellPrice());
                 stringer.key("Remark").value(alOrderItemTran.get(i).getRemark());
+                stringer.key("Tax1").value(alOrderItemTran.get(i).getTax1());
+                stringer.key("Tax2").value(alOrderItemTran.get(i).getTax2());
+                stringer.key("Tax3").value(alOrderItemTran.get(i).getTax3());
+                stringer.key("Tax4").value(alOrderItemTran.get(i).getTax4());
+                stringer.key("Tax5").value(alOrderItemTran.get(i).getTax5());
+                stringer.key("IsRateTaxInclusive").value(alOrderItemTran.get(i).getIsRateTaxInclusive());
                 stringer.key("lstOrderItemModifierTran");
                 stringer.array();
                 for (int j = 0; j < alOrderItemTran.get(i).getAlOrderItemModifierTran().size(); j++) {
@@ -202,6 +211,21 @@ public class OrderJOSNParser {
                 }
                 stringer.endArray();
                 stringer.endObject();
+            }
+            stringer.endArray();
+
+            stringer.key("lstTaxMaster");
+            stringer.array();
+
+            if(alTaxMaster!=null && alTaxMaster.size()!=0) {
+                for (int i = 0; i < alTaxMaster.size(); i++) {
+                    stringer.object();
+                    stringer.key("TaxMasterId").value(alTaxMaster.get(i).getTaxMasterId());
+                    stringer.key("TaxName").value(alTaxMaster.get(i).getTaxName());
+                    stringer.key("TaxRate").value(alTaxMaster.get(i).getTaxRate());
+                    stringer.key("IsPercentage").value(alTaxMaster.get(i).getIsPercentage());
+                    stringer.endObject();
+                }
             }
             stringer.endArray();
 
@@ -248,8 +272,12 @@ public class OrderJOSNParser {
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateOrderMasterStatus, stringer);
-            JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateOrderMasterStatus + "Result");
-            return String.valueOf(jsonObject.getInt("ErrorCode"));
+            if(jsonResponse!=null){
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateOrderMasterStatus + "Result");
+                return String.valueOf(jsonObject.getInt("ErrorCode"));
+            }else{
+                return "-1";
+            }
         } catch (Exception ex) {
             return "-1";
         }

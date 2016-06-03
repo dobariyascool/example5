@@ -50,6 +50,15 @@ public class ItemMaster implements Parcelable {
     int Quantity;
     String Remark;
     long linktoOrderMasterId;
+    String Tax;
+    double TotalTax;
+    double Tax1;
+    double Tax2;
+    double Tax3;
+    double Tax4;
+    double Tax5;
+    double TaxRate;
+    short RateIndex;
     public static final Parcelable.Creator<ItemMaster> CREATOR = new Creator<ItemMaster>() {
         public ItemMaster createFromParcel(Parcel source) {
             ItemMaster objItemMaster = new ItemMaster();
@@ -92,6 +101,16 @@ public class ItemMaster implements Parcelable {
             objItemMaster.ItemModifierIds= source.readString();
             objItemMaster.Quantity = source.readInt();
             objItemMaster.OptionValueTranIds = source.readString();
+            objItemMaster.Tax = source.readString();
+            objItemMaster.RateIndex = (short) source.readInt();
+            objItemMaster.TaxRate = source.readDouble();
+            objItemMaster.Tax1 = source.readDouble();
+            objItemMaster.Tax2 = source.readDouble();
+            objItemMaster.Tax3 = source.readDouble();
+            objItemMaster.Tax4 = source.readDouble();
+            objItemMaster.Tax5 = source.readDouble();
+            objItemMaster.TotalTax = source.readDouble();
+
             return objItemMaster;
         }
 
@@ -99,6 +118,7 @@ public class ItemMaster implements Parcelable {
             return new ItemMaster[size];
         }
     };
+    boolean IsRateTaxInclusive;
     double TotalAmount;
     double ExtraAmount;
     ArrayList<ItemMaster> alOrderItemModifierTran;
@@ -418,6 +438,85 @@ public class ItemMaster implements Parcelable {
         this.XS_ImagePhysicalName = XS_ImagePhysicalName;
     }
 
+    public String getTax() {
+        return Tax;
+    }
+
+    public void setTax(String tax) {
+        Tax = tax;
+    }
+
+    public double getTotalTax() {
+        return TotalTax;
+    }
+
+    public void setTotalTax(double totalTax) {
+        TotalTax = totalTax;
+    }
+
+    public double getTax1() {
+        return Tax1;
+    }
+
+    public void setTax1(double tax1) {
+        Tax1 = tax1;
+    }
+
+    public double getTax2() {
+        return Tax2;
+    }
+
+    public void setTax2(double tax2) {
+        Tax2 = tax2;
+    }
+
+    public double getTax3() {
+        return Tax3;
+    }
+
+    public void setTax3(double tax3) {
+        Tax3 = tax3;
+    }
+
+    public double getTax4() {
+        return Tax4;
+    }
+
+    public void setTax4(double tax4) {
+        Tax4 = tax4;
+    }
+
+    public double getTax5() {
+        return Tax5;
+    }
+
+    public void setTax5(double tax5) {
+        Tax5 = tax5;
+    }
+
+    public double getTaxRate() {
+        return TaxRate;
+    }
+
+    public void setTaxRate(double taxRate) {
+        TaxRate = taxRate;
+    }
+
+    public short getRateIndex() {
+        return RateIndex;
+    }
+
+    public void setRateIndex(short rateIndex) {
+        RateIndex = rateIndex;
+    }
+
+    public boolean getIsRateTaxInclusive() {
+        return IsRateTaxInclusive;
+    }
+
+    public void setIsRateTaxInclusive(boolean isRateTaxInclusive) {
+        IsRateTaxInclusive = isRateTaxInclusive;
+    }
 
     //endregion
     public int describeContents() {
@@ -464,6 +563,15 @@ public class ItemMaster implements Parcelable {
         parcel.writeLong(linktoOrderMasterId);
         parcel.writeString(ItemModifierIds);
         parcel.writeString(OptionValueTranIds);
+        parcel.writeString(Tax);
+        parcel.writeInt(RateIndex);
+        parcel.writeDouble(TotalTax);
+        parcel.writeDouble(Tax1);
+        parcel.writeDouble(Tax2);
+        parcel.writeDouble(Tax3);
+        parcel.writeDouble(Tax4);
+        parcel.writeDouble(Tax5);
+        parcel.writeDouble(TaxRate);
     }
 }
 

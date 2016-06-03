@@ -50,8 +50,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         holder.txtGalleryTitle.setText(current.getImageTitle());
         holder.txtGalleryTitle.setVisibility(View.GONE);
         //holder.cvGallery.setId(position);
-        if (current.getImagePhysicalName() != null) {
-            Picasso.with(holder.ivGalleryImage.getContext()).load(current.getImagePhysicalName()).into(holder.ivGalleryImage);
+        if (current.getMD_ImagePhysicalName() != null && !current.getMD_ImagePhysicalName().equals("")) {
+            Picasso.with(holder.ivGalleryImage.getContext()).load(current.getMD_ImagePhysicalName()).into(holder.ivGalleryImage);
         }
 
         //holder animation

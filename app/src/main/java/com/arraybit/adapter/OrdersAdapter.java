@@ -97,7 +97,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         if (objOrderMaster.getTotalItem() != 0) {
             SetItemLayout(objOrderMaster, holder, position);
         }
-        holder.txtTotalAmount.setText("Rs. " + Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
+        holder.txtTotalAmount.setText(context.getResources().getString(R.string.dfRupee)+" "+ Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
 
         //holder animation
         if (isItemAnimate) {

@@ -36,6 +36,7 @@ import com.rey.material.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
@@ -44,7 +45,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     ImageView ivItemImage, ivModifier;
     TextView txtItemName, txtDescription, txtItemPrice, txtModifier, txtHeaderModifier;
     EditText etQuantity;
-    int ItemMasterId, counterMasterId;
+    int counterMasterId;
     ItemJSONParser objItemJSONParser;
     ItemMaster objItemMaster, objOrderItemTran;
     SharePreferenceManage objSharePreferenceManage;
@@ -57,7 +58,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     boolean isDuplicate = false, isShow = false;
     ArrayList<ItemMaster> alOrderItemModifierTran, alItemMasterModifier, alItemMasterModifierFilter;
     StringBuilder sbModifier, sbModifierName;
-    double totalModifierAmount, totalAmount;
+    double totalModifierAmount, totalAmount,totalTax;
     ResponseListener objResponseListener;
     LinearLayout modifierLayout;
     short cnt = 0;
@@ -373,10 +374,10 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             } else {
                 txtDescription.setVisibility(View.GONE);
             }
-            txtItemPrice.setText("Rs. " + (Globals.dfWithPrecision.format(objItemMaster.getSellPrice())));
+            txtItemPrice.setText(getActivity().getResources().getString(R.string.dfRupee) + " " + (Globals.dfWithPrecision.format(objItemMaster.getSellPrice())));
 
-            if (!objItemMaster.getImageName().equals("null")) {
-                Picasso.with(getActivity()).load(objItemMaster.getImageName()).into(ivItemImage);
+            if (objItemMaster.getMD_ImagePhysicalName() != null && !objItemMaster.getMD_ImagePhysicalName().equals("")) {
+                Picasso.with(getActivity()).load(objItemMaster.getMD_ImagePhysicalName()).into(ivItemImage);
             } else {
                 Picasso.with(getActivity()).load(R.drawable.default_image).into(ivItemImage);
             }
@@ -465,6 +466,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                     objOrderItemTran.setSellPrice(Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                     objOrderItemTran.setQuantity(Integer.valueOf(etQuantity.getText().toString()));
                     objOrderItemTran.setRemark(actRemark.getText().toString());
+                    objOrderItemTran.setTax(objItemMaster.getTax());
+                    CountTax(objOrderItemTran, isDuplicate);
+                    objOrderItemTran.setTotalTax(totalTax);
                     if (alOrderItemModifierTran.size() != 0) {
                         totalAmount = Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice() + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString()));
                         objOrderItemTran.setTotalAmount(totalAmount);
@@ -475,6 +479,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                     } else {
                         objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
                     }
+                    objOrderItemTran.setRateIndex(objItemMaster.getRateIndex());
                     Globals.alOrderItemTran.add(objOrderItemTran);
                     Globals.counter = Globals.counter + 1;
                     isShow = true;
@@ -486,6 +491,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                 objOrderItemTran.setSellPrice(Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                 objOrderItemTran.setQuantity(Integer.valueOf(etQuantity.getText().toString()));
                 objOrderItemTran.setRemark(actRemark.getText().toString());
+                objOrderItemTran.setTax(objItemMaster.getTax());
+                CountTax(objOrderItemTran, isDuplicate);
+                objOrderItemTran.setTotalTax(totalTax);
                 if (alOrderItemModifierTran.size() != 0) {
                     totalAmount = Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice() + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString()));
                     objOrderItemTran.setTotalAmount(totalAmount);
@@ -496,6 +504,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                 } else {
                     objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
                 }
+                objOrderItemTran.setRateIndex(objItemMaster.getRateIndex());
                 Globals.alOrderItemTran.add(objOrderItemTran);
                 Globals.counter = Globals.counter + 1;
                 isShow = true;
@@ -572,6 +581,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                             if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
                                 SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
                             }
+                            CountTax(Globals.alOrderItemTran.get(i), isDuplicate);
+                            Globals.alOrderItemTran.get(i).setTotalTax(Globals.alOrderItemTran.get(i).getTotalTax() + totalTax);
                             break;
                         } else if (actRemark.getText().toString().isEmpty() && Globals.alOrderItemTran.get(i).getRemark().isEmpty() && Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() == 0) {
                             isDuplicate = true;
@@ -583,6 +594,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                             if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
                                 SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
                             }
+                            CountTax(Globals.alOrderItemTran.get(i), isDuplicate);
+                            Globals.alOrderItemTran.get(i).setTotalTax(Globals.alOrderItemTran.get(i).getTotalTax() + totalTax);
                             break;
                         }
                     }
@@ -599,6 +612,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                         if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
                             SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
                         }
+                        CountTax(Globals.alOrderItemTran.get(i), isDuplicate);
+                        Globals.alOrderItemTran.get(i).setTotalTax(Globals.alOrderItemTran.get(i).getTotalTax() + totalTax);
                         break;
                     }
                 }
@@ -629,58 +644,87 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         }
     }
 
+    private void CountTax(ItemMaster objOrderItemMaster, boolean isDuplicate) {
+        totalTax = 0;
+        int cnt = 0;
+        double rate;
+        if (objItemMaster.getTax() != null && !objItemMaster.getTax().equals("")) {
+            ArrayList<String> alTax = new ArrayList<>(Arrays.asList(objItemMaster.getTax().split(",")));
+            for (String tax : alTax) {
+                if (isDuplicate) {
+                    if (objItemMaster.getTaxRate() == 0) {
+                        totalTax = totalTax + ((Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getActualSellPrice()) * Double.valueOf(tax) / 100);
+                        if (cnt == 0) {
+                            objOrderItemMaster.setTax1(objOrderItemMaster.getTax1() + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getActualSellPrice()) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 1) {
+                            objOrderItemMaster.setTax2(objOrderItemMaster.getTax2() + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getActualSellPrice()) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 2) {
+                            objOrderItemMaster.setTax3(objOrderItemMaster.getTax3() + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getActualSellPrice()) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 3) {
+                            objOrderItemMaster.setTax4(objOrderItemMaster.getTax4() + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getActualSellPrice()) * Double.valueOf(tax) / 100);
+                        } else {
+                            objOrderItemMaster.setTax5(objOrderItemMaster.getTax5() + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getActualSellPrice()) * Double.valueOf(tax) / 100);
+                            objOrderItemMaster.setIsRateTaxInclusive(false);
+                        }
+                    } else {
+                        rate = objItemMaster.getActualSellPrice() + objItemMaster.getTaxRate();
+                        totalTax = totalTax + ((Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                        if (cnt == 0) {
+                            objOrderItemMaster.setTax1(objOrderItemMaster.getTax1() + (Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 1) {
+                            objOrderItemMaster.setTax2(objOrderItemMaster.getTax2() + (Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 2) {
+                            objOrderItemMaster.setTax3(objOrderItemMaster.getTax3() + (Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 3) {
+                            objOrderItemMaster.setTax4(objOrderItemMaster.getTax4() + (Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                        } else {
+                            objOrderItemMaster.setTax5(objOrderItemMaster.getTax5() + (Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                            objOrderItemMaster.setIsRateTaxInclusive(true);
+                        }
+                    }
+                } else {
+                    if (objItemMaster.getTaxRate() == 0) {
+                        totalTax = totalTax + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) * Double.valueOf(tax) / 100;
+                        if (cnt == 0) {
+                            objOrderItemMaster.setTax1((Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 1) {
+                            objOrderItemMaster.setTax2((Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 2) {
+                            objOrderItemMaster.setTax3((Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 3) {
+                            objOrderItemMaster.setTax4((Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) * Double.valueOf(tax) / 100);
+                        } else {
+                            objOrderItemMaster.setTax5((Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) * Double.valueOf(tax) / 100);
+                            objOrderItemMaster.setIsRateTaxInclusive(false);
+                        }
+                    } else {
+                        rate = objItemMaster.getSellPrice() + objItemMaster.getTaxRate();
+                        totalTax = totalTax + ((Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                        if (cnt == 0) {
+                            objOrderItemMaster.setTax1((Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 1) {
+                            objOrderItemMaster.setTax2((Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 2) {
+                            objOrderItemMaster.setTax3((Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                        } else if (cnt == 3) {
+                            objOrderItemMaster.setTax4((Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                        } else {
+                            objOrderItemMaster.setTax5((Integer.valueOf(etQuantity.getText().toString()) * rate) * Double.valueOf(tax) / 100);
+                            objOrderItemMaster.setIsRateTaxInclusive(true);
+                        }
+                    }
+                }
+                cnt++;
+            }
+        }
+    }
+
     interface ResponseListener {
         void ShowMessage();
     }
     //endregion
 
     //region LoadingTask
-    @SuppressWarnings("unused")
-    public class DetailLoadingTask extends AsyncTask {
-
-        com.arraybit.pos.ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            progressDialog = new com.arraybit.pos.ProgressDialog();
-            progressDialog.show(getActivity().getSupportFragmentManager(), "");
-
-            objItemMaster = new ItemMaster();
-        }
-
-        @Override
-        protected Object doInBackground(Object[] params) {
-            objItemJSONParser = new ItemJSONParser();
-            objItemMaster = objItemJSONParser.SelectItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), ItemMasterId);
-            return objItemMaster;
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-
-            progressDialog.dismiss();
-            if (objItemMaster != null) {
-                txtItemName.setText(objItemMaster.getItemName());
-                if (!objItemMaster.getShortDescription().equals("")) {
-                    txtDescription.setVisibility(View.VISIBLE);
-                    txtDescription.setText(objItemMaster.getShortDescription());
-                } else {
-                    txtDescription.setVisibility(View.GONE);
-                }
-                txtItemPrice.setText((String.valueOf(objItemMaster.getSellPrice())));
-
-                if (!objItemMaster.getImageName().equals("null")) {
-                    Picasso.with(getActivity()).load(objItemMaster.getImageName()).into(ivItemImage);
-                } else {
-                    Picasso.with(getActivity()).load(R.drawable.default_image).into(ivItemImage);
-                }
-            }
-        }
-    }
-
     class RemarkLoadingTask extends AsyncTask {
 
         @Override

@@ -141,8 +141,8 @@ public class OfferDetailFragment extends Fragment {
                 txtHeader.setText(getActivity().getResources().getString(R.string.odfTerm));
                 txtTermsCondition.setText(objOfferMaster.getTermsAndConditions());
             }
-            if (!objOfferMaster.getImagePhysicalName().equals("null")) {
-                Picasso.with(getActivity()).load(objOfferMaster.getImagePhysicalName()).into(ivOffer);
+            if (objOfferMaster.getMD_ImagePhysicalName()!=null && !objOfferMaster.getMD_ImagePhysicalName().equals("")) {
+                Picasso.with(getActivity()).load(objOfferMaster.getMD_ImagePhysicalName()).into(ivOffer);
             } else {
                 ivOffer.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.image_border));
             }
@@ -150,12 +150,12 @@ public class OfferDetailFragment extends Fragment {
                 String str = (Globals.dfWithPrecision.format(objOfferMaster.getDiscount()))
                         .substring(Globals.dfWithPrecision.format(objOfferMaster.getDiscount()).lastIndexOf(".") + 1, Globals.dfWithPrecision.format(objOfferMaster.getDiscount()).length());
                 if (str.equals("0") || str.equals("00")) {
-                    txtOfferDiscount.setText(Globals.dfWithPrecision.format(objOfferMaster.getDiscount()).substring(0, Globals.dfWithPrecision.format(objOfferMaster.getDiscount()).lastIndexOf(".")) + " % OFF");
+                    txtOfferDiscount.setText(Globals.dfWithPrecision.format(objOfferMaster.getDiscount()).substring(0, Globals.dfWithPrecision.format(objOfferMaster.getDiscount()).lastIndexOf(".")) + "% OFF");
                 } else {
-                    txtOfferDiscount.setText(Globals.dfWithPrecision.format(objOfferMaster.getDiscount()) + " % OFF");
+                    txtOfferDiscount.setText(Globals.dfWithPrecision.format(objOfferMaster.getDiscount()) + "% OFF");
                 }
             } else {
-                txtOfferDiscount.setText(Globals.dfWithPrecision.format(objOfferMaster.getDiscount()) + " OFF");
+                txtOfferDiscount.setText(getActivity().getResources().getString(R.string.dfRupee)+" "+Globals.dfWithPrecision.format(objOfferMaster.getDiscount()) + " OFF");
             }
             if (objOfferMaster.getFromDate() == null && objOfferMaster.getToDate() == null) {
                 offerDateLayout.setVisibility(View.GONE);

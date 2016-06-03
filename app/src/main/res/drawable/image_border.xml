@@ -6,10 +6,5 @@
     <stroke
         android:width="1.3dp"
         android:color="@color/accent_secondary"/>
-
-    <padding
-        android:left="3dp"
-        android:right="3dp" />
-
     <corners android:radius="2dp"/>
 </shape>

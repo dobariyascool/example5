@@ -40,7 +40,7 @@ public class FullViewDialogFragment extends DialogFragment {
         Bundle bundle = getArguments();
         if (bundle != null && bundle.getParcelable("BusinessGallery") != null) {
             objBusinessGalleryTran = bundle.getParcelable("BusinessGallery");
-            Picasso.with(getActivity()).load(objBusinessGalleryTran.getImagePhysicalName()).into(ivFullGalleryImage);
+            Picasso.with(getActivity()).load(objBusinessGalleryTran.getXL_ImagePhysicalName()).into(ivFullGalleryImage);
         }
 
         ivFullGalleryImage.setOnClickListener(new View.OnClickListener() {

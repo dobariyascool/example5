@@ -238,7 +238,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             jsonStringer.key("ShortName").value(objTableMaster.getShortName());
             jsonStringer.key("linktoTableStatusMasterId").value(objTableMaster.getlinktoTableStatusMasterId());
             jsonStringer.key("linktoOrderTypeMasterId").value(objTableMaster.getlinktoOrderTypeMasterId());
-            jsonStringer.key("linktoSectionMasterId").value(objTableMaster.getlinktoSectionMasterId());
+            //jsonStringer.key("linktoSectionMasterId").value(objTableMaster.getlinktoSectionMasterId());
             jsonStringer.key("linktoBusinessMasterId").value(objTableMaster.getlinktoBusinessMasterId());
             jsonStringer.endObject();
             objSharePreferenceManage.CreatePreference("GuestModePreference", "GuestMode", jsonStringer.toString(), GuestHomeActivity.this);
