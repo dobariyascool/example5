@@ -332,7 +332,7 @@
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnAddMore"
-                    style="@style/Button"
+                    style="@style/BorderButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -343,7 +343,6 @@
                     style="@style/Button"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/control_SpecingSmall"
                     android:layout_weight="1"
                     android:text="@string/odfCheckOut" />
             </LinearLayout>

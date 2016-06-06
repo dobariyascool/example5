@@ -47,14 +47,14 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
 
     RecyclerView rvOrderItemSummery;
-    LinearLayout headerLayout, amountLayout, taxLayout,errorLayout;
+    LinearLayout headerLayout, amountLayout, taxLayout, errorLayout;
     FrameLayout orderSummeryLayout;
     TableMaster objTableMaster;
     SharePreferenceManage objSharePreferenceManage;
     ArrayList<OrderMaster> lstOrderMaster;
     ArrayList<ItemMaster> alOrderItemTran;
     short counterMasterId, userMasterId, waiterMasterId;
-    double totalAmount, totalTaxPercentage, totalTaxAmount, totalTax, totalDiscount;
+    double totalAmount,totalTax, totalDiscount, tax1, tax2, tax3, tax4, tax5;
     String billNumber;
     ArrayList<TaxMaster> alTaxMaster;
     TextView txtTotalAmount, txtTotalDiscount, txtNetAmount, txtHeaderDiscount, txtRoundingOff;
@@ -145,7 +145,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         if (Service.CheckNet(getActivity())) {
             new AllOrdersLoadingTask().execute();
         } else {
-            SetErrorLayout(true,getResources().getString(R.string.MsgCheckConnection));
+            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection));
         }
 
 
@@ -272,7 +272,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
 
     //region Private Methods and Interface
-    private void SetErrorLayout(boolean isShow,String errorMsg){
+    private void SetErrorLayout(boolean isShow, String errorMsg) {
         android.widget.TextView txtMsg = (android.widget.TextView) errorLayout.findViewById(R.id.txtMsg);
         if (isShow) {
             errorLayout.setVisibility(View.VISIBLE);
@@ -349,11 +349,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         if (lstOrderMaster.size() != 0) {
             for (int i = 0; i < lstOrderMaster.size(); i++) {
                 totalAmount = totalAmount + lstOrderMaster.get(i).getTotalAmount();
+                totalTax = totalTax + lstOrderMaster.get(i).getTotalTax();
             }
         }
         txtTotalAmount.setText(Globals.dfWithPrecision.format(totalAmount));
         SetTextLayout();
-        totalTax = ((totalAmount * totalTaxPercentage) / 100) + totalTaxAmount;
         CalculateDiscount(totalAmount, totalTax);
     }
 
@@ -428,12 +428,20 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 } else {
                     txtTaxName[i].setText(alTaxMaster.get(i).getTaxName() + "  [" + " " + str.substring(0, str.lastIndexOf(".")) + " % ]");
                 }
-                txtTaxRate[i].setText(Globals.dfWithPrecision.format((totalAmount * alTaxMaster.get(i).getTaxRate()) / 100));
-                totalTaxPercentage = totalTaxPercentage + alTaxMaster.get(i).getTaxRate();
+                if (i == 0) {
+                    txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax1));
+                } else if (i == 1) {
+                    txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax2));
+                } else if (i == 2) {
+                    txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax3));
+                } else if (i == 3) {
+                    txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax4));
+                } else if (i == 4) {
+                    txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax5));
+                }
             } else {
                 txtTaxName[i].setText(alTaxMaster.get(i).getTaxName());
                 txtTaxRate[i].setText(Globals.dfWithPrecision.format(alTaxMaster.get(i).getTaxRate()));
-                totalTaxAmount = totalTaxAmount + alTaxMaster.get(i).getTaxRate();
             }
 
             linearLayout[i].addView(txtTaxName[i]);
@@ -459,7 +467,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         @Override
         protected Object doInBackground(Object[] params) {
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, 0, String.valueOf(objTableMaster.getTableMasterId()), null,Globals.businessMasterId);
+            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, 0, String.valueOf(objTableMaster.getTableMasterId()), null, Globals.businessMasterId);
         }
 
         @Override
@@ -470,11 +478,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
             lstOrderMaster = (ArrayList<OrderMaster>) result;
 
-            if(lstOrderMaster==null){
-                SetErrorLayout(true,getActivity().getResources().getString(R.string.MsgSelectFail));
-            }else if(lstOrderMaster.size()==0){
-                SetErrorLayout(true,getActivity().getResources().getString(R.string.MsgNoRecord));
-            }else{
+            if (lstOrderMaster == null) {
+                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail));
+            } else if (lstOrderMaster.size() == 0) {
+                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord));
+            } else {
                 new TaxLoadingTask().execute();
                 new OrderSummeryLoadingTask().execute();
             }
@@ -505,16 +513,25 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
             ArrayList<ItemMaster> lstOrderItemTran = (ArrayList<ItemMaster>) result;
 
-            if(lstOrderItemTran ==null){
-                SetErrorLayout(true,getActivity().getResources().getString(R.string.MsgSelectFail));
-            }else if(lstOrderItemTran.size()==0) {
-                SetErrorLayout(true,getActivity().getResources().getString(R.string.MsgNoRecord));
-            }else{
-                SetErrorLayout(false,null);
+            if (lstOrderItemTran == null) {
+                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail));
+            } else if (lstOrderItemTran.size() == 0) {
+                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord));
+            } else {
+                SetErrorLayout(false, null);
                 orderSummeryAdapter = new OrderSummaryAdapter(getActivity(), lstOrderItemTran, lstOrderMaster, false);
                 rvOrderItemSummery.setAdapter(orderSummeryAdapter);
                 rvOrderItemSummery.setLayoutManager(new LinearLayoutManager(getActivity()));
                 SetSalesList(lstOrderMaster, lstOrderItemTran);
+                for (int i = 0; i < lstOrderItemTran.size(); i++) {
+                    if(lstOrderItemTran.get(i).getItemModifierIds().equals("0")) {
+                        tax1 = tax1 + lstOrderItemTran.get(i).getTax1();
+                        tax2 = tax2 + lstOrderItemTran.get(i).getTax2();
+                        tax3 = tax3 + lstOrderItemTran.get(i).getTax3();
+                        tax4 = tax4 + lstOrderItemTran.get(i).getTax4();
+                        tax5 = tax5 + lstOrderItemTran.get(i).getTax5();
+                    }
+                }
                 CalculateAmount();
                 rvOrderItemSummery.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
@@ -570,9 +587,9 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             objSalesMaster.setlinktoCounterMasterId(counterMasterId);
             objSalesMaster.setlinktoTableMasterIds(String.valueOf(objTableMaster.getTableMasterId()));
             objSalesMaster.setlinktoWaiterMasterId(waiterMasterId);
-            if(Globals.userName!=null){
+            if (Globals.userName != null) {
                 objSharePreferenceManage = new SharePreferenceManage();
-                if(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity())!=null){
+                if (objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()) != null) {
                     int customerMasterId = Integer.parseInt(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()));
                     objSalesMaster.setlinktoCustomerMasterId((short) customerMasterId);
                 }
@@ -587,8 +604,9 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             objSalesMaster.setTotalItemTax(0.00);
             objSalesMaster.setNetAmount(Double.valueOf(txtNetAmount.getText().toString()));
             objSalesMaster.setPaidAmount(0.00);
-            objSalesMaster.setBalanceAmount(0.00);
+            objSalesMaster.setBalanceAmount(Double.valueOf(txtNetAmount.getText().toString()));
             objSalesMaster.setRemark("");
+            objSalesMaster.setRounding(Double.valueOf(txtRoundingOff.getText().toString().substring(1,txtRoundingOff.getText().length())));
             objSalesMaster.setIscomplimentary(false);
             objSalesMaster.setTotalItemPoint((short) 0);
             objSalesMaster.setTotalDeductedPoint((short) 0);
@@ -607,6 +625,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             if (status.equals("-1")) {
+                progressDialog.dismiss();
                 Globals.ShowSnackBar(orderSummeryLayout, getResources().getString(R.string.MsgServerNotResponding), getActivity(), 1000);
             } else if (status.equals("0")) {
                 new TableStatusLoadingTask().execute();

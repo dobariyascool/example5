@@ -44,36 +44,46 @@
                     android:paddingEnd="@dimen/control_SpecingSmall"
                     android:paddingStart="@dimen/control_SpecingSmall">
 
-                    <com.rey.material.widget.TextView
-                        android:id="@+id/txtItemName"
-                        style="@style/SecondaryTextView"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:paddingEnd="@dimen/control_SpecingTiny"
-                        android:paddingStart="@dimen/control_SpecingTiny"
-                        android:textColor="#4E342E"
-                        android:textSize="@dimen/control_TextLarge"
-                        android:visibility="gone" />
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
-                    <com.rey.material.widget.TextView
-                        android:id="@+id/txtItemPrice"
-                        style="@style/SecondaryTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingEnd="@dimen/control_SpecingTiny"
-                        android:paddingStart="@dimen/control_SpecingTiny"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/control_TextLarge" />
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtItemName"
+                            style="@style/HighLightedTextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:paddingEnd="@dimen/control_SpecingTiny"
+                            android:paddingStart="@dimen/control_SpecingTiny" />
+
+                        <com.rey.material.widget.TextView
+                            android:id="@+id/txtItemPrice"
+                            style="@style/HighLightedTextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:paddingEnd="@dimen/control_SpecingTiny"
+                            android:paddingStart="0dp"
+                            android:text="@string/abBuildVersion" />
+
+                    </LinearLayout>
 
                     <com.rey.material.widget.TextView
                         android:id="@+id/txtDescription"
-                        style="@style/SecondaryTextView"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxLines="4"
-                        android:padding="@dimen/control_SpecingTiny"
-                        android:textColor="@color/secondary_text"
+                        android:ellipsize="end"
+                        android:paddingBottom="@dimen/control_SpecingTiny"
+                        android:paddingEnd="@dimen/control_SpecingTiny"
+                        android:paddingStart="@dimen/control_SpecingTiny"
+                        android:paddingTop="@dimen/control_SpecingTiny"
+                        android:text="@string/abBuildVersion"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Display4"
                         android:textSize="@dimen/control_TextSmall" />
 
                 </LinearLayout>
@@ -82,48 +92,68 @@
                     android:id="@+id/modifierLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:orientation="vertical"
                     android:paddingEnd="@dimen/control_SpecingSmall"
                     android:paddingStart="@dimen/control_SpecingSmall">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                    <com.rey.material.widget.Button
+                        android:id="@+id/btnModifier"
+                        style="@style/BorderLessButton"
+                        android:layout_width="90dp"
+                        android:layout_height="20dp"
+                        android:drawableEnd="@drawable/edit_accent_vector_drawable"
+                        android:paddingEnd="@dimen/control_SpecingTiny"
+                        android:paddingStart="@dimen/control_SpecingTiny"
+                        android:text="Modifier" />
 
-                        <com.rey.material.widget.TextView
-                            android:id="@+id/txtHeaderModifier"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingEnd="@dimen/control_SpecingTiny"
-                            android:paddingStart="@dimen/control_SpecingTiny"
-                            android:text="Modifier"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/control_TextMedium" />
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:orientation="horizontal">-->
 
-                        <ImageView
-                            android:id="@+id/ivModifier"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/control_SpecingSmall"
-                            android:src="@drawable/edit_accent_vector_drawable"
-                            tools:ignore="ContentDescription" />
+                    <!--<com.rey.material.widget.TextView-->
+                    <!--android:id="@+id/txtHeaderModifier"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:paddingEnd="@dimen/control_SpecingTiny"-->
+                    <!--android:paddingStart="@dimen/control_SpecingTiny"-->
+                    <!--android:text="Modifier"-->
+                    <!--android:textColor="@android:color/black"-->
+                    <!--android:textSize="@dimen/control_TextMedium" />-->
 
-                    </LinearLayout>
+                    <!--<ImageView-->
+                    <!--android:id="@+id/ivModifier"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="@dimen/control_SpecingSmall"-->
+                    <!--android:src="@drawable/edit_accent_vector_drawable"-->
+                    <!--tools:ignore="ContentDescription" />-->
+
+                    <!--</LinearLayout>-->
 
                     <com.rey.material.widget.TextView
                         android:id="@+id/txtModifier"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/control_SpecingTiny"
-                        android:layout_marginTop="@dimen/control_SpecingSmall"
+                        android:paddingBottom="2dp"
                         android:paddingEnd="@dimen/control_SpecingTiny"
                         android:paddingStart="@dimen/control_SpecingTiny"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="@dimen/control_TextMedium"
+                        android:paddingTop="2dp"
+                        android:textSize="@dimen/control_TextSmall"
                         android:visibility="gone" />
+
+                    <!--<com.rey.material.widget.TextView-->
+                    <!--android:id="@+id/txtModifier"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="@dimen/control_SpecingTiny"-->
+                    <!--android:layout_marginTop="@dimen/control_SpecingSmall"-->
+                    <!--android:paddingEnd="@dimen/control_SpecingTiny"-->
+                    <!--android:paddingStart="@dimen/control_SpecingTiny"-->
+                    <!--android:textColor="@color/secondary_text"-->
+                    <!--android:textSize="@dimen/control_TextNormal"-->
+                    <!--android:visibility="gone" />-->
                 </LinearLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -325,10 +355,9 @@
 
                     <com.rey.material.widget.Button
                         android:id="@+id/btnCancel"
-                        style="@style/Button"
+                        style="@style/BorderButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/control_SpecingSmall"
                         android:layout_weight="1"
                         android:text="@string/dfCancel" />
 

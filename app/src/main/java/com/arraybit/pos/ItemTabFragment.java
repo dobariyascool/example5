@@ -276,7 +276,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 Globals.counter = Globals.counter + 1;
                 SetCartNumber(txtCartNumber);
                 Globals.alOrderItemTran.add(objOrderItemTran);
-                Globals.ShowSnackBar(rvItem, getActivity().getResources().getString(R.string.MsgCartItem), getActivity(), 2000);
+                Globals.ShowSnackBar(rvItem,String.format(getActivity().getResources().getString(R.string.MsgCartItem),objOrderItemTran.getItemName()), getActivity(), 3000);
             }
         }
     }
@@ -338,7 +338,11 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         }
 
         if (CategoryItemFragment.objCategoryMaster != null && CategoryItemFragment.objCategoryMaster.getCategoryName().equals(objCategoryMaster.getCategoryName())) {
-            Globals.ShowSnackBar(rvItem, getActivity().getResources().getString(R.string.MsgCartItem), getActivity(), 2000);
+            if(objCategoryMaster.getDescription()!=null && !objCategoryMaster.getDescription().equals("")){
+                Globals.ShowSnackBar(rvItem, String.format(getActivity().getResources().getString(R.string.MsgCartItem),objCategoryMaster.getDescription()), getActivity(), 3000);
+            }else{
+                Globals.ShowSnackBar(rvItem, getActivity().getResources().getString(R.string.MsgCartWithNoName), getActivity(), 3000);
+            }
             CategoryItemFragment.objCategoryMaster = null;
         }
         rvItem.addOnScrollListener(new RecyclerView.OnScrollListener() {

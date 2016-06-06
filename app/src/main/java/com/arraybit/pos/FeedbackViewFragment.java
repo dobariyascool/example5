@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.InputType;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 public class FeedbackViewFragment extends Fragment {
 
     public final static String ITEMS_COUNT_KEY = "TableTabFragment$ItemsCount";
-    LinearLayout feedbackViewFragment, feedbackLayout;
+    LinearLayout feedbackViewFragment;
     ArrayList<FeedbackQuestionMaster> alFeedbackQuestionMaster;
     ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, alFeedbackAnswer, alFeedbackAnswerFilter;
     SharePreferenceManage objSharePreferenceManage;
@@ -122,6 +123,7 @@ public class FeedbackViewFragment extends Fragment {
     }
 
     private void SetSingleChoiceLayout(final ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, final FeedbackQuestionMaster objFeedbackQuestionMaster, final int position) {
+        CardView cardView = (CardView) LayoutInflater.from(getActivity()).inflate(R.layout.cardview_layout, feedbackViewFragment, false);
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParams.setMargins(16, 8, 16, 8);
@@ -129,7 +131,6 @@ public class FeedbackViewFragment extends Fragment {
         linearLayout.setPadding(16, 4, 16, 4);
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
 
         LinearLayout headerLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -205,10 +206,12 @@ public class FeedbackViewFragment extends Fragment {
         childLayout.addView(radioGroup);
         linearLayout.addView(headerLayout);
         linearLayout.addView(childLayout);
-        feedbackViewFragment.addView(linearLayout);
+        cardView.addView(linearLayout);
+        feedbackViewFragment.addView(cardView);
     }
 
     private void SetMultiChoiceLayout(final ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, final FeedbackQuestionMaster objFeedbackQuestionMaster, final int position) {
+        CardView cardView = (CardView) LayoutInflater.from(getActivity()).inflate(R.layout.cardview_layout, feedbackViewFragment, false);
         sbAnswerId = new StringBuilder();
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -217,7 +220,6 @@ public class FeedbackViewFragment extends Fragment {
         linearLayout.setPadding(16, 4, 16, 4);
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
 
         LinearLayout headerLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -304,10 +306,12 @@ public class FeedbackViewFragment extends Fragment {
         childLayout.addView(answerLinearLayout);
         linearLayout.addView(headerLayout);
         linearLayout.addView(childLayout);
-        feedbackViewFragment.addView(linearLayout);
+        cardView.addView(linearLayout);
+        feedbackViewFragment.addView(cardView);
     }
 
     private void SetInputLayout(final FeedbackQuestionMaster objFeedbackQuestionMaster, final int position) {
+        CardView cardView = (CardView) LayoutInflater.from(getActivity()).inflate(R.layout.cardview_layout, feedbackViewFragment, false);
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParams.setMargins(16, 8, 16, 8);
@@ -315,8 +319,6 @@ public class FeedbackViewFragment extends Fragment {
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setPadding(4, 4, 4, 4);
-        linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
-
 
         LinearLayout headerLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -369,10 +371,12 @@ public class FeedbackViewFragment extends Fragment {
         headerLayout.addView(txtQuestion);
         linearLayout.addView(headerLayout);
         linearLayout.addView(editText);
-        feedbackViewFragment.addView(linearLayout);
+        cardView.addView(linearLayout);
+        feedbackViewFragment.addView(cardView);
     }
 
     private void SetRatingLayout(final FeedbackQuestionMaster objFeedbackQuestionMaster, final int position) {
+        CardView cardView = (CardView) LayoutInflater.from(getActivity()).inflate(R.layout.cardview_layout, feedbackViewFragment, false);
         LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParams.setMargins(16, 8, 16, 8);
@@ -380,7 +384,6 @@ public class FeedbackViewFragment extends Fragment {
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setPadding(4, 4, 4, 4);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
 
         LinearLayout headerLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams headerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -422,7 +425,8 @@ public class FeedbackViewFragment extends Fragment {
         headerLayout.addView(txtQuestion);
         linearLayout.addView(headerLayout);
         linearLayout.addView(ratingBar);
-        feedbackViewFragment.addView(linearLayout);
+        cardView.addView(linearLayout);
+        feedbackViewFragment.addView(cardView);
     }
 
     private void CreateAnswerList() {

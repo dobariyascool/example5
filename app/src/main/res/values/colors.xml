@@ -84,6 +84,8 @@
     <color name="blue_100">#CFD8DC</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="card_option_ripple_color">#55000000</color>
+    <color name="disable_grey">#9e9d9d</color>
+    <color name="yellow">#f7ecb8</color>
 
     <array name="colorArray">
         <item name="first">#FFBB00</item>

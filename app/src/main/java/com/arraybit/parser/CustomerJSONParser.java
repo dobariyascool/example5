@@ -192,7 +192,7 @@ public class CustomerJSONParser {
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertCustomerMaster, stringer);
             if(jsonResponse!=null) {
                 JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertCustomerMaster + "Result");
-                return String.valueOf(jsonObject.getInt("ErrorCode"));
+                return String.valueOf(jsonObject.getLong("ErrorNumber"));
             }else{
                 return "-1";
             }

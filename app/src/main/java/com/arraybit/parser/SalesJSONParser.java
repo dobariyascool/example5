@@ -190,6 +190,7 @@ public class SalesJSONParser
             stringer.key("NetAmount").value(objSalesMaster.getNetAmount());
             stringer.key("PaidAmount").value(objSalesMaster.getPaidAmount());
             stringer.key("BalanceAmount").value(objSalesMaster.getBalanceAmount());
+            stringer.key("Rounding").value(objSalesMaster.getRounding());
             stringer.key("Remark").value(objSalesMaster.getRemark());
             stringer.key("Iscomplimentary").value(objSalesMaster.getIscomplimentary());
             stringer.key("TotalItemPoint").value(objSalesMaster.getTotalItemPoint());

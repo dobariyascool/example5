@@ -4,34 +4,31 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/control_SpecingSmall"
     android:layout_marginStart="@dimen/control_SpecingSmall"
+    android:layout_marginTop="@dimen/control_SpecingTiny"
     android:gravity="center_horizontal"
     android:orientation="horizontal">
 
     <com.rey.material.widget.CheckBox
         android:id="@+id/chkModifier"
+        style="@style/CheckBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginBottom="@dimen/control_SpecingSmall"
-        android:layout_marginTop="@dimen/control_SpecingSmall"
         android:layout_weight="1"
         android:gravity="start|center"
         android:paddingEnd="@dimen/control_SpecingSmall"
         android:paddingStart="@dimen/control_SpecingSmall"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/control_TextMedium" />
+        android:text="@string/action_settings"
+        android:textColor="@color/secondary_text"
+        android:textSize="@dimen/control_TextNormal" />
 
     <com.rey.material.widget.TextView
         android:id="@+id/txtRate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|center_vertical"
-        android:layout_marginBottom="@dimen/control_SpecingSmall"
-        android:layout_marginTop="@dimen/control_SpecingSmall"
         android:layout_weight="0.5"
         android:gravity="end"
         android:maxLines="1"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/control_TextMedium" />
+        android:textColor="@color/secondary_text"
+        android:textSize="@dimen/control_TextNormal" />
 
 </LinearLayout>

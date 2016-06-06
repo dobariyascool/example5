@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
+import com.rey.material.widget.TextView;
 
 public class RemarkDialogFragment extends DialogFragment implements View.OnClickListener{
 
@@ -36,23 +36,23 @@ public class RemarkDialogFragment extends DialogFragment implements View.OnClick
             etRemark.setText("");
         }
 
-        Button btnCancel = (Button)view.findViewById(R.id.btnCancel);
-        Button btnDone = (Button)view.findViewById(R.id.btnDone);
+        TextView txtCancel = (TextView)view.findViewById(R.id.txtCancel);
+        TextView txtDone = (TextView)view.findViewById(R.id.txtDone);
 
-        btnCancel.setOnClickListener(this);
-        btnDone.setOnClickListener(this);
+        txtCancel.setOnClickListener(this);
+        txtDone.setOnClickListener(this);
 
         return view;
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.btnCancel){
+        if(v.getId()==R.id.txtCancel){
             dismiss();
             strRemark = etRemark.getText().toString();
             objRemarkResponseListener = (RemarkResponseListener)getTargetFragment();
             objRemarkResponseListener.RemarkResponse();
-        }else if(v.getId()==R.id.btnDone){
+        }else if(v.getId()==R.id.txtDone){
             strRemark = etRemark.getText().toString();
             objRemarkResponseListener = (RemarkResponseListener)getTargetFragment();
             objRemarkResponseListener.RemarkResponse();

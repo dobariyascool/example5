@@ -80,17 +80,17 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getSM_ImagePhysicalName()).into(holder.ivItem);
                 }
             }
+            if (objItemMaster.getShortDescription().equals("")) {
+                holder.txtItemDescription.setVisibility(View.INVISIBLE);
+            } else {
+                holder.txtItemDescription.setVisibility(View.VISIBLE);
+                holder.txtItemDescription.setText(objItemMaster.getShortDescription());
+            }
 
         }
 
         holder.txtItemName.setText(objItemMaster.getItemName());
-        if (objItemMaster.getShortDescription().equals("")) {
-            holder.txtItemDescription.setVisibility(View.GONE);
-        } else {
-            holder.txtItemDescription.setVisibility(View.VISIBLE);
-            holder.txtItemDescription.setText(objItemMaster.getShortDescription());
-        }
-        holder.txtItemPrice.setText(context.getResources().getString(R.string.dfRupee) +" "+ Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
+        holder.txtItemPrice.setText(context.getResources().getString(R.string.dfRupee) + " " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
 
         //holder animation
         if (isItemAnimate) {
@@ -143,8 +143,8 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             if (!isWaiterGrid && isViewChange) {
                 DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-                width = displayMetrics.widthPixels / 2 - 32;
-                height = displayMetrics.widthPixels / 2 - 32;
+                width = displayMetrics.widthPixels / 2 - 24;
+                height = displayMetrics.widthPixels / 2 - 24;
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
                 ivItem.setLayoutParams(layoutParams);

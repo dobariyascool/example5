@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -8,6 +9,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +23,8 @@ import com.arraybit.global.Service;
 import com.arraybit.modal.BusinessMaster;
 import com.arraybit.modal.UserMaster;
 import com.arraybit.parser.BusinessJSONParser;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,7 +35,7 @@ public class HotelProfileActivity extends AppCompatActivity {
 
     short mode;
     ViewPager viewPager;
-    ImageView ivLogo;
+    ImageView ivLogo,ivBackground;
     TabLayout tabLayout;
     BusinessMaster objBusinessMaster;
     PageAdapter pageAdapter;
@@ -58,9 +63,12 @@ public class HotelProfileActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         ivLogo = (ImageView) findViewById(R.id.ivLogo);
+        ivBackground = (ImageView) findViewById(R.id.ivBackground);
 
         pageAdapter = new PageAdapter(getSupportFragmentManager());
         objUserMaster = new UserMaster();
+
+        Picasso.with(HotelProfileActivity.this).load(R.drawable.hotel_profile_background).fit().centerCrop().into(ivBackground);
 
         if (Service.CheckNet(this)) {
             new HotelLoadingTask().execute();
@@ -186,10 +194,19 @@ public class HotelProfileActivity extends AppCompatActivity {
                 Globals.ShowSnackBar(hotelProfileFragment, getResources().getString(R.string.MsgSelectFail), HotelProfileActivity.this, 1000);
             } else {
 
-                Picasso.with(ivLogo.getContext()).load(objBusinessMaster.getImageName()).into(ivLogo);
+                Glide.with(HotelProfileActivity.this).load(objBusinessMaster.getImageName()).asBitmap().override(150, 150).centerCrop().into(new BitmapImageViewTarget(ivLogo) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        ivLogo.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
 
                 pageAdapter.addFragment(new InformationFragment(objBusinessMaster), "Information");
                 pageAdapter.addFragment(new GalleryFragment(objBusinessMaster.getBusinessMasterId()), "Gallery");
+                pageAdapter.addFragment(new BusinessInformationFragment(), "BusinessInformation");
 
                 viewPager.setAdapter(pageAdapter);
                 tabLayout.setupWithViewPager(viewPager);

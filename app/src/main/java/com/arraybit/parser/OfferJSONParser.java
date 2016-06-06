@@ -85,6 +85,21 @@ public class OfferJSONParser {
                 /// Extra
                 objOfferMaster.setOfferType(jsonObject.getString("OfferType"));
                 objOfferMaster.setBusiness(jsonObject.getString("Business"));
+                if (!jsonObject.getString("ValidBuyItems").equals("null")) {
+                    objOfferMaster.setValidBuyItems(jsonObject.getString("ValidBuyItems"));
+                }
+                if (!jsonObject.getString("ValidDays").equals("null")) {
+                    objOfferMaster.setValidDays(jsonObject.getString("ValidDays"));
+                }
+                if (!jsonObject.getString("ValidItems").equals("null")) {
+                    objOfferMaster.setValidItems(jsonObject.getString("ValidItems"));
+                }
+                if (!jsonObject.getString("ValidGetItems").equals("null")) {
+                    objOfferMaster.setValidGetItems(jsonObject.getString("ValidGetItems"));
+                }
+                objOfferMaster.setLinktoOrderTypeMasterIds(jsonObject.getString("linktoOrderTypeMasterIds"));
+                objOfferMaster.setIsForApp(jsonObject.getBoolean("IsForApp"));
+                objOfferMaster.setIsOnline(jsonObject.getBoolean("IsOnline"));
             }
             return objOfferMaster;
         } catch (JSONException e) {

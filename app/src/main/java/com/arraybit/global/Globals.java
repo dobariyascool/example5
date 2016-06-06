@@ -82,8 +82,9 @@ public class Globals {
     public static String TimeFormat = "hh:mm";
     public static String DisplayTimeFormat = "h:mm a";
     public static int sourceMasterId = 3;
-    public static short customerType = 3;
+    public static short customerType = 2;
     public static short businessMasterId;
+    public static short businessTypeMasterId;
     public static short itemType = 2;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
     public static int counter = 0;
@@ -112,15 +113,21 @@ public class Globals {
         return dp;
     }
 
-    public static void SetBusinessMasterId(Context context){
+    public static void SetBusinessMasterId(Context context) {
         SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-        if(objSharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId",context)!=null){
-            String str = objSharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId",context);
-            if(str!=null && !str.equals("")) {
+        if (objSharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", context) != null) {
+            String str = objSharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", context);
+            if (str != null && !str.equals("")) {
                 Globals.businessMasterId = Short.parseShort(str);
             }
-        }
-        else{
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessTypeMasterId", context) != null) {
+                String strBusinessTypeMaster = objSharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessTypeMasterId", context);
+                if (str != null && !str.equals("")) {
+                    Globals.businessTypeMasterId = Short.parseShort(strBusinessTypeMaster);
+                }
+            }
+
+        } else {
             Globals.businessMasterId = 1;
         }
     }
@@ -129,29 +136,29 @@ public class Globals {
         Service.Url = "http://" + Globals.serverName + "/Service.svc/";
     }
 
-    public static void TextViewFontTypeFace(com.rey.material.widget.TextView textView,Context context) {
+    public static void TextViewFontTypeFace(com.rey.material.widget.TextView textView, Context context) {
         Typeface roboto = Typeface.createFromAsset(context.getAssets(),
                 "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
         textView.setTypeface(roboto);
     }
 
-    public static void ButtonFontTypeFace(Button button,Context context) {
+    public static void ButtonFontTypeFace(Button button, Context context) {
         Typeface roboto = Typeface.createFromAsset(context.getAssets(),
                 "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
         button.setTypeface(roboto);
     }
 
-    public static void EditTextFontTypeFace(EditText editText,Context context) {
+    public static void EditTextFontTypeFace(EditText editText, Context context) {
         Typeface roboto = Typeface.createFromAsset(context.getAssets(),
                 "fonts/Roboto-Regular.ttf"); //use this.getAssets if you are calling from an Activity
         editText.setTypeface(roboto);
     }
 
-    public static void NavigationViewFontTypeFace(NavigationView navigationView,Context context) {
-        for(int i=0;i<navigationView.getMenu().size();i++){
+    public static void NavigationViewFontTypeFace(NavigationView navigationView, Context context) {
+        for (int i = 0; i < navigationView.getMenu().size(); i++) {
             MenuItem menuItem = navigationView.getMenu().getItem(i);
             SpannableString spannableString = new SpannableString(menuItem.getTitle());
-            spannableString.setSpan(TypefaceUtil.load(context,"fonts/Roboto-Regular.ttf",0), 0 , spannableString.length(),  Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            spannableString.setSpan(TypefaceUtil.load(context, "fonts/Roboto-Regular.ttf", 0), 0, spannableString.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             menuItem.setTitle(spannableString);
         }
     }
@@ -226,7 +233,7 @@ public class Globals {
     public static void ShowSnackBar(View view, String message, Context context, int duration) {
         Snackbar snackbar = Snackbar.make(view, message, duration);
         View snackView = snackbar.getView();
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             snackView.setElevation(R.dimen.snackbar_elevation);
         }
         TextView txt = (TextView) snackView.findViewById(android.support.design.R.id.snackbar_text);
@@ -345,7 +352,7 @@ public class Globals {
     public static void OptionMenuItemClick(MenuItem menuItem, Activity activity, FragmentManager fragmentManager) {
         activityName = activity.getTitle().toString();
         if (menuItem.getItemId() != android.R.id.home) {
-            if(activityName.equals(activity.getResources().getString(R.string.title_fragment_about_us))){
+            if (activityName.equals(activity.getResources().getString(R.string.title_fragment_about_us))) {
                 if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
                     GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
                     guestLoginDialogFragment.show(fragmentManager, "");
@@ -357,8 +364,7 @@ public class Globals {
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
                     Globals.ReplaceAnimatedFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
                 }
-            }
-            else if (fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() != null &&
+            } else if (fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() != null &&
                     fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equals(activity.getResources().getString(R.string.title_fragment_feedback))) {
                 if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
                     GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
@@ -375,11 +381,10 @@ public class Globals {
                     currentFragment.LoginResponse();
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
                     FeedbackFragment currentFragment = (FeedbackFragment) fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
-                    currentFragment.ReplaceFragment(new MyAccountFragment(),activity.getResources().getString(R.string.title_fragment_myaccount));
+                    currentFragment.ReplaceFragment(new MyAccountFragment(), activity.getResources().getString(R.string.title_fragment_myaccount));
                 }
             } else if (MenuActivity.parentActivity && fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() == null) {
-            }
-            else {
+            } else {
                 if (menuItem.getTitle() == activity.getResources().getString(R.string.navLogin)) {
                     GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
                     guestLoginDialogFragment.show(fragmentManager, "");
@@ -395,13 +400,13 @@ public class Globals {
         }
     }
 
-    public static void SetRecyclerLayoutAnimation(boolean isGridLayoutManager,RecyclerView recyclerView,Context context){
-        if(!isGridLayoutManager){
+    public static void SetRecyclerLayoutAnimation(boolean isGridLayoutManager, RecyclerView recyclerView, Context context) {
+        if (!isGridLayoutManager) {
             Animation animation = android.view.animation.AnimationUtils.loadAnimation(context,
                     R.anim.slide_in_down);
             LayoutAnimationController controller = new LayoutAnimationController(animation);
             recyclerView.setLayoutAnimation(controller);
-        }else{
+        } else {
             Animation animation = android.view.animation.AnimationUtils.loadAnimation(context,
                     R.anim.slide_in_down_grid);
             LayoutAnimationController controller = new LayoutAnimationController(animation);
@@ -409,9 +414,9 @@ public class Globals {
         }
     }
 
-    public static void SetItemAnimator(RecyclerView.ViewHolder holder){
+    public static void SetItemAnimator(RecyclerView.ViewHolder holder) {
         //slide from bottom
-        ObjectAnimator animatorTranslateY=ObjectAnimator.ofFloat(holder.itemView,"translationY",200,0);
+        ObjectAnimator animatorTranslateY = ObjectAnimator.ofFloat(holder.itemView, "translationY", 200, 0);
         animatorTranslateY.setDuration(500);
         animatorTranslateY.start();
     }
@@ -524,18 +529,18 @@ public class Globals {
         fragmentTransaction.commit();
     }
 
-    public static void SetErrorLayout(LinearLayout layout, boolean isShow, String errorMsg,RecyclerView recyclerView) {
+    public static void SetErrorLayout(LinearLayout layout, boolean isShow, String errorMsg, RecyclerView recyclerView) {
         TextView txtMsg = (TextView) layout.findViewById(R.id.txtMsg);
         ImageView ivErrorIcon = (ImageView) layout.findViewById(R.id.ivErrorIcon);
         if (isShow) {
             layout.setVisibility(View.VISIBLE);
             txtMsg.setText(errorMsg);
-            if(recyclerView!=null){
+            if (recyclerView != null) {
                 recyclerView.setVisibility(View.GONE);
             }
         } else {
             layout.setVisibility(View.GONE);
-            if(recyclerView!=null){
+            if (recyclerView != null) {
                 recyclerView.setVisibility(View.VISIBLE);
             }
         }
@@ -561,13 +566,13 @@ public class Globals {
 
         activityName = activity.getTitle().toString();
 
-       // if (Build.VERSION.SDK_INT < 21) {
-            Intent intent = new Intent(activity, SignInActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            activity.startActivity(intent);
-            activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            activity.finish();
-      //  } else {
+        // if (Build.VERSION.SDK_INT < 21) {
+        Intent intent = new Intent(activity, SignInActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        activity.finish();
+        //  } else {
 //            ActivityOptions options =
 //                    ActivityOptions.
 //                            makeSceneTransitionAnimation(activity);

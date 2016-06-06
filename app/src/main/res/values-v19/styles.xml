@@ -26,4 +26,29 @@
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:background">@color/primary</item>
     </style>
+
+    <style name="BusinessInfoCardView" parent="AppCompactCardView">
+        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
+        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">2dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardBackgroundColor">@color/offwhite</item>
+    </style>
+
+    <style name="CardViewTransparent" parent="AppCompactCardView">
+        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
+        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">2dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="cardBackgroundColor">@color/transparent_orange</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:layout_marginEnd">2dp</item>
+        <item name="android:foreground">@drawable/offer_ripple_effect</item>
+    </style>
+
+
 </resources>

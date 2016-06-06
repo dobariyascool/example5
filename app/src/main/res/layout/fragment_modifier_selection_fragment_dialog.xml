@@ -19,7 +19,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvModifier"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:paddingEnd="@dimen/control_SpecingTiny"
             android:paddingStart="@dimen/control_SpecingTiny" />
 
@@ -36,7 +36,7 @@
                 android:id="@+id/btnCancel"
                 style="@style/DialogButton"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dialog_button_height"
+                android:layout_height="48dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/msdCancel" />
@@ -45,7 +45,7 @@
                 android:id="@+id/btnDone"
                 style="@style/DialogButton"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dialog_button_height"
+                android:layout_height="48dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/msdDone" />

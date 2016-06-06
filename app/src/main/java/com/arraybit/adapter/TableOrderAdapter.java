@@ -90,11 +90,12 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
         holder.txtTableName.setText(objOrderMaster.getTableName());
         holder.txtTotalOrder.setText(objOrderMaster.getTotalKOT() + " Orders ");
         holder.txtTotalItem.setText(objOrderMaster.getTotalItem() + " Items");
-        if (alTaxMaster == null) {
-            holder.txtTotalAmount.setText("Rs. " + Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
-        } else {
-            CalculateTax(objOrderMaster, holder);
-        }
+        holder.txtTotalAmount.setText(context.getResources().getString(R.string.dfRupee)+" "+Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount() + objOrderMaster.getTotalTax()));
+//        if (alTaxMaster == null) {
+//            holder.txtTotalAmount.setText("Rs. " + Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
+//        } else {
+//            CalculateTax(objOrderMaster, holder);
+//        }
 
         //holder animation
         if(isItemAnimate) {

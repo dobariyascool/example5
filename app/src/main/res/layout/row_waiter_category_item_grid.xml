@@ -3,55 +3,125 @@
     android:id="@+id/cvItem"
     style="@style/CardViewTransparent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/control_SpecingTiny">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/control_SpecingSmall">
 
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtItemName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/control_TextMedium" />
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtItemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/control_TextMedium" />
 
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtItemDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:maxLines="2"
-                android:text="Description"
-                android:textColor="@color/darkgoldenrod"
-                android:textSize="@dimen/control_TextSmall"
-                tools:ignore="HardcodedText" />
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtItemDescription"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="Description"
+            android:textColor="@color/darkgoldenrod"
+            android:textSize="@dimen/control_TextSmall"
+            android:visibility="gone"
+            tools:ignore="HardcodedText" />
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtItemDineOnly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/MsgDineOnly"
+            android:textColor="@color/disable_grey"
+            android:textSize="@dimen/control_TextTiny"
+            android:visibility="gone"
+            tools:ignore="HardcodedText" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<ImageView-->
+                <!--android:id="@+id/ivDoubleSpicy"-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:src="@mipmap/extra_spicy"-->
+                <!--android:visibility="gone"-->
+                <!--tools:ignore="ContentDescription" />-->
+
+                <!--<ImageView-->
+                <!--android:id="@+id/ivSpicy"-->
+                <!--android:layout_width="15dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:src="@mipmap/spicy"-->
+                <!--android:visibility="gone"-->
+                <!--tools:ignore="ContentDescription" />-->
+
+                <!--<ImageView-->
+                <!--android:id="@+id/ivSweet"-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:src="@mipmap/sweet"-->
+                <!--android:visibility="gone"-->
+                <!--tools:ignore="ContentDescription" />-->
+
+                <!--<ImageView-->
+                <!--android:id="@+id/ivNonVeg"-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:src="@mipmap/nonvegicon"-->
+                <!--android:visibility="gone"-->
+                <!--tools:ignore="ContentDescription" />-->
+
+                <!--<ImageView-->
+                <!--android:id="@+id/ivJain"-->
+                <!--android:layout_width="15dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:src="@mipmap/jain_icon"-->
+                <!--android:visibility="gone"-->
+                <!--tools:ignore="ContentDescription" />-->
+            <!--</LinearLayout>-->
 
             <com.rey.material.widget.TextView
                 android:id="@+id/txtItemPrice"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_gravity="end"
                 android:maxLines="1"
-                android:text="Price"
-                android:textColor="@android:color/white"
+                android:text="@string/abBuildVersion"
+                android:textColor="@color/yellow"
                 android:textSize="@dimen/control_TextMedium"
                 tools:ignore="HardcodedText" />
-        <com.rey.material.widget.Button
-            android:id="@+id/btnAdd"
-            style="@style/AddButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:padding="@dimen/control_SpecingTiny"
-            android:text="Add"
-            android:visibility="gone"
-            tools:ignore="HardcodedText" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnAdd"
+                style="@style/AddButton"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:padding="@dimen/control_SpecingTiny"
+                android:text="Add"
+                android:visibility="gone"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
+    </LinearLayout>
 </android.support.v7.widget.CardView>

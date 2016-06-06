@@ -72,6 +72,12 @@ public class ItemJSONParser {
                 objItemMaster.setTax(jsonObject.getString("Tax"));
                 objItemMaster.setRateIndex((short) jsonObject.getInt("RateIndex"));
                 objItemMaster.setTaxRate(jsonObject.getDouble("TaxRate"));
+                objItemMaster.setTax1(jsonObject.getDouble("Tax1"));
+                objItemMaster.setTax2(jsonObject.getDouble("Tax2"));
+                objItemMaster.setTax3(jsonObject.getDouble("Tax3"));
+                objItemMaster.setTax4(jsonObject.getDouble("Tax4"));
+                objItemMaster.setTax5(jsonObject.getDouble("Tax5"));
+                objItemMaster.setCategory(jsonObject.getString("Category"));
             }
             return objItemMaster;
         } catch (JSONException e) {
@@ -130,6 +136,12 @@ public class ItemJSONParser {
                 objItemMaster.setTax(jsonArray.getJSONObject(i).getString("Tax"));
                 objItemMaster.setRateIndex((short) jsonArray.getJSONObject(i).getInt("RateIndex"));
                 objItemMaster.setTaxRate(jsonArray.getJSONObject(i).getDouble("TaxRate"));
+                objItemMaster.setTax1(jsonArray.getJSONObject(i).getDouble("Tax1"));
+                objItemMaster.setTax2(jsonArray.getJSONObject(i).getDouble("Tax2"));
+                objItemMaster.setTax3(jsonArray.getJSONObject(i).getDouble("Tax3"));
+                objItemMaster.setTax4(jsonArray.getJSONObject(i).getDouble("Tax4"));
+                objItemMaster.setTax5(jsonArray.getJSONObject(i).getDouble("Tax5"));
+                objItemMaster.setCategory(jsonArray.getJSONObject(i).getString("Category"));
                 lstItemMaster.add(objItemMaster);
             }
             return lstItemMaster;

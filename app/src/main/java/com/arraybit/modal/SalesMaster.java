@@ -35,6 +35,7 @@ public class SalesMaster implements Parcelable {
     short linktoUserMasterIdCreatedBy;
     String UpdateDateTime;
     short linktoUserMasterIdUpdatedBy;
+    double Rounding;
     /// Extra
     String Counter;
     String Waiter;
@@ -49,13 +50,13 @@ public class SalesMaster implements Parcelable {
             objSalesMaster.SalesMasterId = source.readLong();
             objSalesMaster.BillNumber = source.readString();
             objSalesMaster.BillDateTime = source.readString();
-            objSalesMaster.linktoCounterMasterId = (short)source.readInt();
+            objSalesMaster.linktoCounterMasterId = (short) source.readInt();
             objSalesMaster.linktoTableMasterIds = source.readString();
             objSalesMaster.linktoWaiterMasterId = source.readInt();
             objSalesMaster.linktoWaiterMasterIdCaptain = source.readInt();
             objSalesMaster.linktoCustomerMasterId = source.readInt();
-            objSalesMaster.linktoOrderTypeMasterId = (short)source.readInt();
-            objSalesMaster.linktoOrderStatusMasterId = (short)source.readInt();
+            objSalesMaster.linktoOrderTypeMasterId = (short) source.readInt();
+            objSalesMaster.linktoOrderStatusMasterId = (short) source.readInt();
             objSalesMaster.TotalAmount = source.readDouble();
             objSalesMaster.TotalTax = source.readDouble();
             objSalesMaster.DiscountPercentage = source.readDouble();
@@ -68,13 +69,13 @@ public class SalesMaster implements Parcelable {
             objSalesMaster.BalanceAmount = source.readDouble();
             objSalesMaster.Remark = source.readString();
             objSalesMaster.Iscomplimentary = source.readByte() != 0;
-            objSalesMaster.TotalItemPoint = (short)source.readInt();
-            objSalesMaster.TotalDeductedPoint = (short)source.readInt();
-            objSalesMaster.linktoBusinessMasterId = (short)source.readInt();
+            objSalesMaster.TotalItemPoint = (short) source.readInt();
+            objSalesMaster.TotalDeductedPoint = (short) source.readInt();
+            objSalesMaster.linktoBusinessMasterId = (short) source.readInt();
             objSalesMaster.CreateDateTime = source.readString();
-            objSalesMaster.linktoUserMasterIdCreatedBy = (short)source.readInt();
+            objSalesMaster.linktoUserMasterIdCreatedBy = (short) source.readInt();
             objSalesMaster.UpdateDateTime = source.readString();
-            objSalesMaster.linktoUserMasterIdUpdatedBy = (short)source.readInt();
+            objSalesMaster.linktoUserMasterIdUpdatedBy = (short) source.readInt();
 
             /// Extra
             objSalesMaster.Counter = source.readString();
@@ -92,151 +93,304 @@ public class SalesMaster implements Parcelable {
         }
     };
 
-    public long getSalesMasterId() { return this.SalesMasterId; }
+    public long getSalesMasterId() {
+        return this.SalesMasterId;
+    }
+
+    public void setSalesMasterId(long salesMasterId) {
+        this.SalesMasterId = salesMasterId;
+    }
+
+    public String getBillNumber() {
+        return this.BillNumber;
+    }
+
+    public void setBillNumber(String billNumber) {
+        this.BillNumber = billNumber;
+    }
+
+    public String getBillDateTime() {
+        return this.BillDateTime;
+    }
+
+    public void setBillDateTime(String billDateTime) {
+        this.BillDateTime = billDateTime;
+    }
+
+    public short getlinktoCounterMasterId() {
+        return this.linktoCounterMasterId;
+    }
+
+    public void setlinktoCounterMasterId(short linktoCounterMasterId) {
+        this.linktoCounterMasterId = linktoCounterMasterId;
+    }
+
+    public String getlinktoTableMasterIds() {
+        return this.linktoTableMasterIds;
+    }
+
+    public void setlinktoTableMasterIds(String linktoTableMasterIds) {
+        this.linktoTableMasterIds = linktoTableMasterIds;
+    }
+
+    public int getlinktoWaiterMasterId() {
+        return this.linktoWaiterMasterId;
+    }
+
+    public void setlinktoWaiterMasterId(int linktoWaiterMasterId) {
+        this.linktoWaiterMasterId = linktoWaiterMasterId;
+    }
+
+    public int getlinktoWaiterMasterIdCaptain() {
+        return this.linktoWaiterMasterIdCaptain;
+    }
+
+    public void setlinktoWaiterMasterIdCaptain(int linktoWaiterMasterIdCaptain) {
+        this.linktoWaiterMasterIdCaptain = linktoWaiterMasterIdCaptain;
+    }
+
+    public int getlinktoCustomerMasterId() {
+        return this.linktoCustomerMasterId;
+    }
+
+    public void setlinktoCustomerMasterId(int linktoCustomerMasterId) {
+        this.linktoCustomerMasterId = linktoCustomerMasterId;
+    }
+
+    public short getlinktoOrderTypeMasterId() {
+        return this.linktoOrderTypeMasterId;
+    }
+
+    public void setlinktoOrderTypeMasterId(short linktoOrderTypeMasterId) {
+        this.linktoOrderTypeMasterId = linktoOrderTypeMasterId;
+    }
+
+    public short getlinktoOrderStatusMasterId() {
+        return this.linktoOrderStatusMasterId;
+    }
+
+    public void setlinktoOrderStatusMasterId(short linktoOrderStatusMasterId) {
+        this.linktoOrderStatusMasterId = linktoOrderStatusMasterId;
+    }
+
+    public double getTotalAmount() {
+        return this.TotalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.TotalAmount = totalAmount;
+    }
+
+    public double getTotalTax() {
+        return this.TotalTax;
+    }
+
+    public void setTotalTax(double totalTax) {
+        this.TotalTax = totalTax;
+    }
+
+    public double getDiscountPercentage() {
+        return this.DiscountPercentage;
+    }
+
+    public void setDiscountPercentage(double discountPercentage) {
+        this.DiscountPercentage = discountPercentage;
+    }
+
+    public double getDiscountAmount() {
+        return this.DiscountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        this.DiscountAmount = discountAmount;
+    }
+
+    public double getExtraAmount() {
+        return this.ExtraAmount;
+    }
+
+    public void setExtraAmount(double extraAmount) {
+        this.ExtraAmount = extraAmount;
+    }
+
+    public double getTotalItemDiscount() {
+        return this.TotalItemDiscount;
+    }
+
+    public void setTotalItemDiscount(double totalItemDiscount) {
+        this.TotalItemDiscount = totalItemDiscount;
+    }
+
+    public double getTotalItemTax() {
+        return this.TotalItemTax;
+    }
+
+    public void setTotalItemTax(double totalItemTax) {
+        this.TotalItemTax = totalItemTax;
+    }
+
+    public double getNetAmount() {
+        return this.NetAmount;
+    }
+
+    public void setNetAmount(double netAmount) {
+        this.NetAmount = netAmount;
+    }
+
+    public double getPaidAmount() {
+        return this.PaidAmount;
+    }
+
+    public void setPaidAmount(double paidAmount) {
+        this.PaidAmount = paidAmount;
+    }
+
+    public double getBalanceAmount() {
+        return this.BalanceAmount;
+    }
+
+    public void setBalanceAmount(double balanceAmount) {
+        this.BalanceAmount = balanceAmount;
+    }
+
+    public String getRemark() {
+        return this.Remark;
+    }
+
+    public void setRemark(String remark) {
+        this.Remark = remark;
+    }
+
+    public boolean getIscomplimentary() {
+        return this.Iscomplimentary;
+    }
+
+    public void setIscomplimentary(boolean iscomplimentary) {
+        this.Iscomplimentary = iscomplimentary;
+    }
+
+    public short getTotalItemPoint() {
+        return this.TotalItemPoint;
+    }
+
+    public void setTotalItemPoint(short totalItemPoint) {
+        this.TotalItemPoint = totalItemPoint;
+    }
+
+    public short getTotalDeductedPoint() {
+        return this.TotalDeductedPoint;
+    }
+
+    public void setTotalDeductedPoint(short totalDeductedPoint) {
+        this.TotalDeductedPoint = totalDeductedPoint;
+    }
+
+    public short getlinktoBusinessMasterId() {
+        return this.linktoBusinessMasterId;
+    }
 
-    public void setSalesMasterId(long salesMasterId) { this.SalesMasterId = salesMasterId; }
+    public void setlinktoBusinessMasterId(short linktoBusinessMasterId) {
+        this.linktoBusinessMasterId = linktoBusinessMasterId;
+    }
 
-    public String getBillNumber() { return this.BillNumber; }
+    public String getCreateDateTime() {
+        return this.CreateDateTime;
+    }
 
-    public void setBillNumber(String billNumber) { this.BillNumber = billNumber; }
+    public void setCreateDateTime(String createDateTime) {
+        this.CreateDateTime = createDateTime;
+    }
 
-    public String getBillDateTime() { return this.BillDateTime; }
+    public short getlinktoUserMasterIdCreatedBy() {
+        return this.linktoUserMasterIdCreatedBy;
+    }
 
-    public void setBillDateTime(String billDateTime) { this.BillDateTime = billDateTime; }
+    public void setlinktoUserMasterIdCreatedBy(short linktoUserMasterIdCreatedBy) {
+        this.linktoUserMasterIdCreatedBy = linktoUserMasterIdCreatedBy;
+    }
 
-    public short getlinktoCounterMasterId() { return this.linktoCounterMasterId; }
+    public String getUpdateDateTime() {
+        return this.UpdateDateTime;
+    }
 
-    public void setlinktoCounterMasterId(short linktoCounterMasterId) { this.linktoCounterMasterId = linktoCounterMasterId; }
+    public void setUpdateDateTime(String updateDateTime) {
+        this.UpdateDateTime = updateDateTime;
+    }
 
-    public String getlinktoTableMasterIds() { return this.linktoTableMasterIds; }
+    public short getlinktoUserMasterIdUpdatedBy() {
+        return this.linktoUserMasterIdUpdatedBy;
+    }
 
-    public void setlinktoTableMasterIds(String linktoTableMasterIds) { this.linktoTableMasterIds = linktoTableMasterIds; }
+    public void setlinktoUserMasterIdUpdatedBy(short linktoUserMasterIdUpdatedBy) {
+        this.linktoUserMasterIdUpdatedBy = linktoUserMasterIdUpdatedBy;
+    }
 
-    public int getlinktoWaiterMasterId() { return this.linktoWaiterMasterId; }
+    public String getCounter() {
+        return this.Counter;
+    }
 
-    public void setlinktoWaiterMasterId(int linktoWaiterMasterId) { this.linktoWaiterMasterId = linktoWaiterMasterId; }
+    public void setCounter(String counter) {
+        this.Counter = counter;
+    }
 
-    public int getlinktoWaiterMasterIdCaptain() { return this.linktoWaiterMasterIdCaptain; }
+    public String getWaiter() {
+        return this.Waiter;
+    }
 
-    public void setlinktoWaiterMasterIdCaptain(int linktoWaiterMasterIdCaptain) { this.linktoWaiterMasterIdCaptain = linktoWaiterMasterIdCaptain; }
+    public void setWaiter(String waiter) {
+        this.Waiter = waiter;
+    }
 
-    public int getlinktoCustomerMasterId() { return this.linktoCustomerMasterId; }
+    public String getWaiterCaptain() {
+        return this.WaiterCaptain;
+    }
 
-    public void setlinktoCustomerMasterId(int linktoCustomerMasterId) { this.linktoCustomerMasterId = linktoCustomerMasterId; }
+    public void setWaiterCaptain(String waiterCaptain) {
+        this.WaiterCaptain = waiterCaptain;
+    }
 
-    public short getlinktoOrderTypeMasterId() { return this.linktoOrderTypeMasterId; }
+    public String getCustomer() {
+        return this.Customer;
+    }
 
-    public void setlinktoOrderTypeMasterId(short linktoOrderTypeMasterId) { this.linktoOrderTypeMasterId = linktoOrderTypeMasterId; }
+    public void setCustomer(String customer) {
+        this.Customer = customer;
+    }
 
-    public short getlinktoOrderStatusMasterId() { return this.linktoOrderStatusMasterId; }
+    public String getOrderType() {
+        return this.OrderType;
+    }
 
-    public void setlinktoOrderStatusMasterId(short linktoOrderStatusMasterId) { this.linktoOrderStatusMasterId = linktoOrderStatusMasterId; }
+    public void setOrderType(String orderType) {
+        this.OrderType = orderType;
+    }
 
-    public double getTotalAmount() { return this.TotalAmount; }
+    public String getOrderStatus() {
+        return this.OrderStatus;
+    }
 
-    public void setTotalAmount(double totalAmount) { this.TotalAmount = totalAmount; }
+    public void setOrderStatus(String orderStatus) {
+        this.OrderStatus = orderStatus;
+    }
 
-    public double getTotalTax() { return this.TotalTax; }
+    public String getBusiness() {
+        return this.Business;
+    }
 
-    public void setTotalTax(double totalTax) { this.TotalTax = totalTax; }
+    public void setBusiness(String business) {
+        this.Business = business;
+    }
 
-    public double getDiscountPercentage() { return this.DiscountPercentage; }
+    public double getRounding() {
+        return Rounding;
+    }
 
-    public void setDiscountPercentage(double discountPercentage) { this.DiscountPercentage = discountPercentage; }
-
-    public double getDiscountAmount() { return this.DiscountAmount; }
-
-    public void setDiscountAmount(double discountAmount) { this.DiscountAmount = discountAmount; }
-
-    public double getExtraAmount() { return this.ExtraAmount; }
-
-    public void setExtraAmount(double extraAmount) { this.ExtraAmount = extraAmount; }
-
-    public double getTotalItemDiscount() { return this.TotalItemDiscount; }
-
-    public void setTotalItemDiscount(double totalItemDiscount) { this.TotalItemDiscount = totalItemDiscount; }
-
-    public double getTotalItemTax() { return this.TotalItemTax; }
-
-    public void setTotalItemTax(double totalItemTax) { this.TotalItemTax = totalItemTax; }
-
-    public double getNetAmount() { return this.NetAmount; }
-
-    public void setNetAmount(double netAmount) { this.NetAmount = netAmount; }
-
-    public double getPaidAmount() { return this.PaidAmount; }
-
-    public void setPaidAmount(double paidAmount) { this.PaidAmount = paidAmount; }
-
-    public double getBalanceAmount() { return this.BalanceAmount; }
-
-    public void setBalanceAmount(double balanceAmount) { this.BalanceAmount = balanceAmount; }
-
-    public String getRemark() { return this.Remark; }
-
-    public void setRemark(String remark) { this.Remark = remark; }
-
-    public boolean getIscomplimentary() { return this.Iscomplimentary; }
-
-    public void setIscomplimentary(boolean iscomplimentary) { this.Iscomplimentary = iscomplimentary; }
-
-    public short getTotalItemPoint() { return this.TotalItemPoint; }
-
-    public void setTotalItemPoint(short totalItemPoint) { this.TotalItemPoint = totalItemPoint; }
-
-    public short getTotalDeductedPoint() { return this.TotalDeductedPoint; }
-
-    public void setTotalDeductedPoint(short totalDeductedPoint) { this.TotalDeductedPoint = totalDeductedPoint; }
-
-    public short getlinktoBusinessMasterId() { return this.linktoBusinessMasterId; }
-
-    public void setlinktoBusinessMasterId(short linktoBusinessMasterId) { this.linktoBusinessMasterId = linktoBusinessMasterId; }
-
-    public String getCreateDateTime() { return this.CreateDateTime; }
-
-    public void setCreateDateTime(String createDateTime) { this.CreateDateTime = createDateTime; }
-
-    public short getlinktoUserMasterIdCreatedBy() { return this.linktoUserMasterIdCreatedBy; }
-
-    public void setlinktoUserMasterIdCreatedBy(short linktoUserMasterIdCreatedBy) { this.linktoUserMasterIdCreatedBy = linktoUserMasterIdCreatedBy; }
-
-    public String getUpdateDateTime() { return this.UpdateDateTime; }
-
-    public void setUpdateDateTime(String updateDateTime) { this.UpdateDateTime = updateDateTime; }
-
-    public short getlinktoUserMasterIdUpdatedBy() { return this.linktoUserMasterIdUpdatedBy; }
-
-    public void setlinktoUserMasterIdUpdatedBy(short linktoUserMasterIdUpdatedBy) { this.linktoUserMasterIdUpdatedBy = linktoUserMasterIdUpdatedBy; }
-
-    public String getCounter() { return this.Counter; }
-
-    public void setCounter(String counter) { this.Counter = counter; }
-
-    public String getWaiter() { return this.Waiter; }
-
-    public void setWaiter(String waiter) { this.Waiter = waiter; }
-
-    public String getWaiterCaptain() { return this.WaiterCaptain; }
-
-    public void setWaiterCaptain(String waiterCaptain) { this.WaiterCaptain = waiterCaptain; }
-
-    public String getCustomer() { return this.Customer; }
-
-    public void setCustomer(String customer) { this.Customer = customer; }
-
-    public String getOrderType() { return this.OrderType; }
-
-    public void setOrderType(String orderType) { this.OrderType = orderType; }
-
-    public String getOrderStatus() { return this.OrderStatus; }
-
-    public void setOrderStatus(String orderStatus) { this.OrderStatus = orderStatus; }
-
-    public String getBusiness() { return this.Business; }
 
     //endregion
 
-    public void setBusiness(String business) { this.Business = business; }
+    public void setRounding(double rounding) {
+        Rounding = rounding;
+    }
 
     public int describeContents() {
         return 0;
@@ -264,7 +418,7 @@ public class SalesMaster implements Parcelable {
         parcel.writeDouble(PaidAmount);
         parcel.writeDouble(BalanceAmount);
         parcel.writeString(Remark);
-        parcel.writeByte((byte)(Iscomplimentary ? 1 : 0));
+        parcel.writeByte((byte) (Iscomplimentary ? 1 : 0));
         parcel.writeInt(TotalItemPoint);
         parcel.writeInt(TotalDeductedPoint);
         parcel.writeInt(linktoBusinessMasterId);

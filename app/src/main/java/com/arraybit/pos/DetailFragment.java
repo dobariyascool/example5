@@ -42,11 +42,10 @@ import java.util.Arrays;
 @SuppressLint("ValidFragment")
 public class DetailFragment extends Fragment implements View.OnClickListener, ModifierSelectionFragmentDialog.ModifierResponseListener {
 
-    ImageView ivItemImage, ivModifier;
-    TextView txtItemName, txtDescription, txtItemPrice, txtModifier, txtHeaderModifier;
+    ImageView ivItemImage;
+    TextView txtItemName, txtDescription, txtItemPrice, txtModifier;
     EditText etQuantity;
     int counterMasterId;
-    ItemJSONParser objItemJSONParser;
     ItemMaster objItemMaster, objOrderItemTran;
     SharePreferenceManage objSharePreferenceManage;
     AppCompatMultiAutoCompleteTextView actRemark;
@@ -58,10 +57,11 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     boolean isDuplicate = false, isShow = false;
     ArrayList<ItemMaster> alOrderItemModifierTran, alItemMasterModifier, alItemMasterModifierFilter;
     StringBuilder sbModifier, sbModifierName;
-    double totalModifierAmount, totalAmount,totalTax;
+    double totalModifierAmount, totalAmount, totalTax;
     ResponseListener objResponseListener;
     LinearLayout modifierLayout;
     short cnt = 0;
+    String itemName;
 
 
     public DetailFragment(ItemMaster objItemMaster) {
@@ -81,7 +81,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             if (objItemMaster.getItemName() != null) {
-                app_bar.setTitle(objItemMaster.getItemName());
+                app_bar.setTitle(objItemMaster.getCategory());
             } else {
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_detail));
             }
@@ -93,7 +93,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
         //ImageView
         ivItemImage = (ImageView) view.findViewById(R.id.ivItemImage);
-        ivModifier = (ImageView) view.findViewById(R.id.ivModifier);
         //end
 
         //TextView
@@ -101,7 +100,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         txtDescription = (TextView) view.findViewById(R.id.txtDescription);
         txtItemPrice = (TextView) view.findViewById(R.id.txtItemPrice);
         txtModifier = (TextView) view.findViewById(R.id.txtModifier);
-        txtHeaderModifier = (TextView) view.findViewById(R.id.txtHeaderModifier);
         //end
 
         modifierLayout = (LinearLayout) view.findViewById(R.id.modifierLayout);
@@ -114,6 +112,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         Button btnOrder = (Button) view.findViewById(R.id.btnOrder);
+        Button btnModifier = (Button) view.findViewById(R.id.btnModifier);
 
         Button btnNum1 = (Button) view.findViewById(R.id.btnNum1);
         Button btnNum2 = (Button) view.findViewById(R.id.btnNum2);
@@ -145,7 +144,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         btnNum7.setOnClickListener(this);
         btnNum8.setOnClickListener(this);
         btnNum9.setOnClickListener(this);
-        ivModifier.setOnClickListener(this);
+        btnModifier.setOnClickListener(this);
         //end
 
         objSharePreferenceManage = new SharePreferenceManage();
@@ -240,7 +239,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             if (isShow) {
                 if (getTargetFragment() != null) {
                     objResponseListener = (ResponseListener) getTargetFragment();
-                    objResponseListener.ShowMessage();
+                    objResponseListener.ShowMessage(itemName);
                 }
             }
             ModifierSelectionFragmentDialog.alFinalCheckedModifier = new ArrayList<>();
@@ -284,7 +283,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             AddNumber("8");
         } else if (v.getId() == R.id.btnNum9) {
             AddNumber("9");
-        } else if (v.getId() == R.id.ivModifier) {
+        } else if (v.getId() == R.id.btnModifier) {
             cnt = (short) (cnt + 1);
             SetItemModifier();
             ModifierSelectionFragmentDialog modifierSelectionFragmentDialog = new ModifierSelectionFragmentDialog(alItemMasterModifierFilter);
@@ -460,6 +459,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             if (Globals.alOrderItemTran.size() > 0) {
                 CheckDuplicateRemarkAndModifier();
                 if (!isDuplicate) {
+                    itemName = objItemMaster.getItemName();
                     objOrderItemTran.setItemMasterId(objItemMaster.getItemMasterId());
                     objOrderItemTran.setItemName(objItemMaster.getItemName());
                     objOrderItemTran.setActualSellPrice(objItemMaster.getSellPrice());
@@ -485,6 +485,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                     isShow = true;
                 }
             } else {
+                itemName = objItemMaster.getItemName();
                 objOrderItemTran.setItemMasterId(objItemMaster.getItemMasterId());
                 objOrderItemTran.setItemName(objItemMaster.getItemName());
                 objOrderItemTran.setActualSellPrice(objItemMaster.getSellPrice());
@@ -720,7 +721,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     }
 
     interface ResponseListener {
-        void ShowMessage();
+        void ShowMessage(String itemName);
     }
     //endregion
 

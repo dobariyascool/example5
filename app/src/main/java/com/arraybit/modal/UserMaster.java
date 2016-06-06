@@ -3,7 +3,7 @@ package com.arraybit.modal;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class  UserMaster implements Parcelable {
+public class UserMaster implements Parcelable {
 
     //region Properties
     short UserMasterId;
@@ -14,7 +14,7 @@ public class  UserMaster implements Parcelable {
     short WaiterMasterId;
     String Role;
     short linktoBusinessMasterId;
-
+    short linktoBusinessTypeMasterId;
     public static final Creator<UserMaster> CREATOR = new Creator<UserMaster>() {
         @Override
         public UserMaster createFromParcel(Parcel source) {
@@ -27,6 +27,7 @@ public class  UserMaster implements Parcelable {
             objUserMaster.Role = source.readString();
             objUserMaster.WaiterMasterId = (short) source.readInt();
             objUserMaster.linktoBusinessMasterId = (short) source.readInt();
+            objUserMaster.linktoBusinessTypeMasterId = (short) source.readInt();
             return objUserMaster;
         }
 
@@ -100,6 +101,14 @@ public class  UserMaster implements Parcelable {
         this.linktoBusinessMasterId = linktoBusinessMasterId;
     }
 
+    public short getLinktoBusinessTypeMasterId() {
+        return linktoBusinessTypeMasterId;
+    }
+
+    public void setLinktoBusinessTypeMasterId(short linktoBusinessTypeMasterId) {
+        this.linktoBusinessTypeMasterId = linktoBusinessTypeMasterId;
+    }
+
     //endregion
 
     @Override
@@ -117,6 +126,6 @@ public class  UserMaster implements Parcelable {
         parcel.writeString(Role);
         parcel.writeInt(WaiterMasterId);
         parcel.writeInt(linktoBusinessMasterId);
-
+        parcel.writeInt(linktoBusinessTypeMasterId);
     }
 }

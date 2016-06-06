@@ -30,6 +30,7 @@ public class UserMasterJSONParser {
                 objUserMaster.setRole(jsonObject.getString("Role"));
                 objUserMaster.setWaiterMasterId((short) jsonObject.getInt("WaiterMasterId"));
                 objUserMaster.setLinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
+                objUserMaster.setLinktoBusinessTypeMasterId((short) jsonObject.getInt("linktoBusinessTypeMasterId"));
             }
             return objUserMaster;
         } catch (JSONException e) {
@@ -52,6 +53,7 @@ public class UserMasterJSONParser {
                 objUserMaster.setRole(jsonArray.getJSONObject(i).getString("Role"));
                 objUserMaster.setWaiterMasterId((short) jsonArray.getJSONObject(i).getInt("WaiterMasterId"));
                 objUserMaster.setLinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
+                objUserMaster.setLinktoBusinessTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessTypeMasterId"));
                 lstUserMaster.add(objUserMaster);
             }
             return lstUserMaster;

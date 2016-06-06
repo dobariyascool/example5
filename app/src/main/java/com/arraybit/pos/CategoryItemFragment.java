@@ -44,6 +44,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     public static boolean isViewChange = false;
     public static short i = 0;
     public static CategoryMaster objCategoryMaster = null;
+    public static String itemName;
     public static StringBuilder sbItemTypeMasterId = new StringBuilder();
     ViewPager itemViewPager;
     TabLayout itemTabLayout;
@@ -285,8 +286,9 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void ShowMessage() {
+    public void ShowMessage(String itemName) {
         objCategoryMaster = itemPagerAdapter.GetCategoryMaster(itemTabLayout.getSelectedTabPosition());
+        objCategoryMaster.setDescription(itemName);
     }
 
     //region Private Methods and Interface

@@ -14,13 +14,15 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
+import com.rey.material.widget.TextView;
 
 public class ChangeModeDialogFragment extends DialogFragment implements View.OnClickListener {
 
     EditText etPassword;
     SharePreferenceManage objSharePreferenceManage;
     LinearLayout buttonLayout, modeLayout;
-    Button btnSubmit, btnCancel, btnWaiterMode, btnGuestMode;
+    TextView txtSubmit,txtCancel;
+    Button btnWaiterMode, btnGuestMode;
 
     public ChangeModeDialogFragment() {
         // Required empty public constructor
@@ -42,8 +44,8 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
         btnWaiterMode = (Button) view.findViewById(R.id.btnWaiterMode);
         btnGuestMode = (Button) view.findViewById(R.id.btnGuestMode);
 
-        btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
-        btnCancel = (Button) view.findViewById(R.id.btnCancel);
+        txtSubmit = (TextView) view.findViewById(R.id.txtSubmit);
+        txtCancel = (TextView) view.findViewById(R.id.txtCancel);
 
         SetVisibility();
 
@@ -52,9 +54,9 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnSubmit) {
+        if (v.getId() == R.id.txtSubmit) {
             CheckPassword();
-        } else if (v.getId() == R.id.btnCancel) {
+        } else if (v.getId() == R.id.txtCancel) {
             getDialog().dismiss();
         } else if (v.getId() == R.id.btnWaiterMode) {
             getDialog().dismiss();
@@ -80,8 +82,8 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
                 .equals(getActivity().getResources().getString(R.string.title_fragment_waiter_options))) {
             modeLayout.setVisibility(View.VISIBLE);
             etPassword.setVisibility(View.GONE);
-            btnSubmit.setVisibility(View.GONE);
-            btnCancel.setVisibility(View.GONE);
+            txtSubmit.setVisibility(View.GONE);
+            txtCancel.setVisibility(View.GONE);
             buttonLayout.setVisibility(View.GONE);
 
             btnWaiterMode.setOnClickListener(this);
@@ -92,11 +94,11 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
             modeLayout.setVisibility(View.GONE);
             buttonLayout.setVisibility(View.VISIBLE);
             etPassword.setVisibility(View.VISIBLE);
-            btnSubmit.setVisibility(View.VISIBLE);
-            btnCancel.setVisibility(View.VISIBLE);
+            txtSubmit.setVisibility(View.VISIBLE);
+            txtCancel.setVisibility(View.VISIBLE);
 
-            btnSubmit.setOnClickListener(this);
-            btnCancel.setOnClickListener(this);
+            txtSubmit.setOnClickListener(this);
+            txtCancel.setOnClickListener(this);
         }
     }
 

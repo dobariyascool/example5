@@ -318,7 +318,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             objSharePreferenceManage.CreatePreference("RegistrationPreference", "UserName", objCustomerMaster.getEmail1(), getActivity());
         }
         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity()) == null) {
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "CustomerMasterId", String.valueOf(objCustomerMaster.getCustomerMasterId()), getActivity());
+            objSharePreferenceManage.CreatePreference("RegistrationPreference", "CustomerMasterId", String.valueOf(status), getActivity());
         }
         if (objCustomerMaster.getCustomerName() != null) {
             if (objSharePreferenceManage.GetPreference("RegistrationPreference", "FullName", getActivity()) == null) {
@@ -384,7 +384,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     Globals.ShowSnackBar(view, getResources().getString(R.string.MsgAlreadyExist), getActivity(), 1000);
                     ClearControls();
                     break;
-                case "0":
+                default:
                     Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
                     ClearControls();
                     CreateGuestPreference();

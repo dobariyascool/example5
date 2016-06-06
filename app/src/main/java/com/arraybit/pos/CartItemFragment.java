@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.CartItemAdapter;
@@ -82,8 +81,6 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         }
         //end
 
-        ImageView ivRemark = (ImageView) view.findViewById(R.id.ivRemark);
-
         txtRemark = (TextView) view.findViewById(R.id.txtRemark);
 
         cvRemark = (CardView) view.findViewById(R.id.cvRemark);
@@ -103,13 +100,14 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
 
         btnAddMore = (Button) view.findViewById(R.id.btnAddMore);
         btnConfirmOrder = (Button) view.findViewById(R.id.btnConfirmOrder);
+        Button btnRemark = (Button) view.findViewById(R.id.btnRemark);
 
         SetRecyclerView();
 
         cbMenu.setOnClickListener(this);
         btnAddMore.setOnClickListener(this);
         btnConfirmOrder.setOnClickListener(this);
-        ivRemark.setOnClickListener(this);
+        btnRemark.setOnClickListener(this);
 
         return view;
     }
@@ -194,7 +192,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                     getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             }
-        } else if (v.getId() == R.id.ivRemark) {
+        } else if (v.getId() == R.id.btnRemark) {
             RemarkDialogFragment remarkDialogFragment = new RemarkDialogFragment();
             remarkDialogFragment.setTargetFragment(this, 0);
             remarkDialogFragment.show(getActivity().getSupportFragmentManager(), "");

@@ -234,7 +234,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             etConfirmPassword.clearError();
             etOldPassword.setError("Enter " + getResources().getString(R.string.cpOldPassword));
             if (!etNewPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
-                etConfirmPassword.setError("New and Confirm Password are not match");
+                etConfirmPassword.setError(getActivity().getResources().getString(R.string.cpPasswordMisMatch));
             } else {
                 etConfirmPassword.clearError();
             }
@@ -250,7 +250,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
                 !etNewPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
             etNewPassword.clearError();
             etOldPassword.clearError();
-            etConfirmPassword.setError("New and Confirm Password are not match");
+            etConfirmPassword.setError(getActivity().getResources().getString(R.string.cpPasswordMisMatch));
             IsValid = false;
         }
         if (IsValid) {

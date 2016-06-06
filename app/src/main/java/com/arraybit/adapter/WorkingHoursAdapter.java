@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
@@ -55,24 +56,27 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         }
 
         if (position == 0) {
+            holder.ivTimings.setVisibility(View.VISIBLE);
             holder.txtHeader.setVisibility(View.VISIBLE);
         } else {
+            holder.ivTimings.setVisibility(View.GONE);
             holder.txtHeader.setVisibility(View.GONE);
         }
-        holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()));
 
+        //holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue().charAt(0)).toUpperCase());
+        holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue().substring(0,3)).toUpperCase());
         Calendar calendar = Calendar.getInstance();
-        if(calendar.get(Calendar.DAY_OF_WEEK)==7){
-            if (Globals.Days.valueOf("Day" + 0).getValue().equals(holder.txtDayOfWeek.getText())) {
-                holder.layoutChild.setSelected(true);
+        if (calendar.get(Calendar.DAY_OF_WEEK) == 7) {
+            if (Globals.Days.valueOf("Day" + 0).getValue().equals(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()))) {
+                TextColorChange(holder,true);
             } else {
-                holder.layoutChild.setSelected(false);
+                TextColorChange(holder, false);
             }
-        }else{
-            if (Globals.Days.valueOf("Day" + calendar.get(Calendar.DAY_OF_WEEK)).getValue().equals(holder.txtDayOfWeek.getText())) {
-                holder.layoutChild.setSelected(true);
+        } else {
+            if (Globals.Days.valueOf("Day" + calendar.get(Calendar.DAY_OF_WEEK)).getValue().equals(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()))) {
+                TextColorChange(holder,true);
             } else {
-                holder.layoutChild.setSelected(false);
+                TextColorChange(holder,false);
             }
         }
 
@@ -81,11 +85,11 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
             holder.txtEndTime.setVisibility(View.GONE);
         } else {
             if (current.getBreakStartTime() == null && current.getBreakEndTime() == null) {
-                holder.txtStartTime.setText(current.getOpeningTime() + " " + context.getString(R.string.rTo) + " " + current.getClosingTime());
+                holder.txtStartTime.setText(current.getOpeningTime() + " " + "To" + " " + current.getClosingTime());
                 holder.txtEndTime.setVisibility(View.GONE);
             } else {
-                holder.txtStartTime.setText(current.getOpeningTime() + " " + context.getString(R.string.rTo) + " " + current.getBreakStartTime());
-                holder.txtEndTime.setText(current.getBreakEndTime() + " " + context.getString(R.string.rTo) + " " + current.getClosingTime());
+                holder.txtStartTime.setText(current.getOpeningTime() + " " + "To" + " " + current.getBreakStartTime());
+                holder.txtEndTime.setText(current.getBreakEndTime() + " " + "To" + " " + current.getClosingTime());
             }
         }
 
@@ -96,12 +100,28 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         return alBusinessHoursTran.size();
     }
 
+    private void TextColorChange(WorkingHoursViewHolder holder,boolean isMatch){
+        if(isMatch){
+            holder.txtStartTime.setSelected(true);
+            holder.txtEndTime.setSelected(true);
+            holder.txtDayOfWeek.setSelected(true);
+        }else{
+            holder.txtStartTime.setSelected(false);
+            holder.txtEndTime.setSelected(false);
+            holder.txtDayOfWeek.setSelected(false);
+        }
+    }
+
+
     class WorkingHoursViewHolder extends RecyclerView.ViewHolder {
         TextView txtDayOfWeek, txtStartTime, txtEndTime, txtHeader;
         LinearLayout layoutChild;
+        ImageView ivTimings;
 
         public WorkingHoursViewHolder(View itemView) {
             super(itemView);
+
+            ivTimings = (ImageView)itemView.findViewById(R.id.ivTimings);
 
             layoutChild = (LinearLayout) itemView.findViewById(R.id.layoutChild);
             txtDayOfWeek = (TextView) itemView.findViewById(R.id.txtDayOfWeek);

@@ -28,11 +28,11 @@ public class InformationFragment extends Fragment {
 
     static ArrayList<BusinessHoursTran> lstBusinessHoursTran;
     RecyclerView rvWorkingHours;
-    TextView txtAddress, txtPhone, txtEmail, txtWebSite;
+    TextView txtAddress, txtPhone, txtEmail, txtWebSite,txtPhone1,txtPhone2,txtFax;
     LinearLayoutManager linearLayoutManager;
     WorkingHoursAdapter adapter;
     BusinessMaster objBusinessMaster;
-    LinearLayout phoneLayout, emailLayout, siteLayout;
+    LinearLayout phoneLayout, emailLayout, siteLayout,callLayout,faxLayout,emailDivider,webSiteDivider,faxDivider;
 
     public InformationFragment(BusinessMaster objBusinessMaster) {
         this.objBusinessMaster = objBusinessMaster;
@@ -44,13 +44,19 @@ public class InformationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_information, container, false);
 
         txtAddress = (TextView) view.findViewById(R.id.txtAddress);
-        txtPhone = (TextView) view.findViewById(R.id.txtPhone);
+        txtPhone1 = (TextView) view.findViewById(R.id.txtPhone1);
+        txtPhone2 = (TextView) view.findViewById(R.id.txtPhone2);
         txtEmail = (TextView) view.findViewById(R.id.txtEmail);
         txtWebSite = (TextView) view.findViewById(R.id.txtWebSite);
+        txtFax = (TextView) view.findViewById(R.id.txtFax);
 
-        phoneLayout = (LinearLayout) view.findViewById(R.id.phoneLayout);
+        callLayout = (LinearLayout) view.findViewById(R.id.callLayout);
         emailLayout = (LinearLayout) view.findViewById(R.id.emailLayout);
         siteLayout = (LinearLayout) view.findViewById(R.id.siteLayout);
+        faxLayout = (LinearLayout) view.findViewById(R.id.faxLayout);
+        emailDivider = (LinearLayout) view.findViewById(R.id.emailDivider);
+        webSiteDivider = (LinearLayout) view.findViewById(R.id.webSiteDivider);
+        faxDivider = (LinearLayout) view.findViewById(R.id.faxDivider);
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
 
@@ -96,23 +102,48 @@ public class InformationFragment extends Fragment {
             txtAddress.setVisibility(View.VISIBLE);
             txtAddress.setText(objBusinessMaster.getAddress());
         }
-        if (objBusinessMaster.getPhone1() == null) {
-            phoneLayout.setVisibility(View.GONE);
-        } else {
-            phoneLayout.setVisibility(View.VISIBLE);
-            txtPhone.setText(objBusinessMaster.getPhone1());
+        if (objBusinessMaster.getPhone1().equals("") && objBusinessMaster.getPhone2().equals("")) {
+            callLayout.setVisibility(View.GONE);
+        } else if(!objBusinessMaster.getPhone2().equals("") && !objBusinessMaster.getPhone1().equals("")) {
+            callLayout.setVisibility(View.VISIBLE);
+            txtPhone2.setVisibility(View.VISIBLE);
+            txtPhone1.setVisibility(View.VISIBLE);
+            txtPhone2.setText(objBusinessMaster.getPhone2());
+            txtPhone1.setText(objBusinessMaster.getPhone1());
+        }else if(objBusinessMaster.getPhone2().equals("") && !objBusinessMaster.getPhone1().equals(""))  {
+            callLayout.setVisibility(View.VISIBLE);
+            txtPhone2.setVisibility(View.GONE);
+            txtPhone1.setVisibility(View.VISIBLE);
+            txtPhone1.setText(objBusinessMaster.getPhone1());
+        }else if(objBusinessMaster.getPhone1().equals("") && !objBusinessMaster.getPhone2().equals("")) {
+            callLayout.setVisibility(View.VISIBLE);
+            txtPhone1.setVisibility(View.GONE);
+            txtPhone2.setVisibility(View.VISIBLE);
+            txtPhone2.setText(objBusinessMaster.getPhone2());
         }
-        if (objBusinessMaster.getWebsite() == null) {
+        if (objBusinessMaster.getWebsite().equals("")) {
             siteLayout.setVisibility(View.GONE);
+            webSiteDivider.setVisibility(View.GONE);
         } else {
             siteLayout.setVisibility(View.VISIBLE);
+            webSiteDivider.setVisibility(View.VISIBLE);
             txtWebSite.setText(objBusinessMaster.getWebsite());
         }
-        if (objBusinessMaster.getEmail() == null) {
+        if (objBusinessMaster.getEmail().equals("")) {
             emailLayout.setVisibility(View.GONE);
+            emailDivider.setVisibility(View.GONE);
         } else {
             emailLayout.setVisibility(View.VISIBLE);
+            emailDivider.setVisibility(View.VISIBLE);
             txtEmail.setText(objBusinessMaster.getEmail());
+        }
+        if (objBusinessMaster.getFax().equals("")) {
+            faxLayout.setVisibility(View.GONE);
+            faxDivider.setVisibility(View.GONE);
+        } else {
+            faxLayout.setVisibility(View.VISIBLE);
+            faxDivider.setVisibility(View.VISIBLE);
+            txtFax.setText(objBusinessMaster.getFax());
         }
     }
     //endregion

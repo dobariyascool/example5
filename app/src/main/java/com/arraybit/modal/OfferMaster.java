@@ -39,6 +39,9 @@ public class OfferMaster implements Parcelable {
     boolean IsUnconditional;
     int BuyItemCount;
     int GetItemCount;
+    boolean IsForApp;
+    boolean IsOnline;
+    String linktoOrderTypeMasterIds;
     short linktoCounterMasterId;
     short linktoOrderTypeMasterId;
     /// Extra
@@ -93,8 +96,68 @@ public class OfferMaster implements Parcelable {
             return new OfferMaster[size];
         }
     };
+    String ValidBuyItems;
+    String ValidDays;
+    String ValidGetItems;
+    String ValidItems;
     short Counter;
     short OrderType;
+
+    public boolean isForApp() {
+        return IsForApp;
+    }
+
+    public void setIsForApp(boolean isForApp) {
+        IsForApp = isForApp;
+    }
+
+    public boolean isOnline() {
+        return IsOnline;
+    }
+
+    public void setIsOnline(boolean isOnline) {
+        IsOnline = isOnline;
+    }
+
+    public String getLinktoOrderTypeMasterIds() {
+        return linktoOrderTypeMasterIds;
+    }
+
+    public void setLinktoOrderTypeMasterIds(String linktoOrderTypeMasterIds) {
+        this.linktoOrderTypeMasterIds = linktoOrderTypeMasterIds;
+    }
+
+    public String getValidBuyItems() {
+        return ValidBuyItems;
+    }
+
+    public void setValidBuyItems(String validBuyItems) {
+        ValidBuyItems = validBuyItems;
+    }
+
+    public String getValidDays() {
+        return ValidDays;
+    }
+
+    public void setValidDays(String validDays) {
+        ValidDays = validDays;
+    }
+
+    public String getValidGetItems() {
+        return ValidGetItems;
+    }
+
+    public void setValidGetItems(String validGetItems) {
+        ValidGetItems = validGetItems;
+    }
+
+    public String getValidItems() {
+        return ValidItems;
+    }
+
+    public void setValidItems(String validItems) {
+        ValidItems = validItems;
+    }
 
     public int getOfferMasterId() { return this.OfferMasterId; }
 

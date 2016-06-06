@@ -56,8 +56,11 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_line"
+                        android:padding="25dp"
                         android:src="@mipmap/m_menu"
                         tools:ignore="ContentDescription" />
 
@@ -91,8 +94,11 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_line"
+                        android:padding="25dp"
                         android:src="@mipmap/m_order"
                         tools:ignore="ContentDescription" />
 
@@ -126,8 +132,11 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_line"
+                        android:padding="25dp"
                         android:src="@mipmap/m_offers"
                         tools:ignore="ContentDescription" />
 
@@ -161,8 +170,11 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_line"
+                        android:padding="30dp"
                         android:src="@mipmap/m_feedback"
                         tools:ignore="ContentDescription" />
 

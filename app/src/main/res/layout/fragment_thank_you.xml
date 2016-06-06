@@ -33,12 +33,11 @@
 
         <com.rey.material.widget.Button
             android:id="@+id/btnFeedback"
-            style="@style/Button"
+            style="@style/BorderButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Feedback"
-            />
+            android:text="Feedback" />
 
         <com.rey.material.widget.Button
             android:id="@+id/btnSkip"

@@ -66,7 +66,8 @@
     <string name="MsgFeedback">Thank you for your feedback, your response will help us to improve the quality of service.</string>
     <string name="MsgVerification">Your Phone Number is Verified.</string>
     <string name="MsgCart">Cart is empty.</string>
-    <string name="MsgCartItem">Item is added into dish</string>
+    <string name="MsgCartItem">%s is added to dish</string>
+    <string name="MsgCartWithNoName">Item is added to dish</string>
     <string name="MsgConfirmOrder">Items are place into order</string>
     <string name="MsgAddPerson">Person is added successfully</string>
     <string name="MsgUpdateProfile">Profile updated successfully</string>
@@ -75,6 +76,7 @@
     <string name="MsgGallery">No Images Yet.</string>
     <string name="MsgItem">There is no item.</string>
     <string name="MsgChangeMode">Switch to waiter mode?</string>
+    <string name="MsgDineOnly">Available for Dine-In only</string>
     <!-- End -->
 
     <string name="splash_screen">arraybitlogo</string>
@@ -93,7 +95,7 @@
     <string name="siNewUser">New User?</string>
     <string name="siSignupHere">Sign Up</string>
     <string name="siLoginFailedMsg">Username or Password are invalid.</string>
-    <string name="siLoginSucessMsg">Successfully logged in.</string>
+    <string name="siLoginSucessMsg">Login successfully.</string>
     <string name="clear_text">Clear Text</string>
     <!-- end -->
 
@@ -174,6 +176,23 @@
     <string name="olOption">Options</string>
     <!-- end -->
 
+    <!-- offer detail activity -->
+    <string name="odaOfferHighLight">Highlights</string>
+    <string name="odaOfferCondition">Terms and condition</string>
+    <string name="odaValidOn">Valid on %s</string>
+    <string name="odaValidFor">Valid for %s</string>
+    <string name="odaOfferFor">Offer for %s</string>
+    <string name="odaOfferDiscountWithRupee">\u20B9 %s OFF</string>
+    <string name="odaOfferDiscount">%s\uff05 OFF</string>
+    <string name="odaMinAmt">Minimum Bill Amount \u20B9 %s</string>
+    <string name="odaOfferValid">online and app</string>
+    <string name="odaOfferValidOnline">online only</string>
+    <string name="odaOfferValidApp">app only</string>
+    <string name="odaOfferOnlyFor">Only for %s</string>
+    <string name="odaDiamond">\u25C6</string>
+    <string name="title_activity_google_login">GoogleLoginActivity</string>
+    <string name="title_activity_facebook_login">FacebookLoginActivity</string>
+    <!-- end -->
 
     <!-- fragment add -->
     <string name="afName">Name</string>
@@ -375,6 +394,7 @@
     <string name="cpNewPasssword">New Password</string>
     <string name="cpConfirmPassword">Confirm Password</string>
     <string name="cpChangePassword">Change Password</string>
+    <string name="cpPasswordMisMatch">New and confirm password do not match</string>
     <!-- end -->
 
     <!-- order status dialog -->
@@ -390,6 +410,7 @@
     <!-- modifier selection dialog -->
     <string name="msdDone">Done</string>
     <string name="msdCancel">Cancel</string>
+    <string name="rsService">Services</string>
     <!-- end -->
 
 </resources>

@@ -47,6 +47,7 @@ public class ItemMaster implements Parcelable {
     String ItemModifierIds;
     String OptionValueTranIds;
     double ActualSellPrice;
+    String Category;
     int Quantity;
     String Remark;
     long linktoOrderMasterId;
@@ -110,6 +111,7 @@ public class ItemMaster implements Parcelable {
             objItemMaster.Tax4 = source.readDouble();
             objItemMaster.Tax5 = source.readDouble();
             objItemMaster.TotalTax = source.readDouble();
+            objItemMaster.Category = source.readString();
 
             return objItemMaster;
         }
@@ -518,6 +520,14 @@ public class ItemMaster implements Parcelable {
         IsRateTaxInclusive = isRateTaxInclusive;
     }
 
+    public String getCategory() {
+        return Category;
+    }
+
+    public void setCategory(String category) {
+        Category = category;
+    }
+
     //endregion
     public int describeContents() {
         return 0;
@@ -572,6 +582,7 @@ public class ItemMaster implements Parcelable {
         parcel.writeDouble(Tax4);
         parcel.writeDouble(Tax5);
         parcel.writeDouble(TaxRate);
+        parcel.writeString(Category);
     }
 }
 
