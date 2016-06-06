@@ -21,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/sfName"
-            android:padding="@dimen/control_SpecingSmall"/>
+            android:padding="@dimen/control_SpecingSmall"
+            android:singleLine="true"/>
 
         <com.rey.material.widget.Button
             android:id="@+id/btnSave"
