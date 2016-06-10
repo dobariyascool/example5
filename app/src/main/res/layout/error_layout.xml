@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent_orange"
     android:gravity="center"
     android:orientation="vertical"
     tools:ignore="UseCompoundDrawables">
@@ -13,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/alert_drawable" />
 
     <com.rey.material.widget.TextView
         android:id="@+id/txtMsg"
@@ -21,6 +20,6 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/control_SpecingSmall"
         android:text="@string/MsgNoRecord"
-        android:textColor="@android:color/white" />
+        android:textColor="@color/grey" />
 
 </LinearLayout>

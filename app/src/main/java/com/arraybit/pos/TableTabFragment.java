@@ -158,7 +158,7 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
         if (Service.CheckNet(getActivity())) {
             new TableMasterLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvTables);
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvTables,R.drawable.wifi_drawable);
         }
 
     }
@@ -172,16 +172,16 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                 }
             }
             if (alTableMasterFilter.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables,0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvTables);
+                Globals.SetErrorLayout(errorLayout, false, null, rvTables,0);
                 SetupRecyclerView(rvTables, alTableMasterFilter);
             }
         } else {
             if (alTableMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables,0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvTables);
+                Globals.SetErrorLayout(errorLayout, false, null, rvTables,0);
                 SetupRecyclerView(rvTables, alTableMaster);
             }
 
@@ -345,11 +345,11 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
             progressDialog.dismiss();
             ArrayList<TableMaster> lstTableMaster = (ArrayList<TableMaster>) result;
             if (lstTableMaster == null) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvTables);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvTables,0);
             } else if (lstTableMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables,0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvTables);
+                Globals.SetErrorLayout(errorLayout, false, null, rvTables,0);
                 alTableMaster = lstTableMaster;
                 SetupRecyclerView(rvTables, alTableMaster);
             }

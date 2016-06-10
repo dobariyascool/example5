@@ -15,7 +15,10 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/separator"
+        android:paddingBottom="@dimen/control_SpecingSmall"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -50,15 +53,50 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <com.rey.material.widget.TextView
-                            android:id="@+id/txtItemName"
-                            style="@style/HighLightedTextView"
+                        <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxLines="1"
-                            android:paddingEnd="@dimen/control_SpecingTiny"
-                            android:paddingStart="@dimen/control_SpecingTiny" />
+                            android:layout_weight="1">
+
+                            <com.rey.material.widget.TextView
+                                android:id="@+id/txtItemName"
+                                style="@style/HighLightedTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:paddingEnd="@dimen/control_SpecingTiny"
+                                android:paddingStart="@dimen/control_SpecingTiny"
+                                android:text="@string/abBuildVersion" />
+
+                            <ImageView
+                                android:id="@+id/ivTest"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerVertical="true"
+                                android:layout_toEndOf="@+id/txtItemName"
+                                android:src="@mipmap/extra_spicy"
+                                tools:ignore="ContentDescription" />
+
+                            <ImageView
+                                android:id="@+id/ivJain"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerVertical="true"
+                                android:layout_toEndOf="@+id/ivTest"
+                                android:src="@mipmap/nonvegicon"
+                                tools:ignore="ContentDescription" />
+                        </RelativeLayout>
+
+                        <!--<com.rey.material.widget.TextView-->
+                        <!--android:id="@+id/txtItemName"-->
+                        <!--style="@style/HighLightedTextView"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:paddingEnd="@dimen/control_SpecingTiny"-->
+                        <!--android:paddingStart="@dimen/control_SpecingTiny" />-->
 
                         <com.rey.material.widget.TextView
                             android:id="@+id/txtItemPrice"
@@ -345,31 +383,35 @@
                         android:layout_weight="1"
                         android:text="9" />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/control_SpecingSmall"
-                    android:layout_marginStart="@dimen/control_SpecingSmall"
-                    android:orientation="horizontal">
-
-                    <com.rey.material.widget.Button
-                        android:id="@+id/btnCancel"
-                        style="@style/BorderButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/dfCancel" />
-
-                    <com.rey.material.widget.Button
-                        android:id="@+id/btnOrder"
-                        style="@style/Button"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/dfAdd" />
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/control_SpecingTiny"
+        android:layout_marginEnd="@dimen/control_SpecingSmall"
+        android:layout_marginStart="@dimen/control_SpecingSmall"
+        android:layout_marginTop="@dimen/control_SpecingTiny"
+        android:layout_weight="0.1"
+        android:orientation="horizontal">
+
+        <com.rey.material.widget.Button
+            android:id="@+id/btnCancel"
+            style="@style/BorderButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dfCancel"
+            tools:ignore="NestedWeights" />
+
+        <com.rey.material.widget.Button
+            android:id="@+id/btnOrder"
+            style="@style/Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dfAdd" />
+    </LinearLayout>
 </LinearLayout>

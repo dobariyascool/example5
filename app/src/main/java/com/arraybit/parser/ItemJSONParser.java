@@ -60,6 +60,7 @@ public class ItemJSONParser {
                 objItemMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
                 objItemMaster.setIsFavourite(jsonObject.getBoolean("IsFavourite"));
                 objItemMaster.setBarCode(jsonObject.getString("BarCode"));
+                objItemMaster.setOptionValueTranIds(jsonObject.getString("OptionValueTranIds"));
 
                 /// Extra
                 //objItemMaster.setItemType(jsonObject.getString("ItemType"));

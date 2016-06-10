@@ -28,6 +28,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -140,7 +141,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         if (Service.CheckNet(getActivity())) {
             new TableMasterLoadingTask().execute();
         } else {
-            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection));
+            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), R.drawable.wifi_drawable);
         }
 
         return view;
@@ -248,6 +249,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             final ArrayList<TableMaster> filteredList = Filter(alTableMaster, newText);
             tablesAdapter.SetSearchFilter(filteredList);
         }
+
         return false;
     }
 
@@ -313,8 +315,14 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
     }
 
     //region Private Methods
-    private void SetErrorLayout(boolean isShow, String errorMsg) {
+    private void SetErrorLayout(boolean isShow, String errorMsg, int errorIcon) {
         TextView txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        ImageView ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
+        if (errorIcon != 0) {
+            ivErrorIcon.setImageResource(errorIcon);
+        } else {
+            ivErrorIcon.setImageResource(R.drawable.alert_drawable);
+        }
         if (isShow) {
             errorLayout.setVisibility(View.VISIBLE);
             txtMsg.setText(errorMsg);
@@ -385,16 +393,16 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                 }
             }
             if (alTableMasterFilter.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables, 0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvTables);
+                Globals.SetErrorLayout(errorLayout, false, null, rvTables, 0);
                 SetupRecyclerView(rvTables, alTableMasterFilter);
             }
         } else {
             if (alTableMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTables, 0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvTables);
+                Globals.SetErrorLayout(errorLayout, false, null, rvTables, 0);
                 SetupRecyclerView(rvTables, alTableMaster);
             }
 
@@ -431,11 +439,11 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             progressDialog.dismiss();
             ArrayList<TableMaster> lstTableMaster = (ArrayList<TableMaster>) result;
             if (lstTableMaster == null) {
-                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail));
+                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail), 0);
             } else if (lstTableMaster.size() == 0) {
-                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord));
+                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord), 0);
             } else {
-                SetErrorLayout(false, null);
+                SetErrorLayout(false, null, 0);
                 alTableMaster = lstTableMaster;
                 SetupRecyclerView(rvTables, alTableMaster);
             }

@@ -120,6 +120,8 @@ public class ItemMaster implements Parcelable {
             return new ItemMaster[size];
         }
     };
+    String ItemRemark;
+    String OptionValue;
     boolean IsRateTaxInclusive;
     double TotalAmount;
     double ExtraAmount;
@@ -526,6 +528,22 @@ public class ItemMaster implements Parcelable {
 
     public void setCategory(String category) {
         Category = category;
+    }
+
+    public String getItemRemark() {
+        return ItemRemark;
+    }
+
+    public void setItemRemark(String itemRemark) {
+        ItemRemark = itemRemark;
+    }
+
+    public String getOptionValue() {
+        return OptionValue;
+    }
+
+    public void setOptionValue(String optionValue) {
+        OptionValue = optionValue;
     }
 
     //endregion

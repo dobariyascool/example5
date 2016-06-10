@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -111,7 +112,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         if (Service.CheckNet(getActivity())) {
             new GuestHomeCategoryLodingTask().execute();
         } else {
-            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), itemTabLayout, itemViewPager);
+            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), itemTabLayout, itemViewPager,R.drawable.wifi_drawable);
         }
 
         setHasOptionsMenu(true);
@@ -292,8 +293,14 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     }
 
     //region Private Methods and Interface
-    private void SetErrorLayout(boolean isShow, String errorMsg, TabLayout tabLayout, ViewPager viewPager) {
+    private void SetErrorLayout(boolean isShow, String errorMsg, TabLayout tabLayout, ViewPager viewPager,int errorIcon) {
         TextView txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        ImageView ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
+        if(errorIcon!=0){
+            ivErrorIcon.setImageResource(errorIcon);
+        }else{
+            ivErrorIcon.setImageResource(R.drawable.alert_drawable);
+        }
         if (isShow) {
             errorLayout.setVisibility(View.VISIBLE);
             txtMsg.setText(errorMsg);
@@ -480,12 +487,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             super.onPostExecute(o);
             progressDialog.dismiss();
             if (alCategoryMaster == null) {
-                SetErrorLayout(true, getResources().getString(R.string.MsgSelectFail), itemTabLayout, itemViewPager);
+                SetErrorLayout(true, getResources().getString(R.string.MsgSelectFail), itemTabLayout, itemViewPager,0);
             } else if (alCategoryMaster.size() == 0) {
-                SetErrorLayout(true, getResources().getString(R.string.MsgNoRecord), itemTabLayout, itemViewPager);
+                SetErrorLayout(true, getResources().getString(R.string.MsgNoRecord), itemTabLayout, itemViewPager,0);
             } else {
 
-                SetErrorLayout(false, null, itemTabLayout, itemViewPager);
+                SetErrorLayout(false, null, itemTabLayout, itemViewPager,0);
 
                 itemPagerAdapter = new ItemPagerAdapter(getFragmentManager());
 

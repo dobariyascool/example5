@@ -103,7 +103,23 @@
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         android:layout_marginTop="@dimen/control_SpecingSmall"
-        android:layout_weight="0.75" />
+        android:layout_weight="0.65"
+        android:background="@drawable/dash_line_separator"
+        android:paddingBottom="@dimen/control_SpecingSmall" />
+
+    <com.rey.material.widget.TextView
+        android:id="@+id/txtEditMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dash_line_separator"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingBottom="@dimen/control_SpecingSmall"
+        android:paddingTop="@dimen/control_SpecingTiny"
+        android:text="@string/cifEditMessage"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Display4"
+        android:textColor="#81e29801"
+        android:textSize="@dimen/control_TextNormal" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvRemark"
@@ -129,36 +145,7 @@
                 android:layout_marginTop="@dimen/control_SpecingSmall"
                 android:drawableEnd="@drawable/edit_accent_vector_drawable"
                 android:text="@string/aiqfRemark"
-                android:textColor="@android:color/white"/>
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginEnd="@dimen/control_SpecingSmall"-->
-            <!--android:layout_marginStart="@dimen/control_SpecingSmall"-->
-            <!--android:layout_marginTop="@dimen/control_SpecingSmall"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<com.rey.material.widget.TextView-->
-            <!--android:id="@+id/txtHeaderModifier"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:paddingEnd="@dimen/control_SpecingTiny"-->
-            <!--android:paddingStart="@dimen/control_SpecingTiny"-->
-            <!--android:text="@string/aiqfRemark"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="@dimen/control_TextMedium" />-->
-
-            <!--<ImageView-->
-            <!--android:id="@+id/ivRemark"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="@dimen/control_SpecingSmall"-->
-            <!--android:src="@drawable/edit_accent_vector_drawable"-->
-            <!--tools:ignore="ContentDescription" />-->
-
-            <!--</LinearLayout>-->
+                android:textColor="@android:color/white" />
 
             <com.rey.material.widget.TextView
                 android:id="@+id/txtRemark"
@@ -172,17 +159,6 @@
                 android:textSize="@dimen/control_TextSmall"
                 android:visibility="gone" />
         </LinearLayout>
-        <!--<com.rey.material.widget.EditText-->
-        <!--android:id="@+id/etRemark"-->
-        <!--style="@style/EditText"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:hint="@string/aiqfRemark"-->
-        <!--android:paddingEnd="@dimen/control_SpecingSmall"-->
-        <!--android:paddingStart="@dimen/control_SpecingSmall"-->
-        <!--android:singleLine="true"-->
-        <!--app:et_inputId="@+id/remarkInput"/>-->
 
     </android.support.v7.widget.CardView>
 

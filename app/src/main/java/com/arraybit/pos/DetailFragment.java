@@ -37,12 +37,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
 public class DetailFragment extends Fragment implements View.OnClickListener, ModifierSelectionFragmentDialog.ModifierResponseListener {
 
-    ImageView ivItemImage;
+    ImageView ivItemImage,ivTest,ivJain;
     TextView txtItemName, txtDescription, txtItemPrice, txtModifier;
     EditText etQuantity;
     int counterMasterId;
@@ -62,7 +63,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     LinearLayout modifierLayout;
     short cnt = 0;
     String itemName;
-
+    boolean isVeg, isNonVeg, isJain;
 
     public DetailFragment(ItemMaster objItemMaster) {
         this.objItemMaster = objItemMaster;
@@ -93,6 +94,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
         //ImageView
         ivItemImage = (ImageView) view.findViewById(R.id.ivItemImage);
+        ivTest = (ImageView) view.findViewById(R.id.ivTest);
+        ivJain = (ImageView) view.findViewById(R.id.ivJain);
         //end
 
         //TextView
@@ -380,6 +383,36 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             } else {
                 Picasso.with(getActivity()).load(R.drawable.default_image).into(ivItemImage);
             }
+            if (!objItemMaster.getOptionValueTranIds().equals("")) {
+                if (CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.DoubleSpicy.getValue()))) {
+                    ivTest.setVisibility(View.VISIBLE);
+                    ivTest.setImageResource(R.mipmap.extra_spicy);
+                } else if (CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.Spicy.getValue()))) {
+                    ivTest.setVisibility(View.VISIBLE);
+                    ivTest.setImageResource(R.mipmap.spicy);
+                } else if (CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.Sweet.getValue()))) {
+                    ivTest.setVisibility(View.VISIBLE);
+                    ivTest.setImageResource(R.mipmap.sweet);
+                } else {
+                    ivTest.setVisibility(View.GONE);
+                }
+
+                isVeg = CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.Veg.getValue()));
+                isNonVeg = CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.NonVeg.getValue()));
+                isJain = CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.Jain.getValue()));
+                if (isNonVeg && !isVeg) {
+                    ivJain.setVisibility(View.VISIBLE);
+                    ivJain.setImageResource(R.mipmap.nonvegicon);
+                } else if (isJain && !isNonVeg) {
+                    ivJain.setVisibility(View.VISIBLE);
+                    ivJain.setImageResource(R.mipmap.jain_icon);
+                } else {
+                    ivJain.setVisibility(View.GONE);
+                }
+            } else {
+                ivTest.setVisibility(View.GONE);
+                ivJain.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -445,6 +478,18 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                     (getActivity(), R.layout.row_remark, alString);
             actRemark.setAdapter(adapter);
         }
+    }
+
+    private boolean CheckOptionValue(String optionValueIds, String optionValue) {
+        List<String> items = Arrays.asList(optionValueIds.split(","));
+        boolean isMatch = false;
+        for (String str : items) {
+            if (str.equals(optionValue)) {
+                isMatch = true;
+                break;
+            }
+        }
+        return isMatch;
     }
 
     private void AddNumber(String number) {

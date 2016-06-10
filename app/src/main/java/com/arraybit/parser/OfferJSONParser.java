@@ -17,6 +17,7 @@ import java.util.Locale;
 public class OfferJSONParser {
 
     public String SelectAllOfferMaster = "SelectAllOfferMaster";
+    public String SelectOfferMaster = "SelectOfferMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     SimpleDateFormat sdfControlTimeFormat = new SimpleDateFormat(Globals.TimeFormat, Locale.US);
@@ -97,7 +98,9 @@ public class OfferJSONParser {
                 if (!jsonObject.getString("ValidGetItems").equals("null")) {
                     objOfferMaster.setValidGetItems(jsonObject.getString("ValidGetItems"));
                 }
-                objOfferMaster.setLinktoOrderTypeMasterIds(jsonObject.getString("linktoOrderTypeMasterIds"));
+                if (!jsonObject.getString("linktoOrderTypeMasterIds").equals("null")) {
+                    objOfferMaster.setLinktoOrderTypeMasterIds(jsonObject.getString("linktoOrderTypeMasterIds"));
+                }
                 objOfferMaster.setIsForApp(jsonObject.getBoolean("IsForApp"));
                 objOfferMaster.setIsOnline(jsonObject.getBoolean("IsOnline"));
             }
@@ -193,6 +196,22 @@ public class OfferJSONParser {
                 }
             }
             return lstOfferMaster;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public OfferMaster SelectOfferMaster(int offerMasterId) {
+        OfferMaster objOfferMaster = null;
+        try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectOfferMaster + "/" + offerMasterId);
+            if (jsonResponse != null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectOfferMaster + "Result");
+                if (jsonObject != null) {
+                    objOfferMaster = SetClassPropertiesFromJSONObject(jsonObject);
+                }
+            }
+            return objOfferMaster;
         } catch (Exception ex) {
             return null;
         }

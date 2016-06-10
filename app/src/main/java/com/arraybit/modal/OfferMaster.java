@@ -103,7 +103,7 @@ public class OfferMaster implements Parcelable {
     short Counter;
     short OrderType;
 
-    public boolean isForApp() {
+    public boolean getIsForApp() {
         return IsForApp;
     }
 
@@ -111,7 +111,7 @@ public class OfferMaster implements Parcelable {
         IsForApp = isForApp;
     }
 
-    public boolean isOnline() {
+    public boolean getIsOnline() {
         return IsOnline;
     }
 

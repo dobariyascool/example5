@@ -3,43 +3,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/control_SpecingTiny"
+    android:layout_marginBottom="2dp"
     android:background="@color/transparent_orange"
-    android:orientation="vertical"
-    android:padding="@dimen/control_SpecingTiny">
+    android:orientation="horizontal"
+    android:padding="@dimen/control_SpecingTiny"
+    tools:ignore="DisableBaselineAlignment">
 
     <LinearLayout
         android:id="@+id/childLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        tools:ignore="DisableBaselineAlignment">
+        android:layout_weight="0.86"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/control_SpecingTiny"
-            android:layout_weight="0.4"
-            android:gravity="start|center"
-            android:orientation="vertical">
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textColor="@android:color/white" />
+            android:layout_marginTop="@dimen/control_SpecingTiny"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            tools:ignore="DisableBaselineAlignment">
 
             <LinearLayout
-                android:id="@+id/modifierLayout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginStart="@dimen/control_SpecingTiny"
+                android:layout_weight="0.4"
+                android:gravity="start|center"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white" />
 
-        <com.rey.material.widget.TextView
+                <LinearLayout
+                    android:id="@+id/modifierLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+            <com.rey.material.widget.TextView
                 android:id="@+id/txtQty"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -48,92 +56,80 @@
                 android:maxLines="1"
                 android:textColor="@android:color/white" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.22"
-            android:gravity="end|center"
-            android:orientation="vertical">
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtRate"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="end"
-                android:maxLines="1"
-                android:textColor="@android:color/white" />
+                android:layout_weight="0.22"
+                android:gravity="end|center"
+                android:orientation="vertical">
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white" />
+
+                <LinearLayout
+                    android:id="@+id/modifierRateLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/modifierRateLayout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_weight="0.3"
+                android:gravity="end|center"
+                android:orientation="vertical">
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white" />
+
+                <LinearLayout
+                    android:id="@+id/modifierAmountLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:gravity="end|center"
-            android:orientation="vertical">
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtAmount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:maxLines="1"
-                android:textColor="@android:color/white" />
-
-            <LinearLayout
-                android:id="@+id/modifierAmountLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/control_SpecingSmall"
-            android:layout_weight="0.14"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/ivClose"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:paddingEnd="@dimen/control_SpecingTiny"
-                android:paddingStart="@dimen/control_SpecingTiny"
-                android:src="@drawable/remove_accent_vector_drawable"
-                tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/remarkLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/control_SpecingTiny"
-        android:orientation="horizontal">
 
         <com.rey.material.widget.TextView
             android:id="@+id/txtRemark"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginStart="@dimen/control_SpecingTiny"
             android:gravity="start|center"
             android:maxLines="2"
             android:textColor="#FF7043"
-            android:textSize="12sp" />
+            android:textSize="@dimen/control_TextSmall"
+            android:visibility="gone" />
+    </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.14"
-            android:gravity="center"
-            android:visibility="invisible" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.14"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivClose"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:paddingBottom="@dimen/control_SpecingTiny"
+            android:paddingEnd="0dp"
+            android:paddingStart="@dimen/control_SpecingSmall"
+            android:paddingTop="@dimen/control_SpecingTiny"
+            android:src="@drawable/remove_accent_vector_drawable"
+            tools:ignore="ContentDescription" />
+
     </LinearLayout>
 </LinearLayout>

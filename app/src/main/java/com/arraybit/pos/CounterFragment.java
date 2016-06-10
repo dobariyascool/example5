@@ -86,7 +86,7 @@ public class CounterFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new CounterLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvCounter);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvCounter,R.drawable.wifi_drawable);
         }
 
         return view;
@@ -151,11 +151,11 @@ public class CounterFragment extends Fragment {
             progressDialog.dismiss();
 
             if (alCounterMaster == null) {
-                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgSelectFail), rvCounter);
+                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgSelectFail), rvCounter,0);
             } else if (alCounterMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgNoRecord), rvCounter);
+                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgNoRecord), rvCounter,0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false,null, rvCounter);
+                Globals.SetErrorLayout(errorLayout, false,null, rvCounter,0);
                 adapter = new CounterAdapter(getActivity(), alCounterMaster, userType);
                 rvCounter.setAdapter(adapter);
                 rvCounter.setLayoutManager(linearLayoutManager);

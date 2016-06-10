@@ -108,7 +108,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         if (Service.CheckNet(getActivity())) {
             new GuestHomeItemLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvItem);
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvItem,R.drawable.wifi_drawable);
         }
 
         return view;
@@ -151,17 +151,17 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 }
             }
             if (alItemMasterFilter.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem,0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvItem);
+                Globals.SetErrorLayout(errorLayout, false, null, rvItem,0);
                 SetupRecyclerView(false, alItemMasterFilter);
             }
 
         } else {
             if (alItemMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem,0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvItem);
+                Globals.SetErrorLayout(errorLayout, false, null, rvItem,0);
                 SetupRecyclerView(false, alItemMaster);
             }
 
@@ -434,11 +434,11 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
             ArrayList<ItemMaster> lstItemMaster = (ArrayList<ItemMaster>) result;
             if (lstItemMaster == null) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvItem);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvItem,0);
             } else if (lstItemMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem,0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvItem);
+                Globals.SetErrorLayout(errorLayout, false, null, rvItem,0);
                 alItemMaster = lstItemMaster;
                 if (CategoryItemFragment.sbItemTypeMasterId.toString().equals("")) {
                     SetupRecyclerView(false, alItemMaster);

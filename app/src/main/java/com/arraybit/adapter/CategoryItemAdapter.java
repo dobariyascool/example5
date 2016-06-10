@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.rey.material.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapter.ItemViewHolder> {
 
@@ -35,6 +38,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     ItemMaster objItemMaster;
     ItemClickListener objItemClickListener;
     int previousPosition;
+    boolean isVeg, isNonVeg, isJain;
 
     public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange, ItemClickListener objItemClickListener, Boolean isItemAnimate) {
         this.context = context;
@@ -89,7 +93,77 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
         }
 
-        holder.txtItemName.setText(objItemMaster.getItemName());
+        if (!objItemMaster.getOptionValueTranIds().equals("")) {
+            if (CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.DoubleSpicy.getValue()))) {
+                holder.ivDoubleSpicy.setVisibility(View.VISIBLE);
+                holder.ivSpicy.setVisibility(View.GONE);
+                holder.ivSweet.setVisibility(View.GONE);
+            } else if (CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.Spicy.getValue()))) {
+                holder.ivSpicy.setVisibility(View.VISIBLE);
+                holder.ivDoubleSpicy.setVisibility(View.GONE);
+                holder.ivSweet.setVisibility(View.GONE);
+            } else if (CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.Sweet.getValue()))) {
+                holder.ivSweet.setVisibility(View.VISIBLE);
+                holder.ivDoubleSpicy.setVisibility(View.GONE);
+                holder.ivSpicy.setVisibility(View.GONE);
+            } else {
+                holder.ivSweet.setVisibility(View.GONE);
+                holder.ivDoubleSpicy.setVisibility(View.GONE);
+                holder.ivSpicy.setVisibility(View.GONE);
+            }
+
+            isVeg = CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.Veg.getValue()));
+            isNonVeg = CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.NonVeg.getValue()));
+            isJain = CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.Jain.getValue()));
+            if (isNonVeg && !isVeg) {
+                holder.ivNonVeg.setVisibility(View.VISIBLE);
+                holder.ivJain.setVisibility(View.GONE);
+            } else if (isJain && !isNonVeg) {
+                holder.ivJain.setVisibility(View.VISIBLE);
+                holder.ivNonVeg.setVisibility(View.GONE);
+            } else {
+                holder.ivJain.setVisibility(View.GONE);
+                holder.ivNonVeg.setVisibility(View.GONE);
+            }
+        } else {
+            holder.ivJain.setVisibility(View.GONE);
+            holder.ivNonVeg.setVisibility(View.GONE);
+            holder.ivSweet.setVisibility(View.GONE);
+            holder.ivDoubleSpicy.setVisibility(View.GONE);
+            holder.ivSpicy.setVisibility(View.GONE);
+        }
+
+        if (!isWaiterGrid && !isViewChange) {
+            if ((holder.ivJain.getVisibility() == View.VISIBLE) || (holder.ivSpicy.getVisibility() == View.VISIBLE) || (holder.ivSweet.getVisibility() == View.VISIBLE) || (holder.ivDoubleSpicy.getVisibility() == View.VISIBLE)) {
+                holder.txtItemName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(17)});
+                if (objItemMaster.getItemName().length() > 15) {
+                    holder.txtItemName.setText(objItemMaster.getItemName().substring(0, 15) + "...");
+                } else {
+                    holder.txtItemName.setText(objItemMaster.getItemName());
+                }
+
+            } else {
+                holder.txtItemName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(objItemMaster.getItemName().length())});
+                holder.txtItemName.setText(objItemMaster.getItemName());
+            }
+        } else if (isViewChange) {
+            if(!isWaiterGrid) {
+                if ((holder.ivJain.getVisibility() == View.VISIBLE) || (holder.ivSpicy.getVisibility() == View.VISIBLE) || (holder.ivSweet.getVisibility() == View.VISIBLE) || (holder.ivDoubleSpicy.getVisibility() == View.VISIBLE)) {
+                    holder.txtItemName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
+                    if (objItemMaster.getItemName().length() > 9) {
+                        holder.txtItemName.setText(objItemMaster.getItemName().substring(0, 9) + "...");
+                    } else {
+                        holder.txtItemName.setText(objItemMaster.getItemName());
+                    }
+                } else {
+                    holder.txtItemName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(objItemMaster.getItemName().length())});
+                    holder.txtItemName.setText(objItemMaster.getItemName());
+                }
+            }else{
+                holder.txtItemName.setText(objItemMaster.getItemName());
+            }
+        }
+        //holder.txtItemName.setText(objItemMaster.getItemName());
         holder.txtItemPrice.setText(context.getResources().getString(R.string.dfRupee) + " " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
 
         //holder animation
@@ -114,6 +188,18 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         notifyDataSetChanged();
     }
 
+    private boolean CheckOptionValue(String optionValueIds, String optionValue) {
+        List<String> items = Arrays.asList(optionValueIds.split(","));
+        boolean isMatch = false;
+        for (String str : items) {
+            if (str.equals(optionValue)) {
+                isMatch = true;
+                break;
+            }
+        }
+        return isMatch;
+    }
+
     public interface ItemClickListener {
         void ButtonOnClick(ItemMaster objItemMaster);
 
@@ -123,9 +209,9 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtItemName, txtItemDescription, txtItemPrice;
-        ImageView ivItem;
         CardView cvItem;
         Button btnAdd;
+        ImageView ivItem, ivJain, ivSpicy, ivDoubleSpicy, ivSweet, ivNonVeg;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -133,6 +219,11 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             cvItem = (CardView) itemView.findViewById(R.id.cvItem);
 
             ivItem = (ImageView) itemView.findViewById(R.id.ivItem);
+            ivJain = (ImageView) itemView.findViewById(R.id.ivJain);
+            ivSpicy = (ImageView) itemView.findViewById(R.id.ivSpicy);
+            ivDoubleSpicy = (ImageView) itemView.findViewById(R.id.ivDoubleSpicy);
+            ivSweet = (ImageView) itemView.findViewById(R.id.ivSweet);
+            ivNonVeg = (ImageView) itemView.findViewById(R.id.ivNonVeg);
 
             txtItemName = (TextView) itemView.findViewById(R.id.txtItemName);
             txtItemDescription = (TextView) itemView.findViewById(R.id.txtItemDescription);

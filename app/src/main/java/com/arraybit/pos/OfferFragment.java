@@ -79,7 +79,7 @@ public class OfferFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new OfferLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvOffer);
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvOffer,R.drawable.wifi_drawable);
         }
 
         return view;
@@ -176,11 +176,11 @@ public class OfferFragment extends Fragment {
             progressDialog.dismiss();
             ArrayList<OfferMaster> lstOfferMaster = (ArrayList<OfferMaster>) result;
             if (lstOfferMaster == null) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOffer);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOffer,0);
             } else if (lstOfferMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgOffer), rvOffer);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgOffer), rvOffer,0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvOffer);
+                Globals.SetErrorLayout(errorLayout, false, null, rvOffer,0);
                 alOfferMaster = lstOfferMaster;
                 SetupRecyclerView();
             }

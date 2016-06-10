@@ -265,12 +265,6 @@
         <item name="android:foreground">@drawable/offer_ripple_effect</item>
     </style>
 
-    <style name="DefaultCardView" parent="AppCompactCardView">
-        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
-        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
-        <item name="cardElevation">@dimen/card_Elevation</item>
-        <!--<item name="android:layout_marginBottom">@dimen/card_Margin</item>-->
-    </style>
 
     <style name="CardViewOption" parent="AppCompactCardView">
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
@@ -482,6 +476,15 @@
         <item name="cardElevation">@dimen/card_Elevation</item>
         <item name="android:layout_marginBottom">1dp</item>
         <item name="cardBackgroundColor">@color/offwhite</item>
+    </style>
+
+    <style name="DefaultCardView" parent="AppCompactCardView">
+        <item name="android:layout_height">@dimen/card_MinimumHeight</item>
+        <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
+        <item name="cardElevation">@dimen/card_Elevation</item>
+        <item name="android:layout_marginBottom">@dimen/control_SpecingSmall</item>
+        <item name="android:layout_marginStart">@dimen/control_SpecingSmall</item>
+        <item name="android:layout_marginEnd">@dimen/control_SpecingSmall</item>
     </style>
 
 </resources>

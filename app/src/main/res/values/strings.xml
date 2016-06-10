@@ -316,6 +316,7 @@
     <string name="cifConfirmOrder">Confirm Order</string>
     <string name="cifConfirmClear">Are you sure to clear Order?</string>
     <string name="cifMsg">Go to Menu</string>
+    <string name="cifEditMessage">Tap item to edit quantity</string>
     <!-- end -->
 
     <!-- fragment all orders -->
@@ -379,6 +380,11 @@
         <item>Logout</item>
     </string-array>
     <!-- end -->
+
+    <!--row offers-->
+    <string name="rExpiresOn">Expires On</string>
+    <!--End-->
+
 
     <!-- notification settings -->
     <string name="NotificationSettingDescription"><![CDATA[Manage your push notifications from this section]]></string>

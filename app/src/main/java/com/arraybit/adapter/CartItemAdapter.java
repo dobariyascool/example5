@@ -28,6 +28,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
     View view;
     CartItemOnClickListener objCartItemOnClickListener;
     int previousPosition;
+    StringBuilder sbRemark;
 
     // Constructor
     public CartItemAdapter(Context context, ArrayList<ItemMaster> result, CartItemOnClickListener objCartItemOnClickListener,boolean isItemAnimate) {
@@ -61,10 +62,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             holder.txtQty.setLayoutParams(txtQtyLayoutParams);
             SetModifierLayout(objItemMaster.getAlOrderItemModifierTran(), holder);
         }
-        if (objItemMaster.getRemark().equals("")) {
-            holder.remarkLayout.setVisibility(View.GONE);
+        if (objItemMaster.getRemark() == null || objItemMaster.getRemark().equals("")) {
+            holder.txtRemark.setVisibility(View.GONE);
         } else {
-            holder.remarkLayout.setVisibility(View.VISIBLE);
+            holder.txtRemark.setVisibility(View.VISIBLE);
             if (objItemMaster.getRemark().substring(objItemMaster.getRemark().length() - 1, objItemMaster.getRemark().length()).equals(",")) {
                 holder.txtRemark.setText(objItemMaster.getRemark().substring(0, objItemMaster.getRemark().length() - 1));
             } else if (objItemMaster.getRemark().substring(objItemMaster.getRemark().length() - 1, objItemMaster.getRemark().length()).equals(" ")) {
@@ -96,6 +97,35 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             Globals.counter = Globals.counter - 1;
         }
 
+    }
+
+    public void UpdateData(int position, ItemMaster objItemMaster){
+        isModifierChanged = false;
+        isItemAnimate = false;
+        SplitRemark(objItemMaster,position);
+        alItemMaster.get(position).setRemark(sbRemark.toString());
+        notifyItemChanged(position);
+    }
+
+    private void SplitRemark(ItemMaster objItemMaster,int index){
+        sbRemark = new StringBuilder();
+        if(alItemMaster.get(index).getRemark()==null || alItemMaster.get(index).getRemark().equals("")){
+            if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")) {
+                sbRemark.append(objItemMaster.getItemRemark());
+            }
+        }else {
+            if(objItemMaster.getOptionValue()!=null && !objItemMaster.getOptionValue().equals("")){
+                if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")) {
+                    sbRemark.append(objItemMaster.getItemRemark()).append(", ").append(objItemMaster.getOptionValue());
+                }else{
+                    sbRemark.append(objItemMaster.getOptionValue());
+                }
+            }else{
+                if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")) {
+                    sbRemark.append(objItemMaster.getItemRemark());
+                }
+            }
+        }
     }
 
     private void SetModifierLayout(ArrayList<ItemMaster> alOrderItemModifierTran, CartItemViewHolder holder) {
@@ -150,6 +180,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
     public interface CartItemOnClickListener {
         void ImageViewOnClick(int position);
+        void EditCartItem(ItemMaster objItemMaster,int position);
     }
 
     //region ViewHolder
@@ -166,7 +197,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             modifierLayout = (LinearLayout) itemView.findViewById(R.id.modifierLayout);
             modifierRateLayout = (LinearLayout) itemView.findViewById(R.id.modifierRateLayout);
             modifierAmountLayout = (LinearLayout) itemView.findViewById(R.id.modifierAmountLayout);
-            remarkLayout = (LinearLayout) itemView.findViewById(R.id.remarkLayout);
+            //remarkLayout = (LinearLayout) itemView.findViewById(R.id.remarkLayout);
 
             txtItem = (TextView) itemView.findViewById(R.id.txtItem);
             txtAmount = (TextView) itemView.findViewById(R.id.txtAmount);
@@ -178,7 +209,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             childLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    objCartItemOnClickListener.EditCartItem(alItemMaster.get(getAdapterPosition()),getAdapterPosition());
                 }
             });
 

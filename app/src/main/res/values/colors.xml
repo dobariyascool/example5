@@ -92,6 +92,12 @@
         <item name="second">#FF9800</item>
         <item name="third">#FF6F00</item>
     </array>
+    <color name="offWhiteDark">#f1efef</color>
+    <color name="heading">#FF633611</color>
+    <color name="transparentBrown">#cf3e2723</color>
+    <color name="dimWhite">#c1c0c0</color>
+    <color name="errorTextColor">#66999999</color>
+    <color name="errorIconColor">#43ffab00</color>
 
     //#757575
     <!-- END Other Color -->

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.OfferMaster;
@@ -21,7 +22,11 @@ import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHolder> {
 
@@ -32,6 +37,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
     ArrayList<OfferMaster> alOfferMaster;
     FragmentManager fragmentManager;
     int previousPosition;
+    SimpleDateFormat sdfDate = new SimpleDateFormat(Globals.DateFormat, Locale.US);
+    SimpleDateFormat sdfDateFormat = new SimpleDateFormat("d MMM", Locale.US);
 
 
     public OfferAdapter(Context context, ArrayList<OfferMaster> result, FragmentManager fragmentManager, Boolean isItemAnimate) {
@@ -51,7 +58,6 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
     @Override
     public void onBindViewHolder(final OfferViewHolder holder, int position) {
         OfferMaster objOfferMaster = alOfferMaster.get(position);
-        //holder.cvOffer.setId(position);
         holder.txtOfferTitle.setText(objOfferMaster.getOfferTitle());
         if (objOfferMaster.getOfferContent().equals("null") || objOfferMaster.getOfferContent().equals("")) {
             holder.txtOfferContent.setVisibility(View.GONE);
@@ -59,9 +65,22 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
             holder.txtOfferContent.setVisibility(View.VISIBLE);
             holder.txtOfferContent.setText(objOfferMaster.getOfferContent());
         }
-        if (objOfferMaster.getMD_ImagePhysicalName()!=null && !objOfferMaster.getMD_ImagePhysicalName().equals("")) {
+        if (objOfferMaster.getToDate() == null || objOfferMaster.getToDate().equals("")) {
+            holder.dateLayout.setVisibility(View.GONE);
+        } else {
+            holder.dateLayout.setVisibility(View.VISIBLE);
+            try {
+                Date date = sdfDate.parse(objOfferMaster.getToDate());
+                String str = sdfDateFormat.format(date);
+                holder.txtOfferExpiredDate.setText(str);
+            } catch (ParseException e) {
+                holder.dateLayout.setVisibility(View.GONE);
+            }
+        }
+        if (!objOfferMaster.getMD_ImagePhysicalName().equals("")) {
             Picasso.with(holder.ivOffer.getContext()).load(objOfferMaster.getMD_ImagePhysicalName()).into(holder.ivOffer);
         }
+
 
         //holder animation
         if (isItemAnimate) {
@@ -80,12 +99,17 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
 
     class OfferViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtOfferTitle, txtOfferContent;
+        TextView txtOfferTitle, txtOfferContent, txtOfferExpiredDate;
         ImageView ivOffer;
         CardView cvOffer;
+        LinearLayout titleLayout, dateLayout;
+
 
         public OfferViewHolder(View itemView) {
             super(itemView);
+
+            titleLayout = (LinearLayout) itemView.findViewById(R.id.titleLayout);
+            dateLayout = (LinearLayout) itemView.findViewById(R.id.dateLayout);
 
             cvOffer = (CardView) itemView.findViewById(R.id.cvOffer);
 
@@ -93,6 +117,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
 
             txtOfferTitle = (TextView) itemView.findViewById(R.id.txtOfferTitle);
             txtOfferContent = (TextView) itemView.findViewById(R.id.txtOfferContent);
+            txtOfferExpiredDate = (TextView) itemView.findViewById(R.id.txtOfferExpiredDate);
 
             cvOffer.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("RtlHardcoded")

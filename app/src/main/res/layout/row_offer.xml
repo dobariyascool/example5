@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -25,13 +25,16 @@
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
+                android:id="@+id/titleLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="#30000000"
+                android:background="@color/transparentBrown"
                 android:gravity="center|bottom"
                 android:orientation="vertical"
-                android:padding="@dimen/control_SpecingSmall">
+                android:padding="@dimen/control_SpecingSmall"
+                android:visibility="visible"
+                android:weightSum="1">
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtOfferTitle"
@@ -48,12 +51,47 @@
                     style="@style/Base.TextAppearance.AppCompat.Body2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="2"
-                    android:text="Description"
-                    android:textColor="#BDBDBD"
+                    android:textColor="@color/dimWhite"
                     android:textSize="@dimen/control_TextSmall"
                     tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dateLayout"
+                android:layout_width="180dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/triangle"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtOfferExpired"
+                    style="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_marginTop="@dimen/control_SpecingSmall"
+                    android:maxLines="1"
+                    android:text="@string/rExpiresOn"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/control_TextMedium" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtOfferExpiredDate"
+                    style="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:paddingBottom="@dimen/control_SpecingSmall"
+                    android:paddingEnd="@dimen/control_SpecingSmall"
+                    android:paddingStart="@dimen/control_SpecingSmall"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/control_TextNormal" />
 
             </LinearLayout>
         </RelativeLayout>

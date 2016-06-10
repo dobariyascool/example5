@@ -105,26 +105,30 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     }
 
     public void OrderDataFilter(String orderTypeMasterId) {
-        ArrayList<OrderMaster> alOrderMasterFilter = new ArrayList<>();
-        if (orderTypeMasterId != null) {
-            for (int i = 0; i < alOrderMaster.size(); i++) {
-                if (alOrderMaster.get(i).getlinktoOrderTypeMasterId() == Short.valueOf(orderTypeMasterId)) {
-                    alOrderMasterFilter.add(alOrderMaster.get(i));
+        if (Service.CheckNet(getActivity())) {
+            ArrayList<OrderMaster> alOrderMasterFilter = new ArrayList<>();
+            if (orderTypeMasterId != null) {
+                for (int i = 0; i < alOrderMaster.size(); i++) {
+                    if (alOrderMaster.get(i).getlinktoOrderTypeMasterId() == Short.valueOf(orderTypeMasterId)) {
+                        alOrderMasterFilter.add(alOrderMaster.get(i));
+                    }
+                }
+                if (alOrderMasterFilter.size() == 0) {
+                    Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvOrder, 0);
+                } else {
+                    Globals.SetErrorLayout(errorLayout, false, null, rvOrder, 0);
+                    SetupRecyclerView(rvOrder, alOrderMasterFilter, alOrderItemTran);
+                }
+            } else {
+                if (alOrderMaster.size() == 0) {
+                    Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvOrder, 0);
+                } else {
+                    Globals.SetErrorLayout(errorLayout, false, null, rvOrder, 0);
+                    SetupRecyclerView(rvOrder, alOrderMaster, alOrderItemTran);
                 }
             }
-            if (alOrderMasterFilter.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvOrder);
-            } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvOrder);
-                SetupRecyclerView(rvOrder, alOrderMasterFilter, alOrderItemTran);
-            }
-        } else {
-            if (alOrderMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvOrder);
-            } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvOrder);
-                SetupRecyclerView(rvOrder, alOrderMaster, alOrderItemTran);
-            }
+        }else {
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvOrder,R.drawable.wifi_drawable);
         }
     }
 
@@ -143,9 +147,11 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         // Do something when collapsed
-                        if (alOrderMaster.size() != 0 && alOrderMaster != null) {
-                            ordersAdapter.SetSearchFilter(alOrderMaster);
-                            Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                        if(errorLayout.getVisibility()==View.GONE) {
+                            if (alOrderMaster.size() != 0 && alOrderMaster != null) {
+                                ordersAdapter.SetSearchFilter(alOrderMaster);
+                                Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                            }
                         }
                         return true; // Return true to collapse action view
                     }
@@ -164,7 +170,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         if (Service.CheckNet(getActivity())) {
             new OrderMasterLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvOrder);
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvOrder,R.drawable.wifi_drawable);
         }
 
     }
@@ -176,9 +182,11 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if (alOrderMaster.size() != 0 && alOrderMaster != null) {
-            final ArrayList<OrderMaster> filteredList = Filter(alOrderMaster, newText);
-            ordersAdapter.SetSearchFilter(filteredList);
+        if(errorLayout.getVisibility()==View.GONE) {
+            if (alOrderMaster.size() != 0 && alOrderMaster != null) {
+                final ArrayList<OrderMaster> filteredList = Filter(alOrderMaster, newText);
+                ordersAdapter.SetSearchFilter(filteredList);
+            }
         }
         return false;
     }
@@ -272,9 +280,9 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
             progressDialog.dismiss();
             ArrayList<OrderMaster> lstOrderMaster = (ArrayList<OrderMaster>) result;
             if (lstOrderMaster == null) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOrder);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOrder,0);
             } else if (lstOrderMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvOrder);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvOrder,0);
             } else {
                 alOrderMaster = lstOrderMaster;
                 sbOrderMasterIds = new StringBuilder();
@@ -308,7 +316,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         protected void onPostExecute(Object result) {
             alOrderItemTran = (ArrayList<OrderItemTran>) result;
             if (alOrderItemTran != null && alOrderItemTran.size() != 0) {
-                Globals.SetErrorLayout(errorLayout, false, null, rvOrder);
+                Globals.SetErrorLayout(errorLayout, false, null, rvOrder,0);
                 SetupRecyclerView(rvOrder, alOrderMaster, alOrderItemTran);
             }
         }

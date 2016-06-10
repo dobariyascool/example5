@@ -77,7 +77,7 @@ public class TableOrderFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new OrdersLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder,R.drawable.wifi_drawable);
         }
 
 
@@ -140,14 +140,14 @@ public class TableOrderFragment extends Fragment {
             alOrderMaster = (ArrayList<OrderMaster>) result;
 
             if (alOrderMaster == null) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvTableOrder);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvTableOrder,0);
             } else if (alOrderMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTableOrder);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTableOrder,0);
             } else {
                 if (Service.CheckNet(getActivity())) {
                     new TaxLoadingTask().execute();
                 } else {
-                    Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder);
+                    Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder,0);
                 }
             }
         }
@@ -177,7 +177,7 @@ public class TableOrderFragment extends Fragment {
             } else {
                 orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, null, getActivity().getSupportFragmentManager(), false);
             }
-            Globals.SetErrorLayout(errorLayout, false, null, rvTableOrder);
+            Globals.SetErrorLayout(errorLayout, false, null, rvTableOrder,0);
             rvTableOrder.setAdapter(orderDetailAdapter);
             rvTableOrder.setLayoutManager(new GridLayoutManager(getActivity(), 2));
             rvTableOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -23,6 +23,7 @@ import com.arraybit.adapter.CartItemAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.modal.TaxMaster;
@@ -37,9 +38,9 @@ import java.util.ArrayList;
 
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
-public class CartItemFragment extends Fragment implements CartItemAdapter.CartItemOnClickListener, View.OnClickListener, RemarkDialogFragment.RemarkResponseListener {
+public class CartItemFragment extends Fragment implements CartItemAdapter.CartItemOnClickListener, View.OnClickListener, RemarkDialogFragment.RemarkResponseListener, AddItemQtyDialogFragment.QtyRemarkDialogResponseListener {
 
-    TextView txtMsg;
+    TextView txtMsg,txtEditMessage;
     CompoundButton cbMenu;
     LinearLayout headerLayout, cartItemFragment;
     RecyclerView rvCartItem;
@@ -54,6 +55,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     View view;
     TextView txtRemark;
     ArrayList<TaxMaster> alTaxMaster;
+    int position;
 
     public CartItemFragment() {
         // Required empty public constructor
@@ -91,6 +93,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         setHasOptionsMenu(true);
 
         txtMsg = (TextView) view.findViewById(R.id.txtMsg);
+        txtEditMessage = (TextView) view.findViewById(R.id.txtEditMessage);
 
         cbMenu = (CompoundButton) view.findViewById(R.id.cbMenu);
 
@@ -153,6 +156,17 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     }
 
     @Override
+    public void EditCartItem(ItemMaster objItemMaster,int position) {
+        this.position = position;
+        AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("IsEdit",true);
+        addItemQtyDialogFragment.setArguments(bundle);
+        addItemQtyDialogFragment.setTargetFragment(this,0);
+        addItemQtyDialogFragment.show(getActivity().getSupportFragmentManager(), "");
+    }
+
+    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnAddMore) {
             if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
@@ -210,6 +224,11 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         }
     }
 
+    @Override
+    public void UpdateQtyRemarkResponse(ItemMaster objOrderItem) {
+        adapter.UpdateData(position,objOrderItem);
+    }
+
     //region Private Methods and Interface
     private void SetRecyclerView() {
         if (Globals.alOrderItemTran.size() == 0) {
@@ -243,6 +262,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             headerLayout.setVisibility(View.GONE);
             btnAddMore.setVisibility(View.GONE);
             btnConfirmOrder.setVisibility(View.GONE);
+            txtEditMessage.setVisibility(View.GONE);
         } else {
             txtMsg.setVisibility(View.GONE);
             cbMenu.setVisibility(View.GONE);
@@ -251,6 +271,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             rvCartItem.setVisibility(View.VISIBLE);
             btnAddMore.setVisibility(View.VISIBLE);
             btnConfirmOrder.setVisibility(View.VISIBLE);
+            txtEditMessage.setVisibility(View.VISIBLE);
         }
     }
 
