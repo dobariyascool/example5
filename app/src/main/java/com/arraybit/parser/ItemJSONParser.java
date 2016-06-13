@@ -79,6 +79,7 @@ public class ItemJSONParser {
                 objItemMaster.setTax4(jsonObject.getDouble("Tax4"));
                 objItemMaster.setTax5(jsonObject.getDouble("Tax5"));
                 objItemMaster.setCategory(jsonObject.getString("Category"));
+                objItemMaster.setIsDineInOnly(jsonObject.getBoolean("IsDineInOnly"));
             }
             return objItemMaster;
         } catch (JSONException e) {
@@ -143,6 +144,7 @@ public class ItemJSONParser {
                 objItemMaster.setTax4(jsonArray.getJSONObject(i).getDouble("Tax4"));
                 objItemMaster.setTax5(jsonArray.getJSONObject(i).getDouble("Tax5"));
                 objItemMaster.setCategory(jsonArray.getJSONObject(i).getString("Category"));
+                objItemMaster.setIsDineInOnly(jsonArray.getJSONObject(i).getBoolean("IsDineInOnly"));
                 lstItemMaster.add(objItemMaster);
             }
             return lstItemMaster;
@@ -153,14 +155,14 @@ public class ItemJSONParser {
         }
     }
 
-    public ArrayList<ItemMaster> SelectAllItemMaster(int linktoCounterMasterId, int linktoOrderTypeMasterId, int linktoCategoryMasterId, String linktoItemTypeMasterId, int linktoBusinessMasterId) {
+    public ArrayList<ItemMaster> SelectAllItemMaster(int linktoCounterMasterId, int linktoOrderTypeMasterId, int linktoCategoryMasterId, String linktoItemTypeMasterId, int linktoBusinessMasterId, int isFavorite) {
         ArrayList<ItemMaster> lstItemMaster = null;
         JSONObject jsonResponse;
         try {
             if (linktoCategoryMasterId == 0) {
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId + "/" + linktoCounterMasterId + "/" + linktoOrderTypeMasterId + "/" + null + "/" + linktoItemTypeMasterId + "/" + linktoBusinessMasterId);
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId + "/" + linktoCounterMasterId + "/" + linktoOrderTypeMasterId + "/" + null + "/" + linktoItemTypeMasterId + "/" + linktoBusinessMasterId + "/" + isFavorite);
             } else {
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId + "/" + linktoCounterMasterId + "/" + linktoOrderTypeMasterId + "/" + linktoCategoryMasterId + "/" + linktoItemTypeMasterId + "/" + linktoBusinessMasterId);
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterByCategoryMasterId + "/" + linktoCounterMasterId + "/" + linktoOrderTypeMasterId + "/" + linktoCategoryMasterId + "/" + linktoItemTypeMasterId + "/" + linktoBusinessMasterId + "/" + isFavorite);
             }
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemMasterByCategoryMasterId + "Result");

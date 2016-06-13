@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ToggleButton;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
@@ -90,8 +91,41 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 holder.txtItemDescription.setVisibility(View.VISIBLE);
                 holder.txtItemDescription.setText(objItemMaster.getShortDescription());
             }
-
         }
+
+        if (Globals.orderTypeMasterId == Globals.OrderType.TakeAway.getValue() && objItemMaster.getIsDineInOnly()) {
+            holder.txtItemDineOnly.setVisibility(View.VISIBLE);
+            if (isWaiterGrid) {
+                holder.btnAddDisable.setVisibility(View.GONE);
+                holder.btnAdd.setVisibility(View.GONE);
+                holder.ibLike.setVisibility(View.INVISIBLE);
+
+            }else {
+                holder.btnAddDisable.setVisibility(View.VISIBLE);
+                holder.btnAdd.setVisibility(View.GONE);
+                if(Globals.isWishListShow==1) {
+                    holder.ibLike.setVisibility(View.VISIBLE);
+                }else{
+                    holder.ibLike.setVisibility(View.INVISIBLE);
+                }
+            }
+        } else {
+            holder.txtItemDineOnly.setVisibility(View.INVISIBLE);
+            if (isWaiterGrid) {
+                holder.btnAdd.setVisibility(View.GONE);
+                holder.btnAddDisable.setVisibility(View.GONE);
+            } else {
+                holder.btnAdd.setVisibility(View.VISIBLE);
+                holder.btnAddDisable.setVisibility(View.GONE);
+            }
+            if(Globals.isWishListShow==1) {
+                holder.ibLike.setVisibility(View.VISIBLE);
+            }else{
+                holder.ibLike.setVisibility(View.INVISIBLE);
+            }
+        }
+
+
 
         if (!objItemMaster.getOptionValueTranIds().equals("")) {
             if (CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.DoubleSpicy.getValue()))) {
@@ -147,7 +181,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 holder.txtItemName.setText(objItemMaster.getItemName());
             }
         } else if (isViewChange) {
-            if(!isWaiterGrid) {
+            if (!isWaiterGrid) {
                 if ((holder.ivJain.getVisibility() == View.VISIBLE) || (holder.ivSpicy.getVisibility() == View.VISIBLE) || (holder.ivSweet.getVisibility() == View.VISIBLE) || (holder.ivDoubleSpicy.getVisibility() == View.VISIBLE)) {
                     holder.txtItemName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                     if (objItemMaster.getItemName().length() > 9) {
@@ -159,11 +193,10 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     holder.txtItemName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(objItemMaster.getItemName().length())});
                     holder.txtItemName.setText(objItemMaster.getItemName());
                 }
-            }else{
+            } else {
                 holder.txtItemName.setText(objItemMaster.getItemName());
             }
         }
-        //holder.txtItemName.setText(objItemMaster.getItemName());
         holder.txtItemPrice.setText(context.getResources().getString(R.string.dfRupee) + " " + Globals.dfWithPrecision.format(objItemMaster.getSellPrice()));
 
         //holder animation
@@ -208,15 +241,18 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtItemName, txtItemDescription, txtItemPrice;
+        TextView txtItemName, txtItemDescription, txtItemPrice, txtItemDineOnly;
         CardView cvItem;
-        Button btnAdd;
+        Button btnAdd, btnAddDisable;
         ImageView ivItem, ivJain, ivSpicy, ivDoubleSpicy, ivSweet, ivNonVeg;
+        ToggleButton ibLike;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
 
             cvItem = (CardView) itemView.findViewById(R.id.cvItem);
+
+            ibLike = (ToggleButton) itemView.findViewById(R.id.ibLike);
 
             ivItem = (ImageView) itemView.findViewById(R.id.ivItem);
             ivJain = (ImageView) itemView.findViewById(R.id.ivJain);
@@ -228,8 +264,10 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             txtItemName = (TextView) itemView.findViewById(R.id.txtItemName);
             txtItemDescription = (TextView) itemView.findViewById(R.id.txtItemDescription);
             txtItemPrice = (TextView) itemView.findViewById(R.id.txtItemPrice);
+            txtItemDineOnly = (TextView) itemView.findViewById(R.id.txtItemDineOnly);
 
             btnAdd = (Button) itemView.findViewById(R.id.btnAdd);
+            btnAddDisable = (Button) itemView.findViewById(R.id.btnAddDisable);
 
             if (!isWaiterGrid && isViewChange) {
                 DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
@@ -262,6 +300,15 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
                     Globals.HideKeyBoard(context, v);
                     objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()));
+                }
+            });
+
+            ibLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ibLike.isChecked()) {
+                        ibLike.setChecked(true);
+                    }
                 }
             });
         }

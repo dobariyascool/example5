@@ -95,6 +95,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
             } else if (v.getId() == R.id.cvMenu) {
                 Intent intent = new Intent(getActivity(), MenuActivity.class);
                 intent.putExtra("ParentActivity", true);
+                intent.putExtra("IsFavoriteShow",false);
                 intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);

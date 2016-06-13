@@ -4,31 +4,46 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/control_SpecingSmall"
     android:layout_marginStart="@dimen/control_SpecingSmall"
-    android:layout_marginTop="@dimen/control_SpecingTiny"
-    android:gravity="center_horizontal"
-    android:orientation="horizontal">
-
-    <com.rey.material.widget.CheckBox
-        android:id="@+id/chkModifier"
-        style="@style/CheckBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="start|center"
-        android:paddingEnd="@dimen/control_SpecingSmall"
-        android:paddingStart="@dimen/control_SpecingSmall"
-        android:text="@string/action_settings"
-        android:textColor="@color/secondary_text"
-        android:textSize="@dimen/control_TextNormal" />
+    android:orientation="vertical">
 
     <com.rey.material.widget.TextView
-        android:id="@+id/txtRate"
-        android:layout_width="0dp"
+        android:id="@+id/txtModifier"
+        style="@style/HeaderTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:gravity="end"
-        android:maxLines="1"
-        android:textColor="@color/secondary_text"
-        android:textSize="@dimen/control_TextNormal" />
+        android:layout_marginBottom="@dimen/control_SpecingTiny"
+        android:text="@string/modifier" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|top"
+        android:orientation="horizontal">
+
+        <com.rey.material.widget.CheckBox
+            android:id="@+id/chkModifier"
+            style="@style/CheckBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_marginStart="@dimen/control_SpecingSmall"
+            android:layout_weight="1"
+            android:gravity="start|center"
+            android:paddingEnd="@dimen/control_SpecingSmall"
+            android:paddingStart="@dimen/control_SpecingSmall"
+            android:text="@string/action_settings"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/control_TextNormal" />
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtRate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_weight="0.5"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/control_TextNormal" />
+    </LinearLayout>
 </LinearLayout>

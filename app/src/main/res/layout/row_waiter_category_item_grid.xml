@@ -11,16 +11,35 @@
         android:orientation="vertical"
         android:padding="@dimen/control_SpecingSmall">
 
-        <com.rey.material.widget.TextView
-            android:id="@+id/txtItemName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/control_TextMedium" />
+            android:orientation="horizontal">
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtItemName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/control_SpecingSmall"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/control_TextMedium" />
+
+            <ToggleButton
+                android:id="@+id/ibLike"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:background="@drawable/wishlist_drawable"
+                android:padding="@dimen/control_SpecingSmall"
+                android:textOff=""
+                android:textOn=""
+                android:visibility="visible" />
+
+        </LinearLayout>
 
         <com.rey.material.widget.TextView
             android:id="@+id/txtItemDescription"
@@ -37,13 +56,13 @@
         <com.rey.material.widget.TextView
             android:id="@+id/txtItemDineOnly"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:maxLines="1"
             android:text="@string/MsgDineOnly"
             android:textColor="@color/disable_grey"
             android:textSize="@dimen/control_TextTiny"
-            android:visibility="invisible"
+            android:visibility="gone"
             tools:ignore="HardcodedText" />
 
         <LinearLayout
@@ -119,6 +138,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:padding="@dimen/control_SpecingTiny"
+                android:text="Add"
+                android:visibility="gone"
+                tools:ignore="HardcodedText" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnAddDisable"
+                style="@style/DisableAddButton"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingSmall"
+                android:enabled="false"
                 android:text="Add"
                 android:visibility="gone"
                 tools:ignore="HardcodedText" />

@@ -275,6 +275,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                     Globals.selectTableMasterId = objTableMaster.getTableMasterId();
                 }
                 Intent intent = new Intent(getActivity(), MenuActivity.class);
+                intent.putExtra("IsFavoriteShow",true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("TableMaster", objTableMaster);
                 startActivity(intent);

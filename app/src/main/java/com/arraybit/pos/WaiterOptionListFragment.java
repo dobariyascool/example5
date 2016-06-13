@@ -57,8 +57,10 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
             if (v.getId() == R.id.cvOrders) {
                 Globals.ReplaceFragment(new AllOrdersFragment(null), getActivity().getSupportFragmentManager(), null);
             } else if (v.getId() == R.id.cvDineIn) {
+                Globals.orderTypeMasterId = (short) Globals.OrderType.DineIn.getValue();
                 Globals.ReplaceFragment(new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.DineIn.getValue())), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_all_tables));
             } else if (v.getId() == R.id.cvTakeAway) {
+                Globals.orderTypeMasterId = (short) Globals.OrderType.TakeAway.getValue();
                 Globals.ReplaceFragment(new AllTablesFragment(getActivity(), false, String.valueOf(Globals.OrderType.TakeAway.getValue())), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_all_tables));
             } else if (v.getId() == R.id.cvBill) {
                 Globals.ReplaceFragment(new TableOrderFragment(), getActivity().getSupportFragmentManager(), null);

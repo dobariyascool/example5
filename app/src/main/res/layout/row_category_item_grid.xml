@@ -29,60 +29,80 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-
-                <com.rey.material.widget.TextView
-                    android:id="@+id/txtItemName"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/control_SpecingSmall"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/control_TextMedium" />
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
-                <ImageView
-                    android:id="@+id/ivDoubleSpicy"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/extra_spicy"
-                    android:visibility="gone"
-                    tools:ignore="ContentDescription" />
 
-                <ImageView
-                    android:id="@+id/ivSpicy"
-                    android:layout_width="15dp"
-                    android:layout_height="20dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/spicy"
-                    android:visibility="gone"
-                    tools:ignore="ContentDescription" />
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/txtItemName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/control_SpecingSmall"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/control_TextMedium" />
 
-                <ImageView
-                    android:id="@+id/ivSweet"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@mipmap/sweet"
-                    android:visibility="gone"
-                    tools:ignore="ContentDescription" />
+                    <ImageView
+                        android:id="@+id/ivDoubleSpicy"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/extra_spicy"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
 
-                <ImageView
-                    android:id="@+id/ivNonVeg"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@mipmap/nonvegicon"
-                    android:visibility="gone"
-                    tools:ignore="ContentDescription" />
+                    <ImageView
+                        android:id="@+id/ivSpicy"
+                        android:layout_width="15dp"
+                        android:layout_height="20dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/spicy"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
 
-                <ImageView
-                    android:id="@+id/ivJain"
-                    android:layout_width="15dp"
-                    android:layout_height="20dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/jain_icon"
-                    android:visibility="gone"
-                    tools:ignore="ContentDescription" />
+                    <ImageView
+                        android:id="@+id/ivSweet"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@mipmap/sweet"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/ivNonVeg"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@mipmap/nonvegicon"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/ivJain"
+                        android:layout_width="15dp"
+                        android:layout_height="20dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/jain_icon"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+
+                <ToggleButton
+                    android:id="@+id/ibLike"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    android:background="@drawable/wishlist_drawable"
+                    android:padding="@dimen/control_SpecingSmall"
+                    android:textOff=""
+                    android:textOn=""
+                    android:visibility="visible" />
 
             </LinearLayout>
 
@@ -134,6 +154,18 @@
                 android:layout_height="35dp"
                 android:layout_marginTop="0dp"
                 android:text="Add"
+                tools:ignore="HardcodedText" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnAddDisable"
+                style="@style/DisableAddButton"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_marginTop="0dp"
+                android:enabled="false"
+                android:text="Add"
+                android:visibility="gone"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>

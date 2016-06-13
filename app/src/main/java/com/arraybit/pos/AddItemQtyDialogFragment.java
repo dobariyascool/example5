@@ -582,7 +582,9 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                 if(isEdit){
                     etQuantity.setText(String.valueOf(objItemMaster.getQuantity()));
                     actRemark.setText(objItemMaster.getItemRemark());
-                    actRemark.setSelection(objItemMaster.getItemRemark().length());
+                    if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")) {
+                        actRemark.setSelection(objItemMaster.getItemRemark().length());
+                    }
                     isSelected = true;
                 }else{
                     SetArrayListAdapter(alString);

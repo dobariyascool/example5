@@ -224,15 +224,12 @@
 
     <!--fragment detail-->
     <string name="dfApp">About This</string>
-    <string name="dfItemName">Item Name:</string>
-    <string name="dfDescription">Description:</string>
-    <string name="dfPrice">Price:</string>
-    <string name="dfQuantity">Quantity:</string>
     <string name="dfAdd">Add</string>
     <string name="dfCancel">Cancel</string>
     <string name="dfPlus">+</string>
     <string name="dfMinus">-</string>
     <string name="dfRupee">\u20B9</string>
+    <string name="dfItemSuggestion">Item Suggestion</string>
     <!--end-->
 
 
@@ -417,6 +414,9 @@
     <string name="msdDone">Done</string>
     <string name="msdCancel">Cancel</string>
     <string name="rsService">Services</string>
+    <string name="modifier">Modifier</string>
     <!-- end -->
+    
+    <string name="strFavorite">Favourite</string>
 
 </resources>

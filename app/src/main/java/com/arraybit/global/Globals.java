@@ -91,6 +91,8 @@ public class Globals {
     public static ArrayList<ItemMaster> alOrderItemTran = new ArrayList<>();
     public static ArrayList<OrderItemTran> alOrderItemSummery = new ArrayList<>();
     public static ArrayList<Long> alOrderMasterId = new ArrayList<>();
+    public static short orderTypeMasterId=0;
+    public static short isWishListShow = 0;
     public static short selectTableMasterId;
     public static Fragment targetFragment;
     public static DiscountMaster objDiscountMaster;

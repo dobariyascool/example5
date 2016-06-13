@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,15 +22,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 
+import com.arraybit.adapter.ItemOptionValueAdapter;
+import com.arraybit.adapter.ModifierAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.ItemMaster;
+import com.arraybit.modal.OptionMaster;
+import com.arraybit.modal.OptionValueTran;
 import com.arraybit.parser.ItemJSONParser;
 import com.arraybit.parser.ItemRemarkJSONParser;
+import com.arraybit.parser.OptionValueJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 import com.rey.material.widget.ImageButton;
@@ -41,10 +47,11 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
-public class DetailFragment extends Fragment implements View.OnClickListener, ModifierSelectionFragmentDialog.ModifierResponseListener {
+public class DetailFragment extends Fragment implements View.OnClickListener, ModifierSelectionFragmentDialog.ModifierResponseListener, ModifierAdapter.ModifierCheckedChangeListener {
 
-    ImageView ivItemImage,ivTest,ivJain;
-    TextView txtItemName, txtDescription, txtItemPrice, txtModifier;
+    public static ArrayList<OptionMaster> alOptionValue;
+    ImageView ivItemImage, ivTest, ivJain;
+    TextView txtItemName, txtDescription, txtItemPrice;
     EditText etQuantity;
     int counterMasterId;
     ItemMaster objItemMaster, objOrderItemTran;
@@ -60,10 +67,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     StringBuilder sbModifier, sbModifierName;
     double totalModifierAmount, totalAmount, totalTax;
     ResponseListener objResponseListener;
-    LinearLayout modifierLayout;
-    short cnt = 0;
-    String itemName;
+    ArrayList<OptionMaster> alOptionMaster;
+    String itemName, strOptionName;
     boolean isVeg, isNonVeg, isJain;
+    RecyclerView rvModifier, rvOptionValue;
+    ArrayList<OptionValueTran> lstOptionValueTran, lstOptionValue;
+    ArrayList<ItemMaster> alCheckedModifier = new ArrayList<>();
 
     public DetailFragment(ItemMaster objItemMaster) {
         this.objItemMaster = objItemMaster;
@@ -90,22 +99,17 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
-        //end
 
-        //ImageView
         ivItemImage = (ImageView) view.findViewById(R.id.ivItemImage);
         ivTest = (ImageView) view.findViewById(R.id.ivTest);
         ivJain = (ImageView) view.findViewById(R.id.ivJain);
-        //end
 
-        //TextView
+        rvModifier = (RecyclerView) view.findViewById(R.id.rvModifier);
+        rvOptionValue = (RecyclerView) view.findViewById(R.id.rvOptionValue);
+
         txtItemName = (TextView) view.findViewById(R.id.txtItemName);
         txtDescription = (TextView) view.findViewById(R.id.txtDescription);
         txtItemPrice = (TextView) view.findViewById(R.id.txtItemPrice);
-        txtModifier = (TextView) view.findViewById(R.id.txtModifier);
-        //end
-
-        modifierLayout = (LinearLayout) view.findViewById(R.id.modifierLayout);
 
         //Button
         ImageButton ibPlus = (ImageButton) view.findViewById(R.id.ibPlus);
@@ -115,17 +119,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         Button btnOrder = (Button) view.findViewById(R.id.btnOrder);
-        Button btnModifier = (Button) view.findViewById(R.id.btnModifier);
-
-        Button btnNum1 = (Button) view.findViewById(R.id.btnNum1);
-        Button btnNum2 = (Button) view.findViewById(R.id.btnNum2);
-        Button btnNum3 = (Button) view.findViewById(R.id.btnNum3);
-        Button btnNum4 = (Button) view.findViewById(R.id.btnNum4);
-        Button btnNum5 = (Button) view.findViewById(R.id.btnNum5);
-        Button btnNum6 = (Button) view.findViewById(R.id.btnNum6);
-        Button btnNum7 = (Button) view.findViewById(R.id.btnNum7);
-        Button btnNum8 = (Button) view.findViewById(R.id.btnNum8);
-        Button btnNum9 = (Button) view.findViewById(R.id.btnNum9);
 
         actRemark = (AppCompatMultiAutoCompleteTextView) view.findViewById(R.id.actRemark);
 
@@ -138,17 +131,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         textInputLayout.setOnClickListener(this);
         actRemark.setOnClickListener(this);
 
-        btnNum1.setOnClickListener(this);
-        btnNum2.setOnClickListener(this);
-        btnNum3.setOnClickListener(this);
-        btnNum4.setOnClickListener(this);
-        btnNum5.setOnClickListener(this);
-        btnNum6.setOnClickListener(this);
-        btnNum7.setOnClickListener(this);
-        btnNum8.setOnClickListener(this);
-        btnNum9.setOnClickListener(this);
-        btnModifier.setOnClickListener(this);
-        //end
 
         objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()) != null) {
@@ -268,44 +250,48 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
             }
             actRemark.showDropDown();
-        } else if (v.getId() == R.id.btnNum1) {
-            AddNumber("1");
-        } else if (v.getId() == R.id.btnNum2) {
-            AddNumber("2");
-        } else if (v.getId() == R.id.btnNum3) {
-            AddNumber("3");
-        } else if (v.getId() == R.id.btnNum4) {
-            AddNumber("4");
-        } else if (v.getId() == R.id.btnNum5) {
-            AddNumber("5");
-        } else if (v.getId() == R.id.btnNum6) {
-            AddNumber("6");
-        } else if (v.getId() == R.id.btnNum7) {
-            AddNumber("7");
-        } else if (v.getId() == R.id.btnNum8) {
-            AddNumber("8");
-        } else if (v.getId() == R.id.btnNum9) {
-            AddNumber("9");
-        } else if (v.getId() == R.id.btnModifier) {
-            cnt = (short) (cnt + 1);
-            SetItemModifier();
-            ModifierSelectionFragmentDialog modifierSelectionFragmentDialog = new ModifierSelectionFragmentDialog(alItemMasterModifierFilter);
-            modifierSelectionFragmentDialog.setTargetFragment(this, 0);
-            modifierSelectionFragmentDialog.show(getActivity().getSupportFragmentManager(), "");
+        }
+    }
+
+    @Override
+    public void ModifierCheckedChange(boolean isChecked, ItemMaster objItemModifier, boolean isDuplicate) {
+        this.isDuplicate = isDuplicate;
+        if (isChecked) {
+            if (alCheckedModifier.size() > 0) {
+                for (ItemMaster objCheckedItemModifier : alCheckedModifier) {
+                    if (objItemModifier.getItemMasterId() == objCheckedItemModifier.getItemMasterId()) {
+                        this.isDuplicate = true;
+                        break;
+                    }
+                }
+                if (!this.isDuplicate) {
+                    alCheckedModifier.add(objItemModifier);
+                }
+                this.isDuplicate = false;
+            } else {
+                alCheckedModifier.add(objItemModifier);
+            }
+        } else {
+            for (ItemMaster objCheckedItemModifier : alCheckedModifier) {
+                if (objItemModifier.getItemMasterId() == objCheckedItemModifier.getItemMasterId()) {
+                    alCheckedModifier.remove(alCheckedModifier.indexOf(objCheckedItemModifier));
+                    break;
+                }
+            }
         }
     }
 
     @Override
     public void ModifierResponse(boolean isChange) {
         //ModifierSelectionFragmentDialog response
-        SetTextModifier(ModifierSelectionFragmentDialog.alFinalCheckedModifier);
-        if (!sbModifierName.toString().equals("")) {
-            txtModifier.setVisibility(View.VISIBLE);
-            txtModifier.setText(sbModifierName.toString());
-        } else {
-            txtModifier.setVisibility(View.GONE);
-            txtModifier.setText("");
-        }
+//        SetTextModifier(ModifierSelectionFragmentDialog.alFinalCheckedModifier);
+//        if (!sbModifierName.toString().equals("")) {
+//            txtModifier.setVisibility(View.VISIBLE);
+//            txtModifier.setText(sbModifierName.toString());
+//        } else {
+//            txtModifier.setVisibility(View.GONE);
+//            txtModifier.setText("");
+//        }
     }
 
     //region Private Methods and Interface
@@ -324,35 +310,49 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
     private void SetLoadingTask(ViewGroup container) {
         if (objItemMaster.getItemModifierIds().equals("")) {
-            modifierLayout.setVisibility(View.GONE);
             if (Service.CheckNet(getActivity())) {
                 new RemarkLoadingTask().execute();
             } else {
                 Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
         } else {
-            modifierLayout.setVisibility(View.VISIBLE);
             if (Service.CheckNet(getActivity())) {
                 new RemarkLoadingTask().execute();
-                new ModifierLoadingTask().execute();
+                if (!objItemMaster.getItemModifierIds().equals("")) {
+                    new ModifierLoadingTask().execute();
+                }else{
+                    rvModifier.setVisibility(View.GONE);
+                }
+                if (!objItemMaster.getOptionValueTranIds().equals("")) {
+                    new OptionValueLoadingTask().execute();
+                }else {
+                    rvOptionValue.setVisibility(View.GONE);
+                }
+
             } else {
                 Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
             }
         }
     }
 
-    private void SetItemModifier() {
+    private void SetItemModifierRecyclerView() {
         if (alItemMasterModifier != null && alItemMasterModifier.size() != 0) {
+            rvModifier.setVisibility(View.VISIBLE);
             alItemMasterModifierFilter = new ArrayList<>();
-            String[] strModifier = objItemMaster.getItemModifierIds().split(",");
-            for (String strModifierFilter : strModifier) {
-                for (int i = 0; i < alItemMasterModifier.size(); i++) {
-                    if (strModifierFilter.equals(String.valueOf(alItemMasterModifier.get(i).getItemMasterId()))) {
-                        alItemMasterModifierFilter.add(alItemMasterModifier.get(i));
-                        break;
-                    }
-                }
-            }
+            ModifierAdapter modifierAdapter = new ModifierAdapter(getActivity(), alItemMasterModifier, this);
+            rvModifier.setAdapter(modifierAdapter);
+            rvModifier.setLayoutManager(new LinearLayoutManager(getActivity()));
+//            String[] strModifier = objItemMaster.getItemModifierIds().split(",");
+//            for (String strModifierFilter : strModifier) {
+//                for (int i = 0; i < alItemMasterModifier.size(); i++) {
+//                    if (strModifierFilter.equals(String.valueOf(alItemMasterModifier.get(i).getItemMasterId()))) {
+//                        alItemMasterModifierFilter.add(alItemMasterModifier.get(i));
+//                        break;
+//                    }
+//                }
+//            }
+        } else {
+            rvModifier.setVisibility(View.GONE);
         }
 
     }
@@ -511,6 +511,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                     objOrderItemTran.setSellPrice(Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                     objOrderItemTran.setQuantity(Integer.valueOf(etQuantity.getText().toString()));
                     objOrderItemTran.setRemark(actRemark.getText().toString());
+                    objOrderItemTran.setItemRemark(actRemark.getText().toString());
                     objOrderItemTran.setTax(objItemMaster.getTax());
                     CountTax(objOrderItemTran, isDuplicate);
                     objOrderItemTran.setTotalTax(totalTax);
@@ -537,6 +538,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                 objOrderItemTran.setSellPrice(Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                 objOrderItemTran.setQuantity(Integer.valueOf(etQuantity.getText().toString()));
                 objOrderItemTran.setRemark(actRemark.getText().toString());
+                objOrderItemTran.setItemRemark(actRemark.getText().toString());
                 objOrderItemTran.setTax(objItemMaster.getTax());
                 CountTax(objOrderItemTran, isDuplicate);
                 objOrderItemTran.setTotalTax(totalTax);
@@ -825,6 +827,93 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             ItemJSONParser objItemMasterJSONParser = new ItemJSONParser();
             alItemMasterModifier = objItemMasterJSONParser.SelectAllItemMasterModifier(Globals.businessMasterId);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            SetItemModifierRecyclerView();
+        }
+    }
+
+    class OptionValueLoadingTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            lstOptionValueTran = new ArrayList<>();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            OptionValueJSONParser objOptionValueJSONParser = new OptionValueJSONParser();
+            lstOptionValue = objOptionValueJSONParser.SelectAllItemOptionValue(String.valueOf(objItemMaster.getItemMasterId()));
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            if (lstOptionValue != null && lstOptionValue.size() != 0) {
+                alOptionMaster = new ArrayList<>();
+                lstOptionValueTran = new ArrayList<>();
+                strOptionName = null;
+                OptionMaster objOptionMaster = new OptionMaster();
+                for (OptionValueTran objOptionValueTran : lstOptionValue) {
+                    if (strOptionName == null) {
+                        strOptionName = objOptionValueTran.getOptionName();
+                        objOptionMaster = new OptionMaster();
+                        objOptionMaster.setOptionRowId(-1);
+                        objOptionMaster.setOptionName(objOptionValueTran.getOptionName());
+                        objOptionMaster.setOptionMasterId(objOptionValueTran.getlinktoOptionMasterId());
+                        lstOptionValueTran.add(objOptionValueTran);
+                        if (lstOptionValue.indexOf(objOptionValueTran) == lstOptionValue.size() - 1) {
+                            objOptionMaster.setAlOptionValueTran(lstOptionValueTran);
+                            alOptionMaster.add(objOptionMaster);
+                        }
+                    } else {
+                        if (strOptionName.equals(objOptionValueTran.getOptionName())) {
+                            lstOptionValueTran.add(objOptionValueTran);
+                            if (lstOptionValue.indexOf(objOptionValueTran) == lstOptionValue.size() - 1) {
+                                objOptionMaster.setAlOptionValueTran(lstOptionValueTran);
+                                alOptionMaster.add(objOptionMaster);
+                            }
+                        } else {
+                            objOptionMaster.setAlOptionValueTran(lstOptionValueTran);
+                            alOptionMaster.add(objOptionMaster);
+                            strOptionName = objOptionValueTran.getOptionName();
+                            objOptionMaster = new OptionMaster();
+                            lstOptionValueTran = new ArrayList<>();
+                            lstOptionValueTran.add(objOptionValueTran);
+                            objOptionMaster.setOptionRowId(-1);
+                            objOptionMaster.setOptionName(objOptionValueTran.getOptionName());
+                            objOptionMaster.setOptionMasterId(objOptionValueTran.getlinktoOptionMasterId());
+                            if (lstOptionValue.indexOf(objOptionValueTran) == lstOptionValue.size() - 1) {
+                                objOptionMaster.setAlOptionValueTran(lstOptionValueTran);
+                                alOptionMaster.add(objOptionMaster);
+                            }
+                        }
+                    }
+                }
+
+                alOptionValue = new ArrayList<>();
+                if (alOptionMaster.size() > 0) {
+                    for (OptionMaster objFilterOptionMaster : alOptionMaster) {
+                        objOptionMaster = new OptionMaster();
+                        objOptionMaster.setOptionRowId(-1);
+                        objOptionMaster.setOptionName(null);
+                        objOptionMaster.setOptionMasterId(objFilterOptionMaster.getOptionMasterId());
+                        alOptionValue.add(objOptionMaster);
+                    }
+                }
+                rvOptionValue.setVisibility(View.VISIBLE);
+                rvOptionValue.setAdapter(new ItemOptionValueAdapter(getActivity(), alOptionMaster));
+                rvOptionValue.setLayoutManager(new LinearLayoutManager(getActivity()));
+            } else {
+                rvOptionValue.setVisibility(View.GONE);
+            }
         }
     }
     //endregion

@@ -40,6 +40,7 @@ public class ItemMaster implements Parcelable {
     boolean IsDeleted;
     boolean IsFavourite;
     boolean IsRowMaterial;
+    boolean IsDineInOnly;
     String BarCode;
     /// Extra
     //String ItemType;
@@ -91,6 +92,7 @@ public class ItemMaster implements Parcelable {
             objItemMaster.IsEnabled = source.readByte() != 0;
             objItemMaster.IsDeleted = source.readByte() != 0;
             objItemMaster.IsRowMaterial = source.readByte() != 0;
+            objItemMaster.IsDineInOnly = source.readByte() != 0;
             objItemMaster.IsFavourite = source.readByte() != 0;
             objItemMaster.BarCode = source.readString();
 
@@ -112,6 +114,7 @@ public class ItemMaster implements Parcelable {
             objItemMaster.Tax5 = source.readDouble();
             objItemMaster.TotalTax = source.readDouble();
             objItemMaster.Category = source.readString();
+
 
             return objItemMaster;
         }
@@ -546,6 +549,14 @@ public class ItemMaster implements Parcelable {
         OptionValue = optionValue;
     }
 
+    public boolean getIsDineInOnly() {
+        return IsDineInOnly;
+    }
+
+    public void setIsDineInOnly(boolean isDineInOnly) {
+        IsDineInOnly = isDineInOnly;
+    }
+
     //endregion
     public int describeContents() {
         return 0;
@@ -581,6 +592,7 @@ public class ItemMaster implements Parcelable {
         parcel.writeByte((byte) (IsDeleted ? 1 : 0));
         parcel.writeByte((byte) (IsFavourite ? 1 : 0));
         parcel.writeByte((byte) (IsRowMaterial ? 1 : 0));
+        parcel.writeByte((byte) (IsDineInOnly ? 1 : 0));
         parcel.writeString(BarCode);
 
         /// Extra

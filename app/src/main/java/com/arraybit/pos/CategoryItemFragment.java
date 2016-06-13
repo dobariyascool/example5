@@ -40,6 +40,7 @@ import java.util.List;
 
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
+@SuppressLint("ValidFragment")
 public class CategoryItemFragment extends Fragment implements View.OnClickListener, ItemTabFragment.CartIconListener, DetailFragment.ResponseListener, GuestLoginDialogFragment.LoginResponseListener {
 
     public static boolean isViewChange = false;
@@ -56,9 +57,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     short isVegCheck = 0, isNonVegCheck = 0, isJainCheck = 0;
     CoordinatorLayout categoryItemFragment;
     LinearLayout errorLayout;
+    boolean isFavoriteShow;
 
-    public CategoryItemFragment() {
 
+    public CategoryItemFragment(boolean isFavoriteShow) {
+        this.isFavoriteShow = isFavoriteShow;
+        Globals.isWishListShow = (short) (isFavoriteShow?0:1);
     }
 
     @Override
@@ -112,7 +116,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         if (Service.CheckNet(getActivity())) {
             new GuestHomeCategoryLodingTask().execute();
         } else {
-            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), itemTabLayout, itemViewPager,R.drawable.wifi_drawable);
+            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), itemTabLayout, itemViewPager, R.drawable.wifi_drawable);
         }
 
         setHasOptionsMenu(true);
@@ -293,12 +297,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     }
 
     //region Private Methods and Interface
-    private void SetErrorLayout(boolean isShow, String errorMsg, TabLayout tabLayout, ViewPager viewPager,int errorIcon) {
+    private void SetErrorLayout(boolean isShow, String errorMsg, TabLayout tabLayout, ViewPager viewPager, int errorIcon) {
         TextView txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
         ImageView ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
-        if(errorIcon!=0){
+        if (errorIcon != 0) {
             ivErrorIcon.setImageResource(errorIcon);
-        }else{
+        } else {
             ivErrorIcon.setImageResource(R.drawable.alert_drawable);
         }
         if (isShow) {
@@ -487,12 +491,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             super.onPostExecute(o);
             progressDialog.dismiss();
             if (alCategoryMaster == null) {
-                SetErrorLayout(true, getResources().getString(R.string.MsgSelectFail), itemTabLayout, itemViewPager,0);
+                SetErrorLayout(true, getResources().getString(R.string.MsgSelectFail), itemTabLayout, itemViewPager, 0);
             } else if (alCategoryMaster.size() == 0) {
-                SetErrorLayout(true, getResources().getString(R.string.MsgNoRecord), itemTabLayout, itemViewPager,0);
+                SetErrorLayout(true, getResources().getString(R.string.MsgNoRecord), itemTabLayout, itemViewPager, 0);
             } else {
 
-                SetErrorLayout(false, null, itemTabLayout, itemViewPager,0);
+                SetErrorLayout(false, null, itemTabLayout, itemViewPager, 0);
 
                 itemPagerAdapter = new ItemPagerAdapter(getFragmentManager());
 
@@ -501,6 +505,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 objCategoryMaster.setCategoryName("All");
                 ArrayList<CategoryMaster> alCategory = new ArrayList<>();
                 alCategory.add(objCategoryMaster);
+                if (isFavoriteShow) {
+                    objCategoryMaster = new CategoryMaster();
+                    objCategoryMaster.setCategoryMasterId((short) 0);
+                    objCategoryMaster.setCategoryName(getActivity().getResources().getString(R.string.strFavorite));
+                    alCategory.add(objCategoryMaster);
+                }
                 alCategoryMaster.addAll(0, alCategory);
 
                 for (int i = 0; i < alCategoryMaster.size(); i++) {

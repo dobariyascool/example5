@@ -469,7 +469,6 @@
         <item name="android:textSize">@dimen/control_TextNormal</item>
     </style>
 
-
     <style name="BusinessInfoCardView" parent="AppCompactCardView">
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>

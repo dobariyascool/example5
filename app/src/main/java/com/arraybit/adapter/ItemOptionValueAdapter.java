@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.arraybit.modal.OptionMaster;
 import com.arraybit.modal.OptionValueTran;
+import com.arraybit.pos.DetailFragment;
 import com.arraybit.pos.R;
 import com.rey.material.widget.RadioButton;
 import com.rey.material.widget.TextView;
@@ -26,10 +27,9 @@ public class ItemOptionValueAdapter extends RecyclerView.Adapter<ItemOptionValue
     ArrayList<OptionMaster> alOptionMaster;
     boolean isActivity;
 
-    public ItemOptionValueAdapter(Context context, ArrayList<OptionMaster> result, boolean isActivity) {
+    public ItemOptionValueAdapter(Context context, ArrayList<OptionMaster> result) {
         this.context = context;
         alOptionMaster = result;
-        this.isActivity = isActivity;
     }
 
     @Override
@@ -74,66 +74,36 @@ public class ItemOptionValueAdapter extends RecyclerView.Adapter<ItemOptionValue
             radioButton[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isActivity) {
-                        if (rowNumber == -1) {
-                            rowNumber = linearLayout.getId();
-                        }
-                        if (linearLayout.getId() == rowNumber) {
-                            if (position == -1) {
-                                position = buttonView.getId();
-                                //DetailActivity.alOptionValue.get(rowNumber).setOptionRowId(position);
-                                //DetailActivity.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
-
-                            } else {
-                                //radioButton[DetailActivity.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
-                                position = buttonView.getId();
-                                //DetailActivity.alOptionValue.get(rowNumber).setOptionRowId(position);
-                                //DetailActivity.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
-                            }
-                        } else {
+                    if (rowNumber == -1) {
+                        rowNumber = linearLayout.getId();
+                    }
+                    if (linearLayout.getId() == rowNumber) {
+                        if (position == -1) {
                             position = buttonView.getId();
-                            rowNumber = linearLayout.getId();
-//                            if (DetailActivity.alOptionValue.get(rowNumber).getOptionRowId() != -1) {
-//                                radioButton[DetailActivity.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
-//                                position = buttonView.getId();
-//                                DetailActivity.alOptionValue.get(rowNumber).setOptionRowId(position);
-//                                DetailActivity.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
-//                            } else {
-//                                DetailActivity.alOptionValue.get(rowNumber).setOptionRowId(position);
-//                                DetailActivity.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
-//                            }
+                            DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
+                            DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+
+                        } else {
+                            radioButton[DetailFragment.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
+                            position = buttonView.getId();
+                            DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
+                            DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
                         }
                     } else {
-                        if (rowNumber == -1) {
-                            rowNumber = linearLayout.getId();
-                        }
-                        if (linearLayout.getId() == rowNumber) {
-                            if (position == -1) {
-                                position = buttonView.getId();
-//                                ItemModifierRemarkFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
-//                                ItemModifierRemarkFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
-
-                            } else {
-//                                radioButton[ItemModifierRemarkFragment.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
-//                                position = buttonView.getId();
-//                                ItemModifierRemarkFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
-//                                ItemModifierRemarkFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
-                            }
-                        } else {
+                        position = buttonView.getId();
+                        rowNumber = linearLayout.getId();
+                        if (DetailFragment.alOptionValue.get(rowNumber).getOptionRowId() != -1) {
+                            radioButton[DetailFragment.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
                             position = buttonView.getId();
-                            rowNumber = linearLayout.getId();
-//                            if (ItemModifierRemarkFragment.alOptionValue.get(rowNumber).getOptionRowId() != -1) {
-//                                radioButton[ItemModifierRemarkFragment.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
-//                                position = buttonView.getId();
-//                                ItemModifierRemarkFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
-//                                ItemModifierRemarkFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
-//                            } else {
-//                                ItemModifierRemarkFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
-//                                ItemModifierRemarkFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
-//                            }
+                            DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
+                            DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+                        } else {
+                            DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
+                            DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
                         }
                     }
                 }
+
             });
 
             linearLayout.addView(radioButton[i]);

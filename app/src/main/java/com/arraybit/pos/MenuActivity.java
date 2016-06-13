@@ -44,7 +44,7 @@ public class MenuActivity extends AppCompatActivity{
         }
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(android.R.id.content, new CategoryItemFragment());
+        fragmentTransaction.replace(android.R.id.content, new CategoryItemFragment(getIntent().getBooleanExtra("IsFavoriteShow",false)));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 

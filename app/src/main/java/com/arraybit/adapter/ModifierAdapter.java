@@ -1,5 +1,6 @@
 package com.arraybit.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +10,6 @@ import android.widget.CompoundButton;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
-import com.arraybit.pos.ModifierSelectionFragmentDialog;
 import com.arraybit.pos.R;
 import com.rey.material.widget.CheckBox;
 import com.rey.material.widget.TextView;
@@ -39,29 +39,22 @@ public class ModifierAdapter extends RecyclerView.Adapter<ModifierAdapter.Modifi
         return new ModifierViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ModifierViewHolder holder, int position) {
         ItemMaster objItemModifier = alItemModifier.get(position);
-        //holder.chkModifier.setId(position);
-        holder.chkModifier.setText(objItemModifier.getItemName());
-        holder.txtRate.setText(context.getResources().getString(R.string.dfRupee)+" "+Globals.dfWithPrecision.format(objItemModifier.getMRP()));
-        if (ModifierSelectionFragmentDialog.alFinalCheckedModifier.size() != 0) {
-            CheckedModifier(objItemModifier, holder);
+        if (position == 0) {
+            holder.txtModifier.setVisibility(View.VISIBLE);
+        } else {
+            holder.txtModifier.setVisibility(View.GONE);
         }
+        holder.chkModifier.setText(objItemModifier.getItemName());
+        holder.txtRate.setText(view.getResources().getString(R.string.dfRupee) + " " + Globals.dfWithPrecision.format(objItemModifier.getMRP()));
     }
 
     @Override
     public int getItemCount() {
         return alItemModifier.size();
-    }
-
-    private void CheckedModifier(ItemMaster objItemMaster, ModifierViewHolder holder) {
-        for (int i = 0; i < ModifierSelectionFragmentDialog.alFinalCheckedModifier.size(); i++) {
-            if (objItemMaster.getItemMasterId() == ModifierSelectionFragmentDialog.alFinalCheckedModifier.get(i).getItemMasterId()) {
-                holder.chkModifier.setChecked(true);
-                break;
-            }
-        }
     }
 
     public interface ModifierCheckedChangeListener {
@@ -71,13 +64,14 @@ public class ModifierAdapter extends RecyclerView.Adapter<ModifierAdapter.Modifi
     //region ViewHolder
     class ModifierViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtRate;
+        TextView txtRate, txtModifier;
         CheckBox chkModifier;
 
         public ModifierViewHolder(View itemView) {
             super(itemView);
 
             txtRate = (TextView) itemView.findViewById(R.id.txtRate);
+            txtModifier = (TextView) itemView.findViewById(R.id.txtModifier);
 
             chkModifier = (CheckBox) itemView.findViewById(R.id.chkModifier);
             chkModifier.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

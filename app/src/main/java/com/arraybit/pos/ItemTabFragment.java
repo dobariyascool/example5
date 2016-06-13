@@ -52,7 +52,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     CategoryMaster objCategoryMaster;
     int counterMasterId;
     DisplayMetrics displayMetrics;
-    boolean isFilter = false;
+    boolean isFilter = false,isFavorite;
     String searchText;
     TextView txtCartNumber;
     RelativeLayout relativeLayout;
@@ -251,7 +251,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     @Override
     public void ButtonOnClick(ItemMaster objItemMaster) {
         MenuItemCompat.collapseActionView(searchItem);
-        if (objItemMaster.getItemModifierIds().equals("")) {
+        if (objItemMaster.getItemModifierIds().equals("") && objItemMaster.getOptionValueTranIds().equals("")) {
             AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
             addItemQtyDialogFragment.setTargetFragment(this, 0);
             addItemQtyDialogFragment.show(getFragmentManager(), "");
@@ -259,6 +259,14 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             objCartIconListener = (CartIconListener) Globals.targetFragment;
             objCartIconListener.CardViewOnClick(objItemMaster);
         }
+//        if (objItemMaster.getItemModifierIds().equals("")) {
+//            AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
+//            addItemQtyDialogFragment.setTargetFragment(this, 0);
+//            addItemQtyDialogFragment.show(getFragmentManager(), "");
+//        } else {
+//            objCartIconListener = (CartIconListener) Globals.targetFragment;
+//            objCartIconListener.CardViewOnClick(objItemMaster);
+//        }
     }
 
     @Override
@@ -393,7 +401,6 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
     interface CartIconListener {
         void CartIconOnClick();
-
         void CardViewOnClick(ItemMaster objItemMaster);
     }
 
@@ -413,14 +420,17 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 progressDialog = new com.arraybit.pos.ProgressDialog();
                 progressDialog.show(getActivity().getSupportFragmentManager(), "");
             }
-
+            isFavorite = objCategoryMaster.getCategoryName().equals(getActivity().getResources().getString(R.string.strFavorite));
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-            return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId);
-
+            if(isFavorite){
+                return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId,1);
+            }else{
+                return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId,0);
+            }
         }
 
         @Override
