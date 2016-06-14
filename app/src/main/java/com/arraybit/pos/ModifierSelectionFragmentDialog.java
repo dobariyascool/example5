@@ -24,7 +24,7 @@ import java.util.ArrayList;
 @SuppressLint("ValidFragment")
 public class ModifierSelectionFragmentDialog extends DialogFragment implements View.OnClickListener, ModifierAdapter.ModifierCheckedChangeListener {
 
-    public static ArrayList<ItemMaster> alFinalCheckedModifier = new ArrayList<>();
+    ArrayList<ItemMaster> alFinalCheckedModifier = new ArrayList<>();
     RecyclerView rvModifier;
     Button btnCancel, btnDone;
     ArrayList<ItemMaster> alItemModifier;

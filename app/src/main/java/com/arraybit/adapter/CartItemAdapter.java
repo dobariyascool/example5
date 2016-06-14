@@ -116,7 +116,14 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         }else {
             if(objItemMaster.getOptionValue()!=null && !objItemMaster.getOptionValue().equals("")){
                 if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")) {
-                    sbRemark.append(objItemMaster.getItemRemark()).append(", ").append(objItemMaster.getOptionValue());
+                    if(objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(",")){
+                        sbRemark.append(objItemMaster.getItemRemark()).append(" ").append(objItemMaster.getOptionValue());
+                    }else if(objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(" ")){
+                        sbRemark.append(objItemMaster.getItemRemark()).append(objItemMaster.getOptionValue());
+                    }else{
+                        sbRemark.append(objItemMaster.getItemRemark()).append(", ").append(objItemMaster.getOptionValue());
+                    }
+
                 }else{
                     sbRemark.append(objItemMaster.getOptionValue());
                 }

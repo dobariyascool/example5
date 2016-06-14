@@ -77,7 +77,17 @@ public class MenuActivity extends AppCompatActivity{
 
     public void EditTextOnClick(View view) {
         GuestProfileFragment guestProfileFragment = (GuestProfileFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_myprofile));
-        guestProfileFragment.EditTextOnClick();
+        if(guestProfileFragment!=null) {
+            guestProfileFragment.EditTextOnClick();
+        }else{
+            DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_detail));
+            if(detailFragment!=null){
+                detailFragment.EditTextOnClick();
+            }else{
+                DetailFragment subDetailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_sub_detail));
+                subDetailFragment.EditTextOnClick();
+            }
+        }
     }
 
     @Override
@@ -106,7 +116,9 @@ public class MenuActivity extends AppCompatActivity{
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_category_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
-                    ModifierSelectionFragmentDialog.alFinalCheckedModifier = new ArrayList<>();
+                    DetailFragment.isItemSuggestedClick = false;
+                    DetailFragment.alOptionValue = new ArrayList<>();
+                    DetailFragment.alSubItemOptionValue = new ArrayList<>();
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_cart_item))) {
@@ -131,6 +143,12 @@ public class MenuActivity extends AppCompatActivity{
                 }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_change_password))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_change_password), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                } else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName() != null
+                        &&  getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_sub_detail))){
+                   getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_sub_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    DetailFragment.isItemSuggestedClick = false;
+                    DetailFragment.alOptionValue = new ArrayList<>();
+                    DetailFragment.alSubItemOptionValue = new ArrayList<>();
                 }
             } else {
                 if (MenuActivity.parentActivity) {

@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,10 +25,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 
 import com.arraybit.adapter.ItemOptionValueAdapter;
+import com.arraybit.adapter.ItemSuggestedAdapter;
 import com.arraybit.adapter.ModifierAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -47,11 +54,13 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 @SuppressLint("ValidFragment")
-public class DetailFragment extends Fragment implements View.OnClickListener, ModifierSelectionFragmentDialog.ModifierResponseListener, ModifierAdapter.ModifierCheckedChangeListener {
+public class DetailFragment extends Fragment implements View.OnClickListener, ModifierAdapter.ModifierCheckedChangeListener, ItemSuggestedAdapter.ImageViewClickListener, AddItemQtyDialogFragment.AddToCartListener {
 
-    public static ArrayList<OptionMaster> alOptionValue;
+    public static ArrayList<OptionMaster> alOptionValue = new ArrayList<>();
+    public static ArrayList<OptionMaster> alSubItemOptionValue = new ArrayList<>();
+    public static boolean isItemSuggestedClick;
     ImageView ivItemImage, ivTest, ivJain;
-    TextView txtItemName, txtDescription, txtItemPrice;
+    TextView txtItemName, txtDescription, txtItemPrice, txtDineIn;
     EditText etQuantity;
     int counterMasterId;
     ItemMaster objItemMaster, objOrderItemTran;
@@ -64,15 +73,22 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     boolean isDeleted;
     boolean isDuplicate = false, isShow = false;
     ArrayList<ItemMaster> alOrderItemModifierTran, alItemMasterModifier, alItemMasterModifierFilter;
-    StringBuilder sbModifier, sbModifierName;
+    StringBuilder sbModifier;
     double totalModifierAmount, totalAmount, totalTax;
     ResponseListener objResponseListener;
     ArrayList<OptionMaster> alOptionMaster;
     String itemName, strOptionName;
     boolean isVeg, isNonVeg, isJain;
-    RecyclerView rvModifier, rvOptionValue;
+    RecyclerView rvModifier, rvOptionValue, rvSuggestedItem;
     ArrayList<OptionValueTran> lstOptionValueTran, lstOptionValue;
     ArrayList<ItemMaster> alCheckedModifier = new ArrayList<>();
+    LinearLayout itemSuggestionLayout, wishListLayout, qtyLayout;
+    boolean isDineIn, isKeyClick = false;
+    Button btnOrder, btnOrderDisable;
+    ModifierAdapter modifierAdapter;
+    ItemOptionValueAdapter itemOptionValueAdapter;
+    FrameLayout detailLayout;
+    StringBuilder sbOptionValue;
 
     public DetailFragment(ItemMaster objItemMaster) {
         this.objItemMaster = objItemMaster;
@@ -90,7 +106,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if (objItemMaster.getItemName() != null) {
+            if (objItemMaster.getCategory() != null) {
                 app_bar.setTitle(objItemMaster.getCategory());
             } else {
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_detail));
@@ -100,28 +116,39 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             }
         }
 
+        detailLayout = (FrameLayout) view.findViewById(R.id.detailLayout);
+        itemSuggestionLayout = (LinearLayout) view.findViewById(R.id.itemSuggestionLayout);
+        wishListLayout = (LinearLayout) view.findViewById(R.id.wishListLayout);
+        qtyLayout = (LinearLayout) view.findViewById(R.id.qtyLayout);
+
         ivItemImage = (ImageView) view.findViewById(R.id.ivItemImage);
         ivTest = (ImageView) view.findViewById(R.id.ivTest);
         ivJain = (ImageView) view.findViewById(R.id.ivJain);
 
         rvModifier = (RecyclerView) view.findViewById(R.id.rvModifier);
         rvOptionValue = (RecyclerView) view.findViewById(R.id.rvOptionValue);
+        rvSuggestedItem = (RecyclerView) view.findViewById(R.id.rvSuggestedItem);
 
         txtItemName = (TextView) view.findViewById(R.id.txtItemName);
         txtDescription = (TextView) view.findViewById(R.id.txtDescription);
         txtItemPrice = (TextView) view.findViewById(R.id.txtItemPrice);
+        txtDineIn = (TextView) view.findViewById(R.id.txtDineIn);
 
         //Button
         ImageButton ibPlus = (ImageButton) view.findViewById(R.id.ibPlus);
         ImageButton ibMinus = (ImageButton) view.findViewById(R.id.ibMinus);
 
         etQuantity = (EditText) view.findViewById(R.id.etQuantity);
+        etQuantity.setSelectAllOnFocus(true);
 
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
-        Button btnOrder = (Button) view.findViewById(R.id.btnOrder);
+        btnOrder = (Button) view.findViewById(R.id.btnOrder);
+        btnOrderDisable = (Button) view.findViewById(R.id.btnOrderDisable);
 
         actRemark = (AppCompatMultiAutoCompleteTextView) view.findViewById(R.id.actRemark);
-
+        if (Globals.isWishListShow == 0) {
+            actRemark.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getActivity(), R.drawable.arrow_drop_down_vector_drawable), null);
+        }
         textInputLayout = (TextInputLayout) view.findViewById(R.id.textInputLayout);
 
         ibPlus.setOnClickListener(this);
@@ -129,8 +156,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         btnCancel.setOnClickListener(this);
         btnOrder.setOnClickListener(this);
         textInputLayout.setOnClickListener(this);
-        actRemark.setOnClickListener(this);
-
+        if (Globals.isWishListShow == 0) {
+            actRemark.setOnClickListener(this);
+        }
 
         objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()) != null) {
@@ -140,6 +168,30 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         setHasOptionsMenu(true);
         SetLoadingTask(container);
         SetDetail();
+
+        etQuantity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    etQuantity.setSelectAllOnFocus(true);
+                }
+            }
+        });
+
+        etQuantity.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        isKeyClick = false;
+                        Globals.HideKeyBoard(getActivity(), v);
+                    } else {
+                        isKeyClick = true;
+                    }
+                }
+                return false;
+            }
+        });
 
         return view;
     }
@@ -164,27 +216,39 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     public boolean onOptionsItemSelected(MenuItem item) {
         Globals.HideKeyBoard(getActivity(), getView());
         if (item.getItemId() == android.R.id.home) {
-            ModifierSelectionFragmentDialog.alFinalCheckedModifier = new ArrayList<>();
+            isItemSuggestedClick = false;
+            alOptionValue = new ArrayList<>();
+            alSubItemOptionValue = new ArrayList<>();
             if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2) {
                 if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
                         && getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
                     getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
                 } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
                         && getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
                     if (getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName() != null && getActivity().getSupportFragmentManager().getBackStackEntryAt(3).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
 
                         getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     }
+                } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_sub_detail))) {
+                    getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_sub_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                     && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
 
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void EditTextOnClick() {
+        if (!isKeyClick) {
+            etQuantity.clearFocus();
+            etQuantity.requestFocus();
+        } else {
+            isKeyClick = false;
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -212,22 +276,36 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                     && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_sub_detail))) {
+                getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_sub_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
-            ModifierSelectionFragmentDialog.alFinalCheckedModifier = new ArrayList<>();
+            isItemSuggestedClick = false;
+            alOptionValue = new ArrayList<>();
+            alSubItemOptionValue = new ArrayList<>();
         } else if (v.getId() == R.id.btnOrder) {
             SetOrderItemModifierTran();
             SetOrderItemTran();
             if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                     && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_sub_detail))) {
+                getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_sub_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
             if (isShow) {
+                if (isItemSuggestedClick) {
+                    Globals.ShowSnackBar(detailLayout, String.format(getActivity().getResources().getString(R.string.MsgCartItem), itemName), getActivity(), 3000);
+                    isItemSuggestedClick = false;
+                }
                 if (getTargetFragment() != null) {
                     objResponseListener = (ResponseListener) getTargetFragment();
                     objResponseListener.ShowMessage(itemName);
                 }
             }
-            ModifierSelectionFragmentDialog.alFinalCheckedModifier = new ArrayList<>();
+            isItemSuggestedClick = false;
+            alOptionValue = new ArrayList<>();
+            alSubItemOptionValue = new ArrayList<>();
         } else if (v.getId() == R.id.textInputLayout) {
             textInputLayout.setFocusable(true);
             etQuantity.setFocusable(false);
@@ -282,17 +360,43 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     }
 
     @Override
-    public void ModifierResponse(boolean isChange) {
-        //ModifierSelectionFragmentDialog response
-//        SetTextModifier(ModifierSelectionFragmentDialog.alFinalCheckedModifier);
-//        if (!sbModifierName.toString().equals("")) {
-//            txtModifier.setVisibility(View.VISIBLE);
-//            txtModifier.setText(sbModifierName.toString());
-//        } else {
-//            txtModifier.setVisibility(View.GONE);
-//            txtModifier.setText("");
-//        }
+    public void AddToCart(boolean isAddToCart, ItemMaster objOrderItemTran) {
+        if (isAddToCart) {
+            if (objOrderItemTran.getItemName() != null) {
+                Globals.counter = Globals.counter + 1;
+                Globals.alOrderItemTran.add(objOrderItemTran);
+                Globals.ShowSnackBar(detailLayout, String.format(getActivity().getResources().getString(R.string.MsgCartItem), objOrderItemTran.getItemName()), getActivity(), 3000);
+            }
+        }
     }
+
+
+    @SuppressLint("RtlHardcoded")
+    @Override
+    public void ImageOnClick(ItemMaster objItemMaster, View view, String transitionName) {
+        isItemSuggestedClick = true;
+        alCheckedModifier = new ArrayList<>();
+        if (objItemMaster.getItemModifierIds().equals("") && objItemMaster.getOptionValueTranIds().equals("")) {
+            AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
+            addItemQtyDialogFragment.setTargetFragment(this, 0);
+            addItemQtyDialogFragment.show(getFragmentManager(), "");
+        } else {
+            DetailFragment detailFragment = new DetailFragment(objItemMaster);
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            if (Build.VERSION.SDK_INT >= 21) {
+                Slide slideTransition = new Slide();
+                slideTransition.setSlideEdge(Gravity.RIGHT);
+                slideTransition.setDuration(350);
+                detailFragment.setEnterTransition(slideTransition);
+            } else {
+                fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
+            }
+            fragmentTransaction.replace(R.id.detailLayout, detailFragment, getResources().getString(R.string.title_fragment_sub_detail));
+            fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_sub_detail));
+            fragmentTransaction.commit();
+        }
+    }
+
 
     //region Private Methods and Interface
     private int IncrementDecrementValue(int id, int value) {
@@ -309,28 +413,74 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     }
 
     private void SetLoadingTask(ViewGroup container) {
-        if (objItemMaster.getItemModifierIds().equals("")) {
-            if (Service.CheckNet(getActivity())) {
-                new RemarkLoadingTask().execute();
-            } else {
-                Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
-            }
+        if (objItemMaster.getIsDineInOnly() && Globals.orderTypeMasterId == Globals.OrderType.TakeAway.getValue()) {
+            txtDineIn.setVisibility(View.VISIBLE);
+            textInputLayout.setVisibility(View.GONE);
+            qtyLayout.setVisibility(View.GONE);
+            rvModifier.setVisibility(View.GONE);
+            itemSuggestionLayout.setVisibility(View.GONE);
+            rvOptionValue.setVisibility(View.GONE);
+            wishListLayout.setVisibility(View.GONE);
+            btnOrder.setVisibility(View.GONE);
+            btnOrderDisable.setVisibility(View.VISIBLE);
         } else {
-            if (Service.CheckNet(getActivity())) {
-                new RemarkLoadingTask().execute();
-                if (!objItemMaster.getItemModifierIds().equals("")) {
-                    new ModifierLoadingTask().execute();
-                }else{
-                    rvModifier.setVisibility(View.GONE);
-                }
-                if (!objItemMaster.getOptionValueTranIds().equals("")) {
-                    new OptionValueLoadingTask().execute();
-                }else {
-                    rvOptionValue.setVisibility(View.GONE);
-                }
-
+            txtDineIn.setVisibility(View.GONE);
+            textInputLayout.setVisibility(View.VISIBLE);
+            qtyLayout.setVisibility(View.VISIBLE);
+            btnOrder.setVisibility(View.VISIBLE);
+            btnOrderDisable.setVisibility(View.GONE);
+            if (Globals.isWishListShow == 1) {
+                wishListLayout.setVisibility(View.VISIBLE);
             } else {
-                Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                wishListLayout.setVisibility(View.GONE);
+            }
+            if (objItemMaster.getItemModifierIds().equals("")) {
+                if (Service.CheckNet(getActivity())) {
+                    if (Globals.isWishListShow == 0) {
+                        new RemarkLoadingTask().execute();
+                    }
+                    if (!objItemMaster.getOptionValueTranIds().equals("")) {
+                        new OptionValueLoadingTask().execute();
+                    } else {
+                        rvOptionValue.setVisibility(View.GONE);
+                    }
+                    if (isItemSuggestedClick) {
+                        itemSuggestionLayout.setVisibility(View.GONE);
+                    } else {
+                        if (Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue()) {
+                            isDineIn = true;
+                        }
+                        new ItemSuggestionLoadingTask().execute();
+                    }
+                } else {
+                    Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+            } else {
+                if (Service.CheckNet(getActivity())) {
+                    if (Globals.isWishListShow == 0) {
+                        new RemarkLoadingTask().execute();
+                    }
+                    if (!objItemMaster.getItemModifierIds().equals("")) {
+                        new ModifierLoadingTask().execute();
+                    } else {
+                        rvModifier.setVisibility(View.GONE);
+                    }
+                    if (!objItemMaster.getOptionValueTranIds().equals("")) {
+                        new OptionValueLoadingTask().execute();
+                    } else {
+                        rvOptionValue.setVisibility(View.GONE);
+                    }
+                    if (isItemSuggestedClick) {
+                        itemSuggestionLayout.setVisibility(View.GONE);
+                    } else {
+                        if (Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue()) {
+                            isDineIn = true;
+                        }
+                        new ItemSuggestionLoadingTask().execute();
+                    }
+                } else {
+                    Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
             }
         }
     }
@@ -339,30 +489,23 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         if (alItemMasterModifier != null && alItemMasterModifier.size() != 0) {
             rvModifier.setVisibility(View.VISIBLE);
             alItemMasterModifierFilter = new ArrayList<>();
-            ModifierAdapter modifierAdapter = new ModifierAdapter(getActivity(), alItemMasterModifier, this);
+            modifierAdapter = new ModifierAdapter(getActivity(), alItemMasterModifier, this);
             rvModifier.setAdapter(modifierAdapter);
             rvModifier.setLayoutManager(new LinearLayoutManager(getActivity()));
-//            String[] strModifier = objItemMaster.getItemModifierIds().split(",");
-//            for (String strModifierFilter : strModifier) {
-//                for (int i = 0; i < alItemMasterModifier.size(); i++) {
-//                    if (strModifierFilter.equals(String.valueOf(alItemMasterModifier.get(i).getItemMasterId()))) {
-//                        alItemMasterModifierFilter.add(alItemMasterModifier.get(i));
-//                        break;
-//                    }
-//                }
-//            }
         } else {
             rvModifier.setVisibility(View.GONE);
         }
 
     }
 
-    private void SetTextModifier(ArrayList<ItemMaster> alItemMasterCheckedModifier) {
-        sbModifierName = new StringBuilder();
-        if (alItemMasterCheckedModifier.size() > 0) {
-            for (int i = 0; i < alItemMasterCheckedModifier.size(); i++) {
-                sbModifierName.append(alItemMasterCheckedModifier.get(i).getItemName()).append(", ");
-            }
+    private void SetItemSuggestion(ArrayList<ItemMaster> alItemSuggestion) {
+        if (alItemSuggestion != null && alItemSuggestion.size() != 0) {
+            itemSuggestionLayout.setVisibility(View.VISIBLE);
+            ItemSuggestedAdapter itemSuggestedAdapter = new ItemSuggestedAdapter(getActivity(), alItemSuggestion, this);
+            rvSuggestedItem.setAdapter(itemSuggestedAdapter);
+            rvSuggestedItem.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        } else {
+            itemSuggestionLayout.setVisibility(View.GONE);
         }
     }
 
@@ -492,16 +635,11 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         return isMatch;
     }
 
-    private void AddNumber(String number) {
-        textInputLayout.clearFocus();
-        etQuantity.requestFocus();
-        etQuantity.setText(number);
-    }
-
     private void SetOrderItemTran() {
         objOrderItemTran = new ItemMaster();
         try {
             if (Globals.alOrderItemTran.size() > 0) {
+                SetItemRemark();
                 CheckDuplicateRemarkAndModifier();
                 if (!isDuplicate) {
                     itemName = objItemMaster.getItemName();
@@ -510,8 +648,30 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                     objOrderItemTran.setActualSellPrice(objItemMaster.getSellPrice());
                     objOrderItemTran.setSellPrice(Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                     objOrderItemTran.setQuantity(Integer.valueOf(etQuantity.getText().toString()));
-                    objOrderItemTran.setRemark(actRemark.getText().toString());
-                    objOrderItemTran.setItemRemark(actRemark.getText().toString());
+                    SetItemRemark();
+                    if (actRemark.getText().toString().isEmpty()) {
+                        if (!sbOptionValue.toString().equals("")) {
+                            objOrderItemTran.setRemark(sbOptionValue.toString());
+                            objOrderItemTran.setOptionValue(sbOptionValue.toString());
+                        }
+                    } else {
+                        objOrderItemTran.setItemRemark(actRemark.getText().toString());
+                        if (!sbOptionValue.toString().equals("")) {
+                            if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(",")) {
+                                objOrderItemTran.setRemark(actRemark.getText().toString() + " " + sbOptionValue.toString());
+                            } else if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(" ")) {
+                                objOrderItemTran.setRemark(actRemark.getText().toString() + sbOptionValue.toString());
+                            } else {
+                                objOrderItemTran.setRemark(actRemark.getText().toString() + ", " + sbOptionValue.toString());
+                            }
+
+                            objOrderItemTran.setOptionValue(sbOptionValue.toString());
+                        } else {
+                            objOrderItemTran.setRemark(actRemark.getText().toString());
+                        }
+                    }
+                    //objOrderItemTran.setRemark(actRemark.getText().toString());
+                    //objOrderItemTran.setItemRemark(actRemark.getText().toString());
                     objOrderItemTran.setTax(objItemMaster.getTax());
                     CountTax(objOrderItemTran, isDuplicate);
                     objOrderItemTran.setTotalTax(totalTax);
@@ -537,8 +697,29 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                 objOrderItemTran.setActualSellPrice(objItemMaster.getSellPrice());
                 objOrderItemTran.setSellPrice(Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                 objOrderItemTran.setQuantity(Integer.valueOf(etQuantity.getText().toString()));
-                objOrderItemTran.setRemark(actRemark.getText().toString());
-                objOrderItemTran.setItemRemark(actRemark.getText().toString());
+                SetItemRemark();
+                if (actRemark.getText().toString().isEmpty()) {
+                    if (!sbOptionValue.toString().equals("")) {
+                        objOrderItemTran.setRemark(sbOptionValue.toString());
+                        objOrderItemTran.setOptionValue(sbOptionValue.toString());
+                    }
+                } else {
+                    objOrderItemTran.setItemRemark(actRemark.getText().toString());
+                    if (!sbOptionValue.toString().equals("")) {
+                        if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(",")) {
+                            objOrderItemTran.setRemark(actRemark.getText().toString() + " " + sbOptionValue.toString());
+                        } else if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(" ")) {
+                            objOrderItemTran.setRemark(actRemark.getText().toString() + sbOptionValue.toString());
+                        } else {
+                            objOrderItemTran.setRemark(actRemark.getText().toString() + ", " + sbOptionValue.toString());
+                        }
+                        objOrderItemTran.setOptionValue(sbOptionValue.toString());
+                    } else {
+                        objOrderItemTran.setRemark(actRemark.getText().toString());
+                    }
+                }
+                //objOrderItemTran.setRemark(actRemark.getText().toString());
+                //objOrderItemTran.setItemRemark(actRemark.getText().toString());
                 objOrderItemTran.setTax(objItemMaster.getTax());
                 CountTax(objOrderItemTran, isDuplicate);
                 objOrderItemTran.setTotalTax(totalTax);
@@ -570,23 +751,40 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
     private void CheckDuplicateRemarkAndModifier() {
         String[] strNewRemark = new String[0], strOldRemark;
+        String strOptionValue;
         int cnt, cntModifier;
         try {
-            for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
+            //for (int i = 0; i < Globals.alOrderItemTran.size(); i++) {
+            for (ItemMaster objFilterOrderItemTran : Globals.alOrderItemTran) {
                 cnt = 0;
                 cntModifier = 0;
 
-                if (!actRemark.getText().toString().isEmpty() && !Globals.alOrderItemTran.get(i).getRemark().isEmpty()) {
-
-                    if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(",")) {
-                        strNewRemark = String.valueOf(actRemark.getText().subSequence(0, actRemark.length()) + " ").split(", ");
-                    } else if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(" ")) {
-                        strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
+                if (actRemark.getText().toString().isEmpty()) {
+                    strOptionValue = sbOptionValue.toString();
+                } else {
+                    if (!sbOptionValue.toString().equals("")) {
+                        if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(",")) {
+                            strOptionValue = actRemark.getText().toString() + " " + sbOptionValue.toString();
+                        } else if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(" ")) {
+                            strOptionValue = actRemark.getText().toString() + sbOptionValue.toString();
+                        } else {
+                            strOptionValue = actRemark.getText().toString() + ", " + sbOptionValue.toString();
+                        }
                     } else {
-                        strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
+                        strOptionValue = actRemark.getText().toString();
+                    }
+                }
+
+                if (!strOptionValue.equals("") && (objFilterOrderItemTran.getRemark() != null && !objFilterOrderItemTran.getRemark().equals(""))) {
+                    if (strOptionValue.subSequence(strOptionValue.length() - 1, strOptionValue.length()).toString().equals(",")) {
+                        strNewRemark = String.valueOf(strOptionValue.subSequence(0, strOptionValue.length()) + " ").split(", ");
+                    } else if (strOptionValue.subSequence(strOptionValue.length() - 1, strOptionValue.length()).toString().equals(" ")) {
+                        strNewRemark = strOptionValue.subSequence(0, strOptionValue.length()).toString().split(", ");
+                    } else {
+                        strNewRemark = strOptionValue.subSequence(0, strOptionValue.length()).toString().split(", ");
                     }
 
-                    String listRemark = Globals.alOrderItemTran.get(i).getRemark();
+                    String listRemark = objFilterOrderItemTran.getRemark();
                     if (listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(",")) {
                         strOldRemark = String.valueOf(listRemark.subSequence(0, listRemark.length()) + " ").split(", ");
                     } else if (listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(" ")) {
@@ -594,7 +792,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                     } else {
                         strOldRemark = listRemark.subSequence(0, listRemark.length()).toString().split(", ");
                     }
-
                     if (strNewRemark.length != 0) {
                         for (String newRemark : strNewRemark) {
                             for (String oldRemark : strOldRemark) {
@@ -605,67 +802,170 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                         }
                     }
                 }
-                if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran() != null && Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() != 0) {
-                    if (objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId() && alOrderItemModifierTran.size() != 0) {
-                        ArrayList<ItemMaster> alOldOrderItemTran = Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran();
+
+                if (objFilterOrderItemTran.getAlOrderItemModifierTran() != null && objFilterOrderItemTran.getAlOrderItemModifierTran().size() != 0) {
+                    if (objItemMaster.getItemMasterId() == objFilterOrderItemTran.getItemMasterId() && alOrderItemModifierTran.size() != 0) {
+                        ArrayList<ItemMaster> alOldOrderItemTran = objFilterOrderItemTran.getAlOrderItemModifierTran();
                         if (alOrderItemModifierTran.size() != 0) {
                             if (alOrderItemModifierTran.size() == alOldOrderItemTran.size()) {
-                                for (int j = 0; j < alOrderItemModifierTran.size(); j++) {
-                                    for (int k = 0; k < alOldOrderItemTran.size(); k++) {
-                                        if (alOrderItemModifierTran.get(j).getItemModifierIds().equals(alOldOrderItemTran.get(k).getItemModifierIds())) {
+                                for (ItemMaster objCheckedModifier : alOrderItemModifierTran) {
+                                    for (ItemMaster objOldOrderItemTran : alOldOrderItemTran) {
+                                        if (objCheckedModifier.getItemMasterId() == objOldOrderItemTran.getItemMasterId()) {
                                             cntModifier = cntModifier + 1;
                                         }
                                     }
                                 }
                             }
                         }
-                        if (cntModifier == alOrderItemModifierTran.size() && ((strNewRemark.length != 0 && cnt != 0 && strNewRemark.length == cnt) || (actRemark.getText().toString().isEmpty() && Globals.alOrderItemTran.get(i).getRemark().isEmpty()))) {
+                        if (cntModifier == alOrderItemModifierTran.size() && ((strNewRemark.length != 0 && cnt != 0 && strNewRemark.length == cnt) || (strOptionValue.equals("") && (objFilterOrderItemTran.getRemark() == null || objFilterOrderItemTran.getRemark().equals(""))))) {
                             isDuplicate = true;
-                            Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+                            itemName = objItemMaster.getItemName();
+                            objFilterOrderItemTran.setSellPrice(objFilterOrderItemTran.getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                             if (alOrderItemModifierTran.size() > 0) {
-                                Globals.alOrderItemTran.get(i).setTotalAmount((Globals.alOrderItemTran.get(i).getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+                                objFilterOrderItemTran.setTotalAmount((objFilterOrderItemTran.getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+                            } else {
+                                objFilterOrderItemTran.setTotalAmount(objFilterOrderItemTran.getTotalAmount() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                             }
-                            Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
-                            if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
-                                SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
+                            objFilterOrderItemTran.setQuantity(objFilterOrderItemTran.getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+                            if (objFilterOrderItemTran.getAlOrderItemModifierTran().size() > 0) {
+                                SetOrderItemModifierQty(objFilterOrderItemTran.getAlOrderItemModifierTran(), objFilterOrderItemTran.getQuantity());
                             }
-                            CountTax(Globals.alOrderItemTran.get(i), isDuplicate);
-                            Globals.alOrderItemTran.get(i).setTotalTax(Globals.alOrderItemTran.get(i).getTotalTax() + totalTax);
+                            CountTax(objFilterOrderItemTran, isDuplicate);
+                            objFilterOrderItemTran.setTotalTax(objFilterOrderItemTran.getTotalTax() + totalTax);
                             break;
-                        } else if (actRemark.getText().toString().isEmpty() && Globals.alOrderItemTran.get(i).getRemark().isEmpty() && Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() == 0) {
+                        } else if (strOptionValue.equals("") && (objFilterOrderItemTran.getRemark() == null || objFilterOrderItemTran.getRemark().equals("")) && objFilterOrderItemTran.getAlOrderItemModifierTran().size() == 0) {
                             isDuplicate = true;
-                            Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+                            itemName = objItemMaster.getItemName();
+                            objFilterOrderItemTran.setSellPrice(objFilterOrderItemTran.getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                             if (alOrderItemModifierTran.size() > 0) {
-                                Globals.alOrderItemTran.get(i).setTotalAmount((Globals.alOrderItemTran.get(i).getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+                                objFilterOrderItemTran.setTotalAmount((objFilterOrderItemTran.getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+                            } else {
+                                objFilterOrderItemTran.setTotalAmount(objFilterOrderItemTran.getTotalAmount() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                             }
-                            Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
-                            if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
-                                SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
+                            objFilterOrderItemTran.setQuantity(objFilterOrderItemTran.getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+                            if (objFilterOrderItemTran.getAlOrderItemModifierTran().size() > 0) {
+                                SetOrderItemModifierQty(objFilterOrderItemTran.getAlOrderItemModifierTran(), objFilterOrderItemTran.getQuantity());
                             }
-                            CountTax(Globals.alOrderItemTran.get(i), isDuplicate);
-                            Globals.alOrderItemTran.get(i).setTotalTax(Globals.alOrderItemTran.get(i).getTotalTax() + totalTax);
+                            CountTax(objFilterOrderItemTran, isDuplicate);
+                            objFilterOrderItemTran.setTotalTax(objFilterOrderItemTran.getTotalTax() + totalTax);
                             break;
                         }
                     }
                 } else {
-                    if ((objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId())
-                            && ((actRemark.getText().toString().isEmpty() && Globals.alOrderItemTran.get(i).getRemark().isEmpty() && alOrderItemModifierTran.size() == 0 && Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() == 0)
-                            || (strNewRemark.length != 0 && cnt != 0 && strNewRemark.length == cnt && alOrderItemModifierTran.size() == 0 && Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() == 0))) {
+                    if ((objItemMaster.getItemMasterId() == objFilterOrderItemTran.getItemMasterId())
+                            && ((strOptionValue.equals("") && (objFilterOrderItemTran.getRemark() == null || objFilterOrderItemTran.getRemark().equals("")) && alOrderItemModifierTran.size() == 0 && objFilterOrderItemTran.getAlOrderItemModifierTran().size() == 0)
+                            || (strNewRemark.length != 0 && cnt != 0 && strNewRemark.length == cnt && alCheckedModifier.size() == 0 && objFilterOrderItemTran.getAlOrderItemModifierTran().size() == 0))) {
                         isDuplicate = true;
-                        Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()));
+                        itemName = objItemMaster.getItemName();
+                        objFilterOrderItemTran.setSellPrice(objFilterOrderItemTran.getSellPrice() + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()));
                         if (alOrderItemModifierTran.size() > 0) {
-                            Globals.alOrderItemTran.get(i).setTotalAmount((Globals.alOrderItemTran.get(i).getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+                            objFilterOrderItemTran.setTotalAmount((objFilterOrderItemTran.getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+                        } else {
+                            objFilterOrderItemTran.setTotalAmount(objFilterOrderItemTran.getTotalAmount() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
                         }
-                        Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
-                        if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
-                            SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
+                        objFilterOrderItemTran.setQuantity(objFilterOrderItemTran.getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+                        if (objFilterOrderItemTran.getAlOrderItemModifierTran().size() > 0) {
+                            SetOrderItemModifierQty(objFilterOrderItemTran.getAlOrderItemModifierTran(), objFilterOrderItemTran.getQuantity());
                         }
-                        CountTax(Globals.alOrderItemTran.get(i), isDuplicate);
-                        Globals.alOrderItemTran.get(i).setTotalTax(Globals.alOrderItemTran.get(i).getTotalTax() + totalTax);
+                        CountTax(objFilterOrderItemTran, isDuplicate);
+                        objFilterOrderItemTran.setTotalTax(objFilterOrderItemTran.getTotalTax() + totalTax);
                         break;
                     }
                 }
             }
+
+//                if (!actRemark.getText().toString().isEmpty() && !Globals.alOrderItemTran.get(i).getRemark().isEmpty()) {
+//
+//                    if (sbOptionValue.)
+//
+//                        if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(",")) {
+//                            strNewRemark = String.valueOf(actRemark.getText().subSequence(0, actRemark.length()) + " ").split(", ");
+//                        } else if (actRemark.getText().subSequence(actRemark.length() - 1, actRemark.length()).toString().equals(" ")) {
+//                            strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
+//                        } else {
+//                            strNewRemark = actRemark.getText().subSequence(0, actRemark.length()).toString().split(", ");
+//                        }
+//
+//                    String listRemark = Globals.alOrderItemTran.get(i).getRemark();
+//                    if (listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(",")) {
+//                        strOldRemark = String.valueOf(listRemark.subSequence(0, listRemark.length()) + " ").split(", ");
+//                    } else if (listRemark.subSequence(listRemark.length() - 1, listRemark.length()).toString().equals(" ")) {
+//                        strOldRemark = listRemark.subSequence(0, listRemark.length()).toString().split(", ");
+//                    } else {
+//                        strOldRemark = listRemark.subSequence(0, listRemark.length()).toString().split(", ");
+//                    }
+//
+//                    if (strNewRemark.length != 0) {
+//                        for (String newRemark : strNewRemark) {
+//                            for (String oldRemark : strOldRemark) {
+//                                if (newRemark.equals(oldRemark)) {
+//                                    cnt = cnt + 1;
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran() != null && Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() != 0) {
+//                    if (objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId() && alOrderItemModifierTran.size() != 0) {
+//                        ArrayList<ItemMaster> alOldOrderItemTran = Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran();
+//                        if (alOrderItemModifierTran.size() != 0) {
+//                            if (alOrderItemModifierTran.size() == alOldOrderItemTran.size()) {
+//                                for (int j = 0; j < alOrderItemModifierTran.size(); j++) {
+//                                    for (int k = 0; k < alOldOrderItemTran.size(); k++) {
+//                                        if (alOrderItemModifierTran.get(j).getItemModifierIds().equals(alOldOrderItemTran.get(k).getItemModifierIds())) {
+//                                            cntModifier = cntModifier + 1;
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (cntModifier == alOrderItemModifierTran.size() && ((strNewRemark.length != 0 && cnt != 0 && strNewRemark.length == cnt) || (actRemark.getText().toString().isEmpty() && Globals.alOrderItemTran.get(i).getRemark().isEmpty()))) {
+//                            isDuplicate = true;
+//                            Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+//                            if (alOrderItemModifierTran.size() > 0) {
+//                                Globals.alOrderItemTran.get(i).setTotalAmount((Globals.alOrderItemTran.get(i).getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+//                            }
+//                            Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+//                            if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
+//                                SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
+//                            }
+//                            CountTax(Globals.alOrderItemTran.get(i), isDuplicate);
+//                            Globals.alOrderItemTran.get(i).setTotalTax(Globals.alOrderItemTran.get(i).getTotalTax() + totalTax);
+//                            break;
+//                        } else if (actRemark.getText().toString().isEmpty() && Globals.alOrderItemTran.get(i).getRemark().isEmpty() && Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() == 0) {
+//                            isDuplicate = true;
+//                            Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice());
+//                            if (alOrderItemModifierTran.size() > 0) {
+//                                Globals.alOrderItemTran.get(i).setTotalAmount((Globals.alOrderItemTran.get(i).getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+//                            }
+//                            Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+//                            if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
+//                                SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
+//                            }
+//                            CountTax(Globals.alOrderItemTran.get(i), isDuplicate);
+//                            Globals.alOrderItemTran.get(i).setTotalTax(Globals.alOrderItemTran.get(i).getTotalTax() + totalTax);
+//                            break;
+//                        }
+//                    }
+//                } else {
+//                    if ((objItemMaster.getItemMasterId() == Globals.alOrderItemTran.get(i).getItemMasterId())
+//                            && ((actRemark.getText().toString().isEmpty() && Globals.alOrderItemTran.get(i).getRemark().isEmpty() && alOrderItemModifierTran.size() == 0 && Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() == 0)
+//                            || (strNewRemark.length != 0 && cnt != 0 && strNewRemark.length == cnt && alOrderItemModifierTran.size() == 0 && Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() == 0))) {
+//                        isDuplicate = true;
+//                        Globals.alOrderItemTran.get(i).setSellPrice(Globals.alOrderItemTran.get(i).getSellPrice() + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()));
+//                        if (alOrderItemModifierTran.size() > 0) {
+//                            Globals.alOrderItemTran.get(i).setTotalAmount((Globals.alOrderItemTran.get(i).getTotalAmount()) + (Integer.valueOf(etQuantity.getText().toString()) * objItemMaster.getSellPrice()) + (alOrderItemModifierTran.get(alOrderItemModifierTran.size() - 1).getTotalAmount() * Integer.valueOf(etQuantity.getText().toString())));
+//                        }
+//                        Globals.alOrderItemTran.get(i).setQuantity(Globals.alOrderItemTran.get(i).getQuantity() + Integer.valueOf(etQuantity.getText().toString()));
+//                        if (Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran().size() > 0) {
+//                            SetOrderItemModifierQty(Globals.alOrderItemTran.get(i).getAlOrderItemModifierTran(), Globals.alOrderItemTran.get(i).getQuantity());
+//                        }
+//                        CountTax(Globals.alOrderItemTran.get(i), isDuplicate);
+//                        Globals.alOrderItemTran.get(i).setTotalTax(Globals.alOrderItemTran.get(i).getTotalTax() + totalTax);
+//                        break;
+//                    }
+//                }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -676,14 +976,14 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         alOrderItemModifierTran = new ArrayList<>();
         sbModifier = new StringBuilder();
         try {
-            for (int i = 0; i < ModifierSelectionFragmentDialog.alFinalCheckedModifier.size(); i++) {
+            for (int i = 0; i < alCheckedModifier.size(); i++) {
 
                 objOrderItemModifier = new ItemMaster();
-                objOrderItemModifier.setItemName(ModifierSelectionFragmentDialog.alFinalCheckedModifier.get(i).getItemName());
-                objOrderItemModifier.setItemModifierIds(String.valueOf(ModifierSelectionFragmentDialog.alFinalCheckedModifier.get(i).getItemMasterId()));
-                objOrderItemModifier.setActualSellPrice(ModifierSelectionFragmentDialog.alFinalCheckedModifier.get(i).getMRP());
-                objOrderItemModifier.setMRP(ModifierSelectionFragmentDialog.alFinalCheckedModifier.get(i).getMRP());
-                totalModifierAmount = totalModifierAmount + ModifierSelectionFragmentDialog.alFinalCheckedModifier.get(i).getMRP();
+                objOrderItemModifier.setItemName(alCheckedModifier.get(i).getItemName());
+                objOrderItemModifier.setItemModifierIds(String.valueOf(alCheckedModifier.get(i).getItemMasterId()));
+                objOrderItemModifier.setActualSellPrice(alCheckedModifier.get(i).getMRP());
+                objOrderItemModifier.setMRP(alCheckedModifier.get(i).getMRP());
+                totalModifierAmount = totalModifierAmount + alCheckedModifier.get(i).getMRP();
                 objOrderItemModifier.setTotalAmount(totalModifierAmount);
                 alOrderItemModifierTran.add(objOrderItemModifier);
             }
@@ -767,6 +1067,17 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         }
     }
 
+    private void SetItemRemark() {
+        sbOptionValue = new StringBuilder();
+        if (alOptionValue != null && alOptionValue.size() > 0) {
+            for (OptionMaster objOptionMaster : alOptionValue) {
+                if (objOptionMaster.getOptionName() != null) {
+                    sbOptionValue.append(objOptionMaster.getOptionName()).append(", ");
+                }
+            }
+        }
+    }
+
     interface ResponseListener {
         void ShowMessage(String itemName);
     }
@@ -825,7 +1136,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         protected Object doInBackground(Object[] objects) {
 
             ItemJSONParser objItemMasterJSONParser = new ItemJSONParser();
-            alItemMasterModifier = objItemMasterJSONParser.SelectAllItemMasterModifier(Globals.businessMasterId);
+            alItemMasterModifier = objItemMasterJSONParser.SelectAllItemMasterModifier(Globals.businessMasterId, objItemMaster.getItemMasterId());
             return null;
         }
 
@@ -898,23 +1209,56 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                     }
                 }
 
-                alOptionValue = new ArrayList<>();
-                if (alOptionMaster.size() > 0) {
-                    for (OptionMaster objFilterOptionMaster : alOptionMaster) {
-                        objOptionMaster = new OptionMaster();
-                        objOptionMaster.setOptionRowId(-1);
-                        objOptionMaster.setOptionName(null);
-                        objOptionMaster.setOptionMasterId(objFilterOptionMaster.getOptionMasterId());
-                        alOptionValue.add(objOptionMaster);
+                if (isItemSuggestedClick) {
+                    alSubItemOptionValue = new ArrayList<>();
+                    if (alOptionMaster.size() > 0) {
+                        for (OptionMaster objFilterOptionMaster : alOptionMaster) {
+                            objOptionMaster = new OptionMaster();
+                            objOptionMaster.setOptionRowId(-1);
+                            objOptionMaster.setOptionName(null);
+                            objOptionMaster.setOptionMasterId(objFilterOptionMaster.getOptionMasterId());
+                            alSubItemOptionValue.add(objOptionMaster);
+                        }
+                    }
+                } else {
+                    alOptionValue = new ArrayList<>();
+                    if (alOptionMaster.size() > 0) {
+                        for (OptionMaster objFilterOptionMaster : alOptionMaster) {
+                            objOptionMaster = new OptionMaster();
+                            objOptionMaster.setOptionRowId(-1);
+                            objOptionMaster.setOptionName(null);
+                            objOptionMaster.setOptionMasterId(objFilterOptionMaster.getOptionMasterId());
+                            alOptionValue.add(objOptionMaster);
+                        }
                     }
                 }
                 rvOptionValue.setVisibility(View.VISIBLE);
-                rvOptionValue.setAdapter(new ItemOptionValueAdapter(getActivity(), alOptionMaster));
+                itemOptionValueAdapter = new ItemOptionValueAdapter(getActivity(), alOptionMaster, isItemSuggestedClick);
+                rvOptionValue.setAdapter(itemOptionValueAdapter);
                 rvOptionValue.setLayoutManager(new LinearLayoutManager(getActivity()));
             } else {
                 rvOptionValue.setVisibility(View.GONE);
             }
         }
     }
+
+    class ItemSuggestionLoadingTask extends AsyncTask {
+        ArrayList<ItemMaster> alItemSuggestion;
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            ItemJSONParser objItemMasterJSONParser = new ItemJSONParser();
+            alItemSuggestion = objItemMasterJSONParser.SelectAllItemSuggested(Globals.businessMasterId, objItemMaster.getItemMasterId(), objItemMaster.getRateIndex(), isDineIn ? 1 : 0);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            SetItemSuggestion(alItemSuggestion);
+        }
+    }
+
     //endregion
 }

@@ -93,6 +93,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                     Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
                 }
             } else if (v.getId() == R.id.cvMenu) {
+                Globals.orderTypeMasterId = GuestHomeActivity.objTableMaster.getlinktoOrderTypeMasterId();
                 Intent intent = new Intent(getActivity(), MenuActivity.class);
                 intent.putExtra("ParentActivity", true);
                 intent.putExtra("IsFavoriteShow",false);

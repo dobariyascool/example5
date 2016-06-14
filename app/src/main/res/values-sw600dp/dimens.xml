@@ -16,5 +16,8 @@
     <dimen name="itemGridImageHeight">150dp</dimen>
 
     <dimen name="swipeImageHeight">150dp</dimen>
-
+    <dimen name="button_marginTop">@dimen/control_SpecingSmall</dimen>
+    <dimen name="button_marginBottom">@dimen/control_SpecingSmall</dimen>
+    <dimen name="button_marginStart">@dimen/control_SpecingSmall</dimen>
+    <dimen name="button_marginEnd">@dimen/control_SpecingSmall</dimen>
 </resources>

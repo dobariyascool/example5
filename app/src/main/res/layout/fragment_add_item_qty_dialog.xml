@@ -40,7 +40,6 @@
                 android:id="@+id/actRemark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/arrow_drop_down_vector_drawable"
                 android:dropDownHeight="190dp"
                 android:imeOptions="actionDone"
                 android:singleLine="true"

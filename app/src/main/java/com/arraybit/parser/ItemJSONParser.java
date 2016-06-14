@@ -18,6 +18,7 @@ import java.util.Locale;
 public class ItemJSONParser {
     public String SelectAllItemMasterByCategoryMasterId = "SelectAllItemMasterByCategoryMasterId";
     public String SelectAllItemMasterModifier = "SelectAllItemMasterModifier";
+    public String SelectAllItemSuggested = "SelectAllItemSuggested";
     public String SelectAllOrderItemByTableMasterIds = "SelectAllOrderItemByTableMasterIds";
     public String SelectItemMaster = "SelectItemMaster";
 
@@ -176,10 +177,10 @@ public class ItemJSONParser {
         }
     }
 
-    public ArrayList<ItemMaster> SelectAllItemMasterModifier(int linktoBusinessMasterId) {
+    public ArrayList<ItemMaster> SelectAllItemMasterModifier(int linktoBusinessMasterId, int linktoItemMasterId) {
         ArrayList<ItemMaster> lstItemMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterModifier + "/" + Globals.itemType + "/" + linktoBusinessMasterId);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemMasterModifier + "/" + Globals.itemType + "/" + linktoBusinessMasterId + "/" + linktoItemMasterId);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemMasterModifier + "Result");
                 if (jsonArray != null) {
@@ -207,6 +208,22 @@ public class ItemJSONParser {
             return null;
         }
 
+    }
+
+    public ArrayList<ItemMaster> SelectAllItemSuggested(int linktoBusinessMasterId, int linktoItemMasterId, int rateIndex, int isDineIn) {
+        ArrayList<ItemMaster> lstItemMaster = null;
+        try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllItemSuggested + "/" + linktoItemMasterId + "/" + linktoBusinessMasterId + "/" + rateIndex + "/" + isDineIn);
+            if (jsonResponse != null) {
+                JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllItemSuggested + "Result");
+                if (jsonArray != null) {
+                    lstItemMaster = SetListPropertiesFromJSONArray(jsonArray);
+                }
+            }
+            return lstItemMaster;
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     public ArrayList<ItemMaster> SelectAllOrderItemByTableMasterIds(String tableMasterId) {

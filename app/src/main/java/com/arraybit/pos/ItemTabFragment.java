@@ -259,14 +259,6 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             objCartIconListener = (CartIconListener) Globals.targetFragment;
             objCartIconListener.CardViewOnClick(objItemMaster);
         }
-//        if (objItemMaster.getItemModifierIds().equals("")) {
-//            AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
-//            addItemQtyDialogFragment.setTargetFragment(this, 0);
-//            addItemQtyDialogFragment.show(getFragmentManager(), "");
-//        } else {
-//            objCartIconListener = (CartIconListener) Globals.targetFragment;
-//            objCartIconListener.CardViewOnClick(objItemMaster);
-//        }
     }
 
     @Override

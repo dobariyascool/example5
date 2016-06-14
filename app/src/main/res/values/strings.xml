@@ -418,5 +418,6 @@
     <!-- end -->
     
     <string name="strFavorite">Favourite</string>
+    <string name="title_fragment_sub_detail">Sub Detail</string>
 
 </resources>

@@ -25,11 +25,12 @@ public class ItemOptionValueAdapter extends RecyclerView.Adapter<ItemOptionValue
     View view;
     Context context;
     ArrayList<OptionMaster> alOptionMaster;
-    boolean isActivity;
+    boolean isSubItem;
 
-    public ItemOptionValueAdapter(Context context, ArrayList<OptionMaster> result) {
+    public ItemOptionValueAdapter(Context context, ArrayList<OptionMaster> result,boolean isSubItem) {
         this.context = context;
         alOptionMaster = result;
+        this.isSubItem = isSubItem;
     }
 
     @Override
@@ -74,36 +75,67 @@ public class ItemOptionValueAdapter extends RecyclerView.Adapter<ItemOptionValue
             radioButton[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (rowNumber == -1) {
-                        rowNumber = linearLayout.getId();
-                    }
-                    if (linearLayout.getId() == rowNumber) {
-                        if (position == -1) {
-                            position = buttonView.getId();
-                            DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
-                            DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
-
-                        } else {
-                            radioButton[DetailFragment.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
-                            position = buttonView.getId();
-                            DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
-                            DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+                    if (isSubItem) {
+                        if (rowNumber == -1) {
+                            rowNumber = linearLayout.getId();
                         }
-                    } else {
-                        position = buttonView.getId();
-                        rowNumber = linearLayout.getId();
-                        if (DetailFragment.alOptionValue.get(rowNumber).getOptionRowId() != -1) {
-                            radioButton[DetailFragment.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
-                            position = buttonView.getId();
-                            DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
-                            DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+                        if (linearLayout.getId() == rowNumber) {
+                            if (position == -1) {
+                                position = buttonView.getId();
+                                DetailFragment.alSubItemOptionValue.get(rowNumber).setOptionRowId(position);
+                                DetailFragment.alSubItemOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+
+                            } else {
+                                radioButton[DetailFragment.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
+                                position = buttonView.getId();
+                                DetailFragment.alSubItemOptionValue.get(rowNumber).setOptionRowId(position);
+                                DetailFragment.alSubItemOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+                            }
                         } else {
-                            DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
-                            DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+                            position = buttonView.getId();
+                            rowNumber = linearLayout.getId();
+                            if (DetailFragment.alSubItemOptionValue.get(rowNumber).getOptionRowId() != -1) {
+                                radioButton[DetailFragment.alSubItemOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
+                                position = buttonView.getId();
+                                DetailFragment.alSubItemOptionValue.get(rowNumber).setOptionRowId(position);
+                                DetailFragment.alSubItemOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+                            } else {
+                                DetailFragment.alSubItemOptionValue.get(rowNumber).setOptionRowId(position);
+                                DetailFragment.alSubItemOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+                            }
+                        }
+
+                    } else {
+                        if (rowNumber == -1) {
+                            rowNumber = linearLayout.getId();
+                        }
+                        if (linearLayout.getId() == rowNumber) {
+                            if (position == -1) {
+                                position = buttonView.getId();
+                                DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
+                                DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+
+                            } else {
+                                radioButton[DetailFragment.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
+                                position = buttonView.getId();
+                                DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
+                                DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+                            }
+                        } else {
+                            position = buttonView.getId();
+                            rowNumber = linearLayout.getId();
+                            if (DetailFragment.alOptionValue.get(rowNumber).getOptionRowId() != -1) {
+                                radioButton[DetailFragment.alOptionValue.get(rowNumber).getOptionRowId()].setChecked(false);
+                                position = buttonView.getId();
+                                DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
+                                DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+                            } else {
+                                DetailFragment.alOptionValue.get(rowNumber).setOptionRowId(position);
+                                DetailFragment.alOptionValue.get(rowNumber).setOptionName(buttonView.getText().toString());
+                            }
                         }
                     }
                 }
-
             });
 
             linearLayout.addView(radioButton[i]);

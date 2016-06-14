@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -28,7 +29,7 @@ import java.util.Arrays;
 
 @SuppressLint("ValidFragment")
 @SuppressWarnings("unchecked")
-public class AddItemQtyDialogFragment extends DialogFragment implements View.OnClickListener{
+public class AddItemQtyDialogFragment extends DialogFragment implements View.OnClickListener {
 
     EditText etQuantity;
     ArrayList<String> alString, alStringFilter, alStringModifierFilter, alStringModifierRateFilter;
@@ -41,8 +42,8 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     AddToCartListener objAddToCartListener;
     ItemMaster objItemMaster, objOrderItemTran;
     ArrayList<ItemMaster> alOrderItemModifierTran;
-    boolean isDuplicate,isEdit,isSelected;
-    double totalAmount,totalTax,totalModifierAmount;
+    boolean isDuplicate, isEdit, isSelected;
+    double totalAmount, totalTax, totalModifierAmount;
     QtyRemarkDialogResponseListener objQtyRemarkDialogResponseListener;
 
     public AddItemQtyDialogFragment(ItemMaster objItemMaster) {
@@ -75,6 +76,9 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         Button btnNum9 = (Button) view.findViewById(R.id.btnNum9);
 
         actRemark = (AppCompatMultiAutoCompleteTextView) view.findViewById(R.id.actRemark);
+        if(Globals.isWishListShow==0) {
+            actRemark.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getActivity(), R.drawable.arrow_drop_down_vector_drawable), null);
+        }
 
         textInputLayout = (TextInputLayout) view.findViewById(R.id.textInputLayout);
 
@@ -83,7 +87,9 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         btnCancel.setOnClickListener(this);
         btnOk.setOnClickListener(this);
         textInputLayout.setOnClickListener(this);
-        actRemark.setOnClickListener(this);
+        if(Globals.isWishListShow==0) {
+            actRemark.setOnClickListener(this);
+        }
 
         btnNum1.setOnClickListener(this);
         btnNum2.setOnClickListener(this);
@@ -96,17 +102,24 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         btnNum9.setOnClickListener(this);
 
         Bundle bundle = getArguments();
-        if(bundle!=null) {
+        if (bundle != null) {
             isEdit = bundle.getBoolean("IsEdit", false);
         }
 
         if (Service.CheckNet(getActivity())) {
-            new RemarkLoadingTask().execute();
+            if(Globals.isWishListShow==0) {
+                new RemarkLoadingTask().execute();
+            }else{
+                actRemark.setText(objItemMaster.getItemRemark());
+                if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")){
+                    actRemark.setSelection(objItemMaster.getItemRemark().length());
+                }
+            }
         } else {
             Globals.ShowSnackBar(getActivity().getCurrentFocus(), getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
         }
 
-        if(!isEdit) {
+        if (!isEdit) {
             objAddToCartListener = (AddToCartListener) getTargetFragment();
         }
 
@@ -136,16 +149,16 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             etQuantity.requestFocus();
 
         } else if (v.getId() == R.id.btnCancel) {
-            if(!isEdit){
+            if (!isEdit) {
                 objAddToCartListener.AddToCart(false, null);
             }
             dismiss();
         } else if (v.getId() == R.id.btnOk) {
-            if(isEdit){
+            if (isEdit) {
                 UpdateOrderItem();
-                objQtyRemarkDialogResponseListener = (QtyRemarkDialogResponseListener)getTargetFragment();
+                objQtyRemarkDialogResponseListener = (QtyRemarkDialogResponseListener) getTargetFragment();
                 objQtyRemarkDialogResponseListener.UpdateQtyRemarkResponse(objItemMaster);
-            }else {
+            } else {
                 SetOrderItemTran();
                 objAddToCartListener.AddToCart(true, objOrderItemTran);
             }
@@ -168,16 +181,9 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                     }
                     UpdateArrayListAdapter(null);
                     isDeleted = false;
-                }
-                if(isEdit && isSelected){
-                    if(objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1,objItemMaster.getItemRemark().length()).equals(" ")){
-                        UpdateArrayListAdapter(objItemMaster.getItemRemark().substring(0, objItemMaster.getItemRemark().length()- 2));
-                    }else if(objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1,objItemMaster.getItemRemark().length()).equals(",")){
-                        UpdateArrayListAdapter(objItemMaster.getItemRemark().substring(0, objItemMaster.getItemRemark().length()- 1));
-                    }else{
-                        UpdateArrayListAdapter(objItemMaster.getItemRemark());
+                    if (isSelected) {
+                        isSelected = false;
                     }
-                    isSelected = false;
                 }
             }
             actRemark.showDropDown();
@@ -215,7 +221,6 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         }
         return value;
     }
-    //endregion
 
     private void UpdateArrayListAdapter(String name) {
         int isRemove = -1;
@@ -549,10 +554,9 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         }
     }
 
-    public interface QtyRemarkDialogResponseListener{
+    public interface QtyRemarkDialogResponseListener {
         void UpdateQtyRemarkResponse(ItemMaster objOrderItem);
     }
-
 
     interface AddToCartListener {
         void AddToCart(boolean isAddToCart, ItemMaster objOrderItemTran);
@@ -570,6 +574,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             return null;
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         protected void onPostExecute(Object result) {
 
@@ -579,14 +584,22 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                 actRemark.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
                 SetArrayListAdapter(alString);
 
-                if(isEdit){
+                if (isEdit) {
                     etQuantity.setText(String.valueOf(objItemMaster.getQuantity()));
-                    actRemark.setText(objItemMaster.getItemRemark());
-                    if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")) {
-                        actRemark.setSelection(objItemMaster.getItemRemark().length());
+                    if (objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(",")) {
+                        actRemark.setText(objItemMaster.getItemRemark() + " ");
+                    } else if (objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(" ")) {
+                        actRemark.setText(objItemMaster.getItemRemark());
+                    } else {
+                        actRemark.setText(objItemMaster.getItemRemark() + ", ");
                     }
+
+                    if (objItemMaster.getItemRemark() != null && !objItemMaster.getItemRemark().equals("")) {
+                        actRemark.setSelection(actRemark.getText().length());
+                    }
+                    isDeleted = true;
                     isSelected = true;
-                }else{
+                } else {
                     SetArrayListAdapter(alString);
                 }
 
