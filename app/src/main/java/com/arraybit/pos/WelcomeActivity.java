@@ -91,6 +91,8 @@ public class WelcomeActivity extends Activity {
                         Intent intent = getIntent();
                         isGuestScreen = intent.getBooleanExtra("GuestScreen", false);
                         if (isGuestScreen) {
+                            Globals.isWishListShow = 1;
+                            Globals.selectTableMasterId = objTableMaster.getTableMasterId();
                             Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
                             i.putExtra("TableMaster", intent.getParcelableExtra("TableMaster"));
                             startActivity(i);
@@ -99,6 +101,8 @@ public class WelcomeActivity extends Activity {
                         } else {
                             String obj = objSharePreferenceManage.GetPreference("GuestModePreference", "GuestMode", WelcomeActivity.this);
                             if (obj != null && GetObjectFromPreference() != null) {
+                                Globals.isWishListShow = 1;
+                                Globals.selectTableMasterId = objTableMaster.getTableMasterId();
                                 Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
                                 i.putExtra("TableMaster", objTableMaster);
                                 startActivity(i);

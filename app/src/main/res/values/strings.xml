@@ -137,6 +137,7 @@
     <string name="navRate">Rate this App</string>
     <string name="navOpen">Open</string>
     <string name="navClose">Close</string>
+    <string name="navShortList">Short List</string>
     <!-- end -->
 
 
@@ -416,8 +417,9 @@
     <string name="rsService">Services</string>
     <string name="modifier">Modifier</string>
     <!-- end -->
-    
+
     <string name="strFavorite">Favourite</string>
     <string name="title_fragment_sub_detail">Sub Detail</string>
+    <string name="title_activity_wish_list">Short List</string>
 
 </resources>

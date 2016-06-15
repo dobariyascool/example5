@@ -11,7 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.arraybit.adapter.CategoryItemAdapter;
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.TableMaster;
 
 import java.util.ArrayList;
@@ -43,6 +46,10 @@ public class MenuActivity extends AppCompatActivity{
             parentActivity = intent.getBooleanExtra("ParentActivity", false);
         }
 
+        if(Globals.isWishListShow==1) {
+            SaveWishListInSharePreference(false);
+        }
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(android.R.id.content, new CategoryItemFragment(getIntent().getBooleanExtra("IsFavoriteShow",false)));
         fragmentTransaction.addToBackStack(null);
@@ -60,6 +67,8 @@ public class MenuActivity extends AppCompatActivity{
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (parentActivity) {
             Globals.SetOptionMenu(Globals.userName, MenuActivity.this, menu);
+        }else{
+            menu.findItem(R.id.logout).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -151,8 +160,11 @@ public class MenuActivity extends AppCompatActivity{
                     DetailFragment.alSubItemOptionValue = new ArrayList<>();
                 }
             } else {
+                if(Globals.isWishListShow==1) {
+                    SaveWishListInSharePreference(true);
+                }
                 if (MenuActivity.parentActivity) {
-                    Globals.CategoryItemFragmentResetStaticVariable();
+                    //Globals.CategoryItemFragmentResetStaticVariable();
                     finish();
                     overridePendingTransition(0, R.anim.right_exit);
                 } else {
@@ -164,6 +176,84 @@ public class MenuActivity extends AppCompatActivity{
                 }
             }
         }
+    }
+
+    private void SaveWishListInSharePreference(boolean isBackPressed) {
+        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+        ArrayList<String> alString;
+        if (isBackPressed) {
+            if (objSharePreferenceManage.GetStringListPreference("WishListPreference", "WishList", MenuActivity.this) != null) {
+                alString = objSharePreferenceManage.GetStringListPreference("WishListPreference", "WishList", MenuActivity.this);
+                if (alString.size() > 0) {
+                    if (CategoryItemAdapter.alWishItemMaster.size() > 0) {
+                        for (ItemMaster objWishItemMaster : CategoryItemAdapter.alWishItemMaster) {
+                            if (objWishItemMaster.getIsChecked() != -1) {
+                                if (!CheckDuplicateId(alString, String.valueOf(objWishItemMaster.getItemMasterId()), (short) 1)) {
+                                    alString.add(String.valueOf(objWishItemMaster.getItemMasterId()));
+                                }
+                            } else {
+                                CheckDuplicateId(alString, String.valueOf(objWishItemMaster.getItemMasterId()), (short) -1);
+                            }
+                        }
+                        objSharePreferenceManage.CreateStringListPreference("WishListPreference", "WishList", alString, MenuActivity.this);
+                    }
+                } else {
+                    if (CategoryItemAdapter.alWishItemMaster.size() > 0) {
+                        alString = new ArrayList<>();
+                        for (ItemMaster objWishItemMaster : CategoryItemAdapter.alWishItemMaster) {
+                            if (objWishItemMaster.getIsChecked() != -1) {
+                                alString.add(String.valueOf(objWishItemMaster.getItemMasterId()));
+                            }
+                        }
+                        objSharePreferenceManage.CreateStringListPreference("WishListPreference", "WishList", alString, MenuActivity.this);
+                    }
+                }
+            } else {
+                if (CategoryItemAdapter.alWishItemMaster.size() > 0) {
+                    alString = new ArrayList<>();
+                    for (ItemMaster objWishItemMaster : CategoryItemAdapter.alWishItemMaster) {
+                        if (objWishItemMaster.getIsChecked() != -1) {
+                            alString.add(String.valueOf(objWishItemMaster.getItemMasterId()));
+                        }
+                    }
+                    objSharePreferenceManage.CreateStringListPreference("WishListPreference", "WishList", alString, MenuActivity.this);
+                }
+            }
+        } else {
+            if (objSharePreferenceManage.GetStringListPreference("WishListPreference", "WishList", MenuActivity.this) != null) {
+                alString = objSharePreferenceManage.GetStringListPreference("WishListPreference", "WishList", MenuActivity.this);
+                CategoryItemAdapter.alWishItemMaster = new ArrayList<>();
+                if (alString.size() > 0) {
+                    for (String itemMasterId : alString) {
+                        ItemMaster objItemMaster = new ItemMaster();
+                        objItemMaster.setItemMasterId(Integer.parseInt(itemMasterId));
+                        objItemMaster.setIsChecked((short) 1);
+                        CategoryItemAdapter.alWishItemMaster.add(objItemMaster);
+                    }
+                }
+            } else {
+                CategoryItemAdapter.alWishItemMaster = new ArrayList<>();
+            }
+        }
+    }
+
+    private boolean CheckDuplicateId(ArrayList<String> arrayList, String id, short isCheck) {
+        boolean isDuplicate = false;
+        int cnt = 0;
+        for (String strId : arrayList) {
+            if (strId.equals(id)) {
+                isDuplicate = true;
+                if (isCheck == -1) {
+                    arrayList.remove(cnt);
+                    break;
+                }
+            }
+            cnt++;
+        }
+        if (isDuplicate) {
+            return isDuplicate;
+        }
+        return isDuplicate;
     }
 
 }

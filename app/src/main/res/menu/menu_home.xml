@@ -17,6 +17,12 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/shortList"
+        android:orderInCategory="400"
+        android:title="@string/navShortList"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_search"
         android:icon="@drawable/search"
         android:orderInCategory="200"

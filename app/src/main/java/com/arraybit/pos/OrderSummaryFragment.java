@@ -168,9 +168,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 menu.findItem(R.id.home).setVisible(false);
             }
             menu.findItem(R.id.action_search).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
         } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
             menu.findItem(R.id.home).setVisible(true);
             menu.findItem(R.id.action_search).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
         }
     }
 

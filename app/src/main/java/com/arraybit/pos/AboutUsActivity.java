@@ -83,9 +83,11 @@ public class AboutUsActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (mode == 1) {
             menu.findItem(R.id.viewChange).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
         } else if (mode == 2) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
         } else if (mode == 3) {
             Globals.SetOptionMenu(Globals.userName, this, menu);
         }

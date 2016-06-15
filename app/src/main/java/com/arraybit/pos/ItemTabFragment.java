@@ -270,6 +270,11 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     }
 
     @Override
+    public void LikeOnClick(int position) {
+
+    }
+
+    @Override
     public void AddToCart(boolean isAddToCart, ItemMaster objOrderItemTran) {
         if (isAddToCart) {
             if (objOrderItemTran.getItemName() != null) {
@@ -283,7 +288,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
     public void SetupRecyclerView(final boolean isFilter, ArrayList<ItemMaster> alItemMaster) {
         if (alItemMaster == null && !isFilter) {
-            categoryItemAdapter = new CategoryItemAdapter(getActivity(), this.alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this, false);
+            categoryItemAdapter = new CategoryItemAdapter(getActivity(), this.alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this, false,false);
             rvItem.setVisibility(View.VISIBLE);
             rvItem.setAdapter(categoryItemAdapter);
             if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
@@ -300,7 +305,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 rvItem.setLayoutManager(linearLayoutManager);
             }
         } else if (alItemMaster == null && isFilter) {
-            categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMasterFilter, getFragmentManager(), CategoryItemFragment.isViewChange, this, false);
+            categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMasterFilter, getFragmentManager(), CategoryItemFragment.isViewChange, this, false,false);
             rvItem.setVisibility(View.VISIBLE);
             rvItem.setAdapter(categoryItemAdapter);
             if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
@@ -318,7 +323,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             }
 
         } else {
-            categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this, false);
+            categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this, false,false);
             rvItem.setVisibility(View.VISIBLE);
             rvItem.setAdapter(categoryItemAdapter);
             if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
@@ -366,6 +371,12 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             txtCartNumber.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fab_scale_up));
         } else {
             txtCartNumber.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
+        }
+    }
+
+    public void UpdateWishList(ItemMaster objItemMaster){
+        if(objItemMaster!=null && objItemMaster.getRowPosition()!=-1) {
+            categoryItemAdapter.UpdateWishList(objItemMaster.getRowPosition(), objItemMaster.getIsChecked());
         }
     }
 
@@ -419,9 +430,9 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
             if(isFavorite){
-                return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId,1);
+                return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId,1,null);
             }else{
-                return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId,0);
+                return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId,0,null);
             }
         }
 

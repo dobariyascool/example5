@@ -61,6 +61,13 @@ public class ItemMaster implements Parcelable {
     double Tax5;
     double TaxRate;
     short RateIndex;
+    short IsChecked;
+    String ItemRemark;
+    String OptionValue;
+    boolean IsRateTaxInclusive;
+    double TotalAmount;
+    double ExtraAmount;
+    int RowPosition;
     public static final Parcelable.Creator<ItemMaster> CREATOR = new Creator<ItemMaster>() {
         public ItemMaster createFromParcel(Parcel source) {
             ItemMaster objItemMaster = new ItemMaster();
@@ -114,6 +121,8 @@ public class ItemMaster implements Parcelable {
             objItemMaster.Tax5 = source.readDouble();
             objItemMaster.TotalTax = source.readDouble();
             objItemMaster.Category = source.readString();
+            objItemMaster.IsChecked = (short)source.readInt();
+            objItemMaster.RowPosition = source.readInt();
 
 
             return objItemMaster;
@@ -123,11 +132,6 @@ public class ItemMaster implements Parcelable {
             return new ItemMaster[size];
         }
     };
-    String ItemRemark;
-    String OptionValue;
-    boolean IsRateTaxInclusive;
-    double TotalAmount;
-    double ExtraAmount;
     ArrayList<ItemMaster> alOrderItemModifierTran;
 
     public int getItemMasterId() {
@@ -557,6 +561,22 @@ public class ItemMaster implements Parcelable {
         IsDineInOnly = isDineInOnly;
     }
 
+    public short getIsChecked() {
+        return IsChecked;
+    }
+
+    public void setIsChecked(short isChecked) {
+        IsChecked = isChecked;
+    }
+
+    public int getRowPosition() {
+        return RowPosition;
+    }
+
+    public void setRowPosition(int rowPosition) {
+        RowPosition = rowPosition;
+    }
+
     //endregion
     public int describeContents() {
         return 0;
@@ -613,6 +633,8 @@ public class ItemMaster implements Parcelable {
         parcel.writeDouble(Tax5);
         parcel.writeDouble(TaxRate);
         parcel.writeString(Category);
+        parcel.writeInt(IsChecked);
+        parcel.writeInt(RowPosition);
     }
 }
 

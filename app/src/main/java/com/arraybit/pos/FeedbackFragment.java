@@ -106,9 +106,13 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
 
         if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             menu.findItem(R.id.mWaiting).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
         } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
+            if(Globals.isWishListShow==0){
+                menu.findItem(R.id.logout).setVisible(false);
+            }
         }
 
         if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null

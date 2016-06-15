@@ -104,6 +104,7 @@ public class TableOrderFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_search).setVisible(false);
+        menu.findItem(R.id.logout).setVisible(false);
     }
 
     //region LoadingTask

@@ -28,26 +28,30 @@ import java.util.List;
 
 public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapter.ItemViewHolder> {
 
+    public static ArrayList<ItemMaster> alWishItemMaster = new ArrayList<>();
     public boolean isItemAnimate;
     int width, height;
     FragmentManager fragmentManager;
     boolean isViewChange;
     boolean isWaiterGrid = false;
+    boolean isDuplicate = false, isLikeClick,isWishListChange;
     View view;
     Context context;
     ArrayList<ItemMaster> alItemMaster;
     ItemMaster objItemMaster;
     ItemClickListener objItemClickListener;
-    int previousPosition;
+    int previousPosition,cnt = 0;
     boolean isVeg, isNonVeg, isJain;
 
-    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange, ItemClickListener objItemClickListener, Boolean isItemAnimate) {
+
+    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange, ItemClickListener objItemClickListener, boolean isItemAnimate,boolean isLikeClick) {
         this.context = context;
         alItemMaster = result;
         this.fragmentManager = fragmentManager;
         this.isViewChange = isViewChange;
         this.objItemClickListener = objItemClickListener;
         this.isItemAnimate = isItemAnimate;
+        this.isLikeClick = isLikeClick;
     }
 
     @Override
@@ -71,6 +75,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
         objItemMaster = alItemMaster.get(position);
+        objItemMaster.setRowPosition(position);
         if (!isWaiterGrid) {
             if (isViewChange) {
                 if (objItemMaster.getMD_ImagePhysicalName() == null || objItemMaster.getMD_ImagePhysicalName().equals("")) {
@@ -125,7 +130,14 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             }
         }
 
-
+        if(holder.ibLike.getVisibility()==View.VISIBLE){
+            CheckDuplicate(null, objItemMaster);
+            if (objItemMaster.getIsChecked() == -1 || objItemMaster.getIsChecked() == 0) {
+                holder.ibLike.setChecked(false);
+            } else {
+                holder.ibLike.setChecked(true);
+            }
+        }
 
         if (!objItemMaster.getOptionValueTranIds().equals("")) {
             if (CheckOptionValue(objItemMaster.getOptionValueTranIds(), String.valueOf(Globals.OptionValue.DoubleSpicy.getValue()))) {
@@ -233,10 +245,134 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         return isMatch;
     }
 
+    private void CheckDuplicate(String isChecked, ItemMaster objItemMaster) {
+        cnt = 0;
+        if (isChecked != null) {
+            if (alWishItemMaster.size() == 0) {
+                ItemMaster objWishItemMaster = new ItemMaster();
+                objWishItemMaster.setItemMasterId(objItemMaster.getItemMasterId());
+                if (isChecked.equals("1")) {
+                    objWishItemMaster.setIsChecked((short) 1);
+                } else {
+                    objWishItemMaster.setIsChecked((short) -1);
+                }
+                alWishItemMaster.add(objWishItemMaster);
+            } else {
+                isDuplicate = false;
+                for (ItemMaster objItem : alWishItemMaster) {
+                    if (objItem.getItemMasterId() == objItemMaster.getItemMasterId()) {
+                        if (isChecked.equals("0")) {
+                            if (objItemMaster.getIsChecked() == 1) {
+                                alWishItemMaster.get(cnt).setItemMasterId(objItemMaster.getItemMasterId());
+                                alWishItemMaster.get(cnt).setIsChecked((short) -1);
+                                isDuplicate = true;
+                                break;
+                            }
+                        } else if (isChecked.equals("1")) {
+                            alWishItemMaster.get(cnt).setItemMasterId(objItemMaster.getItemMasterId());
+                            alWishItemMaster.get(cnt).setIsChecked((short) 1);
+                            isDuplicate = true;
+                            break;
+                        }
+                    }
+                    cnt++;
+                }
+                if (!isDuplicate) {
+                    ItemMaster objWishItemMaster = new ItemMaster();
+                    objWishItemMaster.setItemMasterId(objItemMaster.getItemMasterId());
+                    objWishItemMaster.setIsChecked((short) 1);
+                    alWishItemMaster.add(objWishItemMaster);
+                }
+            }
+        } else {
+            if (alWishItemMaster.size() > 0) {
+                for (ItemMaster objItem : alWishItemMaster) {
+                    if (String.valueOf(objItem.getItemMasterId()).equals(String.valueOf(objItemMaster.getItemMasterId()))) {
+                        if (objItem.getIsChecked() == 1) {
+                            objItemMaster.setIsChecked((short) 1);
+                        } else if (objItem.getIsChecked() == -1) {
+                            objItemMaster.setIsChecked((short) -1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+//    public void ItemDataChanged(ArrayList<ItemMaster> result) {
+//        alItemMaster.addAll(result);
+//        isItemAnimate = false;
+//        notifyDataSetChanged();
+//    }
+
+    public void RemoveData(int position, boolean isRemoveFromList) {
+        if (isRemoveFromList) {
+            CheckDuplicate(String.valueOf(0), alItemMaster.get(position));
+        }
+        alItemMaster.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void UpdateWishList(int position, short isCheck) {
+        isItemAnimate = false;
+        isWishListChange = true;
+        CheckDuplicate(String.valueOf(isCheck), alItemMaster.get(position));
+        alItemMaster.get(position).setIsChecked(isCheck);
+        notifyItemChanged(position);
+    }
+
+    public void CheckIdInCurrentListAndUpdate(short isChecked,int itemMasterId,short oldCheckValue){
+        int count=0;
+        boolean isDuplicate = false;
+        for(ItemMaster objItemMaster : alItemMaster) {
+            if (objItemMaster.getItemMasterId() == itemMasterId) {
+                isItemAnimate = false;
+                isWishListChange = true;
+                objItemMaster.setIsChecked(oldCheckValue);
+                CheckDuplicate(String.valueOf(isChecked), objItemMaster);
+                objItemMaster.setIsChecked(isChecked);
+                notifyItemChanged(count);
+                isDuplicate = true;
+                break;
+            }
+            count++;
+        }
+        if(!isDuplicate){
+            ItemMaster objItem = new ItemMaster();
+            objItem.setItemMasterId(itemMasterId);
+            objItem.setIsChecked(oldCheckValue);
+            CheckDuplicate(String.valueOf(isChecked),objItem);
+        }
+    }
+
+    public void CheckIdInCurrentList(short isChecked,int itemMasterId,short oldCheckValue,ItemMaster objWishList){
+        int count=0;
+        boolean isDuplicate = false;
+        for(ItemMaster objItemMaster : alItemMaster) {
+            if (objItemMaster.getItemMasterId() == itemMasterId) {
+                isDuplicate = true;
+                CheckDuplicate(String.valueOf(0), objItemMaster);
+                alItemMaster.remove(count);
+                notifyItemRemoved(count);
+                break;
+            }
+            count++;
+        }
+        if(!isDuplicate){
+            if(objWishList!=null) {
+                CheckDuplicate(String.valueOf(isChecked), objWishList);
+                alItemMaster.add(alItemMaster.size(), objWishList);
+                notifyItemInserted(alItemMaster.size());
+            }
+        }
+    }
+
     public interface ItemClickListener {
         void ButtonOnClick(ItemMaster objItemMaster);
 
         void CardViewOnClick(ItemMaster objItemMaster);
+
+        void LikeOnClick(int position);
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -307,7 +443,17 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 @Override
                 public void onClick(View v) {
                     if (ibLike.isChecked()) {
-                        ibLike.setChecked(true);
+                        alItemMaster.get(getAdapterPosition()).setIsChecked((short) 1);
+                        CheckDuplicate("1", alItemMaster.get(getAdapterPosition()));
+                    } else {
+                        if (isLikeClick) {
+                            CheckDuplicate("0", alItemMaster.get(getAdapterPosition()));
+                            alItemMaster.get(getAdapterPosition()).setIsChecked((short) -1);
+                            objItemClickListener.LikeOnClick(getAdapterPosition());
+                        } else {
+                            CheckDuplicate("0", alItemMaster.get(getAdapterPosition()));
+                            alItemMaster.get(getAdapterPosition()).setIsChecked((short) -1);
+                        }
                     }
                 }
             });

@@ -81,9 +81,11 @@ public class HotelProfileActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (mode == 1) {
             menu.findItem(R.id.viewChange).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
         } else if (mode == 2) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
         } else if (mode == 3) {
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.registration).setVisible(false);

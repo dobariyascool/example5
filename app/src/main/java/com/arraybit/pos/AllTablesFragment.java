@@ -157,7 +157,11 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                if(getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
+                        && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1)
+                        .getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_tables))) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
             } else {
                 getActivity().finish();
                 getActivity().overridePendingTransition(0, R.anim.right_exit);
@@ -174,6 +178,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             menu.findItem(R.id.cart_layout).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
         }
     }
 
@@ -286,7 +291,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             AllTablesFragment.isRefresh = true;
             Bundle bundle = new Bundle();
             bundle.putParcelable("TableMaster", objTableMaster);
-            bundle.putBoolean("isHomeShow", true);
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
             orderSummaryFragment.setArguments(bundle);

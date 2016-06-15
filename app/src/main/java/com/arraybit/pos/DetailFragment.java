@@ -29,7 +29,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.ToggleButton;
 
+import com.arraybit.adapter.CategoryItemAdapter;
 import com.arraybit.adapter.ItemOptionValueAdapter;
 import com.arraybit.adapter.ItemSuggestedAdapter;
 import com.arraybit.adapter.ModifierAdapter;
@@ -52,7 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 @SuppressLint("ValidFragment")
 public class DetailFragment extends Fragment implements View.OnClickListener, ModifierAdapter.ModifierCheckedChangeListener, ItemSuggestedAdapter.ImageViewClickListener, AddItemQtyDialogFragment.AddToCartListener {
 
@@ -89,6 +91,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     ItemOptionValueAdapter itemOptionValueAdapter;
     FrameLayout detailLayout;
     StringBuilder sbOptionValue;
+    boolean isWishList;
+    ToggleButton tbLike;
+
 
     public DetailFragment(ItemMaster objItemMaster) {
         this.objItemMaster = objItemMaster;
@@ -141,6 +146,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         etQuantity = (EditText) view.findViewById(R.id.etQuantity);
         etQuantity.setSelectAllOnFocus(true);
 
+        tbLike = (ToggleButton)view.findViewById(R.id.tbLike);
+
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         btnOrder = (Button) view.findViewById(R.id.btnOrder);
         btnOrderDisable = (Button) view.findViewById(R.id.btnOrderDisable);
@@ -156,6 +163,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         btnCancel.setOnClickListener(this);
         btnOrder.setOnClickListener(this);
         textInputLayout.setOnClickListener(this);
+        tbLike.setOnClickListener(this);
         if (Globals.isWishListShow == 0) {
             actRemark.setOnClickListener(this);
         }
@@ -163,6 +171,10 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()) != null) {
             counterMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()));
+        }
+
+        if(getArguments()!=null){
+            isWishList = getArguments().getBoolean("IsWishList");
         }
 
         setHasOptionsMenu(true);
@@ -216,9 +228,25 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     public boolean onOptionsItemSelected(MenuItem item) {
         Globals.HideKeyBoard(getActivity(), getView());
         if (item.getItemId() == android.R.id.home) {
-            isItemSuggestedClick = false;
-            alOptionValue = new ArrayList<>();
-            alSubItemOptionValue = new ArrayList<>();
+            if(Globals.isWishListShow==1){
+                if (tbLike.isChecked() && (objItemMaster.getIsChecked() != 1)) {
+                        CheckDuplicate("1",objItemMaster);
+                        SaveWishListInSharePreference();
+                    if(isWishList && isItemSuggestedClick){
+                        objItemMaster.setIsChecked((short)1);
+                        objResponseListener = (ResponseListener)getTargetFragment();
+                        objResponseListener.ShowMessage(null,true,objItemMaster);
+                    }
+                }else if(!tbLike.isChecked() && (objItemMaster.getIsChecked() != 0)){
+                        CheckDuplicate("0", objItemMaster);
+                        SaveWishListInSharePreference();
+                    if(isWishList){
+                        objItemMaster.setIsChecked((short)0);
+                        objResponseListener = (ResponseListener)getTargetFragment();
+                        objResponseListener.ShowMessage(null,true,objItemMaster);
+                    }
+                }
+            }
             if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2) {
                 if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null
                         && getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
@@ -238,6 +266,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
+            isItemSuggestedClick = false;
+            alOptionValue = new ArrayList<>();
+            alSubItemOptionValue = new ArrayList<>();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -300,7 +331,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                 }
                 if (getTargetFragment() != null) {
                     objResponseListener = (ResponseListener) getTargetFragment();
-                    objResponseListener.ShowMessage(itemName);
+                    objResponseListener.ShowMessage(itemName,false,null);
                 }
             }
             isItemSuggestedClick = false;
@@ -328,6 +359,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
             }
             actRemark.showDropDown();
+        } else if (v.getId() == R.id.tbLike) {
+            if (tbLike.isChecked()) {
+                tbLike.setChecked(true);
+            } else {
+                tbLike.setChecked(false);
+            }
         }
     }
 
@@ -381,6 +418,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             addItemQtyDialogFragment.setTargetFragment(this, 0);
             addItemQtyDialogFragment.show(getFragmentManager(), "");
         } else {
+            objItemMaster.setIsChecked(CheckSuggestedItemInWishList(objItemMaster.getItemMasterId()));
             DetailFragment detailFragment = new DetailFragment(objItemMaster);
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             if (Build.VERSION.SDK_INT >= 21) {
@@ -396,7 +434,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             fragmentTransaction.commit();
         }
     }
-
 
     //region Private Methods and Interface
     private int IncrementDecrementValue(int id, int value) {
@@ -556,6 +593,11 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                 ivTest.setVisibility(View.GONE);
                 ivJain.setVisibility(View.GONE);
             }
+        }
+        if (objItemMaster.getIsChecked() == 1) {
+            tbLike.setChecked(true);
+        } else {
+            tbLike.setChecked(false);
         }
     }
 
@@ -1078,8 +1120,91 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         }
     }
 
+    private short CheckSuggestedItemInWishList(int itemMasterId) {
+        if (CategoryItemAdapter.alWishItemMaster.size() > 0) {
+            for (ItemMaster objMaster : CategoryItemAdapter.alWishItemMaster) {
+                if (objMaster.getItemMasterId() == itemMasterId) {
+                    if (objMaster.getIsChecked() == 1) {
+                        return 1;
+                    }
+                }
+            }
+
+        } else {
+            return 0;
+        }
+        return 0;
+    }
+
+    private void SaveWishListInSharePreference() {
+        ArrayList<String> alString = new ArrayList<>();
+        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+        for (ItemMaster objWishItemMaster : CategoryItemAdapter.alWishItemMaster) {
+            if (objWishItemMaster.getIsChecked() != -1 && objWishItemMaster.getIsChecked() != 0) {
+                alString.add(String.valueOf(objWishItemMaster.getItemMasterId()));
+            }
+        }
+        objSharePreferenceManage.CreateStringListPreference("WishListPreference", "WishList", alString, getActivity());
+    }
+
+    private void CheckDuplicate(String isChecked, ItemMaster objItemMaster) {
+        int cnt = 0;
+        if (isChecked != null) {
+            if (CategoryItemAdapter.alWishItemMaster.size() == 0) {
+                ItemMaster objWishItemMaster = new ItemMaster();
+                objWishItemMaster.setItemMasterId(objItemMaster.getItemMasterId());
+                if (isChecked.equals("1")) {
+                    objWishItemMaster.setIsChecked((short) 1);
+                } else {
+                    objWishItemMaster.setIsChecked((short) -1);
+                }
+                CategoryItemAdapter.alWishItemMaster.add(objWishItemMaster);
+            } else {
+                isDuplicate = false;
+                for (ItemMaster objItem : CategoryItemAdapter.alWishItemMaster) {
+                    if (objItem.getItemMasterId() == objItemMaster.getItemMasterId()) {
+                        if (isChecked.equals("0")) {
+                            if (objItemMaster.getIsChecked() == 1) {
+                                CategoryItemAdapter.alWishItemMaster.get(cnt).setItemMasterId(objItemMaster.getItemMasterId());
+                                CategoryItemAdapter.alWishItemMaster.get(cnt).setIsChecked((short) -1);
+                                isDuplicate = true;
+                                break;
+                            }
+                        } else if (isChecked.equals("1")) {
+                            CategoryItemAdapter.alWishItemMaster.get(cnt).setItemMasterId(objItemMaster.getItemMasterId());
+                            CategoryItemAdapter.alWishItemMaster.get(cnt).setIsChecked((short) 1);
+                            isDuplicate = true;
+                            break;
+                        }
+                    }
+                    cnt++;
+                }
+                if (!isDuplicate) {
+                    ItemMaster objWishItemMaster = new ItemMaster();
+                    objWishItemMaster.setItemMasterId(objItemMaster.getItemMasterId());
+                    objWishItemMaster.setIsChecked((short) 1);
+                    CategoryItemAdapter.alWishItemMaster.add(objWishItemMaster);
+                }
+            }
+        }
+//        else {
+//            if (CategoryItemAdapter.alWishItemMaster.size() > 0) {
+//                for (ItemMaster objItem : CategoryItemAdapter.alWishItemMaster) {
+//                    if (String.valueOf(objItem.getItemMasterId()).equals(String.valueOf(objItemMaster.getItemMasterId()))) {
+//                        if (objItem.getIsChecked() == 1) {
+//                            objItemMaster.setIsChecked((short) 1);
+//                        } else if (objItem.getIsChecked() == -1) {
+//                            objItemMaster.setIsChecked((short) -1);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+    }
+
+
     interface ResponseListener {
-        void ShowMessage(String itemName);
+        void ShowMessage(String itemName,boolean isWishListUpdate,ItemMaster objItemMaster);
     }
     //endregion
 

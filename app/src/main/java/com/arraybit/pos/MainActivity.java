@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -11,14 +10,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.arraybit.global.Globals;
-import com.arraybit.global.Service;
-import com.arraybit.modal.ItemMaster;
-import com.arraybit.parser.ItemJSONParser;
 
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -537,35 +530,4 @@ public class MainActivity extends AppCompatActivity {
 //    }
         //537-681-144 537-785-248
     //693-817 709-937 09:31:07.829 09:31:09.073 893 761
-    class HotelLoadingTask extends AsyncTask {
-
-        ItemMaster objItemMaster;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            progressDialog = new ProgressDialog();
-            progressDialog.show(getSupportFragmentManager(), "");
-            System.out.println("response" + "text");
-           // String url = "http://10.0.3.2:2293/Service.svc/SelectAllBusinessMaster";
-            Service.Url = "http://10.0.3.2:2293/Service.svc/";
-        }
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            ItemJSONParser objItemJSONParser = new ItemJSONParser();
-            return objItemJSONParser.SelectAllItemMaster(1,1,0,null, Globals.businessMasterId,0);
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
-
-            progressDialog.dismiss();
-            ArrayList<ItemMaster> arrayList = (ArrayList<ItemMaster>) result;
-            System.out.println("response" + "text");
-        }
-    }
-
 }

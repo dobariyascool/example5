@@ -117,10 +117,13 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
 
                         objSharePreferenceManage.RemovePreference("GuestModePreference", "GuestMode", getActivity());
                         objSharePreferenceManage.ClearPreference("GuestModePreference", getActivity());
+                        objSharePreferenceManage.RemovePreference("WishListPreference", "WishList", getActivity());
+                        objSharePreferenceManage.ClearPreference("WishListPreference", getActivity());
 
                         Globals.ClearPreference(getActivity().getApplicationContext());
                         MenuActivity.parentActivity = false;
                         Globals.ClearData();
+                        Globals.isWishListShow = 0;
 
                         Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -76,5 +76,6 @@ public class PolicyFragment extends Fragment {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             menu.findItem(R.id.mWaiting).setVisible(false);
         }
+        menu.findItem(R.id.logout).setVisible(false);
     }
 }

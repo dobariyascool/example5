@@ -139,6 +139,9 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         if (MenuActivity.parentActivity) {
             Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
         }
+        if(Globals.isWishListShow==0){
+            menu.findItem(R.id.logout).setVisible(false);
+        }
     }
 
     @Override
@@ -361,7 +364,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                     new TableStatusLoadingTask().execute();
                 }
                 RemarkDialogFragment.strRemark = null;
-                Globals.ShowSnackBar(view, getResources().getString(R.string.MsgCartItem), getActivity(), 1000);
+                Globals.ShowSnackBar(view, getResources().getString(R.string.MsgConfirmOrder), getActivity(), 1000);
                 if (MenuActivity.parentActivity) {
 
                     Intent intent = new Intent(getActivity(), GuestHomeActivity.class);

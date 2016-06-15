@@ -224,7 +224,6 @@ public class TableTabFragment extends Fragment implements SearchView.OnQueryText
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Occupied.toString())) {
-
             AllTablesFragment.isRefresh = true;
             Bundle bundle = new Bundle();
             bundle.putParcelable("TableMaster", objTableMaster);

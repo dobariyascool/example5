@@ -58,6 +58,7 @@ import com.arraybit.pos.MyAccountFragment;
 import com.arraybit.pos.R;
 import com.arraybit.pos.SignInActivity;
 import com.arraybit.pos.SignUpFragment;
+import com.arraybit.pos.WishListActivity;
 import com.rey.material.util.TypefaceUtil;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
@@ -365,6 +366,10 @@ public class Globals {
                     Globals.userName = null;
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
                     Globals.ReplaceAnimatedFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
+                }else if(menuItem.getTitle()==activity.getResources().getString(R.string.navShortList)){
+                    Intent intent = new Intent(activity, WishListActivity.class);
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             } else if (fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() != null &&
                     fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equals(activity.getResources().getString(R.string.title_fragment_feedback))) {
@@ -384,6 +389,10 @@ public class Globals {
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
                     FeedbackFragment currentFragment = (FeedbackFragment) fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
                     currentFragment.ReplaceFragment(new MyAccountFragment(), activity.getResources().getString(R.string.title_fragment_myaccount));
+                }else if(menuItem.getTitle()==activity.getResources().getString(R.string.navShortList)){
+                    Intent intent = new Intent(activity, WishListActivity.class);
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             } else if (MenuActivity.parentActivity && fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName() == null) {
             } else {
@@ -397,6 +406,10 @@ public class Globals {
                     Globals.userName = null;
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
                     Globals.ReplaceAnimatedFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
+                }else if(menuItem.getTitle()==activity.getResources().getString(R.string.navShortList)){
+                    Intent intent = new Intent(activity, WishListActivity.class);
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             }
         }

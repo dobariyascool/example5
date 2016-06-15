@@ -120,7 +120,9 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         }
 
         if (!isEdit) {
-            objAddToCartListener = (AddToCartListener) getTargetFragment();
+            if(getTargetFragment()!=null) {
+                objAddToCartListener = (AddToCartListener) getTargetFragment();
+            }
         }
 
         return view;

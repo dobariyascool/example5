@@ -217,20 +217,20 @@
     <!--</style>-->
 
     <!--<style name="Button" parent="Material.Drawable.Ripple.Touch.Light">-->
-        <!--<item name="android:background">@color/accent_dark</item>-->
-        <!--<item name="rd_padding">@dimen/button_Padding</item>-->
-        <!--<item name="android:layout_height">@dimen/button_Height</item>-->
-        <!--<item name="android:textColor">@color/primary</item>-->
-        <!--&lt;!&ndash;<item name="android:shadowColor">@color/primary_dark</item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<item name="android:shadowDx">0.7</item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<item name="android:shadowDy">0.7</item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<item name="android:shadowRadius">0.7</item>&ndash;&gt;-->
-        <!--<item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Button</item>-->
-        <!--<item name="android:radius">2dp</item>-->
-        <!--<item name="rd_rippleColor">@color/accent</item>-->
-        <!--<item name="rd_enable">true</item>-->
-        <!--<item name="rd_rippleType">wave</item>-->
-        <!--&lt;!&ndash;<item name="android:textStyle">bold</item>&ndash;&gt;-->
+    <!--<item name="android:background">@color/accent_dark</item>-->
+    <!--<item name="rd_padding">@dimen/button_Padding</item>-->
+    <!--<item name="android:layout_height">@dimen/button_Height</item>-->
+    <!--<item name="android:textColor">@color/primary</item>-->
+    <!--&lt;!&ndash;<item name="android:shadowColor">@color/primary_dark</item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<item name="android:shadowDx">0.7</item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<item name="android:shadowDy">0.7</item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<item name="android:shadowRadius">0.7</item>&ndash;&gt;-->
+    <!--<item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Button</item>-->
+    <!--<item name="android:radius">2dp</item>-->
+    <!--<item name="rd_rippleColor">@color/accent</item>-->
+    <!--<item name="rd_enable">true</item>-->
+    <!--<item name="rd_rippleType">wave</item>-->
+    <!--&lt;!&ndash;<item name="android:textStyle">bold</item>&ndash;&gt;-->
     <!--</style>-->
 
     <style name="Button" parent="Material.Drawable.Ripple.Touch.Light">

@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.arraybit.adapter.CategoryItemAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
@@ -53,11 +54,13 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     ItemPagerAdapter itemPagerAdapter;
     FloatingActionMenu famRoot;
     FloatingActionButton fabVeg, fabNonVeg, fabJain;
-    boolean isForceToChange = false;
+    boolean isForceToChange = false,isUpdate = false;
     short isVegCheck = 0, isNonVegCheck = 0, isJainCheck = 0;
     CoordinatorLayout categoryItemFragment;
     LinearLayout errorLayout;
     boolean isFavoriteShow;
+    ItemMaster objUpdateItemMaster;
+    ItemTabFragment itemTabFragment;
 
 
     public CategoryItemFragment(boolean isFavoriteShow) {
@@ -87,31 +90,24 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
 
-        //floating action menu
+
         famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
         famRoot.setClosedOnTouchOutside(true);
-        //end
 
-        //floating action button
+
         fabVeg = (FloatingActionButton) view.findViewById(R.id.fabVeg);
         fabNonVeg = (FloatingActionButton) view.findViewById(R.id.fabNonVeg);
         fabJain = (FloatingActionButton) view.findViewById(R.id.fabJain);
-        //end
 
-        //tab layout
         itemTabLayout = (TabLayout) view.findViewById(R.id.itemTabLayout);
         itemTabLayout.setClickable(true);
-        //end
 
-        //view page
         itemViewPager = (ViewPager) view.findViewById(R.id.itemViewPager);
-        //end
 
-        //event
         fabVeg.setOnClickListener(this);
         fabNonVeg.setOnClickListener(this);
         fabJain.setOnClickListener(this);
-        //end
+
 
         if (Service.CheckNet(getActivity())) {
             new GuestHomeCategoryLodingTask().execute();
@@ -160,8 +156,11 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
+                if(Globals.isWishListShow==1){
+                    SaveWishListInSharePreference(true);
+                }
                 if (MenuActivity.parentActivity) {
-                    Globals.CategoryItemFragmentResetStaticVariable();
+                    //Globals.CategoryItemFragmentResetStaticVariable();
                     getActivity().finish();
                     getActivity().overridePendingTransition(0, R.anim.right_exit);
                 } else {
@@ -291,9 +290,27 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void ShowMessage(String itemName) {
-        objCategoryMaster = itemPagerAdapter.GetCategoryMaster(itemTabLayout.getSelectedTabPosition());
-        objCategoryMaster.setDescription(itemName);
+    public void ShowMessage(String itemName,boolean isWishListUpdate,ItemMaster objItemMaster) {
+        if(isWishListUpdate) {
+            if(objItemMaster!=null){
+                isUpdate = true;
+                objUpdateItemMaster = objItemMaster;
+                itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
+                //itemTabFragment.UpdateWishList(objItemMaster);
+            }
+        }else{
+            objCategoryMaster = itemPagerAdapter.GetCategoryMaster(itemTabLayout.getSelectedTabPosition());
+            objCategoryMaster.setDescription(itemName);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(isUpdate){
+            itemTabFragment.UpdateWishList(objUpdateItemMaster);
+            isUpdate = false;
+        }
     }
 
     //region Private Methods and Interface
@@ -418,6 +435,85 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             }
         }
     }
+
+    private void SaveWishListInSharePreference(boolean isBackPressed) {
+        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+        ArrayList<String> alString;
+        if (isBackPressed) {
+            if (objSharePreferenceManage.GetStringListPreference("WishListPreference", "WishList", getActivity()) != null) {
+                alString = objSharePreferenceManage.GetStringListPreference("WishListPreference", "WishList", getActivity());
+                if (alString.size() > 0) {
+                    if (CategoryItemAdapter.alWishItemMaster.size() > 0) {
+                        for (ItemMaster objWishItemMaster : CategoryItemAdapter.alWishItemMaster) {
+                            if (objWishItemMaster.getIsChecked() != -1) {
+                                if (!CheckDuplicateId(alString, String.valueOf(objWishItemMaster.getItemMasterId()), (short) 1)) {
+                                    alString.add(String.valueOf(objWishItemMaster.getItemMasterId()));
+                                }
+                            } else {
+                                CheckDuplicateId(alString, String.valueOf(objWishItemMaster.getItemMasterId()), (short) -1);
+                            }
+                        }
+                        objSharePreferenceManage.CreateStringListPreference("WishListPreference", "WishList", alString, getActivity());
+                    }
+                } else {
+                    if (CategoryItemAdapter.alWishItemMaster.size() > 0) {
+                        alString = new ArrayList<>();
+                        for (ItemMaster objWishItemMaster : CategoryItemAdapter.alWishItemMaster) {
+                            if (objWishItemMaster.getIsChecked() != -1) {
+                                alString.add(String.valueOf(objWishItemMaster.getItemMasterId()));
+                            }
+                        }
+                        objSharePreferenceManage.CreateStringListPreference("WishListPreference", "WishList", alString, getActivity());
+                    }
+                }
+            } else {
+                if (CategoryItemAdapter.alWishItemMaster.size() > 0) {
+                    alString = new ArrayList<>();
+                    for (ItemMaster objWishItemMaster : CategoryItemAdapter.alWishItemMaster) {
+                        if (objWishItemMaster.getIsChecked() != -1) {
+                            alString.add(String.valueOf(objWishItemMaster.getItemMasterId()));
+                        }
+                    }
+                    objSharePreferenceManage.CreateStringListPreference("WishListPreference", "WishList", alString, getActivity());
+                }
+            }
+        } else {
+            if (objSharePreferenceManage.GetStringListPreference("WishListPreference", "WishList", getActivity()) != null) {
+                alString = objSharePreferenceManage.GetStringListPreference("WishListPreference", "WishList", getActivity());
+                CategoryItemAdapter.alWishItemMaster = new ArrayList<>();
+                if (alString.size() > 0) {
+                    for (String itemMasterId : alString) {
+                        ItemMaster objItemMaster = new ItemMaster();
+                        objItemMaster.setItemMasterId(Integer.parseInt(itemMasterId));
+                        objItemMaster.setIsChecked((short) 1);
+                        CategoryItemAdapter.alWishItemMaster.add(objItemMaster);
+                    }
+                }
+            } else {
+                CategoryItemAdapter.alWishItemMaster = new ArrayList<>();
+            }
+        }
+    }
+
+    private boolean CheckDuplicateId(ArrayList<String> arrayList, String id, short isCheck) {
+        boolean isDuplicate = false;
+        int cnt = 0;
+        for (String strId : arrayList) {
+            if (strId.equals(id)) {
+                isDuplicate = true;
+                if (isCheck == -1) {
+                    arrayList.remove(cnt);
+                    break;
+                }
+            }
+            cnt++;
+        }
+        if (isDuplicate) {
+            return isDuplicate;
+        }
+        return isDuplicate;
+    }
+
 
     //compound button signup click event form guest login
     @Override
