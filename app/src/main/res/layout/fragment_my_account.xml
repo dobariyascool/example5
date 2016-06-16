@@ -16,6 +16,7 @@
             android:id="@+id/topPanel"
             android:layout_width="match_parent"
             android:layout_height="192dp"
+            android:layout_marginBottom="@dimen/control_SpecingSmall"
             android:background="@color/primary">
 
             <android.support.v7.widget.Toolbar
@@ -61,7 +62,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/topPanel"
-            android:layout_margin="@dimen/control_SpecingMedium" />
+            android:layout_marginBottom="@dimen/control_SpecingTiny"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_marginStart="@dimen/control_SpecingSmall"
+            android:layout_marginTop="@dimen/control_SpecingTiny" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabEdit"

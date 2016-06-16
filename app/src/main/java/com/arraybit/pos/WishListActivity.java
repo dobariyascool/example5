@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -44,14 +45,35 @@ public class WishListActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        SaveWishListInSharePreference(true);
+        if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
+            DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_detail));
+            detailFragment.SaveWishListData();
+            DetailFragment.isItemSuggestedClick = false;
+            DetailFragment.alOptionValue = new ArrayList<>();
+            DetailFragment.alSubItemOptionValue = new ArrayList<>();
+            getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName() != null
+                &&  getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_sub_detail))){
+            getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_sub_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_sub_detail));
+            detailFragment.SaveWishListData();
+            DetailFragment.isItemSuggestedClick = false;
+            DetailFragment.alOptionValue = new ArrayList<>();
+            DetailFragment.alSubItemOptionValue = new ArrayList<>();
+        }else{
+            super.onBackPressed();
+            SaveWishListInSharePreference(true);
+        }
+
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        Globals.SetOptionMenu(Globals.userName, WishListActivity.this, menu);
         menu.findItem(R.id.cart_layout).setVisible(true);
+        menu.findItem(R.id.login).setVisible(false);
+        menu.findItem(R.id.registration).setVisible(false);
+        menu.findItem(R.id.shortList).setVisible(false);
         return super.onPrepareOptionsMenu(menu);
     }
 

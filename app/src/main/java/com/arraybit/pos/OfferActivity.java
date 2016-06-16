@@ -53,9 +53,10 @@ public class OfferActivity extends AppCompatActivity {
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
         } else if (mode == 3) {
-            menu.findItem(R.id.login).setVisible(true);
-            menu.findItem(R.id.registration).setVisible(true);
-            Globals.SetOptionMenu(Globals.userName, this, menu);
+            menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.shortList).setVisible(false);
+            //Globals.SetOptionMenu(Globals.userName, this, menu);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -122,11 +123,11 @@ public class OfferActivity extends AppCompatActivity {
                 Globals.ClearPreference(OfferActivity.this);
             }
         } else {
-            if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                    && !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
-                    .equals(getResources().getString(R.string.title_fragment_offer_detail))) {
-                Globals.OptionMenuItemClick(item, OfferActivity.this, getSupportFragmentManager());
-            }
+//            if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+//                    && !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
+//                    .equals(getResources().getString(R.string.title_fragment_offer_detail))) {
+//                Globals.OptionMenuItemClick(item, OfferActivity.this, getSupportFragmentManager());
+//            }
         }
 
         return super.onOptionsItemSelected(item);

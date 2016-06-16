@@ -30,9 +30,9 @@ public class FeedbackMaster implements Parcelable {
             objFeedbackMaster.Phone = source.readString();
             objFeedbackMaster.Feedback = source.readString();
             objFeedbackMaster.FeedbackDateTime = source.readString();
-            objFeedbackMaster.linktoFeedbackTypeMasterId = (short)source.readInt();
+            objFeedbackMaster.linktoFeedbackTypeMasterId = (short) source.readInt();
             objFeedbackMaster.linktoCustomerMasterId = source.readInt();
-            objFeedbackMaster.linktoBusinessMasterId = (short)source.readInt();
+            objFeedbackMaster.linktoBusinessMasterId = (short) source.readInt();
 
             /// Extra
             objFeedbackMaster.FeedbackType = source.readString();
@@ -44,52 +44,105 @@ public class FeedbackMaster implements Parcelable {
             return new FeedbackMaster[size];
         }
     };
+    int FeedbackRowPosition;
 
-    public int getFeedbackMasterId() { return this.FeedbackMasterId; }
+    public int getFeedbackMasterId() {
+        return this.FeedbackMasterId;
+    }
 
-    public void setFeedbackMasterId(int feedbackMasterId) { this.FeedbackMasterId = feedbackMasterId; }
+    public void setFeedbackMasterId(int feedbackMasterId) {
+        this.FeedbackMasterId = feedbackMasterId;
+    }
 
-    public String getName() { return this.Name; }
+    public String getName() {
+        return this.Name;
+    }
 
-    public void setName(String name) { this.Name = name; }
+    public void setName(String name) {
+        this.Name = name;
+    }
 
-    public String getEmail() { return this.Email; }
+    public String getEmail() {
+        return this.Email;
+    }
 
-    public void setEmail(String email) { this.Email = email; }
+    public void setEmail(String email) {
+        this.Email = email;
+    }
 
-    public String getPhone() { return this.Phone; }
+    public String getPhone() {
+        return this.Phone;
+    }
 
-    public void setPhone(String phone) { this.Phone = phone; }
+    public void setPhone(String phone) {
+        this.Phone = phone;
+    }
 
-    public String getFeedback() { return this.Feedback; }
+    public String getFeedback() {
+        return this.Feedback;
+    }
 
-    public void setFeedback(String feedback) { this.Feedback = feedback; }
+    public void setFeedback(String feedback) {
+        this.Feedback = feedback;
+    }
 
-    public String getFeedbackDateTime() { return this.FeedbackDateTime; }
+    public String getFeedbackDateTime() {
+        return this.FeedbackDateTime;
+    }
 
-    public void setFeedbackDateTime(String feedbackDateTime) { this.FeedbackDateTime = feedbackDateTime; }
+    public void setFeedbackDateTime(String feedbackDateTime) {
+        this.FeedbackDateTime = feedbackDateTime;
+    }
 
-    public short getlinktoFeedbackTypeMasterId() { return this.linktoFeedbackTypeMasterId; }
+    public short getlinktoFeedbackTypeMasterId() {
+        return this.linktoFeedbackTypeMasterId;
+    }
 
-    public void setlinktoFeedbackTypeMasterId(short linktoFeedbackTypeMasterId) { this.linktoFeedbackTypeMasterId = linktoFeedbackTypeMasterId; }
+    public void setlinktoFeedbackTypeMasterId(short linktoFeedbackTypeMasterId) {
+        this.linktoFeedbackTypeMasterId = linktoFeedbackTypeMasterId;
+    }
 
-    public int getlinktoCustomerMasterId() { return this.linktoCustomerMasterId; }
+    public int getlinktoCustomerMasterId() {
+        return this.linktoCustomerMasterId;
+    }
 
-    public void setlinktoCustomerMasterId(int linktoCustomerMasterId) { this.linktoCustomerMasterId = linktoCustomerMasterId; }
+    public void setlinktoCustomerMasterId(int linktoCustomerMasterId) {
+        this.linktoCustomerMasterId = linktoCustomerMasterId;
+    }
 
-    public short getlinktoBusinesseMasterId() { return this.linktoBusinessMasterId; }
+    public short getlinktoBusinesseMasterId() {
+        return this.linktoBusinessMasterId;
+    }
 
-    public void setlinktoBusinessMasterId(short linktoBusinessMasterId) { this.linktoBusinessMasterId = linktoBusinessMasterId; }
+    public void setlinktoBusinessMasterId(short linktoBusinessMasterId) {
+        this.linktoBusinessMasterId = linktoBusinessMasterId;
+    }
 
-    public String getFeedbackType() { return this.FeedbackType; }
+    public String getFeedbackType() {
+        return this.FeedbackType;
+    }
 
-    public void setFeedbackType(String feedbackType) { this.FeedbackType = feedbackType; }
+    public void setFeedbackType(String feedbackType) {
+        this.FeedbackType = feedbackType;
+    }
 
-    public String getBusiness() { return this.Business; }
+    public String getBusiness() {
+        return this.Business;
+    }
+
+    public void setBusiness(String business) {
+        this.Business = business;
+    }
+
+    public int getFeedbackRowPosition() {
+        return FeedbackRowPosition;
+    }
 
     //endregion
 
-    public void setBusiness(String business) { this.Business = business; }
+    public void setFeedbackRowPosition(int feedbackRowPosition) {
+        FeedbackRowPosition = feedbackRowPosition;
+    }
 
     public int describeContents() {
         return 0;

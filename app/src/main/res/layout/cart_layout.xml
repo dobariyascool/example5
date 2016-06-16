@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cartLayout"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:background="@drawable/cart_with_ripple_drawable"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/control_SpecingMedium"
+    android:paddingStart="@dimen/control_SpecingMedium">
 
     <ImageView
-            android:id="@+id/ivCart"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="@dimen/control_SpecingMedium"
-            android:layout_marginStart="@dimen/control_SpecingMedium"
-            android:background="@drawable/cart_layout"
-            android:contentDescription="@string/wmCart"/>
+        android:id="@+id/ivCart"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/cart_layout"
+        android:contentDescription="@string/wmCart" />
 
     <com.rey.material.widget.TextView
         android:id="@+id/txtCartNumber"

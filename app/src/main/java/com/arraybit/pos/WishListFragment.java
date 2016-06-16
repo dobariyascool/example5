@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -131,12 +130,12 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
         MenuItem cartItem = menu.findItem(R.id.cart_layout);
 
         relativeLayout = (RelativeLayout) MenuItemCompat.getActionView(cartItem);
-        final ImageView ivCart = (ImageView) relativeLayout.findViewById(R.id.ivCart);
+        final RelativeLayout cartLayout = (RelativeLayout) relativeLayout.findViewById(R.id.cartLayout);
         txtCartNumber = (TextView) relativeLayout.findViewById(R.id.txtCartNumber);
 
         SetCartNumber(txtCartNumber);
 
-        ivCart.setOnClickListener(new View.OnClickListener() {
+        cartLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Globals.HideKeyBoard(getActivity(), v);

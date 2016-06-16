@@ -145,11 +145,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         } else {
             menu.findItem(R.id.viewChange).setIcon(R.drawable.view_list);
         }
-
-        if (MenuActivity.parentActivity) {
-            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
-        }
-
     }
 
     @Override

@@ -49,7 +49,9 @@
                 android:inputType="number"
                 android:paddingEnd="@dimen/control_SpecingTiny"
                 android:paddingStart="@dimen/control_SpecingTiny"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText" >
+                <requestFocus/>
+            </com.rey.material.widget.EditText>
 
             <ToggleButton
                 android:id="@+id/tbPercentage"

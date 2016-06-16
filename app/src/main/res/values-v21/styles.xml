@@ -458,6 +458,10 @@
         <!--<item name="android:fontFamily">Roboto-Regular</item>-->
     </style>
 
+    <style name="Layout">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
 
     <style name="SplashScreenImage" parent="ImageView">
         <item name="android:paddingTop">@dimen/control_SpecingTiny</item>

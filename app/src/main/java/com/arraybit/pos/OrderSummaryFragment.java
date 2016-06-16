@@ -43,7 +43,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 @SuppressLint("ValidFragment")
-public class OrderSummaryFragment extends Fragment implements View.OnClickListener, AddDiscountDialogFragment.DiscountSelectionListener, GuestLoginDialogFragment.LoginResponseListener {
+public class OrderSummaryFragment extends Fragment implements View.OnClickListener, AddDiscountDialogFragment.DiscountSelectionListener, GuestLoginDialogFragment.LoginResponseListener,ConfirmDialog.ConfirmationResponseListener{
 
 
     RecyclerView rvOrderItemSummery;
@@ -62,6 +62,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     OrderSummaryAdapter orderSummeryAdapter;
     boolean isHomeShow = false;
     com.arraybit.pos.ProgressDialog progressDialog;
+    View focusView;
 
     public OrderSummaryFragment() {
     }
@@ -160,7 +161,10 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.action_search).setVisible(false);
-            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
+            menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.shortList).setVisible(false);
+            //Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
         } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             if (isHomeShow) {
                 menu.findItem(R.id.home).setVisible(true);
@@ -206,12 +210,16 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         if (v.getId() == R.id.btnAddMore) {
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
                 if (MenuActivity.parentActivity) {
+                    Globals.isWishListShow = 1;
+                    Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
                     Intent intent = new Intent(getActivity(), MenuActivity.class);
                     intent.putExtra("ParentActivity", true);
                     intent.putExtra("TableMaster", objTableMaster);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 } else {
+                    Globals.isWishListShow = 0;
+                    Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
                     if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
                         if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                                 && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_summary))) {
@@ -221,6 +229,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                         Intent intent = new Intent(getActivity(), MenuActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra("TableMaster", objTableMaster);
+                        intent.putExtra("IsFavoriteShow",true);
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                     }
@@ -233,17 +242,10 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 }
             }
         } else if (v.getId() == R.id.btnCheckOut) {
-            if (MenuActivity.parentActivity && Globals.userName == null) {
-                GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
-                guestLoginDialogFragment.setTargetFragment(this, 0);
-                guestLoginDialogFragment.show(getActivity().getSupportFragmentManager(), "");
-            } else {
-                if (Service.CheckNet(getActivity())) {
-                    new BillNumberLoadingTask().execute();
-                } else {
-                    Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
-                }
-            }
+            focusView = v;
+            ConfirmDialog confirmDialog = new ConfirmDialog(getActivity().getResources().getString(R.string.cdfCheckOutMsg));
+            confirmDialog.setTargetFragment(this,0);
+            confirmDialog.show(getActivity().getSupportFragmentManager(),"");
         } else if (v.getId() == R.id.txtHeaderDiscount) {
             AddDiscountDialogFragment addDiscountDialogFragment = new AddDiscountDialogFragment();
             addDiscountDialogFragment.setTargetFragment(this, 0);
@@ -452,6 +454,21 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         }
 
     }
+
+    @Override
+    public void ConfirmResponse() {
+        if (MenuActivity.parentActivity && Globals.userName == null) {
+            GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+            guestLoginDialogFragment.setTargetFragment(this, 0);
+            guestLoginDialogFragment.show(getActivity().getSupportFragmentManager(), "");
+        } else {
+            if (Service.CheckNet(getActivity())) {
+                new BillNumberLoadingTask().execute();
+            } else {
+                Globals.ShowSnackBar(focusView, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            }
+        }
+    }
     //endregion
 
     //region LoadingTask
@@ -645,7 +662,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             super.onPreExecute();
             objTable = new TableMaster();
             objTable.setTableMasterId(objTableMaster.getTableMasterId());
-            objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Dirty.getValue());
+            if(Globals.orderTypeMasterId==Globals.OrderType.DineIn.getValue()) {
+                objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Dirty.getValue());
+            }else{
+                objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Vacant.getValue());
+            }
         }
 
         @Override
@@ -666,6 +687,8 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                     Globals.alOrderItemTran.clear();
                     Globals.alOrderItemSummery = new ArrayList<>();
                     Globals.alOrderMasterId = new ArrayList<>();
+                    objSharePreferenceManage.RemovePreference("WishListPreference", "WishList",getActivity());
+                    objSharePreferenceManage.ClearPreference("WishListPreference", getActivity());
                     Globals.ReplaceFragment(new ThankYouFragment(), getActivity().getSupportFragmentManager(), null);
                 } else {
                     Globals.counter = 0;

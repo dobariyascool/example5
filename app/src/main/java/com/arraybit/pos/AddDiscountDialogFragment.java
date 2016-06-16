@@ -117,6 +117,8 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
         if (v.getId() == R.id.actDiscount) {
             ClearFocus(v);
             Globals.HideKeyBoard(getActivity(), v);
+            tbPercentage.setChecked(false);
+            tbRupee.setChecked(false);
             actDiscount.showDropDown();
         } else if (v.getId() == R.id.btnCancel) {
             getDialog().dismiss();

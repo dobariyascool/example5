@@ -128,7 +128,7 @@
             android:paddingEnd="0dp"
             android:paddingStart="@dimen/control_SpecingSmall"
             android:paddingTop="@dimen/control_SpecingTiny"
-            android:src="@drawable/remove_accent_vector_drawable"
+            android:src="@drawable/cancel_drawable"
             tools:ignore="ContentDescription" />
 
     </LinearLayout>

@@ -68,7 +68,7 @@ public class HotelProfileActivity extends AppCompatActivity {
         pageAdapter = new PageAdapter(getSupportFragmentManager());
         objUserMaster = new UserMaster();
 
-        Picasso.with(HotelProfileActivity.this).load(R.drawable.hotel_profile_background).fit().centerCrop().into(ivBackground);
+        Picasso.with(HotelProfileActivity.this).load(R.drawable.profile_background).fit().centerCrop().into(ivBackground);
 
         if (Service.CheckNet(this)) {
             new HotelLoadingTask().execute();
@@ -89,6 +89,7 @@ public class HotelProfileActivity extends AppCompatActivity {
         } else if (mode == 3) {
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.shortList).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
     }

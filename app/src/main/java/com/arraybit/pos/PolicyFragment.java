@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.arraybit.global.Globals;
+
 @SuppressLint("ValidFragment")
 @SuppressWarnings("ConstantConditions")
 public class PolicyFragment extends Fragment {
@@ -76,6 +78,12 @@ public class PolicyFragment extends Fragment {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             menu.findItem(R.id.mWaiting).setVisible(false);
         }
-        menu.findItem(R.id.logout).setVisible(false);
+        if(Globals.isWishListShow==0) {
+            menu.findItem(R.id.logout).setVisible(false);
+        }else if(Globals.isWishListShow==1){
+            menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.shortList).setVisible(false);
+        }
     }
 }

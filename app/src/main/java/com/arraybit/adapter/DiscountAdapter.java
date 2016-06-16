@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import com.arraybit.global.Globals;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
@@ -37,7 +38,17 @@ public class DiscountAdapter extends ArrayAdapter<String> {
 
     @Override
     public String getItem(int position) {
-        return alDiscount.get(position);
+        if (alDiscountType.get(position).equals(true)) {
+            String str = alDiscount.get(position).substring(alDiscount.get(position).lastIndexOf(".")+1,alDiscount.get(position).length());
+            if(str.equals("0")){
+                return alDiscount.get(position).substring(0,alDiscount.get(position).lastIndexOf("."))+" "+context.getResources().getString(R.string.ddfPercentage);
+            }
+            else{
+                return alDiscount.get(position)+" "+context.getResources().getString(R.string.ddfPercentage);
+            }
+        } else {
+            return Globals.dfWithPrecision.format(Double.valueOf(alDiscount.get(position)))+" "+context.getResources().getString(R.string.ddfRupee);
+        }
     }
 
     @Override
@@ -70,7 +81,7 @@ public class DiscountAdapter extends ArrayAdapter<String> {
             }
             txtDiscountType.setText(context.getResources().getString(R.string.ddfPercentage));
         } else {
-            txtDiscount.setText(alDiscount.get(position));
+            txtDiscount.setText(Globals.dfWithPrecision.format(Double.valueOf(alDiscount.get(position))));
             txtDiscountType.setText(context.getResources().getString(R.string.ddfRupee));
         }
         return view;

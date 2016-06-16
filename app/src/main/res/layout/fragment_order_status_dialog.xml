@@ -33,11 +33,12 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        style="@style/Layout"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/control_SpecingMedium"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="4">
 
         <com.rey.material.widget.Button
             android:id="@+id/btnCooking"
@@ -46,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@mipmap/os_cooking"
+            android:padding="@dimen/control_SpecingSmall"
             android:text="@string/osdCooking" />
 
         <com.rey.material.widget.Button
@@ -66,6 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@mipmap/os_served"
+            android:padding="@dimen/control_SpecingSmall"
             android:text="@string/osdServed" />
 
 
@@ -76,7 +79,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@mipmap/os_cancel"
-            android:padding="@dimen/control_SpecingSmall"
             android:text="@string/osdCancel" />
 
     </LinearLayout>

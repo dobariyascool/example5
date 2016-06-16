@@ -119,6 +119,7 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.login).setVisible(false);
         menu.findItem(R.id.registration).setVisible(false);
+        menu.findItem(R.id.shortList).setVisible(false);
     }
 
     //region Private Methods

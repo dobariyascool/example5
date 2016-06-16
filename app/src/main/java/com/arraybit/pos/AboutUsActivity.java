@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -54,11 +53,11 @@ public class AboutUsActivity extends AppCompatActivity {
         TextView txtCardTerms = (TextView) findViewById(R.id.txtCardTerms);
         TextView txtVersionCode = (TextView) findViewById(R.id.txtVersionCode);
 
-        if (Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19) {
-            versionLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.card_view_with_border));
-            txtCardPolicy.setBackground(ContextCompat.getDrawable(this, R.drawable.card_view_with_border));
-            txtCardTerms.setBackground(ContextCompat.getDrawable(this, R.drawable.card_view_with_border));
-        }
+//        if (Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19) {
+//            versionLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.card_view_with_border));
+//            txtCardPolicy.setBackground(ContextCompat.getDrawable(this, R.drawable.card_view_with_border));
+//            txtCardTerms.setBackground(ContextCompat.getDrawable(this, R.drawable.card_view_with_border));
+//        }
 
         txtVersionCode.setText(getResources().getString(R.string.abVersionCode) + "  " + BuildConfig.VERSION_CODE + "\n" +
                 getResources().getString(R.string.abVersionName) + " " + BuildConfig.VERSION_NAME);
@@ -89,7 +88,9 @@ public class AboutUsActivity extends AppCompatActivity {
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
         } else if (mode == 3) {
-            Globals.SetOptionMenu(Globals.userName, this, menu);
+            menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.shortList).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
     }

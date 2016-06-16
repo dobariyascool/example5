@@ -307,7 +307,6 @@ public class Globals {
         }
     }
 
-
     public static void ShowTimePickerDialog(final TextView txtView, final Context context) {
         final Calendar c = Calendar.getInstance();
 

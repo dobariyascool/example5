@@ -4,7 +4,6 @@
     style="@style/CardViewTransparent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/control_SpecingSmall"
     android:padding="@dimen/control_SpecingTiny">
 
     <LinearLayout

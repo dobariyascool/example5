@@ -3,6 +3,7 @@ package com.arraybit.pos;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
@@ -34,6 +34,7 @@ import com.rey.material.widget.Button;
 import com.rey.material.widget.CheckBox;
 import com.rey.material.widget.CompoundButton;
 import com.rey.material.widget.EditText;
+import com.rey.material.widget.RadioButton;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class FeedbackViewFragment extends Fragment {
     ArrayList<FeedbackQuestionMaster> alFeedbackQuestionMaster;
     ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, alFeedbackAnswer, alFeedbackAnswerFilter;
     SharePreferenceManage objSharePreferenceManage;
-    int userMasterId, currentView;
+    int userMasterId, currentView,rowNumber = -1,rowPosition = -1,feedbackType;
     StringBuilder sbAnswerId;
     String checkedString;
     FeedbackMaster objFeedbackMaster;
@@ -124,12 +125,13 @@ public class FeedbackViewFragment extends Fragment {
 
     private void SetSingleChoiceLayout(final ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, final FeedbackQuestionMaster objFeedbackQuestionMaster, final int position) {
         CardView cardView = (CardView) LayoutInflater.from(getActivity()).inflate(R.layout.cardview_layout, feedbackViewFragment, false);
-        LinearLayout linearLayout = new LinearLayout(getActivity());
+        final LinearLayout linearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParams.setMargins(16, 8, 16, 8);
         linearLayout.setLayoutParams(linearLayoutParams);
         linearLayout.setPadding(16, 4, 16, 4);
         linearLayout.setGravity(Gravity.CENTER);
+        linearLayout.setId(position);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         LinearLayout headerLayout = new LinearLayout(getActivity());
@@ -188,17 +190,51 @@ public class FeedbackViewFragment extends Fragment {
             rbAnswer[j].setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
             rbAnswer[j].setGravity(Gravity.START | Gravity.CENTER);
             rbAnswer[j].setTextSize(14f);
+            rbAnswer[j].applyStyle(R.style.RadioButton);
+
+            rbAnswer[j].setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(android.widget.CompoundButton buttonView, boolean isChecked) {
+                    Globals.HideKeyBoard(getActivity(), buttonView);
+                    if (rowNumber == -1) {
+                        rowNumber = linearLayout.getId();
+                    }
+                    if (linearLayout.getId() == rowNumber) {
+                        if (rowPosition == -1) {
+                            rowPosition = buttonView.getId();
+                            alFeedbackAnswer.get(rowNumber).setFeedbackRowPosition(rowPosition);
+                            alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
+                            alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
+                        } else {
+                            rbAnswer[alFeedbackAnswer.get(rowNumber).getFeedbackRowPosition()].setChecked(false);
+                            alFeedbackAnswer.get(rowNumber).setAnswer(null);
+                            alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId(0);
+                            rowPosition = buttonView.getId();
+                            alFeedbackAnswer.get(rowNumber).setFeedbackRowPosition(rowPosition);
+                            alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
+                            alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
+                        }
+                    }else {
+                        rowPosition = buttonView.getId();
+                        rowNumber = linearLayout.getId();
+                        if (alFeedbackAnswer.get(rowNumber).getFeedbackRowPosition() != -1) {
+                            rbAnswer[alFeedbackAnswer.get(rowNumber).getFeedbackRowPosition()].setChecked(false);
+                            alFeedbackAnswer.get(rowNumber).setAnswer(null);
+                            alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId(0);
+                            rowPosition = buttonView.getId();
+                            alFeedbackAnswer.get(rowNumber).setFeedbackRowPosition(rowPosition);
+                            alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
+                            alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
+                        }else {
+                            alFeedbackAnswer.get(rowNumber).setFeedbackRowPosition(rowPosition);
+                            alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
+                            alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
+                        }
+                    }
+                }
+            });
             radioGroup.addView(rbAnswer[j]);
         }
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Globals.HideKeyBoard(getActivity(), group);
-                rbAnswer[checkedId].setChecked(true);
-                alFeedbackAnswer.get(position).setFeedbackAnswerMasterId((int) rbAnswer[checkedId].getTag());
-                alFeedbackAnswer.get(position).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
-            }
-        });
 
         headerLayout.addView(txtNumber);
         headerLayout.addView(txtQuestion);
@@ -275,6 +311,7 @@ public class FeedbackViewFragment extends Fragment {
             cbAnswer[j].setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
             cbAnswer[j].setGravity(Gravity.START | Gravity.CENTER);
             cbAnswer[j].setTextSize(14f);
+            cbAnswer[j].applyStyle(R.style.CheckBox);
             cbAnswer[j].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(android.widget.CompoundButton buttonView, boolean isChecked) {
@@ -347,6 +384,7 @@ public class FeedbackViewFragment extends Fragment {
         editText.setLayoutParams(editTextLayoutParams);
         editText.setPadding(30, 0, 0, 0);
         editText.applyStyle(R.style.EditText);
+        editText.setSingleLine();
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -411,6 +449,10 @@ public class FeedbackViewFragment extends Fragment {
         LinearLayout.LayoutParams ratingBarLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ratingBar.setLayoutParams(ratingBarLayoutParams);
         ratingBar.setNumStars(5);
+
+        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_ATOP);
+
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -437,6 +479,7 @@ public class FeedbackViewFragment extends Fragment {
             objFeedbackAnswerMaster.setFeedbackQuestion(null);
             objFeedbackAnswerMaster.setAnswer(null);
             objFeedbackAnswerMaster.setlinktoFeedbackQuestionMasterId(0);
+            objFeedbackAnswerMaster.setFeedbackRowPosition(-1);
             alFeedbackAnswer.add(objFeedbackAnswerMaster);
         }
     }
@@ -455,60 +498,54 @@ public class FeedbackViewFragment extends Fragment {
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        RadioGroup radioGroup = new RadioGroup(getActivity());
+        final RadioGroup radioGroup = new RadioGroup(getActivity());
         LinearLayout.LayoutParams radioGroupLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         radioGroup.setLayoutParams(radioGroupLayoutParams);
         radioGroup.setOrientation(LinearLayout.HORIZONTAL);
 
-        final RadioButton rbSuggestion = new RadioButton(getActivity());
-        LinearLayout.LayoutParams rbSuggestionLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        rbSuggestion.setLayoutParams(rbSuggestionLayoutParams);
-        rbSuggestion.setText(Globals.FeedbackType.Suggestion.toString());
-        rbSuggestion.setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
-        rbSuggestion.setChecked(true);
-        checkedString = rbSuggestion.getText().toString();
+        final RadioButton[] radioButton = new RadioButton[3];
 
-        final RadioButton rbBugReport = new RadioButton(getActivity());
-        LinearLayout.LayoutParams rbBugReportLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        rbBugReport.setLayoutParams(rbBugReportLayoutParams);
-        rbBugReport.setText(Globals.FeedbackType.BugReport.toString());
-        rbBugReport.setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
+        for (int i = 0; i < 3; i++) {
+            radioButton[i] = new RadioButton(getActivity());
+            LinearLayout.LayoutParams rbLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            radioButton[i].setLayoutParams(rbLayoutParams);
+            radioButton[i].setId(i);
+            radioButton[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
+            radioButton[i].applyStyle(R.style.RadioButton);
 
-        final RadioButton rbOtherQuery = new RadioButton(getActivity());
-        LinearLayout.LayoutParams rbOtherQueryLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        rbOtherQuery.setLayoutParams(rbOtherQueryLayoutParams);
-        rbOtherQuery.setText(Globals.FeedbackType.OtherQuery.toString());
-        rbOtherQuery.setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
-
-        radioGroup.addView(rbSuggestion);
-        radioGroup.addView(rbBugReport);
-        radioGroup.addView(rbOtherQuery);
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (rbBugReport.isChecked()) {
-                    rbSuggestion.setChecked(false);
-                    rbOtherQuery.setChecked(false);
-                    checkedString = (String) rbBugReport.getText();
-                } else if (rbSuggestion.isChecked()) {
-                    rbBugReport.setChecked(false);
-                    rbOtherQuery.setChecked(false);
-                    checkedString = (String) rbSuggestion.getText();
-                } else if (rbOtherQuery.isChecked()) {
-                    rbBugReport.setChecked(false);
-                    rbSuggestion.setChecked(false);
-                    checkedString = (String) rbOtherQuery.getText();
-                }
+            if (i == 0) {
+                radioButton[i].setText(Globals.FeedbackType.Suggestion.toString());
+                radioButton[i].setTag(Globals.FeedbackType.Suggestion.getValue());
+                rowPosition = i;
+                feedbackType = Globals.FeedbackType.Suggestion.getValue();
+                radioButton[i].setChecked(true);
+            } else if (i == 1) {
+                radioButton[i].setText(Globals.FeedbackType.BugReport.toString());
+                radioButton[i].setTag(Globals.FeedbackType.BugReport.getValue());
+            } else {
+                radioButton[i].setText(Globals.FeedbackType.OtherQuery.toString());
+                radioButton[i].setTag(Globals.FeedbackType.OtherQuery.getValue());
             }
-        });
 
+            radioButton[i].setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(android.widget.CompoundButton buttonView, boolean isChecked) {
+                    Globals.HideKeyBoard(getActivity(), buttonView);
+                    radioButton[rowPosition].setChecked(false);
+                    rowPosition = buttonView.getId();
+                    feedbackType = (int) buttonView.getTag();
+                }
+            });
+
+            radioGroup.addView(radioButton[i]);
+        }
         final EditText etUserName = new EditText(getActivity());
         LinearLayout.LayoutParams etUserNameLayoutParams = new LinearLayout.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT);
         etUserName.setLayoutParams(etUserNameLayoutParams);
         etUserName.applyStyle(R.style.EditText);
         etUserName.setHint(getActivity().getResources().getString(R.string.fbName));
-        etUserName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        etUserName.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        etUserName.setSingleLine();
 
         final EditText etEmail = new EditText(getActivity());
         LinearLayout.LayoutParams etEmailLayoutParams = new LinearLayout.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -516,13 +553,15 @@ public class FeedbackViewFragment extends Fragment {
         etEmail.applyStyle(R.style.EditText);
         etEmail.setHint(getActivity().getResources().getString(R.string.fbEmail));
         etEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        etEmail.setSingleLine();
 
         final EditText etMobileNo = new EditText(getActivity());
         LinearLayout.LayoutParams etMobileNoLayoutParams = new LinearLayout.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT);
         etMobileNo.setLayoutParams(etMobileNoLayoutParams);
         etMobileNo.applyStyle(R.style.EditText);
         etMobileNo.setHint(getActivity().getResources().getString(R.string.fbMobileNo));
-        etMobileNo.setInputType(InputType.TYPE_CLASS_PHONE);
+        etMobileNo.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etMobileNo.setSingleLine();
 
         final EditText etFeedback = new EditText(getActivity());
         LinearLayout.LayoutParams etFeedbackLayoutParams = new LinearLayout.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -551,7 +590,7 @@ public class FeedbackViewFragment extends Fragment {
                         objFeedbackMaster.setEmail(etEmail.getText().toString());
                         objFeedbackMaster.setPhone(etMobileNo.getText().toString());
                         objFeedbackMaster.setFeedback(etFeedback.getText().toString());
-                        objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) Globals.FeedbackType.valueOf(checkedString).getValue());
+                        objFeedbackMaster.setlinktoFeedbackTypeMasterId((short) feedbackType);
                         objFeedbackMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
                         if (userMasterId != 0) {
                             objFeedbackMaster.setlinktoCustomerMasterId(userMasterId);
@@ -622,6 +661,14 @@ public class FeedbackViewFragment extends Fragment {
             etFeedback.setError("Enter " + getResources().getString(R.string.fbFeedback));
             etEmail.setError("Enter " + getResources().getString(R.string.fbEmail));
             IsValid = false;
+        }else if (!etEmail.getText().toString().equals("") && !etFeedback.getText().toString().equals("")) {
+            if (!Globals.IsValidEmail(etEmail.getText().toString())) {
+                etEmail.setError("Enter Valid " + getResources().getString(R.string.fbEmail));
+                IsValid = false;
+            } else {
+                etEmail.clearError();
+                etFeedback.clearError();
+            }
         }
         if (!etMobileNo.getText().toString().equals("") && etMobileNo.getText().length() != 10) {
             etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.fbMobileNo));

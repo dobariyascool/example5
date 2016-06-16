@@ -87,8 +87,12 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         }
 
         holder.txtOrderTime.setText(objOrderMaster.getOrderTime());
-        holder.txtTableName.setText(objOrderMaster.getTableName());
-        holder.txtOrderNumber.setText("[ " + objOrderMaster.getOrderNumber() + " ]");
+        if(objOrderMaster.getTableName().length() > 8 && objOrderMaster.getOrderNumber().length() >= 2){
+            holder.txtTableName.setText(objOrderMaster.getTableName().substring(0,8)+".."+"[" + objOrderMaster.getOrderNumber() + "]");
+        }else{
+            holder.txtTableName.setText(objOrderMaster.getTableName()+" "+"[" + objOrderMaster.getOrderNumber() + "]");
+        }
+
         holder.txtOrderType.setText(objOrderMaster.getOrderType());
         if (isViewFilter) {
             holder.itemLayout.removeAllViewsInLayout();
@@ -211,6 +215,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                         ivStatus[i].setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.cancel));
                     }
                 }
+                ivStatus[i].setBackground(ContextCompat.getDrawable(context,R.drawable.icon_hover_drawable));
 
                 ivStatus[i].setOnClickListener(new View.OnClickListener() {
                     @Override

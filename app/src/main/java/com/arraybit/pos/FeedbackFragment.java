@@ -110,16 +110,20 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
         } else if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
-            if(Globals.isWishListShow==0){
+            if (Globals.isWishListShow == 0) {
                 menu.findItem(R.id.logout).setVisible(false);
+            } else if (Globals.isWishListShow == 1) {
+                menu.findItem(R.id.login).setVisible(false);
+                menu.findItem(R.id.registration).setVisible(false);
+                menu.findItem(R.id.shortList).setVisible(false);
             }
         }
 
-        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
-                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
-            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
-        }
+//        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+//                && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
+//                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
+//            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
+//        }
     }
 
     @Override
@@ -167,13 +171,13 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-    private void SetNextPreviousEnable(boolean isEnable){
-        if(isEnable){
-           ivNext.setEnabled(true);
-           txtNext.setEnabled(true);
-           ivPrevious.setEnabled(true);
-           txtPrevious.setEnabled(true);
-        }else{
+    private void SetNextPreviousEnable(boolean isEnable) {
+        if (isEnable) {
+            ivNext.setEnabled(true);
+            txtNext.setEnabled(true);
+            ivPrevious.setEnabled(true);
+            txtPrevious.setEnabled(true);
+        } else {
             ivNext.setEnabled(false);
             txtNext.setEnabled(false);
             ivPrevious.setEnabled(false);
@@ -206,16 +210,28 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
             txtNext.setEnabled(true);
             ivPrevious.setEnabled(false);
             txtPrevious.setEnabled(false);
+            txtPrevious.setVisibility(View.INVISIBLE);
+            ivPrevious.setVisibility(View.INVISIBLE);
+            ivNext.setVisibility(View.VISIBLE);
+            txtNext.setVisibility(View.VISIBLE);
         } else if (position == viewPager.getOffscreenPageLimit() - 1) {
             ivNext.setEnabled(false);
             txtNext.setEnabled(false);
             ivPrevious.setEnabled(true);
             txtPrevious.setEnabled(true);
+            ivNext.setVisibility(View.INVISIBLE);
+            txtNext.setVisibility(View.INVISIBLE);
+            ivPrevious.setVisibility(View.VISIBLE);
+            txtPrevious.setVisibility(View.VISIBLE);
         } else {
             ivNext.setEnabled(true);
             txtNext.setEnabled(true);
             ivPrevious.setEnabled(true);
             txtPrevious.setEnabled(true);
+            ivNext.setVisibility(View.VISIBLE);
+            txtNext.setVisibility(View.VISIBLE);
+            ivPrevious.setVisibility(View.VISIBLE);
+            txtPrevious.setVisibility(View.VISIBLE);
         }
     }
 

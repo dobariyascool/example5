@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -57,9 +56,9 @@ public class NotificationSettingsFragment extends Fragment {
 
         LinearLayout notificationLayout = (LinearLayout)view.findViewById(R.id.notificationLayout);
 
-        if(Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19){
-            notificationLayout.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.card_view_with_border));
-        }
+//        if(Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19){
+//            notificationLayout.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.card_view_with_border));
+//        }
 
         txtOnTime = (TextView) view.findViewById(R.id.txtOnTime);
         txtOffTime = (TextView) view.findViewById(R.id.txtOffTime);
@@ -133,6 +132,7 @@ public class NotificationSettingsFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.login).setVisible(false);
         menu.findItem(R.id.registration).setVisible(false);
+        menu.findItem(R.id.shortList).setVisible(false);
     }
 
     @Override

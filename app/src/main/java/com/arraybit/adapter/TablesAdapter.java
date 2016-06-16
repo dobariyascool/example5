@@ -60,7 +60,12 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         }
         holder.txtTableName.setText(objTableMaster.getShortName());
         holder.txtPersons.setText(String.valueOf(objTableMaster.getMaxPerson()));
-        holder.txtTableStatus.setText(objTableMaster.getTableStatus());
+        if(objTableMaster.getTableStatus()!=null && objTableMaster.getTableStatus().equals(Globals.TableStatus.Block.toString()))
+        {
+            holder.txtTableStatus.setText(context.getResources().getString(R.string.tsBlocked));
+        }else {
+            holder.txtTableStatus.setText(objTableMaster.getTableStatus());
+        }
         holder.txtTableStatus.setTextColor(Color.parseColor("#" + objTableMaster.getStatusColor()));
 
         //holder animation

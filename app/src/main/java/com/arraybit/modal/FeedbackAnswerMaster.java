@@ -32,33 +32,66 @@ public class FeedbackAnswerMaster implements Parcelable {
             return new FeedbackAnswerMaster[size];
         }
     };
+    int FeedbackRowPosition;
     String FeedbackAnswerIds;
 
-    public int getFeedbackAnswerMasterId() { return this.FeedbackAnswerMasterId; }
+    public int getFeedbackRowPosition() {
+        return FeedbackRowPosition;
+    }
 
-    public void setFeedbackAnswerMasterId(int feedbackAnswerMasterId) { this.FeedbackAnswerMasterId = feedbackAnswerMasterId; }
+    public void setFeedbackRowPosition(int feedbackRowPosition) {
+        FeedbackRowPosition = feedbackRowPosition;
+    }
 
-    public int getlinktoFeedbackQuestionMasterId() { return this.linktoFeedbackQuestionMasterId; }
+    public int getFeedbackAnswerMasterId() {
+        return this.FeedbackAnswerMasterId;
+    }
 
-    public void setlinktoFeedbackQuestionMasterId(int linktoFeedbackQuestionMasterId) { this.linktoFeedbackQuestionMasterId = linktoFeedbackQuestionMasterId; }
+    public void setFeedbackAnswerMasterId(int feedbackAnswerMasterId) {
+        this.FeedbackAnswerMasterId = feedbackAnswerMasterId;
+    }
 
-    public String getAnswer() { return this.Answer; }
+    public int getlinktoFeedbackQuestionMasterId() {
+        return this.linktoFeedbackQuestionMasterId;
+    }
 
-    public void setAnswer(String answer) { this.Answer = answer; }
+    public void setlinktoFeedbackQuestionMasterId(int linktoFeedbackQuestionMasterId) {
+        this.linktoFeedbackQuestionMasterId = linktoFeedbackQuestionMasterId;
+    }
 
-    public boolean getIsDeleted() { return this.IsDeleted; }
+    public String getAnswer() {
+        return this.Answer;
+    }
 
-    public void setIsDeleted(boolean isDeleted) { this.IsDeleted = isDeleted; }
+    public void setAnswer(String answer) {
+        this.Answer = answer;
+    }
 
-    public String getFeedbackQuestion() { return this.FeedbackQuestion; }
+    public boolean getIsDeleted() {
+        return this.IsDeleted;
+    }
 
-    public void setFeedbackQuestion(String feedbackQuestion) { this.FeedbackQuestion = feedbackQuestion; }
+    public void setIsDeleted(boolean isDeleted) {
+        this.IsDeleted = isDeleted;
+    }
 
-    public String getFeedbackAnswerIds() { return FeedbackAnswerIds; }
+    public String getFeedbackQuestion() {
+        return this.FeedbackQuestion;
+    }
+
+    public void setFeedbackQuestion(String feedbackQuestion) {
+        this.FeedbackQuestion = feedbackQuestion;
+    }
+
+    public String getFeedbackAnswerIds() {
+        return FeedbackAnswerIds;
+    }
 
 //endregion
 
-    public void setFeedbackAnswerIds(String feedbackAnswerIds) { FeedbackAnswerIds = feedbackAnswerIds; }
+    public void setFeedbackAnswerIds(String feedbackAnswerIds) {
+        FeedbackAnswerIds = feedbackAnswerIds;
+    }
 
     public int describeContents() {
         return 0;
@@ -68,7 +101,7 @@ public class FeedbackAnswerMaster implements Parcelable {
         parcel.writeInt(FeedbackAnswerMasterId);
         parcel.writeInt(linktoFeedbackQuestionMasterId);
         parcel.writeString(Answer);
-        parcel.writeByte((byte)(IsDeleted ? 1 : 0));
+        parcel.writeByte((byte) (IsDeleted ? 1 : 0));
 
         /// Extra
         parcel.writeString(FeedbackQuestion);

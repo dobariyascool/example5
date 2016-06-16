@@ -66,6 +66,9 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
         Intent intent = getIntent();
         objTableMaster = intent.getParcelableExtra("TableMaster");
+        if(objTableMaster!=null && objTableMaster.getlinktoOrderTypeMasterId()!=0){
+            Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
+        }
 
         //navigationView
         navigationView = (NavigationView) findViewById(R.id.navigationView);

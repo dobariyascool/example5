@@ -96,13 +96,18 @@ public class OfferFragment extends Fragment {
                 || (strActivityName != null && strActivityName.equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))))) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
+            if(Globals.isWishListShow==1){
+                menu.findItem(R.id.shortList).setVisible(false);
+                menu.findItem(R.id.login).setVisible(false);
+                menu.findItem(R.id.registration).setVisible(false);
+            }
         }
 
-        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName() != null
-                && getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()
-                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
-            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
-        }
+//        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName() != null
+//                && getActivity().getSupportFragmentManager().getBackStackEntryAt(0).getName()
+//                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
+//            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
+//        }
     }
 
     @Override

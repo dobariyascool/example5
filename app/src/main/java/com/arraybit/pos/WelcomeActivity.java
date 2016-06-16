@@ -110,11 +110,13 @@ public class WelcomeActivity extends Activity {
                                 finish();
                             } else {
                                 if (intent.getShortExtra("UserType", (short) 0) == Globals.UserType.Waiting.getValue()) {
+                                    Globals.isWishListShow = 0;
                                     Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
                                     startActivity(i);
                                     overridePendingTransition(R.anim.right_in, R.anim.left_out);
                                     finish();
                                 } else {
+                                    Globals.isWishListShow = 0;
                                     Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
                                     startActivity(i);
                                     overridePendingTransition(R.anim.right_in, R.anim.left_out);

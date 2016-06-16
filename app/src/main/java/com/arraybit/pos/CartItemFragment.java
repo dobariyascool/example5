@@ -38,7 +38,7 @@ import java.util.ArrayList;
 
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
-public class CartItemFragment extends Fragment implements CartItemAdapter.CartItemOnClickListener, View.OnClickListener, RemarkDialogFragment.RemarkResponseListener, AddItemQtyDialogFragment.QtyRemarkDialogResponseListener {
+public class CartItemFragment extends Fragment implements CartItemAdapter.CartItemOnClickListener, View.OnClickListener, RemarkDialogFragment.RemarkResponseListener, AddItemQtyDialogFragment.QtyRemarkDialogResponseListener ,ConfirmDialog.ConfirmationResponseListener{
 
     TextView txtMsg,txtEditMessage;
     CompoundButton cbMenu;
@@ -136,11 +136,12 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         menu.findItem(R.id.viewChange).setVisible(false);
         menu.findItem(R.id.action_search).setVisible(false);
         menu.findItem(R.id.cart_layout).setVisible(false);
-        if (MenuActivity.parentActivity) {
-            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
-        }
         if(Globals.isWishListShow==0){
             menu.findItem(R.id.logout).setVisible(false);
+        }else if(Globals.isWishListShow==1){
+            menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.shortList).setVisible(false);
         }
     }
 
@@ -177,25 +178,10 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         } else if (v.getId() == R.id.btnConfirmOrder) {
-            if (MenuActivity.parentActivity) {
-                GetValueFromSharePreference();
-
-                if (Service.CheckNet(getActivity())) {
-                    view = v;
-                    new TaxLoadingTask().execute();
-                } else {
-                    Globals.ShowSnackBar(v, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
-                }
-
-            } else {
-                GetValueFromSharePreference();
-                if (Service.CheckNet(getActivity())) {
-                    view = v;
-                    new TaxLoadingTask().execute();
-                } else {
-                    Globals.ShowSnackBar(v, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
-                }
-            }
+            view = v;
+            ConfirmDialog confirmDialog = new ConfirmDialog(getActivity().getResources().getString(R.string.cdfConfirmMsg));
+            confirmDialog.setTargetFragment(this,0);
+            confirmDialog.show(getActivity().getSupportFragmentManager(),"");
         } else if (v.getId() == R.id.cbMenu) {
             RemarkDialogFragment.strRemark = null;
             if (MenuActivity.parentActivity) {
@@ -230,6 +216,26 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
     @Override
     public void UpdateQtyRemarkResponse(ItemMaster objOrderItem) {
         adapter.UpdateData(position,objOrderItem);
+    }
+
+    @Override
+    public void ConfirmResponse() {
+        if (MenuActivity.parentActivity) {
+            GetValueFromSharePreference();
+            if (Service.CheckNet(getActivity())) {
+                new TaxLoadingTask().execute();
+            } else {
+                Globals.ShowSnackBar(view, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            }
+
+        } else {
+            GetValueFromSharePreference();
+            if (Service.CheckNet(getActivity())) {
+                new TaxLoadingTask().execute();
+            } else {
+                Globals.ShowSnackBar(view, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            }
+        }
     }
 
     //region Private Methods and Interface
@@ -366,7 +372,6 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                 RemarkDialogFragment.strRemark = null;
                 Globals.ShowSnackBar(view, getResources().getString(R.string.MsgConfirmOrder), getActivity(), 1000);
                 if (MenuActivity.parentActivity) {
-
                     Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                     intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -375,10 +380,16 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                     Globals.counter = 0;
                     Globals.alOrderItemTran.clear();
                 } else {
-
-                    Globals.ReplaceFragment(new OrderSummaryFragment(), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_order_summary));
                     Globals.counter = 0;
                     Globals.alOrderItemTran.clear();
+                    if(Globals.orderTypeMasterId==Globals.OrderType.DineIn.getValue()){
+                        Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        getActivity().startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    }else {
+                        Globals.ReplaceFragment(new OrderSummaryFragment(), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_order_summary));
+                    }
                 }
             }
         }

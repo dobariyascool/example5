@@ -36,6 +36,7 @@ public class MenuActivity extends AppCompatActivity{
         Intent intent = getIntent();
         if (intent.getParcelableExtra("TableMaster") != null) {
             objTableMaster = intent.getParcelableExtra("TableMaster");
+            Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
             if (Globals.selectTableMasterId != objTableMaster.getTableMasterId()) {
                 CategoryItemFragment.i = 0;
                 CategoryItemFragment.isViewChange = false;
@@ -66,7 +67,10 @@ public class MenuActivity extends AppCompatActivity{
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (parentActivity) {
-            Globals.SetOptionMenu(Globals.userName, MenuActivity.this, menu);
+            //Globals.SetOptionMenu(Globals.userName, MenuActivity.this, menu);
+            menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.shortList).setVisible(false);
         }else{
             menu.findItem(R.id.logout).setVisible(false);
         }
@@ -107,7 +111,7 @@ public class MenuActivity extends AppCompatActivity{
         int id = item.getItemId();
 
         if (MenuActivity.parentActivity) {
-            Globals.OptionMenuItemClick(item, MenuActivity.this, getSupportFragmentManager());
+            //Globals.OptionMenuItemClick(item, MenuActivity.this, getSupportFragmentManager());
         } else {
             if (id == R.id.logout) {
                 Globals.ClearPreference(MenuActivity.this);
@@ -125,6 +129,8 @@ public class MenuActivity extends AppCompatActivity{
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_category_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
+                    DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_detail));
+                    detailFragment.SaveWishListData();
                     DetailFragment.isItemSuggestedClick = false;
                     DetailFragment.alOptionValue = new ArrayList<>();
                     DetailFragment.alSubItemOptionValue = new ArrayList<>();
@@ -155,6 +161,8 @@ public class MenuActivity extends AppCompatActivity{
                 } else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName() != null
                         &&  getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_sub_detail))){
                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_sub_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_sub_detail));
+                    detailFragment.SaveWishListData();
                     DetailFragment.isItemSuggestedClick = false;
                     DetailFragment.alOptionValue = new ArrayList<>();
                     DetailFragment.alSubItemOptionValue = new ArrayList<>();

@@ -35,7 +35,7 @@
     <string name="title_fragment_myprofile">Your Profile</string>
     <string name="title_fragment_notification_settings">Notification Settings</string>
     <string name="title_fragment_change_password">Change Password</string>
-    <string name="title_fragment_table_order">Orders</string>
+    <string name="title_fragment_table_order">Generate Bill</string>
     <!-- end -->
 
     <string name="hello_world">Hello world!</string>
@@ -125,7 +125,7 @@
     <!-- navigation drawer menu -->
     <string name="navLogin">Login</string>
     <string name="navHome">Home</string>
-    <string name="navProfile">Our Profile</string>
+    <string name="navProfile">Company Profile</string>
     <string name="navRegistration">Registration</string>
     <string name="navChangeMode">Change Mode</string>
     <string name="navSearch">Search</string>
@@ -266,6 +266,7 @@
     <string name="tsBusy">Occupied</string>
     <string name="tsOccupy">Occupy</string>
     <string name="tsBlock">Block</string>
+    <string name="tsBlocked">Blocked</string>
     <string name="tsDirty">Dirty</string>
     <!-- end -->
 
@@ -421,5 +422,10 @@
     <string name="strFavorite">Favourite</string>
     <string name="title_fragment_sub_detail">Sub Detail</string>
     <string name="title_activity_wish_list">Short List</string>
+    <string name="cdfConfirmMsg">You want to place order?</string>
+    <string name="cdfCheckOutMsg">You want to generate bill?</string>
+    <string name="cdfConfirm">Confirm</string>
+    <string name="cdfCancel">Cancel</string>
+    <string name="cdfRemove">Remove</string>
 
 </resources>
