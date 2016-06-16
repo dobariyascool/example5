@@ -3,7 +3,6 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -110,11 +109,6 @@ public class OfferFragment extends Fragment {
 //        }
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), null, null, offerFragment);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

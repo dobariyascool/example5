@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -96,12 +95,6 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
         menu.findItem(R.id.action_search).setVisible(true);
         menu.findItem(R.id.home).setVisible(false);
         menu.findItem(R.id.logout).setVisible(false);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), allOrdersFragment);
     }
 
     @Override

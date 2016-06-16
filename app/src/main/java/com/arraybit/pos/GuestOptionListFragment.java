@@ -2,7 +2,6 @@ package com.arraybit.pos;
 
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -47,12 +46,6 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         setHasOptionsMenu(true);
 
         return view;
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
     }
 
 

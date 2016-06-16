@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -143,12 +142,6 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             menu.findItem(R.id.registration).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
     }
 
     @Override

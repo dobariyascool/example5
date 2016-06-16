@@ -2,7 +2,6 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -253,11 +252,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), null, null, orderSummeryLayout);
-    }
+
 
     @Override
     public void DiscountCount(DiscountMaster objDiscountMaster) {

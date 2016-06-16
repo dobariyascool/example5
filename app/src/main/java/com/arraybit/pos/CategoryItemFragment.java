@@ -2,7 +2,6 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -124,13 +123,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
-            Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
-        }
-    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {

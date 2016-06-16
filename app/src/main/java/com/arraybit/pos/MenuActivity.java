@@ -1,7 +1,6 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -58,11 +57,6 @@ public class MenuActivity extends AppCompatActivity{
 
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
-    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {

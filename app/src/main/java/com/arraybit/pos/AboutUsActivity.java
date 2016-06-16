@@ -52,12 +52,7 @@ public class AboutUsActivity extends AppCompatActivity {
         TextView txtCardPolicy = (TextView) findViewById(R.id.txtCardPolicy);
         TextView txtCardTerms = (TextView) findViewById(R.id.txtCardTerms);
         TextView txtVersionCode = (TextView) findViewById(R.id.txtVersionCode);
-
-//        if (Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19) {
-//            versionLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.card_view_with_border));
-//            txtCardPolicy.setBackground(ContextCompat.getDrawable(this, R.drawable.card_view_with_border));
-//            txtCardTerms.setBackground(ContextCompat.getDrawable(this, R.drawable.card_view_with_border));
-//        }
+        
 
         txtVersionCode.setText(getResources().getString(R.string.abVersionCode) + "  " + BuildConfig.VERSION_CODE + "\n" +
                 getResources().getString(R.string.abVersionName) + " " + BuildConfig.VERSION_NAME);

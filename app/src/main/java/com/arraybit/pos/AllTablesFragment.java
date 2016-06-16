@@ -4,7 +4,6 @@ package com.arraybit.pos;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -180,12 +179,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
     }
 
     @Override

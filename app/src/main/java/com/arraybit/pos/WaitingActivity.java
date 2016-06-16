@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -96,12 +95,6 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             Globals.ShowSnackBar(waitingMainLayout, getResources().getString(R.string.MsgCheckConnection), WaitingActivity.this, 1000);
         }
 
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null, null);
     }
 
     @Override
