@@ -434,5 +434,7 @@
     <string name="MsgBillGenerate">bill to generate</string>
     <string name="MsgOrderSummary">order summary</string>
     <string name="MsgWaitingPerson">persons</string>
+    <string name="MsgShortItem">short item</string>
+    <string name="title_add_qty_dialog">Add Qty Dialog</string>
 
 </resources>

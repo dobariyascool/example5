@@ -90,10 +90,13 @@ public class MenuActivity extends AppCompatActivity{
             DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_detail));
             if(detailFragment!=null){
                 detailFragment.EditTextOnClick();
-            }else{
-                DetailFragment subDetailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_sub_detail));
-                subDetailFragment.EditTextOnClick();
+            }else {
+                DetailFragment subDetailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_sub_detail));
+                if (subDetailFragment != null) {
+                    subDetailFragment.EditTextOnClick();
+                }
             }
+
         }
     }
 

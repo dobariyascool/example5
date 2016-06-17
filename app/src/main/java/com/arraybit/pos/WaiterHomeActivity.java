@@ -252,6 +252,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             navigationView.getMenu().findItem(R.id.wChangeCounter).setTitle(objSharePreferenceManage.GetPreference("CounterPreference", "CounterName", WaiterHomeActivity.this));
         }
     }
+
     //endregion
 
     //region LoadingTask

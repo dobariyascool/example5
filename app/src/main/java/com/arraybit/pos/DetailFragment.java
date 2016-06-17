@@ -234,23 +234,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         if (item.getItemId() == android.R.id.home) {
             if (Globals.isWishListShow == 1) {
                 SaveWishListData();
-//                if (tbLike.isChecked() && (objItemMaster.getIsChecked() != 1)) {
-//                        CheckDuplicate("1",objItemMaster);
-//                        SaveWishListInSharePreference();
-////                    if(isWishList && isItemSuggestedClick){
-////                        objItemMaster.setIsChecked((short)1);
-////                        objResponseListener = (ResponseListener)getTargetFragment();
-////                        objResponseListener.ShowMessage(null,true,objItemMaster);
-////                    }
-//                }else if(!tbLike.isChecked() && (objItemMaster.getIsChecked() != 0)){
-//                        CheckDuplicate("0", objItemMaster);
-//                        SaveWishListInSharePreference();
-////                    if(isWishList){
-////                        objItemMaster.setIsChecked((short)0);
-////                        objResponseListener = (ResponseListener)getTargetFragment();
-////                        objResponseListener.ShowMessage(null,true,objItemMaster);
-////                    }
-//                }
             }
             if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 2) {
                 if (getActivity().getSupportFragmentManager().getBackStackEntryAt(2).getName() != null

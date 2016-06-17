@@ -109,12 +109,12 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
                     sbItemMasterIds.append(",");
                 }
             } else {
-                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgNoRecord), rvWishItemMaster, 0);
+                Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound), getResources().getString(R.string.MsgShortItem)), rvWishItemMaster, 0);
             }
             if (!sbItemMasterIds.toString().equals("")) {
                 new ItemLoadingTask().execute();
             }else{
-                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgNoRecord), rvWishItemMaster, 0);
+                Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound), getResources().getString(R.string.MsgShortItem)), rvWishItemMaster, 0);
             }
 
         } else {
@@ -266,7 +266,7 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
         if (alItemMaster == null) {
             Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgSelectFail), rvWishItemMaster, 0);
         } else if (alItemMaster.size() == 0) {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgNoRecord), rvWishItemMaster, 0);
+            Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound),getResources().getString(R.string.MsgShortItem)), rvWishItemMaster, 0);
         } else {
             Globals.SetErrorLayout(errorLayout, false, null, rvWishItemMaster, 0);
             itemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getActivity().getSupportFragmentManager(), false, this, false, true);

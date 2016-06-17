@@ -23,6 +23,7 @@ import com.arraybit.parser.ItemRemarkJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 import com.rey.material.widget.ImageButton;
+import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,12 +39,13 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     ImageButton ibPlus;
     ArrayAdapter<String> adapter;
     String[] selectedValue;
-    boolean isDeleted;
+    boolean isDeleted, isKeyClick = false;
     AddToCartListener objAddToCartListener;
     ItemMaster objItemMaster, objOrderItemTran;
     ArrayList<ItemMaster> alOrderItemModifierTran;
     boolean isDuplicate, isEdit, isSelected;
     double totalAmount, totalTax, totalModifierAmount;
+    TextView focusText;
     QtyRemarkDialogResponseListener objQtyRemarkDialogResponseListener;
 
     public AddItemQtyDialogFragment(ItemMaster objItemMaster) {
@@ -61,6 +63,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         ImageButton ibMinus = (ImageButton) view.findViewById(R.id.ibMinus);
 
         etQuantity = (EditText) view.findViewById(R.id.etQuantity);
+        etQuantity.setSelectAllOnFocus(true);
 
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
@@ -76,9 +79,11 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         Button btnNum9 = (Button) view.findViewById(R.id.btnNum9);
 
         actRemark = (AppCompatMultiAutoCompleteTextView) view.findViewById(R.id.actRemark);
-        if(Globals.isWishListShow==0) {
+        if (Globals.isWishListShow == 0) {
             actRemark.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getActivity(), R.drawable.arrow_drop_down_vector_drawable), null);
         }
+
+        focusText = (TextView)view.findViewById(R.id.focusText);
 
         textInputLayout = (TextInputLayout) view.findViewById(R.id.textInputLayout);
 
@@ -87,7 +92,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         btnCancel.setOnClickListener(this);
         btnOk.setOnClickListener(this);
         textInputLayout.setOnClickListener(this);
-        if(Globals.isWishListShow==0) {
+        if (Globals.isWishListShow == 0) {
             actRemark.setOnClickListener(this);
         }
 
@@ -107,11 +112,11 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         }
 
         if (Service.CheckNet(getActivity())) {
-            if(Globals.isWishListShow==0) {
+            if (Globals.isWishListShow == 0) {
                 new RemarkLoadingTask().execute();
-            }else{
+            } else {
                 actRemark.setText(objItemMaster.getItemRemark());
-                if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")){
+                if (objItemMaster.getItemRemark() != null && !objItemMaster.getItemRemark().equals("")) {
                     actRemark.setSelection(objItemMaster.getItemRemark().length());
                 }
             }
@@ -120,10 +125,40 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         }
 
         if (!isEdit) {
-            if(getTargetFragment()!=null) {
+            if (getTargetFragment() != null) {
                 objAddToCartListener = (AddToCartListener) getTargetFragment();
             }
         }
+
+        etQuantity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    etQuantity.setSelectAllOnFocus(true);
+                }
+            }
+        });
+
+
+        etQuantity.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        Globals.HideKeyBoard(getActivity(), v);
+                        etQuantity.clearFocus();
+                    }
+                }
+                return false;
+            }
+        });
+
+        etQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etQuantity.requestFocus();
+            }
+        });
 
         return view;
     }
@@ -133,29 +168,53 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.ibPlus) {
+            Globals.HideKeyBoard(getActivity(), v);
             if (etQuantity.getText().toString().equals("")) {
                 etQuantity.setText("1");
             } else {
                 IncrementDecrementValue(v.getId(), Integer.valueOf(etQuantity.getText().toString()));
             }
-            textInputLayout.clearFocus();
-            etQuantity.requestFocus();
+            //textInputLayout.clearFocus();
+            focusText.requestFocus();
+//            etQuantity.requestFocus();
+//            etQuantity.selectAll();
+
+//            if(etQuantity.hasFocus()){
+//                etQuantity.clearFocus();
+//                etQuantity.selectAll();
+//            }else{
+//                textInputLayout.clearFocus();
+//                etQuantity.requestFocus();
+//                etQuantity.selectAll();
+//            }
 
         } else if (v.getId() == R.id.ibMinus) {
+            Globals.HideKeyBoard(getActivity(), v);
             if (etQuantity.getText().toString().equals("")) {
                 etQuantity.setText("1");
             } else {
                 IncrementDecrementValue(v.getId(), Integer.valueOf(etQuantity.getText().toString()));
             }
-            textInputLayout.clearFocus();
-            etQuantity.requestFocus();
+            //textInputLayout.clearFocus();
+            focusText.requestFocus();
+            //etQuantity.requestFocus();
+            //etQuantity.selectAll();
+//            textInputLayout.clearFocus();
+//            if(etQuantity.hasFocus()){
+//                etQuantity.clearFocus();
+//            }else{
+//                textInputLayout.clearFocus();
+//                etQuantity.requestFocus();
+//            }
 
         } else if (v.getId() == R.id.btnCancel) {
+            Globals.HideKeyBoard(getActivity(), v);
             if (!isEdit) {
                 objAddToCartListener.AddToCart(false, null);
             }
             dismiss();
         } else if (v.getId() == R.id.btnOk) {
+            Globals.HideKeyBoard(getActivity(), v);
             if (isEdit) {
                 UpdateOrderItem();
                 objQtyRemarkDialogResponseListener = (QtyRemarkDialogResponseListener) getTargetFragment();
@@ -190,23 +249,49 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             }
             actRemark.showDropDown();
         } else if (v.getId() == R.id.btnNum1) {
+            Globals.HideKeyBoard(getActivity(), v);
             AddNumber("1");
+            focusText.requestFocus();
+            //etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum2) {
+            Globals.HideKeyBoard(getActivity(), v);
             AddNumber("2");
+            focusText.requestFocus();
+            //etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum3) {
+            Globals.HideKeyBoard(getActivity(), v);
             AddNumber("3");
+            focusText.requestFocus();
+            //etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum4) {
+            Globals.HideKeyBoard(getActivity(), v);
             AddNumber("4");
+            focusText.requestFocus();
         } else if (v.getId() == R.id.btnNum5) {
+            Globals.HideKeyBoard(getActivity(), v);
             AddNumber("5");
+            focusText.requestFocus();
+            //etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum6) {
+            Globals.HideKeyBoard(getActivity(), v);
             AddNumber("6");
+            focusText.requestFocus();
+            //etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum7) {
+            Globals.HideKeyBoard(getActivity(), v);
             AddNumber("7");
+            focusText.requestFocus();
+            //etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum8) {
+            Globals.HideKeyBoard(getActivity(), v);
             AddNumber("8");
+            focusText.requestFocus();
+            //etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum9) {
+            Globals.HideKeyBoard(getActivity(), v);
             AddNumber("9");
+            focusText.requestFocus();
+           // etQuantity.clearFocus();
         }
     }
 
@@ -295,7 +380,8 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
 
     private void AddNumber(String number) {
         textInputLayout.clearFocus();
-        etQuantity.requestFocus();
+        //etQuantity.requestFocus();
+        focusText.requestFocus();
         etQuantity.setText(number);
     }
 

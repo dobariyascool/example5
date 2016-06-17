@@ -253,7 +253,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         if (objItemMaster.getItemModifierIds().equals("") && objItemMaster.getOptionValueTranIds().equals("")) {
             AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
             addItemQtyDialogFragment.setTargetFragment(this, 0);
-            addItemQtyDialogFragment.show(getFragmentManager(), "");
+            addItemQtyDialogFragment.show(getFragmentManager(), getActivity().getResources().getString(R.string.title_add_qty_dialog));
         } else {
             objCartIconListener = (CartIconListener) Globals.targetFragment;
             objCartIconListener.CardViewOnClick(objItemMaster);

@@ -27,6 +27,7 @@
             android:id="@+id/textInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
             android:hint="@string/aiqfRemark"
             android:paddingBottom="0dp"
             android:paddingEnd="@dimen/control_SpecingSmall"
@@ -41,11 +42,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:dropDownHeight="190dp"
+                android:focusableInTouchMode="true"
                 android:imeOptions="actionDone"
                 android:singleLine="true"
                 android:textSize="14sp" />
 
         </android.support.design.widget.TextInputLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -54,6 +57,12 @@
             android:orientation="horizontal"
             android:paddingEnd="@dimen/control_SpecingSmall"
             android:paddingStart="@dimen/control_SpecingSmall">
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/focusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"/>
 
             <com.rey.material.widget.ImageButton
                 android:id="@+id/ibMinus"
@@ -70,7 +79,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                android:focusableInTouchMode="true"
                 android:gravity="center"
+                android:imeOptions="actionDone"
                 android:inputType="number"
                 android:maxLength="2"
                 android:text="1"
@@ -86,6 +97,7 @@
                 android:src="@mipmap/plus_small" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
