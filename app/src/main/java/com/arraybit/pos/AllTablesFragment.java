@@ -411,12 +411,12 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
     //region Loading Task
     class TableMasterLoadingTask extends AsyncTask {
 
-        com.arraybit.pos.ProgressDialog progressDialog;
+        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog = new ProgressDialog();
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
             if (isVacant) {
                 tableStatusMasterId = String.valueOf(Globals.TableStatus.Vacant.getValue());

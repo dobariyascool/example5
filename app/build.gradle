@@ -24,6 +24,7 @@ android {
         }
     }
 
+
     // Flag to tell aapt to keep the attribute ids around vector drawable
     aaptOptions {
         additionalParameters "--no-version-vectors"

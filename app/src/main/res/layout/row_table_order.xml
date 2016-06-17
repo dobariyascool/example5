@@ -48,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:maxLines="1"
             android:textColor="@color/grey"
             android:textSize="@dimen/control_TextSmall" />
 
@@ -56,6 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
+            android:maxLines="1"
             android:textColor="@color/grey"
             android:textSize="@dimen/control_TextSmall" />
 
@@ -64,6 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
+            android:maxLines="1"
             android:textColor="@android:color/white"
             android:textSize="@dimen/control_TextMedium"
             android:textStyle="bold" />

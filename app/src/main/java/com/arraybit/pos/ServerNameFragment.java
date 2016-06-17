@@ -2,7 +2,6 @@ package com.arraybit.pos;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -47,11 +46,6 @@ public class ServerNameFragment extends Fragment {
 
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Globals.SetScaleImageBackground(getContext(), mainLayout, null, null);
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

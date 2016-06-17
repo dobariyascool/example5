@@ -19,8 +19,6 @@ public class BusinessInfoAdapter extends RecyclerView.Adapter<BusinessInfoAdapte
     Context context;
     LayoutInflater layoutInflater;
     ArrayList<BusinessInfoQuestionMaster> alBusinessInfoQuestionMaster;
-    String str;
-    //fghgfhgfh
 
     public BusinessInfoAdapter(Context context, ArrayList<BusinessInfoQuestionMaster> alBusinessInfoQuestionMaster) {
         this.context = context;
