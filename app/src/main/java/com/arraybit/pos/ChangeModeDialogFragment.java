@@ -60,12 +60,14 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
             getDialog().dismiss();
         } else if (v.getId() == R.id.btnWaiterMode) {
             getDialog().dismiss();
+            Globals.isWishListShow = 0;
             Intent intent = new Intent(getActivity(), WaitingActivity.class);
             startActivity(intent);
             getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             getActivity().finish();
         } else if (v.getId() == R.id.btnGuestMode) {
             getDialog().dismiss();
+            Globals.isWishListShow = 1;
             AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(), true, null);
             Bundle bundle = new Bundle();
             bundle.putBoolean("IsVacant", true);
@@ -91,6 +93,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
         } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                 && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
                 .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
+            Globals.isWishListShow = 1;
             modeLayout.setVisibility(View.GONE);
             buttonLayout.setVisibility(View.VISIBLE);
             etPassword.setVisibility(View.VISIBLE);

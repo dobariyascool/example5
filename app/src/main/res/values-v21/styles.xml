@@ -47,6 +47,8 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+
+
     <!--<style name="MyActionBarMenuText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu">-->
     <!--<item name="android:textColor">@android:color/white</item>-->
     <!--</style>-->
@@ -499,5 +501,6 @@
         <item name="android:layout_marginStart">@dimen/control_SpecingSmall</item>
         <item name="android:layout_marginEnd">@dimen/control_SpecingSmall</item>
     </style>
+
 
 </resources>

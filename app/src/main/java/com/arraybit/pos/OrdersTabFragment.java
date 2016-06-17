@@ -282,7 +282,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
             if (lstOrderMaster == null) {
                 Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOrder,0);
             } else if (lstOrderMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvOrder,0);
+                Globals.SetErrorLayout(errorLayout, true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound),getActivity().getResources().getString(R.string.MsgOrder)), rvOrder,0);
             } else {
                 alOrderMaster = lstOrderMaster;
                 sbOrderMasterIds = new StringBuilder();

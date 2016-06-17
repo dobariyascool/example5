@@ -264,6 +264,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         this.position = position;
         if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Vacant.toString())) {
             if (isChangeMode) {
+                Globals.isWishListShow = 1;
                 Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                 intent.putExtra("TableMaster", objTableMaster);
                 startActivity(intent);
@@ -439,7 +440,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             if (lstTableMaster == null) {
                 SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail), 0);
             } else if (lstTableMaster.size() == 0) {
-                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord), 0);
+                SetErrorLayout(true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgTable)), 0);
             } else {
                 SetErrorLayout(false, null, 0);
                 alTableMaster = lstTableMaster;

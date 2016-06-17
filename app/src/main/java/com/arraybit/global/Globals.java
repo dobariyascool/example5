@@ -77,6 +77,9 @@ import java.util.regex.Pattern;
 public class Globals {
 
 
+    public static final String AboutUs="About Us";
+    public static final String PrivacyPolicy="Privacy Policy";
+    public static final String TermsOfService="Terms Of Service";
     public static String activityName;
     public static String serverName = null;
     public static String DateFormat = "d/M/yyyy";

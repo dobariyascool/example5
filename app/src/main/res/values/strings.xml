@@ -31,6 +31,7 @@
     <string name="title_fragment_offer_detail">Offer Detail</string>
     <string name="title_fragment_about_us">About Us</string>
     <string name="title_fragment_policy">Privacy Policy</string>
+    <string name="title_fragment_terms_service">Terms Of Service</string>
     <string name="title_fragment_myaccount">Your Account</string>
     <string name="title_fragment_myprofile">Your Profile</string>
     <string name="title_fragment_notification_settings">Notification Settings</string>
@@ -77,6 +78,7 @@
     <string name="MsgItem">There is no item.</string>
     <string name="MsgChangeMode">Switch to waiter mode?</string>
     <string name="MsgDineOnly">Available for Dine-In only</string>
+    <string name="MsgNoRecordFound">There is no %s</string>
     <!-- End -->
 
     <string name="splash_screen">arraybitlogo</string>
@@ -427,5 +429,10 @@
     <string name="cdfConfirm">Confirm</string>
     <string name="cdfCancel">Cancel</string>
     <string name="cdfRemove">Remove</string>
+    <string name="MsgTable">tables</string>
+    <string name="MsgOrder">orders</string>
+    <string name="MsgBillGenerate">bill to generate</string>
+    <string name="MsgOrderSummary">order summary</string>
+    <string name="MsgWaitingPerson">persons</string>
 
 </resources>

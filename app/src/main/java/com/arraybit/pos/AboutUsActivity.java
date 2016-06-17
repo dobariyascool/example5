@@ -2,6 +2,7 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,18 +15,25 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.widget.FrameLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
+import com.arraybit.modal.BusinessDescription;
+import com.arraybit.parser.BusinessDescriptionJSONParser;
 import com.rey.material.widget.TextView;
 
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings({"ConstantConditions", "unchecked"})
 public class AboutUsActivity extends AppCompatActivity {
 
     CardView cardPolicy, cardTerms;
     short mode;
+    WebView wvAbout;
+    BusinessDescription objBusinessDescription;
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "SetJavaScriptEnabled"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +49,11 @@ public class AboutUsActivity extends AppCompatActivity {
             }
         }
 
+        FrameLayout aboutFragment = (FrameLayout) findViewById(R.id.aboutFragment);
+
         Intent getData = getIntent();
         mode = getData.getShortExtra("Mode", (short) 0);
 
-        LinearLayout versionLayout = (LinearLayout) findViewById(R.id.versionLayout);
 
         cardTerms = (CardView) findViewById(R.id.cardTerms);
         cardPolicy = (CardView) findViewById(R.id.cardPolicy);
@@ -52,7 +61,20 @@ public class AboutUsActivity extends AppCompatActivity {
         TextView txtCardPolicy = (TextView) findViewById(R.id.txtCardPolicy);
         TextView txtCardTerms = (TextView) findViewById(R.id.txtCardTerms);
         TextView txtVersionCode = (TextView) findViewById(R.id.txtVersionCode);
-        
+
+        wvAbout = (WebView) findViewById(R.id.wvAbout);
+        wvAbout.getSettings().setJavaScriptEnabled(true);
+        wvAbout.getSettings().setDatabaseEnabled(true);
+        wvAbout.getSettings().setDomStorageEnabled(true);
+        wvAbout.getSettings().setAppCacheEnabled(true);
+        wvAbout.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        wvAbout.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
+        if (Service.CheckNet(this)) {
+            new DescriptionLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(aboutFragment, getResources().getString(R.string.MsgCheckConnection), this, 1000);
+        }
 
         txtVersionCode.setText(getResources().getString(R.string.abVersionCode) + "  " + BuildConfig.VERSION_CODE + "\n" +
                 getResources().getString(R.string.abVersionName) + " " + BuildConfig.VERSION_NAME);
@@ -67,7 +89,7 @@ public class AboutUsActivity extends AppCompatActivity {
         txtCardTerms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReplaceFragment(new PolicyFragment((short) 1), getResources().getString(R.string.title_fragment_policy));
+                ReplaceFragment(new PolicyFragment((short) 2), getResources().getString(R.string.title_fragment_policy));
             }
         });
 
@@ -143,4 +165,36 @@ public class AboutUsActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(0, R.anim.right_exit);
     }
+
+    //region Loading Task
+    class DescriptionLoadingTask extends AsyncTask {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog();
+            progressDialog.show(getSupportFragmentManager(), "");
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            BusinessDescriptionJSONParser objBusinessDescriptionJSONParser = new BusinessDescriptionJSONParser();
+            return objBusinessDescriptionJSONParser.SelectBusinessDescription(AboutUsActivity.this, String.valueOf(Globals.businessMasterId), Globals.AboutUs);
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            objBusinessDescription = (BusinessDescription) result;
+            if (objBusinessDescription != null && objBusinessDescription.getDescription() != null && !objBusinessDescription.getDescription().equals("")) {
+                wvAbout.setVisibility(View.VISIBLE);
+                wvAbout.loadData(objBusinessDescription.getDescription(), "text/html; charset=UTF-8", null);
+            }
+        }
+    }
+    //endregion
 }

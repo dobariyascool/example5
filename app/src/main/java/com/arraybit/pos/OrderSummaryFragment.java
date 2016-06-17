@@ -495,7 +495,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             if (lstOrderMaster == null) {
                 SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail));
             } else if (lstOrderMaster.size() == 0) {
-                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord));
+                SetErrorLayout(true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgOrderSummary)));
             } else {
                 new TaxLoadingTask().execute();
                 new OrderSummeryLoadingTask().execute();
@@ -530,7 +530,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             if (lstOrderItemTran == null) {
                 SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail));
             } else if (lstOrderItemTran.size() == 0) {
-                SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgNoRecord));
+                SetErrorLayout(true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound),getActivity().getResources().getString(R.string.MsgOrderSummary)));
             } else {
                 SetErrorLayout(false, null);
                 orderSummeryAdapter = new OrderSummaryAdapter(getActivity(), lstOrderItemTran, lstOrderMaster, false);

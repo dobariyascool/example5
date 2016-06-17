@@ -139,7 +139,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
             if (lstWaitingMaster == null) {
                 Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgSelectFail), rvWaiting,0);
             } else if (lstWaitingMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgNoRecord), rvWaiting,0);
+                Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound), getResources().getString(R.string.MsgWaitingPerson)), rvWaiting, 0);
             } else {
                 Globals.SetErrorLayout(errorLayout, false, null, rvWaiting,0);
                 alWaitingMaster = lstWaitingMaster;

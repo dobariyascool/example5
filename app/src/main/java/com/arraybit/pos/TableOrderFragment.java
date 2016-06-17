@@ -137,7 +137,7 @@ public class TableOrderFragment extends Fragment {
             if (alOrderMaster == null) {
                 Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvTableOrder,0);
             } else if (alOrderMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgNoRecord), rvTableOrder,0);
+                Globals.SetErrorLayout(errorLayout, true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound),getActivity().getResources().getString(R.string.MsgBillGenerate)), rvTableOrder,0);
             } else {
                 if (Service.CheckNet(getActivity())) {
                     new TaxLoadingTask().execute();

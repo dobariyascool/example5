@@ -122,12 +122,6 @@ public class OfferActivity extends AppCompatActivity {
             if (id == R.id.logout) {
                 Globals.ClearPreference(OfferActivity.this);
             }
-        } else {
-//            if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-//                    && !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
-//                    .equals(getResources().getString(R.string.title_fragment_offer_detail))) {
-//                Globals.OptionMenuItemClick(item, OfferActivity.this, getSupportFragmentManager());
-//            }
         }
 
         return super.onOptionsItemSelected(item);

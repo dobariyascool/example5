@@ -210,7 +210,7 @@ public class WaitingListFragment extends Fragment {
                 SetErrorLayout(true,getResources().getString(R.string.MsgSelectFail));
             }
             else if(alWaitingStatusMaster.size()==0){
-                SetErrorLayout(true,getResources().getString(R.string.MsgNoRecord));
+                SetErrorLayout(true,String.format(getResources().getString(R.string.MsgNoRecordFound),getResources().getString(R.string.MsgWaitingPerson)));
             }else{
                 SetErrorLayout(false,null);
                 waitingListPagerAdapter = new WaitingListPagerAdapter(getChildFragmentManager());
