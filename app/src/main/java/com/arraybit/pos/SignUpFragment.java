@@ -187,6 +187,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         menu.findItem(R.id.login).setVisible(false);
         menu.findItem(R.id.registration).setVisible(false);
         menu.findItem(R.id.action_search).setVisible(false);
+        menu.findItem(R.id.callWaiter).setVisible(false);
 
     }
 

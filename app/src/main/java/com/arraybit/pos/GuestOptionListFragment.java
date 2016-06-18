@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -52,6 +53,15 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.callWaiter){
+            CallWaiterDialog callWaiterDialog = new CallWaiterDialog();
+            callWaiterDialog.show(getActivity().getSupportFragmentManager(),"");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -103,6 +103,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     public boolean onPrepareOptionsMenu(Menu menu) {
         Globals.SetOptionMenu(Globals.userName, GuestHomeActivity.this, menu);
         menu.findItem(R.id.home).setVisible(false);
+        menu.findItem(R.id.callWaiter).setVisible(true);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -116,6 +117,9 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                 .equals(getResources().getString(R.string.title_fragment_offer_detail))) {
             Globals.OptionMenuItemClick(item, GuestHomeActivity.this, getSupportFragmentManager());
             SetGuestName();
+        }else if(item.getItemId()==R.id.callWaiter){
+            CallWaiterDialog callWaiterDialog = new CallWaiterDialog();
+            callWaiterDialog.show(getSupportFragmentManager(),"");
         }
         return super.onOptionsItemSelected(item);
     }

@@ -56,6 +56,7 @@ public class OfferActivity extends AppCompatActivity {
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.registration).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
+            menu.findItem(R.id.callWaiter).setVisible(false);
             //Globals.SetOptionMenu(Globals.userName, this, menu);
         }
         return super.onPrepareOptionsMenu(menu);

@@ -55,4 +55,12 @@
         android:title="@string/navHome"
         android:visible="false"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/callWaiter"
+        android:icon="@mipmap/call_waiter"
+        android:orderInCategory="600"
+        android:title="@string/navCallWaiter"
+        app:showAsAction="always"/>
+
 </menu>

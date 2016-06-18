@@ -163,6 +163,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.registration).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
+            menu.findItem(R.id.callWaiter).setVisible(false);
             //Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
         } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             if (isHomeShow) {

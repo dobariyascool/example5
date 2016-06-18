@@ -140,6 +140,7 @@
     <string name="navOpen">Open</string>
     <string name="navClose">Close</string>
     <string name="navShortList">Short List</string>
+    <string name="navCallWaiter">Call Waiter</string>
     <!-- end -->
 
 
@@ -436,5 +437,9 @@
     <string name="MsgWaitingPerson">persons</string>
     <string name="MsgShortItem">short item</string>
     <string name="title_add_qty_dialog">Add Qty Dialog</string>
+
+    <string name="callWaiter">Call waiter?</string>
+    <string name="message">Message</string>
+    <string name="call">Call</string>
 
 </resources>
