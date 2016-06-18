@@ -69,6 +69,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Globals.HideKeyBoard(getActivity(),v);
                         etUserName = (EditText) getDialog().findViewById(R.id.etUserName);
                         etPassword = (EditText) getDialog().findViewById(R.id.etPassword);
                         view = v;
@@ -89,6 +90,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                 negative.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Globals.HideKeyBoard(getActivity(),v);
                         if (getTargetFragment() != null) {
                             Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
                             if (getTargetFragment() == currentFragment) {
@@ -109,6 +111,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                 cbSignUp.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Globals.HideKeyBoard(getActivity(),v);
                         if (getTargetFragment() != null) {
                             FeedbackFragment currentFragment = (FeedbackFragment) getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_feedback));
                             if (getTargetFragment() == currentFragment) {
@@ -138,6 +141,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
                 cbSkip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        Globals.HideKeyBoard(getActivity(),buttonView);
                         dismiss();
                         Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
                     }

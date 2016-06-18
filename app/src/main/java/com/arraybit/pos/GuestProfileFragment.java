@@ -98,6 +98,7 @@ public class GuestProfileFragment extends Fragment {
 
             }
         });
+
         return view;
     }
 

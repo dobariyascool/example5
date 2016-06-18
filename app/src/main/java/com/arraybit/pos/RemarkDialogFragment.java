@@ -49,9 +49,9 @@ public class RemarkDialogFragment extends DialogFragment implements View.OnClick
     public void onClick(View v) {
         if(v.getId()==R.id.txtCancel){
             dismiss();
-            strRemark = etRemark.getText().toString();
-            objRemarkResponseListener = (RemarkResponseListener)getTargetFragment();
-            objRemarkResponseListener.RemarkResponse();
+            //strRemark = etRemark.getText().toString();
+            //objRemarkResponseListener = (RemarkResponseListener)getTargetFragment();
+           // objRemarkResponseListener.RemarkResponse();
         }else if(v.getId()==R.id.txtDone){
             strRemark = etRemark.getText().toString();
             objRemarkResponseListener = (RemarkResponseListener)getTargetFragment();

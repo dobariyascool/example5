@@ -121,8 +121,10 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
             tbRupee.setChecked(false);
             actDiscount.showDropDown();
         } else if (v.getId() == R.id.btnCancel) {
+            Globals.HideKeyBoard(getActivity(), v);
             getDialog().dismiss();
         } else if (v.getId() == R.id.btnOk) {
+            Globals.HideKeyBoard(getActivity(), v);
             if (CheckValidation()) {
                 getDialog().dismiss();
                 if (actDiscount.getText().toString().isEmpty() && (!etDiscount.getText().toString().isEmpty())) {

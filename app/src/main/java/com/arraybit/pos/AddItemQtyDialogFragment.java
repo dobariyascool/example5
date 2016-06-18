@@ -84,6 +84,8 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         }
 
         focusText = (TextView)view.findViewById(R.id.focusText);
+        final TextView focusText2 = (TextView)view.findViewById(R.id.focusText2);
+        focusText.requestFocus();
 
         textInputLayout = (TextInputLayout) view.findViewById(R.id.textInputLayout);
 
@@ -139,24 +141,18 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             }
         });
 
-
         etQuantity.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_ENTER) {
                         Globals.HideKeyBoard(getActivity(), v);
+                        isKeyClick = true;
+                        focusText2.requestFocus();
                         etQuantity.clearFocus();
                     }
                 }
                 return false;
-            }
-        });
-
-        etQuantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etQuantity.requestFocus();
             }
         });
 
@@ -176,6 +172,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             }
             //textInputLayout.clearFocus();
             focusText.requestFocus();
+            etQuantity.clearFocus();
 //            etQuantity.requestFocus();
 //            etQuantity.selectAll();
 
@@ -197,6 +194,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             }
             //textInputLayout.clearFocus();
             focusText.requestFocus();
+            etQuantity.clearFocus();
             //etQuantity.requestFocus();
             //etQuantity.selectAll();
 //            textInputLayout.clearFocus();
@@ -226,7 +224,8 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             dismiss();
         } else if (v.getId() == R.id.textInputLayout) {
             textInputLayout.setFocusable(true);
-            etQuantity.setFocusable(false);
+            focusText.clearFocus();
+            etQuantity.clearFocus();
         } else if (v.getId() == R.id.actRemark) {
             if (actRemark.getText().toString().isEmpty()) {
                 SetArrayListAdapter(alString);
@@ -252,46 +251,47 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
             Globals.HideKeyBoard(getActivity(), v);
             AddNumber("1");
             focusText.requestFocus();
-            //etQuantity.clearFocus();
+            etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum2) {
             Globals.HideKeyBoard(getActivity(), v);
             AddNumber("2");
             focusText.requestFocus();
-            //etQuantity.clearFocus();
+            etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum3) {
             Globals.HideKeyBoard(getActivity(), v);
             AddNumber("3");
             focusText.requestFocus();
-            //etQuantity.clearFocus();
+            etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum4) {
             Globals.HideKeyBoard(getActivity(), v);
             AddNumber("4");
             focusText.requestFocus();
+            etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum5) {
             Globals.HideKeyBoard(getActivity(), v);
             AddNumber("5");
             focusText.requestFocus();
-            //etQuantity.clearFocus();
+            etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum6) {
             Globals.HideKeyBoard(getActivity(), v);
             AddNumber("6");
             focusText.requestFocus();
-            //etQuantity.clearFocus();
+            etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum7) {
             Globals.HideKeyBoard(getActivity(), v);
             AddNumber("7");
             focusText.requestFocus();
-            //etQuantity.clearFocus();
+            etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum8) {
             Globals.HideKeyBoard(getActivity(), v);
             AddNumber("8");
             focusText.requestFocus();
-            //etQuantity.clearFocus();
+            etQuantity.clearFocus();
         } else if (v.getId() == R.id.btnNum9) {
             Globals.HideKeyBoard(getActivity(), v);
             AddNumber("9");
             focusText.requestFocus();
-           // etQuantity.clearFocus();
+            etQuantity.clearFocus();
         }
     }
 
