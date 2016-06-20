@@ -177,6 +177,11 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (menuItem.getItemId() == R.id.wExit) {
                 System.exit(0);
+            } else if(menuItem.getItemId() == R.id.notification){
+                drawerLayout.closeDrawer(navigationView);
+                Intent intent = new Intent(WaiterHomeActivity.this, NotificationDetailActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         }
         return false;

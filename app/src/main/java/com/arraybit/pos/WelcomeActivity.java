@@ -1,6 +1,8 @@
 package com.arraybit.pos;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.NotificationReceiver;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.TableMaster;
 import com.bumptech.glide.Glide;
@@ -23,6 +26,8 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
 
 
 @SuppressWarnings("ConstantConditions")
@@ -116,6 +121,18 @@ public class WelcomeActivity extends Activity {
                                     overridePendingTransition(R.anim.right_in, R.anim.left_out);
                                     finish();
                                 } else {
+                                    if (objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId", WelcomeActivity.this) != null) {
+                                        Calendar calendar = Calendar.getInstance();
+
+                                        //intent registerd the broadcast receiver
+                                        Intent myIntent = new Intent(WelcomeActivity.this, NotificationReceiver.class);
+                                        PendingIntent pendingIntent = PendingIntent.getBroadcast(WelcomeActivity.this, 0, myIntent, 0);
+
+                                        //set the repeating alarm
+                                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 30 * 1000, pendingIntent);
+                                    }
+
                                     Globals.isWishListShow = 0;
                                     Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
                                     startActivity(i);

@@ -7,6 +7,11 @@
         android:title="@string/navProfile" />
 
     <item
+        android:id="@+id/notification"
+        android:icon="@drawable/bell_drawable"
+        android:title="@string/navNotification" />
+
+    <item
         android:id="@+id/wOffers"
         android:icon="@mipmap/offers"
         android:title="@string/navOffers" />
@@ -15,7 +20,7 @@
         android:id="@+id/wChangeCounter"
         android:icon="@mipmap/counter"
         android:title="@string/navChangeCounter"
-        android:titleCondensed="@string/navChangeCounter"/>
+        android:titleCondensed="@string/navChangeCounter" />
 
     <item
         android:id="@+id/wChangeMode"

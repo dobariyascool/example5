@@ -14,7 +14,7 @@ import com.arraybit.global.SharePreferenceManage;
 
 @SuppressWarnings({"unchecked", "NullArgumentToVariableArgMethod"})
 public class SplashScreenActivity extends AppCompatActivity {
-    SharePreferenceManage objSharePreferenceManage;
+    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();;
     RelativeLayout splashScreenLayout;
 
     @Override
@@ -29,7 +29,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                objSharePreferenceManage = new SharePreferenceManage();
+
 
                 if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this) == null) {
                     Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
@@ -37,7 +37,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                     if ((objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SplashScreenActivity.this) == null) && (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", SplashScreenActivity.this) == null)) {
                         RedirectActivity(SignInActivity.class);
-
 
                     } else {
                         Globals.SetBusinessMasterId(SplashScreenActivity.this);

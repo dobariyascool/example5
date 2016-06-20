@@ -141,6 +141,7 @@
     <string name="navClose">Close</string>
     <string name="navShortList">Short List</string>
     <string name="navCallWaiter">Call Waiter</string>
+    <string name="navNotification">Notification</string>
     <!-- end -->
 
 
@@ -441,5 +442,8 @@
     <string name="callWaiter">Call waiter?</string>
     <string name="message">Message</string>
     <string name="call">Call</string>
+    <string name="notificationText">Customer is calling</string>
+    <string name="title_activity_notification_detail">Notifications</string>
+    <string name="notification">notification</string>
 
 </resources>
