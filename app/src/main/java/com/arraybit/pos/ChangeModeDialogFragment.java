@@ -61,6 +61,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
         } else if (v.getId() == R.id.btnWaiterMode) {
             getDialog().dismiss();
             Globals.isWishListShow = 0;
+            Globals.DisableBroadCastReceiver(getActivity());
             Intent intent = new Intent(getActivity(), WaitingActivity.class);
             startActivity(intent);
             getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
@@ -68,6 +69,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
         } else if (v.getId() == R.id.btnGuestMode) {
             getDialog().dismiss();
             Globals.isWishListShow = 1;
+            Globals.DisableBroadCastReceiver(getActivity());
             AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(), true, null);
             Bundle bundle = new Bundle();
             bundle.putBoolean("IsVacant", true);
@@ -127,6 +129,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
                         MenuActivity.parentActivity = false;
                         Globals.ClearData();
                         Globals.isWishListShow = 0;
+                        Globals.EnableBroadCastReceiver(getActivity());
 
                         Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -45,7 +45,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         WaiterNotificationMaster objWaiterNotificationMaster = alWaiterNotificationMaster.get(position);
 
         holder.txtTableName.setText(objWaiterNotificationMaster.getTable());
-        holder.txtNotificationTime.setText(String.valueOf(objWaiterNotificationMaster.getNotificationDateTime()));
+        holder.txtNotificationTime.setText(objWaiterNotificationMaster.getNotificationTime());
         if (objWaiterNotificationMaster.getMessage() == null || objWaiterNotificationMaster.getMessage().equals("")) {
             holder.txtNotificationText.setText(context.getResources().getString(R.string.notificationText));
         } else {
@@ -79,7 +79,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             txtNotificationText = (TextView) itemView.findViewById(R.id.txtNotificationText);
             ivClear = (ImageView) itemView.findViewById(R.id.ivClear);
             cvTable = (CardView) itemView.findViewById(R.id.cvTable);
-
         }
     }
 }

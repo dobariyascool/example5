@@ -21,11 +21,14 @@ import java.util.Locale;
 public class WaiterNotificationJSONParser
 {
 	public String InsertWaiterNotification = "InsertWaiterNotification";
+	public String InsertWaiterNotificationTran = "InsertWaiterNotificationTran";
 	public String SelectAllWaiterNotificationMaster = "SelectAllWaiterNotificationMaster";
 
 	SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
+	SimpleDateFormat sdfTimeFormat = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US);
 	SimpleDateFormat sdfDateFormat = new SimpleDateFormat(Globals.DateTimeFormat, Locale.US);
 	Date dt = null;
+	Date time = null;
 	SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
 	private WaiterNotificationMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
@@ -64,6 +67,7 @@ public class WaiterNotificationJSONParser
 				}
 				dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("NotificationDateTime"));
 				objWaiterNotificationMaster.setNotificationDateTime(sdfControlDateFormat.format(dt));
+				objWaiterNotificationMaster.setNotificationTime(sdfTimeFormat.format(dt));
 				/// Extra
 				objWaiterNotificationMaster.setTable(jsonArray.getJSONObject(i).getString("TableName"));
 				if(jsonArray.getJSONObject(i).getInt("WaiterNotificationTranId")==0) {
@@ -110,14 +114,43 @@ public class WaiterNotificationJSONParser
 		}
 	}
 
+	public String InsertWaiterNotificationTran(WaiterNotificationMaster objWaiterNotificationMaster) {
+		dt = new Date();
+		try {
+			JSONStringer stringer = new JSONStringer();
+			stringer.object();
+
+			stringer.key("waiterNotificationTran");
+			stringer.object();
+
+			stringer.key("linktoWaiterNotificationMasterId").value(objWaiterNotificationMaster.getLinktoWaiterNotificationMasterId());
+			stringer.key("linktoUserMasterId").value(objWaiterNotificationMaster.getLinktoUserMasterId());
+
+			stringer.endObject();
+
+			stringer.endObject();
+
+			JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertWaiterNotificationTran, stringer);
+			if (jsonResponse != null) {
+				JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertWaiterNotificationTran + "Result");
+				if (jsonObject != null) {
+					return String.valueOf(jsonObject.getInt("ErrorCode"));
+				}
+			}
+			return "-1";
+		} catch (Exception ex) {
+			return "-1";
+		}
+	}
+
 	//endregion
 
 	//region SelectAll
-	public ArrayList<WaiterNotificationMaster> SelectAllWaiterNotificationMaster(int linktoWaiterMasterId) {
+	public ArrayList<WaiterNotificationMaster> SelectAllWaiterNotificationMaster(int linktoWaiterMasterId,int duration) {
 		ArrayList<WaiterNotificationMaster> lstWaiterNotificationMaster = null;
 		Date date;
 		try {
-			date = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
+			date = new Date(System.currentTimeMillis() - duration * 60 * 1000);
 			//date = new Date();
 			JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaiterNotificationMaster + "/" + linktoWaiterMasterId + "/" +sdfDateFormat.format(date));
 			if (jsonResponse != null) {

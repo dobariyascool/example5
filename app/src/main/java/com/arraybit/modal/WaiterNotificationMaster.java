@@ -4,65 +4,119 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class WaiterNotificationMaster implements Parcelable {
-	//region Properties
 
-	long WaiterNotificationMasterId;
-	String NotificationDateTime;
-	short linktoTableMasterId;
-	String Message;
-	/// Extra
-	String Table;
-	public static final Creator<WaiterNotificationMaster> CREATOR = new Creator<WaiterNotificationMaster>() {
-		public WaiterNotificationMaster createFromParcel(Parcel source) {
-			WaiterNotificationMaster objWaiterNotificationMaster = new WaiterNotificationMaster();
-			objWaiterNotificationMaster.WaiterNotificationMasterId = source.readLong();
-			objWaiterNotificationMaster.NotificationDateTime = source.readString();
-			objWaiterNotificationMaster.linktoTableMasterId = (short)source.readInt();
-			objWaiterNotificationMaster.Message = source.readString();
+    //region Properties
 
-			/// Extra
-			objWaiterNotificationMaster.Table = source.readString();
-			return objWaiterNotificationMaster;
-		}
+    long WaiterNotificationMasterId;
+    String NotificationDateTime;
+    short linktoTableMasterId;
+    String Message;
+    /// Extra
+    String Table;
+    String NotificationTime;
+    short linktoUserMasterId;
+    long linktoWaiterNotificationMasterId;
+    public static final Creator<WaiterNotificationMaster> CREATOR = new Creator<WaiterNotificationMaster>() {
+        public WaiterNotificationMaster createFromParcel(Parcel source) {
+            WaiterNotificationMaster objWaiterNotificationMaster = new WaiterNotificationMaster();
+            objWaiterNotificationMaster.WaiterNotificationMasterId = source.readLong();
+            objWaiterNotificationMaster.NotificationDateTime = source.readString();
+            objWaiterNotificationMaster.linktoTableMasterId = (short) source.readInt();
+            objWaiterNotificationMaster.Message = source.readString();
 
-		public WaiterNotificationMaster[] newArray(int size) {
-			return new WaiterNotificationMaster[size];
-		}
-	};
+            /// Extra
+            objWaiterNotificationMaster.Table = source.readString();
+            objWaiterNotificationMaster.NotificationTime = source.readString();
+            objWaiterNotificationMaster.linktoUserMasterId = (short) source.readInt();
+            objWaiterNotificationMaster.linktoWaiterNotificationMasterId = source.readLong();
+            return objWaiterNotificationMaster;
+        }
 
-	public long getWaiterNotificationMasterId() { return this.WaiterNotificationMasterId; }
+        public WaiterNotificationMaster[] newArray(int size) {
+            return new WaiterNotificationMaster[size];
+        }
+    };
 
-	public void setWaiterNotificationMasterId(long waiterNotificationMasterId) { this.WaiterNotificationMasterId = waiterNotificationMasterId; }
+    public short getLinktoUserMasterId() {
+        return linktoUserMasterId;
+    }
 
-	public String getNotificationDateTime() { return this.NotificationDateTime; }
+    public void setLinktoUserMasterId(short linktoUserMasterId) {
+        this.linktoUserMasterId = linktoUserMasterId;
+    }
 
-	public void setNotificationDateTime(String notificationDateTime) { this.NotificationDateTime = notificationDateTime; }
+    public long getLinktoWaiterNotificationMasterId() {
+        return linktoWaiterNotificationMasterId;
+    }
 
-	public short getlinktoTableMasterId() { return this.linktoTableMasterId; }
+    public void setLinktoWaiterNotificationMasterId(long linktoWaiterNotificationMasterId) {
+        this.linktoWaiterNotificationMasterId = linktoWaiterNotificationMasterId;
+    }
 
-	public void setlinktoTableMasterId(short linktoTableMasterId) { this.linktoTableMasterId = linktoTableMasterId; }
+    public long getWaiterNotificationMasterId() {
+        return this.WaiterNotificationMasterId;
+    }
 
-	public String getMessage() { return this.Message; }
+    public void setWaiterNotificationMasterId(long waiterNotificationMasterId) {
+        this.WaiterNotificationMasterId = waiterNotificationMasterId;
+    }
 
-	public void setMessage(String message) { this.Message = message; }
+    public String getNotificationDateTime() {
+        return this.NotificationDateTime;
+    }
 
-	public String getTable() { return this.Table; }
+    public void setNotificationDateTime(String notificationDateTime) {
+        this.NotificationDateTime = notificationDateTime;
+    }
 
-	//endregion
+    public short getlinktoTableMasterId() {
+        return this.linktoTableMasterId;
+    }
 
-	public void setTable(String table) { this.Table = table; }
+    public void setlinktoTableMasterId(short linktoTableMasterId) {
+        this.linktoTableMasterId = linktoTableMasterId;
+    }
 
-	public int describeContents() {
-		return 0;
-	}
+    public String getMessage() {
+        return this.Message;
+    }
 
-	public void writeToParcel(Parcel parcel, int flags) {
-		parcel.writeLong(WaiterNotificationMasterId);
-		parcel.writeString(NotificationDateTime);
-		parcel.writeInt(linktoTableMasterId);
-		parcel.writeString(Message);
+    public void setMessage(String message) {
+        this.Message = message;
+    }
 
-		/// Extra
-		parcel.writeString(Table);
-	}
+    public String getTable() {
+        return this.Table;
+    }
+
+    public void setTable(String table) {
+        this.Table = table;
+    }
+
+    public String getNotificationTime() {
+        return NotificationTime;
+    }
+
+    //endregion
+
+    public void setNotificationTime(String notificationTime) {
+        NotificationTime = notificationTime;
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeLong(WaiterNotificationMasterId);
+        parcel.writeString(NotificationDateTime);
+        parcel.writeInt(linktoTableMasterId);
+        parcel.writeString(Message);
+
+        /// Extra
+        parcel.writeString(Table);
+        parcel.writeString(NotificationTime);
+        parcel.writeInt(linktoUserMasterId);
+        parcel.writeLong(linktoWaiterNotificationMasterId);
+    }
 }

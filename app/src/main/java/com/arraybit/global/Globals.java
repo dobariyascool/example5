@@ -6,9 +6,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -608,14 +610,14 @@ public class Globals {
         objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId", activity);
         objSharePreferenceManage.RemovePreference("WaiterPreference", "UserSecurityCode", activity);
         objSharePreferenceManage.RemovePreference("WaiterPreference", "WaiterMasterId", activity);
-//        objSharePreferenceManage.RemovePreference("NotificationPreference", "NotificationList", activity);
+        objSharePreferenceManage.RemovePreference("NotificationPreference", "NotificationList", activity);
 
         Globals.counter = 0;
         Globals.alOrderItemTran.clear();
         Globals.selectTableMasterId = 0;
 
         objSharePreferenceManage.ClearPreference("WaiterPreference", activity);
-//        objSharePreferenceManage.ClearPreference("NotificationPreference", activity);
+        objSharePreferenceManage.ClearPreference("NotificationPreference", activity);
     }
 
     public static void ClearData() {
@@ -639,6 +641,24 @@ public class Globals {
         }
     }
 
+    public static void EnableBroadCastReceiver(Activity activity){
+        ComponentName receiver = new ComponentName(activity, NotificationReceiver.class);
+        PackageManager pm = activity.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+//        Toast.makeText(activity, "Enabled broadcast receiver", Toast.LENGTH_SHORT).show();
+    }
+
+    public static void DisableBroadCastReceiver(Activity activity){
+        ComponentName receiver = new ComponentName(activity, NotificationReceiver.class);
+        PackageManager pm = activity.getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+//        Toast.makeText(activity, "Disabled broadcst receiver", Toast.LENGTH_SHORT).show();
+    }
 
     //set runtime orientation for mobile and tablet
     public static void RuntimeChangeOrientation(Activity activity) {

@@ -247,6 +247,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 drawerLayout.closeDrawer(navigationView);
+                                Globals.EnableBroadCastReceiver(WaitingActivity.this);
                                 Intent intent = new Intent(WaitingActivity.this, WaiterHomeActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.right_in, R.anim.left_out);

@@ -134,7 +134,7 @@ public class NotificationDetailActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
             WaiterNotificationJSONParser objWaiterNotificationJSONParser = new WaiterNotificationJSONParser();
-            return objWaiterNotificationJSONParser.SelectAllWaiterNotificationMaster(linktoWaiterMasterId);
+            return objWaiterNotificationJSONParser.SelectAllWaiterNotificationMaster(linktoWaiterMasterId,60);
         }
 
         @Override

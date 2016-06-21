@@ -15,7 +15,10 @@ import com.arraybit.parser.WaiterNotificationJSONParser;
 import com.arraybit.pos.NotificationDetailActivity;
 import com.arraybit.pos.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 @SuppressWarnings("unchecked")
 public class NotificationReceiver extends BroadcastReceiver {
@@ -25,11 +28,12 @@ public class NotificationReceiver extends BroadcastReceiver {
     ArrayList<WaiterNotificationMaster> alWaiterNotification;
     ArrayList<String> alString = new ArrayList<>();
     SharePreferenceManage objSharePreferenceManage=new SharePreferenceManage();
+    int cnt = 0;
 
-    public static void GenerateNotification(Context context, int notificationID, String notificationText, String notificationTitle) {
+    public static void GenerateNotification(Context context, int notificationID, String notificationText, String notificationTitle,boolean isSoundPlay) {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
+        Notification notification;
 
         Intent notificationIntent = new Intent(context, NotificationDetailActivity.class);
         if(!POSApplication.isActivityVisible()){
@@ -42,15 +46,27 @@ public class NotificationReceiver extends BroadcastReceiver {
         }
 
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo);
-        Notification notification = new Notification.Builder(context)
-                .setContentText(notificationText)
-                .setContentTitle(notificationTitle)
-                .setSmallIcon(R.drawable.bell_drawable)
-                .setLargeIcon(bitmap)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_SOUND)
-                .setWhen(System.currentTimeMillis()).build();
+        if(isSoundPlay){
+          notification = new Notification.Builder(context)
+                    .setContentText(notificationText)
+                    .setContentTitle(notificationTitle)
+                    .setSmallIcon(R.mipmap.notification)
+                    .setLargeIcon(bitmap)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setDefaults(Notification.DEFAULT_SOUND)
+                    .setWhen(System.currentTimeMillis()).build();
+        }else{
+          notification = new Notification.Builder(context)
+                    .setContentText(notificationText)
+                    .setContentTitle(notificationTitle)
+                    .setSmallIcon(R.mipmap.notification)
+                    .setLargeIcon(bitmap)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setWhen(System.currentTimeMillis()).build();
+        }
+
 
         notificationManager.notify(notificationID, notification);
     }
@@ -67,29 +83,114 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void CheckDuplicateList(ArrayList<WaiterNotificationMaster> alWaiterList){
         alWaiterNotification = new ArrayList<>();
         boolean isDuplicate = false;
-        if (objSharePreferenceManage.GetStringListPreference("NotificationPreference", "NotificationList", context) != null) {
-            alString = objSharePreferenceManage.GetStringListPreference("NotificationPreference", "NotificationList", context);
-            for(WaiterNotificationMaster objWaiterNotificationMaster : alWaiterList){
-                for(String strWaiterMasterId : alString){
-                    if(strWaiterMasterId.equals(String.valueOf(objWaiterNotificationMaster.getWaiterNotificationMasterId()))){
-                        isDuplicate = true;
+        String date = new SimpleDateFormat(Globals.DateFormat, Locale.US).format(new Date());
+        if(objSharePreferenceManage.GetPreference("NotificationPreference", "TodaysDate",context)!=null){
+            if(objSharePreferenceManage.GetPreference("NotificationPreference", "TodaysDate",context).equals(date)){
+                if (objSharePreferenceManage.GetStringListPreference("NotificationPreference", "NotificationList", context) != null) {
+                    alString = objSharePreferenceManage.GetStringListPreference("NotificationPreference", "NotificationList", context);
+                    for(WaiterNotificationMaster objWaiterNotificationMaster : alWaiterList){
+                        for(String strWaiterMasterId : alString){
+                            if(strWaiterMasterId.equals(String.valueOf(objWaiterNotificationMaster.getWaiterNotificationMasterId()))){
+                                isDuplicate = true;
+                            }
+                            if(cnt==4){
+                                cnt=0;
+                                break;
+                            }else {
+                                cnt++;
+                            }
+                        }
+                        if(!isDuplicate){
+                            if(cnt==1){
+                                GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(),objWaiterNotificationMaster.getMessage(),objWaiterNotificationMaster.getTable(),true);
+                            }else {
+                                GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(), objWaiterNotificationMaster.getMessage(), objWaiterNotificationMaster.getTable(),false);
+                            }
+                            alString.add(String.valueOf(objWaiterNotificationMaster.getWaiterNotificationMasterId()));
+                            objSharePreferenceManage.CreateStringListPreference("NotificationPreference", "NotificationList", alString, context);
+                        }else{
+                            isDuplicate = false;
+                        }
+                    }
+                }else{
+                    for(WaiterNotificationMaster objWaiterNotificationMaster : alWaiterList){
+                        alString.add(String.valueOf(objWaiterNotificationMaster.getWaiterNotificationMasterId()));
+                        if(cnt==0) {
+                            GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(), objWaiterNotificationMaster.getTable(), objWaiterNotificationMaster.getMessage(),true);
+                        }else{
+                            GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(), objWaiterNotificationMaster.getTable(), objWaiterNotificationMaster.getMessage(),false);
+                        }
+                        if(cnt==4){
+                            cnt=0;
+                            break;
+                        }else{
+                            cnt++;
+                        }
+                    }
+                    objSharePreferenceManage.CreateStringListPreference("NotificationPreference", "NotificationList", alString, context);
+                }
+            }else{
+                objSharePreferenceManage.RemovePreference("NotificationPreference","TodaysDate",context);
+                objSharePreferenceManage.RemovePreference("NotificationPreference","NotificationList", context);
+                objSharePreferenceManage.ClearPreference("NotificationPreference", context);
+                for(WaiterNotificationMaster objWaiterNotificationMaster : alWaiterList){
+                    alString.add(String.valueOf(objWaiterNotificationMaster.getWaiterNotificationMasterId()));
+                    if(cnt==0) {
+                        GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(), objWaiterNotificationMaster.getTable(), objWaiterNotificationMaster.getMessage(),true);
+                    }else{
+                        GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(), objWaiterNotificationMaster.getTable(), objWaiterNotificationMaster.getMessage(),false);
+                    }
+                    if(cnt==4){
+                        cnt=0;
+                        break;
+                    }else{
+                        cnt++;
                     }
                 }
-                if(!isDuplicate){
-                    GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(),objWaiterNotificationMaster.getMessage(),objWaiterNotificationMaster.getTable());
-                    alString.add(String.valueOf(objWaiterNotificationMaster.getWaiterNotificationMasterId()));
-                    objSharePreferenceManage.CreateStringListPreference("NotificationPreference", "NotificationList", alString, context);
-                }else{
-                    isDuplicate = false;
-                }
+                objSharePreferenceManage.CreateStringListPreference("NotificationPreference", "NotificationList", alString, context);
+                objSharePreferenceManage.CreatePreference("NotificationPreference", "TodaysDate", date, context);
             }
         }else{
             for(WaiterNotificationMaster objWaiterNotificationMaster : alWaiterList){
                 alString.add(String.valueOf(objWaiterNotificationMaster.getWaiterNotificationMasterId()));
-                GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(),objWaiterNotificationMaster.getTable(),objWaiterNotificationMaster.getMessage());
+                if(cnt==0) {
+                    GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(), objWaiterNotificationMaster.getTable(), objWaiterNotificationMaster.getMessage(),true);
+                }else{
+                    GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(), objWaiterNotificationMaster.getTable(), objWaiterNotificationMaster.getMessage(),false);
+                }
+                if(cnt==4){
+                    cnt=0;
+                    break;
+                }else{
+                    cnt++;
+                }
             }
             objSharePreferenceManage.CreateStringListPreference("NotificationPreference", "NotificationList", alString, context);
+            objSharePreferenceManage.CreatePreference("NotificationPreference", "TodaysDate", date, context);
         }
+//        if (objSharePreferenceManage.GetStringListPreference("NotificationPreference", "NotificationList", context) != null) {
+//            alString = objSharePreferenceManage.GetStringListPreference("NotificationPreference", "NotificationList", context);
+//            for(WaiterNotificationMaster objWaiterNotificationMaster : alWaiterList){
+//                for(String strWaiterMasterId : alString){
+//                    if(strWaiterMasterId.equals(String.valueOf(objWaiterNotificationMaster.getWaiterNotificationMasterId()))){
+//                        isDuplicate = true;
+//                    }
+//                }
+//                if(!isDuplicate){
+//                    GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(),objWaiterNotificationMaster.getMessage(),objWaiterNotificationMaster.getTable());
+//                    alString.add(String.valueOf(objWaiterNotificationMaster.getWaiterNotificationMasterId()));
+//                    objSharePreferenceManage.CreateStringListPreference("NotificationPreference", "NotificationList", alString, context);
+//                }else{
+//                    isDuplicate = false;
+//                }
+//            }
+//        }else{
+//            for(WaiterNotificationMaster objWaiterNotificationMaster : alWaiterList){
+//                alString.add(String.valueOf(objWaiterNotificationMaster.getWaiterNotificationMasterId()));
+//                GenerateNotification(context, (int) objWaiterNotificationMaster.getWaiterNotificationMasterId(),objWaiterNotificationMaster.getTable(),objWaiterNotificationMaster.getMessage());
+//            }
+//            objSharePreferenceManage.CreateStringListPreference("NotificationPreference", "NotificationList", alString, context);
+//        }
     }
 
     @SuppressWarnings("unchecked")
@@ -108,7 +209,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         @Override
         protected Object doInBackground(Object[] params) {
             WaiterNotificationJSONParser objWaiterNotificationJSONParser = new WaiterNotificationJSONParser();
-            return objWaiterNotificationJSONParser.SelectAllWaiterNotificationMaster(linktoWaiterMasterId);
+            return objWaiterNotificationJSONParser.SelectAllWaiterNotificationMaster(linktoWaiterMasterId,30);
         }
 
         @Override
