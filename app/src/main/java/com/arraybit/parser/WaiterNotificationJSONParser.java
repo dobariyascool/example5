@@ -123,7 +123,7 @@ public class WaiterNotificationJSONParser
 			stringer.key("waiterNotificationTran");
 			stringer.object();
 
-			stringer.key("linktoWaiterNotificationMasterId").value(objWaiterNotificationMaster.getLinktoWaiterNotificationMasterId());
+			stringer.key("linktoWaiterNotificationMasterId").value(objWaiterNotificationMaster.getWaiterNotificationMasterId());
 			stringer.key("linktoUserMasterId").value(objWaiterNotificationMaster.getLinktoUserMasterId());
 
 			stringer.endObject();

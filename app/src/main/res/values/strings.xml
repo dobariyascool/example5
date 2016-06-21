@@ -79,6 +79,7 @@
     <string name="MsgChangeMode">Switch to waiter mode?</string>
     <string name="MsgDineOnly">Available for Dine-In only</string>
     <string name="MsgNoRecordFound">There is no %s</string>
+    <string name="MsgCallWaiter">Waiter called.</string>
     <!-- End -->
 
     <string name="splash_screen">arraybitlogo</string>

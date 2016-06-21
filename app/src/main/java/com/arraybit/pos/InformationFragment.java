@@ -28,11 +28,11 @@ public class InformationFragment extends Fragment {
 
     static ArrayList<BusinessHoursTran> lstBusinessHoursTran;
     RecyclerView rvWorkingHours;
-    TextView txtAddress, txtPhone, txtEmail, txtWebSite,txtPhone1,txtPhone2,txtFax;
+    TextView txtAddress, txtEmail, txtWebSite,txtPhone1,txtPhone2,txtFax;
     LinearLayoutManager linearLayoutManager;
     WorkingHoursAdapter adapter;
     BusinessMaster objBusinessMaster;
-    LinearLayout phoneLayout, emailLayout, siteLayout,callLayout,faxLayout,emailDivider,webSiteDivider,faxDivider;
+    LinearLayout emailLayout, siteLayout,callLayout,faxLayout,emailDivider,webSiteDivider,faxDivider;
 
     public InformationFragment(BusinessMaster objBusinessMaster) {
         this.objBusinessMaster = objBusinessMaster;
@@ -164,7 +164,7 @@ public class InformationFragment extends Fragment {
         @Override
         protected Object doInBackground(Object[] params) {
             BusinessHoursJSONParser objBusinessHoursJSONParser = new BusinessHoursJSONParser();
-            return objBusinessHoursJSONParser.SelectAllBusinessHoursTranById(1);
+            return objBusinessHoursJSONParser.SelectAllBusinessHoursTranById(Globals.businessMasterId);
 
         }
 

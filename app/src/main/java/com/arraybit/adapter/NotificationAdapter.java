@@ -25,12 +25,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     LayoutInflater layoutInflater;
     View view;
     int previousPosition;
+    OnClickListener objOnClickListener;
 
     // Constructor
-    public NotificationAdapter(Context context, ArrayList<WaiterNotificationMaster> result) {
+    public NotificationAdapter(Context context, ArrayList<WaiterNotificationMaster> result, OnClickListener objOnClickListener) {
         this.context = context;
         this.alWaiterNotificationMaster = result;
         this.layoutInflater = LayoutInflater.from(context);
+        this.objOnClickListener = objOnClickListener;
     }
 
 
@@ -65,6 +67,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return alWaiterNotificationMaster.size();
     }
 
+    public void NotificationDataRemove(int position) {
+        isItemAnimate = true;
+        alWaiterNotificationMaster.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public interface OnClickListener {
+        void OnRemoveClick(WaiterNotificationMaster objWaiterNotificationMaster, int position);
+    }
+
     class NotificationViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtTableName, txtNotificationTime, txtNotificationText;
@@ -79,6 +91,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             txtNotificationText = (TextView) itemView.findViewById(R.id.txtNotificationText);
             ivClear = (ImageView) itemView.findViewById(R.id.ivClear);
             cvTable = (CardView) itemView.findViewById(R.id.cvTable);
+
+            ivClear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    objOnClickListener.OnRemoveClick(alWaiterNotificationMaster.get(getAdapterPosition()), getAdapterPosition());
+                }
+            });
         }
     }
 }

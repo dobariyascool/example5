@@ -39,7 +39,7 @@ public class WelcomeActivity extends Activity {
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     SharePreferenceManage objSharePreferenceManage;
-    boolean isGuestScreen;
+    boolean isGuestScreen, isRequestPermission;
     short count = 0;
     DisplayMetrics displayMetrics;
     ImageView ivLeft, ivRight, ivLogo, ivText, ivSwipe;
@@ -87,79 +87,83 @@ public class WelcomeActivity extends Activity {
 
 
         mainLayout.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ShortAlarm")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+                                          @SuppressLint("ShortAlarm")
+                                          @Override
+                                          public boolean onTouch(View v, MotionEvent event) {
 
-                if (count == 0) {
-                    count++;
-                    objSharePreferenceManage = new SharePreferenceManage();
-                    String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
-                    Globals.SetBusinessMasterId(WelcomeActivity.this);
-                    if (userTypeMasterId != null && (userTypeMasterId.equals(String.valueOf(Globals.UserType.valueOf("Waiter").getValue())) ||
-                            (userTypeMasterId.equals(String.valueOf(Globals.UserType.valueOf("Captain").getValue()))))) {
-                        Intent intent = getIntent();
-                        isGuestScreen = intent.getBooleanExtra("GuestScreen", false);
-                        if (isGuestScreen) {
-                            Globals.isWishListShow = 1;
-                            Globals.selectTableMasterId = objTableMaster.getTableMasterId();
-                            Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
-                            i.putExtra("TableMaster", intent.getParcelableExtra("TableMaster"));
-                            startActivity(i);
-                            overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                            finish();
-                        } else {
-                            String obj = objSharePreferenceManage.GetPreference("GuestModePreference", "GuestMode", WelcomeActivity.this);
-                            if (obj != null && GetObjectFromPreference() != null) {
-                                Globals.isWishListShow = 1;
-                                Globals.selectTableMasterId = objTableMaster.getTableMasterId();
-                                Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
-                                i.putExtra("TableMaster", objTableMaster);
-                                startActivity(i);
-                                overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                                finish();
-                            } else {
-                                if (intent.getShortExtra("UserType", (short) 0) == Globals.UserType.Waiting.getValue()) {
-                                    Globals.isWishListShow = 0;
-                                    Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
-                                    startActivity(i);
-                                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                                    finish();
-                                } else {
-                                    if (objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId", WelcomeActivity.this) != null) {
-                                        int hasWriteContactsPermission = 0;
-                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                                            hasWriteContactsPermission = checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED);
-                                            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
-                                                requestPermissions(new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED},
-                                                        REQUEST_CODE_ASK_PERMISSIONS);
-                                            }
-                                        }else {
-                                            Calendar calendar = Calendar.getInstance();
+                                              if (count == 0) {
+                                                  count++;
+                                                  objSharePreferenceManage = new SharePreferenceManage();
+                                                  String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
+                                                  Globals.SetBusinessMasterId(WelcomeActivity.this);
+                                                  if (userTypeMasterId != null && (userTypeMasterId.equals(String.valueOf(Globals.UserType.valueOf("Waiter").getValue())) ||
+                                                          (userTypeMasterId.equals(String.valueOf(Globals.UserType.valueOf("Captain").getValue()))))) {
+                                                      Intent intent = getIntent();
+                                                      isGuestScreen = intent.getBooleanExtra("GuestScreen", false);
+                                                      if (isGuestScreen) {
+                                                          Globals.isWishListShow = 1;
+                                                          Globals.selectTableMasterId = objTableMaster.getTableMasterId();
+                                                          Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
+                                                          i.putExtra("TableMaster", intent.getParcelableExtra("TableMaster"));
+                                                          startActivity(i);
+                                                          overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                                                          finish();
+                                                      } else {
+                                                          String obj = objSharePreferenceManage.GetPreference("GuestModePreference", "GuestMode", WelcomeActivity.this);
+                                                          if (obj != null && GetObjectFromPreference() != null) {
+                                                              Globals.isWishListShow = 1;
+                                                              Globals.selectTableMasterId = objTableMaster.getTableMasterId();
+                                                              Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
+                                                              i.putExtra("TableMaster", objTableMaster);
+                                                              startActivity(i);
+                                                              overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                                                              finish();
+                                                          } else {
+                                                              if (intent.getShortExtra("UserType", (short) 0) == Globals.UserType.Waiting.getValue()) {
+                                                                  Globals.isWishListShow = 0;
+                                                                  Intent i = new Intent(WelcomeActivity.this, WaitingActivity.class);
+                                                                  startActivity(i);
+                                                                  overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                                                                  finish();
+                                                              } else {
+                                                                  if (objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId", WelcomeActivity.this) != null) {
+                                                                      int hasWriteContactsPermission = 0;
+                                                                      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                                                                          hasWriteContactsPermission = checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED);
+                                                                          if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+                                                                              isRequestPermission = true;
+                                                                              requestPermissions(new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED},
+                                                                                      REQUEST_CODE_ASK_PERMISSIONS);
+                                                                          }
+                                                                      }
+                                                                      if (!isRequestPermission) {
+                                                                          Calendar calendar = Calendar.getInstance();
 
-                                            //intent registerd the broadcast receiver
-                                            Intent myIntent = new Intent(WelcomeActivity.this, NotificationReceiver.class);
-                                            PendingIntent pendingIntent = PendingIntent.getBroadcast(WelcomeActivity.this, 0, myIntent, 0);
+                                                                          //intent registerd the broadcast receiver
+                                                                          Intent myIntent = new Intent(WelcomeActivity.this, NotificationReceiver.class);
+                                                                          PendingIntent pendingIntent = PendingIntent.getBroadcast(WelcomeActivity.this, 0, myIntent, 0);
 
-                                            //set the repeating alarm
-                                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 30 * 1000, pendingIntent);
-                                        }
-                                    }
+                                                                          //set the repeating alarm
+                                                                          AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                                                                          alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 20 * 1000, pendingIntent);
 
-                                    Globals.isWishListShow = 0;
-                                    Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
-                                    startActivity(i);
-                                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                                    finish();
-                                }
-                            }
-                        }
-                    }
-                }
-                return false;
-            }
-        });
+                                                                          Globals.isWishListShow = 0;
+                                                                          Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
+                                                                          startActivity(i);
+                                                                          overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                                                                          finish();
+                                                                      }
+                                                                  }
+                                                              }
+                                                          }
+                                                      }
+                                                  }
+                                              }
+                                              return false;
+                                          }
+                                      }
+
+        );
     }
 
     @Override
@@ -171,7 +175,8 @@ public class WelcomeActivity extends Activity {
 
     @SuppressLint("ShortAlarm")
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -184,7 +189,13 @@ public class WelcomeActivity extends Activity {
 
                     //set the repeating alarm
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 30 * 1000, pendingIntent);
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 20 * 1000, pendingIntent);
+
+                    Globals.isWishListShow = 0;
+                    Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
+                    startActivity(i);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    finish();
                 } else {
                     // Permission Denied
                     Toast.makeText(WelcomeActivity.this, "Permission Denied", Toast.LENGTH_SHORT)
@@ -212,6 +223,7 @@ public class WelcomeActivity extends Activity {
     }
 
     //region Private Methods
+
     private TableMaster GetObjectFromPreference() {
         JSONObject jsonObject;
         try {

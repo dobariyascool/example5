@@ -10,14 +10,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Toast;
 
-import com.arraybit.modal.CategoryMaster;
 import com.arraybit.modal.WaiterNotificationMaster;
 import com.arraybit.parser.WaiterNotificationJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
-import java.util.ArrayList;
-
+@SuppressWarnings("unchecked")
 public class CallWaiterDialog extends DialogFragment {
 
     EditText etMessage;
@@ -49,9 +47,8 @@ public class CallWaiterDialog extends DialogFragment {
     }
 
     //region Loading Task
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "unchecked"})
     public class InsertLodingTask extends AsyncTask {
-        ArrayList<CategoryMaster> alCategoryMaster;
         com.arraybit.pos.ProgressDialog progressDialog;
         WaiterNotificationMaster objWaiterNotificationMaster;
 
@@ -83,9 +80,9 @@ public class CallWaiterDialog extends DialogFragment {
             super.onPostExecute(o);
             progressDialog.dismiss();
             if (status.equals("-1")) {
-                Toast.makeText(getActivity(),getActivity().getResources().getString(R.string.MsgServerNotResponding),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.MsgServerNotResponding), Toast.LENGTH_LONG).show();
             } else if (status.equals("0")) {
-                Toast.makeText(getActivity(),"Done",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.MsgCallWaiter), Toast.LENGTH_LONG).show();
                 dismiss();
             }
         }

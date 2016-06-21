@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,13 +25,18 @@ import com.arraybit.parser.WaiterNotificationJSONParser;
 import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
-public class NotificationDetailActivity extends AppCompatActivity {
+public class NotificationDetailActivity extends AppCompatActivity implements NotificationAdapter.OnClickListener {
 
     boolean isBackHome;
     SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
     RecyclerView rvNotification;
     LinearLayout errorLayout;
-    int linktoWaiterMasterId;
+    int linktoWaiterMasterId, linktoUserMasterId, position;
+    NotificationAdapter notificationAdapter;
+    WaiterNotificationMaster objWaiterNotificationTran;
+    FrameLayout notificationLayout;
+    ItemTouchHelper.SimpleCallback simpleItemTouchHelper;
+    ArrayList<WaiterNotificationMaster> alWaiterNotificationMaster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,19 +54,42 @@ public class NotificationDetailActivity extends AppCompatActivity {
         }
         //end
 
-        FrameLayout notificationLayout = (FrameLayout)findViewById(R.id.notificationLayout);
+        notificationLayout = (FrameLayout) findViewById(R.id.notificationLayout);
         Globals.SetScaleImageBackground(this, null, null, notificationLayout);
 
         errorLayout = (LinearLayout) findViewById(R.id.errorLayout);
-        rvNotification = (RecyclerView)findViewById(R.id.rvNotification);
+        rvNotification = (RecyclerView) findViewById(R.id.rvNotification);
 
         isBackHome = getIntent().getBooleanExtra("isBackHome", false);
 
         if (Service.CheckNet(this)) {
             new NotificationLodingTask().execute();
-        }else{
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvNotification,R.drawable.wifi_drawable);
+        } else {
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvNotification, R.drawable.wifi_drawable);
         }
+
+
+        simpleItemTouchHelper = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                position = viewHolder.getAdapterPosition();
+                objWaiterNotificationTran = alWaiterNotificationMaster.get(viewHolder.getAdapterPosition());
+                if (Service.CheckNet(NotificationDetailActivity.this)) {
+                    new InsertLodingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(errorLayout, getResources().getString(R.string.MsgCheckConnection), NotificationDetailActivity.this, 1000);
+                }
+
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchHelper);
+        itemTouchHelper.attachToRecyclerView(rvNotification);
+        //itemTouchHelper.
 
     }
 
@@ -118,15 +147,41 @@ public class NotificationDetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void OnRemoveClick(WaiterNotificationMaster objWaiterNotificationMaster, int position) {
+        objWaiterNotificationTran = objWaiterNotificationMaster;
+        this.position = position;
+        if (Service.CheckNet(this)) {
+            new InsertLodingTask().execute();
+        } else {
+            Globals.ShowSnackBar(errorLayout, getResources().getString(R.string.MsgCheckConnection), NotificationDetailActivity.this, 1000);
+        }
+    }
+
+    private void SetRecyclerView(ArrayList<WaiterNotificationMaster> alWaiterNotificationMaster) {
+        if (alWaiterNotificationMaster == null) {
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgServerNotResponding), rvNotification, 0);
+        } else if (alWaiterNotificationMaster.size() == 0) {
+            Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound), getResources().getString(R.string.notification)), rvNotification, 0);
+        } else {
+            notificationAdapter = new NotificationAdapter(NotificationDetailActivity.this, alWaiterNotificationMaster, this);
+            rvNotification.setAdapter(notificationAdapter);
+            rvNotification.setVisibility(View.VISIBLE);
+            rvNotification.setLayoutManager(new LinearLayoutManager(NotificationDetailActivity.this));
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public class NotificationLodingTask extends AsyncTask {
-        ArrayList<WaiterNotificationMaster> alWaiterNotificationMaster;
+        com.arraybit.pos.ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId",NotificationDetailActivity.this)!=null){
-                linktoWaiterMasterId = Integer.parseInt(objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId",NotificationDetailActivity.this));
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getSupportFragmentManager(), "");
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId", NotificationDetailActivity.this) != null) {
+                linktoWaiterMasterId = Integer.parseInt(objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId", NotificationDetailActivity.this));
             }
 
         }
@@ -134,22 +189,51 @@ public class NotificationDetailActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
             WaiterNotificationJSONParser objWaiterNotificationJSONParser = new WaiterNotificationJSONParser();
-            return objWaiterNotificationJSONParser.SelectAllWaiterNotificationMaster(linktoWaiterMasterId,60);
+            return objWaiterNotificationJSONParser.SelectAllWaiterNotificationMaster(linktoWaiterMasterId, 60);
         }
 
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
+            progressDialog.dismiss();
             alWaiterNotificationMaster = (ArrayList<WaiterNotificationMaster>) result;
-            if(alWaiterNotificationMaster==null){
-                Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgServerNotResponding),rvNotification,0);
-            }else if(alWaiterNotificationMaster.size()==0){
-                Globals.SetErrorLayout(errorLayout,true,String.format(getResources().getString(R.string.MsgNoRecordFound),getResources().getString(R.string.notification)),rvNotification,0);
-            }else{
-                NotificationAdapter notificationAdapter = new NotificationAdapter(NotificationDetailActivity.this,alWaiterNotificationMaster);
-                rvNotification.setAdapter(notificationAdapter);
-                rvNotification.setVisibility(View.VISIBLE);
-                rvNotification.setLayoutManager(new LinearLayoutManager(NotificationDetailActivity.this));
+            SetRecyclerView(alWaiterNotificationMaster);
+        }
+    }
+
+    public class InsertLodingTask extends AsyncTask {
+        com.arraybit.pos.ProgressDialog progressDialog;
+        String status;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getSupportFragmentManager(), "");
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", NotificationDetailActivity.this) != null) {
+                linktoUserMasterId = Integer.parseInt(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", NotificationDetailActivity.this));
+            }
+            objWaiterNotificationTran.setLinktoUserMasterId((short) linktoUserMasterId);
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            WaiterNotificationJSONParser objWaiterNotificationJSONParser = new WaiterNotificationJSONParser();
+            status = objWaiterNotificationJSONParser.InsertWaiterNotificationTran(objWaiterNotificationTran);
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            if (status.equals("-1")) {
+                Globals.ShowSnackBar(notificationLayout, getResources().getString(R.string.MsgServerNotResponding), NotificationDetailActivity.this, 2000);
+            } else if (status.equals("0")) {
+                notificationAdapter.NotificationDataRemove(position);
+                if(alWaiterNotificationMaster.size()==0){
+                    Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound), getResources().getString(R.string.notification)), rvNotification, 0);
+                }
             }
         }
     }
