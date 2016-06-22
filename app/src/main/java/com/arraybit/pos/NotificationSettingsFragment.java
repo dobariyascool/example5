@@ -96,13 +96,13 @@ public class NotificationSettingsFragment extends Fragment {
             }
         });
 
-        if (objSharePreferenceManage.GetPreference("NotificationPreference", "Push", getActivity()) == null) {
-            objSharePreferenceManage.CreatePreference("NotificationPreference", "Push", "true", getActivity());
+        if (objSharePreferenceManage.GetPreference("NotificationSettingPreference", "Push", getActivity()) == null) {
+            objSharePreferenceManage.CreatePreference("NotificationSettingPreference", "Push", "true", getActivity());
 
             sPushNotificationOnOff.setChecked(true);
         } else {
 
-            strOnOff = objSharePreferenceManage.GetPreference("NotificationPreference", "Push", getActivity());
+            strOnOff = objSharePreferenceManage.GetPreference("NotificationSettingPreference", "Push", getActivity());
             if (strOnOff.equals("false")) {
                 sPushNotificationOnOff.setChecked(false);
 
@@ -116,8 +116,8 @@ public class NotificationSettingsFragment extends Fragment {
             @Override
             public void onCheckedChanged(Switch aSwitch, boolean b) {
                 if (sPushNotificationOnOff.isChecked()) {
-                    objSharePreferenceManage.RemovePreference("NotificationPreference", "Push", getActivity());
-                    objSharePreferenceManage.CreatePreference("NotificationPreference", "Push", "true", getActivity());
+                    objSharePreferenceManage.RemovePreference("NotificationSettingPreference", "Push", getActivity());
+                    objSharePreferenceManage.CreatePreference("NotificationSettingPreference", "Push", "true", getActivity());
                 } else {
 
                     ConfirmNotificationSettings();
@@ -157,8 +157,8 @@ public class NotificationSettingsFragment extends Fragment {
                 .setPositiveButton("Yes",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                objSharePreferenceManage.RemovePreference("NotificationPreference", "Push", getActivity());
-                                objSharePreferenceManage.CreatePreference("NotificationPreference", "Push", "false", getActivity());
+                                objSharePreferenceManage.RemovePreference("NotificationSettingPreference", "Push", getActivity());
+                                objSharePreferenceManage.CreatePreference("NotificationSettingPreference", "Push", "false", getActivity());
                             }
                         })
                 .setNegativeButton("No",

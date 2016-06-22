@@ -22,7 +22,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
     SharePreferenceManage objSharePreferenceManage;
     LinearLayout buttonLayout, modeLayout;
     TextView txtSubmit,txtCancel;
-    Button btnWaiterMode, btnGuestMode;
+    Button btnWaiterMode, btnGuestMode,btnMenuMode;
 
     public ChangeModeDialogFragment() {
         // Required empty public constructor
@@ -43,6 +43,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
 
         btnWaiterMode = (Button) view.findViewById(R.id.btnWaiterMode);
         btnGuestMode = (Button) view.findViewById(R.id.btnGuestMode);
+        btnMenuMode = (Button) view.findViewById(R.id.btnMenuMode);
 
         txtSubmit = (TextView) view.findViewById(R.id.txtSubmit);
         txtCancel = (TextView) view.findViewById(R.id.txtCancel);
@@ -130,6 +131,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
                         Globals.ClearData();
                         Globals.isWishListShow = 0;
                         Globals.EnableBroadCastReceiver(getActivity());
+                        Globals.CallNotificationReceiver(getActivity());
 
                         Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

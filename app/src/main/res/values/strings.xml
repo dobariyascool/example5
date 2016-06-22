@@ -332,6 +332,7 @@
     <!-- fragment change mode -->
     <string name="cmfWaiterMode">Waiting Mode</string>
     <string name="cmfGuestMode">Guest Mode</string>
+    <string name="cmfMenuMode">Menu Mode</string>
     <string name="cmfCancel">Cancel</string>
     <string name="cmfSubmit">Submit</string>
     <string name="title_activity_all_orders">AllOrdersActivity</string>
@@ -446,5 +447,6 @@
     <string name="notificationText">Customer is calling</string>
     <string name="title_activity_notification_detail">Notifications</string>
     <string name="notification">notification</string>
+    <string name="title_activity_menu_mode">MenuModeActivity</string>
 
 </resources>
