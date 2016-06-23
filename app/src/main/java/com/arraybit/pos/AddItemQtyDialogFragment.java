@@ -674,12 +674,14 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
 
                 if (isEdit) {
                     etQuantity.setText(String.valueOf(objItemMaster.getQuantity()));
-                    if (objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(",")) {
-                        actRemark.setText(objItemMaster.getItemRemark() + " ");
-                    } else if (objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(" ")) {
-                        actRemark.setText(objItemMaster.getItemRemark());
-                    } else {
-                        actRemark.setText(objItemMaster.getItemRemark() + ", ");
+                    if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")) {
+                        if (objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(",")) {
+                            actRemark.setText(objItemMaster.getItemRemark() + " ");
+                        } else if (objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(" ")) {
+                            actRemark.setText(objItemMaster.getItemRemark());
+                        } else {
+                            actRemark.setText(objItemMaster.getItemRemark() + ", ");
+                        }
                     }
 
                     if (objItemMaster.getItemRemark() != null && !objItemMaster.getItemRemark().equals("")) {

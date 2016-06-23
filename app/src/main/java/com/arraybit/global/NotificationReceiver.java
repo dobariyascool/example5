@@ -86,9 +86,13 @@ public class NotificationReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
-        System.out.println("onReceive Called");
         if (Service.CheckNet(context)) {
-            RequestNotification();
+            if(objSharePreferenceManage.GetPreference("ServerPreference", "ServerName",context)!=null);
+            {
+                Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName",context);
+                Globals.ChangeUrl();
+                RequestNotification();
+            }
         }
     }
 
@@ -209,6 +213,7 @@ public class NotificationReceiver extends BroadcastReceiver{
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+
                 JSONArray jsonArray = null;
                 try {
 
