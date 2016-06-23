@@ -31,8 +31,6 @@ public class AboutUsActivity extends AppCompatActivity {
     CardView cardPolicy, cardTerms;
     short mode;
     WebView wvAbout;
-
-
     BusinessDescription objBusinessDescription;
 
     @SuppressLint({"SetTextI18n", "SetJavaScriptEnabled"})
