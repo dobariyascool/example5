@@ -22,7 +22,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
     SharePreferenceManage objSharePreferenceManage;
     LinearLayout buttonLayout, modeLayout;
     TextView txtSubmit,txtCancel;
-    Button btnWaiterMode, btnGuestMode;
+    Button btnWaiterMode, btnGuestMode,btnMenuMode;
 
     public ChangeModeDialogFragment() {
         // Required empty public constructor
@@ -43,6 +43,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
 
         btnWaiterMode = (Button) view.findViewById(R.id.btnWaiterMode);
         btnGuestMode = (Button) view.findViewById(R.id.btnGuestMode);
+        btnMenuMode = (Button) view.findViewById(R.id.btnMenuMode);
 
         txtSubmit = (TextView) view.findViewById(R.id.txtSubmit);
         txtCancel = (TextView) view.findViewById(R.id.txtCancel);
@@ -76,6 +77,12 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
             allTablesFragment.setArguments(bundle);
 
             Globals.ReplaceFragment(allTablesFragment, getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_all_tables));
+        }else if (v.getId() == R.id.btnMenuMode) {
+            getDialog().dismiss();
+            Globals.isWishListShow = 1;
+            Globals.DisableBroadCastReceiver(getActivity());
+            BottomDialogFragment bottomDialogFragment = new BottomDialogFragment();
+            bottomDialogFragment.show(getActivity().getSupportFragmentManager(),"");
         }
     }
 
@@ -92,6 +99,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
 
             btnWaiterMode.setOnClickListener(this);
             btnGuestMode.setOnClickListener(this);
+            btnMenuMode.setOnClickListener(this);
         } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                 && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
                 .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
@@ -130,6 +138,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
                         Globals.ClearData();
                         Globals.isWishListShow = 0;
                         Globals.EnableBroadCastReceiver(getActivity());
+                        Globals.CallNotificationReceiver(getActivity());
 
                         Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

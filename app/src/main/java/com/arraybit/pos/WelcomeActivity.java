@@ -3,8 +3,6 @@ package com.arraybit.pos;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -22,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.arraybit.global.Globals;
-import com.arraybit.global.NotificationReceiver;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.TableMaster;
 import com.bumptech.glide.Glide;
@@ -30,8 +27,6 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Calendar;
 
 
 @SuppressWarnings("ConstantConditions")
@@ -137,16 +132,7 @@ public class WelcomeActivity extends Activity {
                                                                           }
                                                                       }
                                                                       if (!isRequestPermission) {
-                                                                          Calendar calendar = Calendar.getInstance();
-
-                                                                          //intent registerd the broadcast receiver
-                                                                          Intent myIntent = new Intent(WelcomeActivity.this, NotificationReceiver.class);
-                                                                          PendingIntent pendingIntent = PendingIntent.getBroadcast(WelcomeActivity.this, 0, myIntent, 0);
-
-                                                                          //set the repeating alarm
-                                                                          AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                                                                          alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 20 * 1000, pendingIntent);
-
+                                                                          Globals.CallNotificationReceiver(WelcomeActivity.this);
                                                                           Globals.isWishListShow = 0;
                                                                           Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);
                                                                           startActivity(i);
@@ -180,16 +166,8 @@ public class WelcomeActivity extends Activity {
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-                    Calendar calendar = Calendar.getInstance();
 
-                    //intent registerd the broadcast receiver
-                    Intent myIntent = new Intent(WelcomeActivity.this, NotificationReceiver.class);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(WelcomeActivity.this, 0, myIntent, 0);
-
-                    //set the repeating alarm
-                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 20 * 1000, pendingIntent);
+                    Globals.CallNotificationReceiver(WelcomeActivity.this);
 
                     Globals.isWishListShow = 0;
                     Intent i = new Intent(WelcomeActivity.this, WaiterHomeActivity.class);

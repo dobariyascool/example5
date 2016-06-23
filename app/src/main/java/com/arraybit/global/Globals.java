@@ -4,7 +4,9 @@ package com.arraybit.global;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -86,7 +88,7 @@ public class Globals {
     public static String serverName = null;
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "hh:mm";
-    public static String DateTimeFormat = "d/M/yyyy/h/m";
+    public static String DateTimeFormat = "d/M/yyyy/H/m";
     public static String DisplayTimeFormat = "h:mm a";
     public static int sourceMasterId = 3;
     public static short customerType = 2;
@@ -170,6 +172,18 @@ public class Globals {
             spannableString.setSpan(TypefaceUtil.load(context, "fonts/Roboto-Regular.ttf", 0), 0, spannableString.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             menuItem.setTitle(spannableString);
         }
+    }
+
+    public static void CallNotificationReceiver(Activity activity){
+        Calendar calendar = Calendar.getInstance();
+
+        //intent registerd the broadcast receiver
+        Intent myIntent = new Intent(activity, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, 0, myIntent, 0);
+
+        //set the repeating alarm
+        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 20 * 1000, pendingIntent);
     }
 
     public static void SetAppBarPadding(Toolbar app_bar) {
@@ -449,11 +463,11 @@ public class Globals {
         objSharePreferenceManage.RemovePreference("RegistrationPreference", "FirstName", context);
         objSharePreferenceManage.RemovePreference("NotificationOnTimePreference", "OnTime", context);
         objSharePreferenceManage.RemovePreference("NotificationOffTimePreference", "OffTime", context);
-        objSharePreferenceManage.RemovePreference("NotificationPreference", "Push", context);
+        objSharePreferenceManage.RemovePreference("NotificationSettingPreference", "Push", context);
         objSharePreferenceManage.ClearPreference("RegistrationPreference", context);
         objSharePreferenceManage.ClearPreference("NotificationOnTimePreference", context);
         objSharePreferenceManage.ClearPreference("NotificationOffTimePreference", context);
-        objSharePreferenceManage.ClearPreference("NotificationPreference", context);
+        objSharePreferenceManage.ClearPreference("NotificationSettingPreference", context);
         Globals.userName = null;
     }
 

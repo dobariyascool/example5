@@ -80,7 +80,7 @@
         <activity
             android:name=".NotificationDetailActivity"
             android:label="@string/title_activity_notification_detail"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

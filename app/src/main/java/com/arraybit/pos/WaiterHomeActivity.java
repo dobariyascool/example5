@@ -12,6 +12,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,10 +22,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.NotificationReceiver;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CounterMaster;
@@ -41,6 +46,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     SharePreferenceManage objSharePreferenceManage;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
+    TextView txtCartNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +99,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.viewChange).setVisible(false);
+        menu.findItem(R.id.cart_layout).setVisible(false);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -100,6 +107,12 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_waiter_home, menu);
+        MenuItem cartItem = menu.findItem(R.id.cart_layout);
+        RelativeLayout relativeLayout = (RelativeLayout) MenuItemCompat.getActionView(cartItem);
+        final RelativeLayout cartLayout = (RelativeLayout) relativeLayout.findViewById(R.id.cartLayout);
+        txtCartNumber = (TextView) relativeLayout.findViewById(R.id.txtCartNumber);
+
+        SetCartNumber(txtCartNumber);
         return true;
     }
 
@@ -258,6 +271,16 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         }
     }
 
+    private void SetCartNumber(TextView txtCartNumber) {
+        if (Globals.counter > 0) {
+            txtCartNumber.setText(String.valueOf(NotificationReceiver.notificationCount));
+            txtCartNumber.setSoundEffectsEnabled(true);
+            txtCartNumber.setBackground(ContextCompat.getDrawable(WaiterHomeActivity.this, R.drawable.cart_number));
+            txtCartNumber.setAnimation(AnimationUtils.loadAnimation(WaiterHomeActivity.this, R.anim.fab_scale_up));
+        } else {
+            txtCartNumber.setBackgroundColor(ContextCompat.getColor(WaiterHomeActivity.this, android.R.color.transparent));
+        }
+    }
     //endregion
 
     //region LoadingTask

@@ -89,8 +89,6 @@ public class NotificationDetailActivity extends AppCompatActivity implements Not
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchHelper);
         itemTouchHelper.attachToRecyclerView(rvNotification);
-        //itemTouchHelper.
-
     }
 
     @Override

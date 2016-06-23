@@ -1,5 +1,12 @@
 package com.arraybit.parser;
 
+import android.content.Context;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.WaiterNotificationMaster;
@@ -31,6 +38,8 @@ public class WaiterNotificationJSONParser
 	Date time = null;
 	SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
+	NotificationRequestListener objNotificationRequestListener;
+
 	private WaiterNotificationMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
 		WaiterNotificationMaster objWaiterNotificationMaster = null;
 		try {
@@ -54,7 +63,7 @@ public class WaiterNotificationJSONParser
 		}
 	}
 
-	private ArrayList<WaiterNotificationMaster> SetListPropertiesFromJSONArray(JSONArray jsonArray) {
+	public ArrayList<WaiterNotificationMaster> SetListPropertiesFromJSONArray(JSONArray jsonArray) {
 		ArrayList<WaiterNotificationMaster> lstWaiterNotificationMaster = new ArrayList<>();
 		WaiterNotificationMaster objWaiterNotificationMaster;
 		try {
@@ -164,5 +173,39 @@ public class WaiterNotificationJSONParser
 			return null;
 		}
 	}
+
+	public void SelectAllWaiterNotificationMaster(final Context context, int linktoWaiterMasterId,int duration) {
+		Date date = new Date(System.currentTimeMillis() - duration * 60 * 1000);
+		String url = Service.Url + this.SelectAllWaiterNotificationMaster + "/" + linktoWaiterMasterId + "/" +sdfDateFormat.format(date);
+		RequestQueue queue = Volley.newRequestQueue(context);
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject jsonObject) {
+				JSONArray jsonArray = null;
+				try {
+					jsonArray = jsonObject.getJSONArray(SelectAllWaiterNotificationMaster + "Result");
+					if (jsonArray != null) {
+						ArrayList<WaiterNotificationMaster> alWaiterNotificationMaster = SetListPropertiesFromJSONArray(jsonArray);
+						objNotificationRequestListener = (NotificationRequestListener) context;
+						objNotificationRequestListener.NotificationResponse(alWaiterNotificationMaster);
+					}
+				} catch (Exception e) {
+					objNotificationRequestListener = (NotificationRequestListener) context;
+					objNotificationRequestListener.NotificationResponse(null);
+				}
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError volleyError) {
+				objNotificationRequestListener = (NotificationRequestListener) context;
+				objNotificationRequestListener.NotificationResponse(null);
+			}
+		});
+		queue.add(jsonObjectRequest);
+	}
 	//endregion
+
+	public interface NotificationRequestListener {
+		void NotificationResponse(ArrayList<WaiterNotificationMaster> alWaiterNotificationMaster);
+	}
 }

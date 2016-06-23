@@ -35,6 +35,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
     public static TableMaster objTableMaster;
     public static String userName;
+    public static boolean isMenuMode;
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -64,9 +65,14 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         //end
 
         Intent intent = getIntent();
-        objTableMaster = intent.getParcelableExtra("TableMaster");
-        if(objTableMaster!=null && objTableMaster.getlinktoOrderTypeMasterId()!=0){
-            Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
+        isMenuMode = intent.getBooleanExtra("IsMenuMode",false);
+        if(isMenuMode) {
+            Globals.orderTypeMasterId = (short) intent.getIntExtra("linktoOrderTypeMasterId",0);
+        }else{
+            objTableMaster = intent.getParcelableExtra("TableMaster");
+            if (objTableMaster != null && objTableMaster.getlinktoOrderTypeMasterId() != 0) {
+                Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
+            }
         }
 
         //navigationView
