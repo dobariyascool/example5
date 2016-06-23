@@ -63,8 +63,10 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
 
     public CategoryItemFragment(boolean isFavoriteShow) {
-        this.isFavoriteShow = isFavoriteShow;
-        Globals.isWishListShow = (short) (isFavoriteShow?0:1);
+        if(!GuestHomeActivity.isMenuMode) {
+            this.isFavoriteShow = isFavoriteShow;
+            Globals.isWishListShow = (short) (isFavoriteShow ? 0 : 1);
+        }
     }
 
     @Override
@@ -129,7 +131,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_search).setVisible(true);
         menu.findItem(R.id.viewChange).setVisible(true);
-        menu.findItem(R.id.cart_layout).setVisible(true);
+        if(GuestHomeActivity.isMenuMode){
+            menu.findItem(R.id.cart_layout).setVisible(false);
+        }else{
+            menu.findItem(R.id.cart_layout).setVisible(true);
+        }
+
         if (i == 1) {
             menu.findItem(R.id.viewChange).setIcon(R.drawable.view_grid);
         } else if (i == 2) {
@@ -146,7 +153,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 if(Globals.isWishListShow==1){
                     SaveWishListInSharePreference(true);
                 }
-                if (MenuActivity.parentActivity) {
+               if (MenuActivity.parentActivity || GuestHomeActivity.isMenuMode) {
                     //Globals.CategoryItemFragmentResetStaticVariable();
                     getActivity().finish();
                     getActivity().overridePendingTransition(0, R.anim.right_exit);

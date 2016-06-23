@@ -428,10 +428,14 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-            if(isFavorite){
-                return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId,1,null);
-            }else{
-                return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId,Globals.businessMasterId,0,null);
+            if(GuestHomeActivity.isMenuMode){
+                return objItemJSONParser.SelectAllItemMaster(counterMasterId,Globals.orderTypeMasterId, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId, Globals.businessMasterId, 0, null);
+            }else {
+                if (isFavorite) {
+                    return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId, Globals.businessMasterId, 1, null);
+                } else {
+                    return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId, Globals.businessMasterId, 0, null);
+                }
             }
         }
 

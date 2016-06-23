@@ -107,9 +107,21 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        Globals.SetOptionMenu(Globals.userName, GuestHomeActivity.this, menu);
-        menu.findItem(R.id.home).setVisible(false);
-        menu.findItem(R.id.callWaiter).setVisible(true);
+        if(isMenuMode){
+            menu.findItem(R.id.callWaiter).setVisible(false);
+            menu.findItem(R.id.home).setVisible(false);
+            menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.shortList).setVisible(false);
+            menu.findItem(R.id.action_search).setVisible(false);
+            menu.findItem(R.id.viewChange).setVisible(false);
+            menu.findItem(R.id.cart_layout).setVisible(false);
+        }else{
+            Globals.SetOptionMenu(Globals.userName, GuestHomeActivity.this, menu);
+            menu.findItem(R.id.home).setVisible(false);
+            menu.findItem(R.id.callWaiter).setVisible(true);
+        }
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -236,21 +248,23 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
     //region Private Methods
     private void SaveObjectInPreference() {
-        objSharePreferenceManage = new SharePreferenceManage();
-        try {
-            JSONStringer jsonStringer = new JSONStringer();
-            jsonStringer.object();
-            jsonStringer.key("TableMasterId").value(objTableMaster.getTableMasterId());
-            jsonStringer.key("TableName").value(objTableMaster.getTableName());
-            jsonStringer.key("ShortName").value(objTableMaster.getShortName());
-            jsonStringer.key("linktoTableStatusMasterId").value(objTableMaster.getlinktoTableStatusMasterId());
-            jsonStringer.key("linktoOrderTypeMasterId").value(objTableMaster.getlinktoOrderTypeMasterId());
-            //jsonStringer.key("linktoSectionMasterId").value(objTableMaster.getlinktoSectionMasterId());
-            jsonStringer.key("linktoBusinessMasterId").value(objTableMaster.getlinktoBusinessMasterId());
-            jsonStringer.endObject();
-            objSharePreferenceManage.CreatePreference("GuestModePreference", "GuestMode", jsonStringer.toString(), GuestHomeActivity.this);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(!isMenuMode) {
+            objSharePreferenceManage = new SharePreferenceManage();
+            try {
+                JSONStringer jsonStringer = new JSONStringer();
+                jsonStringer.object();
+                jsonStringer.key("TableMasterId").value(objTableMaster.getTableMasterId());
+                jsonStringer.key("TableName").value(objTableMaster.getTableName());
+                jsonStringer.key("ShortName").value(objTableMaster.getShortName());
+                jsonStringer.key("linktoTableStatusMasterId").value(objTableMaster.getlinktoTableStatusMasterId());
+                jsonStringer.key("linktoOrderTypeMasterId").value(objTableMaster.getlinktoOrderTypeMasterId());
+                //jsonStringer.key("linktoSectionMasterId").value(objTableMaster.getlinktoSectionMasterId());
+                jsonStringer.key("linktoBusinessMasterId").value(objTableMaster.getlinktoBusinessMasterId());
+                jsonStringer.endObject();
+                objSharePreferenceManage.CreatePreference("GuestModePreference", "GuestMode", jsonStringer.toString(), GuestHomeActivity.this);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -263,27 +277,35 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     }
 
     private void SetGuestName() {
-        objSharePreferenceManage = new SharePreferenceManage();
-        if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", GuestHomeActivity.this) != null) {
-            Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", GuestHomeActivity.this);
-        } else {
-            Globals.userName = null;
-        }
-        if (Globals.userName != null) {
-            ivLogo.setVisibility(View.GONE);
-            nameLayout.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.VISIBLE);
-            txtName.setVisibility(View.VISIBLE);
-            txtLetter.setVisibility(View.VISIBLE);
-
-            txtName.setText(Globals.userName);
-            txtLetter.setText(Globals.userName.substring(0, 1).toUpperCase());
-        } else {
+        if(isMenuMode){
             ivLogo.setVisibility(View.VISIBLE);
             nameLayout.setVisibility(View.GONE);
             imageView.setVisibility(View.GONE);
             txtName.setVisibility(View.GONE);
             txtLetter.setVisibility(View.GONE);
+        }else {
+            objSharePreferenceManage = new SharePreferenceManage();
+            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", GuestHomeActivity.this) != null) {
+                Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", GuestHomeActivity.this);
+            } else {
+                Globals.userName = null;
+            }
+            if (Globals.userName != null) {
+                ivLogo.setVisibility(View.GONE);
+                nameLayout.setVisibility(View.VISIBLE);
+                imageView.setVisibility(View.VISIBLE);
+                txtName.setVisibility(View.VISIBLE);
+                txtLetter.setVisibility(View.VISIBLE);
+
+                txtName.setText(Globals.userName);
+                txtLetter.setText(Globals.userName.substring(0, 1).toUpperCase());
+            } else {
+                ivLogo.setVisibility(View.VISIBLE);
+                nameLayout.setVisibility(View.GONE);
+                imageView.setVisibility(View.GONE);
+                txtName.setVisibility(View.GONE);
+                txtLetter.setVisibility(View.GONE);
+            }
         }
     }
 

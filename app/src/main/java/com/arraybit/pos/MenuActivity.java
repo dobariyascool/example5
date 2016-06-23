@@ -33,17 +33,19 @@ public class MenuActivity extends AppCompatActivity{
         Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
 
         Intent intent = getIntent();
-        if (intent.getParcelableExtra("TableMaster") != null) {
-            objTableMaster = intent.getParcelableExtra("TableMaster");
-            Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
-            if (Globals.selectTableMasterId != objTableMaster.getTableMasterId()) {
-                CategoryItemFragment.i = 0;
-                CategoryItemFragment.isViewChange = false;
-                Globals.counter = 0;
-                Globals.selectTableMasterId = 0;
-                Globals.alOrderItemTran = new ArrayList<>();
+        if(!GuestHomeActivity.isMenuMode) {
+            if (intent.getParcelableExtra("TableMaster") != null) {
+                objTableMaster = intent.getParcelableExtra("TableMaster");
+                Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
+                if (Globals.selectTableMasterId != objTableMaster.getTableMasterId()) {
+                    CategoryItemFragment.i = 0;
+                    CategoryItemFragment.isViewChange = false;
+                    Globals.counter = 0;
+                    Globals.selectTableMasterId = 0;
+                    Globals.alOrderItemTran = new ArrayList<>();
+                }
+                parentActivity = intent.getBooleanExtra("ParentActivity", false);
             }
-            parentActivity = intent.getBooleanExtra("ParentActivity", false);
         }
 
         if(Globals.isWishListShow==1) {
@@ -60,14 +62,21 @@ public class MenuActivity extends AppCompatActivity{
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (parentActivity) {
-            //Globals.SetOptionMenu(Globals.userName, MenuActivity.this, menu);
+        if(GuestHomeActivity.isMenuMode){
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.registration).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
             menu.findItem(R.id.callWaiter).setVisible(false);
-        }else{
-            menu.findItem(R.id.logout).setVisible(false);
+        }else {
+            if (parentActivity) {
+                //Globals.SetOptionMenu(Globals.userName, MenuActivity.this, menu);
+                menu.findItem(R.id.login).setVisible(false);
+                menu.findItem(R.id.registration).setVisible(false);
+                menu.findItem(R.id.shortList).setVisible(false);
+                menu.findItem(R.id.callWaiter).setVisible(false);
+            } else {
+                menu.findItem(R.id.logout).setVisible(false);
+            }
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -75,10 +84,14 @@ public class MenuActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (MenuActivity.parentActivity) {
+        if(GuestHomeActivity.isMenuMode){
             getMenuInflater().inflate(R.menu.menu_home, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.menu_waiter_home, menu);
+        }else {
+            if (MenuActivity.parentActivity) {
+                getMenuInflater().inflate(R.menu.menu_home, menu);
+            } else {
+                getMenuInflater().inflate(R.menu.menu_waiter_home, menu);
+            }
         }
         return true;
     }
@@ -107,12 +120,15 @@ public class MenuActivity extends AppCompatActivity{
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        if(GuestHomeActivity.isMenuMode){
 
-        if (MenuActivity.parentActivity) {
-            //Globals.OptionMenuItemClick(item, MenuActivity.this, getSupportFragmentManager());
-        } else {
-            if (id == R.id.logout) {
-                Globals.ClearPreference(MenuActivity.this);
+        }else {
+            if (MenuActivity.parentActivity) {
+                //Globals.OptionMenuItemClick(item, MenuActivity.this, getSupportFragmentManager());
+            } else {
+                if (id == R.id.logout) {
+                    Globals.ClearPreference(MenuActivity.this);
+                }
             }
         }
         return super.onOptionsItemSelected(item);
@@ -169,7 +185,7 @@ public class MenuActivity extends AppCompatActivity{
                 if(Globals.isWishListShow==1) {
                     SaveWishListInSharePreference(true);
                 }
-                if (MenuActivity.parentActivity) {
+                if (MenuActivity.parentActivity || GuestHomeActivity.isMenuMode) {
                     //Globals.CategoryItemFragmentResetStaticVariable();
                     finish();
                     overridePendingTransition(0, R.anim.right_exit);

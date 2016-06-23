@@ -37,6 +37,7 @@
     <string name="title_fragment_notification_settings">Notification Settings</string>
     <string name="title_fragment_change_password">Change Password</string>
     <string name="title_fragment_table_order">Generate Bill</string>
+    <string name="title_fragment_bottom_dialog">Select Order Type</string>
     <!-- end -->
 
     <string name="hello_world">Hello world!</string>

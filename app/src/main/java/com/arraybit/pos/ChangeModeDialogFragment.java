@@ -82,7 +82,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
             Globals.isWishListShow = 1;
             Globals.DisableBroadCastReceiver(getActivity());
             BottomDialogFragment bottomDialogFragment = new BottomDialogFragment();
-            bottomDialogFragment.show(getActivity().getSupportFragmentManager(),"");
+            bottomDialogFragment.show(getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_bottom_dialog));
         }
     }
 

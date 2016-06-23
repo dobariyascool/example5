@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.pos.CategoryItemFragment;
+import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.R;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.TextView;
@@ -100,33 +101,46 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
         if (Globals.orderTypeMasterId == Globals.OrderType.TakeAway.getValue() && objItemMaster.getIsDineInOnly()) {
             holder.txtItemDineOnly.setVisibility(View.VISIBLE);
-            if (isWaiterGrid) {
+            if(GuestHomeActivity.isMenuMode){
+                holder.btnAdd.setVisibility(View.GONE);
                 holder.btnAddDisable.setVisibility(View.GONE);
-                holder.btnAdd.setVisibility(View.GONE);
-                holder.ibLike.setVisibility(View.INVISIBLE);
-
-            }else {
-                holder.btnAddDisable.setVisibility(View.VISIBLE);
-                holder.btnAdd.setVisibility(View.GONE);
-                if(Globals.isWishListShow==1) {
-                    holder.ibLike.setVisibility(View.VISIBLE);
-                }else{
+                holder.ibLike.setVisibility(View.GONE);
+            }
+            else {
+                if (isWaiterGrid) {
+                    holder.btnAddDisable.setVisibility(View.GONE);
+                    holder.btnAdd.setVisibility(View.GONE);
                     holder.ibLike.setVisibility(View.INVISIBLE);
+
+                } else {
+                    holder.btnAddDisable.setVisibility(View.VISIBLE);
+                    holder.btnAdd.setVisibility(View.GONE);
+                    if (Globals.isWishListShow == 1) {
+                        holder.ibLike.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.ibLike.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         } else {
             holder.txtItemDineOnly.setVisibility(View.INVISIBLE);
-            if (isWaiterGrid) {
+            if(GuestHomeActivity.isMenuMode){
                 holder.btnAdd.setVisibility(View.GONE);
                 holder.btnAddDisable.setVisibility(View.GONE);
-            } else {
-                holder.btnAdd.setVisibility(View.VISIBLE);
-                holder.btnAddDisable.setVisibility(View.GONE);
-            }
-            if(Globals.isWishListShow==1) {
-                holder.ibLike.setVisibility(View.VISIBLE);
-            }else{
-                holder.ibLike.setVisibility(View.INVISIBLE);
+                holder.ibLike.setVisibility(View.GONE);
+            }else {
+                if (isWaiterGrid) {
+                    holder.btnAdd.setVisibility(View.GONE);
+                    holder.btnAddDisable.setVisibility(View.GONE);
+                } else {
+                    holder.btnAdd.setVisibility(View.VISIBLE);
+                    holder.btnAddDisable.setVisibility(View.GONE);
+                }
+                if (Globals.isWishListShow == 1) {
+                    holder.ibLike.setVisibility(View.VISIBLE);
+                } else {
+                    holder.ibLike.setVisibility(View.INVISIBLE);
+                }
             }
         }
 
@@ -321,30 +335,6 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         notifyItemChanged(position);
     }
 
-    public void CheckIdInCurrentListAndUpdate(short isChecked,int itemMasterId,short oldCheckValue){
-        int count=0;
-        boolean isDuplicate = false;
-        for(ItemMaster objItemMaster : alItemMaster) {
-            if (objItemMaster.getItemMasterId() == itemMasterId) {
-                isItemAnimate = false;
-                isWishListChange = true;
-                objItemMaster.setIsChecked(oldCheckValue);
-                CheckDuplicate(String.valueOf(isChecked), objItemMaster);
-                objItemMaster.setIsChecked(isChecked);
-                notifyItemChanged(count);
-                isDuplicate = true;
-                break;
-            }
-            count++;
-        }
-        if(!isDuplicate){
-            ItemMaster objItem = new ItemMaster();
-            objItem.setItemMasterId(itemMasterId);
-            objItem.setIsChecked(oldCheckValue);
-            CheckDuplicate(String.valueOf(isChecked),objItem);
-        }
-    }
-
     public void CheckIdInCurrentList(short isChecked,int itemMasterId,short oldCheckValue,ItemMaster objWishList){
         int count=0;
         boolean isDuplicate = false;
@@ -418,12 +408,13 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             cvItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Globals.HideKeyBoard(context, v);
-                    if (isWaiterGrid) {
-                        objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()));
-                    } else {
-                        objItemClickListener.CardViewOnClick(alItemMaster.get(getAdapterPosition()));
+                    if(!GuestHomeActivity.isMenuMode) {
+                        Globals.HideKeyBoard(context, v);
+                        if (isWaiterGrid) {
+                            objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()));
+                        } else {
+                            objItemClickListener.CardViewOnClick(alItemMaster.get(getAdapterPosition()));
+                        }
                     }
 
                 }

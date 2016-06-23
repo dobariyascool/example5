@@ -13,10 +13,10 @@ import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 
-public class GuestOptionListFragment extends Fragment implements View.OnClickListener{
+public class GuestOptionListFragment extends Fragment implements View.OnClickListener {
 
 
-    LinearLayout guestOptionLayout;
+    LinearLayout guestOptionLayout, menuModeLayout, guestModeLayout;
     GuestLoginDialogFragment.LoginResponseListener objLoginResponseListener;
 
 
@@ -31,6 +31,11 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         View view = inflater.inflate(R.layout.fragment_guest_option_list, container, false);
 
         guestOptionLayout = (LinearLayout) view.findViewById(R.id.guestOptionLayout);
+        if (!getActivity().getResources().getBoolean(R.bool.isTablet)) {
+            menuModeLayout = (LinearLayout) view.findViewById(R.id.menuModeLayout);
+            guestModeLayout = (LinearLayout) view.findViewById(R.id.guestModeLayout);
+        }
+
         Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
 
         CardView cvMenu = (CardView) view.findViewById(R.id.cvMenu);
@@ -43,7 +48,25 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         cvOffers.setOnClickListener(this);
         cvFeedback.setOnClickListener(this);
 
+        if (!getActivity().getResources().getBoolean(R.bool.isTablet)) {
+            CardView cvMenuModeMenu = (CardView) view.findViewById(R.id.cvMenuModeMenu);
+            CardView cvMenuModeOffers = (CardView) view.findViewById(R.id.cvMenuModeOffers);
+            cvMenuModeMenu.setOnClickListener(this);
+            cvMenuModeOffers.setOnClickListener(this);
+            if (GuestHomeActivity.isMenuMode) {
+                menuModeLayout.setVisibility(View.VISIBLE);
+                guestModeLayout.setVisibility(View.GONE);
+            } else {
+                menuModeLayout.setVisibility(View.GONE);
+                guestModeLayout.setVisibility(View.VISIBLE);
+            }
+        } else {
+            cvOrders.setVisibility(View.GONE);
+            cvFeedback.setVisibility(View.GONE);
+        }
+
         setHasOptionsMenu(true);
+
 
         return view;
     }
@@ -52,14 +75,18 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
+        if (!GuestHomeActivity.isMenuMode) {
+            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.callWaiter){
-            CallWaiterDialog callWaiterDialog = new CallWaiterDialog();
-            callWaiterDialog.show(getActivity().getSupportFragmentManager(),"");
+        if (!GuestHomeActivity.isMenuMode) {
+            if (item.getItemId() == R.id.callWaiter) {
+                CallWaiterDialog callWaiterDialog = new CallWaiterDialog();
+                callWaiterDialog.show(getActivity().getSupportFragmentManager(), "");
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -72,8 +99,10 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-        objLoginResponseListener = (GuestLoginDialogFragment.LoginResponseListener)getActivity();
-        objLoginResponseListener.LoginResponse();
+        if (!GuestHomeActivity.isMenuMode) {
+            objLoginResponseListener = (GuestLoginDialogFragment.LoginResponseListener) getActivity();
+            objLoginResponseListener.LoginResponse();
+        }
     }
 
     @Override
@@ -94,16 +123,22 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                 } else {
                     Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
                 }
-            } else if (v.getId() == R.id.cvMenu) {
-                Globals.isWishListShow = 1;
-                Globals.orderTypeMasterId = GuestHomeActivity.objTableMaster.getlinktoOrderTypeMasterId();
+            } else if (v.getId() == R.id.cvMenu || v.getId() == R.id.cvMenuModeMenu) {
+                if(v.getId()==R.id.cvMenu && !GuestHomeActivity.isMenuMode) {
+                    Globals.isWishListShow = 1;
+                    Globals.orderTypeMasterId = GuestHomeActivity.objTableMaster.getlinktoOrderTypeMasterId();
+                }else{
+                    Globals.isWishListShow = 0;
+                }
                 Intent intent = new Intent(getActivity(), MenuActivity.class);
-                intent.putExtra("ParentActivity", true);
-                intent.putExtra("IsFavoriteShow",false);
-                intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
+                if(v.getId()==R.id.cvMenu  && !GuestHomeActivity.isMenuMode) {
+                    intent.putExtra("ParentActivity", true);
+                    intent.putExtra("IsFavoriteShow", false);
+                    intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
+                }
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            } else if (v.getId() == R.id.cvOffers) {
+            } else if (v.getId() == R.id.cvOffers || v.getId() == R.id.cvMenuModeOffers) {
                 Globals.ReplaceFragment(new OfferFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_offer));
             }
         }
