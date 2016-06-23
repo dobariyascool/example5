@@ -61,8 +61,13 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                 guestModeLayout.setVisibility(View.VISIBLE);
             }
         } else {
-            cvOrders.setVisibility(View.GONE);
-            cvFeedback.setVisibility(View.GONE);
+            if (GuestHomeActivity.isMenuMode) {
+                cvOrders.setVisibility(View.GONE);
+                cvFeedback.setVisibility(View.GONE);
+            }else{
+                cvOrders.setVisibility(View.VISIBLE);
+                cvFeedback.setVisibility(View.VISIBLE);
+            }
         }
 
         setHasOptionsMenu(true);

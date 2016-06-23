@@ -77,6 +77,9 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
         //navigationView
         navigationView = (NavigationView) findViewById(R.id.navigationView);
+        if(isMenuMode){
+            navigationView.getMenu().findItem(R.id.feedback).setVisible(false);
+        }
         headerView = LayoutInflater.from(GuestHomeActivity.this).inflate(R.layout.navigation_header, null);
         nameLayout = (LinearLayout)headerView.findViewById(R.id.nameLayout);
         imageView = (ImageView) headerView.findViewById(R.id.imageView);

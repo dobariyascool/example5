@@ -231,7 +231,8 @@
                         android:layout_weight="1"
                         android:background="@drawable/card_line"
                         android:padding="25dp"
-                        android:src="@mipmap/m_menu"
+                        android:src="@drawable/menu_drawable"
+                        android:tint="#BDBDBD"
                         tools:ignore="ContentDescription" />
 
                     <com.rey.material.widget.TextView

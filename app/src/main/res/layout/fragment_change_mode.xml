@@ -8,7 +8,7 @@
     tools:ignore="HardcodedText">
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/control_SpecingSmall"
         android:orientation="vertical"
@@ -31,12 +31,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/control_SpecingMedium"
-            android:layout_marginEnd="@dimen/control_SpecingMedium"
-            android:layout_marginStart="@dimen/control_SpecingMedium"
             android:layout_marginTop="@dimen/control_SpecingSmall"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:paddingEnd="@dimen/control_SpecingSmall"
+            android:paddingStart="@dimen/control_SpecingSmall"
+            android:visibility="visible"
+            android:weightSum="3">
 
             <com.rey.material.widget.Button
                 android:id="@+id/btnWaiterMode"
@@ -62,7 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@mipmap/guest_mode"
+                android:drawableTop="@drawable/menu_drawable"
                 android:text="@string/cmfMenuMode"
                 android:visibility="visible"/>
 

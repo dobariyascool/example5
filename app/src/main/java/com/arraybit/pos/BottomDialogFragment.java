@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.CardView;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
-import com.rey.material.widget.Button;
 
 
 public class BottomDialogFragment extends DialogFragment {
@@ -25,13 +25,6 @@ public class BottomDialogFragment extends DialogFragment {
     }
 
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_bottom_dialog, container, false);
-//    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -39,10 +32,10 @@ public class BottomDialogFragment extends DialogFragment {
         final Dialog mBottomSheetDialog = new Dialog(getActivity(),
                 R.style.MaterialDialogSheet);
 
-        Button btnDineIn = (Button)view.findViewById(R.id.btnDineIn);
-        Button btnTakeAway = (Button)view.findViewById(R.id.btnTakeAway);
+        CardView cvDineIn = (CardView)view.findViewById(R.id.cvDineIn);
+        CardView cvTakeAway = (CardView)view.findViewById(R.id.cvTakeAway);
 
-        btnDineIn.setOnClickListener(new View.OnClickListener() {
+        cvDineIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
@@ -53,7 +46,7 @@ public class BottomDialogFragment extends DialogFragment {
             }
         });
 
-        btnTakeAway.setOnClickListener(new View.OnClickListener() {
+        cvTakeAway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), GuestHomeActivity.class);

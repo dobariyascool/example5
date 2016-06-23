@@ -9,33 +9,103 @@
         android:layout_height="wrap_content"
         android:background="@color/offwhite"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/control_SpecingSmall"
-        android:paddingEnd="@dimen/control_SpecingSmall"
-        android:paddingStart="@dimen/control_SpecingSmall"
-        android:paddingTop="@dimen/control_SpecingSmall">
+        android:paddingBottom="0dp"
+        android:paddingTop="@dimen/control_SpecingSmall"
+        tools:ignore="DisableBaselineAlignment">
 
-        <com.rey.material.widget.Button
-            android:id="@+id/btnDineIn"
-            style="@style/StatusButton"
+        <android.support.v7.widget.CardView
+            android:id="@+id/cvDineIn"
+            style="@style/DefaultCardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
-            android:layout_weight="1"
-            android:drawableTop="@mipmap/dine_in"
-            android:text="@string/wolfTable"
-            android:textColor="@color/secondary_text"
-            android:visibility="visible"/>
+            android:layout_weight="1">
 
-        <com.rey.material.widget.Button
-            android:id="@+id/btnTakeAway"
-            style="@style/StatusButton"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivDineIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:paddingBottom="@dimen/control_SpecingSmall"
+                    android:paddingTop="0dp"
+                    android:src="@mipmap/dine_in"
+                    android:tint="#757575"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivDineIn"
+                    android:gravity="center"
+                    android:padding="@dimen/control_SpecingSmall"
+                    android:text="@string/wolfTable"
+                    android:textColor="@android:color/black" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cvTakeAway"
+            style="@style/DefaultCardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@mipmap/take_away"
-            android:text="@string/wolfMenu"
-            android:textColor="@color/secondary_text"
-            android:visibility="visible"/>
+            android:layout_marginStart="0dp"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:id="@+id/ivTakeAway"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:paddingBottom="@dimen/control_SpecingSmall"
+                    android:paddingTop="0dp"
+                    android:src="@mipmap/take_away"
+                    android:tint="#757575"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivTakeAway"
+                    android:gravity="center"
+                    android:padding="@dimen/control_SpecingSmall"
+                    android:text="@string/wolfMenu"
+                    android:textColor="@android:color/black" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <!--<com.rey.material.widget.Button-->
+        <!--android:id="@+id/btnDineIn"-->
+        <!--style="@style/StatusButton"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="@dimen/control_SpecingSmall"-->
+        <!--android:layout_weight="1"-->
+        <!--android:drawableTop="@mipmap/dine_in"-->
+        <!--android:text="@string/wolfTable"-->
+        <!--android:tint="@color/secondary_text"-->
+        <!--android:textColor="@color/secondary_text"-->
+        <!--android:visibility="visible"/>-->
+
+        <!--<com.rey.material.widget.Button-->
+        <!--android:id="@+id/btnTakeAway"-->
+        <!--style="@style/StatusButton"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:drawableTop="@mipmap/take_away"-->
+        <!--android:text="@string/wolfMenu"-->
+        <!--android:textColor="@color/secondary_text"-->
+        <!--android:visibility="visible"/>-->
 
     </LinearLayout>
 
