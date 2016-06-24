@@ -91,11 +91,6 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
         holder.txtTotalOrder.setText(objOrderMaster.getTotalKOT() + " Orders ");
         holder.txtTotalItem.setText(objOrderMaster.getTotalItem() + " Items");
         holder.txtTotalAmount.setText(context.getResources().getString(R.string.dfRupee)+" "+Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount() + objOrderMaster.getTotalTax()));
-//        if (alTaxMaster == null) {
-//            holder.txtTotalAmount.setText("Rs. " + Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
-//        } else {
-//            CalculateTax(objOrderMaster, holder);
-//        }
 
         //holder animation
         if(isItemAnimate) {
@@ -111,23 +106,6 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
         return alOrderMaster.size();
     }
 
-    private void CalculateTax(OrderMaster objOrderMaster, TableOrderViewHolder holder) {
-        try {
-            totalTaxPercentage = 0;
-            totalNetAmount = 0;
-            for (int i = 0; i < alTaxMaster.size(); i++) {
-                if (alTaxMaster.get(i).getIsPercentage()) {
-                    totalTaxPercentage = totalTaxPercentage + alTaxMaster.get(i).getTaxRate();
-                } else {
-                    totalTaxAmount = totalTaxAmount + alTaxMaster.get(i).getTaxRate();
-                }
-            }
-            totalNetAmount = Math.round(objOrderMaster.getTotalAmount() + (objOrderMaster.getTotalAmount() * totalTaxPercentage / 100) + totalTaxAmount);
-            holder.txtTotalAmount.setText(Globals.dfWithPrecision.format(totalNetAmount));
-        } catch (Exception ex) {
-            holder.txtTotalAmount.setText(Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
-        }
-    }
 
     @SuppressLint("RtlHardcoded")
     private void ReplaceFragment(Fragment fragment,String fragmentName){
@@ -181,7 +159,6 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
                     orderSummaryFragment.setArguments(bundle);
 
                     ReplaceFragment(orderSummaryFragment,context.getResources().getString(R.string.title_fragment_order_summary));
-                    //Globals.ReplaceFragment(orderSummaryFragment, fragmentManager, context.getResources().getString(R.string.title_fragment_order_summary));
                 }
             });
         }

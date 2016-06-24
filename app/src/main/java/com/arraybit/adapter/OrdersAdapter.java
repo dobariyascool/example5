@@ -152,6 +152,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         alOrderMaster.get(position).setlinktoOrderStatusMasterId(linktoOrderStatusMasterId);
         notifyItemChanged(position);
         isItemAnimate = false;
+        isViewFilter = true;
     }
 
     public void RemoveOrder(int position) {
