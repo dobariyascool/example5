@@ -20,4 +20,6 @@
     <dimen name="button_marginBottom">@dimen/control_SpecingSmall</dimen>
     <dimen name="button_marginStart">@dimen/control_SpecingSmall</dimen>
     <dimen name="button_marginEnd">@dimen/control_SpecingSmall</dimen>
+    <dimen name="qty_image_height">50dp</dimen>
+    <dimen name="qty_image_width">55dp</dimen>
 </resources>

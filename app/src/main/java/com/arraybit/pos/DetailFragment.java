@@ -84,7 +84,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     RecyclerView rvModifier, rvOptionValue, rvSuggestedItem;
     ArrayList<OptionValueTran> lstOptionValueTran, lstOptionValue;
     ArrayList<ItemMaster> alCheckedModifier = new ArrayList<>();
-    LinearLayout itemSuggestionLayout, wishListLayout, qtyLayout;
+    LinearLayout itemSuggestionLayout, wishListLayout;
     boolean isDineIn, isKeyClick = false;
     Button btnOrder, btnOrderDisable;
     ModifierAdapter modifierAdapter;
@@ -93,6 +93,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     StringBuilder sbOptionValue;
     boolean isWishList;
     ToggleButton tbLike;
+    ImageButton ibPlus,ibMinus,ibDisablePlus,ibDisableMinus;
 
 
     public DetailFragment(ItemMaster objItemMaster) {
@@ -124,7 +125,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         detailLayout = (FrameLayout) view.findViewById(R.id.detailLayout);
         itemSuggestionLayout = (LinearLayout) view.findViewById(R.id.itemSuggestionLayout);
         wishListLayout = (LinearLayout) view.findViewById(R.id.wishListLayout);
-        qtyLayout = (LinearLayout) view.findViewById(R.id.qtyLayout);
 
         ivItemImage = (ImageView) view.findViewById(R.id.ivItemImage);
         ivTest = (ImageView) view.findViewById(R.id.ivTest);
@@ -140,15 +140,16 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         txtDineIn = (TextView) view.findViewById(R.id.txtDineIn);
 
         //Button
-        ImageButton ibPlus = (ImageButton) view.findViewById(R.id.ibPlus);
-        ImageButton ibMinus = (ImageButton) view.findViewById(R.id.ibMinus);
+        ibPlus = (ImageButton) view.findViewById(R.id.ibPlus);
+        ibMinus = (ImageButton) view.findViewById(R.id.ibMinus);
+        ibDisablePlus = (ImageButton) view.findViewById(R.id.ibDisablePlus);
+        ibDisableMinus = (ImageButton) view.findViewById(R.id.ibDisableMinus);
 
         etQuantity = (EditText) view.findViewById(R.id.etQuantity);
         etQuantity.setSelectAllOnFocus(true);
 
         tbLike = (ToggleButton) view.findViewById(R.id.tbLike);
 
-        Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         btnOrder = (Button) view.findViewById(R.id.btnOrder);
         btnOrderDisable = (Button) view.findViewById(R.id.btnOrderDisable);
 
@@ -160,7 +161,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
         ibPlus.setOnClickListener(this);
         ibMinus.setOnClickListener(this);
-        btnCancel.setOnClickListener(this);
         btnOrder.setOnClickListener(this);
         textInputLayout.setOnClickListener(this);
         tbLike.setOnClickListener(this);
@@ -292,21 +292,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             textInputLayout.clearFocus();
             etQuantity.requestFocus();
 
-        } else if (v.getId() == R.id.btnCancel) {
-            if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_detail))) {
-                getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                    && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_sub_detail))) {
-                getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_sub_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }
-            if(Globals.isWishListShow==1){
-                SaveWishListData();
-            }
-            isItemSuggestedClick = false;
-            alOptionValue = new ArrayList<>();
-            alSubItemOptionValue = new ArrayList<>();
-        } else if (v.getId() == R.id.btnOrder) {
+        }else if (v.getId() == R.id.btnOrder) {
             SetOrderItemModifierTran();
             SetOrderItemTran();
             if(Globals.isWishListShow==1){
@@ -459,19 +445,27 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         if (objItemMaster.getIsDineInOnly() && Globals.orderTypeMasterId == Globals.OrderType.TakeAway.getValue()) {
             txtDineIn.setVisibility(View.VISIBLE);
             textInputLayout.setVisibility(View.GONE);
-            qtyLayout.setVisibility(View.GONE);
             rvModifier.setVisibility(View.GONE);
             itemSuggestionLayout.setVisibility(View.GONE);
             rvOptionValue.setVisibility(View.GONE);
             wishListLayout.setVisibility(View.GONE);
             btnOrder.setVisibility(View.GONE);
             btnOrderDisable.setVisibility(View.VISIBLE);
+            ibDisableMinus.setVisibility(View.VISIBLE);
+            ibDisablePlus.setVisibility(View.VISIBLE);
+            ibMinus.setVisibility(View.GONE);
+            ibPlus.setVisibility(View.GONE);
+            etQuantity.setEnabled(false);
         } else {
             txtDineIn.setVisibility(View.GONE);
             textInputLayout.setVisibility(View.VISIBLE);
-            qtyLayout.setVisibility(View.VISIBLE);
             btnOrder.setVisibility(View.VISIBLE);
             btnOrderDisable.setVisibility(View.GONE);
+            ibDisableMinus.setVisibility(View.GONE);
+            ibDisablePlus.setVisibility(View.GONE);
+            ibMinus.setVisibility(View.VISIBLE);
+            ibPlus.setVisibility(View.VISIBLE);
+            etQuantity.setEnabled(true);
             if (Globals.isWishListShow == 1) {
                 wishListLayout.setVisibility(View.VISIBLE);
             } else {

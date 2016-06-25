@@ -219,4 +219,7 @@
     <dimen name="button_marginEnd">@dimen/control_SpecingTiny</dimen>
     <dimen name="status_dialog_width">300dp</dimen>
 
+    <dimen name="qty_image_height">35dp</dimen>
+    <dimen name="qty_image_width">40dp</dimen>
+
 </resources>
