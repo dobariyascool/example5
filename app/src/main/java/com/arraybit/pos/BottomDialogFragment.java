@@ -70,6 +70,7 @@ public class BottomDialogFragment extends DialogFragment {
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                 if ((keyCode == android.view.KeyEvent.KEYCODE_BACK)) {
                     // To dismiss the fragment when the back-button is pressed.
+                    dismiss();
                     return true;
                 } else {
                     // Otherwise, do nothing else
