@@ -68,10 +68,16 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         isMenuMode = intent.getBooleanExtra("IsMenuMode",false);
         if(isMenuMode) {
             Globals.orderTypeMasterId = (short) intent.getIntExtra("linktoOrderTypeMasterId",0);
+            if(app_bar!=null){
+                getSupportActionBar().setTitle(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? getResources().getString(R.string.title_activity_home) + " - Dine In" : getResources().getString(R.string.title_activity_home) + " - Take Away");
+            }
         }else{
             objTableMaster = intent.getParcelableExtra("TableMaster");
             if (objTableMaster != null && objTableMaster.getlinktoOrderTypeMasterId() != 0) {
                 Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
+                if(app_bar!=null){
+                    getSupportActionBar().setTitle(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? getResources().getString(R.string.title_activity_home) + " - Dine In" : getResources().getString(R.string.title_activity_home) + " - Take Away");
+                }
             }
         }
 

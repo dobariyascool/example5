@@ -33,6 +33,7 @@ import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CounterMaster;
 import com.arraybit.parser.CounterJSONParser;
+import com.rey.material.widget.CompoundButton;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -74,6 +75,8 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         ivLogo.setVisibility(View.GONE);
         TextView txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
         TextView txtName = (TextView) headerView.findViewById(R.id.txtName);
+        CompoundButton cbLogout = (CompoundButton)headerView.findViewById(R.id.cbLogout);
+        cbLogout.setVisibility(View.VISIBLE);
 
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         SetWaiterName(txtName, txtLetter, navigationView);
@@ -94,12 +97,19 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             Globals.ShowSnackBar(waiterHomeMainLayout, getResources().getString(R.string.MsgCheckConnection), WaiterHomeActivity.this, 1000);
         }
 
+        cbLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Globals.ClearPreference(WaiterHomeActivity.this);
+            }
+        });
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.viewChange).setVisible(false);
         menu.findItem(R.id.cart_layout).setVisible(false);
+        menu.findItem(R.id.logout).setVisible(false);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -127,10 +137,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
         if (id == R.id.action_settings) {
             return true;
-        }
-
-        if (id == R.id.logout) {
-            Globals.ClearPreference(WaiterHomeActivity.this);
         }
 
         return super.onOptionsItemSelected(item);

@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -84,7 +85,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     RecyclerView rvModifier, rvOptionValue, rvSuggestedItem;
     ArrayList<OptionValueTran> lstOptionValueTran, lstOptionValue;
     ArrayList<ItemMaster> alCheckedModifier = new ArrayList<>();
-    LinearLayout itemSuggestionLayout, wishListLayout;
+    LinearLayout itemSuggestionLayout, wishListLayout, btnLayout;
     boolean isDineIn, isKeyClick = false;
     Button btnOrder, btnOrderDisable;
     ModifierAdapter modifierAdapter;
@@ -93,7 +94,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     StringBuilder sbOptionValue;
     boolean isWishList;
     ToggleButton tbLike;
+    NestedScrollView scrollView;
     ImageButton ibPlus,ibMinus,ibDisablePlus,ibDisableMinus;
+
 
 
     public DetailFragment(ItemMaster objItemMaster) {
@@ -125,6 +128,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         detailLayout = (FrameLayout) view.findViewById(R.id.detailLayout);
         itemSuggestionLayout = (LinearLayout) view.findViewById(R.id.itemSuggestionLayout);
         wishListLayout = (LinearLayout) view.findViewById(R.id.wishListLayout);
+        btnLayout = (LinearLayout) view.findViewById(R.id.btnLayout);
+
+        scrollView = (NestedScrollView)view.findViewById(R.id.scrollView);
 
         ivItemImage = (ImageView) view.findViewById(R.id.ivItemImage);
         ivTest = (ImageView) view.findViewById(R.id.ivTest);
@@ -220,7 +226,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         menu.findItem(R.id.viewChange).setVisible(false);
         menu.findItem(R.id.cart_layout).setVisible(false);
         if(Globals.isWishListShow==0){
-            menu.findItem(R.id.logout).setVisible(false);
+            if(!GuestHomeActivity.isMenuMode) {
+                menu.findItem(R.id.logout).setVisible(false);
+            }
         } else if(Globals.isWishListShow==1){
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.registration).setVisible(false);
@@ -442,81 +450,100 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     }
 
     private void SetLoadingTask(ViewGroup container) {
-        if (objItemMaster.getIsDineInOnly() && Globals.orderTypeMasterId == Globals.OrderType.TakeAway.getValue()) {
-            txtDineIn.setVisibility(View.VISIBLE);
+        if(GuestHomeActivity.isMenuMode){
+            btnLayout.setVisibility(View.GONE);
+            txtDineIn.setVisibility(View.GONE);
             textInputLayout.setVisibility(View.GONE);
             rvModifier.setVisibility(View.GONE);
             itemSuggestionLayout.setVisibility(View.GONE);
             rvOptionValue.setVisibility(View.GONE);
             wishListLayout.setVisibility(View.GONE);
             btnOrder.setVisibility(View.GONE);
-            btnOrderDisable.setVisibility(View.VISIBLE);
-            ibDisableMinus.setVisibility(View.VISIBLE);
-            ibDisablePlus.setVisibility(View.VISIBLE);
-            ibMinus.setVisibility(View.GONE);
-            ibPlus.setVisibility(View.GONE);
-            etQuantity.setEnabled(false);
-        } else {
-            txtDineIn.setVisibility(View.GONE);
-            textInputLayout.setVisibility(View.VISIBLE);
-            btnOrder.setVisibility(View.VISIBLE);
             btnOrderDisable.setVisibility(View.GONE);
             ibDisableMinus.setVisibility(View.GONE);
             ibDisablePlus.setVisibility(View.GONE);
-            ibMinus.setVisibility(View.VISIBLE);
-            ibPlus.setVisibility(View.VISIBLE);
-            etQuantity.setEnabled(true);
-            if (Globals.isWishListShow == 1) {
-                wishListLayout.setVisibility(View.VISIBLE);
-            } else {
+            ibMinus.setVisibility(View.GONE);
+            ibPlus.setVisibility(View.GONE);
+            etQuantity.setEnabled(false);
+        }else {
+            scrollView.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.separator));
+            btnLayout.setVisibility(View.VISIBLE);
+            if (objItemMaster.getIsDineInOnly() && Globals.orderTypeMasterId == Globals.OrderType.TakeAway.getValue()) {
+                txtDineIn.setVisibility(View.VISIBLE);
+                textInputLayout.setVisibility(View.GONE);
+                rvModifier.setVisibility(View.GONE);
+                itemSuggestionLayout.setVisibility(View.GONE);
+                rvOptionValue.setVisibility(View.GONE);
                 wishListLayout.setVisibility(View.GONE);
-            }
-            if (objItemMaster.getItemModifierIds().equals("")) {
-                if (Service.CheckNet(getActivity())) {
-                    if (Globals.isWishListShow == 0) {
-                        new RemarkLoadingTask().execute();
-                    }
-                    if (!objItemMaster.getOptionValueTranIds().equals("")) {
-                        new OptionValueLoadingTask().execute();
-                    } else {
-                        rvOptionValue.setVisibility(View.GONE);
-                    }
-                    if (isItemSuggestedClick) {
-                        itemSuggestionLayout.setVisibility(View.GONE);
-                    } else {
-                        if (Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue()) {
-                            isDineIn = true;
-                        }
-                        new ItemSuggestionLoadingTask().execute();
-                    }
-                } else {
-                    Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
-                }
+                btnOrder.setVisibility(View.GONE);
+                btnOrderDisable.setVisibility(View.VISIBLE);
+                ibDisableMinus.setVisibility(View.VISIBLE);
+                ibDisablePlus.setVisibility(View.VISIBLE);
+                ibMinus.setVisibility(View.GONE);
+                ibPlus.setVisibility(View.GONE);
+                etQuantity.setEnabled(false);
             } else {
-                if (Service.CheckNet(getActivity())) {
-                    if (Globals.isWishListShow == 0) {
-                        new RemarkLoadingTask().execute();
-                    }
-                    if (!objItemMaster.getItemModifierIds().equals("")) {
-                        new ModifierLoadingTask().execute();
-                    } else {
-                        rvModifier.setVisibility(View.GONE);
-                    }
-                    if (!objItemMaster.getOptionValueTranIds().equals("")) {
-                        new OptionValueLoadingTask().execute();
-                    } else {
-                        rvOptionValue.setVisibility(View.GONE);
-                    }
-                    if (isItemSuggestedClick) {
-                        itemSuggestionLayout.setVisibility(View.GONE);
-                    } else {
-                        if (Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue()) {
-                            isDineIn = true;
+                txtDineIn.setVisibility(View.GONE);
+                textInputLayout.setVisibility(View.VISIBLE);
+                btnOrder.setVisibility(View.VISIBLE);
+                btnOrderDisable.setVisibility(View.GONE);
+                ibDisableMinus.setVisibility(View.GONE);
+                ibDisablePlus.setVisibility(View.GONE);
+                ibMinus.setVisibility(View.VISIBLE);
+                ibPlus.setVisibility(View.VISIBLE);
+                etQuantity.setEnabled(true);
+                if (Globals.isWishListShow == 1) {
+                    wishListLayout.setVisibility(View.VISIBLE);
+                } else {
+                    wishListLayout.setVisibility(View.GONE);
+                }
+                if (objItemMaster.getItemModifierIds().equals("")) {
+                    if (Service.CheckNet(getActivity())) {
+                        if (Globals.isWishListShow == 0) {
+                            new RemarkLoadingTask().execute();
                         }
-                        new ItemSuggestionLoadingTask().execute();
+                        if (!objItemMaster.getOptionValueTranIds().equals("")) {
+                            new OptionValueLoadingTask().execute();
+                        } else {
+                            rvOptionValue.setVisibility(View.GONE);
+                        }
+                        if (isItemSuggestedClick) {
+                            itemSuggestionLayout.setVisibility(View.GONE);
+                        } else {
+                            if (Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue()) {
+                                isDineIn = true;
+                            }
+                            new ItemSuggestionLoadingTask().execute();
+                        }
+                    } else {
+                        Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                     }
                 } else {
-                    Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                    if (Service.CheckNet(getActivity())) {
+                        if (Globals.isWishListShow == 0) {
+                            new RemarkLoadingTask().execute();
+                        }
+                        if (!objItemMaster.getItemModifierIds().equals("")) {
+                            new ModifierLoadingTask().execute();
+                        } else {
+                            rvModifier.setVisibility(View.GONE);
+                        }
+                        if (!objItemMaster.getOptionValueTranIds().equals("")) {
+                            new OptionValueLoadingTask().execute();
+                        } else {
+                            rvOptionValue.setVisibility(View.GONE);
+                        }
+                        if (isItemSuggestedClick) {
+                            itemSuggestionLayout.setVisibility(View.GONE);
+                        } else {
+                            if (Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue()) {
+                                isDineIn = true;
+                            }
+                            new ItemSuggestionLoadingTask().execute();
+                        }
+                    } else {
+                        Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                    }
                 }
             }
         }

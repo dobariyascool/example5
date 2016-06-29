@@ -408,15 +408,15 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             cvItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!GuestHomeActivity.isMenuMode) {
-                        Globals.HideKeyBoard(context, v);
-                        if (isWaiterGrid) {
-                            objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()));
-                        } else {
-                            objItemClickListener.CardViewOnClick(alItemMaster.get(getAdapterPosition()));
-                        }
-                    }
 
+                    Globals.HideKeyBoard(context, v);
+                    if (isWaiterGrid) {
+                        if (!GuestHomeActivity.isMenuMode) {
+                            objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()));
+                        }
+                    } else {
+                        objItemClickListener.CardViewOnClick(alItemMaster.get(getAdapterPosition()));
+                    }
                 }
 
             });

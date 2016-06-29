@@ -49,13 +49,35 @@
                 android:textSize="@dimen/control_TextLarge"
                 tools:ignore="HardcodedText" />
         </RelativeLayout>
-        <com.rey.material.widget.TextView
-            android:id="@+id/txtName"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/control_SpecingTiny"
+            android:paddingEnd="@dimen/control_SpecingSmall"
+            android:paddingStart="@dimen/control_SpecingSmall"
+            android:paddingTop="@dimen/control_SpecingTiny">
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLength="28"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/control_TextNormal" />
+        <com.rey.material.widget.CompoundButton
+            android:id="@+id/cbLogout"
+            style="@style/CompoundButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/txtName"
             android:gravity="start"
             android:paddingEnd="@dimen/control_SpecingSmall"
             android:paddingStart="@dimen/control_SpecingSmall"
-            android:textColor="@android:color/white" />
+            android:text="@string/wmLogout"
+            android:textSize="@dimen/control_TextNormal"
+            android:visibility="gone"/>
+        </RelativeLayout>
         </LinearLayout>
 </LinearLayout>

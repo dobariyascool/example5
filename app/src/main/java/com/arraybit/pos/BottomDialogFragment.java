@@ -32,16 +32,28 @@ public class BottomDialogFragment extends DialogFragment {
         final Dialog mBottomSheetDialog = new Dialog(getActivity(),
                 R.style.MaterialDialogSheet);
 
-        CardView cvDineIn = (CardView)view.findViewById(R.id.cvDineIn);
-        CardView cvTakeAway = (CardView)view.findViewById(R.id.cvTakeAway);
+        CardView cvDineIn = (CardView) view.findViewById(R.id.cvDineIn);
+        CardView cvTakeAway = (CardView) view.findViewById(R.id.cvTakeAway);
 
         cvDineIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
-                intent.putExtra("linktoOrderTypeMasterId",Globals.OrderType.DineIn.getValue());
-                intent.putExtra("IsMenuMode", true);
-                startActivity(intent);
+                if (getArguments() != null && getArguments().getBoolean("IsMenuMode")) {
+                    Globals.isWishListShow = 1;
+                    Globals.DisableBroadCastReceiver(getActivity());
+                    Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+                    intent.putExtra("linktoOrderTypeMasterId", Globals.OrderType.DineIn.getValue());
+                    intent.putExtra("IsMenuMode", true);
+                    startActivity(intent);
+                } else {
+                    AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(), true, null);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("IsVacant", true);
+                    bundle.putInt("linktoOrderTypeMasterId", Globals.OrderType.DineIn.getValue());
+                    allTablesFragment.setArguments(bundle);
+                    Globals.ReplaceFragment(allTablesFragment, getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_all_tables));
+                }
+
                 mBottomSheetDialog.dismiss();
             }
         });
@@ -49,10 +61,21 @@ public class BottomDialogFragment extends DialogFragment {
         cvTakeAway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
-                intent.putExtra("linktoOrderTypeMasterId",Globals.OrderType.TakeAway.getValue());
-                intent.putExtra("IsMenuMode", true);
-                startActivity(intent);
+                if(getArguments()!=null && getArguments().getBoolean("IsMenuMode")){
+                    Globals.isWishListShow = 1;
+                    Globals.DisableBroadCastReceiver(getActivity());
+                    Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+                    intent.putExtra("linktoOrderTypeMasterId", Globals.OrderType.TakeAway.getValue());
+                    intent.putExtra("IsMenuMode", true);
+                    startActivity(intent);
+                }else{
+                    AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(), true, null);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("IsVacant", true);
+                    bundle.putInt("linktoOrderTypeMasterId", Globals.OrderType.TakeAway.getValue());
+                    allTablesFragment.setArguments(bundle);
+                    Globals.ReplaceFragment(allTablesFragment, getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_all_tables));
+                }
                 mBottomSheetDialog.dismiss();
             }
         });

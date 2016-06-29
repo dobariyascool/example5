@@ -117,6 +117,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         bundle = getArguments();
         if (bundle != null) {
             isVacant = bundle.getBoolean("IsVacant");
+            this.linktoOrderTypeMasterId = String.valueOf(bundle.getInt("linktoOrderTypeMasterId"));
         }
 
 
@@ -265,6 +266,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Vacant.toString())) {
             if (isChangeMode) {
                 Globals.isWishListShow = 1;
+                Globals.DisableBroadCastReceiver(getActivity());
                 Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                 intent.putExtra("TableMaster", objTableMaster);
                 startActivity(intent);

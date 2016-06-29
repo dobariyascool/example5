@@ -19,10 +19,10 @@
             layout="@layout/app_bar" />
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            android:background="@drawable/separator"
             android:paddingBottom="@dimen/control_SpecingSmall"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -233,66 +233,15 @@
                             android:imeOptions="actionDone"
                             android:singleLine="true"
                             android:textSize="@dimen/control_TextNormal" />
-                        <!--android:drawableEnd="@drawable/arrow_drop_down_vector_drawable"-->
-                        <!--android:lineSpacingMultiplier="1" android:imeOptions="actionDone"-->
+
                     </android.support.design.widget.TextInputLayout>
 
-                    <!--<LinearLayout-->
-                    <!--android:id="@+id/qtyLayout"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="45dp"-->
-                    <!--android:layout_marginTop="@dimen/control_SpecingTiny"-->
-                    <!--android:gravity="center"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:paddingEnd="@dimen/control_SpecingSmall"-->
-                    <!--android:paddingStart="@dimen/control_SpecingSmall">-->
-
-                    <!--<com.rey.material.widget.ImageButton-->
-                    <!--android:id="@+id/ibMinus"-->
-                    <!--style="@style/NumberButton"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:background="@drawable/btn_selector"-->
-                    <!--android:src="@mipmap/minus" />-->
-
-                    <!--<com.rey.material.widget.EditText-->
-                    <!--android:id="@+id/etQuantity"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center_vertical"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:focusableInTouchMode="true"-->
-                    <!--android:gravity="center"-->
-                    <!--android:inputType="number"-->
-                    <!--android:maxLength="2"-->
-                    <!--android:onClick="EditTextOnClick"-->
-                    <!--android:text="1"-->
-                    <!--app:et_inputId="@+id/Quantity_input"-->
-                    <!--tools:ignore="HardcodedText" />-->
-
-                    <!--<com.rey.material.widget.ImageButton-->
-                    <!--android:id="@+id/ibPlus"-->
-                    <!--style="@style/NumberButton"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:background="@drawable/btn_selector"-->
-                    <!--android:src="@mipmap/plus_small" />-->
-
-                    <!--</LinearLayout>-->
                 </LinearLayout>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 
-        <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!-- -->
-        <!--android:layout_weight="1"-->
-        <!--android:orientation="horizontal">-->
-
         <LinearLayout
+            android:id="@+id/btnLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/control_SpecingTiny"
@@ -375,81 +324,5 @@
                 android:visibility="gone" />
 
         </LinearLayout>
-        <!--<com.rey.material.widget.ImageButton-->
-        <!--android:id="@+id/ibMinus"-->
-        <!--style="@style/QtyPicker"-->
-        <!--android:layout_width="@dimen/qty_image_width"-->
-        <!--android:layout_height="@dimen/qty_image_height"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:background="@drawable/rounded_layout"-->
-        <!--android:src="@drawable/minus_drawable"-->
-        <!--android:tint="@color/colorPrimary" />-->
-
-        <!--<com.rey.material.widget.EditText-->
-        <!--android:id="@+id/etQuantity"-->
-        <!--android:layout_width="@dimen/qty_image_width"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_toEndOf="@+id/ibMinus"-->
-        <!--android:focusableInTouchMode="true"-->
-        <!--android:gravity="center"-->
-        <!--android:inputType="number"-->
-        <!--android:maxLength="2"-->
-        <!--android:onClick="EditTextOnClick"-->
-        <!--android:singleLine="true"-->
-        <!--android:text="1"-->
-        <!--tools:ignore="HardcodedText" />-->
-
-        <!--<com.rey.material.widget.ImageButton-->
-        <!--android:id="@+id/ibPlus"-->
-        <!--style="@style/QtyPicker"-->
-        <!--android:layout_width="@dimen/qty_image_width"-->
-        <!--android:layout_height="@dimen/qty_image_height"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_toEndOf="@+id/etQuantity"-->
-        <!--android:background="@drawable/rounded_layout"-->
-        <!--android:src="@drawable/plus_drawable"-->
-        <!--android:tint="@color/colorPrimary" />-->
-
-
-        <!--</RelativeLayout>-->
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_marginBottom="@dimen/control_SpecingTiny"-->
-        <!--android:layout_marginEnd="@dimen/control_SpecingTiny"-->
-        <!--android:layout_marginStart="@dimen/control_SpecingTiny"-->
-        <!--android:layout_marginTop="@dimen/control_SpecingTiny"-->
-        <!--android:layout_weight="1"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<com.rey.material.widget.Button-->
-        <!--android:id="@+id/btnCancel"-->
-        <!--style="@style/BorderButton"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:text="@string/dfCancel"-->
-        <!--tools:ignore="NestedWeights" />-->
-
-        <!--<com.rey.material.widget.Button-->
-        <!--android:id="@+id/btnOrder"-->
-        <!--style="@style/Button"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:text="@string/dfAdd" />-->
-
-        <!--<com.rey.material.widget.Button-->
-        <!--android:id="@+id/btnOrderDisable"-->
-        <!--style="@style/DisableButton"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:enabled="false"-->
-        <!--android:text="@string/dfAdd"-->
-        <!--android:visibility="gone" />-->
-        <!--</LinearLayout>-->
     </LinearLayout>
 </FrameLayout>

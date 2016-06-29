@@ -69,19 +69,17 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
             getActivity().finish();
         } else if (v.getId() == R.id.btnGuestMode) {
             getDialog().dismiss();
-            Globals.isWishListShow = 1;
-            Globals.DisableBroadCastReceiver(getActivity());
-            AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(), true, null);
             Bundle bundle = new Bundle();
-            bundle.putBoolean("IsVacant", true);
-            allTablesFragment.setArguments(bundle);
-
-            Globals.ReplaceFragment(allTablesFragment, getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_all_tables));
+            bundle.putBoolean("IsMenuMode",false);
+            BottomDialogFragment bottomDialogFragment = new BottomDialogFragment();
+            bottomDialogFragment.setArguments(bundle);
+            bottomDialogFragment.show(getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_bottom_dialog));
         }else if (v.getId() == R.id.btnMenuMode) {
             getDialog().dismiss();
-            Globals.isWishListShow = 1;
-            Globals.DisableBroadCastReceiver(getActivity());
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("IsMenuMode",true);
             BottomDialogFragment bottomDialogFragment = new BottomDialogFragment();
+            bottomDialogFragment.setArguments(bundle);
             bottomDialogFragment.show(getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_bottom_dialog));
         }
     }
