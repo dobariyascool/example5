@@ -18,8 +18,20 @@
         android:id="@+id/txtMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/control_SpecingSmall"
+        android:paddingBottom="@dimen/control_SpecingTiny"
+        android:paddingEnd="@dimen/control_SpecingSmall"
+        android:paddingStart="@dimen/control_SpecingSmall"
+        android:paddingTop="@dimen/control_SpecingTiny"
         android:text="@string/MsgNoRecord"
         android:textColor="@color/grey" />
+
+    <com.rey.material.widget.CompoundButton
+        android:id="@+id/cbOrderPlace"
+        style="@style/CompoundButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cifPlaceOrder"
+        android:textSize="@dimen/control_TextNormal"
+        android:visibility="gone"/>
 
 </LinearLayout>

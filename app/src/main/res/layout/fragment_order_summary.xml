@@ -18,336 +18,275 @@
         <include
             android:id="@+id/errorLayout"
             layout="@layout/error_layout"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/headerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="@dimen/control_SpecingTiny"
-            android:background="@color/accent_secondary"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="@dimen/control_SpecingTiny">
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtHeaderItem"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:gravity="start|center"
-                android:paddingEnd="0dp"
-                android:paddingStart="@dimen/control_SpecingTiny"
-                android:text="@string/cifItem"
-                android:textAllCaps="false"
-                android:textColor="@color/primary" />
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtHeaderNo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.15"
-                android:gravity="center"
-                android:text="@string/cifQty"
-                android:textAllCaps="false"
-                android:textColor="@color/primary" />
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtHeaderRate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.22"
-                android:gravity="center|end"
-                android:text="@string/cifRate"
-                android:textAllCaps="false"
-                android:textColor="@color/primary" />
-
-            <com.rey.material.widget.TextView
-                android:id="@+id/txtHeaderAmount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="center|end"
-                android:paddingEnd="@dimen/control_SpecingTiny"
-                android:paddingStart="0dp"
-                android:text="@string/cifAmount"
-                android:textAllCaps="false"
-                android:textColor="@color/primary" />
-
-        </LinearLayout>
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvOrderItemSummery"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/control_SpecingSmall"
-            android:layout_marginEnd="@dimen/control_SpecingTiny"
-            android:layout_marginStart="@dimen/control_SpecingTiny"
-            android:layout_marginTop="@dimen/control_SpecingSmall"
-            android:layout_weight="0.8" />
-
-        <LinearLayout
-            android:id="@+id/amountLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/control_SpecingTiny"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
-            android:layout_marginStart="@dimen/control_SpecingSmall"
-            android:layout_marginTop="@dimen/control_SpecingTiny"
-            android:layout_weight="0.55"
+            android:layout_weight="10"
             android:orientation="vertical">
 
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:baselineAligned="false"-->
-            <!--android:layout_marginBottom="@dimen/control_SpecingTiny"-->
-            <!--android:orientation="horizontal">-->
+            <LinearLayout
+                android:id="@+id/headerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="@dimen/control_SpecingTiny"
+                android:background="@color/accent_secondary"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/control_SpecingTiny">
 
-            <!--<LinearLayout-->
-            <!--android:id="@+id/taxLayout"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:orientation="vertical" />-->
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtHeaderItem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="start|center"
+                    android:paddingEnd="0dp"
+                    android:paddingStart="@dimen/control_SpecingTiny"
+                    android:text="@string/cifItem"
+                    android:textAllCaps="false"
+                    android:textColor="@color/primary" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtHeaderNo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:text="@string/cifQty"
+                    android:textAllCaps="false"
+                    android:textColor="@color/primary" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtHeaderRate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.22"
+                    android:gravity="center|end"
+                    android:text="@string/cifRate"
+                    android:textAllCaps="false"
+                    android:textColor="@color/primary" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtHeaderAmount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:gravity="center|end"
+                    android:paddingEnd="@dimen/control_SpecingTiny"
+                    android:paddingStart="0dp"
+                    android:text="@string/cifAmount"
+                    android:textAllCaps="false"
+                    android:textColor="@color/primary" />
+
+            </LinearLayout>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvOrderItemSummery"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/control_SpecingSmall"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
+                android:layout_marginStart="@dimen/control_SpecingTiny"
+                android:layout_marginTop="@dimen/control_SpecingSmall"
+                android:layout_weight="7"
+                tools:ignore="NestedWeights" />
 
             <LinearLayout
+                android:id="@+id/amountLayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginBottom="@dimen/control_SpecingTiny"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                tools:ignore="NestedWeights">
+                android:layout_marginEnd="@dimen/control_SpecingSmall"
+                android:layout_marginStart="@dimen/control_SpecingSmall"
+                android:layout_marginTop="@dimen/control_SpecingTiny"
+                android:layout_weight="3"
+                android:orientation="vertical">
 
-                <ScrollView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="@dimen/control_SpecingTiny"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    tools:ignore="NestedWeights">
 
-                    <LinearLayout
+                    <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingEnd="@dimen/control_SpecingTiny"
-                            android:paddingStart="@dimen/control_SpecingTiny">
+                            android:orientation="vertical">
 
-                            <com.rey.material.widget.TextView
-                                android:id="@+id/txtHeaderTotalAmount"
-                                android:layout_width="0dp"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:gravity="start"
-                                android:maxLines="1"
-                                android:text="@string/osfTotalAmount"
-                                android:textAllCaps="false"
-                                android:textColor="@color/grey" />
+                                android:orientation="horizontal"
+                                android:paddingEnd="@dimen/control_SpecingTiny"
+                                android:paddingStart="@dimen/control_SpecingTiny">
 
-                            <com.rey.material.widget.TextView
-                                android:id="@+id/txtTotalAmount"
-                                android:layout_width="0dp"
+                                <com.rey.material.widget.TextView
+                                    android:id="@+id/txtHeaderTotalAmount"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:gravity="start"
+                                    android:maxLines="1"
+                                    android:text="@string/osfTotalAmount"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/grey" />
+
+                                <com.rey.material.widget.TextView
+                                    android:id="@+id/txtTotalAmount"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:gravity="end"
+                                    android:maxLines="1"
+                                    android:text="@string/osfNumber"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/grey" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/taxLayout"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:gravity="end"
-                                android:maxLines="1"
-                                android:text="@string/osfNumber"
-                                android:textAllCaps="false"
-                                android:textColor="@color/grey" />
+                                android:orientation="vertical" />
 
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingEnd="@dimen/control_SpecingTiny"
+                                android:paddingStart="@dimen/control_SpecingTiny">
+
+                                <com.rey.material.widget.TextView
+                                    android:id="@+id/txtHeaderDiscount"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:gravity="start"
+                                    android:maxLines="1"
+                                    android:text="@string/osfDiscount"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/grey" />
+
+                                <com.rey.material.widget.TextView
+                                    android:id="@+id/txtTotalDiscount"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:gravity="end"
+                                    android:maxLines="1"
+                                    android:text="@string/osfNumber"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/grey" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingEnd="@dimen/control_SpecingTiny"
+                                android:paddingStart="@dimen/control_SpecingTiny">
+
+                                <com.rey.material.widget.TextView
+                                    android:id="@+id/txtHeaderRounding"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:gravity="start"
+                                    android:maxLines="1"
+                                    android:text="@string/osfRounding"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/grey"
+                                    android:textSize="@dimen/control_TextTiny" />
+
+                                <com.rey.material.widget.TextView
+                                    android:id="@+id/txtRoundingOff"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:gravity="end"
+                                    android:maxLines="1"
+                                    android:text="@string/osfNumber"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/grey"
+                                    android:textSize="@dimen/control_TextTiny" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingEnd="@dimen/control_SpecingTiny"
+                                android:paddingStart="@dimen/control_SpecingTiny">
+
+                                <com.rey.material.widget.TextView
+                                    android:id="@+id/txtHeaderNetAmount"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:gravity="start"
+                                    android:maxLines="1"
+                                    android:text="@string/osfNetAmount"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/white_blur"
+                                    android:textStyle="bold" />
+
+                                <com.rey.material.widget.TextView
+                                    android:id="@+id/txtNetAmount"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:gravity="end"
+                                    android:maxLines="1"
+                                    android:text="@string/osfNumber"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/white_blur"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
                         </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/taxLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingEnd="@dimen/control_SpecingTiny"
-                            android:paddingStart="@dimen/control_SpecingTiny">
-
-                            <com.rey.material.widget.TextView
-                                android:id="@+id/txtHeaderDiscount"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:gravity="start"
-                                android:maxLines="1"
-                                android:text="@string/osfDiscount"
-                                android:textAllCaps="false"
-                                android:textColor="@color/grey" />
-
-                            <com.rey.material.widget.TextView
-                                android:id="@+id/txtTotalDiscount"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:gravity="end"
-                                android:maxLines="1"
-                                android:text="@string/osfNumber"
-                                android:textAllCaps="false"
-                                android:textColor="@color/grey" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingEnd="@dimen/control_SpecingTiny"
-                            android:paddingStart="@dimen/control_SpecingTiny">
-
-                            <com.rey.material.widget.TextView
-                                android:id="@+id/txtHeaderRounding"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:gravity="start"
-                                android:maxLines="1"
-                                android:text="@string/osfRounding"
-                                android:textAllCaps="false"
-                                android:textColor="@color/grey"
-                                android:textSize="@dimen/control_TextTiny" />
-
-                            <com.rey.material.widget.TextView
-                                android:id="@+id/txtRoundingOff"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:gravity="end"
-                                android:maxLines="1"
-                                android:text="@string/osfNumber"
-                                android:textAllCaps="false"
-                                android:textColor="@color/grey"
-                                android:textSize="@dimen/control_TextTiny" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingEnd="@dimen/control_SpecingTiny"
-                            android:paddingStart="@dimen/control_SpecingTiny">
-
-                            <com.rey.material.widget.TextView
-                                android:id="@+id/txtHeaderNetAmount"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:gravity="start"
-                                android:maxLines="1"
-                                android:text="@string/osfNetAmount"
-                                android:textAllCaps="false"
-                                android:textColor="@color/white_blur"
-                                android:textStyle="bold" />
-
-                            <com.rey.material.widget.TextView
-                                android:id="@+id/txtNetAmount"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.5"
-                                android:gravity="end"
-                                android:maxLines="1"
-                                android:text="@string/osfNumber"
-                                android:textAllCaps="false"
-                                android:textColor="@color/white_blur"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </ScrollView>
-
-                <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:padding="@dimen/control_SpecingTiny">-->
-
-                <!--<com.rey.material.widget.TextView-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="0.5"-->
-                <!--android:gravity="start"-->
-                <!--android:text="@string/osfAmountPaid"-->
-                <!--android:textAllCaps="false"-->
-                <!--android:maxLines="1"-->
-                <!--android:textColor="@color/white_blur" />-->
-
-                <!--<com.rey.material.widget.TextView-->
-                <!--android:id="@+id/txtAmountPaid"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="0.5"-->
-                <!--android:gravity="end"-->
-                <!--android:text="@string/osfNumber"-->
-                <!--android:textAllCaps="false"-->
-                <!--android:maxLines="1"-->
-                <!--android:textColor="@color/white_blur" />-->
-
-                <!--</LinearLayout>-->
-
-                <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:padding="@dimen/control_SpecingTiny">-->
-
-                <!--<com.rey.material.widget.TextView-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="0.5"-->
-                <!--android:gravity="start"-->
-                <!--android:text="@string/osfBalance"-->
-                <!--android:textAllCaps="false"-->
-                <!--android:maxLines="1"-->
-                <!--android:textColor="@color/white_blur" />-->
-
-                <!--<com.rey.material.widget.TextView-->
-                <!--android:id="@+id/txtBalanceAmount"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="0.5"-->
-                <!--android:gravity="end"-->
-                <!--android:text="@string/osfNumber"-->
-                <!--android:textAllCaps="false"-->
-                <!--android:maxLines="1"-->
-                <!--android:textColor="@color/white_blur" />-->
-                <!--</LinearLayout>-->
-                <!--</LinearLayout>-->
+                    </ScrollView>
+                </LinearLayout>
             </LinearLayout>
+        </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/control_SpecingTiny"
+            android:layout_marginEnd="@dimen/control_SpecingTiny"
+            android:layout_marginStart="@dimen/control_SpecingTiny"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-                <com.rey.material.widget.Button
-                    android:id="@+id/btnAddMore"
-                    style="@style/BorderButton"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/odfAddMore" />
+            <com.rey.material.widget.Button
+                android:id="@+id/btnAddMore"
+                style="@style/BorderButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/odfAddMore"
+                tools:ignore="NestedWeights" />
 
-                <com.rey.material.widget.Button
-                    android:id="@+id/btnCheckOut"
-                    style="@style/Button"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/odfCheckOut" />
-            </LinearLayout>
+            <com.rey.material.widget.Button
+                android:id="@+id/btnCheckOut"
+                style="@style/Button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/odfCheckOut" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

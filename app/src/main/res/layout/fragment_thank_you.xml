@@ -35,7 +35,7 @@
             android:id="@+id/btnFeedback"
             style="@style/BorderButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_Height"
             android:gravity="center"
             android:text="Feedback" />
 
@@ -43,7 +43,7 @@
             android:id="@+id/btnSkip"
             style="@style/Button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_Height"
             android:layout_marginStart="@dimen/control_SpecingTiny"
             android:gravity="center"
             android:text="Skip" />

@@ -22,4 +22,6 @@
     <dimen name="button_marginEnd">@dimen/control_SpecingSmall</dimen>
     <dimen name="qty_image_height">50dp</dimen>
     <dimen name="qty_image_width">55dp</dimen>
+    <dimen name="button_TouchableHeight">60dp</dimen>
+    <dimen name="button_Height">55dp</dimen>
 </resources>

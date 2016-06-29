@@ -322,6 +322,7 @@
     <string name="cifConfirmClear">Are you sure to clear Order?</string>
     <string name="cifMsg">Go to Menu</string>
     <string name="cifEditMessage">Tap item to edit quantity</string>
+    <string name="cifPlaceOrder">Place Order</string>
     <!-- end -->
 
     <!-- fragment all orders -->

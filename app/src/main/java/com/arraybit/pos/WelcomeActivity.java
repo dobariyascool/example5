@@ -95,14 +95,17 @@ public class WelcomeActivity extends Activity {
                                                           (userTypeMasterId.equals(String.valueOf(Globals.UserType.valueOf("Captain").getValue()))))) {
                                                       Intent intent = getIntent();
                                                       isGuestScreen = intent.getBooleanExtra("GuestScreen", false);
+                                                      objTableMaster = intent.getParcelableExtra("TableMaster");
                                                       if (isGuestScreen) {
-                                                          Globals.isWishListShow = 1;
-                                                          Globals.selectTableMasterId = objTableMaster.getTableMasterId();
-                                                          Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
-                                                          i.putExtra("TableMaster", intent.getParcelableExtra("TableMaster"));
-                                                          startActivity(i);
-                                                          overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                                                          finish();
+                                                          if(objTableMaster!=null) {
+                                                              Globals.isWishListShow = 1;
+                                                              Globals.selectTableMasterId = objTableMaster.getTableMasterId();
+                                                              Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
+                                                              i.putExtra("TableMaster", intent.getParcelableExtra("TableMaster"));
+                                                              startActivity(i);
+                                                              overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                                                              finish();
+                                                          }
                                                       } else {
                                                           String obj = objSharePreferenceManage.GetPreference("GuestModePreference", "GuestMode", WelcomeActivity.this);
                                                           if (obj != null && GetObjectFromPreference() != null) {

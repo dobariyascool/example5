@@ -150,7 +150,7 @@
                     android:id="@+id/btnUpdateProfile"
                     style="@style/Button"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/button_Height"
                     android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:text="@string/suUpdate" />
 

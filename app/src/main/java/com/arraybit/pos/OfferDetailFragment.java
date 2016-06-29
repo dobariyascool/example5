@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -41,7 +42,7 @@ import java.util.Locale;
 
 @SuppressLint("ValidFragment")
 @SuppressWarnings({"ConstantConditions", "unchecked"})
-public class OfferDetailFragment extends Fragment {
+public class OfferDetailFragment extends Fragment implements View.OnClickListener{
 
 
     ProgressDialog progressDialog = new ProgressDialog();
@@ -163,6 +164,19 @@ public class OfferDetailFragment extends Fragment {
         }
 
 
+        termsConditionLayout.setOnClickListener(this);
+        ibVisible.setOnClickListener(this);
+
+        //terms and condition shows that time scroll
+        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (isShow == 1) {
+                    scrollView.scrollBy(0, cvCondition.getHeight());
+                }
+            }
+        });
+
         return view;
     }
 
@@ -186,6 +200,23 @@ public class OfferDetailFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.termsConditionLayout || v.getId()==R.id.ibVisible){
+            if (isShow == 0) {
+                ibVisible.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.collapse_drawable));
+                cvCondition.setVisibility(View.VISIBLE);
+                wvCondition.loadData(objOfferMaster.getTermsAndConditions(), "text/html", "UTF-8");
+                isShow = 1;
+            } else {
+                ibVisible.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.expand_drawable));
+                cvCondition.setVisibility(View.GONE);
+                isShow = 0;
+            }
+        }
+    }
+
 
     //region Private Methods
     @SuppressLint("RtlHardcoded")
@@ -366,6 +397,7 @@ public class OfferDetailFragment extends Fragment {
             }
         }
     }
+
     //endregion
 
     //region LoadingTask

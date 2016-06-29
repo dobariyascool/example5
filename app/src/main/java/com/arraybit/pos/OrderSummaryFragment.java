@@ -36,6 +36,7 @@ import com.arraybit.parser.SalesJSONParser;
 import com.arraybit.parser.TableJSONParser;
 import com.arraybit.parser.TaxJSONParser;
 import com.rey.material.widget.Button;
+import com.rey.material.widget.CompoundButton;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     boolean isHomeShow = false;
     com.arraybit.pos.ProgressDialog progressDialog;
     View focusView;
+    CompoundButton cbOrderPlace;
 
     public OrderSummaryFragment() {
     }
@@ -116,6 +118,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         amountLayout = (LinearLayout) view.findViewById(R.id.amountLayout);
         taxLayout = (LinearLayout) view.findViewById(R.id.taxLayout);
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
+        cbOrderPlace = (CompoundButton) errorLayout.findViewById(R.id.cbOrderPlace);
 
         txtTotalAmount = (TextView) view.findViewById(R.id.txtTotalAmount);
         txtTotalDiscount = (TextView) view.findViewById(R.id.txtTotalDiscount);
@@ -131,6 +134,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
         btnAddMore.setOnClickListener(this);
         btnCheckOut.setOnClickListener(this);
+        cbOrderPlace.setOnClickListener(this);
 
         if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount() - 1).getName() != null
                 && getActivity().getSupportFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getString(R.string.title_fragment_guest_options))) {
@@ -244,13 +248,40 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         } else if (v.getId() == R.id.btnCheckOut) {
             focusView = v;
             ConfirmDialog confirmDialog = new ConfirmDialog(getActivity().getResources().getString(R.string.cdfCheckOutMsg));
-            confirmDialog.setTargetFragment(this,0);
-            confirmDialog.show(getActivity().getSupportFragmentManager(),"");
+            confirmDialog.setTargetFragment(this, 0);
+            confirmDialog.show(getActivity().getSupportFragmentManager(), "");
         } else if (v.getId() == R.id.txtHeaderDiscount) {
             AddDiscountDialogFragment addDiscountDialogFragment = new AddDiscountDialogFragment();
             addDiscountDialogFragment.setTargetFragment(this, 0);
             addDiscountDialogFragment.show(getFragmentManager(), "");
+        } else if(v.getId() == R.id.cbOrderPlace){
+            if (MenuActivity.parentActivity) {
+                Globals.isWishListShow = 1;
+                Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
+                Intent intent = new Intent(getActivity(), MenuActivity.class);
+                intent.putExtra("ParentActivity", true);
+                intent.putExtra("TableMaster", objTableMaster);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            } else {
+                Globals.isWishListShow = 0;
+                Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
+                if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
+                    if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_order_summary))) {
+                        getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    }
+                } else {
+                    Intent intent = new Intent(getActivity(), MenuActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("TableMaster", objTableMaster);
+                    intent.putExtra("IsFavoriteShow",true);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                }
+            }
         }
+
     }
 
 
@@ -494,10 +525,13 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             lstOrderMaster = (ArrayList<OrderMaster>) result;
 
             if (lstOrderMaster == null) {
+                cbOrderPlace.setVisibility(View.GONE);
                 SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail));
             } else if (lstOrderMaster.size() == 0) {
+                cbOrderPlace.setVisibility(View.VISIBLE);
                 SetErrorLayout(true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgOrderSummary)));
             } else {
+                cbOrderPlace.setVisibility(View.GONE);
                 new TaxLoadingTask().execute();
                 new OrderSummeryLoadingTask().execute();
             }
@@ -529,10 +563,13 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             ArrayList<ItemMaster> lstOrderItemTran = (ArrayList<ItemMaster>) result;
 
             if (lstOrderItemTran == null) {
+                cbOrderPlace.setVisibility(View.GONE);
                 SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail));
             } else if (lstOrderItemTran.size() == 0) {
-                SetErrorLayout(true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound),getActivity().getResources().getString(R.string.MsgOrderSummary)));
+                cbOrderPlace.setVisibility(View.VISIBLE);
+                SetErrorLayout(true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgOrderSummary)));
             } else {
+                cbOrderPlace.setVisibility(View.GONE);
                 SetErrorLayout(false, null);
                 orderSummeryAdapter = new OrderSummaryAdapter(getActivity(), lstOrderItemTran, lstOrderMaster, false);
                 rvOrderItemSummery.setAdapter(orderSummeryAdapter);

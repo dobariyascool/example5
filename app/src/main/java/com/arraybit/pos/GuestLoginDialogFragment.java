@@ -60,9 +60,9 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
                 if (getTargetFragment() != null) {
                     Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
-                    if (getTargetFragment() == currentFragment) {
+                    if (getTargetFragment() == currentFragment || getTargetFragment().getTag().equals(getActivity().getResources().getString(R.string.title_fragment_order_summary))) {
                         cbSkip.setVisibility(View.VISIBLE);
-                    } else {
+                    } else{
                         cbSkip.setVisibility(View.GONE);
                     }
                 }
@@ -95,7 +95,8 @@ public class GuestLoginDialogFragment extends DialogFragment {
                             Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
                             if (getTargetFragment() == currentFragment) {
                                 dismiss();
-                            } else if (getTargetFragment().getTag().equals(getResources().getString(R.string.title_fragment_offer_detail))) {
+                            } else if (getTargetFragment().getTag().equals(getResources().getString(R.string.title_fragment_offer_detail))
+                                    || getTargetFragment().getTag().equals(getResources().getString(R.string.title_fragment_order_summary))) {
                                 dismiss();
                             } else {
                                 dismiss();
@@ -141,9 +142,15 @@ public class GuestLoginDialogFragment extends DialogFragment {
                 cbSkip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        Globals.HideKeyBoard(getActivity(),buttonView);
-                        dismiss();
-                        Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
+                        Globals.HideKeyBoard(getActivity(), buttonView);
+                        if(getTargetFragment() == getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_order_summary))){
+                            objLoginResponseListener = (LoginResponseListener) getTargetFragment();
+                            objLoginResponseListener.LoginResponse();
+                            dismiss();
+                        }else{
+                            dismiss();
+                            Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
+                        }
                     }
                 });
             }

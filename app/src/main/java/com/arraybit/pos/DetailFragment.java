@@ -452,7 +452,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     private void SetLoadingTask(ViewGroup container) {
         if(GuestHomeActivity.isMenuMode){
             btnLayout.setVisibility(View.GONE);
-            txtDineIn.setVisibility(View.GONE);
             textInputLayout.setVisibility(View.GONE);
             rvModifier.setVisibility(View.GONE);
             itemSuggestionLayout.setVisibility(View.GONE);
@@ -465,6 +464,11 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             ibMinus.setVisibility(View.GONE);
             ibPlus.setVisibility(View.GONE);
             etQuantity.setEnabled(false);
+            if (objItemMaster.getIsDineInOnly() && Globals.orderTypeMasterId == Globals.OrderType.TakeAway.getValue()) {
+                txtDineIn.setVisibility(View.VISIBLE);
+            }else{
+                txtDineIn.setVisibility(View.GONE);
+            }
         }else {
             scrollView.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.separator));
             btnLayout.setVisibility(View.VISIBLE);

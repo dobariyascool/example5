@@ -82,31 +82,5 @@
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
-
-        <!--<com.rey.material.widget.Button-->
-        <!--android:id="@+id/btnDineIn"-->
-        <!--style="@style/StatusButton"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginEnd="@dimen/control_SpecingSmall"-->
-        <!--android:layout_weight="1"-->
-        <!--android:drawableTop="@mipmap/dine_in"-->
-        <!--android:text="@string/wolfTable"-->
-        <!--android:tint="@color/secondary_text"-->
-        <!--android:textColor="@color/secondary_text"-->
-        <!--android:visibility="visible"/>-->
-
-        <!--<com.rey.material.widget.Button-->
-        <!--android:id="@+id/btnTakeAway"-->
-        <!--style="@style/StatusButton"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:drawableTop="@mipmap/take_away"-->
-        <!--android:text="@string/wolfMenu"-->
-        <!--android:textColor="@color/secondary_text"-->
-        <!--android:visibility="visible"/>-->
-
     </LinearLayout>
-
 </FrameLayout>

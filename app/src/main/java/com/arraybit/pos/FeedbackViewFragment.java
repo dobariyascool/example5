@@ -572,7 +572,7 @@ public class FeedbackViewFragment extends Fragment {
 
         SetUser(etEmail, etUserName);
         Button btnSubmit = new Button(getActivity());
-        LinearLayout.LayoutParams btnSubmitLayoutParams = new LinearLayout.LayoutParams(600, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams btnSubmitLayoutParams = new LinearLayout.LayoutParams(600, getResources().getDimensionPixelSize(R.dimen.button_Height));
         btnSubmit.setLayoutParams(btnSubmitLayoutParams);
         btnSubmit.applyStyle(R.style.Button);
         btnSubmit.setText(getActivity().getResources().getString(R.string.fbSubmit));
