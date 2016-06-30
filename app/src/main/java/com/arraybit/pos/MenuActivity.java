@@ -68,7 +68,7 @@ public class MenuActivity extends AppCompatActivity{
             menu.findItem(R.id.shortList).setVisible(false);
             menu.findItem(R.id.callWaiter).setVisible(false);
         }else {
-            if (parentActivity) {
+            if (MenuActivity.parentActivity) {
                 //Globals.SetOptionMenu(Globals.userName, MenuActivity.this, menu);
                 menu.findItem(R.id.login).setVisible(false);
                 menu.findItem(R.id.registration).setVisible(false);
@@ -76,6 +76,8 @@ public class MenuActivity extends AppCompatActivity{
                 menu.findItem(R.id.callWaiter).setVisible(false);
             } else {
                 menu.findItem(R.id.logout).setVisible(false);
+                menu.findItem(R.id.notification_layout).setVisible(false);
+                menu.findItem(R.id.cart_layout).setVisible(true);
             }
         }
         return super.onPrepareOptionsMenu(menu);

@@ -1,8 +1,10 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.TableOrderAdapter;
@@ -24,23 +25,26 @@ import com.arraybit.modal.OrderMaster;
 import com.arraybit.modal.TaxMaster;
 import com.arraybit.parser.OrderJOSNParser;
 import com.arraybit.parser.TaxJSONParser;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
 @SuppressLint("ValidFragment")
 @SuppressWarnings({"unchecked", "ConstantConditions"})
-public class TableOrderFragment extends Fragment {
+public class TableOrderFragment extends Fragment implements View.OnClickListener{
 
 
     RecyclerView rvTableOrder;
-    FrameLayout tableOrderFragment;
+    CoordinatorLayout tableOrderFragment;
     LinearLayout errorLayout;
     TextView txtMsg;
-    ArrayList<OrderMaster> alOrderMaster;
+    ArrayList<OrderMaster> alOrderMaster,alFilterOrderMaster;
     int counterMasterId;
     ArrayList<TaxMaster> alTaxMaster;
     TableOrderAdapter orderDetailAdapter;
+    FloatingActionMenu famRoot;
 
     public TableOrderFragment() {
     }
@@ -68,10 +72,21 @@ public class TableOrderFragment extends Fragment {
         rvTableOrder = (RecyclerView) view.findViewById(R.id.rvTableOrder);
         rvTableOrder.setVisibility(View.GONE);
 
-        tableOrderFragment = (FrameLayout) view.findViewById(R.id.tableOrderFragment);
-        Globals.SetScaleImageBackground(getActivity(), null, null, tableOrderFragment);
+        tableOrderFragment = (CoordinatorLayout) view.findViewById(R.id.tableOrderFragment);
+        Globals.SetScaleImageBackground(getActivity(), tableOrderFragment);
+
+        famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
+        famRoot.setClosedOnTouchOutside(true);
+
+        FloatingActionButton fabDineIn = (FloatingActionButton) view.findViewById(R.id.fabDineIn);
+        FloatingActionButton fabTakeAway = (FloatingActionButton) view.findViewById(R.id.fabTakeAway);
+        FloatingActionButton fabAll = (FloatingActionButton) view.findViewById(R.id.fabAll);
 
         setHasOptionsMenu(true);
+
+        fabDineIn.setOnClickListener(this);
+        fabTakeAway.setOnClickListener(this);
+        fabAll.setOnClickListener(this);
 
         if (Service.CheckNet(getActivity())) {
             new OrdersLoadingTask().execute();
@@ -87,10 +102,29 @@ public class TableOrderFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
+                Globals.isWishListShow = 0;
+                Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.fabDineIn){
+            famRoot.close(true);
+            OrderMasterFilter(Globals.OrderType.DineIn.getValue());
+        }else if(v.getId()==R.id.fabTakeAway){
+            famRoot.close(true);
+            OrderMasterFilter(Globals.OrderType.TakeAway.getValue());
+        }else if(v.getId()==R.id.fabAll){
+            famRoot.close(true);
+            OrderMasterFilter(0);
+        }
     }
 
 
@@ -99,6 +133,42 @@ public class TableOrderFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_search).setVisible(false);
         menu.findItem(R.id.logout).setVisible(false);
+        menu.findItem(R.id.notification_layout).setVisible(false);
+    }
+
+    private void OrderMasterFilter(int linktoOrderTypeMasterId){
+        alFilterOrderMaster=new ArrayList<>();
+        if(linktoOrderTypeMasterId==0) {
+            alFilterOrderMaster.addAll(alOrderMaster);
+        }else{
+            for (OrderMaster objOrderMaster : alOrderMaster) {
+                if (objOrderMaster.getlinktoOrderTypeMasterId() == linktoOrderTypeMasterId) {
+                    alFilterOrderMaster.add(objOrderMaster);
+                }
+            }
+        }
+        if(alFilterOrderMaster.size()==0){
+            Globals.SetErrorLayout(errorLayout, true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound),getActivity().getResources().getString(R.string.MsgBillGenerate)), rvTableOrder,0);
+        }else {
+            Globals.SetErrorLayout(errorLayout, false, null, rvTableOrder,0);
+            if (alTaxMaster != null && alTaxMaster.size() != 0) {
+                orderDetailAdapter = new TableOrderAdapter(getActivity(), alFilterOrderMaster, alTaxMaster, getActivity().getSupportFragmentManager(), false);
+            } else {
+                orderDetailAdapter = new TableOrderAdapter(getActivity(), alFilterOrderMaster, null, getActivity().getSupportFragmentManager(), false);
+            }
+
+            rvTableOrder.setAdapter(orderDetailAdapter);
+            rvTableOrder.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            rvTableOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (!orderDetailAdapter.isItemAnimate) {
+                        orderDetailAdapter.isItemAnimate = true;
+                    }
+                }
+            });
+        }
     }
 
     //region LoadingTask
@@ -135,8 +205,10 @@ public class TableOrderFragment extends Fragment {
             alOrderMaster = (ArrayList<OrderMaster>) result;
 
             if (alOrderMaster == null) {
+                famRoot.setVisibility(View.GONE);
                 Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvTableOrder,0);
             } else if (alOrderMaster.size() == 0) {
+                famRoot.setVisibility(View.GONE);
                 Globals.SetErrorLayout(errorLayout, true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound),getActivity().getResources().getString(R.string.MsgBillGenerate)), rvTableOrder,0);
             } else {
                 if (Service.CheckNet(getActivity())) {
@@ -147,6 +219,7 @@ public class TableOrderFragment extends Fragment {
             }
         }
     }
+
 
     class TaxLoadingTask extends AsyncTask {
 
@@ -166,6 +239,7 @@ public class TableOrderFragment extends Fragment {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
 
+            famRoot.setVisibility(View.VISIBLE);
             alTaxMaster = (ArrayList<TaxMaster>) result;
             if (alTaxMaster != null && alTaxMaster.size() != 0) {
                 orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, alTaxMaster, getActivity().getSupportFragmentManager(), false);

@@ -137,6 +137,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         menu.findItem(R.id.cart_layout).setVisible(false);
         if(Globals.isWishListShow==0){
             menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         }else if(Globals.isWishListShow==1){
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.registration).setVisible(false);

@@ -38,6 +38,7 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
     ToggleButton tbPercentage, tbRupee;
     DiscountSelectionListener objDiscountSelectionListener;
     DiscountMaster objDiscountMaster;
+    double totalAmount;
 
     public AddDiscountDialogFragment() {
         // Required empty public constructor
@@ -72,6 +73,8 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
 
         tbPercentage = (ToggleButton) view.findViewById(R.id.tbPercentage);
         tbRupee = (ToggleButton) view.findViewById(R.id.tbRupee);
+
+        totalAmount = getArguments().getDouble("TotalAmount", 0);
 
         actDiscount.setOnClickListener(this);
         etDiscount.setOnClickListener(this);
@@ -276,6 +279,10 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
         } else if (tbPercentage.isChecked() &&
                 (sbDiscount.toString().length() == 3 && !sbDiscount.toString().equals("100")
                         || sbDiscount.toString().length() > 4 && !sbDiscount.toString().equals("100") && sbDiscount.toString().contains("."))) {
+            etDiscount.setError(getActivity().getResources().getString(R.string.ddfErrorDiscount));
+            return false;
+        }else if(tbRupee.isChecked() && !etDiscount.getText().toString().isEmpty()
+                 && Double.valueOf(etDiscount.getText().toString()) >= totalAmount){
             etDiscount.setError(getActivity().getResources().getString(R.string.ddfErrorDiscount));
             return false;
         }

@@ -10,16 +10,16 @@
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/registration"
-        android:icon="@mipmap/registration"
+        android:id="@+id/shortList"
         android:orderInCategory="300"
-        android:title="@string/navRegistration"
+        android:title="@string/navShortList"
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/shortList"
+        android:id="@+id/logout"
+        android:icon="@mipmap/exit"
         android:orderInCategory="400"
-        android:title="@string/navShortList"
+        android:title="@string/wmLogout"
         app:showAsAction="never"/>
 
     <item

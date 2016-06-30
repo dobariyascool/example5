@@ -7,7 +7,7 @@
         android:title="@string/navProfile" />
 
     <item
-        android:id="@+id/notification"
+        android:id="@+id/wNotification"
         android:icon="@drawable/bell_drawable"
         android:title="@string/navNotification" />
 

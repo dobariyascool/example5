@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.arraybit.adapter.CategoryItemAdapter;
 import com.arraybit.global.Globals;
@@ -280,7 +281,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 Globals.counter = Globals.counter + 1;
                 SetCartNumber(txtCartNumber);
                 Globals.alOrderItemTran.add(objOrderItemTran);
-                Globals.ShowSnackBar(rvItem,String.format(getActivity().getResources().getString(R.string.MsgCartItem),objOrderItemTran.getItemName()), getActivity(), 3000);
+                Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem),objOrderItemTran.getItemName()),Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -343,9 +344,9 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
         if (CategoryItemFragment.objCategoryMaster != null && CategoryItemFragment.objCategoryMaster.getCategoryName().equals(objCategoryMaster.getCategoryName())) {
             if(objCategoryMaster.getDescription()!=null && !objCategoryMaster.getDescription().equals("")){
-                Globals.ShowSnackBar(rvItem, String.format(getActivity().getResources().getString(R.string.MsgCartItem),objCategoryMaster.getDescription()), getActivity(), 3000);
+                Toast.makeText(getActivity(), String.format(getActivity().getResources().getString(R.string.MsgCartItem), objCategoryMaster.getDescription()),Toast.LENGTH_LONG).show();
             }else{
-                Globals.ShowSnackBar(rvItem, getActivity().getResources().getString(R.string.MsgCartWithNoName), getActivity(), 3000);
+                Toast.makeText(getActivity(),getActivity().getResources().getString(R.string.MsgCartWithNoName),Toast.LENGTH_LONG).show();
             }
             CategoryItemFragment.objCategoryMaster = null;
         }

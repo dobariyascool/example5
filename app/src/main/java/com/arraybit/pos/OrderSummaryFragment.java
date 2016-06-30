@@ -177,6 +177,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             }
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
             menu.findItem(R.id.home).setVisible(true);
             menu.findItem(R.id.action_search).setVisible(false);
@@ -192,6 +193,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         }
         if (item.getItemId() == R.id.home) {
             if (MenuActivity.parentActivity) {
+                Globals.isWishListShow = 1;
                 Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                 intent.putExtra("ParentActivity", true);
                 intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
@@ -199,6 +201,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 getActivity().startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else {
+                Globals.isWishListShow = 0;
                 Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 getActivity().startActivity(intent);
@@ -251,8 +254,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             confirmDialog.setTargetFragment(this, 0);
             confirmDialog.show(getActivity().getSupportFragmentManager(), "");
         } else if (v.getId() == R.id.txtHeaderDiscount) {
+            Bundle bundle = new Bundle();
+            bundle.putDouble("TotalAmount",totalAmount);
             AddDiscountDialogFragment addDiscountDialogFragment = new AddDiscountDialogFragment();
             addDiscountDialogFragment.setTargetFragment(this, 0);
+            addDiscountDialogFragment.setArguments(bundle);
             addDiscountDialogFragment.show(getFragmentManager(), "");
         } else if(v.getId() == R.id.cbOrderPlace){
             if (MenuActivity.parentActivity) {
@@ -281,10 +287,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 }
             }
         }
-
     }
-
-
 
     @Override
     public void DiscountCount(DiscountMaster objDiscountMaster) {
@@ -528,7 +531,9 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 cbOrderPlace.setVisibility(View.GONE);
                 SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail));
             } else if (lstOrderMaster.size() == 0) {
-                cbOrderPlace.setVisibility(View.VISIBLE);
+                if(Globals.isWishListShow==0){
+                    cbOrderPlace.setVisibility(View.VISIBLE);
+                }
                 SetErrorLayout(true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgOrderSummary)));
             } else {
                 cbOrderPlace.setVisibility(View.GONE);
@@ -566,7 +571,9 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 cbOrderPlace.setVisibility(View.GONE);
                 SetErrorLayout(true, getActivity().getResources().getString(R.string.MsgSelectFail));
             } else if (lstOrderItemTran.size() == 0) {
-                cbOrderPlace.setVisibility(View.VISIBLE);
+                if(Globals.isWishListShow==0){
+                    cbOrderPlace.setVisibility(View.VISIBLE);
+                }
                 SetErrorLayout(true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgOrderSummary)));
             } else {
                 cbOrderPlace.setVisibility(View.GONE);

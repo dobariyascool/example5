@@ -94,6 +94,7 @@ public class NotificationDetailActivity extends AppCompatActivity implements Not
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.logout).setVisible(false);
+        menu.findItem(R.id.notification_layout).setVisible(false);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -123,7 +124,9 @@ public class NotificationDetailActivity extends AppCompatActivity implements Not
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 finish();
             } else {
+                setResult(RESULT_OK);
                 finish();
+                overridePendingTransition(0, R.anim.right_exit);
             }
         }
 
@@ -141,6 +144,7 @@ public class NotificationDetailActivity extends AppCompatActivity implements Not
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
             finish();
         } else {
+            setResult(RESULT_OK);
             super.onBackPressed();
         }
     }

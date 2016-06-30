@@ -100,10 +100,12 @@ public class AboutUsActivity extends AppCompatActivity {
         if (mode == 1) {
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         } else if (mode == 2) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         } else if (mode == 3) {
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.registration).setVisible(false);
@@ -129,6 +131,7 @@ public class AboutUsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                setResult(RESULT_OK);
                 finish();
                 overridePendingTransition(0, R.anim.right_exit);
             }
@@ -163,6 +166,7 @@ public class AboutUsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        setResult(RESULT_OK);
         super.onBackPressed();
         overridePendingTransition(0, R.anim.right_exit);
     }

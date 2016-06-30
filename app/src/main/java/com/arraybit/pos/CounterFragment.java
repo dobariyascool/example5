@@ -97,8 +97,10 @@ public class CounterFragment extends Fragment {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             menu.findItem(R.id.mWaiting).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         }
 
     }
@@ -106,6 +108,7 @@ public class CounterFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+
             getActivity().getSupportFragmentManager().popBackStack();
         }
         return super.onOptionsItemSelected(item);

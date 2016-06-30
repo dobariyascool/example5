@@ -1,4 +1,5 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tableOrderFragment"
     android:layout_width="match_parent"
@@ -29,4 +30,39 @@
             android:layout_marginStart="@dimen/control_SpecingTiny"
             android:layout_marginTop="@dimen/control_SpecingSmall" />
     </LinearLayout>
-</FrameLayout>
+
+    <com.github.clans.fab.FloatingActionMenu xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/famRoot"
+        style="@style/FloatingMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/control_SpecingSmall"
+        app:layout_behavior="com.arraybit.global.FloatingActionMenuBehavior"
+        app:menu_icon="@mipmap/fmenu">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabDineIn"
+            style="@style/GreenTableFloatingButtonWithTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/fab_dine"
+            fab:fab_label="@string/aofDineIn" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabTakeAway"
+            style="@style/RedTableFloatingButtonWithTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/fab_take"
+            fab:fab_label="@string/aofTakeAway" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabAll"
+            style="@style/BlueTableFloatingButtonWithTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/select_all"
+            fab:fab_label="@string/aofAll" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+</android.support.design.widget.CoordinatorLayout>

@@ -48,10 +48,12 @@ public class OfferActivity extends AppCompatActivity {
         if (mode == 1) {
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         } else if (mode == 2) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         } else if (mode == 3) {
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.registration).setVisible(false);
@@ -113,6 +115,7 @@ public class OfferActivity extends AppCompatActivity {
                     .equals(getResources().getString(R.string.title_fragment_policy)))) {
                 getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
             } else {
+                setResult(RESULT_OK);
                 finish();
                 overridePendingTransition(0, R.anim.right_exit);
             }
@@ -162,6 +165,7 @@ public class OfferActivity extends AppCompatActivity {
             }
 
         } else {
+            setResult(RESULT_OK);
             finish();
             overridePendingTransition(0, R.anim.right_exit);
         }

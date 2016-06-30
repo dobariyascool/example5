@@ -160,6 +160,11 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                 if(getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
                         && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1)
                         .getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_tables))) {
+                    Globals.isWishListShow = 0;
+                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                     getActivity().getSupportFragmentManager().popBackStack();
                 }
             } else {
@@ -175,7 +180,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         super.onPrepareOptionsMenu(menu);
         if (activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             menu.findItem(R.id.action_search).setVisible(true);
-            menu.findItem(R.id.cart_layout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);

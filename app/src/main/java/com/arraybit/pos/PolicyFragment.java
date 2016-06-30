@@ -89,7 +89,7 @@ public class PolicyFragment extends Fragment {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             menu.findItem(R.id.mWaiting).setVisible(false);
         }
-        if(Globals.isWishListShow==0) {
+        if(Globals.isWishListShow==0 && !GuestHomeActivity.isMenuMode) {
             menu.findItem(R.id.logout).setVisible(false);
         }else if(Globals.isWishListShow==1){
             menu.findItem(R.id.login).setVisible(false);

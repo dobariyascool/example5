@@ -30,6 +30,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.arraybit.adapter.CategoryItemAdapter;
@@ -228,6 +229,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         if(Globals.isWishListShow==0){
             if(!GuestHomeActivity.isMenuMode) {
                 menu.findItem(R.id.logout).setVisible(false);
+                menu.findItem(R.id.notification_layout).setVisible(false);
             }
         } else if(Globals.isWishListShow==1){
             menu.findItem(R.id.login).setVisible(false);
@@ -315,7 +317,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             }
             if (isShow) {
                 if (isItemSuggestedClick) {
-                    Globals.ShowSnackBar(detailLayout, String.format(getActivity().getResources().getString(R.string.MsgCartItem), itemName), getActivity(), 3000);
+                    Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem), itemName),Toast.LENGTH_LONG).show();
                     isItemSuggestedClick = false;
                 }
                 if (getTargetFragment() != null) {
@@ -391,7 +393,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             if (objOrderItemTran.getItemName() != null) {
                 Globals.counter = Globals.counter + 1;
                 Globals.alOrderItemTran.add(objOrderItemTran);
-                Globals.ShowSnackBar(detailLayout, String.format(getActivity().getResources().getString(R.string.MsgCartItem), objOrderItemTran.getItemName()), getActivity(), 3000);
+                Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem), objOrderItemTran.getItemName()),Toast.LENGTH_LONG).show();
             }
         }
     }

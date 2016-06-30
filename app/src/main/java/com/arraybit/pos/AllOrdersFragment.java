@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -95,12 +96,18 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
         menu.findItem(R.id.action_search).setVisible(true);
         menu.findItem(R.id.home).setVisible(false);
         menu.findItem(R.id.logout).setVisible(false);
+        menu.findItem(R.id.notification_layout).setVisible(false);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
+                Globals.isWishListShow = 0;
+                Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 getActivity().getSupportFragmentManager().popBackStack();
             } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
                 getActivity().finish();

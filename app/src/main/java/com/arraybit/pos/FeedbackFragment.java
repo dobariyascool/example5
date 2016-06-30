@@ -3,6 +3,7 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -112,6 +113,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
             menu.findItem(R.id.viewChange).setVisible(false);
             if (Globals.isWishListShow == 0) {
                 menu.findItem(R.id.logout).setVisible(false);
+                menu.findItem(R.id.notification_layout).setVisible(false);
             } else if (Globals.isWishListShow == 1) {
                 menu.findItem(R.id.login).setVisible(false);
                 menu.findItem(R.id.registration).setVisible(false);
@@ -120,11 +122,6 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
             }
         }
 
-//        if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-//                && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
-//                .equals(getActivity().getResources().getString(R.string.title_fragment_guest_options))) {
-//            Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
-//        }
     }
 
     @Override
@@ -133,8 +130,19 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            getActivity().getSupportFragmentManager().popBackStack();
             Globals.HideKeyBoard(getActivity(), getView());
+            if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_home))){
+                if(Globals.isWishListShow==0) {
+                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                }else{
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+            }else {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
             return true;
         }
 

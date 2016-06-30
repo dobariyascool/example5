@@ -134,7 +134,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         if(GuestHomeActivity.isMenuMode){
             menu.findItem(R.id.cart_layout).setVisible(false);
         }else{
-            menu.findItem(R.id.cart_layout).setVisible(true);
+            if(MenuActivity.parentActivity) {
+                menu.findItem(R.id.cart_layout).setVisible(true);
+            }else {
+                menu.findItem(R.id.cart_layout).setVisible(true);
+                menu.findItem(R.id.notification_layout).setVisible(false);
+            }
         }
 
         if (i == 1) {

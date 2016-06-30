@@ -82,10 +82,12 @@ public class HotelProfileActivity extends AppCompatActivity {
         if (mode == 1) {
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         } else if (mode == 2) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         } else if (mode == 3) {
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.registration).setVisible(false);
@@ -116,6 +118,7 @@ public class HotelProfileActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
+            setResult(RESULT_OK);
             finish();
             GalleryFragment.alBusinessGalleryTran = null;
             InformationFragment.lstBusinessHoursTran = null;
@@ -136,6 +139,7 @@ public class HotelProfileActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            setResult(RESULT_OK);
             super.onBackPressed();
             GalleryFragment.alBusinessGalleryTran = null;
             InformationFragment.lstBusinessHoursTran = null;

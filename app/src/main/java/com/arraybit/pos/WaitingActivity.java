@@ -71,6 +71,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         SetWaiterName(txtName, txtLetter, navigationView);
         navigationView.addHeaderView(headerView);
         navigationView.getMenu().findItem(R.id.wFeedback).setVisible(false);
+        navigationView.getMenu().findItem(R.id.wNotification).setVisible(false);
         navigationView.setNavigationItemSelectedListener(this);
         //end
 

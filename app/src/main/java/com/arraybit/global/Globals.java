@@ -316,14 +316,14 @@ public class Globals {
 
     public static void SetOptionMenu(String userName, Context context, Menu menu) {
         MenuItem mLogin = menu.findItem(R.id.login);
-        MenuItem mRegistration = menu.findItem(R.id.registration);
+        MenuItem mLogout = menu.findItem(R.id.logout);
 
         if (userName == null) {
             mLogin.setTitle(context.getResources().getString(R.string.navLogin)).setVisible(true);
-            mRegistration.setTitle(context.getResources().getString(R.string.navRegistration));
+            mLogout.setVisible(false);
         } else {
             mLogin.setTitle(context.getResources().getString(R.string.wmMyAccount)).setVisible(true);
-            mRegistration.setTitle(context.getResources().getString(R.string.wmLogout));
+            mLogout.setVisible(true);
         }
     }
 
@@ -662,7 +662,6 @@ public class Globals {
         pm.setComponentEnabledSetting(receiver,
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
-//        Toast.makeText(activity, "Enabled broadcast receiver", Toast.LENGTH_SHORT).show();
     }
 
     public static void DisableBroadCastReceiver(Activity activity){
@@ -671,7 +670,6 @@ public class Globals {
         pm.setComponentEnabledSetting(receiver,
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
-//        Toast.makeText(activity, "Disabled broadcst receiver", Toast.LENGTH_SHORT).show();
     }
 
     //set runtime orientation for mobile and tablet

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notificationLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@drawable/cart_with_ripple_drawable"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/control_SpecingMedium"
+    android:paddingStart="@dimen/control_SpecingMedium">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        tools:ignore="UselessParent">
+
+    <ImageView
+        android:id="@+id/ivMain"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/bell_drawable"
+        android:tint="@android:color/white"
+        tools:ignore="ContentDescription" />
+
+
+    <com.rey.material.widget.TextView
+        android:id="@+id/txtNotificationNumber"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_alignEnd="@+id/ivMain"
+        android:layout_alignTop="@+id/ivMain"
+        android:background="@drawable/cart_number"
+        android:gravity="center"
+        android:maxLength="2"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp"
+        android:textColor="@android:color/white"
+        android:textSize="9sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:ignore="SmallSp"/>
+    </RelativeLayout>
+</RelativeLayout>

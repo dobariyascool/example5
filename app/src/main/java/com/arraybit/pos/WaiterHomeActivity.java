@@ -1,9 +1,11 @@
 package com.arraybit.pos;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -12,7 +14,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,9 +27,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.NotificationReceiver;
+import com.arraybit.global.POSApplication;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CounterMaster;
@@ -40,14 +43,18 @@ import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 @SuppressLint("InflateParams")
-public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, NotificationReceiver.NotificationListener {
 
+    final private int requestAskPermission = 123;
     ActionBarDrawerToggle actionBarDrawerToggle;
     LinearLayout waiterHomeMainLayout;
     SharePreferenceManage objSharePreferenceManage;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    TextView txtCartNumber;
+    TextView txtNotificationNumber;
+    Toolbar app_bar;
+    boolean isRestart;
+    RelativeLayout notificationLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +62,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         setContentView(R.layout.activity_waiter_home);
 
         //app_bar
-        Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
+        app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
         if (getSupportActionBar() != null) {
             if (Build.VERSION.SDK_INT >= 21) {
@@ -75,7 +82,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         ivLogo.setVisibility(View.GONE);
         TextView txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
         TextView txtName = (TextView) headerView.findViewById(R.id.txtName);
-        CompoundButton cbLogout = (CompoundButton)headerView.findViewById(R.id.cbLogout);
+        CompoundButton cbLogout = (CompoundButton) headerView.findViewById(R.id.cbLogout);
         cbLogout.setVisibility(View.VISIBLE);
 
         navigationView = (NavigationView) findViewById(R.id.navigationView);
@@ -97,18 +104,29 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             Globals.ShowSnackBar(waiterHomeMainLayout, getResources().getString(R.string.MsgCheckConnection), WaiterHomeActivity.this, 1000);
         }
 
-        cbLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Globals.ClearPreference(WaiterHomeActivity.this);
+        cbLogout.setOnClickListener(this);
+
+        //schedule to call notification class on time
+        int hasWriteContactsPermission = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            hasWriteContactsPermission = checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED);
+            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED},
+                        requestAskPermission);
+            } else {
+                POSApplication.setAppCompatActivity(WaiterHomeActivity.this);
+                Globals.CallNotificationReceiver(WaiterHomeActivity.this);
             }
-        });
+        } else {
+            POSApplication.setAppCompatActivity(WaiterHomeActivity.this);
+            Globals.CallNotificationReceiver(WaiterHomeActivity.this);
+        }
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.viewChange).setVisible(false);
-        menu.findItem(R.id.cart_layout).setVisible(false);
+        menu.findItem(R.id.notification_layout).setVisible(true);
         menu.findItem(R.id.logout).setVisible(false);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -117,13 +135,36 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_waiter_home, menu);
-        MenuItem cartItem = menu.findItem(R.id.cart_layout);
+        MenuItem cartItem = menu.findItem(R.id.notification_layout);
         RelativeLayout relativeLayout = (RelativeLayout) MenuItemCompat.getActionView(cartItem);
-        final RelativeLayout cartLayout = (RelativeLayout) relativeLayout.findViewById(R.id.cartLayout);
-        txtCartNumber = (TextView) relativeLayout.findViewById(R.id.txtCartNumber);
+        notificationLayout = (RelativeLayout) relativeLayout.findViewById(R.id.notificationLayout);
+        txtNotificationNumber = (TextView) relativeLayout.findViewById(R.id.txtNotificationNumber);
 
-        SetCartNumber(txtCartNumber);
+        SetNotificationNumber(txtNotificationNumber);
+        notificationLayout.setOnClickListener(this);
         return true;
+    }
+
+    @SuppressLint("ShortAlarm")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case requestAskPermission:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    POSApplication.setAppCompatActivity(WaiterHomeActivity.this);
+                    Globals.CallNotificationReceiver(WaiterHomeActivity.this);
+
+                } else {
+                    // Permission Denied
+                    Toast.makeText(WaiterHomeActivity.this, "Permission Denied", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     @Override
@@ -165,15 +206,15 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             } else if (menuItem.getItemId() == R.id.wHotelProfile) {
                 drawerLayout.closeDrawer(navigationView);
                 Intent intent = new Intent(WaiterHomeActivity.this, HotelProfileActivity.class);
-                intent.putExtra("Mode",(short) 2);
-                startActivity(intent);
+                intent.putExtra("Mode", (short) 2);
+                startActivityForResult(intent, 0);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
 
             } else if (menuItem.getItemId() == R.id.wOffers) {
                 drawerLayout.closeDrawer(navigationView);
                 Intent intent = new Intent(WaiterHomeActivity.this, OfferActivity.class);
-                intent.putExtra("Mode",(short) 2);
-                startActivity(intent);
+                intent.putExtra("Mode", (short) 2);
+                startActivityForResult(intent, 0);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (menuItem.getItemId() == R.id.wFeedback) {
                 drawerLayout.closeDrawer(navigationView);
@@ -191,19 +232,75 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             } else if (menuItem.getItemId() == R.id.wAbout) {
                 drawerLayout.closeDrawer(navigationView);
                 Intent intent = new Intent(WaiterHomeActivity.this, AboutUsActivity.class);
-                intent.putExtra("Mode",(short) 2);
-                startActivity(intent);
+                intent.putExtra("Mode", (short) 2);
+                startActivityForResult(intent, 0);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (menuItem.getItemId() == R.id.wExit) {
                 System.exit(0);
-            } else if(menuItem.getItemId() == R.id.notification){
+            } else if (menuItem.getItemId() == R.id.wNotification) {
                 drawerLayout.closeDrawer(navigationView);
+                NotificationReceiver.notificationCount = 0;
                 Intent intent = new Intent(WaiterHomeActivity.this, NotificationDetailActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         }
         return false;
+    }
+
+    @Override
+    public void ShowNotificationCount() {
+        SetNotificationNumber(txtNotificationNumber);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.cbLogout) {
+            Globals.ClearPreference(WaiterHomeActivity.this);
+        } else if (v.getId() == R.id.notificationLayout) {
+            NotificationReceiver.notificationCount = 0;
+            Intent intent = new Intent(WaiterHomeActivity.this, NotificationDetailActivity.class);
+            startActivityForResult(intent, 0);
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(isRestart) {
+            Globals.isWishListShow = 0;
+            Intent intent = new Intent(WaiterHomeActivity.this, WaiterHomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        }
+//        WaiterOptionListFragment waiterOptionListFragment = (WaiterOptionListFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_waiter_options));
+//        RemoveFragment(waiterOptionListFragment);
+//        Intent i = new Intent(WaiterHomeActivity.this, WaiterHomeActivity.class);
+//        startActivity(i);
+//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//        finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 0) {
+                SetNotificationNumber(txtNotificationNumber);
+            }
+        }
     }
 
     //prevent backPressed
@@ -223,13 +320,14 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_cart_item))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_summary))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_summary), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     Globals.objDiscountMaster = null;
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_tables))) {
+                    isRestart=true;
+                    onRestart();
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
@@ -237,8 +335,9 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_about_us))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_about_us), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                else {
+                } else {
+                    isRestart=true;
+                    onRestart();
                     CategoryItemFragment.i = 0;
                     CategoryItemFragment.isViewChange = false;
                     getSupportFragmentManager().popBackStack();
@@ -259,6 +358,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         fragmentTransaction.commit();
     }
 
+
     private void SetWaiterName(TextView txtName, TextView txtLetter, NavigationView navigationView) {
         objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this) != null) {
@@ -270,14 +370,15 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         }
     }
 
-    private void SetCartNumber(TextView txtCartNumber) {
-        if (Globals.counter > 0) {
-            txtCartNumber.setText(String.valueOf(NotificationReceiver.notificationCount));
-            txtCartNumber.setSoundEffectsEnabled(true);
-            txtCartNumber.setBackground(ContextCompat.getDrawable(WaiterHomeActivity.this, R.drawable.cart_number));
-            txtCartNumber.setAnimation(AnimationUtils.loadAnimation(WaiterHomeActivity.this, R.anim.fab_scale_up));
+    private void SetNotificationNumber(final TextView txtNotificationNumber) {
+        if (NotificationReceiver.notificationCount > 0) {
+            txtNotificationNumber.setVisibility(View.VISIBLE);
+            txtNotificationNumber.setText(String.valueOf(NotificationReceiver.notificationCount));
+            txtNotificationNumber.setSoundEffectsEnabled(true);
+            notificationLayout.setSoundEffectsEnabled(true);
+            txtNotificationNumber.setAnimation(AnimationUtils.loadAnimation(WaiterHomeActivity.this, R.anim.fab_scale_up));
         } else {
-            txtCartNumber.setBackgroundColor(ContextCompat.getColor(WaiterHomeActivity.this, android.R.color.transparent));
+            txtNotificationNumber.setVisibility(View.GONE);
         }
     }
     //endregion
@@ -315,6 +416,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             }
         }
     }
-    //endregion
+//endregion
 
 }

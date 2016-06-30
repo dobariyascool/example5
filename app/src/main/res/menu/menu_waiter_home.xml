@@ -27,13 +27,21 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/notification_layout"
+        android:orderInCategory="400"
+        android:title="@string/wmCart"
+        android:visible="false"
+        app:actionLayout="@layout/notification_layout"
+        app:showAsAction="always" />
+    <!--android:icon="@drawable/cart"-->
+
+    <item
         android:id="@+id/cart_layout"
         android:orderInCategory="400"
         android:title="@string/wmCart"
         android:visible="false"
         app:actionLayout="@layout/cart_layout"
         app:showAsAction="always" />
-    <!--android:icon="@drawable/cart"-->
 
     <item
         android:id="@+id/home"

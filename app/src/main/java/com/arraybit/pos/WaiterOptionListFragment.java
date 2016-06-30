@@ -13,10 +13,15 @@ import com.arraybit.global.Globals;
 public class WaiterOptionListFragment extends Fragment implements View.OnClickListener {
 
     LinearLayout waiterOptionLayout;
+//    NotificationListener notificationListener;
 
     public WaiterOptionListFragment() {
         // Required empty public constructor
     }
+
+//    interface NotificationListener{
+//        void ShowNotificationCount();
+//    }
 
 
     @Override
@@ -38,7 +43,7 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
         cvTakeAway.setOnClickListener(this);
         cvBill.setOnClickListener(this);
 
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
 
         return view;
     }
@@ -61,4 +66,9 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
             }
         }
     }
+
+//    public void ShowNotification(){
+//        notificationListener = (NotificationListener)getActivity();
+//        notificationListener.ShowNotificationCount();
+//    }
 }

@@ -78,7 +78,7 @@ public class OfferFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new OfferLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvOffer,R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvOffer, R.drawable.wifi_drawable);
         }
 
         return view;
@@ -91,15 +91,18 @@ public class OfferFragment extends Fragment {
         if ((activityName != null && activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting)))
                 || (strActivityName != null && strActivityName.equals(getActivity().getResources().getString(R.string.title_activity_waiting)))) {
             menu.findItem(R.id.viewChange).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(false);
         } else if ((activityName != null && activityName.getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))
                 || (strActivityName != null && strActivityName.equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))))) {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
-            if(Globals.isWishListShow==1){
+            if (Globals.isWishListShow == 1) {
                 menu.findItem(R.id.shortList).setVisible(false);
                 menu.findItem(R.id.login).setVisible(false);
                 menu.findItem(R.id.registration).setVisible(false);
                 menu.findItem(R.id.callWaiter).setVisible(false);
+            }else if(!GuestHomeActivity.isMenuMode && Globals.isWishListShow==0){
+                menu.findItem(R.id.notification_layout).setVisible(false);
             }
         }
 
@@ -176,11 +179,11 @@ public class OfferFragment extends Fragment {
             progressDialog.dismiss();
             ArrayList<OfferMaster> lstOfferMaster = (ArrayList<OfferMaster>) result;
             if (lstOfferMaster == null) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOffer,0);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOffer, 0);
             } else if (lstOfferMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgOffer), rvOffer,0);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgOffer), rvOffer, 0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvOffer,0);
+                Globals.SetErrorLayout(errorLayout, false, null, rvOffer, 0);
                 alOfferMaster = lstOfferMaster;
                 SetupRecyclerView();
             }

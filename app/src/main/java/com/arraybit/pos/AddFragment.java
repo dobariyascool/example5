@@ -111,7 +111,6 @@ public class AddFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-
         menu.findItem(R.id.mWaiting).setVisible(false);
         menu.findItem(R.id.logout).setVisible(false);
     }

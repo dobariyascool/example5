@@ -90,6 +90,15 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
         holder.txtTableName.setText(objOrderMaster.getTableName());
         holder.txtTotalOrder.setText(objOrderMaster.getTotalKOT() + " Orders ");
         holder.txtTotalItem.setText(objOrderMaster.getTotalItem() + " Items");
+        if(objOrderMaster.getlinktoOrderTypeMasterId()==Globals.OrderType.DineIn.getValue()){
+            holder.txtOrderType.setVisibility(View.VISIBLE);
+            holder.txtOrderType.setText("Dine In");
+        }else if(objOrderMaster.getlinktoOrderTypeMasterId()==Globals.OrderType.TakeAway.getValue()){
+            holder.txtOrderType.setVisibility(View.VISIBLE);
+            holder.txtOrderType.setText("Take Away");
+        }else{
+            holder.txtOrderType.setVisibility(View.GONE);
+        }
         holder.txtTotalAmount.setText(context.getResources().getString(R.string.dfRupee)+" "+Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount() + objOrderMaster.getTotalTax()));
 
         //holder animation
@@ -105,7 +114,6 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
     public int getItemCount() {
         return alOrderMaster.size();
     }
-
 
     @SuppressLint("RtlHardcoded")
     private void ReplaceFragment(Fragment fragment,String fragmentName){
@@ -125,7 +133,7 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
 
     class TableOrderViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtOrderTimeDifference, txtOrderTime, txtTableName, txtTotalOrder, txtTotalItem, txtTotalAmount;
+        TextView txtOrderTimeDifference, txtOrderTime, txtTableName, txtTotalOrder, txtTotalItem, txtTotalAmount,txtOrderType;
         CardView cvOrder;
 
         public TableOrderViewHolder(View itemView) {
@@ -137,6 +145,7 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
             txtTotalOrder = (TextView) itemView.findViewById(R.id.txtTotalOrder);
             txtTotalItem = (TextView) itemView.findViewById(R.id.txtTotalItem);
             txtTotalAmount = (TextView) itemView.findViewById(R.id.txtTotalAmount);
+            txtOrderType = (TextView) itemView.findViewById(R.id.txtOrderType);
 
             cvOrder = (CardView) itemView.findViewById(R.id.cvOrder);
 
