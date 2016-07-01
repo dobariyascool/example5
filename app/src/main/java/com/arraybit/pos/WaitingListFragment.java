@@ -116,7 +116,7 @@ public class WaitingListFragment extends Fragment {
 
         //set first tab
         WaitingTabFragment waitingTabFragment = (WaitingTabFragment) waitingListPagerAdapter.GetCurrentFragment(0);
-        waitingTabFragment.LoadWaitingListData();
+        waitingTabFragment.LoadWaitingListData(getActivity(),getActivity().getSupportFragmentManager());
         //end
 
         waitingViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -133,7 +133,7 @@ public class WaitingListFragment extends Fragment {
                 waitingViewPager.setCurrentItem(position);
                 //load data when tab is change
                 WaitingTabFragment waitingTabFragment = (WaitingTabFragment) waitingListPagerAdapter.GetCurrentFragment(position);
-                waitingTabFragment.LoadWaitingListData();
+                waitingTabFragment.LoadWaitingListData(getActivity(),getActivity().getSupportFragmentManager());
             }
 
             @Override
@@ -213,7 +213,7 @@ public class WaitingListFragment extends Fragment {
                 SetErrorLayout(true,String.format(getResources().getString(R.string.MsgNoRecordFound),getResources().getString(R.string.MsgWaitingPerson)));
             }else{
                 SetErrorLayout(false,null);
-                waitingListPagerAdapter = new WaitingListPagerAdapter(getChildFragmentManager());
+                waitingListPagerAdapter = new WaitingListPagerAdapter(getActivity().getSupportFragmentManager());
                 SetTabLayout(alWaitingStatusMaster, waitingListPagerAdapter);
             }
         }

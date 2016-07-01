@@ -90,7 +90,7 @@ public class HotelProfileActivity extends AppCompatActivity {
             menu.findItem(R.id.notification_layout).setVisible(false);
         } else if (mode == 3) {
             menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
             menu.findItem(R.id.callWaiter).setVisible(false);
         }

@@ -7,7 +7,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +20,9 @@ import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.modal.TableMaster;
 import com.arraybit.modal.WaitingMaster;
+import com.arraybit.parser.TableJSONParser;
 import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.TextView;
@@ -28,6 +33,11 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
     Button btnServe, btnNot, btnCancel, btnCall, btnWaiting;
     UpdateStatusListener objUpdateStatusListener;
+    FragmentTransaction fragmentTransaction;
+    boolean isOrderPlace;
+    int btnId;
+    View focusView;
+
 
     WaitingMaster objWaitingMaster = null, objWaiting;
 
@@ -87,50 +97,81 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
     public void onClick(View v) {
 
         objWaitingMaster = new WaitingMaster();
+        focusView = v;
         if (v.getId() == R.id.btnWaiting) {
-            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnWaiting.getText().toString()).getValue());
-            objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
+            if(objWaiting.getlinktoWaitingStatusMasterId()==Globals.WaitingStatus.Assign.getValue()){
+                if (Service.CheckNet(getActivity())) {
+                    btnId = R.id.btnWaiting;
+                    new OrderLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+            }else {
+                objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnWaiting.getText().toString()).getValue());
+                objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
-            if (Service.CheckNet(getActivity())) {
-                new UpdateWaitingStatusLoadingTask().execute();
-            } else {
-                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                if (Service.CheckNet(getActivity())) {
+                    new UpdateWaitingStatusLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+                dismiss();
             }
-            dismiss();
         }
         if (v.getId() == R.id.btnServe) {
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnServe.getText().toString()).getValue());
             objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
-
-            if (Service.CheckNet(getActivity())) {
-                new UpdateWaitingStatusLoadingTask().execute();
-            } else {
-                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
-            }
             dismiss();
+            AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(), false, null);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("WaitingMaster",objWaiting);
+            bundle.putBoolean("IsClick",true);
+            allTablesFragment.setArguments(bundle);
+            ReplaceFragment(allTablesFragment);
+            objUpdateStatusListener = (UpdateStatusListener)getActivity();
+            objUpdateStatusListener.UpdateStatus(true);
         }
         if (v.getId() == R.id.btnNot) {
-            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("NA").getValue());
-            objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
+            if(objWaiting.getlinktoWaitingStatusMasterId()==Globals.WaitingStatus.Assign.getValue()){
+                if (Service.CheckNet(getActivity())) {
+                    btnId = R.id.btnWaiting;
+                    new OrderLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+            }else {
+                objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("NA").getValue());
+                objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
-            if (Service.CheckNet(getActivity())) {
-                new UpdateWaitingStatusLoadingTask().execute();
-            } else {
-                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                if (Service.CheckNet(getActivity())) {
+                    new UpdateWaitingStatusLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+                dismiss();
             }
-            dismiss();
+
         }
         if (v.getId() == R.id.btnCancel) {
+            if(objWaiting.getlinktoWaitingStatusMasterId()==Globals.WaitingStatus.Assign.getValue()){
+                if (Service.CheckNet(getActivity())) {
+                    btnId = R.id.btnWaiting;
+                    new OrderLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+            }else {
+                objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnCancel.getText().toString()).getValue());
+                objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
-            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnCancel.getText().toString()).getValue());
-            objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
-
-            if (Service.CheckNet(getActivity())) {
-                new UpdateWaitingStatusLoadingTask().execute();
-            } else {
-                Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                if (Service.CheckNet(getActivity())) {
+                    new UpdateWaitingStatusLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+                dismiss();
             }
-            dismiss();
+
         }
         if (v.getId() == R.id.btnCall) {
 
@@ -173,6 +214,24 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         }
     }
 
+    @SuppressLint("CommitTransaction")
+    private void ReplaceFragment(Fragment fragment) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Fade fade = new Fade();
+            fade.setDuration(500);
+            fragment.setEnterTransition(fade);
+            fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentLayout, fragment);
+            fragmentTransaction.commit();
+        } else {
+            fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.fragmentLayout, fragment);
+            fragmentTransaction.commit();
+        }
+    }
+
+
     interface UpdateStatusListener {
         void UpdateStatus(boolean flag);
     }
@@ -206,9 +265,78 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             if (status.equals("-1")) {
                 objUpdateStatusListener.UpdateStatus(false);
             } else if (status.equals("0")) {
-                objUpdateStatusListener.UpdateStatus(true);
+                if(isOrderPlace){
+                    objUpdateStatusListener.UpdateStatus(true);
+                }else{
+                    new UpdateTableStatusLoadingTask().execute();
+                }
             }
             progressDialog.dismiss();
+        }
+    }
+    class OrderLoadingTask extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
+            isOrderPlace = objWaitingJSONParser.CheckOrderPlaceForTableMasterId(Globals.businessMasterId, String.valueOf(objWaiting.getLinktoTableMasterId()));
+
+            return isOrderPlace;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            if(isOrderPlace){
+                Globals.ShowSnackBar(focusView,getResources().getString(R.string.MsgOrderPlace),getActivity(),2000);
+            }else{
+                if(btnId==R.id.btnWaiting){
+                    objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnWaiting.getText().toString()).getValue());
+                    objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
+                }else if(btnId==R.id.btnNot){
+                    objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("NA").getValue());
+                    objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
+                }else if(btnId==R.id.btnCancel){
+                    objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnCancel.getText().toString()).getValue());
+                    objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
+                }
+                if (Service.CheckNet(getActivity())) {
+                    new UpdateWaitingStatusLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(focusView, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+            }
+        }
+    }
+
+    class UpdateTableStatusLoadingTask extends AsyncTask {
+
+        String status;
+        TableMaster objTable;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            objTable = new TableMaster();
+            objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Vacant.getValue());
+            objTable.setTableMasterId((short) objWaiting.getLinktoTableMasterId());
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            TableJSONParser objTableJSONParser = new TableJSONParser();
+            status = objTableJSONParser.UpdateTableStatus(objTable);
+
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            objUpdateStatusListener.UpdateStatus(true);
+            dismiss();
         }
     }
     //endregion

@@ -20,6 +20,8 @@ public class TableJSONParser {
     public String SelectAllTableMaster = "SelectAllTableMaster";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
+    SimpleDateFormat sdfControlTimeFormat = new SimpleDateFormat(Globals.TimeFormat, Locale.US);
+    SimpleDateFormat sdfControlDateTimeFormat = new SimpleDateFormat(Globals.DateFormat+'_'+Globals.DisplayTimeFormat, Locale.US);
     Date dt = null;
     SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
@@ -62,6 +64,10 @@ public class TableJSONParser {
                 objTableMaster.setTableStatus(jsonObject.getString("TableStatus"));
                 objTableMaster.setStatusColor(jsonObject.getString("StatusColor"));
                 objTableMaster.setBusiness(jsonObject.getString("Business"));
+                if(!jsonObject.getString("StatusUpdateDateTime").equals("null")){
+                    dt = sdfDateTimeFormat.parse(jsonObject.getString("StatusUpdateDateTime"));
+                    objTableMaster.setStatusUpdateDateTime(sdfControlDateTimeFormat.format(dt));
+                }
             }
             return objTableMaster;
         } catch (JSONException e) {
@@ -109,6 +115,10 @@ public class TableJSONParser {
                 objTableMaster.setTableStatus(jsonArray.getJSONObject(i).getString("TableStatus"));
                 objTableMaster.setStatusColor(jsonArray.getJSONObject(i).getString("StatusColor"));
                 objTableMaster.setBusiness(jsonArray.getJSONObject(i).getString("Business"));
+                if(!jsonArray.getJSONObject(i).getString("StatusUpdateDateTime").equals("null")){
+                    dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("StatusUpdateDateTime"));
+                    objTableMaster.setStatusUpdateDateTime(sdfControlDateTimeFormat.format(dt));
+                }
                 lstTableMaster.add(objTableMaster);
             }
             return lstTableMaster;
@@ -124,6 +134,7 @@ public class TableJSONParser {
     //region Update
 
     public String UpdateTableStatus(TableMaster objTableMaster) {
+        dt = new Date();
         try {
             JSONStringer stringer = new JSONStringer();
             stringer.object();
@@ -133,6 +144,7 @@ public class TableJSONParser {
 
             stringer.key("TableMasterId").value(objTableMaster.getTableMasterId());
             stringer.key("linktoTableStatusMasterId").value(objTableMaster.getlinktoTableStatusMasterId());
+            stringer.key("StatusUpdateDateTime").value(sdfDateTimeFormat.format(dt));
 
             stringer.endObject();
 

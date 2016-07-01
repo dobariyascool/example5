@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -35,7 +36,7 @@ import com.rey.material.widget.TextView;
 import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
-public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,WaitingStatusFragment.UpdateStatusListener,ConfirmDialog.ConfirmationResponseListener {
 
     LinearLayout fragmentLayout, waitingMainLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -43,6 +44,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     SharePreferenceManage objSharePreferenceManage;
+    Toolbar app_bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_waiting);
 
         //app_bar
-        Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
+        app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -136,7 +138,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if (id == R.id.mWaiting) {
             if (item.getTitle().equals("T")) {
                 item.setTitle("W");
-                item.setIcon(R.mipmap.waiting_person);
+                item.setIcon(R.mipmap.call_waiter);
                 ReplaceFragment(new AllTablesFragment(WaitingActivity.this, false, null));
             } else {
                 item.setTitle("T");
@@ -154,7 +156,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if (menuItem.getItemId() == R.id.wExit) {
             System.exit(0);
         } else if (menuItem.getItemId() == R.id.wChangeMode) {
-            ConfirmMessage();
+            ConfirmDialog confirmDialog = new ConfirmDialog(getResources().getString(R.string.MsgChangeMode),true);
+            confirmDialog.show(getSupportFragmentManager(),"");
         } else if (menuItem.getItemId() == R.id.wChangeCounter) {
             objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaitingActivity.this) != null) {
@@ -195,15 +198,41 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         return false;
     }
 
+    @Override
+    public void UpdateStatus(boolean flag) {
+        if(flag){
+            app_bar.getMenu().findItem(R.id.mWaiting).setTitle("W").setIcon(R.mipmap.call_waiter);
+        }else{
+            app_bar.getMenu().findItem(R.id.mWaiting).setTitle("T").setIcon(R.mipmap.view_table);
+            ReplaceFragment(new WaitingListFragment());
+            Globals.ShowSnackBar(waitingMainLayout,getResources().getString(R.string.MsgTableAssign),WaitingActivity.this,3000);
+        }
+    }
+
+    @Override
+    public void ConfirmResponse() {
+        drawerLayout.closeDrawer(navigationView);
+        Globals.EnableBroadCastReceiver(WaitingActivity.this);
+        Globals.CallNotificationReceiver(WaitingActivity.this);
+        Intent intent = new Intent(WaitingActivity.this, WaiterHomeActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        finish();
+    }
 
     //prevent backPressed
     @Override
     public void onBackPressed() {
         //fragment backPressed
+        Globals.HideKeyBoard(WaitingActivity.this, getCurrentFocus());
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            Globals.HideKeyBoard(WaitingActivity.this, getCurrentFocus());
-            getSupportFragmentManager().popBackStack();
-
+            if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
+                    && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_all_tables)))
+            {
+                getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }else{
+                getSupportFragmentManager().popBackStack();
+            }
         }
         //end
     }
@@ -254,7 +283,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
                 .setPositiveButton("Yes",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                drawerLayout.closeDrawer(navigationView);
+
                                 Globals.EnableBroadCastReceiver(WaitingActivity.this);
                                 Globals.CallNotificationReceiver(WaitingActivity.this);
                                 Intent intent = new Intent(WaitingActivity.this, WaiterHomeActivity.class);
@@ -275,6 +304,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
         alertDialog.show();
     }
+
+
     //endregion
 
     //region LoadingTask

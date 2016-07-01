@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +32,7 @@ import org.json.JSONException;
 import org.json.JSONStringer;
 
 
-@SuppressWarnings("RedundantIfStatement")
+@SuppressWarnings({"RedundantIfStatement", "ResourceType"})
 public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GuestLoginDialogFragment.LoginResponseListener {
 
     public static TableMaster objTableMaster;
@@ -41,9 +43,10 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     NavigationView navigationView;
     Toolbar app_bar;
     View headerView;
-    ImageView imageView,ivLogo;
+    ImageView imageView, ivLogo;
     TextView txtLetter, txtName;
     LinearLayout nameLayout;
+    boolean isShowMessage;
     SharePreferenceManage objSharePreferenceManage;
 
     @SuppressLint("InflateParams")
@@ -58,24 +61,24 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setLogo(R.mipmap.app_logo);
-            if(Build.VERSION.SDK_INT >=21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
         //end
 
         Intent intent = getIntent();
-        isMenuMode = intent.getBooleanExtra("IsMenuMode",false);
-        if(isMenuMode) {
-            Globals.orderTypeMasterId = (short) intent.getIntExtra("linktoOrderTypeMasterId",0);
-            if(app_bar!=null){
+        isMenuMode = intent.getBooleanExtra("IsMenuMode", false);
+        if (isMenuMode) {
+            Globals.orderTypeMasterId = (short) intent.getIntExtra("linktoOrderTypeMasterId", 0);
+            if (app_bar != null) {
                 getSupportActionBar().setTitle(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? getResources().getString(R.string.title_activity_home) + " - Dine In" : getResources().getString(R.string.title_activity_home) + " - Take Away");
             }
-        }else{
+        } else {
             objTableMaster = intent.getParcelableExtra("TableMaster");
             if (objTableMaster != null && objTableMaster.getlinktoOrderTypeMasterId() != 0) {
                 Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
-                if(app_bar!=null){
+                if (app_bar != null) {
                     getSupportActionBar().setTitle(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? getResources().getString(R.string.title_activity_home) + " - Dine In" : getResources().getString(R.string.title_activity_home) + " - Take Away");
                 }
             }
@@ -83,11 +86,11 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
         //navigationView
         navigationView = (NavigationView) findViewById(R.id.navigationView);
-        if(isMenuMode){
+        if (isMenuMode) {
             navigationView.getMenu().findItem(R.id.feedback).setVisible(false);
         }
         headerView = LayoutInflater.from(GuestHomeActivity.this).inflate(R.layout.navigation_header, null);
-        nameLayout = (LinearLayout)headerView.findViewById(R.id.nameLayout);
+        nameLayout = (LinearLayout) headerView.findViewById(R.id.nameLayout);
         imageView = (ImageView) headerView.findViewById(R.id.imageView);
         ivLogo = (ImageView) headerView.findViewById(R.id.ivLogo);
         txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
@@ -99,13 +102,23 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
         //drawerlayout and actionbardrawertoggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        Globals.SetNavigationDrawer(actionBarDrawerToggle, GuestHomeActivity.this, drawerLayout, app_bar,getSupportFragmentManager());
+        Globals.SetNavigationDrawer(actionBarDrawerToggle, GuestHomeActivity.this, drawerLayout, app_bar, getSupportFragmentManager());
         //end
 
         AddFragmentInLayout(new GuestOptionListFragment());
         SaveObjectInPreference();
+
+        isShowMessage = getIntent().getBooleanExtra("ShowMessage", false);
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (isShowMessage) {
+            ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace), " successfully"));
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,16 +129,16 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(isMenuMode){
+        if (isMenuMode) {
             menu.findItem(R.id.callWaiter).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.viewChange).setVisible(false);
             menu.findItem(R.id.cart_layout).setVisible(false);
-        }else{
+        } else {
             Globals.SetOptionMenu(Globals.userName, GuestHomeActivity.this, menu);
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.callWaiter).setVisible(true);
@@ -139,14 +152,14 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
-                && !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()
+        if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                && !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
                 .equals(getResources().getString(R.string.title_fragment_offer_detail))) {
             Globals.OptionMenuItemClick(item, GuestHomeActivity.this, getSupportFragmentManager());
             SetGuestName();
-        }else if(item.getItemId()==R.id.callWaiter){
+        } else if (item.getItemId() == R.id.callWaiter) {
             CallWaiterDialog callWaiterDialog = new CallWaiterDialog();
-            callWaiterDialog.show(getSupportFragmentManager(),"");
+            callWaiterDialog.show(getSupportFragmentManager(), "");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -154,8 +167,8 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     //navigationview event
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-        if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
-                && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()
+        if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
                 .equals(getResources().getString(R.string.title_fragment_guest_options))) {
             if (menuItem.getItemId() == R.id.changeMode) {
                 drawerLayout.closeDrawer(navigationView);
@@ -164,13 +177,13 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             } else if (menuItem.getItemId() == R.id.profile) {
                 drawerLayout.closeDrawer(navigationView);
                 Intent intent = new Intent(GuestHomeActivity.this, HotelProfileActivity.class);
-                intent.putExtra("Mode",(short)3);
+                intent.putExtra("Mode", (short) 3);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (menuItem.getItemId() == R.id.offers) {
                 drawerLayout.closeDrawer(navigationView);
                 Intent intent = new Intent(GuestHomeActivity.this, OfferActivity.class);
-                intent.putExtra("Mode",(short) 3);
+                intent.putExtra("Mode", (short) 3);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (menuItem.getItemId() == R.id.feedback) {
@@ -195,7 +208,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             } else if (menuItem.getItemId() == R.id.aboutus) {
                 drawerLayout.closeDrawer(navigationView);
                 Intent intent = new Intent(GuestHomeActivity.this, AboutUsActivity.class);
-                intent.putExtra("Mode",(short) 3);
+                intent.putExtra("Mode", (short) 3);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
@@ -207,6 +220,10 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     public void LoginResponse() {
         SetGuestName();
     }
+    public void EditTextOnClick(View view) {
+        GuestProfileFragment guestProfileFragment = (GuestProfileFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_myprofile));
+        guestProfileFragment.EditTextOnClick();
+    }
 
     //prevent backPressed
     @Override
@@ -216,40 +233,38 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                 if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_signup))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_signup), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
                     getSupportFragmentManager().popBackStack();
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_about_us))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_about_us), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_myaccount))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_myaccount), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     MyAccountFragment.objCustomerMaster = null;
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_myprofile))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_myprofile), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_notification_settings))) {
                     NotificationSettingsFragment notificationSettingsFragment = (NotificationSettingsFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_notification_settings));
                     notificationSettingsFragment.CreateNotificationPreference();
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_notification_settings), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_change_password))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_change_password), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_summary))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_summary), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_offer_detail))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_offer_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_offer))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_offer), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_feedback))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_feedback), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
@@ -260,7 +275,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
 
     //region Private Methods
     private void SaveObjectInPreference() {
-        if(!isMenuMode) {
+        if (!isMenuMode) {
             objSharePreferenceManage = new SharePreferenceManage();
             try {
                 JSONStringer jsonStringer = new JSONStringer();
@@ -289,13 +304,13 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     }
 
     private void SetGuestName() {
-        if(isMenuMode){
+        if (isMenuMode) {
             ivLogo.setVisibility(View.VISIBLE);
             nameLayout.setVisibility(View.GONE);
             imageView.setVisibility(View.GONE);
             txtName.setVisibility(View.GONE);
             txtLetter.setVisibility(View.GONE);
-        }else {
+        } else {
             objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", GuestHomeActivity.this) != null) {
                 Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", GuestHomeActivity.this);
@@ -321,9 +336,31 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         }
     }
 
-    public void EditTextOnClick(View view) {
-        GuestProfileFragment guestProfileFragment = (GuestProfileFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_myprofile));
-        guestProfileFragment.EditTextOnClick();
+    private void ShowSnackBarWithAction(final String msg) {
+        //getResources().getString(R.string.ybAddBookingSuccessMsg)
+        Snackbar snackbar = Snackbar
+                .make(drawerLayout, msg, Snackbar.LENGTH_LONG)
+                .setAction("View", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("TableMaster", GuestHomeActivity.objTableMaster);
+                        OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
+                        orderSummaryFragment.setArguments(bundle);
+                        Globals.ReplaceFragment(orderSummaryFragment, getSupportFragmentManager(), getResources().getString(R.string.title_fragment_order_summary));
+                    }
+                })
+                .setDuration(5000);
+        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.accent));
+        View snackView = snackbar.getView();
+        if (Build.VERSION.SDK_INT >= 21) {
+            snackView.setElevation(R.dimen.snackbar_elevation);
+        }
+        android.widget.TextView txt = (android.widget.TextView) snackView.findViewById(android.support.design.R.id.snackbar_text);
+        txt.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+        snackView.setBackgroundColor(ContextCompat.getColor(this, R.color.blue_grey));
+        snackbar.show();
     }
+
     //endregion
 }

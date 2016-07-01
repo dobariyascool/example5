@@ -18,6 +18,7 @@ import java.util.Locale;
 public class WaitingJSONParser {
     public String InsertWaitingMaster = "InsertWaitingMaster";
     public String UpdateWaitingStatus = "UpdateWaitingStatus";
+    public String SelectOrderMasterByTableMasterId = "SelectOrderMasterByTableMasterId";
     public String SelectAllWaitingMasterByWaitingStatusId = "SelectAllWaitingMasterByWaitingStatusMasterId";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
@@ -40,6 +41,7 @@ public class WaitingJSONParser {
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
                 objWaitingMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objWaitingMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
+                objWaitingMaster.setLinktoTableMasterId((short) jsonObject.getInt("linktoTableMasterId"));
 
                 /// Extra
                 objWaitingMaster.setWaitingStatus(jsonObject.getString("WaitingStatus"));
@@ -66,6 +68,7 @@ public class WaitingJSONParser {
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
                 objWaitingMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
                 objWaitingMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
+                objWaitingMaster.setLinktoTableMasterId((short) jsonArray.getJSONObject(i).getInt("linktoTableMasterId"));
 
                 /// Extra
                 objWaitingMaster.setWaitingStatus(jsonArray.getJSONObject(i).getString("WaitingStatus"));
@@ -131,6 +134,9 @@ public class WaitingJSONParser {
 
             stringer.key("WaitingMasterId").value(objWaitingMaster.getWaitingMasterId());
             stringer.key("linktoWaitingStatusMasterId").value(objWaitingMaster.getlinktoWaitingStatusMasterId());
+            if(objWaitingMaster.getLinktoTableMasterId()!=0){
+                stringer.key("linktoTableMasterId").value(objWaitingMaster.getLinktoTableMasterId());
+            }
 
             stringer.endObject();
 
@@ -148,6 +154,20 @@ public class WaitingJSONParser {
     }
 
     //endregion
+
+    public boolean CheckOrderPlaceForTableMasterId(int businessMasterId,String linktoTableMasterId){
+        dt = new Date();
+        boolean isOrderPlace = false;
+        try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectOrderMasterByTableMasterId + "/" + linktoTableMasterId + "/" + businessMasterId + "/" + sdfControlDateFormat.format(dt));
+            if (jsonResponse != null) {
+                isOrderPlace = jsonResponse.optBoolean(this.SelectOrderMasterByTableMasterId + "Result");
+            }
+            return isOrderPlace;
+        } catch (Exception ex) {
+            return isOrderPlace;
+        }
+    }
 
     //region SelectAll
 

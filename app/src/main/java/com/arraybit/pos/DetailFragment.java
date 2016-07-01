@@ -233,7 +233,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             }
         } else if(Globals.isWishListShow==1){
             menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
             menu.findItem(R.id.callWaiter).setVisible(false);
         }

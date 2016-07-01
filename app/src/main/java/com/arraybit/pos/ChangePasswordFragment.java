@@ -199,7 +199,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.login).setVisible(false);
-        menu.findItem(R.id.registration).setVisible(false);
+        menu.findItem(R.id.logout).setVisible(false);
         menu.findItem(R.id.shortList).setVisible(false);
     }
 

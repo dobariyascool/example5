@@ -140,7 +140,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             menu.findItem(R.id.notification_layout).setVisible(false);
         }else if(Globals.isWishListShow==1){
             menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
             menu.findItem(R.id.callWaiter).setVisible(false);
         }
@@ -174,7 +174,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             }
         } else if (v.getId() == R.id.btnConfirmOrder) {
             view = v;
-            ConfirmDialog confirmDialog = new ConfirmDialog(getActivity().getResources().getString(R.string.cdfConfirmMsg));
+            ConfirmDialog confirmDialog = new ConfirmDialog(getActivity().getResources().getString(R.string.cdfConfirmMsg),false);
             confirmDialog.setTargetFragment(this,0);
             confirmDialog.show(getActivity().getSupportFragmentManager(),"");
         } else if (v.getId() == R.id.cbMenu) {
@@ -369,6 +369,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                 if (MenuActivity.parentActivity) {
                     Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                     intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
+                    intent.putExtra("ShowMessage",true);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
@@ -380,6 +381,8 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                     if(Globals.orderTypeMasterId==Globals.OrderType.DineIn.getValue()){
                         Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra("TableName", MenuActivity.objTableMaster.getTableName());
+                        intent.putExtra("ShowMessage",true);
                         getActivity().startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                     }else {

@@ -15,7 +15,12 @@ import com.arraybit.modal.TableMaster;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewHolder> {
 
@@ -27,11 +32,11 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
     boolean isClickEnable;
     LayoutClickListener objLayoutClickListener;
     FragmentManager fragmentManager;
-    Boolean isAll;
+    Boolean isAll, isWaitingMode, isVacantClick;
     int previousPosition;
 
     // Constructor
-    public TablesAdapter(Context context, ArrayList<TableMaster> result, boolean isClickEnable, LayoutClickListener objLayoutClickListener, FragmentManager fragmentManager, Boolean isAll, boolean isItemAnimate) {
+    public TablesAdapter(Context context, ArrayList<TableMaster> result, boolean isClickEnable, LayoutClickListener objLayoutClickListener, FragmentManager fragmentManager, Boolean isAll, boolean isItemAnimate, boolean isWaitingMode, boolean isVacantClick) {
         this.context = context;
         alTableMaster = result;
         this.isClickEnable = isClickEnable;
@@ -40,6 +45,8 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         this.fragmentManager = fragmentManager;
         this.isAll = isAll;
         this.isItemAnimate = isItemAnimate;
+        this.isWaitingMode = isWaitingMode;
+        this.isVacantClick = isVacantClick;
     }
 
     @Override
@@ -60,13 +67,37 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         }
         holder.txtTableName.setText(objTableMaster.getShortName());
         holder.txtPersons.setText(String.valueOf(objTableMaster.getMaxPerson()));
-        if(objTableMaster.getTableStatus()!=null && objTableMaster.getTableStatus().equals(Globals.TableStatus.Block.toString()))
-        {
+        if (objTableMaster.getTableStatus() != null && objTableMaster.getTableStatus().equals(Globals.TableStatus.Block.toString())) {
             holder.txtTableStatus.setText(context.getResources().getString(R.string.tsBlocked));
-        }else {
+        } else {
             holder.txtTableStatus.setText(objTableMaster.getTableStatus());
         }
         holder.txtTableStatus.setTextColor(Color.parseColor("#" + objTableMaster.getStatusColor()));
+
+        if (isWaitingMode) {
+            if (objTableMaster.getStatusUpdateDateTime() != null && !objTableMaster.getStatusUpdateDateTime().equals("") && objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Occupied.getValue()) {
+                Calendar calendar = Calendar.getInstance();
+                String[] strArray = objTableMaster.getStatusUpdateDateTime().split("_");
+                try {
+                    Date currentTime = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).parse(new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).format(calendar.getTime()));
+                    Date statusUpdateTime = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).parse(strArray[1]);
+                    long timeDifference = currentTime.getTime() - statusUpdateTime.getTime();
+                    int hour = (int) timeDifference / (60 * 60 * 1000) % 24;
+                    int min = (int) (timeDifference / (60 * 1000)) % 60;
+                    int sec = (int) (timeDifference / 1000 % 60);
+                    holder.txtTableStatusTime.setVisibility(View.VISIBLE);
+                    holder.txtTableStatusTime.setText(String.format("%02d:%02d", hour, min));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                holder.txtTableStatusTime.setVisibility(View.GONE);
+                holder.txtTableStatusTime.setText(objTableMaster.getStatusUpdateDateTime());
+            }
+        } else {
+            holder.txtTableStatusTime.setVisibility(View.GONE);
+        }
 
         //holder animation
         if (isItemAnimate) {
@@ -104,7 +135,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
 
     class TableViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtTableName, txtPersons, txtTableStatus;
+        TextView txtTableName, txtPersons, txtTableStatus, txtTableStatusTime;
         CardView cvTable;
 
         public TableViewHolder(View itemView) {
@@ -113,6 +144,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             txtTableName = (TextView) itemView.findViewById(R.id.txtTableName);
             txtPersons = (TextView) itemView.findViewById(R.id.txtPersons);
             txtTableStatus = (TextView) itemView.findViewById(R.id.txtTableStatus);
+            txtTableStatusTime = (TextView) itemView.findViewById(R.id.txtTableStatusTime);
             cvTable = (CardView) itemView.findViewById(R.id.cvTable);
 
             if (isClickEnable) {
@@ -129,6 +161,18 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
                         }
                     }
                 });
+            } else {
+                if (isVacantClick) {
+                    cvTable.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (alTableMaster.get(getAdapterPosition()).getlinktoTableStatusMasterId() == Globals.TableStatus.Vacant.getValue()) {
+                                Globals.HideKeyBoard(context, v);
+                                objLayoutClickListener.ChangeTableStatusClick(alTableMaster.get(v.getId()), v.getId());
+                            }
+                        }
+                    });
+                }
             }
         }
     }

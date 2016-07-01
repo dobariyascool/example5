@@ -64,14 +64,14 @@ public class MenuActivity extends AppCompatActivity{
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(GuestHomeActivity.isMenuMode){
             menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
             menu.findItem(R.id.callWaiter).setVisible(false);
         }else {
             if (MenuActivity.parentActivity) {
                 //Globals.SetOptionMenu(Globals.userName, MenuActivity.this, menu);
                 menu.findItem(R.id.login).setVisible(false);
-                menu.findItem(R.id.registration).setVisible(false);
+                menu.findItem(R.id.logout).setVisible(false);
                 menu.findItem(R.id.shortList).setVisible(false);
                 menu.findItem(R.id.callWaiter).setVisible(false);
             } else {

@@ -93,6 +93,22 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             holder.txtTableName.setText(objOrderMaster.getTableName()+" "+"[" + objOrderMaster.getOrderNumber() + "]");
         }
 
+
+        if(objOrderMaster.getlinktoOrderStatusMasterId()!=null){
+            holder.ivOrderIcon.setVisibility(View.VISIBLE);
+            if(objOrderMaster.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Cooking.getValue()){
+                holder.ivOrderIcon.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.cooking));
+            }else if(objOrderMaster.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Ready.getValue()){
+                holder.ivOrderIcon.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.ready));
+            }else if(objOrderMaster.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Served.getValue()){
+                holder.ivOrderIcon.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.served));
+            }else if(objOrderMaster.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Cancelled.getValue()){
+                holder.ivOrderIcon.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.cancel));
+            }
+        }else{
+            holder.ivOrderIcon.setVisibility(View.GONE);
+        }
+
         holder.txtOrderType.setText(objOrderMaster.getOrderType());
         if (isViewFilter) {
             holder.itemLayout.removeAllViewsInLayout();
@@ -150,7 +166,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
 
     public void UpdateOrder(int position,short linktoOrderStatusMasterId){
         alOrderMaster.get(position).setlinktoOrderStatusMasterId(linktoOrderStatusMasterId);
-        notifyItemChanged(position);
+        notifyDataSetChanged();
         isItemAnimate = false;
         isViewFilter = true;
     }
@@ -246,6 +262,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         TextView txtOrderTimeDifference, txtOrderTime, txtTableName, txtOrderNumber, txtOrderType, txtTotalAmount;
         LinearLayout itemLayout;
         CardView cvOrder;
+        ImageView ivOrderIcon;
 
         public OrderViewHolder(View itemView) {
             super(itemView);
@@ -259,6 +276,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             itemLayout = (LinearLayout) itemView.findViewById(R.id.itemLayout);
 
             cvOrder = (CardView) itemView.findViewById(R.id.cvOrder);
+
+            ivOrderIcon = (ImageView) itemView.findViewById(R.id.ivOrderIcon);
 
             cvOrder.setOnClickListener(new View.OnClickListener() {
                 @Override

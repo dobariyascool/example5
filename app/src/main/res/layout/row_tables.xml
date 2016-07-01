@@ -21,6 +21,18 @@
             android:paddingStart="0dp"
             android:textColor="@color/orange" />
 
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtTableStatusTime"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:paddingEnd="@dimen/control_SpecingTiny"
+            android:paddingStart="0dp"
+            android:paddingTop="@dimen/control_SpecingTiny"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/control_TextTiny" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

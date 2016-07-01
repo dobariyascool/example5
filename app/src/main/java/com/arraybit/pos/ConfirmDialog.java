@@ -17,6 +17,7 @@ public class ConfirmDialog extends DialogFragment implements View.OnClickListene
     ConfirmationResponseListener objConfirmationResponseListener;
     boolean isDeleteConfirm;
     String message;
+    boolean btnTextChange;
 
     public ConfirmDialog() {
         // Required empty public constructor
@@ -24,9 +25,10 @@ public class ConfirmDialog extends DialogFragment implements View.OnClickListene
 
 
     @SuppressLint("ValidFragment")
-    public ConfirmDialog(String message) {
+    public ConfirmDialog(String message,boolean btnTextChange) {
         // Required empty public constructor
         this.message = message;
+        this.btnTextChange = btnTextChange;
     }
 
     @Override
@@ -41,6 +43,14 @@ public class ConfirmDialog extends DialogFragment implements View.OnClickListene
 
         TextView txtConfirm = (TextView)view.findViewById(R.id.txtConfirm);
         TextView txtCancel = (TextView)view.findViewById(R.id.txtCancel);
+
+        if(btnTextChange){
+            txtConfirm.setText(getActivity().getResources().getString(R.string.cdfYes));
+            txtCancel.setText(getActivity().getResources().getString(R.string.cdfNo));
+        }else{
+            txtConfirm.setText(getActivity().getResources().getString(R.string.cdfConfirm));
+            txtCancel.setText(getActivity().getResources().getString(R.string.cdfCancel));
+        }
 
         txtHeader.setText(message);
 

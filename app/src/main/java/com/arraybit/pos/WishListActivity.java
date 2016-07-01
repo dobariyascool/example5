@@ -72,7 +72,7 @@ public class WishListActivity extends AppCompatActivity{
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.cart_layout).setVisible(true);
         menu.findItem(R.id.login).setVisible(false);
-        menu.findItem(R.id.registration).setVisible(false);
+        menu.findItem(R.id.logout).setVisible(false);
         menu.findItem(R.id.shortList).setVisible(false);
         menu.findItem(R.id.callWaiter).setVisible(false);
         return super.onPrepareOptionsMenu(menu);

@@ -143,11 +143,11 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         }
 
         if (i == 1) {
-            menu.findItem(R.id.viewChange).setIcon(R.drawable.view_grid);
-        } else if (i == 2) {
             menu.findItem(R.id.viewChange).setIcon(R.drawable.view_grid_two);
-        } else {
+        } else if (i == 2) {
             menu.findItem(R.id.viewChange).setIcon(R.drawable.view_list);
+        } else {
+            menu.findItem(R.id.viewChange).setIcon(R.drawable.view_grid);
         }
     }
 
@@ -159,7 +159,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                     SaveWishListInSharePreference(true);
                 }
                if (MenuActivity.parentActivity || GuestHomeActivity.isMenuMode) {
-                    //Globals.CategoryItemFragmentResetStaticVariable();
                     getActivity().finish();
                     getActivity().overridePendingTransition(0, R.anim.right_exit);
                 } else {
@@ -178,7 +177,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.GetCurrentFragment(itemTabLayout.getSelectedTabPosition());
                 i = (short) (i + 1);
                 if (i == 1) {
-                    item.setIcon(R.drawable.view_grid);
+                    item.setIcon(R.drawable.view_grid_two);
                     isViewChange = true;
                     isForceToChange = true;
                     if (fabJain.isSelected() || fabNonVeg.isSelected() || fabVeg.isSelected()) {
@@ -187,7 +186,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                         itemTabFragment.SetupRecyclerView(false, null);
                     }
                 } else if (i == 2) {
-                    item.setIcon(R.drawable.view_grid_two);
+                    item.setIcon(R.drawable.view_list);
                     isViewChange = true;
                     isForceToChange = true;
                     if (fabJain.isSelected() || fabNonVeg.isSelected() || fabVeg.isSelected()) {
@@ -197,7 +196,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                     }
                 } else {
                     i = 0;
-                    item.setIcon(R.drawable.view_list);
+                    item.setIcon(R.drawable.view_grid);
                     isViewChange = false;
                     isForceToChange = true;
                     if (fabJain.isSelected() || fabNonVeg.isSelected() || fabVeg.isSelected()) {

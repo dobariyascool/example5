@@ -11,9 +11,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -41,7 +43,7 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ResourceType"})
 @SuppressLint("InflateParams")
 public class WaiterHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, NotificationReceiver.NotificationListener {
 
@@ -53,7 +55,8 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     NavigationView navigationView;
     TextView txtNotificationNumber;
     Toolbar app_bar;
-    boolean isRestart;
+    boolean isRestart,isShowMessage,isCheckOutMessage;
+    String tableName;
     RelativeLayout notificationLayout;
 
     @Override
@@ -120,6 +123,25 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         } else {
             POSApplication.setAppCompatActivity(WaiterHomeActivity.this);
             Globals.CallNotificationReceiver(WaiterHomeActivity.this);
+        }
+
+        tableName = getIntent().getStringExtra("TableName");
+        isShowMessage = getIntent().getBooleanExtra("ShowMessage", false);
+        isCheckOutMessage = getIntent().getBooleanExtra("IsCheckOutMessage",false);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(isShowMessage){
+            if(tableName!=null && !tableName.equals("")){
+                ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace)," of ("+tableName+")"));
+            }else {
+                ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace)," successfully"));
+            }
+        }
+        if(isCheckOutMessage){
+            Globals.ShowSnackBar(drawerLayout,getResources().getString(R.string.MsgBillGenerateSuccess),this,2000);
         }
     }
 
@@ -358,7 +380,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         fragmentTransaction.commit();
     }
 
-
     private void SetWaiterName(TextView txtName, TextView txtLetter, NavigationView navigationView) {
         objSharePreferenceManage = new SharePreferenceManage();
         if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", WaiterHomeActivity.this) != null) {
@@ -381,6 +402,28 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             txtNotificationNumber.setVisibility(View.GONE);
         }
     }
+
+    private void ShowSnackBarWithAction(final String msg) {
+        Snackbar snackbar = Snackbar
+                .make(drawerLayout, msg, Snackbar.LENGTH_LONG)
+                .setAction("View", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Globals.ReplaceFragment(new AllOrdersFragment(null),getSupportFragmentManager(), null);
+                    }
+                })
+                .setDuration(5000);
+        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.accent));
+        View snackView = snackbar.getView();
+        if (Build.VERSION.SDK_INT >= 21) {
+            snackView.setElevation(R.dimen.snackbar_elevation);
+        }
+        android.widget.TextView txt = (android.widget.TextView) snackView.findViewById(android.support.design.R.id.snackbar_text);
+        txt.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+        snackView.setBackgroundColor(ContextCompat.getColor(this, R.color.blue_grey));
+        snackbar.show();
+    }
+
     //endregion
 
     //region LoadingTask

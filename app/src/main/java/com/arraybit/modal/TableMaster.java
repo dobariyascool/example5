@@ -31,6 +31,8 @@ public class TableMaster implements Parcelable {
     String StatusColor;
     String Section;
     String Business;
+    String StatusUpdateDateTime;
+
     public static final Parcelable.Creator<TableMaster> CREATOR = new Creator<TableMaster>() {
         public TableMaster createFromParcel(Parcel source) {
             TableMaster objTableMaster = new TableMaster();
@@ -53,6 +55,7 @@ public class TableMaster implements Parcelable {
             objTableMaster.linktoUserMasterIdUpdatedBy = (short)source.readInt();
             objTableMaster.linktoBusinessMasterId = (short)source.readInt();
             objTableMaster.IsEnabled = source.readByte() != 0;
+            objTableMaster.StatusUpdateDateTime = source.readString();
 
             /// Extra
             objTableMaster.TableStatus = source.readString();
@@ -156,10 +159,16 @@ public class TableMaster implements Parcelable {
 
     public String getStatusColor() { return StatusColor; }
 
-    //endregion
-
     public void setStatusColor(String statusColor) {
         StatusColor = statusColor;
+    }
+
+    public String getStatusUpdateDateTime() {return StatusUpdateDateTime;}
+
+    //endregion
+
+    public void setStatusUpdateDateTime(String statusUpdateDateTime) {
+        StatusUpdateDateTime = statusUpdateDateTime;
     }
 
     public int describeContents() {
@@ -188,6 +197,7 @@ public class TableMaster implements Parcelable {
         parcel.writeInt(linktoUserMasterIdUpdatedBy);
         parcel.writeInt(linktoBusinessMasterId);
         parcel.writeByte((byte) (IsEnabled ? 1 : 0));
+        parcel.writeString(StatusUpdateDateTime);
 
         /// Extra
         parcel.writeString(TableStatus);

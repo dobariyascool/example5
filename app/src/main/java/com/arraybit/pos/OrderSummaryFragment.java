@@ -165,7 +165,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.registration).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
             menu.findItem(R.id.callWaiter).setVisible(false);
             //Globals.SetOptionMenu(Globals.userName, getActivity(), menu);
@@ -250,7 +250,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             }
         } else if (v.getId() == R.id.btnCheckOut) {
             focusView = v;
-            ConfirmDialog confirmDialog = new ConfirmDialog(getActivity().getResources().getString(R.string.cdfCheckOutMsg));
+            ConfirmDialog confirmDialog = new ConfirmDialog(getActivity().getResources().getString(R.string.cdfCheckOutMsg),false);
             confirmDialog.setTargetFragment(this, 0);
             confirmDialog.show(getActivity().getSupportFragmentManager(), "");
         } else if (v.getId() == R.id.txtHeaderDiscount) {
@@ -304,6 +304,20 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    @Override
+    public void ConfirmResponse() {
+        if (MenuActivity.parentActivity && Globals.userName == null) {
+            GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
+            guestLoginDialogFragment.setTargetFragment(this, 0);
+            guestLoginDialogFragment.show(getActivity().getSupportFragmentManager(), "");
+        } else {
+            if (Service.CheckNet(getActivity())) {
+                new BillNumberLoadingTask().execute();
+            } else {
+                Globals.ShowSnackBar(focusView, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+            }
+        }
+    }
 
     //region Private Methods and Interface
     private void SetErrorLayout(boolean isShow, String errorMsg) {
@@ -483,21 +497,6 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             taxLayout.addView(linearLayout[i]);
         }
 
-    }
-
-    @Override
-    public void ConfirmResponse() {
-        if (MenuActivity.parentActivity && Globals.userName == null) {
-            GuestLoginDialogFragment guestLoginDialogFragment = new GuestLoginDialogFragment();
-            guestLoginDialogFragment.setTargetFragment(this, 0);
-            guestLoginDialogFragment.show(getActivity().getSupportFragmentManager(), "");
-        } else {
-            if (Service.CheckNet(getActivity())) {
-                new BillNumberLoadingTask().execute();
-            } else {
-                Globals.ShowSnackBar(focusView, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
-            }
-        }
     }
     //endregion
 
@@ -738,6 +737,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                     Globals.alOrderMasterId = new ArrayList<>();
                     Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("IsCheckOutMessage", true);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }

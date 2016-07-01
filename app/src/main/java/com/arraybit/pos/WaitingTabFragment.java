@@ -1,9 +1,11 @@
 package com.arraybit.pos;
 
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,6 +36,8 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
     WaitingListAdapter waitingListAdapter;
     WaitingStatusMaster objWaitingStatusMaster;
     LinearLayout errorLayout;
+    Context context;
+    FragmentManager fragmentManager;
 
     public WaitingTabFragment() {
     }
@@ -65,13 +69,14 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         return view;
     }
 
-    public void LoadWaitingListData() {
-
+    public void LoadWaitingListData(Context context,FragmentManager fragmentManager) {
+        this.context = context;
+        this.fragmentManager = fragmentManager;
         Bundle bundle = getArguments();
         objWaitingStatusMaster = bundle.getParcelable(ITEMS_COUNT_KEY);
         alWaitingMaster = new ArrayList<>();
 
-        if (Service.CheckNet(getActivity())) {
+        if (Service.CheckNet(context)) {
             new WaitingMasterLoadingTask().execute();
         } else {
             Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvWaiting,R.drawable.wifi_drawable);
@@ -96,7 +101,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
 
     //region Private Methods
     private void SetupRecyclerView(RecyclerView rvWaiting) {
-        waitingListAdapter = new WaitingListAdapter(getActivity(), alWaitingMaster, this, false);
+        waitingListAdapter = new WaitingListAdapter(context, alWaitingMaster, this, false);
         rvWaiting.setAdapter(waitingListAdapter);
         rvWaiting.setLayoutManager(linearLayoutManager);
         rvWaiting.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -122,7 +127,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
             super.onPreExecute();
 
             progressDialog = new com.arraybit.pos.ProgressDialog();
-            progressDialog.show(getActivity().getSupportFragmentManager(), "");
+            progressDialog.show(fragmentManager, "");
         }
 
         @Override

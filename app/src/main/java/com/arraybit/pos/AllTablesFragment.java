@@ -36,7 +36,9 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.TableMaster;
+import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.TableJSONParser;
+import com.arraybit.parser.WaitingJSONParser;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -45,7 +47,7 @@ import java.util.Arrays;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 @SuppressLint("ValidFragment")
-public class AllTablesFragment extends Fragment implements View.OnClickListener, TablesAdapter.LayoutClickListener, SearchView.OnQueryTextListener, TableStatusFragment.UpdateTableStatusListener {
+public class AllTablesFragment extends Fragment implements View.OnClickListener, TablesAdapter.LayoutClickListener, SearchView.OnQueryTextListener, TableStatusFragment.UpdateTableStatusListener,ConfirmDialog.ConfirmationResponseListener {
 
     static boolean isRefresh = false;
     boolean isFilter;
@@ -54,16 +56,16 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
     FloatingActionMenu famRoot;
     Activity activityName;
     CoordinatorLayout allTablesFragment;
-    boolean isChangeMode, isVacant = false;
+    boolean isChangeMode, isVacant = false, isClick;
     String linktoOrderTypeMasterId, tableStatusMasterId;
     LinearLayout errorLayout;
     RecyclerView rvTables;
     GridLayoutManager gridLayoutManager;
-    int counterMasterId, position;
+    int counterMasterId, position,tableMasterId;
     SharePreferenceManage objSharePreferenceManage;
     Bundle bundle;
     DisplayMetrics displayMetrics;
-
+    WaitingMaster objWaitingMaster;
 
     public AllTablesFragment(Activity activityName, boolean isChangeMode, String linktoOrderTypeMasterId) {
         this.activityName = activityName;
@@ -117,6 +119,8 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         bundle = getArguments();
         if (bundle != null) {
             isVacant = bundle.getBoolean("IsVacant");
+            isClick = bundle.getBoolean("IsClick");
+            objWaitingMaster = bundle.getParcelable("WaitingMaster");
             this.linktoOrderTypeMasterId = String.valueOf(bundle.getInt("linktoOrderTypeMasterId"));
         }
 
@@ -157,8 +161,8 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
-                if(getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
-                        && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount()-1)
+                if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1)
                         .getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_tables))) {
                     Globals.isWishListShow = 0;
                     Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
@@ -269,23 +273,34 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
     public void ChangeTableStatusClick(TableMaster objTableMaster, int position) {
         this.position = position;
         if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Vacant.toString())) {
-            if (isChangeMode) {
-                Globals.isWishListShow = 1;
-                Globals.DisableBroadCastReceiver(getActivity());
-                Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
-                intent.putExtra("TableMaster", objTableMaster);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            } else {
-                if (Globals.selectTableMasterId == 0) {
-                    Globals.selectTableMasterId = objTableMaster.getTableMasterId();
+            if(isClick){
+               if(objWaitingMaster!=null){
+                   tableMasterId = objTableMaster.getTableMasterId();
+                   String message = "Want to assign"+" "+objTableMaster.getShortName()+"("+objTableMaster.getMaxPerson()+") to "+objWaitingMaster.getPersonName()
+                           +"("+objWaitingMaster.getNoOfPersons()+" persons)?";
+                   ConfirmDialog confirmDialog = new ConfirmDialog(message,false);
+                   confirmDialog.setTargetFragment(this,0);
+                   confirmDialog.show(getActivity().getSupportFragmentManager(),"");
+               }
+            }else {
+                if (isChangeMode) {
+                    Globals.isWishListShow = 1;
+                    Globals.DisableBroadCastReceiver(getActivity());
+                    Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+                    intent.putExtra("TableMaster", objTableMaster);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                } else {
+                    if (Globals.selectTableMasterId == 0) {
+                        Globals.selectTableMasterId = objTableMaster.getTableMasterId();
+                    }
+                    Intent intent = new Intent(getActivity(), MenuActivity.class);
+                    intent.putExtra("IsFavoriteShow", true);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("TableMaster", objTableMaster);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
-                Intent intent = new Intent(getActivity(), MenuActivity.class);
-                intent.putExtra("IsFavoriteShow",true);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("TableMaster", objTableMaster);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Occupied.toString())) {
 
@@ -317,6 +332,15 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             TableStatusFragment tableStatusFragment = new TableStatusFragment(objTableMaster);
             tableStatusFragment.setTargetFragment(this, 0);
             tableStatusFragment.show(getFragmentManager(), "");
+        }
+    }
+
+    @Override
+    public void ConfirmResponse() {
+        if (Service.CheckNet(getActivity())) {
+            new UpdateTableStatusLoadingTask().execute();
+        } else {
+            Globals.ShowSnackBar(rvTables,getResources().getString(R.string.MsgCheckConnection),getActivity(),2000);
         }
     }
 
@@ -368,12 +392,15 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         return filteredList;
     }
 
-
     private void SetupRecyclerView(RecyclerView rvTables, ArrayList<TableMaster> alTableMaster) {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
-            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), true, false);
+            if (isClick) {
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, this, getActivity().getSupportFragmentManager(), true, false, true, true);
+            } else {
+                tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, false, null, getActivity().getSupportFragmentManager(), true, false, true, false);
+            }
         } else {
-            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), true, false);
+            tablesAdapter = new TablesAdapter(getActivity(), alTableMaster, true, this, getActivity().getSupportFragmentManager(), true, false, false, false);
         }
 
         rvTables.setAdapter(tablesAdapter);
@@ -414,6 +441,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
 
         }
     }
+
     //endregion
 
     //region Loading Task
@@ -455,5 +483,85 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             }
         }
     }
+
+    class UpdateTableStatusLoadingTask extends AsyncTask {
+
+        com.arraybit.pos.ProgressDialog progressDialog;
+        String status;
+        TableMaster objTable;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new com.arraybit.pos.ProgressDialog();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
+
+            objTable = new TableMaster();
+            objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Occupied.getValue());
+            objTable.setTableMasterId((short) tableMasterId);
+            objTable.setStatusColor(Globals.TableStatusColor.Occupied.getValue());
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            TableJSONParser objTableJSONParser = new TableJSONParser();
+            status = objTableJSONParser.UpdateTableStatus(objTable);
+
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            if(status.equals("-1")){
+                progressDialog.dismiss();
+            }
+            else if(status.equals("0")) {
+                progressDialog.dismiss();
+                if (Service.CheckNet(getActivity())) {
+                    tablesAdapter.UpdateData(position, objTable);
+                    new UpdateWaitingStatusLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(rvTables,getResources().getString(R.string.MsgCheckConnection),getActivity(),2000);
+                }
+            }
+        }
+    }
+
+    class UpdateWaitingStatusLoadingTask extends AsyncTask {
+
+        String status;
+        WaitingMaster objUpdateWaitingMaster;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            objUpdateWaitingMaster = new WaitingMaster();
+            objUpdateWaitingMaster.setWaitingMasterId(objWaitingMaster.getWaitingMasterId());
+            objUpdateWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.Assign.getValue());
+            objUpdateWaitingMaster.setLinktoTableMasterId((short) tableMasterId);
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
+            status = objWaitingJSONParser.UpdateWaitingStatus(objUpdateWaitingMaster);
+
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            if(status.equals("0")){
+                WaitingStatusFragment.UpdateStatusListener objUpdateStatusListener = (WaitingStatusFragment.UpdateStatusListener)getActivity();
+                objUpdateStatusListener.UpdateStatus(false);
+            }
+        }
+    }
+
     //endregion
 }

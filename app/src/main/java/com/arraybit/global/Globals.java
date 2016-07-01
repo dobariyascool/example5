@@ -90,6 +90,7 @@ public class Globals {
     public static String TimeFormat = "hh:mm";
     public static String DateTimeFormat = "d/M/yyyy/H/m";
     public static String DisplayTimeFormat = "h:mm a";
+    public static String FullTimeFormat = "H:mm a";
     public static int sourceMasterId = 3;
     public static short customerType = 2;
     public static short businessMasterId;
