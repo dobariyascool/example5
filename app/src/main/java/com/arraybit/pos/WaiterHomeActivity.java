@@ -157,6 +157,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                     @Override
                     public void run() {
                         Globals.ShowSnackBar(drawerLayout, getResources().getString(R.string.MsgBillGenerateSuccess), WaiterHomeActivity.this, 2000);
+                        isCheckOutMessage = false;
                     }
                 }, 1000);
             }
