@@ -108,7 +108,6 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                getActivity().getSupportFragmentManager().popBackStack();
             } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
                 getActivity().finish();
                 getActivity().overridePendingTransition(0,R.anim.right_exit);

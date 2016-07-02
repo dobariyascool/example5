@@ -92,7 +92,7 @@ public class InformationFragment extends Fragment {
         rvWorkingHours.setVisibility(View.VISIBLE);
         adapter = new WorkingHoursAdapter(getActivity(), lstBusinessHoursTran);
         rvWorkingHours.setAdapter(adapter);
-        rvWorkingHours.setLayoutManager(linearLayoutManager);
+        rvWorkingHours.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private void SetContactDetails() {

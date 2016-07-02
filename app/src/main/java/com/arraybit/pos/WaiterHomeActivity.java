@@ -362,7 +362,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                             && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_tables))) {
                         isRestart = true;
                         onRestart();
-                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                             && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
                         getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -377,7 +376,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                         onRestart();
                         CategoryItemFragment.i = 0;
                         CategoryItemFragment.isViewChange = false;
-                        getSupportFragmentManager().popBackStack();
                         Globals.counter = 0;
                         Globals.alOrderItemTran = new ArrayList<>();
                         Globals.targetFragment = null;

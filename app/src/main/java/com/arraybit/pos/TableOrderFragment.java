@@ -107,7 +107,6 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                getActivity().getSupportFragmentManager().popBackStack();
             }
         }
         return super.onOptionsItemSelected(item);
