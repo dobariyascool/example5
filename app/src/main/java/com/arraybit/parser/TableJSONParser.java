@@ -167,8 +167,9 @@ public class TableJSONParser {
     public ArrayList<TableMaster> SelectAllTableMaster(int linktoCounterMasterId, String linktoTableStatusMasterId, String linktoOrderTypeMasterId, int linktoBusinessMasterId) {
         ArrayList<TableMaster> lstTableMaster = null;
         JSONObject jsonResponse;
+        dt = new Date();
         try {
-                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMaster + "/" + linktoCounterMasterId + "/" + linktoTableStatusMasterId + "/" + linktoOrderTypeMasterId + "/" + linktoBusinessMasterId);
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllTableMaster + "/" + linktoCounterMasterId + "/" + linktoTableStatusMasterId + "/" + linktoOrderTypeMasterId + "/" + linktoBusinessMasterId+"/"+sdfControlDateFormat.format(dt));
 
                 if (jsonResponse != null) {
                     JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllTableMaster + "Result");
