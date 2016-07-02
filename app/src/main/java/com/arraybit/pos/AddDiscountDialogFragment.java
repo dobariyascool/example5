@@ -134,16 +134,16 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
                     objDiscountMaster = new DiscountMaster();
                     objDiscountMaster.setIsPercentage(tbPercentage.isChecked());
                     if (tbRupee.isChecked()) {
-                        strDiscount = etDiscount.getText().toString().substring(0, 1);
+                        strDiscount = etDiscount.getText().toString().trim().substring(0, 1);
                         if (strDiscount.equals("0")) {
-                            strDiscount = etDiscount.getText().toString().substring(1, etDiscount.getText().length());
+                            strDiscount = etDiscount.getText().toString().trim().substring(1, etDiscount.getText().length());
                             objDiscountMaster.setDiscount(Double.valueOf(strDiscount));
                         } else {
-                            objDiscountMaster.setDiscount(Double.valueOf(etDiscount.getText().toString()));
+                            objDiscountMaster.setDiscount(Double.valueOf(etDiscount.getText().toString().trim()));
                         }
 
                     } else {
-                        objDiscountMaster.setDiscount(Double.valueOf(etDiscount.getText().toString()));
+                        objDiscountMaster.setDiscount(Double.valueOf(etDiscount.getText().toString().trim()));
                     }
                     objDiscountSelectionListener.DiscountCount(objDiscountMaster);
                 } else {

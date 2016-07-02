@@ -301,8 +301,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             progressDialog = new com.arraybit.pos.ProgressDialog();
             progressDialog.show(getSupportFragmentManager(), "");
 
-            strName = etName.getText().toString();
-            strPassword = etPassword.getText().toString();
+            strName = etName.getText().toString().trim();
+            strPassword = etPassword.getText().toString().trim();
 
         }
 

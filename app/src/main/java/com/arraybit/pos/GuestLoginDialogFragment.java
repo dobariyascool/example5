@@ -232,8 +232,8 @@ public class GuestLoginDialogFragment extends DialogFragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            strUserName = etUserName.getText().toString();
-            strPassword = etPassword.getText().toString();
+            strUserName = etUserName.getText().toString().trim();
+            strPassword = etPassword.getText().toString().trim();
 
         }
 

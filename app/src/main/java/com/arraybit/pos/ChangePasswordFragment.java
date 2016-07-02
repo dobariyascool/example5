@@ -286,8 +286,8 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             } else {
                 objCustomerMaster.setCustomerMasterId(0);
             }
-            objCustomerMaster.setPassword(etNewPassword.getText().toString());
-            password = etOldPassword.getText().toString();
+            objCustomerMaster.setPassword(etNewPassword.getText().toString().trim());
+            password = etOldPassword.getText().toString().trim();
             objCustomerMaster.setlinktoUserMasterIdUpdatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
         }
 

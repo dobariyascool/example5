@@ -348,16 +348,16 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
             objCustomerMaster = new CustomerMaster();
             objSharePreferenceManage = new SharePreferenceManage();
-            objCustomerMaster.setCustomerName(etFirstName.getText().toString() + " " + etLastName.getText().toString());
-            objCustomerMaster.setPassword(etPassword.getText().toString());
+            objCustomerMaster.setCustomerName(etFirstName.getText().toString().trim() + " " + etLastName.getText().toString().trim());
+            objCustomerMaster.setPassword(etPassword.getText().toString().trim());
             if (rbMale.isChecked()) {
                 objCustomerMaster.setGender(rbMale.getText().toString());
             }
             if (rbFemale.isChecked()) {
                 objCustomerMaster.setGender(rbFemale.getText().toString());
             }
-            objCustomerMaster.setEmail1(etEmail.getText().toString());
-            objCustomerMaster.setPhone1(etPhone.getText().toString());
+            objCustomerMaster.setEmail1(etEmail.getText().toString().trim());
+            objCustomerMaster.setPhone1(etPhone.getText().toString().trim());
             objCustomerMaster.setLinktoAreaMasterId((short) AreaMasterId);
             objCustomerMaster.setlinktoSourceMasterId((short) Globals.sourceMasterId);
             objCustomerMaster.setlinktoBusinessMasterId(Globals.businessMasterId);

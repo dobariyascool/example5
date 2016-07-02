@@ -750,13 +750,15 @@ public class FeedbackViewFragment extends Fragment {
             } else if (status.equals("0")) {
                 if (MenuActivity.parentActivity) {
                     Globals.userName = null;
-                    Intent intent = new Intent(getActivity(), WelcomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
-                    intent.putExtra("GuestScreen", true);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                    getActivity().finish();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                    Globals.ReplaceFragment(new ThankYouFragment(getActivity().getResources().getString(R.string.thankYouFeedbackMsg), false), getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_thank_you));
+//                    Intent intent = new Intent(getActivity(), WelcomeActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
+//                    intent.putExtra("GuestScreen", true);
+//                    startActivity(intent);
+//                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//                    getActivity().finish();
                 } else {
                     getActivity().getSupportFragmentManager().popBackStack();
                     Globals.ReplaceFragment(new ThankYouFragment(getActivity().getResources().getString(R.string.thankYouFeedbackMsg), false), getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_thank_you));
