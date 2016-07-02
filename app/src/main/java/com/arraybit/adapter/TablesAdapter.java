@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,9 +106,8 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
                     String strPersonName = objTableMaster.getWaitingPersonName().substring(0,objTableMaster.getWaitingPersonName().lastIndexOf("^"));
                     String strNoOfPersons = objTableMaster.getWaitingPersonName().substring(objTableMaster.getWaitingPersonName().lastIndexOf("^")+1,objTableMaster.getWaitingPersonName().length());
                     holder.txtWaitingPersons.setVisibility(View.VISIBLE);
-                    if(strPersonName.length() >= 8){
-                        holder.txtWaitingPersons.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
-                        holder.txtWaitingPersons.setText(strPersonName.substring(0,6)+"..("+strNoOfPersons+")");
+                    if(strPersonName.length() >= 10){
+                        holder.txtWaitingPersons.setText(strPersonName.substring(0,8)+"..("+strNoOfPersons+")");
                     }else{
                         holder.txtWaitingPersons.setText(strPersonName+"("+strNoOfPersons+")");
                     }
