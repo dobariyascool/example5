@@ -57,7 +57,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     NavigationView navigationView;
     TextView txtNotificationNumber;
     Toolbar app_bar;
-    boolean isRestart,isShowMessage,isCheckOutMessage;
+    boolean isRestart, isShowMessage, isCheckOutMessage;
     String tableName;
     RelativeLayout notificationLayout;
 
@@ -74,7 +74,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
             }
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setLogo(R.mipmap.center_pos_logo);
+            getSupportActionBar().setLogo(R.mipmap.app_logo);
         }
         //end
 
@@ -113,279 +113,282 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
         //schedule to call notification class on time
         int hasWriteContactsPermission = 0;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            hasWriteContactsPermission = checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED);
-            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED},
-                        requestAskPermission);
+        if (!Globals.ReceiverStart) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                hasWriteContactsPermission = checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED);
+                if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED},
+                            requestAskPermission);
+                } else {
+                    Globals.ReceiverStart = true;
+                    POSApplication.setAppCompatActivity(WaiterHomeActivity.this);
+                    Globals.CallNotificationReceiver(WaiterHomeActivity.this);
+                }
             } else {
+                Globals.ReceiverStart = true;
                 POSApplication.setAppCompatActivity(WaiterHomeActivity.this);
                 Globals.CallNotificationReceiver(WaiterHomeActivity.this);
             }
-        } else {
-            POSApplication.setAppCompatActivity(WaiterHomeActivity.this);
-            Globals.CallNotificationReceiver(WaiterHomeActivity.this);
         }
 
-        tableName = getIntent().getStringExtra("TableName");
-        isShowMessage = getIntent().getBooleanExtra("ShowMessage", false);
-        isCheckOutMessage = getIntent().getBooleanExtra("IsCheckOutMessage",false);
-    }
+            tableName = getIntent().getStringExtra("TableName");
+            isShowMessage = getIntent().getBooleanExtra("ShowMessage", false);
+            isCheckOutMessage = getIntent().getBooleanExtra("IsCheckOutMessage", false);
+        }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if(isShowMessage){
-                    if(tableName!=null && !tableName.equals("")){
-                        ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace)," of "+tableName));
-                    }else {
-                        ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace)," successfully"));
+        @Override
+        protected void onStart () {
+            super.onStart();
+            if (isShowMessage) {
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (tableName != null && !tableName.equals("")) {
+                            ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace), " of " + tableName));
+                        } else {
+                            ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace), " successfully"));
+                        }
+                        isShowMessage = false;
                     }
-                    isShowMessage = false;
-                }
-                if(isCheckOutMessage){
-                    Globals.ShowSnackBar(drawerLayout,getResources().getString(R.string.MsgBillGenerateSuccess),WaiterHomeActivity.this,2000);
-                }
+                }, 1000);
             }
-        }, 1000);
+            if (isCheckOutMessage) {
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Globals.ShowSnackBar(drawerLayout, getResources().getString(R.string.MsgBillGenerateSuccess), WaiterHomeActivity.this, 2000);
+                    }
+                }, 1000);
+            }
 
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.viewChange).setVisible(false);
-        menu.findItem(R.id.notification_layout).setVisible(true);
-        menu.findItem(R.id.logout).setVisible(false);
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_waiter_home, menu);
-        MenuItem cartItem = menu.findItem(R.id.notification_layout);
-        RelativeLayout relativeLayout = (RelativeLayout) MenuItemCompat.getActionView(cartItem);
-        notificationLayout = (RelativeLayout) relativeLayout.findViewById(R.id.notificationLayout);
-        txtNotificationNumber = (TextView) relativeLayout.findViewById(R.id.txtNotificationNumber);
-
-        SetNotificationNumber(txtNotificationNumber);
-        notificationLayout.setOnClickListener(this);
-        return true;
-    }
-
-    @SuppressLint("ShortAlarm")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        switch (requestCode) {
-            case requestAskPermission:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    POSApplication.setAppCompatActivity(WaiterHomeActivity.this);
-                    Globals.CallNotificationReceiver(WaiterHomeActivity.this);
-
-                } else {
-                    // Permission Denied
-                    Toast.makeText(WaiterHomeActivity.this, "Permission Denied", Toast.LENGTH_SHORT)
-                            .show();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        @Override
+        public boolean onPrepareOptionsMenu (Menu menu){
+            menu.findItem(R.id.viewChange).setVisible(false);
+            menu.findItem(R.id.notification_layout).setVisible(true);
+            menu.findItem(R.id.logout).setVisible(false);
+            return super.onPrepareOptionsMenu(menu);
+        }
 
-        //noinspection SimplifiableIfStatement
+        @Override
+        public boolean onCreateOptionsMenu (Menu menu){
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu_waiter_home, menu);
+            MenuItem cartItem = menu.findItem(R.id.notification_layout);
+            RelativeLayout relativeLayout = (RelativeLayout) MenuItemCompat.getActionView(cartItem);
+            notificationLayout = (RelativeLayout) relativeLayout.findViewById(R.id.notificationLayout);
+            txtNotificationNumber = (TextView) relativeLayout.findViewById(R.id.txtNotificationNumber);
 
-        if (id == R.id.action_settings) {
+            SetNotificationNumber(txtNotificationNumber);
+            notificationLayout.setOnClickListener(this);
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+        @SuppressLint("ShortAlarm")
+        @Override
+        public void onRequestPermissionsResult ( int requestCode, String[] permissions,
+        int[] grantResults){
+            switch (requestCode) {
+                case requestAskPermission:
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        Globals.ReceiverStart = true;
+                        POSApplication.setAppCompatActivity(WaiterHomeActivity.this);
+                        Globals.CallNotificationReceiver(WaiterHomeActivity.this);
 
-    //selected event
-    @Override
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
-        if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
-                .equals(getResources().getString(R.string.title_fragment_waiter_options))) {
-            if (menuItem.getItemId() == R.id.wChangeCounter) {
-                objSharePreferenceManage = new SharePreferenceManage();
-                if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaiterHomeActivity.this) != null) {
+                    } else {
+                        // Permission Denied
+                        Toast.makeText(WaiterHomeActivity.this, "Permission Denied", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                    break;
+                default:
+                    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+        }
+
+        @Override
+        public boolean onOptionsItemSelected (MenuItem item){
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+            int id = item.getItemId();
+
+            //noinspection SimplifiableIfStatement
+
+            if (id == R.id.action_settings) {
+                return true;
+            }
+
+            return super.onOptionsItemSelected(item);
+        }
+
+        //selected event
+        @Override
+        public boolean onNavigationItemSelected (MenuItem menuItem){
+            if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                    && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
+                    .equals(getResources().getString(R.string.title_fragment_waiter_options))) {
+                if (menuItem.getItemId() == R.id.wChangeCounter) {
+                    objSharePreferenceManage = new SharePreferenceManage();
+                    if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaiterHomeActivity.this) != null) {
+                        drawerLayout.closeDrawer(navigationView);
+                        CounterFragment counterFragment = new CounterFragment((short) Globals.UserType.Waiter.getValue());
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("isBack", true);
+                        counterFragment.setArguments(bundle);
+                        Globals.ReplaceFragment(counterFragment, getSupportFragmentManager(), null);
+                    }
+                } else if (menuItem.getItemId() == R.id.wChangeMode) {
                     drawerLayout.closeDrawer(navigationView);
-                    CounterFragment counterFragment = new CounterFragment((short) Globals.UserType.Waiter.getValue());
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("isBack", true);
-                    counterFragment.setArguments(bundle);
-                    Globals.ReplaceFragment(counterFragment, getSupportFragmentManager(), null);
+                    ChangeModeDialogFragment changeModeDialogFragment = new ChangeModeDialogFragment();
+                    changeModeDialogFragment.show(getSupportFragmentManager(), "");
+                } else if (menuItem.getItemId() == R.id.wHotelProfile) {
+                    drawerLayout.closeDrawer(navigationView);
+                    Intent intent = new Intent(WaiterHomeActivity.this, HotelProfileActivity.class);
+                    intent.putExtra("Mode", (short) 2);
+                    startActivityForResult(intent, 0);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
+                } else if (menuItem.getItemId() == R.id.wOffers) {
+                    drawerLayout.closeDrawer(navigationView);
+                    Intent intent = new Intent(WaiterHomeActivity.this, OfferActivity.class);
+                    intent.putExtra("Mode", (short) 2);
+                    startActivityForResult(intent, 0);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                } else if (menuItem.getItemId() == R.id.wFeedback) {
+                    drawerLayout.closeDrawer(navigationView);
+                    Globals.ReplaceFragment(new FeedbackFragment(WaiterHomeActivity.this), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_feedback));
+                } else if (menuItem.getItemId() == R.id.wRate) {
+                    Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                    try {
+                        startActivity(goToMarket);
+                    } catch (ActivityNotFoundException e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+
+                    }
+
+                } else if (menuItem.getItemId() == R.id.wAbout) {
+                    drawerLayout.closeDrawer(navigationView);
+                    Intent intent = new Intent(WaiterHomeActivity.this, AboutUsActivity.class);
+                    intent.putExtra("Mode", (short) 2);
+                    startActivityForResult(intent, 0);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                } else if (menuItem.getItemId() == R.id.wExit) {
+                    System.exit(0);
+                } else if (menuItem.getItemId() == R.id.wNotification) {
+                    drawerLayout.closeDrawer(navigationView);
+                    NotificationReceiver.notificationCount = 0;
+                    Intent intent = new Intent(WaiterHomeActivity.this, NotificationDetailActivity.class);
+                    startActivityForResult(intent, 0);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
-            } else if (menuItem.getItemId() == R.id.wChangeMode) {
-                drawerLayout.closeDrawer(navigationView);
-                ChangeModeDialogFragment changeModeDialogFragment = new ChangeModeDialogFragment();
-                changeModeDialogFragment.show(getSupportFragmentManager(), "");
-            } else if (menuItem.getItemId() == R.id.wHotelProfile) {
-                drawerLayout.closeDrawer(navigationView);
-                Intent intent = new Intent(WaiterHomeActivity.this, HotelProfileActivity.class);
-                intent.putExtra("Mode", (short) 2);
-                startActivityForResult(intent, 0);
-                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            }
+            return false;
+        }
 
-            } else if (menuItem.getItemId() == R.id.wOffers) {
-                drawerLayout.closeDrawer(navigationView);
-                Intent intent = new Intent(WaiterHomeActivity.this, OfferActivity.class);
-                intent.putExtra("Mode", (short) 2);
-                startActivityForResult(intent, 0);
-                overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            } else if (menuItem.getItemId() == R.id.wFeedback) {
-                drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new FeedbackFragment(WaiterHomeActivity.this), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_feedback));
-            } else if (menuItem.getItemId() == R.id.wRate) {
-                Uri uri = Uri.parse("market://details?id=" + getPackageName());
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                try {
-                    startActivity(goToMarket);
-                } catch (ActivityNotFoundException e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+        @Override
+        public void ShowNotificationCount () {
+            SetNotificationNumber(txtNotificationNumber);
+        }
 
-                }
-
-            } else if (menuItem.getItemId() == R.id.wAbout) {
-                drawerLayout.closeDrawer(navigationView);
-                Intent intent = new Intent(WaiterHomeActivity.this, AboutUsActivity.class);
-                intent.putExtra("Mode", (short) 2);
-                startActivityForResult(intent, 0);
-                overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            } else if (menuItem.getItemId() == R.id.wExit) {
-                System.exit(0);
-            } else if (menuItem.getItemId() == R.id.wNotification) {
-                drawerLayout.closeDrawer(navigationView);
+        @Override
+        public void onClick (View v){
+            if (v.getId() == R.id.cbLogout) {
+                Globals.ClearPreference(WaiterHomeActivity.this);
+            } else if (v.getId() == R.id.notificationLayout) {
                 NotificationReceiver.notificationCount = 0;
                 Intent intent = new Intent(WaiterHomeActivity.this, NotificationDetailActivity.class);
                 startActivityForResult(intent, 0);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         }
-        return false;
-    }
 
-    @Override
-    public void ShowNotificationCount() {
-        SetNotificationNumber(txtNotificationNumber);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.cbLogout) {
-            Globals.ClearPreference(WaiterHomeActivity.this);
-        } else if (v.getId() == R.id.notificationLayout) {
-            NotificationReceiver.notificationCount = 0;
-            Intent intent = new Intent(WaiterHomeActivity.this, NotificationDetailActivity.class);
-            startActivityForResult(intent, 0);
-            overridePendingTransition(R.anim.right_in, R.anim.left_out);
-        }
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if(isRestart) {
-            Globals.isWishListShow = 0;
-            Intent intent = new Intent(WaiterHomeActivity.this, WaiterHomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            overridePendingTransition(R.anim.right_in, R.anim.left_out);
-        }
-//        WaiterOptionListFragment waiterOptionListFragment = (WaiterOptionListFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_waiter_options));
-//        RemoveFragment(waiterOptionListFragment);
-//        Intent i = new Intent(WaiterHomeActivity.this, WaiterHomeActivity.class);
-//        startActivity(i);
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//        finish();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 0) {
-                SetNotificationNumber(txtNotificationNumber);
+        @Override
+        protected void onRestart () {
+            super.onRestart();
+            if (isRestart) {
+                Globals.isWishListShow = 0;
+                Intent intent = new Intent(WaiterHomeActivity.this, WaiterHomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         }
-    }
 
-    //prevent backPressed
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_detail))) {
-                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
-                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_orders))) {
-                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_cart_item))) {
-                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_summary))) {
-                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_summary), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    Globals.objDiscountMaster = null;
-                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_tables))) {
-                    isRestart=true;
-                    onRestart();
-                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
-                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
-                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_about_us))) {
-                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_about_us), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() -1).getName()!=null
-                    && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_feedback))){
+        @Override
+        protected void onPause () {
+            super.onPause();
+        }
 
-                }
-                else {
-                    isRestart=true;
-                    onRestart();
-                    CategoryItemFragment.i = 0;
-                    CategoryItemFragment.isViewChange = false;
-                    getSupportFragmentManager().popBackStack();
-                    Globals.counter = 0;
-                    Globals.alOrderItemTran = new ArrayList<>();
-                    Globals.targetFragment = null;
+        @Override
+        protected void onResume () {
+            super.onResume();
+        }
+
+        @Override
+        protected void onActivityResult ( int requestCode, int resultCode, Intent data){
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == RESULT_OK) {
+                if (requestCode == 0) {
+                    SetNotificationNumber(txtNotificationNumber);
                 }
             }
         }
-    }
-    //end
 
-    //region Private Methods and Interface
+        //prevent backPressed
+        @Override
+        public void onBackPressed () {
+            if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                    if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_detail))) {
+                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
+                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_orders))) {
+                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_cart_item))) {
+                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_order_summary))) {
+                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_summary), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        Globals.objDiscountMaster = null;
+                    } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_tables))) {
+                        isRestart = true;
+                        onRestart();
+                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
+                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_about_us))) {
+                        getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_about_us), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_feedback))) {
+
+                    } else {
+                        isRestart = true;
+                        onRestart();
+                        CategoryItemFragment.i = 0;
+                        CategoryItemFragment.isViewChange = false;
+                        getSupportFragmentManager().popBackStack();
+                        Globals.counter = 0;
+                        Globals.alOrderItemTran = new ArrayList<>();
+                        Globals.targetFragment = null;
+                    }
+                }
+            }
+        }
+        //end
+
+        //region Private Methods and Interface
+
     private void AddFragmentInLayout(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.waiterFragmentLayout, fragment, getResources().getString(R.string.title_fragment_waiter_options));
@@ -422,7 +425,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 .setAction("View", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Globals.ReplaceFragment(new AllOrdersFragment(null),getSupportFragmentManager(), null);
+                        Globals.ReplaceFragment(new AllOrdersFragment(null), getSupportFragmentManager(), null);
                     }
                 })
                 .setDuration(5000);

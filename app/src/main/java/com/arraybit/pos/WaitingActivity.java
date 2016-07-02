@@ -56,7 +56,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         setSupportActionBar(app_bar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setLogo(R.mipmap.center_pos_logo);
+            getSupportActionBar().setLogo(R.mipmap.app_logo);
         }
         //end
 
@@ -211,9 +211,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public void ConfirmResponse() {
-        drawerLayout.closeDrawer(navigationView);
         Globals.EnableBroadCastReceiver(WaitingActivity.this);
-        Globals.CallNotificationReceiver(WaitingActivity.this);
         Intent intent = new Intent(WaitingActivity.this, WaiterHomeActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.left_out);

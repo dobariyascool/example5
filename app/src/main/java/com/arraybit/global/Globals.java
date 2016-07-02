@@ -84,6 +84,7 @@ public class Globals {
     public static final String AboutUs="About Us";
     public static final String PrivacyPolicy="Privacy Policy";
     public static final String TermsOfService="Terms Of Service";
+    public static boolean ReceiverStart = false;
     public static String activityName;
     public static String serverName = null;
     public static String DateFormat = "d/M/yyyy";
@@ -625,14 +626,12 @@ public class Globals {
         objSharePreferenceManage.RemovePreference("WaiterPreference", "UserTypeMasterId", activity);
         objSharePreferenceManage.RemovePreference("WaiterPreference", "UserSecurityCode", activity);
         objSharePreferenceManage.RemovePreference("WaiterPreference", "WaiterMasterId", activity);
-        objSharePreferenceManage.RemovePreference("NotificationPreference", "NotificationList", activity);
 
         Globals.counter = 0;
         Globals.alOrderItemTran.clear();
         Globals.selectTableMasterId = 0;
 
         objSharePreferenceManage.ClearPreference("WaiterPreference", activity);
-        objSharePreferenceManage.ClearPreference("NotificationPreference", activity);
     }
 
     public static void ClearData() {
