@@ -31,6 +31,9 @@ import com.rey.material.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONStringer;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 @SuppressWarnings({"RedundantIfStatement", "ResourceType"})
 public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GuestLoginDialogFragment.LoginResponseListener {
@@ -60,7 +63,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         setSupportActionBar(app_bar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setLogo(R.mipmap.app_logo);
+            getSupportActionBar().setLogo(R.mipmap.center_pos_logo);
             if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
             }
@@ -115,9 +118,14 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     @Override
     protected void onStart() {
         super.onStart();
-        if (isShowMessage) {
-            ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace), " successfully"));
-        }
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (isShowMessage) {
+                    ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace), " successfully"));
+                }
+            }
+        }, 1000);
     }
 
     @Override
@@ -220,6 +228,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     public void LoginResponse() {
         SetGuestName();
     }
+
     public void EditTextOnClick(View view) {
         GuestProfileFragment guestProfileFragment = (GuestProfileFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_myprofile));
         guestProfileFragment.EditTextOnClick();
@@ -267,6 +276,9 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_feedback))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_feedback), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_thank_you))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_thank_you), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             }
         }

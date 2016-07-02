@@ -276,7 +276,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             if(isClick){
                if(objWaitingMaster!=null){
                    tableMasterId = objTableMaster.getTableMasterId();
-                   String message = "Want to assign"+" "+objTableMaster.getShortName()+"("+objTableMaster.getMaxPerson()+") to "+objWaitingMaster.getPersonName()
+                   String message = "Want to assign"+" "+objTableMaster.getShortName()+"("+objTableMaster.getMaxPerson()+") to "+objWaitingMaster.getPersonName().trim()
                            +"("+objWaitingMaster.getNoOfPersons()+" persons)?";
                    ConfirmDialog confirmDialog = new ConfirmDialog(message,false);
                    confirmDialog.setTargetFragment(this,0);
@@ -303,27 +303,34 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                 }
             }
         } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Occupied.toString())) {
+            if(isVacant){
+                Globals.isWishListShow = 1;
+                Globals.DisableBroadCastReceiver(getActivity());
+                Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+                intent.putExtra("TableMaster", objTableMaster);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            }else {
+                AllTablesFragment.isRefresh = true;
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("TableMaster", objTableMaster);
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
+                orderSummaryFragment.setArguments(bundle);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    Slide slideTransition = new Slide();
+                    slideTransition.setSlideEdge(Gravity.RIGHT);
+                    slideTransition.setDuration(500);
 
-            AllTablesFragment.isRefresh = true;
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("TableMaster", objTableMaster);
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
-            orderSummaryFragment.setArguments(bundle);
-            if (Build.VERSION.SDK_INT >= 21) {
-                Slide slideTransition = new Slide();
-                slideTransition.setSlideEdge(Gravity.RIGHT);
-                slideTransition.setDuration(500);
+                    orderSummaryFragment.setEnterTransition(slideTransition);
+                } else {
+                    fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+                }
 
-                orderSummaryFragment.setEnterTransition(slideTransition);
-            } else {
-                fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);
+                fragmentTransaction.replace(R.id.allTablesFragment, orderSummaryFragment, getActivity().getResources().getString(R.string.title_fragment_order_summary));
+                fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
+                fragmentTransaction.commit();
             }
-
-            fragmentTransaction.replace(R.id.allTablesFragment, orderSummaryFragment, getActivity().getResources().getString(R.string.title_fragment_order_summary));
-            fragmentTransaction.addToBackStack(getActivity().getResources().getString(R.string.title_fragment_order_summary));
-            fragmentTransaction.commit();
-
         } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Block.toString())) {
             TableStatusFragment tableStatusFragment = new TableStatusFragment(objTableMaster);
             tableStatusFragment.setTargetFragment(this, 0);
@@ -454,9 +461,9 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             super.onPreExecute();
             progressDialog = new ProgressDialog();
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
-            if (isVacant) {
-                tableStatusMasterId = String.valueOf(Globals.TableStatus.Vacant.getValue());
-            }
+//            if (isVacant) {
+//                tableStatusMasterId = String.valueOf(Globals.TableStatus.Vacant.getValue());
+//            }
         }
 
         @Override
@@ -478,7 +485,20 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                 SetErrorLayout(true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgTable)), 0);
             } else {
                 SetErrorLayout(false, null, 0);
-                alTableMaster = lstTableMaster;
+                if(isVacant){
+                    alTableMaster = new ArrayList<>();
+                    for(TableMaster objTableMaster : lstTableMaster){
+                        if(objTableMaster.getlinktoTableStatusMasterId()==Globals.TableStatus.Vacant.getValue() || objTableMaster.getlinktoTableStatusMasterId()==Globals.TableStatus.Occupied.getValue()) {
+                            if ((objTableMaster.getWaitingPersonName() != null && !objTableMaster.getWaitingPersonName().equals("")) && objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Occupied.getValue()) {
+                                alTableMaster.add(objTableMaster);
+                            } else if (objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Vacant.getValue()) {
+                                alTableMaster.add(objTableMaster);
+                            }
+                        }
+                    }
+                }else {
+                    alTableMaster = lstTableMaster;
+                }
                 SetupRecyclerView(rvTables, alTableMaster);
             }
         }

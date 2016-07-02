@@ -317,7 +317,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             }
             if (isShow) {
                 if (isItemSuggestedClick) {
-                    Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem), itemName),Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem), itemName),Toast.LENGTH_SHORT).show();
                     isItemSuggestedClick = false;
                 }
                 if (getTargetFragment() != null) {
@@ -393,7 +393,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             if (objOrderItemTran.getItemName() != null) {
                 Globals.counter = Globals.counter + 1;
                 Globals.alOrderItemTran.add(objOrderItemTran);
-                Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem), objOrderItemTran.getItemName()),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem), objOrderItemTran.getItemName()),Toast.LENGTH_SHORT).show();
             }
         }
     }

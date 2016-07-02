@@ -167,9 +167,9 @@ public class AddFragment extends Fragment {
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             objWaitingMaster = new WaitingMaster();
-            objWaitingMaster.setPersonName(etName.getText().toString());
-            objWaitingMaster.setPersonMobile(etMobileNo.getText().toString());
-            objWaitingMaster.setNoOfPersons(Short.valueOf(etPersons.getText().toString()));
+            objWaitingMaster.setPersonName(etName.getText().toString().trim().substring(0, 1).toUpperCase() + etName.getText().toString().trim().substring(1));
+            objWaitingMaster.setPersonMobile(etMobileNo.getText().toString().trim());
+            objWaitingMaster.setNoOfPersons(Short.valueOf(etPersons.getText().toString().trim()));
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Waiting").getValue());
             objWaitingMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
 

@@ -184,7 +184,7 @@
                     <com.rey.material.widget.TextView
                         android:id="@+id/txtBill"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/leftHeight"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:padding="@dimen/control_SpecingSmall"

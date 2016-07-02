@@ -728,7 +728,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                     Globals.alOrderMasterId = new ArrayList<>();
                     objSharePreferenceManage.RemovePreference("WishListPreference", "WishList",getActivity());
                     objSharePreferenceManage.ClearPreference("WishListPreference", getActivity());
-                    Globals.ReplaceFragment(new ThankYouFragment(), getActivity().getSupportFragmentManager(), null);
+                    Globals.ReplaceFragment(new ThankYouFragment(getActivity().getResources().getString(R.string.thankYouMsg),true), getActivity().getSupportFragmentManager(), null);
                 } else {
                     Globals.counter = 0;
                     Globals.alOrderItemTran.clear();

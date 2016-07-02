@@ -31,10 +31,10 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         View view = inflater.inflate(R.layout.fragment_guest_option_list, container, false);
 
         guestOptionLayout = (LinearLayout) view.findViewById(R.id.guestOptionLayout);
-        if (!getActivity().getResources().getBoolean(R.bool.isTablet)) {
-            menuModeLayout = (LinearLayout) view.findViewById(R.id.menuModeLayout);
-            guestModeLayout = (LinearLayout) view.findViewById(R.id.guestModeLayout);
-        }
+//        if (!getActivity().getResources().getBoolean(R.bool.isTablet)) {
+        menuModeLayout = (LinearLayout) view.findViewById(R.id.menuModeLayout);
+        guestModeLayout = (LinearLayout) view.findViewById(R.id.guestModeLayout);
+//        }
 
         Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
 
@@ -42,33 +42,38 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);
         CardView cvOffers = (CardView) view.findViewById(R.id.cvOffers);
         CardView cvFeedback = (CardView) view.findViewById(R.id.cvFeedback);
+        CardView cvMenuModeMenu = (CardView) view.findViewById(R.id.cvMenuModeMenu);
+        CardView cvMenuModeOffers = (CardView) view.findViewById(R.id.cvMenuModeOffers);
 
         cvMenu.setOnClickListener(this);
         cvOrders.setOnClickListener(this);
         cvOffers.setOnClickListener(this);
         cvFeedback.setOnClickListener(this);
+        cvMenuModeMenu.setOnClickListener(this);
+        cvMenuModeOffers.setOnClickListener(this);
 
-        if (!getActivity().getResources().getBoolean(R.bool.isTablet)) {
-            CardView cvMenuModeMenu = (CardView) view.findViewById(R.id.cvMenuModeMenu);
-            CardView cvMenuModeOffers = (CardView) view.findViewById(R.id.cvMenuModeOffers);
-            cvMenuModeMenu.setOnClickListener(this);
-            cvMenuModeOffers.setOnClickListener(this);
-            if (GuestHomeActivity.isMenuMode) {
-                menuModeLayout.setVisibility(View.VISIBLE);
-                guestModeLayout.setVisibility(View.GONE);
-            } else {
-                menuModeLayout.setVisibility(View.GONE);
-                guestModeLayout.setVisibility(View.VISIBLE);
-            }
+
+        if (GuestHomeActivity.isMenuMode) {
+            menuModeLayout.setVisibility(View.VISIBLE);
+            guestModeLayout.setVisibility(View.GONE);
         } else {
-            if (GuestHomeActivity.isMenuMode) {
-                cvOrders.setVisibility(View.GONE);
-                cvFeedback.setVisibility(View.GONE);
-            }else{
-                cvOrders.setVisibility(View.VISIBLE);
-                cvFeedback.setVisibility(View.VISIBLE);
-            }
+            menuModeLayout.setVisibility(View.GONE);
+            guestModeLayout.setVisibility(View.VISIBLE);
         }
+
+//        if (!getActivity().getResources().getBoolean(R.bool.isTablet)) {
+//
+//
+//
+//        } else {
+//            if (GuestHomeActivity.isMenuMode) {
+//                cvOrders.setVisibility(View.GONE);
+//                cvFeedback.setVisibility(View.GONE);
+//            }else{
+//                cvOrders.setVisibility(View.VISIBLE);
+//                cvFeedback.setVisibility(View.VISIBLE);
+//            }
+//        }
 
         setHasOptionsMenu(true);
 
@@ -129,14 +134,14 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                     Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_feedback));
                 }
             } else if (v.getId() == R.id.cvMenu || v.getId() == R.id.cvMenuModeMenu) {
-                if(v.getId()==R.id.cvMenu && !GuestHomeActivity.isMenuMode) {
+                if (v.getId() == R.id.cvMenu && !GuestHomeActivity.isMenuMode) {
                     Globals.isWishListShow = 1;
                     Globals.orderTypeMasterId = GuestHomeActivity.objTableMaster.getlinktoOrderTypeMasterId();
-                }else{
+                } else {
                     Globals.isWishListShow = 0;
                 }
                 Intent intent = new Intent(getActivity(), MenuActivity.class);
-                if(v.getId()==R.id.cvMenu  && !GuestHomeActivity.isMenuMode) {
+                if (v.getId() == R.id.cvMenu && !GuestHomeActivity.isMenuMode) {
                     intent.putExtra("ParentActivity", true);
                     intent.putExtra("IsFavoriteShow", false);
                     intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);

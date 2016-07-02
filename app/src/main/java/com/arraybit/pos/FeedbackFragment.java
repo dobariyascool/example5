@@ -37,6 +37,8 @@ import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 @SuppressLint("ValidFragment")
@@ -98,6 +100,22 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
             Globals.ShowSnackBar(container, getActivity().getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
         }
 
+        feedbackFragment.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    }
+                }, 1000);
+                return false;
+            }
+        });
+
         return view;
     }
 
@@ -131,16 +149,16 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
 
         if (id == android.R.id.home) {
             Globals.HideKeyBoard(getActivity(), getView());
-            if(getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_home))){
-                if(Globals.isWishListShow==0) {
-                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                }else{
+            if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_home))) {
+                if (Globals.isWishListShow == 0) {
+//                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
+//                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                } else {
                     getActivity().getSupportFragmentManager().popBackStack();
                 }
-            }else {
+            } else {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
             return true;

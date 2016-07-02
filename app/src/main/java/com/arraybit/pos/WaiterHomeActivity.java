@@ -42,6 +42,8 @@ import com.rey.material.widget.CompoundButton;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SuppressWarnings({"unchecked", "ResourceType"})
 @SuppressLint("InflateParams")
@@ -72,7 +74,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
             }
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setLogo(R.mipmap.app_logo);
+            getSupportActionBar().setLogo(R.mipmap.center_pos_logo);
         }
         //end
 
@@ -133,16 +135,23 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
     @Override
     protected void onStart() {
         super.onStart();
-        if(isShowMessage){
-            if(tableName!=null && !tableName.equals("")){
-                ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace)," of ("+tableName+")"));
-            }else {
-                ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace)," successfully"));
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(isShowMessage){
+                    if(tableName!=null && !tableName.equals("")){
+                        ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace)," of "+tableName));
+                    }else {
+                        ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace)," successfully"));
+                    }
+                    isShowMessage = false;
+                }
+                if(isCheckOutMessage){
+                    Globals.ShowSnackBar(drawerLayout,getResources().getString(R.string.MsgBillGenerateSuccess),WaiterHomeActivity.this,2000);
+                }
             }
-        }
-        if(isCheckOutMessage){
-            Globals.ShowSnackBar(drawerLayout,getResources().getString(R.string.MsgBillGenerateSuccess),this,2000);
-        }
+        }, 1000);
+
     }
 
     @Override
@@ -240,7 +249,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (menuItem.getItemId() == R.id.wFeedback) {
                 drawerLayout.closeDrawer(navigationView);
-                Globals.ReplaceFragment(new FeedbackFragment(WaiterHomeActivity.this), getSupportFragmentManager(), null);
+                Globals.ReplaceFragment(new FeedbackFragment(WaiterHomeActivity.this), getSupportFragmentManager(), getResources().getString(R.string.title_fragment_feedback));
             } else if (menuItem.getItemId() == R.id.wRate) {
                 Uri uri = Uri.parse("market://details?id=" + getPackageName());
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -357,7 +366,11 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_about_us))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_about_us), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else {
+                } else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() -1).getName()!=null
+                    && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_feedback))){
+
+                }
+                else {
                     isRestart=true;
                     onRestart();
                     CategoryItemFragment.i = 0;

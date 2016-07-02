@@ -405,7 +405,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                     objOrderItemTran.setTotalAmount(totalAmount);
                     alOrderItemModifierTran = new ArrayList<>();
                     objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
-
+                    objOrderItemTran.setRateIndex(objItemMaster.getRateIndex());
                 }
             } else {
                 objOrderItemTran.setItemMasterId(objItemMaster.getItemMasterId());
@@ -422,7 +422,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
                 objOrderItemTran.setTotalAmount(totalAmount);
                 alOrderItemModifierTran = new ArrayList<>();
                 objOrderItemTran.setAlOrderItemModifierTran(alOrderItemModifierTran);
-
+                objOrderItemTran.setRateIndex(objItemMaster.getRateIndex());
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();

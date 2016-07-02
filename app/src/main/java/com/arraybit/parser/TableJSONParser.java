@@ -68,6 +68,7 @@ public class TableJSONParser {
                     dt = sdfDateTimeFormat.parse(jsonObject.getString("StatusUpdateDateTime"));
                     objTableMaster.setStatusUpdateDateTime(sdfControlDateTimeFormat.format(dt));
                 }
+                objTableMaster.setWaitingPersonName(jsonObject.getString("WaitingPersonName"));
             }
             return objTableMaster;
         } catch (JSONException e) {
@@ -119,6 +120,7 @@ public class TableJSONParser {
                     dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("StatusUpdateDateTime"));
                     objTableMaster.setStatusUpdateDateTime(sdfControlDateTimeFormat.format(dt));
                 }
+                objTableMaster.setWaitingPersonName(jsonArray.getJSONObject(i).getString("WaitingPersonName"));
                 lstTableMaster.add(objTableMaster);
             }
             return lstTableMaster;

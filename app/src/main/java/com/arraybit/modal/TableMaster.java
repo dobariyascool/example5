@@ -32,6 +32,8 @@ public class TableMaster implements Parcelable {
     String Section;
     String Business;
     String StatusUpdateDateTime;
+    String WaitingPersonName;
+
 
     public static final Parcelable.Creator<TableMaster> CREATOR = new Creator<TableMaster>() {
         public TableMaster createFromParcel(Parcel source) {
@@ -61,6 +63,7 @@ public class TableMaster implements Parcelable {
             objTableMaster.TableStatus = source.readString();
             objTableMaster.StatusColor = source.readString();
             objTableMaster.Business = source.readString();
+            objTableMaster.WaitingPersonName = source.readString();
             return objTableMaster;
         }
 
@@ -165,10 +168,18 @@ public class TableMaster implements Parcelable {
 
     public String getStatusUpdateDateTime() {return StatusUpdateDateTime;}
 
-    //endregion
-
     public void setStatusUpdateDateTime(String statusUpdateDateTime) {
         StatusUpdateDateTime = statusUpdateDateTime;
+    }
+
+    public String getWaitingPersonName() {
+        return WaitingPersonName;
+    }
+
+    //endregion
+
+    public void setWaitingPersonName(String waitingPersonName) {
+        WaitingPersonName = waitingPersonName;
     }
 
     public int describeContents() {
@@ -203,6 +214,7 @@ public class TableMaster implements Parcelable {
         parcel.writeString(TableStatus);
         parcel.writeString(StatusColor);
         parcel.writeString(Business);
+        parcel.writeString(WaitingPersonName);
     }
 
 }

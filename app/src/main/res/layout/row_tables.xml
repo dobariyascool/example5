@@ -3,7 +3,7 @@
     android:id="@+id/cvTable"
     style="@style/CardViewTransparent"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,15 +51,30 @@
 
         </LinearLayout>
 
-        <com.rey.material.widget.TextView
-            android:id="@+id/txtPersons"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="end"
-            android:layout_weight="1"
-            android:paddingEnd="@dimen/control_SpecingTiny"
-            android:paddingStart="0dp"
-            android:textColor="@color/grey" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtWaitingPersons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:paddingEnd="@dimen/control_SpecingTiny"
+                android:paddingStart="@dimen/control_SpecingTiny"
+                android:textColor="@color/yellow"/>
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtPersons"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="end"
+                android:paddingEnd="@dimen/control_SpecingTiny"
+                android:paddingStart="0dp"
+                android:textColor="@color/grey" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

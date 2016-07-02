@@ -24,4 +24,5 @@
     <dimen name="qty_image_width">55dp</dimen>
     <dimen name="button_TouchableHeight">60dp</dimen>
     <dimen name="button_Height">55dp</dimen>
+    <dimen name="leftHeight">60dp</dimen>
 </resources>

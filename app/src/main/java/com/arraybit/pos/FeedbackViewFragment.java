@@ -38,6 +38,8 @@ import com.rey.material.widget.RadioButton;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SuppressWarnings({"unchecked", "UnnecessaryReturnStatement"})
 @SuppressLint("SetTextI18n")
@@ -48,7 +50,7 @@ public class FeedbackViewFragment extends Fragment {
     ArrayList<FeedbackQuestionMaster> alFeedbackQuestionMaster;
     ArrayList<FeedbackAnswerMaster> alFeedbackAnswerMaster, alFeedbackAnswer, alFeedbackAnswerFilter;
     SharePreferenceManage objSharePreferenceManage;
-    int userMasterId, currentView,rowNumber = -1,rowPosition = -1,feedbackType;
+    int userMasterId, currentView, rowNumber = -1, rowPosition = -1, feedbackType;
     StringBuilder sbAnswerId;
     String checkedString;
     FeedbackMaster objFeedbackMaster;
@@ -90,6 +92,22 @@ public class FeedbackViewFragment extends Fragment {
         if (currentView != FeedbackFragment.alFinalFeedbackAnswers.size()) {
             FeedbackFragment.alFinalFeedbackAnswers.get(currentView).addAll(alFeedbackAnswer);
         }
+
+        feedbackViewFragment.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    }
+                }, 1000);
+                return false;
+            }
+        });
 
         return view;
     }
@@ -182,7 +200,7 @@ public class FeedbackViewFragment extends Fragment {
 
         for (int j = 0; j < alFeedbackAnswerFilter.size(); j++) {
             rbAnswer[j] = new RadioButton(getActivity());
-            LinearLayout.LayoutParams rbAnswerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams rbAnswerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             rbAnswer[j].setId(j);
             rbAnswer[j].setTag(alFeedbackAnswerFilter.get(j).getFeedbackAnswerMasterId());
             rbAnswer[j].setLayoutParams(rbAnswerLayoutParams);
@@ -214,7 +232,7 @@ public class FeedbackViewFragment extends Fragment {
                             alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
                             alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
                         }
-                    }else {
+                    } else {
                         rowPosition = buttonView.getId();
                         rowNumber = linearLayout.getId();
                         if (alFeedbackAnswer.get(rowNumber).getFeedbackRowPosition() != -1) {
@@ -225,7 +243,7 @@ public class FeedbackViewFragment extends Fragment {
                             alFeedbackAnswer.get(rowNumber).setFeedbackRowPosition(rowPosition);
                             alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
                             alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
-                        }else {
+                        } else {
                             alFeedbackAnswer.get(rowNumber).setFeedbackRowPosition(rowPosition);
                             alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
                             alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
@@ -303,7 +321,7 @@ public class FeedbackViewFragment extends Fragment {
 
         for (int j = 0; j < alFeedbackAnswerFilter.size(); j++) {
             cbAnswer[j] = new CheckBox(getActivity());
-            LinearLayout.LayoutParams rbAnswerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams rbAnswerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             cbAnswer[j].setId(j);
             cbAnswer[j].setTag(alFeedbackAnswerFilter.get(j).getFeedbackAnswerMasterId());
             cbAnswer[j].setLayoutParams(rbAnswerLayoutParams);
@@ -661,7 +679,7 @@ public class FeedbackViewFragment extends Fragment {
             etFeedback.setError("Enter " + getResources().getString(R.string.fbFeedback));
             etEmail.setError("Enter " + getResources().getString(R.string.fbEmail));
             IsValid = false;
-        }else if (!etEmail.getText().toString().equals("") && !etFeedback.getText().toString().equals("")) {
+        } else if (!etEmail.getText().toString().equals("") && !etFeedback.getText().toString().equals("")) {
             if (!Globals.IsValidEmail(etEmail.getText().toString())) {
                 etEmail.setError("Enter Valid " + getResources().getString(R.string.fbEmail));
                 IsValid = false;
@@ -741,6 +759,7 @@ public class FeedbackViewFragment extends Fragment {
                     getActivity().finish();
                 } else {
                     getActivity().getSupportFragmentManager().popBackStack();
+                    Globals.ReplaceFragment(new ThankYouFragment(getActivity().getResources().getString(R.string.thankYouFeedbackMsg), false), getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_thank_you));
                 }
             }
 

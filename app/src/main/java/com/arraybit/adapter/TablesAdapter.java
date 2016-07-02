@@ -1,11 +1,13 @@
 package com.arraybit.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +57,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         return new TableViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(TableViewHolder holder, int position) {
         TableMaster objTableMaster = alTableMaster.get(position);
@@ -78,26 +81,48 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             if (objTableMaster.getStatusUpdateDateTime() != null && !objTableMaster.getStatusUpdateDateTime().equals("") && objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Occupied.getValue()) {
                 Calendar calendar = Calendar.getInstance();
                 String[] strArray = objTableMaster.getStatusUpdateDateTime().split("_");
-                try {
-                    Date currentTime = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).parse(new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).format(calendar.getTime()));
-                    Date statusUpdateTime = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).parse(strArray[1]);
-                    long timeDifference = currentTime.getTime() - statusUpdateTime.getTime();
-                    int hour = (int) timeDifference / (60 * 60 * 1000) % 24;
-                    int min = (int) (timeDifference / (60 * 1000)) % 60;
-                    int sec = (int) (timeDifference / 1000 % 60);
-                    holder.txtTableStatusTime.setVisibility(View.VISIBLE);
-                    holder.txtTableStatusTime.setText(String.format("%02d:%02d", hour, min));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                String currentDate = new SimpleDateFormat(Globals.DateFormat,Locale.US).format(new Date());
+                if(currentDate.equals(strArray[0])) {
+                    try {
+                        Date currentTime = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).parse(new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).format(calendar.getTime()));
+                        Date statusUpdateTime = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).parse(strArray[1]);
+                        long timeDifference = currentTime.getTime() - statusUpdateTime.getTime();
+                        int hour = (int) timeDifference / (60 * 60 * 1000) % 24;
+                        int min = (int) (timeDifference / (60 * 1000)) % 60;
+                        int sec = (int) (timeDifference / 1000 % 60);
+                        holder.txtTableStatusTime.setVisibility(View.VISIBLE);
+                        holder.txtTableStatusTime.setText(String.format("%02d:%02d", hour, min));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
-
             } else {
-                holder.txtTableStatusTime.setVisibility(View.GONE);
+                holder.txtTableStatusTime.setVisibility(View.INVISIBLE);
                 holder.txtTableStatusTime.setText(objTableMaster.getStatusUpdateDateTime());
             }
         } else {
-            holder.txtTableStatusTime.setVisibility(View.GONE);
+            holder.txtTableStatusTime.setVisibility(View.INVISIBLE);
+            if(objTableMaster.getlinktoOrderTypeMasterId()==Globals.OrderType.DineIn.getValue()){
+                if(objTableMaster.getWaitingPersonName()!=null && !objTableMaster.getWaitingPersonName().equals("")){
+                    String strPersonName = objTableMaster.getWaitingPersonName().substring(0,objTableMaster.getWaitingPersonName().lastIndexOf("^"));
+                    String strNoOfPersons = objTableMaster.getWaitingPersonName().substring(objTableMaster.getWaitingPersonName().lastIndexOf("^")+1,objTableMaster.getWaitingPersonName().length());
+                    holder.txtWaitingPersons.setVisibility(View.VISIBLE);
+                    if(strPersonName.length() >= 8){
+                        holder.txtWaitingPersons.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+                        holder.txtWaitingPersons.setText(strPersonName.substring(0,6)+"..("+strNoOfPersons+")");
+                    }else{
+                        holder.txtWaitingPersons.setText(strPersonName+"("+strNoOfPersons+")");
+                    }
+                }else{
+                    holder.txtWaitingPersons.setVisibility(View.INVISIBLE);
+                }
+
+            }else{
+                holder.txtWaitingPersons.setVisibility(View.INVISIBLE);
+            }
         }
+
+
 
         //holder animation
         if (isItemAnimate) {
@@ -135,7 +160,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
 
     class TableViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtTableName, txtPersons, txtTableStatus, txtTableStatusTime;
+        TextView txtTableName, txtPersons, txtTableStatus, txtTableStatusTime, txtWaitingPersons;
         CardView cvTable;
 
         public TableViewHolder(View itemView) {
@@ -145,6 +170,7 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             txtPersons = (TextView) itemView.findViewById(R.id.txtPersons);
             txtTableStatus = (TextView) itemView.findViewById(R.id.txtTableStatus);
             txtTableStatusTime = (TextView) itemView.findViewById(R.id.txtTableStatusTime);
+            txtWaitingPersons = (TextView) itemView.findViewById(R.id.txtWaitingPersons);
             cvTable = (CardView) itemView.findViewById(R.id.cvTable);
 
             if (isClickEnable) {

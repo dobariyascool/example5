@@ -281,7 +281,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 Globals.counter = Globals.counter + 1;
                 SetCartNumber(txtCartNumber);
                 Globals.alOrderItemTran.add(objOrderItemTran);
-                Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem),objOrderItemTran.getItemName()),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem),objOrderItemTran.getItemName()),Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -1,52 +1,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/thankYouFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/offwhite"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.arraybit.pos.ThankYouFragment">
+    tools:context="com.arraybit.pos.ThankYouFragment"
+    tools:ignore="NestedWeights">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/action_settings"
-        android:scaleType="fitXY"
-        android:src="@drawable/my_account" />
-
-    <com.rey.material.widget.TextView
-        android:id="@+id/txtTitle"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/control_SpecingTiny"
-        android:text="Thank you for ..................................."
-        android:textSize="@dimen/control_TextMedium"
-        tools:ignore="HardcodedText" />
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/control_SpecingMedium"
+            android:text="@string/thankYouMsg"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+            android:textColor="@color/accent"
+            android:textSize="@dimen/control_TextLarge"
+            tools:ignore="HardcodedText" />
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        tools:ignore="HardcodedText">
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/control_SpecingTiny"
+        android:layout_marginEnd="@dimen/control_SpecingTiny"
+        android:layout_marginStart="@dimen/control_SpecingTiny"
+        android:layout_weight="1"
+        android:gravity="center">
 
-        <com.rey.material.widget.Button
-            android:id="@+id/btnFeedback"
-            style="@style/BorderButton"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/button_Height"
-            android:gravity="center"
-            android:text="Feedback" />
 
         <com.rey.material.widget.Button
             android:id="@+id/btnSkip"
-            style="@style/Button"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/button_Height"
-            android:layout_marginStart="@dimen/control_SpecingTiny"
+            style="@style/BorderButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:text="Skip" />
+            android:text="@string/tfSkip" />
+
+        <com.rey.material.widget.Button
+            android:id="@+id/btnFeedback"
+            style="@style/Button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tfFeedback" />
 
     </LinearLayout>
 </LinearLayout>

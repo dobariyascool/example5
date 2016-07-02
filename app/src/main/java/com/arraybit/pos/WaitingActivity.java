@@ -56,7 +56,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         setSupportActionBar(app_bar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setLogo(R.mipmap.app_logo);
+            getSupportActionBar().setLogo(R.mipmap.center_pos_logo);
         }
         //end
 
