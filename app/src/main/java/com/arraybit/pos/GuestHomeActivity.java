@@ -125,6 +125,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                     ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace), " successfully"));
                 }
             }, 1000);
+            isShowMessage = false;
         }
 
     }

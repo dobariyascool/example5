@@ -81,6 +81,7 @@
     <string name="MsgDineOnly">Available for Dine-In only</string>
     <string name="MsgNoRecordFound">There is no %s</string>
     <string name="MsgCallWaiter">Waiter called.</string>
+    <string name="MsgEmailAlreadyExist">Email already exist.</string>
     <string name="MsgBillGenerateSuccess">Bill printed successfully</string>
     <!-- End -->
 

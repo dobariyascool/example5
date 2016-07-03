@@ -134,7 +134,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         if (v.getId() == R.id.btnNot) {
             if(objWaiting.getlinktoWaitingStatusMasterId()==Globals.WaitingStatus.Assign.getValue()){
                 if (Service.CheckNet(getActivity())) {
-                    btnId = R.id.btnWaiting;
+                    btnId = R.id.btnNot;
                     new OrderLoadingTask().execute();
                 } else {
                     Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
@@ -155,7 +155,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         if (v.getId() == R.id.btnCancel) {
             if(objWaiting.getlinktoWaitingStatusMasterId()==Globals.WaitingStatus.Assign.getValue()){
                 if (Service.CheckNet(getActivity())) {
-                    btnId = R.id.btnWaiting;
+                    btnId = R.id.btnCancel;
                     new OrderLoadingTask().execute();
                 } else {
                     Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);

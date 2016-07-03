@@ -382,8 +382,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     Globals.ShowSnackBar(view, getResources().getString(R.string.MsgServerNotResponding), getActivity(), 1000);
                     break;
                 case "-2":
-                    Globals.ShowSnackBar(view, getResources().getString(R.string.MsgAlreadyExist), getActivity(), 1000);
-                    ClearControls();
+                    Globals.ShowSnackBar(view, getResources().getString(R.string.MsgEmailAlreadyExist), getActivity(), 1000);
                     break;
                 default:
                     Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);

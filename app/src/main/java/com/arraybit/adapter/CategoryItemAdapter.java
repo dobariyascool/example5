@@ -82,13 +82,13 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 if (objItemMaster.getMD_ImagePhysicalName() == null || objItemMaster.getMD_ImagePhysicalName().equals("")) {
                     Picasso.with(holder.ivItem.getContext()).load(R.drawable.default_image).into(holder.ivItem);
                 } else {
-                    Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getMD_ImagePhysicalName()).error(R.drawable.default_image).into(holder.ivItem);
+                    Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getMD_ImagePhysicalName()).into(holder.ivItem);
                 }
             } else {
                 if (objItemMaster.getSM_ImagePhysicalName() == null || objItemMaster.getSM_ImagePhysicalName().equals("")) {
                     Picasso.with(holder.ivItem.getContext()).load(R.drawable.default_image).into(holder.ivItem);
                 } else {
-                    Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getSM_ImagePhysicalName()).error(R.drawable.default_image).into(holder.ivItem);
+                    Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getSM_ImagePhysicalName()).into(holder.ivItem);
                 }
             }
             if (objItemMaster.getShortDescription().equals("")) {
