@@ -441,8 +441,8 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
     //endregion
 
-    //region LoadingTask
-    class CounterLoadingTask extends AsyncTask {
+        //region LoadingTask
+        class CounterLoadingTask extends AsyncTask {
         ProgressDialog progressDialog;
         short userMasterId;
 
@@ -474,6 +474,6 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
             }
         }
     }
-//endregion
+        //endregion
 
 }
