@@ -25,7 +25,20 @@
             android:text="@string/thankYouMsg"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
             android:textColor="@color/accent"
-            android:textSize="@dimen/control_TextLarge"
+            android:textSize="@dimen/thank_you_2"
+            tools:ignore="HardcodedText" />
+
+
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtTitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/thankYouMsgGuest2"
+            android:padding="@dimen/control_SpecingMedium"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+            android:textColor="@color/accent"
+            android:textSize="@dimen/thank_you_2"
             tools:ignore="HardcodedText" />
 
 
@@ -49,7 +62,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/tfSkip" />
+            android:text="@string/tfNoThanks" />
 
         <com.rey.material.widget.Button
             android:id="@+id/btnFeedback"
@@ -58,7 +71,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/tfFeedback" />
+            android:text="@string/tfGiveFeedback" />
 
     </LinearLayout>
 </LinearLayout>

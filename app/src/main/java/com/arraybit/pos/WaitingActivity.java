@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,6 +15,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -138,7 +142,10 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if (id == R.id.mWaiting) {
             if (item.getTitle().equals("T")) {
                 item.setTitle("W");
-                item.setIcon(R.mipmap.call_waiter);
+                item.setIcon(R.drawable.waiting_list_drawable);
+//                Drawable drawable = item.getIcon();
+//                drawable = DrawableCompat.wrap(drawable);
+//                DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
                 ReplaceFragment(new AllTablesFragment(WaitingActivity.this, false, null));
             } else {
                 item.setTitle("T");

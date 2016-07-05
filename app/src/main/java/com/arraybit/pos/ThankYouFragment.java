@@ -30,7 +30,6 @@ public class ThankYouFragment extends Fragment {
         this.isShowButton = isShowButton;
     }
 
-
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,14 +41,17 @@ public class ThankYouFragment extends Fragment {
         Globals.SetScaleImageBackground(getActivity(), thankYouFragment, null, null);
 
         TextView txtTitle = (TextView) view.findViewById(R.id.txtTitle);
+        TextView txtTitle2 = (TextView) view.findViewById(R.id.txtTitle2);
 
         Button btnFeedback = (Button) view.findViewById(R.id.btnFeedback);
         Button btnSkip = (Button) view.findViewById(R.id.btnSkip);
 
         if (isShowButton) {
             buttonLayout.setVisibility(View.VISIBLE);
+            txtTitle2.setVisibility(View.VISIBLE);
         } else {
             buttonLayout.setVisibility(View.GONE);
+            txtTitle2.setVisibility(View.GONE);
         }
 
         txtTitle.setText(message);
@@ -61,7 +63,6 @@ public class ThankYouFragment extends Fragment {
                 Globals.ReplaceFragment(new FeedbackFragment(getActivity()), getActivity().getSupportFragmentManager(), null);
             }
         });
-
 
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,5 +101,7 @@ public class ThankYouFragment extends Fragment {
 
         return view;
     }
+
+
 
 }

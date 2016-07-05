@@ -98,6 +98,7 @@
     <color name="dimWhite">#c1c0c0</color>
     <color name="errorTextColor">#66999999</color>
     <color name="errorIconColor">#43ffab00</color>
+    <color name="waitingTitleIconColor">#757575</color>
 
     //#757575
     <!-- END Other Color -->

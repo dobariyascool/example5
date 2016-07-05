@@ -70,6 +70,7 @@
     <string name="MsgCart">Cart is empty.</string>
     <string name="MsgCartItem">%s is added to dish</string>
     <string name="MsgCartWithNoName">Item is added to dish</string>
+    <string name="MsgWishListItem">%s is added to Wishlist.</string>
     <string name="MsgConfirmOrder">Items are place into order</string>
     <string name="MsgAddPerson">Person is added successfully</string>
     <string name="MsgUpdateProfile">Profile updated successfully</string>
@@ -457,9 +458,15 @@
     <string name="MsgConfirmOrderPlace">Order placed %s</string>
     <string name="cdfYes">Yes</string>
     <string name="cdfNo">No</string>
-    <string name="tfSkip">Skip</string>
-    <string name="tfFeedback">Feedback</string>
-    <string name="thankYouFeedbackMsg">We really appreciate the time you took to help us improve,we will use your feedback to develop an amazing new change.Thanks for being an awesome customer! </string>
-    <string name="thankYouMsg">Thank you for....</string>
+    <string name="tfNoThanks">No, Thanks</string>
+    <string name="tfGiveFeedback">Give Feedback</string>
+    <string name="thankYouFeedbackMsg">We really appreciate the time \nyou took to help us improve,\n we\'ll use your feedback to develop \nan amazing new change.
+        \n\n Thanks for being \nan awesome customer! </string>
+    <string name="thankYouMsg">Thank you \n for being our guest.</string>
+    <string name="thankYouMsgGuest1">being our guest.</string>
+    <string name="thankYouMsgGuest2">We\'d love to hear your thoughts, \n tell us how you feel about our place. \n
+        It\'ll take less than a minute.</string>
+
+
     <string name="title_fragment_thank_you">Thank You</string>
 </resources>

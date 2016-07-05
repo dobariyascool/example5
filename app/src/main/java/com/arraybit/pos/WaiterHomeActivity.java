@@ -372,7 +372,10 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                     } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                             && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_feedback))) {
 
-                    } else {
+                    } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                            && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_thank_you))) {
+//                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_thank_you), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    }else {
                         isRestart = true;
                         onRestart();
                         CategoryItemFragment.i = 0;

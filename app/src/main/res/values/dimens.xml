@@ -222,4 +222,7 @@
     <dimen name="qty_image_height">35dp</dimen>
     <dimen name="qty_image_width">40dp</dimen>
 
+    <dimen name="thank_you_1">25sp</dimen>
+    <dimen name="thank_you_2">20sp</dimen>
+
 </resources>

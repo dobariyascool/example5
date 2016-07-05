@@ -2,8 +2,11 @@ package com.arraybit.pos;
 
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +50,9 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
 
         txtSubmit = (TextView) view.findViewById(R.id.txtSubmit);
         txtCancel = (TextView) view.findViewById(R.id.txtCancel);
-
+        Drawable[] drawable = btnWaiterMode.getCompoundDrawablesRelative();
+        drawable[1] = DrawableCompat.wrap(drawable[1]);
+        DrawableCompat.setTint(drawable[1], ContextCompat.getColor(getContext(), R.color.waitingTitleIconColor));
         SetVisibility();
 
         return view;

@@ -436,19 +436,19 @@ public class Globals {
         }
     }
 
-    public static void SetRecyclerLayoutAnimation(boolean isGridLayoutManager, RecyclerView recyclerView, Context context) {
-        if (!isGridLayoutManager) {
-            Animation animation = android.view.animation.AnimationUtils.loadAnimation(context,
-                    R.anim.slide_in_down);
-            LayoutAnimationController controller = new LayoutAnimationController(animation);
-            recyclerView.setLayoutAnimation(controller);
-        } else {
-            Animation animation = android.view.animation.AnimationUtils.loadAnimation(context,
-                    R.anim.slide_in_down_grid);
-            LayoutAnimationController controller = new LayoutAnimationController(animation);
-            recyclerView.setLayoutAnimation(controller);
-        }
-    }
+//    public static void SetRecyclerLayoutAnimation(boolean isGridLayoutManager, RecyclerView recyclerView, Context context) {
+//        if (!isGridLayoutManager) {
+//            Animation animation = android.view.animation.AnimationUtils.loadAnimation(context,
+//                    R.anim.slide_in_down);
+//            LayoutAnimationController controller = new LayoutAnimationController(animation);
+//            recyclerView.setLayoutAnimation(controller);
+//        } else {
+//            Animation animation = android.view.animation.AnimationUtils.loadAnimation(context,
+//                    R.anim.slide_in_down_grid);
+//            LayoutAnimationController controller = new LayoutAnimationController(animation);
+//            recyclerView.setLayoutAnimation(controller);
+//        }
+//    }
 
     public static void SetItemAnimator(RecyclerView.ViewHolder holder) {
         //slide from bottom
