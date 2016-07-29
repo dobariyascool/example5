@@ -10,6 +10,7 @@
     <dimen name="sMedium">25dp</dimen>
     <dimen name="sMargin">16dp</dimen>
 
+    <dimen name="navWidth">320dp</dimen>
 
     <dimen name="itemListImageWidth">130dp</dimen>
     <dimen name="itemListImageHeight">130dp</dimen>

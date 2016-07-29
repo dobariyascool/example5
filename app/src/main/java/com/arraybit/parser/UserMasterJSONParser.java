@@ -1,6 +1,7 @@
 package com.arraybit.parser;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.arraybit.global.Service;
 import com.arraybit.modal.UserMaster;
@@ -68,6 +69,8 @@ public class UserMasterJSONParser {
     {
         try {
             JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectRegisteredUserMasterUserName + "/" + username + "/" + password + "/" + null);
+            Log.e("url"," "+Service.Url + this.SelectRegisteredUserMasterUserName + "/" + username + "/" + password + "/" + null);
+            Log.e("json"," "+jsonResponse);
             if (jsonResponse != null) {
                 JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectRegisteredUserMasterUserName + "Result");
                 if (jsonObject != null) {

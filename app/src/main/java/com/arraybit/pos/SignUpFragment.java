@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
@@ -84,6 +85,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         }
         app_bar.setTitle(getResources().getString(R.string.title_fragment_signup));
         //end
+        Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
 
         //EditText
         etFirstName = (EditText) view.findViewById(R.id.etFirstName);
@@ -122,6 +124,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         cbTermsofService.setOnClickListener(this);
         btnSignUp.setOnClickListener(this);
         //end
+
+        Globals.CustomView(btnSignUp, ContextCompat.getColor(getActivity(),R.color.accent), ContextCompat.getColor(getActivity(),android.R.color.white));
+        btnSignUp.setTextColor(ContextCompat.getColor(getActivity(),R.color.primary));
 
         setHasOptionsMenu(true);
 
@@ -188,6 +193,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         menu.findItem(R.id.logout).setVisible(false);
         menu.findItem(R.id.action_search).setVisible(false);
         menu.findItem(R.id.callWaiter).setVisible(false);
+        menu.findItem(R.id.cart_layout).setVisible(false);
 
     }
 

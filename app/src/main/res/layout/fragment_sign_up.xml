@@ -14,7 +14,7 @@
 
         <include
             android:id="@+id/app_bar"
-            layout="@layout/app_bar" />
+            layout="@layout/app_bar_dynamic" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -73,7 +73,7 @@
                     android:hint="@string/suPhone"
                     android:imeOptions="actionDone"
                     android:inputType="number"
-                    android:maxLength="10"/>
+                    android:maxLength="10" />
 
 
                 <RadioGroup
@@ -127,7 +127,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/control_SpecingSmall"
-                        android:text="@string/suPrivacyPolicy" />
+                        android:text="@string/suPrivacyPolicy"
+                        android:textColor="@color/accent_dark" />
 
                     <com.rey.material.widget.TextView
                         style="@style/SecondaryTextView"
@@ -143,7 +144,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/suTerms" />
+                    android:text="@string/suTerms"
+                    android:textColor="@color/accent_dark" />
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnSignUp"
@@ -172,7 +174,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/control_SpecingSmall"
-                        android:text="@string/suSignIn" />
+                        android:text="@string/suSignIn"
+                        android:textColor="@color/accent_dark" />
 
                 </LinearLayout>
             </LinearLayout>

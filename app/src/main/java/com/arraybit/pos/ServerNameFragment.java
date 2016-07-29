@@ -2,9 +2,14 @@ package com.arraybit.pos;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +39,16 @@ public class ServerNameFragment extends Fragment {
 
         //linearlayout
         mainLayout = (LinearLayout) view.findViewById(R.id.mainLayout);
-        Globals.SetScaleImageBackground(getContext(), mainLayout, null, null);
+//        Globals.SetScaleImageBackground(getContext(), mainLayout, null, null);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
+        mainLayout.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
         //end
 
         etServerName = (EditText) view.findViewById(R.id.etServerName);
         btnSave = (com.rey.material.widget.Button) view.findViewById(R.id.btnSave);
 
+        Globals.CustomView(btnSave, ContextCompat.getColor(getActivity(),R.color.accent_red), ContextCompat.getColor(getActivity(),android.R.color.transparent));
+        btnSave.setTextColor(ContextCompat.getColor(getActivity(),android.R.color.white));
 
         return view;
 

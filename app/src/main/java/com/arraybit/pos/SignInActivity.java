@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -69,6 +70,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         tbPasswordShow = (ToggleButton) findViewById(R.id.tbPasswordShow);
         ibClear = (ImageButton) findViewById(R.id.ibClear);
         //end
+
+        Globals.CustomView(btnSignIn, ContextCompat.getColor(this,R.color.accent_red), ContextCompat.getColor(this,android.R.color.transparent));
+        btnSignIn.setTextColor(ContextCompat.getColor(this,android.R.color.white));
 
         //event
         btnSignIn.setOnClickListener(this);
