@@ -49,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:dropDownHeight="190dp"
                 android:hint="@string/aiqfRemark"
+                android:textColorHint="@color/accent"
                 android:imeOptions="actionDone"
                 android:singleLine="true"
                 android:textSize="14sp" />

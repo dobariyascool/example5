@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -54,11 +55,22 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_all_orders));
+            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//                if(Globals.objAppThemeMaster!=null) {
+//                    Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
+//                }
+//                else
+//                {
+//                }
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            } else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
+            }
         }
         //end
 
         allOrdersFragment = (CoordinatorLayout) view.findViewById(R.id.allOrdersFragment);
-        Globals.SetScaleImageBackground(getActivity(), allOrdersFragment);
+//        Globals.SetScaleImageBackground(getActivity(), allOrdersFragment);
 
         setHasOptionsMenu(true);
 
@@ -84,8 +96,9 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
         orderTabLayout = (TabLayout) view.findViewById(R.id.orderTabLayout);
         orderViewPager = (ViewPager) view.findViewById(R.id.orderViewPager);
 
-        SetTabLayout();
+        allOrdersFragment.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
 
+        SetTabLayout();
 
         return view;
     }
@@ -104,13 +117,14 @@ public class AllOrdersFragment extends Fragment implements View.OnClickListener 
         if (item.getItemId() == android.R.id.home) {
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
                 Globals.isWishListShow = 0;
+                Globals.targetFragment = null;
                 Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
                 getActivity().finish();
-                getActivity().overridePendingTransition(0,R.anim.right_exit);
+                getActivity().overridePendingTransition(0, R.anim.right_exit);
             } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null &&
                     getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_orders))) {
                 getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_all_orders), FragmentManager.POP_BACK_STACK_INCLUSIVE);

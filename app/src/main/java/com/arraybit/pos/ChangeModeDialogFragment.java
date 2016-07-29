@@ -24,8 +24,8 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
     EditText etPassword;
     SharePreferenceManage objSharePreferenceManage;
     LinearLayout buttonLayout, modeLayout;
-    TextView txtSubmit,txtCancel;
-    Button btnWaiterMode, btnGuestMode,btnMenuMode;
+    TextView txtSubmit, txtCancel;
+    Button btnWaiterMode, btnGuestMode, btnMenuMode;
 
     public ChangeModeDialogFragment() {
         // Required empty public constructor
@@ -65,6 +65,8 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
         } else if (v.getId() == R.id.txtCancel) {
             getDialog().dismiss();
         } else if (v.getId() == R.id.btnWaiterMode) {
+            WaiterHomeActivity.isWaiterMode = false;
+            GuestHomeActivity.isGuestMode = false;
             getDialog().dismiss();
             Globals.isWishListShow = 0;
             Globals.DisableBroadCastReceiver(getActivity());
@@ -73,16 +75,17 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
             getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             getActivity().finish();
         } else if (v.getId() == R.id.btnGuestMode) {
+
             getDialog().dismiss();
             Bundle bundle = new Bundle();
-            bundle.putBoolean("IsMenuMode",false);
+            bundle.putBoolean("IsMenuMode", false);
             BottomDialogFragment bottomDialogFragment = new BottomDialogFragment();
             bottomDialogFragment.setArguments(bundle);
             bottomDialogFragment.show(getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_bottom_dialog));
-        }else if (v.getId() == R.id.btnMenuMode) {
+        } else if (v.getId() == R.id.btnMenuMode) {
             getDialog().dismiss();
             Bundle bundle = new Bundle();
-            bundle.putBoolean("IsMenuMode",true);
+            bundle.putBoolean("IsMenuMode", true);
             BottomDialogFragment bottomDialogFragment = new BottomDialogFragment();
             bottomDialogFragment.setArguments(bundle);
             bottomDialogFragment.show(getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_bottom_dialog));
@@ -135,6 +138,8 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
                         objSharePreferenceManage.ClearPreference("GuestModePreference", getActivity());
                         objSharePreferenceManage.RemovePreference("WishListPreference", "WishList", getActivity());
                         objSharePreferenceManage.ClearPreference("WishListPreference", getActivity());
+                        objSharePreferenceManage.RemovePreference("CartItemListPreference", "CartItemList", getActivity());
+                        objSharePreferenceManage.ClearPreference("CartItemListPreference", getActivity());
 
                         Globals.ClearPreference(getActivity().getApplicationContext());
                         MenuActivity.parentActivity = false;
@@ -143,6 +148,7 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
                         Globals.EnableBroadCastReceiver(getActivity());
                         Globals.CallNotificationReceiver(getActivity());
                         GuestHomeActivity.isMenuMode = false;
+                        GuestHomeActivity.isGuestMode = false;
 
                         Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

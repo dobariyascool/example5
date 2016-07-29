@@ -15,7 +15,7 @@
 
         <include
             android:id="@+id/app_bar"
-            layout="@layout/app_bar" />
+            layout="@layout/app_bar_dynamic" />
 
         <include
             android:id="@+id/errorLayout"
@@ -48,7 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_alignParentEnd="true"
-                        android:background="#FFBB00"
+                        android:background="@color/accent_red"
                         android:gravity="end|center"
                         android:orientation="vertical"
                         tools:ignore="RelativeOverlap">
@@ -61,7 +61,7 @@
                             android:maxLines="1"
                             android:paddingEnd="@dimen/control_SpecingMedium"
                             android:paddingStart="@dimen/control_SpecingMedium"
-                            android:textColor="@color/purple"
+                            android:textColor="@android:color/white"
                             android:textSize="@dimen/control_TextMedium" />
 
                     </LinearLayout>
@@ -92,6 +92,7 @@
                     android:textSize="@dimen/control_TextSmall" />
 
                 <LinearLayout
+                    android:id="@+id/highLightsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/control_SpecingSmall"

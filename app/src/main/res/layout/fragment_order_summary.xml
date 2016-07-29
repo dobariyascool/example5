@@ -13,7 +13,7 @@
 
         <include
             android:id="@+id/app_bar"
-            layout="@layout/app_bar" />
+            layout="@layout/app_bar_dynamic" />
 
         <include
             android:id="@+id/errorLayout"
@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="@dimen/control_SpecingTiny"
-                android:background="@color/accent_secondary"
+                android:background="@color/accent_red"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="@dimen/control_SpecingTiny">
@@ -46,7 +46,7 @@
                     android:paddingStart="@dimen/control_SpecingTiny"
                     android:text="@string/cifItem"
                     android:textAllCaps="false"
-                    android:textColor="@color/primary" />
+                    android:textColor="@android:color/white" />
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtHeaderNo"
@@ -56,7 +56,7 @@
                     android:gravity="center"
                     android:text="@string/cifQty"
                     android:textAllCaps="false"
-                    android:textColor="@color/primary" />
+                    android:textColor="@android:color/white" />
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtHeaderRate"
@@ -66,7 +66,7 @@
                     android:gravity="center|end"
                     android:text="@string/cifRate"
                     android:textAllCaps="false"
-                    android:textColor="@color/primary" />
+                    android:textColor="@android:color/white" />
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtHeaderAmount"
@@ -78,7 +78,7 @@
                     android:paddingStart="0dp"
                     android:text="@string/cifAmount"
                     android:textAllCaps="false"
-                    android:textColor="@color/primary" />
+                    android:textColor="@android:color/white" />
 
             </LinearLayout>
 
@@ -139,7 +139,7 @@
                                     android:maxLines="1"
                                     android:text="@string/osfTotalAmount"
                                     android:textAllCaps="false"
-                                    android:textColor="@color/grey" />
+                                    android:textColor="@color/waitingTitleIconColor" />
 
                                 <com.rey.material.widget.TextView
                                     android:id="@+id/txtTotalAmount"
@@ -150,7 +150,7 @@
                                     android:maxLines="1"
                                     android:text="@string/osfNumber"
                                     android:textAllCaps="false"
-                                    android:textColor="@color/grey" />
+                                    android:textColor="@color/waitingTitleIconColor" />
 
                             </LinearLayout>
 
@@ -176,7 +176,7 @@
                                     android:maxLines="1"
                                     android:text="@string/osfDiscount"
                                     android:textAllCaps="false"
-                                    android:textColor="@color/grey" />
+                                    android:textColor="@color/waitingTitleIconColor" />
 
                                 <com.rey.material.widget.TextView
                                     android:id="@+id/txtTotalDiscount"
@@ -187,7 +187,7 @@
                                     android:maxLines="1"
                                     android:text="@string/osfNumber"
                                     android:textAllCaps="false"
-                                    android:textColor="@color/grey" />
+                                    android:textColor="@color/waitingTitleIconColor" />
 
                             </LinearLayout>
 
@@ -207,7 +207,7 @@
                                     android:maxLines="1"
                                     android:text="@string/osfRounding"
                                     android:textAllCaps="false"
-                                    android:textColor="@color/grey"
+                                    android:textColor="@color/waitingTitleIconColor"
                                     android:textSize="@dimen/control_TextTiny" />
 
                                 <com.rey.material.widget.TextView
@@ -219,7 +219,7 @@
                                     android:maxLines="1"
                                     android:text="@string/osfNumber"
                                     android:textAllCaps="false"
-                                    android:textColor="@color/grey"
+                                    android:textColor="@color/waitingTitleIconColor"
                                     android:textSize="@dimen/control_TextTiny" />
 
                             </LinearLayout>
@@ -240,7 +240,7 @@
                                     android:maxLines="1"
                                     android:text="@string/osfNetAmount"
                                     android:textAllCaps="false"
-                                    android:textColor="@color/white_blur"
+                                    android:textColor="@color/waitingTitleIconColor"
                                     android:textStyle="bold" />
 
                                 <com.rey.material.widget.TextView
@@ -252,7 +252,7 @@
                                     android:maxLines="1"
                                     android:text="@string/osfNumber"
                                     android:textAllCaps="false"
-                                    android:textColor="@color/white_blur"
+                                    android:textColor="@color/waitingTitleIconColor"
                                     android:textStyle="bold" />
 
                             </LinearLayout>

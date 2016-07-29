@@ -2,9 +2,11 @@ package com.arraybit.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Slide;
@@ -17,6 +19,7 @@ import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.OfferMaster;
+import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.OfferDetailFragment;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
@@ -99,7 +102,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
 
     class OfferViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtOfferTitle, txtOfferContent, txtOfferExpiredDate;
+        TextView txtOfferTitle, txtOfferContent, txtOfferExpiredDate, txtOfferExpired;
         ImageView ivOffer;
         CardView cvOffer;
         LinearLayout titleLayout, dateLayout;
@@ -118,6 +121,39 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
             txtOfferTitle = (TextView) itemView.findViewById(R.id.txtOfferTitle);
             txtOfferContent = (TextView) itemView.findViewById(R.id.txtOfferContent);
             txtOfferExpiredDate = (TextView) itemView.findViewById(R.id.txtOfferExpiredDate);
+            txtOfferExpired = (TextView) itemView.findViewById(R.id.txtOfferExpired);
+
+            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+                if (Globals.objAppThemeMaster != null) {
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        cvOffer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvOffer.setElevation(4f);
+                    } else {
+                        cvOffer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                    }
+
+                    titleLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.transparentBrown));
+                    dateLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.accent));
+                    txtOfferTitle.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtOfferContent.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.dimWhite)));
+                    txtOfferExpired.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.purple)));
+                    txtOfferExpiredDate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.purple)));
+                } else {
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        cvOffer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvOffer.setElevation(4f);
+                    } else {
+                        cvOffer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                    }
+
+                    titleLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.transparentBrown));
+                    dateLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.accent));
+                    txtOfferTitle.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtOfferContent.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.dimWhite)));
+                    txtOfferExpired.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.purple)));
+                    txtOfferExpiredDate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.purple)));
+                }
+            }
 
             cvOffer.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("RtlHardcoded")

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/dash_separator"
         android:left="-5dp"
         android:right="-5dp"
         android:top="-5dp">
         <shape android:shape="rectangle">
             <stroke
                 android:width="0.8dp"
-                android:color="#5be29801"
+                android:color="@color/accent_red"
                 android:dashGap="3dp"
                 android:dashWidth="3dp" />
         </shape>

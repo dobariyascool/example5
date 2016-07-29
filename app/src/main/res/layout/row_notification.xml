@@ -29,7 +29,7 @@
                 android:ellipsize="end"
                 android:gravity="start"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
+                android:textColor="@color/primary_black"
                 android:textSize="@dimen/control_TextMedium" />
 
             <com.rey.material.widget.TextView
@@ -40,7 +40,7 @@
                 android:ellipsize="end"
                 android:gravity="end"
                 android:maxLines="1"
-                android:textColor="@color/grey"
+                android:textColor="@color/waitingTitleIconColor"
                 android:textSize="@dimen/control_TextSmall" />
         </LinearLayout>
 
@@ -59,7 +59,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:gravity="start"
-                android:textColor="@android:color/white"
+                android:textColor="@color/primary_black"
                 android:textSize="@dimen/control_TextMedium" />
 
             <ImageView
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
                 android:src="@drawable/notification_clear_all_drawable"
-                android:tint="@color/accent_dark"
+                android:tint="@color/accent_red_dark"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
     </LinearLayout>

@@ -1,9 +1,11 @@
 package com.arraybit.pos;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,10 +17,13 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.TableMaster;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class MenuActivity extends AppCompatActivity{
+public class MenuActivity extends AppCompatActivity {
 
     public static TableMaster objTableMaster = null;
     public static boolean parentActivity = false;
@@ -30,10 +35,14 @@ public class MenuActivity extends AppCompatActivity{
         setContentView(R.layout.activity_menu);
 
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
-        Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
+        } else {
+            mainLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.background_img));
+        }
 
         Intent intent = getIntent();
-        if(!GuestHomeActivity.isMenuMode) {
+        if (!GuestHomeActivity.isMenuMode) {
             if (intent.getParcelableExtra("TableMaster") != null) {
                 objTableMaster = intent.getParcelableExtra("TableMaster");
                 Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
@@ -48,12 +57,12 @@ public class MenuActivity extends AppCompatActivity{
             }
         }
 
-        if(Globals.isWishListShow==1) {
+        if (Globals.isWishListShow == 1) {
             SaveWishListInSharePreference(false);
         }
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(android.R.id.content, new CategoryItemFragment(getIntent().getBooleanExtra("IsFavoriteShow",false)));
+        fragmentTransaction.replace(android.R.id.content, new CategoryItemFragment(getIntent().getBooleanExtra("IsFavoriteShow", false)));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
@@ -62,12 +71,12 @@ public class MenuActivity extends AppCompatActivity{
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(GuestHomeActivity.isMenuMode){
+        if (GuestHomeActivity.isMenuMode) {
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
             menu.findItem(R.id.callWaiter).setVisible(false);
-        }else {
+        } else {
             if (MenuActivity.parentActivity) {
                 //Globals.SetOptionMenu(Globals.userName, MenuActivity.this, menu);
                 menu.findItem(R.id.login).setVisible(false);
@@ -86,9 +95,9 @@ public class MenuActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(GuestHomeActivity.isMenuMode){
+        if (GuestHomeActivity.isMenuMode) {
             getMenuInflater().inflate(R.menu.menu_home, menu);
-        }else {
+        } else {
             if (MenuActivity.parentActivity) {
                 getMenuInflater().inflate(R.menu.menu_home, menu);
             } else {
@@ -99,14 +108,14 @@ public class MenuActivity extends AppCompatActivity{
     }
 
     public void EditTextOnClick(View view) {
-        GuestProfileFragment guestProfileFragment = (GuestProfileFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_myprofile));
-        if(guestProfileFragment!=null) {
+        GuestProfileFragment guestProfileFragment = (GuestProfileFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_myprofile));
+        if (guestProfileFragment != null) {
             guestProfileFragment.EditTextOnClick();
-        }else{
-            DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_detail));
-            if(detailFragment!=null){
+        } else {
+            DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_detail));
+            if (detailFragment != null) {
                 detailFragment.EditTextOnClick();
-            }else {
+            } else {
                 DetailFragment subDetailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_sub_detail));
                 if (subDetailFragment != null) {
                     subDetailFragment.EditTextOnClick();
@@ -122,19 +131,31 @@ public class MenuActivity extends AppCompatActivity{
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if(GuestHomeActivity.isMenuMode){
-
-        }else {
+        if (!GuestHomeActivity.isMenuMode) {
+            if (Globals.isWishListShow == 1) {
+                SaveWishListInSharePreference(true);
+                SaveCartDataInSharePreference();
+            }
             if (MenuActivity.parentActivity) {
-                //Globals.OptionMenuItemClick(item, MenuActivity.this, getSupportFragmentManager());
+//                Globals.OptionMenuItemClick(item, MenuActivity.this, getSupportFragmentManager());
+//                Globals.targetFragment = null;
+                if (id == android.R.id.home) {
+//                    SaveCartDataInSharePreference();
+                }
             } else {
                 if (id == R.id.logout) {
                     Globals.ClearPreference(MenuActivity.this);
                 }
             }
         }
+
         return super.onOptionsItemSelected(item);
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 
     @Override
     public void onBackPressed() {
@@ -142,10 +163,18 @@ public class MenuActivity extends AppCompatActivity{
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                 if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_category_item))) {
-                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_category_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    SaveCartDataInSharePreference();
+
+//                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_category_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                    Globals.targetFragment = null;
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("IsMenu", true);
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
-                    DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_detail));
+                    DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_detail));
                     detailFragment.SaveWishListData();
                     DetailFragment.isItemSuggestedClick = false;
                     DetailFragment.alOptionValue = new ArrayList<>();
@@ -153,6 +182,7 @@ public class MenuActivity extends AppCompatActivity{
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_cart_item))) {
+                    SaveCartDataInSharePreference();
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_cart_item), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_orders))) {
@@ -160,35 +190,46 @@ public class MenuActivity extends AppCompatActivity{
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_signup))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_signup), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_policy), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_myaccount))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_myaccount), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_notification_settings))) {
                     NotificationSettingsFragment notificationSettingsFragment = (NotificationSettingsFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_notification_settings));
                     notificationSettingsFragment.CreateNotificationPreference();
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_notification_settings), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_change_password))) {
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_change_password), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName() != null
-                        &&  getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_sub_detail))){
-                   getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_sub_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_sub_detail));
+                } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                        && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_sub_detail))) {
+                    getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_sub_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_sub_detail));
                     detailFragment.SaveWishListData();
                     DetailFragment.isItemSuggestedClick = false;
                     DetailFragment.alOptionValue = new ArrayList<>();
                     DetailFragment.alSubItemOptionValue = new ArrayList<>();
                 }
             } else {
-                if(Globals.isWishListShow==1) {
+                if (Globals.isWishListShow == 1) {
                     SaveWishListInSharePreference(true);
+                    SaveCartDataInSharePreference();
+//                    Intent returnIntent = new Intent();
+//                    returnIntent.putExtra("IsMenu", true);
+//                    setResult(Activity.RESULT_OK, returnIntent);
+//                    finish();
                 }
                 if (MenuActivity.parentActivity || GuestHomeActivity.isMenuMode) {
                     //Globals.CategoryItemFragmentResetStaticVariable();
+//                    SaveCartDataInSharePreference();
+
+                    Globals.targetFragment = null;
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("IsMenu", true);
+                    setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                     overridePendingTransition(0, R.anim.right_exit);
                 } else {
@@ -274,10 +315,43 @@ public class MenuActivity extends AppCompatActivity{
             }
             cnt++;
         }
-        if (isDuplicate) {
-            return isDuplicate;
-        }
+//        if (isDuplicate) {
+//            return isDuplicate;
+//        }
         return isDuplicate;
     }
 
+    private void SaveCartDataInSharePreference() {
+        Gson gson = new Gson();
+        SharePreferenceManage objSharePreferenceManage;
+        List<ItemMaster> lstItemMaster;
+        try {
+            if (Globals.alOrderItemTran.size() == 0) {
+                objSharePreferenceManage = new SharePreferenceManage();
+                String string = objSharePreferenceManage.GetPreference("CartItemListPreference", "CartItemList", MenuActivity.this);
+                if (string != null) {
+                    ItemMaster[] objItemMaster = gson.fromJson(string,
+                            ItemMaster[].class);
+
+                    lstItemMaster = Arrays.asList(objItemMaster);
+                    Globals.alOrderItemTran.addAll(new ArrayList<>(lstItemMaster));
+                    Globals.counter = Globals.alOrderItemTran.size();
+                    if (objSharePreferenceManage.GetPreference("CartItemListPreference", "OrderRemark", MenuActivity.this) != null) {
+                        RemarkDialogFragment.strRemark = objSharePreferenceManage.GetPreference("CartItemListPreference", "OrderRemark", MenuActivity.this);
+                    }
+                } else {
+                    objSharePreferenceManage.RemovePreference("CheckOutDataPreference", "CheckOutData", MenuActivity.this);
+                    objSharePreferenceManage.ClearPreference("CheckOutDataPreference", MenuActivity.this);
+                }
+            } else {
+                objSharePreferenceManage = new SharePreferenceManage();
+                String string = gson.toJson(Globals.alOrderItemTran);
+                objSharePreferenceManage.CreatePreference("CartItemListPreference", "CartItemList", string, this);
+                objSharePreferenceManage.CreatePreference("CartItemListPreference", "OrderRemark", RemarkDialogFragment.strRemark, this);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

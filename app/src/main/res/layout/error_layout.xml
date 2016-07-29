@@ -23,7 +23,7 @@
         android:paddingStart="@dimen/control_SpecingSmall"
         android:paddingTop="@dimen/control_SpecingTiny"
         android:text="@string/MsgNoRecord"
-        android:textColor="@color/grey" />
+        android:textColor="@color/waitingTitleIconColor" />
 
     <com.rey.material.widget.CompoundButton
         android:id="@+id/cbOrderPlace"

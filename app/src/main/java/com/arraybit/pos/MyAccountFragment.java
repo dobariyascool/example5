@@ -1,11 +1,17 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableWrapper;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +45,7 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
     TextView txtLoginChar, txtFullName, txtEmail;
     FloatingActionButton fabEdit;
     int customerMasterId;
+    RelativeLayout topPanel;
 
     public MyAccountFragment() {
         // Required empty public constructor
@@ -64,6 +71,8 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
             topPanel.setElevation(16f);
         }
 
+        topPanel = (RelativeLayout) view.findViewById(R.id.topPanel);
+
         txtLoginChar = (TextView) view.findViewById(R.id.txtLoginChar);
         txtFullName = (TextView) view.findViewById(R.id.txtFullName);
         txtEmail = (TextView) view.findViewById(R.id.txtEmail);
@@ -77,6 +86,18 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
         MyAccountAdapter accountAdapter = new MyAccountAdapter(getActivity(), alString, this);
         rvOptions.setAdapter(accountAdapter);
         rvOptions.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            topPanel.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            Drawable drawable = txtLoginChar.getBackground();
+            drawable.mutate().setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent), PorterDuff.Mode.SRC_IN);
+            txtLoginChar.setBackgroundDrawable(drawable);
+            txtLoginChar.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+        } else {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
+            topPanel.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary_black));
+        }
 
         fabEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +142,7 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
         menu.findItem(R.id.logout).setVisible(false);
         menu.findItem(R.id.shortList).setVisible(false);
         menu.findItem(R.id.callWaiter).setVisible(false);
+        menu.findItem(R.id.cart_layout).setVisible(false);
     }
 
     //region Private Methods
@@ -210,7 +232,7 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
         @Override
         protected Object doInBackground(Object[] objects) {
             CustomerJSONParser objCustomerJSONParser = new CustomerJSONParser();
-            objCustomerMaster = objCustomerJSONParser.SelectCustomerMaster(null, null,customerMasterId);
+            objCustomerMaster = objCustomerJSONParser.SelectCustomerMaster(null, null, customerMasterId);
             return objCustomerMaster;
         }
 

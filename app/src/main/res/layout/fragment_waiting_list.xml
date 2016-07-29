@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/leftHeight"
             android:layout_marginTop="@dimen/control_SpecingTiny"
-            android:background="@color/accent_secondary"
+            android:background="@color/primary_black"
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="@dimen/control_SpecingTiny">
@@ -37,28 +37,28 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
                 android:text="@string/wlfNo"
-                android:textColor="@color/primary" />
+                android:textColor="@android:color/white" />
 
             <com.rey.material.widget.TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="@string/wlfName"
-                android:textColor="@color/primary" />
+                android:textColor="@android:color/white" />
 
             <com.rey.material.widget.TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:text="@string/wlfMobile"
-                android:textColor="@color/primary" />
+                android:textColor="@android:color/white" />
 
             <com.rey.material.widget.TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.16"
                 android:text="@string/wlfPerson"
-                android:textColor="@color/primary" />
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 

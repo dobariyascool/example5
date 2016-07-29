@@ -16,7 +16,7 @@
 
         <include
             android:id="@+id/app_bar"
-            layout="@layout/app_bar" />
+            layout="@layout/app_bar_dynamic" />
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/scrollView"

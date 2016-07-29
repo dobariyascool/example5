@@ -3,6 +3,7 @@ package com.arraybit.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.TableMaster;
+import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
@@ -62,11 +64,11 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
         TableMaster objTableMaster = alTableMaster.get(position);
 
         holder.cvTable.setId(position);
-        if (objTableMaster.getTableColor() == null) {
-            holder.cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
-        } else {
-            holder.cvTable.setCardBackgroundColor(Color.parseColor("#" + objTableMaster.getTableColor()));
-        }
+//        if (objTableMaster.getTableColor() == null) {
+//            holder.cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+//        } else {
+//            holder.cvTable.setCardBackgroundColor(Color.parseColor("#" + objTableMaster.getTableColor()));
+//        }
         holder.txtTableName.setText(objTableMaster.getShortName());
         holder.txtPersons.setText(String.valueOf(objTableMaster.getMaxPerson()));
         if (objTableMaster.getTableStatus() != null && objTableMaster.getTableStatus().equals(Globals.TableStatus.Block.toString())) {
@@ -80,8 +82,8 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             if (objTableMaster.getStatusUpdateDateTime() != null && !objTableMaster.getStatusUpdateDateTime().equals("") && objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Occupied.getValue()) {
                 Calendar calendar = Calendar.getInstance();
                 String[] strArray = objTableMaster.getStatusUpdateDateTime().split("_");
-                String currentDate = new SimpleDateFormat(Globals.DateFormat,Locale.US).format(new Date());
-                if(currentDate.equals(strArray[0])) {
+                String currentDate = new SimpleDateFormat(Globals.DateFormat, Locale.US).format(new Date());
+                if (currentDate.equals(strArray[0])) {
                     try {
                         Date currentTime = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).parse(new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).format(calendar.getTime()));
                         Date statusUpdateTime = new SimpleDateFormat(Globals.DisplayTimeFormat, Locale.US).parse(strArray[1]);
@@ -101,25 +103,24 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             }
         } else {
             holder.txtTableStatusTime.setVisibility(View.INVISIBLE);
-            if(objTableMaster.getlinktoOrderTypeMasterId()==Globals.OrderType.DineIn.getValue()){
-                if(objTableMaster.getWaitingPersonName()!=null && !objTableMaster.getWaitingPersonName().equals("")){
-                    String strPersonName = objTableMaster.getWaitingPersonName().substring(0,objTableMaster.getWaitingPersonName().lastIndexOf("^"));
-                    String strNoOfPersons = objTableMaster.getWaitingPersonName().substring(objTableMaster.getWaitingPersonName().lastIndexOf("^")+1,objTableMaster.getWaitingPersonName().length());
+            if (objTableMaster.getlinktoOrderTypeMasterId() == Globals.OrderType.DineIn.getValue()) {
+                if (objTableMaster.getWaitingPersonName() != null && !objTableMaster.getWaitingPersonName().equals("")) {
+                    String strPersonName = objTableMaster.getWaitingPersonName().substring(0, objTableMaster.getWaitingPersonName().lastIndexOf("^"));
+                    String strNoOfPersons = objTableMaster.getWaitingPersonName().substring(objTableMaster.getWaitingPersonName().lastIndexOf("^") + 1, objTableMaster.getWaitingPersonName().length());
                     holder.txtWaitingPersons.setVisibility(View.VISIBLE);
-                    if(strPersonName.length() >= 10){
-                        holder.txtWaitingPersons.setText(strPersonName.substring(0,8)+"..("+strNoOfPersons+")");
-                    }else{
-                        holder.txtWaitingPersons.setText(strPersonName+"("+strNoOfPersons+")");
+                    if (strPersonName.length() >= 10) {
+                        holder.txtWaitingPersons.setText(strPersonName.substring(0, 8) + "..(" + strNoOfPersons + ")");
+                    } else {
+                        holder.txtWaitingPersons.setText(strPersonName + "(" + strNoOfPersons + ")");
                     }
-                }else{
+                } else {
                     holder.txtWaitingPersons.setVisibility(View.INVISIBLE);
                 }
 
-            }else{
+            } else {
                 holder.txtWaitingPersons.setVisibility(View.INVISIBLE);
             }
         }
-
 
 
         //holder animation
@@ -170,6 +171,34 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             txtTableStatusTime = (TextView) itemView.findViewById(R.id.txtTableStatusTime);
             txtWaitingPersons = (TextView) itemView.findViewById(R.id.txtWaitingPersons);
             cvTable = (CardView) itemView.findViewById(R.id.cvTable);
+
+            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+                if (Globals.objAppThemeMaster != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvTable.setElevation(4f);
+                    } else {
+                        cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                    }
+
+                    txtTableName.setTextColor(ContextCompat.getColor(context, android.R.color.white));
+                    txtPersons.setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    txtTableStatusTime.setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    txtWaitingPersons.setTextColor(ContextCompat.getColor(context, R.color.yellow));
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvTable.setElevation(4f);
+                    } else {
+                        cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                    }
+
+                    txtTableName.setTextColor(ContextCompat.getColor(context, android.R.color.white));
+                    txtPersons.setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    txtTableStatusTime.setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    txtWaitingPersons.setTextColor(ContextCompat.getColor(context, R.color.yellow));
+                }
+            }
 
             if (isClickEnable) {
 

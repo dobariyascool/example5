@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -63,6 +64,8 @@ public class AddFragment extends Fragment {
 
         btnAdd = (Button) view.findViewById(R.id.btnAdd);
 
+        Globals.CustomView(btnAdd, ContextCompat.getColor(getActivity(),R.color.accent_red), ContextCompat.getColor(getActivity(),android.R.color.transparent));
+        btnAdd.setTextColor( ContextCompat.getColor(getActivity(),android.R.color.white));
         return view;
     }
 

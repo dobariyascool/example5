@@ -13,11 +13,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
@@ -27,6 +31,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
@@ -35,13 +40,12 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.transition.Fade;
 import android.transition.Slide;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
@@ -51,6 +55,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.arraybit.modal.AppThemeMaster;
 import com.arraybit.modal.DiscountMaster;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderItemTran;
@@ -81,11 +86,12 @@ import java.util.regex.Pattern;
 public class Globals {
 
 
-    public static final String AboutUs="About Us";
-    public static final String PrivacyPolicy="Privacy Policy";
-    public static final String TermsOfService="Terms Of Service";
+    public static final String AboutUs = "About Us";
+    public static final String PrivacyPolicy = "Privacy Policy";
+    public static final String TermsOfService = "Terms Of Service";
     public static boolean ReceiverStart = false;
     public static String activityName;
+    public static boolean isAdded;
     public static String serverName = null;
     public static String DateFormat = "d/M/yyyy";
     public static String TimeFormat = "hh:mm";
@@ -102,11 +108,12 @@ public class Globals {
     public static ArrayList<ItemMaster> alOrderItemTran = new ArrayList<>();
     public static ArrayList<OrderItemTran> alOrderItemSummery = new ArrayList<>();
     public static ArrayList<Long> alOrderMasterId = new ArrayList<>();
-    public static short orderTypeMasterId=0;
+    public static short orderTypeMasterId = 0;
     public static short isWishListShow = 0;
     public static short selectTableMasterId;
     public static Fragment targetFragment;
     public static DiscountMaster objDiscountMaster;
+    public static AppThemeMaster objAppThemeMaster;
     public static String userName;
     static FragmentManager fragmentManager;
     static int y, M, d, H, m;
@@ -115,15 +122,13 @@ public class Globals {
     public static float ConvertDp(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics dm = resources.getDisplayMetrics();
-        float pixel = dp * (dm.densityDpi) / 160.0F;
-        return pixel;
+        return dp * (dm.densityDpi) / 160.0F;
     }
 
     public static float ConvertPixcel(float px, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics dm = resources.getDisplayMetrics();
-        float dp = px * (dm.densityDpi) / 160.0F;
-        return dp;
+        return px * (dm.densityDpi) / 160.0F;
     }
 
     public static void SetBusinessMasterId(Context context) {
@@ -176,7 +181,7 @@ public class Globals {
         }
     }
 
-    public static void CallNotificationReceiver(Activity activity){
+    public static void CallNotificationReceiver(Activity activity) {
         Calendar calendar = Calendar.getInstance();
 
         //intent registerd the broadcast receiver
@@ -387,7 +392,7 @@ public class Globals {
                     Globals.userName = null;
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
                     Globals.ReplaceAnimatedFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
-                }else if(menuItem.getTitle()==activity.getResources().getString(R.string.navShortList)){
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navShortList)) {
                     Intent intent = new Intent(activity, WishListActivity.class);
                     activity.startActivity(intent);
                     activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
@@ -410,7 +415,7 @@ public class Globals {
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
                     FeedbackFragment currentFragment = (FeedbackFragment) fragmentManager.findFragmentByTag(activity.getResources().getString(R.string.title_fragment_feedback));
                     currentFragment.ReplaceFragment(new MyAccountFragment(), activity.getResources().getString(R.string.title_fragment_myaccount));
-                }else if(menuItem.getTitle()==activity.getResources().getString(R.string.navShortList)){
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navShortList)) {
                     Intent intent = new Intent(activity, WishListActivity.class);
                     activity.startActivity(intent);
                     activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
@@ -427,7 +432,7 @@ public class Globals {
                     Globals.userName = null;
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
                     Globals.ReplaceAnimatedFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
-                }else if(menuItem.getTitle()==activity.getResources().getString(R.string.navShortList)){
+                } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navShortList)) {
                     Intent intent = new Intent(activity, WishListActivity.class);
                     activity.startActivity(intent);
                     activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
@@ -466,10 +471,13 @@ public class Globals {
         objSharePreferenceManage.RemovePreference("NotificationOnTimePreference", "OnTime", context);
         objSharePreferenceManage.RemovePreference("NotificationOffTimePreference", "OffTime", context);
         objSharePreferenceManage.RemovePreference("NotificationSettingPreference", "Push", context);
+        objSharePreferenceManage.RemovePreference("CartItemListPreference", "CartItemList", context);
+        objSharePreferenceManage.RemovePreference("CartItemListPreference", "OrderRemark", context);
         objSharePreferenceManage.ClearPreference("RegistrationPreference", context);
         objSharePreferenceManage.ClearPreference("NotificationOnTimePreference", context);
         objSharePreferenceManage.ClearPreference("NotificationOffTimePreference", context);
         objSharePreferenceManage.ClearPreference("NotificationSettingPreference", context);
+        objSharePreferenceManage.ClearPreference("CartItemListPreference", context);
         Globals.userName = null;
     }
 
@@ -499,6 +507,20 @@ public class Globals {
         coordinatorLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
     }
 
+    public static void SetPageBackground(final Context context, final String encodedImage, final LinearLayout linearLayout, final RelativeLayout relativeLayout, final FrameLayout frameLayout, final CoordinatorLayout coordinatorLayout) {
+        byte[] decodedString = Base64.decode(encodedImage.getBytes(), Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        if (relativeLayout != null) {
+            relativeLayout.setBackground(new BitmapDrawable(context.getResources(), decodedByte));
+        } else if (frameLayout != null) {
+            frameLayout.setBackground(new BitmapDrawable(context.getResources(), decodedByte));
+        } else if (linearLayout != null) {
+            linearLayout.setBackground(new BitmapDrawable(context.getResources(), decodedByte));
+        } else if (coordinatorLayout != null) {
+            coordinatorLayout.setBackground(new BitmapDrawable(context.getResources(), decodedByte));
+        }
+    }
+
     public static void SetHomePageBackground(final Context context, final LinearLayout linearLayout, final RelativeLayout relativeLayout, final FrameLayout frameLayout) {
 
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
@@ -513,6 +535,13 @@ public class Globals {
         } else if (linearLayout != null) {
             linearLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
         }
+    }
+
+    public static void SetToolBarBackground(final Context context, final Toolbar app_bar, final int backgroundColor, final int tintColor) {
+        app_bar.setBackground(new ColorDrawable(backgroundColor));
+        Drawable drawable = app_bar.getOverflowIcon();
+        DrawableCompat.setTint(drawable.mutate(), tintColor);
+        app_bar.setOverflowIcon(drawable);
     }
 
     public static void InitializeFragment(Fragment fragment, FragmentManager fragmentManager) {
@@ -655,7 +684,7 @@ public class Globals {
         }
     }
 
-    public static void EnableBroadCastReceiver(Activity activity){
+    public static void EnableBroadCastReceiver(Activity activity) {
         ComponentName receiver = new ComponentName(activity, NotificationReceiver.class);
         PackageManager pm = activity.getPackageManager();
 
@@ -664,7 +693,7 @@ public class Globals {
                 PackageManager.DONT_KILL_APP);
     }
 
-    public static void DisableBroadCastReceiver(Activity activity){
+    public static void DisableBroadCastReceiver(Activity activity) {
         ComponentName receiver = new ComponentName(activity, NotificationReceiver.class);
         PackageManager pm = activity.getPackageManager();
         pm.setComponentEnabledSetting(receiver,
@@ -687,6 +716,15 @@ public class Globals {
         CategoryItemFragment.i = 0;
         CategoryItemFragment.objCategoryMaster = null;
         CategoryItemFragment.sbItemTypeMasterId = new StringBuilder();
+    }
+
+    public static void CustomView(View v, int backgroundColor, int borderColor) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.RECTANGLE);
+        shape.setCornerRadii(new float[]{8, 8, 8, 8, 8, 8, 8, 8});
+        shape.setColor(backgroundColor);
+        shape.setStroke(3, borderColor);
+        v.setBackground(shape);
     }
 
     //region Enum

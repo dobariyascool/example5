@@ -2,6 +2,8 @@ package com.arraybit.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.BusinessHoursTran;
+import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
@@ -102,9 +105,16 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
 
     private void TextColorChange(WorkingHoursViewHolder holder,boolean isMatch){
         if(isMatch){
-            holder.txtStartTime.setSelected(true);
-            holder.txtEndTime.setSelected(true);
-            holder.txtDayOfWeek.setSelected(true);
+            if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
+            {
+                holder.txtStartTime.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
+                holder.txtEndTime.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
+                holder.txtDayOfWeek.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
+            }else {
+                holder.txtStartTime.setSelected(true);
+                holder.txtEndTime.setSelected(true);
+                holder.txtDayOfWeek.setSelected(true);
+            }
         }else{
             holder.txtStartTime.setSelected(false);
             holder.txtEndTime.setSelected(false);
@@ -128,6 +138,12 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
             txtStartTime = (TextView) itemView.findViewById(R.id.txtStartTime);
             txtEndTime = (TextView) itemView.findViewById(R.id.txtEndTime);
             txtHeader = (TextView) itemView.findViewById(R.id.txtHeader);
+
+            if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
+            {
+                ivTimings.setColorFilter(ContextCompat.getColor(context, R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+                txtHeader.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
+            }
 
         }
     }

@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -61,6 +62,21 @@ public class AboutUsActivity extends AppCompatActivity {
         TextView txtCardPolicy = (TextView) findViewById(R.id.txtCardPolicy);
         TextView txtCardTerms = (TextView) findViewById(R.id.txtCardTerms);
         TextView txtVersionCode = (TextView) findViewById(R.id.txtVersionCode);
+
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            //                if(Globals.objAppThemeMaster!=null) {
+//                    Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
+//                }
+//                else
+//                {
+            Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
+//                }
+            txtCardPolicy.setTextColor(ContextCompat.getColor(this, R.color.accent_dark));
+            txtCardTerms.setTextColor(ContextCompat.getColor(this, R.color.accent_dark));
+        } else {
+            Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary_black), ContextCompat.getColor(this, android.R.color.white));
+
+        }
 
         wvAbout = (WebView) findViewById(R.id.wvAbout);
         wvAbout.getSettings().setJavaScriptEnabled(true);

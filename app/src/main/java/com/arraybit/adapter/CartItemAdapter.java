@@ -1,7 +1,10 @@
 package com.arraybit.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
+import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.R;
 import com.rey.material.widget.TextView;
 
@@ -31,7 +35,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
     StringBuilder sbRemark;
 
     // Constructor
-    public CartItemAdapter(Context context, ArrayList<ItemMaster> result, CartItemOnClickListener objCartItemOnClickListener,boolean isItemAnimate) {
+    public CartItemAdapter(Context context, ArrayList<ItemMaster> result, CartItemOnClickListener objCartItemOnClickListener, boolean isItemAnimate) {
         this.context = context;
         this.alItemMaster = result;
         this.objCartItemOnClickListener = objCartItemOnClickListener;
@@ -93,42 +97,45 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             isModifierChanged = false;
             isItemAnimate = true;
             alItemMaster.remove(position);
+//            Globals.alOrderItemTran.remove(position);
             notifyItemRemoved(position);
             Globals.counter = Globals.counter - 1;
+
         }
+
 
     }
 
-    public void UpdateData(int position, ItemMaster objItemMaster){
+    public void UpdateData(int position, ItemMaster objItemMaster) {
         isModifierChanged = false;
         isItemAnimate = false;
-        SplitRemark(objItemMaster,position);
+        SplitRemark(objItemMaster, position);
         alItemMaster.get(position).setRemark(sbRemark.toString());
         notifyItemChanged(position);
     }
 
-    private void SplitRemark(ItemMaster objItemMaster,int index){
+    private void SplitRemark(ItemMaster objItemMaster, int index) {
         sbRemark = new StringBuilder();
-        if(alItemMaster.get(index).getRemark()==null || alItemMaster.get(index).getRemark().equals("")){
-            if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")) {
+        if (alItemMaster.get(index).getRemark() == null || alItemMaster.get(index).getRemark().equals("")) {
+            if (objItemMaster.getItemRemark() != null && !objItemMaster.getItemRemark().equals("")) {
                 sbRemark.append(objItemMaster.getItemRemark());
             }
-        }else {
-            if(objItemMaster.getOptionValue()!=null && !objItemMaster.getOptionValue().equals("")){
-                if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")) {
-                    if(objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(",")){
+        } else {
+            if (objItemMaster.getOptionValue() != null && !objItemMaster.getOptionValue().equals("")) {
+                if (objItemMaster.getItemRemark() != null && !objItemMaster.getItemRemark().equals("")) {
+                    if (objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(",")) {
                         sbRemark.append(objItemMaster.getItemRemark()).append(" ").append(objItemMaster.getOptionValue());
-                    }else if(objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(" ")){
+                    } else if (objItemMaster.getItemRemark().subSequence(objItemMaster.getItemRemark().length() - 1, objItemMaster.getItemRemark().length()).toString().equals(" ")) {
                         sbRemark.append(objItemMaster.getItemRemark()).append(objItemMaster.getOptionValue());
-                    }else{
+                    } else {
                         sbRemark.append(objItemMaster.getItemRemark()).append(", ").append(objItemMaster.getOptionValue());
                     }
 
-                }else{
+                } else {
                     sbRemark.append(objItemMaster.getOptionValue());
                 }
-            }else{
-                if(objItemMaster.getItemRemark()!=null && !objItemMaster.getItemRemark().equals("")) {
+            } else {
+                if (objItemMaster.getItemRemark() != null && !objItemMaster.getItemRemark().equals("")) {
                     sbRemark.append(objItemMaster.getItemRemark());
                 }
             }
@@ -186,15 +193,16 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
     }
 
     public interface CartItemOnClickListener {
-        void ImageViewOnClick(int position);
-        void EditCartItem(ItemMaster objItemMaster,int position);
+        void ImageViewOnClick(int position, boolean isBackPressed);
+
+        void EditCartItem(ItemMaster objItemMaster, int position);
     }
 
     //region ViewHolder
     class CartItemViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtItem, txtQty, txtRate, txtAmount, txtRemark;
-        LinearLayout childLayout, modifierLayout, modifierRateLayout, modifierAmountLayout, remarkLayout;
+        LinearLayout childLayout, modifierLayout, modifierRateLayout, modifierAmountLayout, remarkLayout, llCartItem;
         ImageView ivClose;
 
         public CartItemViewHolder(View itemView) {
@@ -204,6 +212,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             modifierLayout = (LinearLayout) itemView.findViewById(R.id.modifierLayout);
             modifierRateLayout = (LinearLayout) itemView.findViewById(R.id.modifierRateLayout);
             modifierAmountLayout = (LinearLayout) itemView.findViewById(R.id.modifierAmountLayout);
+            llCartItem = (LinearLayout) itemView.findViewById(R.id.llCartItem);
             //remarkLayout = (LinearLayout) itemView.findViewById(R.id.remarkLayout);
 
             txtItem = (TextView) itemView.findViewById(R.id.txtItem);
@@ -213,10 +222,35 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             txtRemark = (TextView) itemView.findViewById(R.id.txtRemark);
             ivClose = (ImageView) itemView.findViewById(R.id.ivClose);
 
+            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+                if (Globals.objAppThemeMaster != null) {
+                    llCartItem.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+//                    Drawable drawable = ivClose.getDrawable();
+//                    DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(context, R.color.accent_secondary));
+//                    ivClose.setImageDrawable(drawable);
+                    ivClose.setColorFilter(ContextCompat.getColor(context, R.color.accent_secondary));
+                    txtItem.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtAmount.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtRate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtQty.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtRemark.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                } else {
+                    llCartItem.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                    Drawable drawable = ivClose.getDrawable();
+                    DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(context, R.color.accent_secondary));
+                    ivClose.setImageDrawable(drawable);
+                    txtItem.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtAmount.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtRate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtQty.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtRemark.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                }
+            }
+
             childLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    objCartItemOnClickListener.EditCartItem(alItemMaster.get(getAdapterPosition()),getAdapterPosition());
+                    objCartItemOnClickListener.EditCartItem(alItemMaster.get(getAdapterPosition()), getAdapterPosition());
                 }
             });
 
@@ -224,7 +258,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
                 @Override
                 public void onClick(View v) {
                     //getAdapterPosition current position
-                    objCartItemOnClickListener.ImageViewOnClick(getAdapterPosition());
+                    objCartItemOnClickListener.ImageViewOnClick(getAdapterPosition(), true);
                 }
             });
         }

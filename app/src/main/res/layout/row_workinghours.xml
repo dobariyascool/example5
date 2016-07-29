@@ -28,7 +28,7 @@
             android:layout_marginStart="17dp"
             android:paddingTop="0dp"
             android:text="@string/rTimings"
-            android:textColor="@color/accent"
+            android:textColor="@color/accent_red"
             android:visibility="visible" />
     </LinearLayout>
 

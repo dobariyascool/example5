@@ -3,10 +3,19 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,11 +26,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.OfferAdapter;
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.OfferMaster;
 import com.arraybit.parser.OfferJSONParser;
 import com.rey.material.widget.TextView;
@@ -41,6 +52,8 @@ public class OfferFragment extends Fragment {
     TextView txtMsg;
     String strActivityName;
     LinearLayout errorLayout;
+    SharePreferenceManage objSharePreferenceManage;
+    ImageView ivErrorIcon;
 
     public OfferFragment(Activity activityName) {
         this.activityName = activityName;
@@ -58,6 +71,7 @@ public class OfferFragment extends Fragment {
 
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
         txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
 
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
         if (app_bar != null) {
@@ -70,7 +84,25 @@ public class OfferFragment extends Fragment {
         }
 
         offerFragment = (FrameLayout) view.findViewById(R.id.offerFragment);
-        Globals.SetScaleImageBackground(getActivity(), null, null, offerFragment);
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//            if (Globals.objAppThemeMaster != null) {
+//                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(),ContextCompat.getColor(getActivity(), android.R.color.white));
+//                objSharePreferenceManage = new SharePreferenceManage();
+//                String encodedImage= objSharePreferenceManage.GetPreference("GuestAppTheme",getActivity().getString(R.string.guestEncodedImage1),getActivity());
+//                Globals.SetPageBackground(getActivity(), encodedImage, null, null, offerFragment, null);
+//            }
+//            else {
+//                Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
+//                offerFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(),R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            Globals.SetScaleImageBackground(getActivity(), null, null, offerFragment);
+            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+            txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+//            }
+        } else {
+            Globals.SetToolBarBackground(getActivity(), app_bar,ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
+            offerFragment.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
+        }
 
         rvOffer = (RecyclerView) view.findViewById(R.id.rvOffer);
         setHasOptionsMenu(true);
@@ -101,8 +133,9 @@ public class OfferFragment extends Fragment {
                 menu.findItem(R.id.login).setVisible(false);
                 menu.findItem(R.id.logout).setVisible(false);
                 menu.findItem(R.id.callWaiter).setVisible(false);
-            }else if(!GuestHomeActivity.isMenuMode && Globals.isWishListShow==0){
-                menu.findItem(R.id.notification_layout).setVisible(false);
+                menu.findItem(R.id.cart_layout).setVisible(false);
+            }else if(!GuestHomeActivity.isMenuMode && !GuestHomeActivity.isGuestMode && Globals.isWishListShow==0){
+                    menu.findItem(R.id.notification_layout).setVisible(false);
             }
         }
 

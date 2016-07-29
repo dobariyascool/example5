@@ -96,15 +96,17 @@ public class FeedbackViewFragment extends Fragment {
         feedbackViewFragment.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                    }
-                }, 1000);
+                if (WaiterHomeActivity.isWaiterMode) {
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                        }
+                    }, 1000);
+                }
                 return false;
             }
         });
@@ -469,8 +471,11 @@ public class FeedbackViewFragment extends Fragment {
         ratingBar.setNumStars(5);
 
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_ATOP);
-
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            stars.getDrawable(2).setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            stars.getDrawable(2).setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent_red), PorterDuff.Mode.SRC_ATOP);
+        }
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -593,6 +598,13 @@ public class FeedbackViewFragment extends Fragment {
         LinearLayout.LayoutParams btnSubmitLayoutParams = new LinearLayout.LayoutParams(600, getResources().getDimensionPixelSize(R.dimen.button_Height));
         btnSubmit.setLayoutParams(btnSubmitLayoutParams);
         btnSubmit.applyStyle(R.style.Button);
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            Globals.CustomView(btnSubmit, ContextCompat.getColor(getActivity(), R.color.accent), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+            btnSubmit.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+        } else {
+            Globals.CustomView(btnSubmit, ContextCompat.getColor(getActivity(), R.color.accent_red), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+            btnSubmit.setTextColor(ContextCompat.getColor(getActivity(), android.R.color.white));
+        }
         btnSubmit.setText(getActivity().getResources().getString(R.string.fbSubmit));
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

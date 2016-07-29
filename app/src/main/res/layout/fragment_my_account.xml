@@ -17,15 +17,18 @@
             android:layout_width="match_parent"
             android:layout_height="192dp"
             android:layout_marginBottom="@dimen/control_SpecingSmall"
-            android:background="@color/primary">
+            android:background="@color/primary_black">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/app_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="@style/ToolBar"
-                app:popupTheme="@style/Popup" />
+            <!--<android.support.v7.widget.Toolbar-->
+                <!--android:id="@+id/app_bar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:minHeight="?attr/actionBarSize"-->
+                <!--android:theme="@style/ToolBar"-->
+                <!--app:popupTheme="@style/Popup" />-->
+
+            <include android:id="@+id/app_bar"
+                layout="@layout/app_bar_dynamic"/>
 
             <com.rey.material.widget.TextView
                 android:id="@+id/txtLoginChar"

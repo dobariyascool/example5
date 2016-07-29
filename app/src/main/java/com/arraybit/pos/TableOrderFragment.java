@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.TableOrderAdapter;
@@ -33,18 +35,19 @@ import java.util.ArrayList;
 
 @SuppressLint("ValidFragment")
 @SuppressWarnings({"unchecked", "ConstantConditions"})
-public class TableOrderFragment extends Fragment implements View.OnClickListener{
+public class TableOrderFragment extends Fragment implements View.OnClickListener {
 
 
     RecyclerView rvTableOrder;
     CoordinatorLayout tableOrderFragment;
     LinearLayout errorLayout;
     TextView txtMsg;
-    ArrayList<OrderMaster> alOrderMaster,alFilterOrderMaster;
+    ArrayList<OrderMaster> alOrderMaster, alFilterOrderMaster;
     int counterMasterId;
     ArrayList<TaxMaster> alTaxMaster;
     TableOrderAdapter orderDetailAdapter;
     FloatingActionMenu famRoot;
+    ImageView ivErrorIcon;
 
     public TableOrderFragment() {
     }
@@ -57,6 +60,7 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
 
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
         txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
 
         //app_bar
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
@@ -64,6 +68,7 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_table_order));
+
         }
         //end
 
@@ -73,7 +78,6 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
         rvTableOrder.setVisibility(View.GONE);
 
         tableOrderFragment = (CoordinatorLayout) view.findViewById(R.id.tableOrderFragment);
-        Globals.SetScaleImageBackground(getActivity(), tableOrderFragment);
 
         famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
         famRoot.setClosedOnTouchOutside(true);
@@ -81,6 +85,9 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
         FloatingActionButton fabDineIn = (FloatingActionButton) view.findViewById(R.id.fabDineIn);
         FloatingActionButton fabTakeAway = (FloatingActionButton) view.findViewById(R.id.fabTakeAway);
         FloatingActionButton fabAll = (FloatingActionButton) view.findViewById(R.id.fabAll);
+
+        Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
+        tableOrderFragment.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
 
         setHasOptionsMenu(true);
 
@@ -91,7 +98,7 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
         if (Service.CheckNet(getActivity())) {
             new OrdersLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder,R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder, R.drawable.wifi_drawable);
         }
 
 
@@ -114,13 +121,13 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.fabDineIn){
+        if (v.getId() == R.id.fabDineIn) {
             famRoot.close(true);
             OrderMasterFilter(Globals.OrderType.DineIn.getValue());
-        }else if(v.getId()==R.id.fabTakeAway){
+        } else if (v.getId() == R.id.fabTakeAway) {
             famRoot.close(true);
             OrderMasterFilter(Globals.OrderType.TakeAway.getValue());
-        }else if(v.getId()==R.id.fabAll){
+        } else if (v.getId() == R.id.fabAll) {
             famRoot.close(true);
             OrderMasterFilter(0);
         }
@@ -135,21 +142,21 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
         menu.findItem(R.id.notification_layout).setVisible(false);
     }
 
-    private void OrderMasterFilter(int linktoOrderTypeMasterId){
-        alFilterOrderMaster=new ArrayList<>();
-        if(linktoOrderTypeMasterId==0) {
+    private void OrderMasterFilter(int linktoOrderTypeMasterId) {
+        alFilterOrderMaster = new ArrayList<>();
+        if (linktoOrderTypeMasterId == 0) {
             alFilterOrderMaster.addAll(alOrderMaster);
-        }else{
+        } else {
             for (OrderMaster objOrderMaster : alOrderMaster) {
                 if (objOrderMaster.getlinktoOrderTypeMasterId() == linktoOrderTypeMasterId) {
                     alFilterOrderMaster.add(objOrderMaster);
                 }
             }
         }
-        if(alFilterOrderMaster.size()==0){
-            Globals.SetErrorLayout(errorLayout, true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound),getActivity().getResources().getString(R.string.MsgBillGenerate)), rvTableOrder,0);
-        }else {
-            Globals.SetErrorLayout(errorLayout, false, null, rvTableOrder,0);
+        if (alFilterOrderMaster.size() == 0) {
+            Globals.SetErrorLayout(errorLayout, true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgBillGenerate)), rvTableOrder, 0);
+        } else {
+            Globals.SetErrorLayout(errorLayout, false, null, rvTableOrder, 0);
             if (alTaxMaster != null && alTaxMaster.size() != 0) {
                 orderDetailAdapter = new TableOrderAdapter(getActivity(), alFilterOrderMaster, alTaxMaster, getActivity().getSupportFragmentManager(), false);
             } else {
@@ -205,15 +212,15 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
 
             if (alOrderMaster == null) {
                 famRoot.setVisibility(View.GONE);
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvTableOrder,0);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvTableOrder, 0);
             } else if (alOrderMaster.size() == 0) {
                 famRoot.setVisibility(View.GONE);
-                Globals.SetErrorLayout(errorLayout, true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound),getActivity().getResources().getString(R.string.MsgBillGenerate)), rvTableOrder,0);
+                Globals.SetErrorLayout(errorLayout, true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgBillGenerate)), rvTableOrder, 0);
             } else {
                 if (Service.CheckNet(getActivity())) {
                     new TaxLoadingTask().execute();
                 } else {
-                    Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder,0);
+                    Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder, 0);
                 }
             }
         }
@@ -245,7 +252,7 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
             } else {
                 orderDetailAdapter = new TableOrderAdapter(getActivity(), alOrderMaster, null, getActivity().getSupportFragmentManager(), false);
             }
-            Globals.SetErrorLayout(errorLayout, false, null, rvTableOrder,0);
+            Globals.SetErrorLayout(errorLayout, false, null, rvTableOrder, 0);
             rvTableOrder.setAdapter(orderDetailAdapter);
             rvTableOrder.setLayoutManager(new GridLayoutManager(getActivity(), 2));
             rvTableOrder.addOnScrollListener(new RecyclerView.OnScrollListener() {

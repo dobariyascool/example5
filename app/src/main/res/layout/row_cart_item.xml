@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
-    android:background="@color/transparent_orange"
+    android:background="@color/card_white"
     android:orientation="horizontal"
     android:padding="@dimen/control_SpecingTiny"
+    android:id="@+id/llCartItem"
     tools:ignore="DisableBaselineAlignment">
 
     <LinearLayout
@@ -37,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@color/primary_black" />
 
                 <LinearLayout
                     android:id="@+id/modifierLayout"
@@ -54,7 +55,7 @@
                 android:layout_weight="0.15"
                 android:gravity="center"
                 android:maxLines="1"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/primary_black" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -69,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@color/primary_black" />
 
                 <LinearLayout
                     android:id="@+id/modifierRateLayout"
@@ -91,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@color/primary_black" />
 
                 <LinearLayout
                     android:id="@+id/modifierAmountLayout"

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -53,6 +54,14 @@ public class PolicyFragment extends Fragment {
             app_bar.setTitle(getResources().getString(R.string.title_fragment_terms_service));
         }
         setHasOptionsMenu(true);
+        if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
+        {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+        }
+        else
+        {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
+        }
 
         wvPolicy = (WebView) view.findViewById(R.id.wvPolicy);
         wvPolicy.getSettings().setJavaScriptEnabled(true);
@@ -93,7 +102,7 @@ public class PolicyFragment extends Fragment {
             menu.findItem(R.id.logout).setVisible(false);
         }else if(Globals.isWishListShow==1){
             menu.findItem(R.id.login).setVisible(false);
-            menu.findItem(R.id.registration).setVisible(false);
+//            menu.findItem(R.id.registration).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
         }
     }

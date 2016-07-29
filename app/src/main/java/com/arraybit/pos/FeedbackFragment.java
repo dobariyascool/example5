@@ -4,6 +4,7 @@ package com.arraybit.pos;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -53,6 +55,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
     ViewPager viewPager;
     ImageView ivNext, ivPrevious;
     FrameLayout feedbackFragment;
+    LinearLayout feedbackHeader;
     short cnt = 0;
     FeedbackPagerAdapter adapter;
 
@@ -78,6 +81,8 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
 
         feedbackFragment = (FrameLayout) view.findViewById(R.id.feedbackFragment);
 
+        feedbackHeader = (LinearLayout) view.findViewById(R.id.feedbackHeader);
+
         txtFeedbackGroup = (TextView) view.findViewById(R.id.txtFeedbackGroup);
         txtNext = (TextView) view.findViewById(R.id.txtNext);
         txtPrevious = (TextView) view.findViewById(R.id.txtPrevious);
@@ -93,6 +98,18 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
         ivNext.setOnClickListener(this);
         ivPrevious.setOnClickListener(this);
 
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//            if (Globals.objAppThemeMaster != null) {
+//                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
+//                feedbackHeader.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorPrimaryLight()));
+//            } else {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            feedbackHeader.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.primary)));
+//            }
+        } else {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
+        }
+
         if (Service.CheckNet(getActivity())) {
             new FeedbackQuestionGroupLodingTask().execute();
         } else {
@@ -103,18 +120,22 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
         feedbackFragment.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                    }
-                }, 1000);
+                if (WaiterHomeActivity.isWaiterMode) {
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+
+                            Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                        }
+                    }, 1000);
+                }
                 return false;
             }
         });
+
 
         return view;
     }
@@ -131,12 +152,15 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
             menu.findItem(R.id.viewChange).setVisible(false);
             if (Globals.isWishListShow == 0) {
                 menu.findItem(R.id.logout).setVisible(false);
-                menu.findItem(R.id.notification_layout).setVisible(false);
+                if (!GuestHomeActivity.isGuestMode && !GuestHomeActivity.isMenuMode) {
+                    menu.findItem(R.id.notification_layout).setVisible(false);
+                }
             } else if (Globals.isWishListShow == 1) {
                 menu.findItem(R.id.login).setVisible(false);
                 menu.findItem(R.id.logout).setVisible(false);
                 menu.findItem(R.id.shortList).setVisible(false);
                 menu.findItem(R.id.callWaiter).setVisible(false);
+                menu.findItem(R.id.cart_layout).setVisible(false);
             }
         }
 

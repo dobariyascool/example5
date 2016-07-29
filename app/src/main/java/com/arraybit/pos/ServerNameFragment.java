@@ -4,7 +4,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +47,7 @@ public class ServerNameFragment extends Fragment {
 
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated( Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +63,9 @@ public class ServerNameFragment extends Fragment {
 
                     Globals.serverName = etServerName.getText().toString();
                     Globals.ChangeUrl();
+
+                    Intent intent1= new Intent(getActivity(),AppThemeIntentService.class);
+                    getActivity().startService(intent1);
 
                     if (Build.VERSION.SDK_INT >= 21) {
                         ActivityOptions options =

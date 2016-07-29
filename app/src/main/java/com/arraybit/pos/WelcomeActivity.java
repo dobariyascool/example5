@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -20,15 +22,18 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.TableMaster;
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 @SuppressWarnings("ConstantConditions")
 public class WelcomeActivity extends AppCompatActivity {
-
 
     SharePreferenceManage objSharePreferenceManage;
     boolean isGuestScreen;
@@ -47,15 +52,22 @@ public class WelcomeActivity extends AppCompatActivity {
         objSharePreferenceManage = new SharePreferenceManage();
         Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", WelcomeActivity.this);
         //end
+        if (Globals.objAppThemeMaster != null) {
+            new ImageLoadingTask(getResources().getString(R.string.guestEncodedImage1), Globals.objAppThemeMaster.getBackImageName1()).execute();
+            new ImageLoadingTask(getResources().getString(R.string.guestEncodedImage2), Globals.objAppThemeMaster.getBackImageName2()).execute();
+            new ImageLoadingTask(getResources().getString(R.string.encodedLogoImage), Globals.objAppThemeMaster.getLogoImageName()).execute();
+            new ImageLoadingTask(getResources().getString(R.string.encodedProfileImage), Globals.objAppThemeMaster.getProfileImageName()).execute();
+        }
 
         mainLayout = (DrawerLayout) findViewById(R.id.mainLayout);
-
         displayMetrics = getResources().getDisplayMetrics();
 
-        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.welcome_background);
-        Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.welcome_background_full);
+//        Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
 
-        mainLayout.setBackground(new BitmapDrawable(getResources(), resizeBitmap));
+        mainLayout.setBackground(new BitmapDrawable(getResources(), originalBitmap));
+
+
 
         ivLeft = (ImageView) findViewById(R.id.ivLeft);
         ivRight = (ImageView) findViewById(R.id.ivRight);
@@ -63,19 +75,20 @@ public class WelcomeActivity extends AppCompatActivity {
         ivText = (ImageView) findViewById(R.id.ivText);
         ivSwipe = (ImageView) findViewById(R.id.ivSwipe);
 
-        if (displayMetrics.widthPixels > displayMetrics.heightPixels) {
-            Picasso.with(WelcomeActivity.this).load(R.drawable.left_design).resize((displayMetrics.widthPixels * 35) / 100, (displayMetrics.heightPixels * 30) / 100).into(ivLeft);
-            Picasso.with(WelcomeActivity.this).load(R.drawable.right_design).resize((displayMetrics.widthPixels * 35) / 100, (displayMetrics.heightPixels * 30) / 100).into(ivRight);
-            Picasso.with(WelcomeActivity.this).load(R.drawable.likeat_logo).resize((displayMetrics.widthPixels * 20) / 100, (displayMetrics.heightPixels * 14) / 100).into(ivLogo);
-            Picasso.with(WelcomeActivity.this).load(R.drawable.welcome_text).resize((displayMetrics.widthPixels * 70) / 100, (displayMetrics.heightPixels * 12) / 100).into(ivText);
+//        if (displayMetrics.widthPixels > displayMetrics.heightPixels) {
+//            Picasso.with(WelcomeActivity.this).load(R.drawable.left_design).resize((displayMetrics.widthPixels * 35) / 100, (displayMetrics.heightPixels * 30) / 100).into(ivLeft);
+//            Picasso.with(WelcomeActivity.this).load(R.drawable.right_design).resize((displayMetrics.widthPixels * 35) / 100, (displayMetrics.heightPixels * 30) / 100).into(ivRight);
+//            Picasso.with(WelcomeActivity.this).load(R.drawable.likeat_logo).resize((displayMetrics.widthPixels * 20) / 100, (displayMetrics.heightPixels * 14) / 100).into(ivLogo);
+//            Picasso.with(WelcomeActivity.this).load(R.drawable.welcome_text).resize((displayMetrics.widthPixels * 70) / 100, (displayMetrics.heightPixels * 12) / 100).into(ivText);
+//            Glide.with(WelcomeActivity.this).load(R.drawable.swipe).asGif().into(ivSwipe);
+//        } else {
+//            Picasso.with(WelcomeActivity.this).load(R.drawable.left_design).resize((displayMetrics.widthPixels * 50) / 100, (displayMetrics.heightPixels * 20) / 100).into(ivLeft);
+//            Picasso.with(WelcomeActivity.this).load(R.drawable.right_design).resize((displayMetrics.widthPixels * 50) / 100, (displayMetrics.heightPixels * 20) / 100).into(ivRight);
+//            Picasso.with(WelcomeActivity.this).load(R.drawable.likeat_logo).resize((displayMetrics.widthPixels * 25) / 100, (displayMetrics.heightPixels * 8) / 100).into(ivLogo);
+//            Picasso.with(WelcomeActivity.this).load(R.drawable.welcome_text).resize((displayMetrics.widthPixels * 80) / 100, (displayMetrics.heightPixels * 6) / 100).into(ivText);
             Glide.with(WelcomeActivity.this).load(R.drawable.swipe).asGif().into(ivSwipe);
-        } else {
-            Picasso.with(WelcomeActivity.this).load(R.drawable.left_design).resize((displayMetrics.widthPixels * 50) / 100, (displayMetrics.heightPixels * 20) / 100).into(ivLeft);
-            Picasso.with(WelcomeActivity.this).load(R.drawable.right_design).resize((displayMetrics.widthPixels * 50) / 100, (displayMetrics.heightPixels * 20) / 100).into(ivRight);
-            Picasso.with(WelcomeActivity.this).load(R.drawable.likeat_logo).resize((displayMetrics.widthPixels * 25) / 100, (displayMetrics.heightPixels * 8) / 100).into(ivLogo);
-            Picasso.with(WelcomeActivity.this).load(R.drawable.welcome_text).resize((displayMetrics.widthPixels * 80) / 100, (displayMetrics.heightPixels * 6) / 100).into(ivText);
-            Glide.with(WelcomeActivity.this).load(R.drawable.swipe).asGif().into(ivSwipe);
-        }
+//        }
+
 
 
         mainLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -140,6 +153,40 @@ public class WelcomeActivity extends AppCompatActivity {
         );
     }
 
+    class ImageLoadingTask extends AsyncTask {
+        String imagePreferenceName, urlImage;
+        SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
+        String encodedImage;
+
+        public ImageLoadingTask(String imagePreferenceName, String urlImage) {
+            this.imagePreferenceName = imagePreferenceName;
+            this.urlImage = urlImage;
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            try {
+                URL aURL = new URL(urlImage);
+                URLConnection conn = aURL.openConnection();
+                conn.connect();
+                InputStream is = conn.getInputStream();
+                BufferedInputStream bis = new BufferedInputStream(is);
+                Bitmap bm = BitmapFactory.decodeStream(bis);
+                bis.close();
+                is.close();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] b = baos.toByteArray();
+                encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                Log.e("image"," "+encodedImage);
+                sharePreferenceManage.CreatePreference("GuestAppTheme", imagePreferenceName, encodedImage,WelcomeActivity.this);
+            } catch (Exception e) {
+                Log.d("ImageManager", "Error: " + e.toString());
+            }
+            return null;
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -186,4 +233,6 @@ public class WelcomeActivity extends AppCompatActivity {
         return objTableMaster;
     }
     //endregion
+
+
 }

@@ -1,27 +1,41 @@
 package com.arraybit.pos;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 
 public class GuestOptionListFragment extends Fragment implements View.OnClickListener {
 
 
     LinearLayout guestOptionLayout, menuModeLayout, guestModeLayout;
     GuestLoginDialogFragment.LoginResponseListener objLoginResponseListener;
+    com.rey.material.widget.TextView txtCartNumber;
+    RelativeLayout relativeLayout;
+    RelativeLayout footerLayout;
+    Context context;
+    SharePreferenceManage sharePreferenceManage;
 
 
-    public GuestOptionListFragment() {
+    public GuestOptionListFragment(Context context) {
         // Required empty public constructor
+        this.context = context;
     }
 
     @Override
@@ -36,7 +50,26 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         guestModeLayout = (LinearLayout) view.findViewById(R.id.guestModeLayout);
 //        }
 
-        Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
+        footerLayout = (RelativeLayout) view.findViewById(R.id.footerLayout);
+
+//        if (GuestHomeActivity.isGuestMode ) {
+            if (Globals.objAppThemeMaster != null) {
+//                sharePreferenceManage = new SharePreferenceManage();
+//                String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity());
+//                if (!encodedImage.equals("")) {
+//                    Globals.SetPageBackground(getActivity(), encodedImage, guestOptionLayout, null, null, null);
+//                } else {
+//                    Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.splash_screen_background);
+//                    guestOptionLayout.setBackground(new BitmapDrawable(context.getResources(), originalBitmap));
+//                }
+//            } else {
+//                Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.splash_screen_background);
+//                guestOptionLayout.setBackground(new BitmapDrawable(context.getResources(), originalBitmap));
+//            }
+                Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
+        } else {
+            Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
+        }
 
         CardView cvMenu = (CardView) view.findViewById(R.id.cvMenu);
         CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);
@@ -52,7 +85,6 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         cvMenuModeMenu.setOnClickListener(this);
         cvMenuModeOffers.setOnClickListener(this);
 
-
         if (GuestHomeActivity.isMenuMode) {
             menuModeLayout.setVisibility(View.VISIBLE);
             guestModeLayout.setVisibility(View.GONE);
@@ -60,27 +92,16 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
             menuModeLayout.setVisibility(View.GONE);
             guestModeLayout.setVisibility(View.VISIBLE);
         }
-
-//        if (!getActivity().getResources().getBoolean(R.bool.isTablet)) {
-//
-//
-//
-//        } else {
-//            if (GuestHomeActivity.isMenuMode) {
-//                cvOrders.setVisibility(View.GONE);
-//                cvFeedback.setVisibility(View.GONE);
-//            }else{
-//                cvOrders.setVisibility(View.VISIBLE);
-//                cvFeedback.setVisibility(View.VISIBLE);
-//            }
-//        }
-
         setHasOptionsMenu(true);
-
 
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -141,13 +162,12 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                     Globals.isWishListShow = 0;
                 }
                 Intent intent = new Intent(getActivity(), MenuActivity.class);
-                if (v.getId() == R.id.cvMenu && !GuestHomeActivity.isMenuMode) {
-                    intent.putExtra("ParentActivity", true);
-                    intent.putExtra("IsFavoriteShow", false);
-                    intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
-                }
-                startActivity(intent);
+                intent.putExtra("ParentActivity", true);
+                intent.putExtra("IsFavoriteShow", false);
+                intent.putExtra("TableMaster", GuestHomeActivity.objTableMaster);
+                getActivity().startActivityForResult(intent, 0);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
             } else if (v.getId() == R.id.cvOffers || v.getId() == R.id.cvMenuModeOffers) {
                 Globals.ReplaceFragment(new OfferFragment(getActivity()), getActivity().getSupportFragmentManager(), getActivity().getResources().getString(R.string.title_fragment_offer));
             }

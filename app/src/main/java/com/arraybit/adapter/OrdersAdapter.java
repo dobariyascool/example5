@@ -2,9 +2,13 @@ package com.arraybit.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -17,7 +21,9 @@ import android.widget.LinearLayout;
 import com.arraybit.global.Globals;
 import com.arraybit.modal.OrderItemTran;
 import com.arraybit.modal.OrderMaster;
+import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.R;
+import com.arraybit.pos.WaiterHomeActivity;
 import com.rey.material.widget.TextView;
 
 import java.text.ParseException;
@@ -105,6 +111,12 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
             }else if(objOrderMaster.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Cancelled.getValue()){
                 holder.ivOrderIcon.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.cancel));
             }
+
+            if(WaiterHomeActivity.isWaiterMode) {
+                Drawable drawable = holder.ivOrderIcon.getDrawable();
+                DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(context, R.color.red_tab_indicator));
+            }
+
         }else{
             holder.ivOrderIcon.setVisibility(View.GONE);
         }
@@ -232,6 +244,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                         ivStatus[i].setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.cancel));
                     }
                 }
+                ivStatus[i].setColorFilter(ContextCompat.getColor(context,R.color.accent_red), PorterDuff.Mode.SRC_IN);
                 ivStatus[i].setBackground(ContextCompat.getDrawable(context,R.drawable.icon_hover_drawable));
 
                 ivStatus[i].setOnClickListener(new View.OnClickListener() {

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 
 
 public class BottomDialogFragment extends DialogFragment {
@@ -40,12 +41,20 @@ public class BottomDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 if (getArguments() != null && getArguments().getBoolean("IsMenuMode")) {
                     Globals.isWishListShow = 1;
+                    GuestHomeActivity.isMenuMode = true;
+                    WaiterHomeActivity.isWaiterMode = false;
+                    GuestHomeActivity.isGuestMode = false;
                     Globals.DisableBroadCastReceiver(getActivity());
                     Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                     intent.putExtra("linktoOrderTypeMasterId", Globals.OrderType.DineIn.getValue());
                     intent.putExtra("IsMenuMode", true);
                     startActivity(intent);
                 } else {
+                    GuestHomeActivity.isGuestMode = true;
+                    WaiterHomeActivity.isWaiterMode = false;
+                    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+                    objSharePreferenceManage.RemovePreference("CartItemListPreference", "CartItemList", getActivity());
+                    objSharePreferenceManage.ClearPreference("CartItemListPreference", getActivity());
                     AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(), true, null);
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("IsVacant", true);
@@ -53,7 +62,6 @@ public class BottomDialogFragment extends DialogFragment {
                     allTablesFragment.setArguments(bundle);
                     Globals.ReplaceFragment(allTablesFragment, getActivity().getSupportFragmentManager(), getResources().getString(R.string.title_fragment_all_tables));
                 }
-
                 mBottomSheetDialog.dismiss();
             }
         });
@@ -61,14 +69,22 @@ public class BottomDialogFragment extends DialogFragment {
         cvTakeAway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getArguments()!=null && getArguments().getBoolean("IsMenuMode")){
+                if (getArguments() != null && getArguments().getBoolean("IsMenuMode")) {
                     Globals.isWishListShow = 1;
+                    GuestHomeActivity.isMenuMode = true;
+                    WaiterHomeActivity.isWaiterMode = false;
+                    GuestHomeActivity.isGuestMode = false;
                     Globals.DisableBroadCastReceiver(getActivity());
                     Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                     intent.putExtra("linktoOrderTypeMasterId", Globals.OrderType.TakeAway.getValue());
                     intent.putExtra("IsMenuMode", true);
                     startActivity(intent);
-                }else{
+                } else {
+                    GuestHomeActivity.isGuestMode = true;
+                    WaiterHomeActivity.isWaiterMode = false;
+                    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+                    objSharePreferenceManage.RemovePreference("CartItemListPreference", "CartItemList", getActivity());
+                    objSharePreferenceManage.ClearPreference("CartItemListPreference", getActivity());
                     AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(), true, null);
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("IsVacant", true);

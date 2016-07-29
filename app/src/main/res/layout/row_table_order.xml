@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:maxLines="1"
-            android:textColor="@color/grey"
+            android:textColor="@color/waitingTitleIconColor"
             android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.TextView
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:maxLines="1"
-            android:textColor="@color/grey"
+            android:textColor="@color/waitingTitleIconColor"
             android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.TextView
@@ -39,7 +39,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:maxLines="1"
-            android:textColor="@android:color/white"
+            android:textColor="@color/primary_black"
             android:textSize="@dimen/control_TextMedium"
             android:textStyle="bold" />
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="1"
-            android:textColor="@color/grey"
+            android:textColor="@color/waitingTitleIconColor"
             android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.TextView
@@ -58,7 +58,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:maxLines="1"
-            android:textColor="#C0CA33"
+            android:textColor="@color/accent_red"
             android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.TextView
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:maxLines="1"
-            android:textColor="@color/grey"
+            android:textColor="@color/waitingTitleIconColor"
             android:textSize="@dimen/control_TextSmall" />
 
         <com.rey.material.widget.TextView
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:maxLines="1"
-            android:textColor="@android:color/white"
+            android:textColor="@color/primary_black"
             android:textSize="@dimen/control_TextMedium"
             android:textStyle="bold" />
     </LinearLayout>

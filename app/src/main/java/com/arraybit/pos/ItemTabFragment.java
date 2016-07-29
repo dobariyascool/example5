@@ -1,16 +1,22 @@
 package com.arraybit.pos;
 
 import android.app.Activity;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
+import android.transition.Fade;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -30,10 +37,12 @@ import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CategoryMaster;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.parser.ItemJSONParser;
+import com.google.gson.Gson;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings({"unchecked", "ObjectEqualsNull", "ConstantConditions"})
 public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextListener, CategoryItemAdapter.ItemClickListener, AddItemQtyDialogFragment.AddToCartListener {
@@ -58,6 +67,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     RelativeLayout relativeLayout;
     CartIconListener objCartIconListener;
     MenuItem searchItem;
+    ImageView ivErrorIcon;
     ArrayList<ItemMaster> alItemMasterFilter;
     View v;
     LinearLayout errorLayout;
@@ -81,6 +91,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
         txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
 
         rvItem = (RecyclerView) view.findViewById(R.id.rvItem);
         rvItem.setVisibility(View.GONE);
@@ -103,6 +114,20 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
             counterMasterId = Integer.valueOf(objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", getActivity()));
         }
         //end
+
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            if(Globals.objAppThemeMaster!=null)
+            {
+                ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(),R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+                txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+            }
+            else
+            {
+                ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+                txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+            }
+        }
+
 
         setHasOptionsMenu(true);
         if (Service.CheckNet(getActivity())) {
@@ -178,12 +203,14 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         final RelativeLayout cartLayout = (RelativeLayout) relativeLayout.findViewById(R.id.cartLayout);
         txtCartNumber = (TextView) relativeLayout.findViewById(R.id.txtCartNumber);
 
+
         SetCartNumber(txtCartNumber);
 
         cartLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Globals.HideKeyBoard(getActivity(), v);
+//                ReplaceFragment(new CartItemFragment(), getActivity().getResources().getString(R.string.title_fragment_cart_item));
                 objCartIconListener = (CartIconListener) Globals.targetFragment;
                 objCartIconListener.CartIconOnClick();
             }
@@ -243,10 +270,8 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 categoryItemAdapter.SetSearchFilter(filteredList);
             }
         }
-
         return false;
     }
-
 
     @Override
     public void ButtonOnClick(ItemMaster objItemMaster) {
@@ -281,6 +306,8 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 Globals.counter = Globals.counter + 1;
                 SetCartNumber(txtCartNumber);
                 Globals.alOrderItemTran.add(objOrderItemTran);
+                Globals.isAdded=true;
+                SaveCartDataInSharePreference();
                 Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem),objOrderItemTran.getItemName()),Toast.LENGTH_SHORT).show();
             }
         }
@@ -380,6 +407,35 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         }
     }
 
+    private void SaveCartDataInSharePreference() {
+        Gson gson = new Gson();
+        SharePreferenceManage objSharePreferenceManage;
+        List<ItemMaster> lstItemMaster;
+        try {
+            if (Globals.alOrderItemTran.size() == 0) {
+                objSharePreferenceManage = new SharePreferenceManage();
+                String string = objSharePreferenceManage.GetPreference("CartItemListPreference", "CartItemList", getActivity());
+                if (string != null) {
+                    ItemMaster[] objItemMaster = gson.fromJson(string,
+                            ItemMaster[].class);
+
+                    lstItemMaster = Arrays.asList(objItemMaster);
+                    Globals.alOrderItemTran.addAll(new ArrayList<>(lstItemMaster));
+                    Globals.counter = Globals.alOrderItemTran.size();
+                    if (objSharePreferenceManage.GetPreference("CartItemListPreference", "OrderRemark", getActivity()) != null) {
+                        RemarkDialogFragment.strRemark = objSharePreferenceManage.GetPreference("CartItemListPreference", "OrderRemark", getActivity());
+                    }
+                } else {
+                    objSharePreferenceManage.RemovePreference("CheckOutDataPreference", "CheckOutData", getActivity());
+                    objSharePreferenceManage.ClearPreference("CheckOutDataPreference", getActivity());
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private ArrayList<ItemMaster> Filter(ArrayList<ItemMaster> lstItemMaster, String filterName) {
         filterName = filterName.toLowerCase();
         final ArrayList<ItemMaster> filteredList = new ArrayList<>();
@@ -405,6 +461,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     interface CartIconListener {
         void CartIconOnClick();
         void CardViewOnClick(ItemMaster objItemMaster);
+
     }
 
     //endregion

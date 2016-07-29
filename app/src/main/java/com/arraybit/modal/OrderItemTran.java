@@ -24,6 +24,7 @@ public class OrderItemTran implements Parcelable {
     String OrderStatus;
     String OrderItemTranIds;
     String ModifierRates;
+    short RateIndex;
 
     public static final Creator<OrderItemTran> CREATOR = new Creator<OrderItemTran>() {
         @Override
@@ -47,6 +48,8 @@ public class OrderItemTran implements Parcelable {
             objOrderItemTran.OrderStatus = source.readString();
             objOrderItemTran.OrderItemTranIds = source.readString();
             objOrderItemTran.ModifierRates = source.readString();
+            objOrderItemTran.RateIndex = (short) source.readInt();
+
             return objOrderItemTran;
 
         }
@@ -185,6 +188,14 @@ public class OrderItemTran implements Parcelable {
         ModifierRates = modifierRates;
     }
 
+    public short getRateIndex() {
+        return RateIndex;
+    }
+
+    public void setRateIndex(short rateIndex) {
+        RateIndex = rateIndex;
+    }
+
     //endregion
 
 
@@ -214,6 +225,7 @@ public class OrderItemTran implements Parcelable {
         parcel.writeString(OrderStatus);
         parcel.writeString(OrderItemTranIds);
         parcel.writeString(ModifierRates);
+        parcel.writeInt(RateIndex);
 
     }
 }

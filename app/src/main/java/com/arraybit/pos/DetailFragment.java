@@ -2,6 +2,10 @@ package com.arraybit.pos;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
@@ -86,7 +91,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     RecyclerView rvModifier, rvOptionValue, rvSuggestedItem;
     ArrayList<OptionValueTran> lstOptionValueTran, lstOptionValue;
     ArrayList<ItemMaster> alCheckedModifier = new ArrayList<>();
-    LinearLayout itemSuggestionLayout, wishListLayout, btnLayout;
+    LinearLayout itemSuggestionLayout, wishListLayout, btnLayout, dividerLayout;
     boolean isDineIn, isKeyClick = false;
     Button btnOrder, btnOrderDisable;
     ModifierAdapter modifierAdapter;
@@ -96,8 +101,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     boolean isWishList;
     ToggleButton tbLike;
     NestedScrollView scrollView;
-    ImageButton ibPlus,ibMinus,ibDisablePlus,ibDisableMinus;
-
+    ImageButton ibPlus, ibMinus, ibDisablePlus, ibDisableMinus;
 
 
     public DetailFragment(ItemMaster objItemMaster) {
@@ -130,8 +134,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         itemSuggestionLayout = (LinearLayout) view.findViewById(R.id.itemSuggestionLayout);
         wishListLayout = (LinearLayout) view.findViewById(R.id.wishListLayout);
         btnLayout = (LinearLayout) view.findViewById(R.id.btnLayout);
+        dividerLayout = (LinearLayout) view.findViewById(R.id.dividerLayout);
 
-        scrollView = (NestedScrollView)view.findViewById(R.id.scrollView);
+        scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
 
         ivItemImage = (ImageView) view.findViewById(R.id.ivItemImage);
         ivTest = (ImageView) view.findViewById(R.id.ivTest);
@@ -188,6 +193,60 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         SetLoadingTask(container);
         SetDetail();
 
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            getActivity().setTheme(R.style.AppThemeGuest);
+            if (Globals.objAppThemeMaster != null) {
+                app_bar.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.primary)));
+                Drawable drawable = app_bar.getOverflowIcon();
+                DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(getActivity(), android.R.color.white));
+                app_bar.setOverflowIcon(drawable);
+
+//                GradientDrawable shape = new GradientDrawable();
+//                shape.setShape(GradientDrawable.RECTANGLE);
+//                shape.setBounds(-5, -5, -5, 1);
+//                shape.setStroke(3, ContextCompat.getColor(getActivity(), R.color.accent_secondary));
+//                scrollView.setBackground(shape);
+
+                LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.separator);
+                GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.separator1);
+                gradientDrawable.setStroke(2,ContextCompat.getColor(getActivity(), R.color.accent_dark)); // change color
+                scrollView.setBackground(shape);
+
+                Globals.CustomView(btnOrder, ContextCompat.getColor(getActivity(), R.color.accent_secondary), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnOrder.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+                Globals.CustomView(btnOrderDisable, ContextCompat.getColor(getActivity(), R.color.transparent_accent), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnOrderDisable.setTextColor(ContextCompat.getColor(getActivity(), R.color.dimWhite));
+            } else {
+                app_bar.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.guestTabColor1)));
+                Drawable drawable = app_bar.getOverflowIcon();
+                DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(getActivity(), android.R.color.white));
+                app_bar.setOverflowIcon(drawable);
+
+//                GradientDrawable shape = new GradientDrawable();
+//                shape.setShape(GradientDrawable.RECTANGLE);
+//                shape.setBounds(-5, -5, -5, 1);
+//                shape.setStroke(3, ContextCompat.getColor(getActivity(), R.color.accent_secondary));
+//                scrollView.setBackground(shape);
+//                Drawable drawable1 = scrollView.getBackground();
+
+                Globals.CustomView(btnOrder, ContextCompat.getColor(getActivity(), R.color.accent_secondary), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnOrder.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+                Globals.CustomView(btnOrderDisable, ContextCompat.getColor(getActivity(), R.color.transparent_accent), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnOrderDisable.setTextColor(ContextCompat.getColor(getActivity(), R.color.dimWhite));
+            }
+        } else {
+
+            app_bar.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.primary_black)));
+            Drawable drawable = app_bar.getOverflowIcon();
+            DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(getActivity(), android.R.color.white));
+            app_bar.setOverflowIcon(drawable);
+
+            Globals.CustomView(btnOrder, ContextCompat.getColor(getActivity(), R.color.red_tab_indicator), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+            btnOrder.setTextColor(ContextCompat.getColor(getActivity(), android.R.color.white));
+            Globals.CustomView(btnOrderDisable, ContextCompat.getColor(getActivity(), R.color.transparent_red), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+            btnOrderDisable.setTextColor(ContextCompat.getColor(getActivity(), R.color.waitingTitleIconColor));
+        }
+
         etQuantity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -226,12 +285,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         menu.findItem(R.id.action_search).setVisible(false);
         menu.findItem(R.id.viewChange).setVisible(false);
         menu.findItem(R.id.cart_layout).setVisible(false);
-        if(Globals.isWishListShow==0){
-            if(!GuestHomeActivity.isMenuMode) {
+        if (Globals.isWishListShow == 0) {
+            if (!GuestHomeActivity.isMenuMode) {
                 menu.findItem(R.id.logout).setVisible(false);
-                menu.findItem(R.id.notification_layout).setVisible(false);
+//                menu.findItem(R.id.notification_layout).setVisible(false);
             }
-        } else if(Globals.isWishListShow==1){
+        } else if (Globals.isWishListShow == 1) {
             menu.findItem(R.id.login).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
@@ -302,10 +361,10 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             textInputLayout.clearFocus();
             etQuantity.requestFocus();
 
-        }else if (v.getId() == R.id.btnOrder) {
+        } else if (v.getId() == R.id.btnOrder) {
             SetOrderItemModifierTran();
             SetOrderItemTran();
-            if(Globals.isWishListShow==1){
+            if (Globals.isWishListShow == 1) {
                 SaveWishListData();
             }
             if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
@@ -317,7 +376,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             }
             if (isShow) {
                 if (isItemSuggestedClick) {
-                    Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem), itemName),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), String.format(getActivity().getResources().getString(R.string.MsgCartItem), itemName), Toast.LENGTH_SHORT).show();
                     isItemSuggestedClick = false;
                 }
                 if (getTargetFragment() != null) {
@@ -393,7 +452,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             if (objOrderItemTran.getItemName() != null) {
                 Globals.counter = Globals.counter + 1;
                 Globals.alOrderItemTran.add(objOrderItemTran);
-                Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem), objOrderItemTran.getItemName()),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), String.format(getActivity().getResources().getString(R.string.MsgCartItem), objOrderItemTran.getItemName()), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -428,7 +487,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     public void SaveWishListData() {
         if (tbLike.isChecked() && objItemMaster.getIsChecked() == 1) {
         } else if (!tbLike.isChecked() && (objItemMaster.getIsChecked() == 0 || objItemMaster.getIsChecked() == -1)) {
-        }else if (tbLike.isChecked() && (objItemMaster.getIsChecked() != 1)) {
+        } else if (tbLike.isChecked() && (objItemMaster.getIsChecked() != 1)) {
             CheckDuplicate("1", objItemMaster);
             SaveWishListInSharePreference();
         } else if (!tbLike.isChecked() && (objItemMaster.getIsChecked() != 0)) {
@@ -452,7 +511,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
     }
 
     private void SetLoadingTask(ViewGroup container) {
-        if(GuestHomeActivity.isMenuMode){
+        if (GuestHomeActivity.isMenuMode) {
             btnLayout.setVisibility(View.GONE);
             textInputLayout.setVisibility(View.GONE);
             rvModifier.setVisibility(View.GONE);
@@ -468,11 +527,11 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             etQuantity.setEnabled(false);
             if (objItemMaster.getIsDineInOnly() && Globals.orderTypeMasterId == Globals.OrderType.TakeAway.getValue()) {
                 txtDineIn.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 txtDineIn.setVisibility(View.GONE);
             }
-        }else {
-            scrollView.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.separator));
+        } else {
+            scrollView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.separator));
             btnLayout.setVisibility(View.VISIBLE);
             if (objItemMaster.getIsDineInOnly() && Globals.orderTypeMasterId == Globals.OrderType.TakeAway.getValue()) {
                 txtDineIn.setVisibility(View.VISIBLE);

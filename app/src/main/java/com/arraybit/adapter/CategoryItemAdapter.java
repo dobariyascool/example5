@@ -2,7 +2,10 @@ package com.arraybit.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
@@ -36,17 +39,17 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     FragmentManager fragmentManager;
     boolean isViewChange;
     boolean isWaiterGrid = false;
-    boolean isDuplicate = false, isLikeClick,isWishListChange;
+    boolean isDuplicate = false, isLikeClick, isWishListChange;
     View view;
     Context context;
     ArrayList<ItemMaster> alItemMaster;
     ItemMaster objItemMaster;
     ItemClickListener objItemClickListener;
-    int previousPosition,cnt = 0;
+    int previousPosition, cnt = 0;
     boolean isVeg, isNonVeg, isJain;
 
 
-    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange, ItemClickListener objItemClickListener, boolean isItemAnimate,boolean isLikeClick) {
+    public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange, ItemClickListener objItemClickListener, boolean isItemAnimate, boolean isLikeClick) {
         this.context = context;
         alItemMaster = result;
         this.fragmentManager = fragmentManager;
@@ -102,12 +105,11 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
         if (Globals.orderTypeMasterId == Globals.OrderType.TakeAway.getValue() && objItemMaster.getIsDineInOnly()) {
             holder.txtItemDineOnly.setVisibility(View.VISIBLE);
-            if(GuestHomeActivity.isMenuMode){
+            if (GuestHomeActivity.isMenuMode) {
                 holder.btnAdd.setVisibility(View.GONE);
                 holder.btnAddDisable.setVisibility(View.GONE);
                 holder.ibLike.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 if (isWaiterGrid) {
                     holder.btnAddDisable.setVisibility(View.GONE);
                     holder.btnAdd.setVisibility(View.GONE);
@@ -125,11 +127,11 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             }
         } else {
             holder.txtItemDineOnly.setVisibility(View.INVISIBLE);
-            if(GuestHomeActivity.isMenuMode){
+            if (GuestHomeActivity.isMenuMode) {
                 holder.btnAdd.setVisibility(View.GONE);
                 holder.btnAddDisable.setVisibility(View.GONE);
                 holder.ibLike.setVisibility(View.GONE);
-            }else {
+            } else {
                 if (isWaiterGrid) {
                     holder.btnAdd.setVisibility(View.GONE);
                     holder.btnAddDisable.setVisibility(View.GONE);
@@ -145,7 +147,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             }
         }
 
-        if(holder.ibLike.getVisibility()==View.VISIBLE){
+        if (holder.ibLike.getVisibility() == View.VISIBLE) {
             CheckDuplicate(null, objItemMaster);
             if (objItemMaster.getIsChecked() == -1 || objItemMaster.getIsChecked() == 0) {
                 holder.ibLike.setChecked(false);
@@ -336,10 +338,10 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         notifyItemChanged(position);
     }
 
-    public void CheckIdInCurrentList(short isChecked,int itemMasterId,short oldCheckValue,ItemMaster objWishList){
-        int count=0;
+    public void CheckIdInCurrentList(short isChecked, int itemMasterId, short oldCheckValue, ItemMaster objWishList) {
+        int count = 0;
         boolean isDuplicate = false;
-        for(ItemMaster objItemMaster : alItemMaster) {
+        for (ItemMaster objItemMaster : alItemMaster) {
             if (objItemMaster.getItemMasterId() == itemMasterId) {
                 isDuplicate = true;
                 CheckDuplicate(String.valueOf(0), objItemMaster);
@@ -349,8 +351,8 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             }
             count++;
         }
-        if(!isDuplicate){
-            if(objWishList!=null) {
+        if (!isDuplicate) {
+            if (objWishList != null) {
                 CheckDuplicate(String.valueOf(isChecked), objWishList);
                 alItemMaster.add(alItemMaster.size(), objWishList);
                 notifyItemInserted(alItemMaster.size());
@@ -406,6 +408,45 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 ivItem.setLayoutParams(layoutParams);
             }
 
+            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+                if(Globals.objAppThemeMaster!=null)
+                {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        cvItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvItem.setElevation(4f);
+                    } else {
+                        cvItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                    }
+                    Globals.CustomView(btnAdd, ContextCompat.getColor(context, R.color.accent_secondary), ContextCompat.getColor(context, android.R.color.transparent));
+                    btnAdd.setTextColor(ContextCompat.getColor(context, R.color.primary));
+                    txtItemName.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtItemDescription.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.darkgoldenrod)));
+                    txtItemPrice.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.yellow)));
+                    Globals.CustomView(btnAddDisable, ContextCompat.getColor(context, R.color.transparent_accent), ContextCompat.getColor(context, android.R.color.transparent));
+                    btnAddDisable.setTextColor(ContextCompat.getColor(context, R.color.transparentBrown));
+
+//                    ibLike.setButtonDrawable(ContextCompat.getDrawable(context, R.drawable.like_drawable));
+            }
+                else
+                {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        cvItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvItem.setElevation(4f);
+                    } else {
+                        cvItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                    }
+                    Globals.CustomView(btnAdd, ContextCompat.getColor(context, R.color.accent), ContextCompat.getColor(context, android.R.color.transparent));
+                    btnAdd.setTextColor(ContextCompat.getColor(context, R.color.primary));
+                    txtItemName.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    txtItemDescription.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.darkgoldenrod)));
+                    txtItemPrice.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.yellow)));
+                    Globals.CustomView(btnAddDisable, ContextCompat.getColor(context, R.color.transparent_accent), ContextCompat.getColor(context, android.R.color.transparent));
+                    btnAddDisable.setTextColor(ContextCompat.getColor(context, R.color.dimWhite));
+
+//                    ibLike.setButtonDrawable(ContextCompat.getDrawable(context, R.drawable.like_drawable));
+                }
+            }
+
             cvItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -437,7 +478,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     if (ibLike.isChecked()) {
                         alItemMaster.get(getAdapterPosition()).setIsChecked((short) 1);
                         CheckDuplicate("1", alItemMaster.get(getAdapterPosition()));
-                        Toast.makeText(context,String.format(context.getResources().getString(R.string.MsgWishListItem),  alItemMaster.get(getAdapterPosition()).getItemName()), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, String.format(context.getResources().getString(R.string.MsgWishListItem), alItemMaster.get(getAdapterPosition()).getItemName()), Toast.LENGTH_SHORT).show();
                     } else {
                         if (isLikeClick) {
                             CheckDuplicate("0", alItemMaster.get(getAdapterPosition()));

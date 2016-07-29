@@ -201,6 +201,7 @@
                 </android.support.v7.widget.CardView>
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/menuModeLayout"
             android:layout_width="match_parent"
@@ -286,4 +287,40 @@
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/footerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@android:color/transparent"
+        android:gravity="end|bottom"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivCompany"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/control_SpecingSmall"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_marginTop="@dimen/control_SpecingSmall"
+            android:contentDescription="@string/splash_screen"
+            android:scaleType="fitEnd"
+            android:visibility="gone" />
+        <!--android:src="@drawable/cmp_logo"-->
+
+        <ImageView
+            android:id="@+id/ivCompanyLogo"
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/control_SpecingSmall"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_marginTop="@dimen/control_SpecingSmall"
+            android:layout_toEndOf="@+id/ivCompany"
+            android:contentDescription="@string/splash_screen"
+            android:gravity="start|center"
+            android:scaleType="fitStart"
+            android:src="@drawable/arraybit_text" />
+    </RelativeLayout>
 </LinearLayout>
+

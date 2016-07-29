@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -82,6 +83,15 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         tbPasswordShowConfirm.setOnClickListener(this);
         //end
 
+        if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
+        {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            Globals.CustomView(btnChangePassword, ContextCompat.getColor(getActivity(), R.color.accent_dark), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+            btnChangePassword.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+        }else
+        {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
+        }
 
         //region TextChange Event
         etOldPassword.addTextChangedListener(new TextWatcher() {
@@ -201,6 +211,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         menu.findItem(R.id.login).setVisible(false);
         menu.findItem(R.id.logout).setVisible(false);
         menu.findItem(R.id.shortList).setVisible(false);
+        menu.findItem(R.id.cart_layout).setVisible(false);
     }
 
     //region Private Methods

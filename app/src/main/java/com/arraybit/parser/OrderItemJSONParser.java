@@ -1,5 +1,7 @@
 package com.arraybit.parser;
 
+import android.util.Log;
+
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.OrderItemTran;
@@ -94,6 +96,7 @@ public class OrderItemJSONParser {
                 objOrderItemTran.setOrderStatus(jsonArray.getJSONObject(i).getString("OrderStatus"));
                 objOrderItemTran.setOrderItemTranIds(jsonArray.getJSONObject(i).getString("OrderItemTranIds"));
                 objOrderItemTran.setModifierRates(jsonArray.getJSONObject(i).getString("ModifierRates"));
+                objOrderItemTran.setRateIndex((short)jsonArray.getJSONObject(i).getInt("RateIndex"));
                 lstOrderItemTran.add(objOrderItemTran);
             }
             return lstOrderItemTran;

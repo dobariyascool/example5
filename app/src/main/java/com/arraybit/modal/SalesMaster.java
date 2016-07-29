@@ -36,6 +36,9 @@ public class SalesMaster implements Parcelable {
     String UpdateDateTime;
     short linktoUserMasterIdUpdatedBy;
     double Rounding;
+    short RateIndex;
+
+
     /// Extra
     String Counter;
     String Waiter;
@@ -76,6 +79,7 @@ public class SalesMaster implements Parcelable {
             objSalesMaster.linktoUserMasterIdCreatedBy = (short) source.readInt();
             objSalesMaster.UpdateDateTime = source.readString();
             objSalesMaster.linktoUserMasterIdUpdatedBy = (short) source.readInt();
+            objSalesMaster.RateIndex = (short) source.readInt();
 
             /// Extra
             objSalesMaster.Counter = source.readString();
@@ -385,6 +389,13 @@ public class SalesMaster implements Parcelable {
         return Rounding;
     }
 
+    public short getRateIndex() {
+        return RateIndex;
+    }
+
+    public void setRateIndex(short rateIndex) {
+        RateIndex = rateIndex;
+    }
 
     //endregion
 
@@ -426,6 +437,7 @@ public class SalesMaster implements Parcelable {
         parcel.writeInt(linktoUserMasterIdCreatedBy);
         parcel.writeString(UpdateDateTime);
         parcel.writeInt(linktoUserMasterIdUpdatedBy);
+        parcel.writeInt(RateIndex);
 
         /// Extra
         parcel.writeString(Counter);

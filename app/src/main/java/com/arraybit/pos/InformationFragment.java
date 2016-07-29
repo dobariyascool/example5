@@ -1,14 +1,17 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.WorkingHoursAdapter;
@@ -29,6 +32,7 @@ public class InformationFragment extends Fragment {
     static ArrayList<BusinessHoursTran> lstBusinessHoursTran;
     RecyclerView rvWorkingHours;
     TextView txtAddress, txtEmail, txtWebSite,txtPhone1,txtPhone2,txtFax;
+    ImageView ivAddress,ivCall,ivWebSite,ivEmail,ivFax;
     LinearLayoutManager linearLayoutManager;
     WorkingHoursAdapter adapter;
     BusinessMaster objBusinessMaster;
@@ -50,6 +54,12 @@ public class InformationFragment extends Fragment {
         txtWebSite = (TextView) view.findViewById(R.id.txtWebSite);
         txtFax = (TextView) view.findViewById(R.id.txtFax);
 
+        ivAddress = (ImageView) view.findViewById(R.id.ivAddress);
+        ivCall = (ImageView) view.findViewById(R.id.ivCall);
+        ivWebSite = (ImageView) view.findViewById(R.id.ivWebSite);
+        ivEmail = (ImageView) view.findViewById(R.id.ivEmail);
+        ivFax = (ImageView) view.findViewById(R.id.ivFax);
+
         callLayout = (LinearLayout) view.findViewById(R.id.callLayout);
         emailLayout = (LinearLayout) view.findViewById(R.id.emailLayout);
         siteLayout = (LinearLayout) view.findViewById(R.id.siteLayout);
@@ -63,6 +73,15 @@ public class InformationFragment extends Fragment {
         rvWorkingHours = (RecyclerView) view.findViewById(R.id.rvWorkingHours);
         rvWorkingHours.setNestedScrollingEnabled(false);
         rvWorkingHours.setVisibility(View.GONE);
+
+        if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
+        {
+            ivAddress.setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+            ivCall.setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+            ivEmail.setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+            ivFax.setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+            ivWebSite.setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+        }
 
         if (lstBusinessHoursTran == null) {
             SetContactDetails();

@@ -1,9 +1,13 @@
 package com.arraybit.pos;
 
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.OrdersAdapter;
@@ -50,6 +55,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
     StringBuilder sbOrderMasterIds;
     ArrayList<OrderItemTran> alOrderItemTran;
     LinearLayout errorLayout;
+    ImageView ivErrorIcon;
 
 
     public OrdersTabFragment() {
@@ -73,6 +79,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
 
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
         txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
 
         rvOrder = (RecyclerView) view.findViewById(R.id.rvOrder);
         rvOrder.setVisibility(View.GONE);
@@ -127,8 +134,8 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                     SetupRecyclerView(rvOrder, alOrderMaster, alOrderItemTran);
                 }
             }
-        }else {
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvOrder,R.drawable.wifi_drawable);
+        } else {
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvOrder, R.drawable.wifi_drawable);
         }
     }
 
@@ -147,7 +154,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         // Do something when collapsed
-                        if(errorLayout.getVisibility()==View.GONE) {
+                        if (errorLayout.getVisibility() == View.GONE) {
                             if (alOrderMaster.size() != 0 && alOrderMaster != null) {
                                 ordersAdapter.SetSearchFilter(alOrderMaster);
                                 Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
@@ -170,7 +177,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         if (Service.CheckNet(getActivity())) {
             new OrderMasterLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvOrder,R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvOrder, R.drawable.wifi_drawable);
         }
 
     }
@@ -182,7 +189,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if(errorLayout.getVisibility()==View.GONE) {
+        if (errorLayout.getVisibility() == View.GONE) {
             if (alOrderMaster.size() != 0 && alOrderMaster != null) {
                 final ArrayList<OrderMaster> filteredList = Filter(alOrderMaster, newText);
                 ordersAdapter.SetSearchFilter(filteredList);
@@ -272,7 +279,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         protected Object doInBackground(Object[] objects) {
 
             OrderJOSNParser objOrderJOSNParser = new OrderJOSNParser();
-            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, Globals.OrderStatus.valueOf(orderStatus).getValue(), linktoTableMasterIds, orderTypeMasterId,Globals.businessMasterId);
+            return objOrderJOSNParser.SelectAllOrderMaster(counterMasterId, Globals.OrderStatus.valueOf(orderStatus).getValue(), linktoTableMasterIds, orderTypeMasterId, Globals.businessMasterId);
         }
 
         @Override
@@ -280,9 +287,9 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
             progressDialog.dismiss();
             ArrayList<OrderMaster> lstOrderMaster = (ArrayList<OrderMaster>) result;
             if (lstOrderMaster == null) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOrder,0);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvOrder, 0);
             } else if (lstOrderMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound),getActivity().getResources().getString(R.string.MsgOrder)), rvOrder,0);
+                Globals.SetErrorLayout(errorLayout, true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgOrder)), rvOrder, 0);
             } else {
                 alOrderMaster = lstOrderMaster;
                 sbOrderMasterIds = new StringBuilder();
@@ -316,7 +323,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         protected void onPostExecute(Object result) {
             alOrderItemTran = (ArrayList<OrderItemTran>) result;
             if (alOrderItemTran != null && alOrderItemTran.size() != 0) {
-                Globals.SetErrorLayout(errorLayout, false, null, rvOrder,0);
+                Globals.SetErrorLayout(errorLayout, false, null, rvOrder, 0);
                 SetupRecyclerView(rvOrder, alOrderMaster, alOrderItemTran);
             }
         }

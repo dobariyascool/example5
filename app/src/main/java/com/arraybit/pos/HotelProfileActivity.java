@@ -1,25 +1,35 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.BusinessMaster;
 import com.arraybit.modal.UserMaster;
 import com.arraybit.parser.BusinessJSONParser;
@@ -35,13 +45,15 @@ public class HotelProfileActivity extends AppCompatActivity {
 
     short mode;
     ViewPager viewPager;
-    ImageView ivLogo,ivBackground;
+    ImageView ivLogo, ivBackground;
     TabLayout tabLayout;
     BusinessMaster objBusinessMaster;
     PageAdapter pageAdapter;
     UserMaster objUserMaster;
     BusinessJSONParser objBusinessJSONParser;
     CoordinatorLayout hotelProfileFragment;
+    CollapsingToolbarLayout collapsingToolbar;
+    SharePreferenceManage sharePreferenceManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +71,7 @@ public class HotelProfileActivity extends AppCompatActivity {
         mode = getData.getShortExtra("Mode", (short) 0);
 
         hotelProfileFragment = (CoordinatorLayout) findViewById(R.id.hotelProfileFragment);
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbar);
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -68,7 +81,24 @@ public class HotelProfileActivity extends AppCompatActivity {
         pageAdapter = new PageAdapter(getSupportFragmentManager());
         objUserMaster = new UserMaster();
 
-        Picasso.with(HotelProfileActivity.this).load(R.drawable.profile_background).fit().centerCrop().into(ivBackground);
+        if (Globals.objAppThemeMaster != null) {
+            sharePreferenceManage = new SharePreferenceManage();
+            String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getString(R.string.encodedProfileImage), HotelProfileActivity.this);
+            byte[] decodedString = Base64.decode(encodedImage.getBytes(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ivBackground.setImageDrawable(new BitmapDrawable(getResources(), decodedByte));
+            ivBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            Picasso.with(HotelProfileActivity.this).load().fit().centerCrop().into(ivBackground);
+        } else {
+            Picasso.with(HotelProfileActivity.this).load(R.drawable.profile_background).fit().centerCrop().into(ivBackground);
+        }
+
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            collapsingToolbar.setContentScrimColor(ContextCompat.getColor(this, R.color.primary));
+            tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.primary));
+            tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.accent));
+            tabLayout.setTabTextColors(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.white)));
+        }
 
         if (Service.CheckNet(this)) {
             new HotelLoadingTask().execute();

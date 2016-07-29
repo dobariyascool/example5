@@ -4,13 +4,16 @@ package com.arraybit.pos;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -29,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.arraybit.adapter.TablesAdapter;
 import com.arraybit.global.Globals;
@@ -41,13 +43,14 @@ import com.arraybit.parser.TableJSONParser;
 import com.arraybit.parser.WaitingJSONParser;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 @SuppressLint("ValidFragment")
-public class AllTablesFragment extends Fragment implements View.OnClickListener, TablesAdapter.LayoutClickListener, SearchView.OnQueryTextListener, TableStatusFragment.UpdateTableStatusListener,ConfirmDialog.ConfirmationResponseListener {
+public class AllTablesFragment extends Fragment implements View.OnClickListener, TablesAdapter.LayoutClickListener, SearchView.OnQueryTextListener, TableStatusFragment.UpdateTableStatusListener, ConfirmDialog.ConfirmationResponseListener {
 
     static boolean isRefresh = false;
     boolean isFilter;
@@ -61,11 +64,13 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
     LinearLayout errorLayout;
     RecyclerView rvTables;
     GridLayoutManager gridLayoutManager;
-    int counterMasterId, position,tableMasterId;
+    int counterMasterId, position, tableMasterId;
     SharePreferenceManage objSharePreferenceManage;
     Bundle bundle;
     DisplayMetrics displayMetrics;
     WaitingMaster objWaitingMaster;
+    ImageView ivErrorIcon;
+    TextView txtMsg;
 
     public AllTablesFragment(Activity activityName, boolean isChangeMode, String linktoOrderTypeMasterId) {
         this.activityName = activityName;
@@ -91,17 +96,45 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                 ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_all_tables));
+                if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//                if(Globals.objAppThemeMaster!=null) {
+//                    Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
+//                }
+//                else
+//                {
+                    Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+//                }
+                } else {
+                    Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
+                }
             }
 
             allTablesFragment = (CoordinatorLayout) view.findViewById(R.id.allTablesFragment);
-            Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
+//            Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
+            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//            if (Globals.objAppThemeMaster != null) {
+////                    sharePreferenceManage = new SharePreferenceManage();
+////                    String encodedImage= sharePreferenceManage.GetPreference("GuestAppTheme",getActivity().getString(R.string.guestEncodedImage1),getActivity());
+////                    Globals.SetPageBackground(getActivity(), encodedImage, null, null, null, categoryItemFragment);
+//            } else {
+//                Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
+//                categoryItemFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
+//            }
+                Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
+            } else {
+                allTablesFragment.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
+            }
 
             setHasOptionsMenu(true);
         }
 
+
+
         displayMetrics = getActivity().getResources().getDisplayMetrics();
 
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
+        txtMsg = (com.rey.material.widget.TextView) errorLayout.findViewById(R.id.txtMsg);
+        ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
 
         rvTables = (RecyclerView) view.findViewById(R.id.rvTables);
         rvTables.setHasFixedSize(true);
@@ -109,6 +142,19 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
 
         gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//            if (Globals.objAppThemeMaster != null) {
+////                    sharePreferenceManage = new SharePreferenceManage();
+////                    String encodedImage= sharePreferenceManage.GetPreference("GuestAppTheme",getActivity().getString(R.string.guestEncodedImage1),getActivity());
+////                    Globals.SetPageBackground(getActivity(), encodedImage, null, null, null, categoryItemFragment);
+//            } else {
+//                Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
+//                categoryItemFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
+//            }
+            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(),R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+            txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+        }
 
         //get counterMasterId
         objSharePreferenceManage = new SharePreferenceManage();
@@ -272,18 +318,21 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
     public void ChangeTableStatusClick(TableMaster objTableMaster, int position) {
         this.position = position;
         if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Vacant.toString())) {
-            if(isClick){
-               if(objWaitingMaster!=null){
-                   tableMasterId = objTableMaster.getTableMasterId();
-                   String message = "Want to assign"+" "+objTableMaster.getShortName()+"("+objTableMaster.getMaxPerson()+") to "+objWaitingMaster.getPersonName().trim()
-                           +"("+objWaitingMaster.getNoOfPersons()+" persons)?";
-                   ConfirmDialog confirmDialog = new ConfirmDialog(message,false);
-                   confirmDialog.setTargetFragment(this,0);
-                   confirmDialog.show(getActivity().getSupportFragmentManager(),"");
-               }
-            }else {
+            if (isClick) {
+                if (objWaitingMaster != null) {
+                    tableMasterId = objTableMaster.getTableMasterId();
+                    String message = "Want to assign" + " " + objTableMaster.getShortName() + "(" + objTableMaster.getMaxPerson() + ") to " + objWaitingMaster.getPersonName().trim()
+                            + "(" + objWaitingMaster.getNoOfPersons() + " persons)?";
+                    ConfirmDialog confirmDialog = new ConfirmDialog(message, false);
+                    confirmDialog.setTargetFragment(this, 0);
+                    confirmDialog.show(getActivity().getSupportFragmentManager(), "");
+                }
+            } else {
                 if (isChangeMode) {
                     Globals.isWishListShow = 1;
+                    Globals.counter = 0;
+                    Globals.selectTableMasterId = objTableMaster.getTableMasterId();
+                    Globals.alOrderItemTran = new ArrayList<>();
                     Globals.DisableBroadCastReceiver(getActivity());
                     Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                     intent.putExtra("TableMaster", objTableMaster);
@@ -293,23 +342,26 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                     if (Globals.selectTableMasterId == 0) {
                         Globals.selectTableMasterId = objTableMaster.getTableMasterId();
                     }
+                    getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     Intent intent = new Intent(getActivity(), MenuActivity.class);
                     intent.putExtra("IsFavoriteShow", true);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.setFlags(0);
                     intent.putExtra("TableMaster", objTableMaster);
-                    startActivity(intent);
+                    startActivityForResult(intent, 100);
                     getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//                    TableOnclickListener tableOnclickListener= (TableOnclickListener) getActivity();
+//                    tableOnclickListener.TableOnClick(objTableMaster);
                 }
             }
         } else if (objTableMaster.getTableStatus().equals(Globals.TableStatus.Occupied.toString())) {
-            if(isVacant){
+            if (isVacant) {
                 Globals.isWishListShow = 1;
                 Globals.DisableBroadCastReceiver(getActivity());
                 Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
                 intent.putExtra("TableMaster", objTableMaster);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-            }else {
+            } else {
                 AllTablesFragment.isRefresh = true;
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("TableMaster", objTableMaster);
@@ -346,11 +398,11 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         if (Service.CheckNet(getActivity())) {
             new UpdateTableStatusLoadingTask().execute();
         } else {
-            Globals.ShowSnackBar(rvTables,getResources().getString(R.string.MsgCheckConnection),getActivity(),2000);
+            Globals.ShowSnackBar(rvTables, getResources().getString(R.string.MsgCheckConnection), getActivity(), 2000);
         }
     }
 
-    //region Private Methods
+    //region Private Methods & Interfaces
     private void SetErrorLayout(boolean isShow, String errorMsg, int errorIcon) {
         TextView txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
         ImageView ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
@@ -448,6 +500,11 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+//    public interface TableOnclickListener
+//    {
+//        void TableOnClick(TableMaster objTableMaster);
+//    }
+
     //endregion
 
     //region Loading Task
@@ -484,10 +541,10 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                 SetErrorLayout(true, String.format(getActivity().getResources().getString(R.string.MsgNoRecordFound), getActivity().getResources().getString(R.string.MsgTable)), 0);
             } else {
                 SetErrorLayout(false, null, 0);
-                if(isVacant){
+                if (isVacant) {
                     alTableMaster = new ArrayList<>();
-                    for(TableMaster objTableMaster : lstTableMaster){
-                        if(objTableMaster.getlinktoTableStatusMasterId()==Globals.TableStatus.Vacant.getValue() || objTableMaster.getlinktoTableStatusMasterId()==Globals.TableStatus.Occupied.getValue()) {
+                    for (TableMaster objTableMaster : lstTableMaster) {
+                        if (objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Vacant.getValue() || objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Occupied.getValue()) {
                             if ((objTableMaster.getWaitingPersonName() != null && !objTableMaster.getWaitingPersonName().equals("")) && objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Occupied.getValue()) {
                                 alTableMaster.add(objTableMaster);
                             } else if (objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Vacant.getValue()) {
@@ -495,7 +552,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                             }
                         }
                     }
-                }else {
+                } else {
                     alTableMaster = lstTableMaster;
                 }
                 SetupRecyclerView(rvTables, alTableMaster);
@@ -533,16 +590,15 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
 
         @Override
         protected void onPostExecute(Object result) {
-            if(status.equals("-1")){
+            if (status.equals("-1")) {
                 progressDialog.dismiss();
-            }
-            else if(status.equals("0")) {
+            } else if (status.equals("0")) {
                 progressDialog.dismiss();
                 if (Service.CheckNet(getActivity())) {
                     tablesAdapter.UpdateData(position, objTable);
                     new UpdateWaitingStatusLoadingTask().execute();
                 } else {
-                    Globals.ShowSnackBar(rvTables,getResources().getString(R.string.MsgCheckConnection),getActivity(),2000);
+                    Globals.ShowSnackBar(rvTables, getResources().getString(R.string.MsgCheckConnection), getActivity(), 2000);
                 }
             }
         }
@@ -575,8 +631,8 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            if(status.equals("0")){
-                WaitingStatusFragment.UpdateStatusListener objUpdateStatusListener = (WaitingStatusFragment.UpdateStatusListener)getActivity();
+            if (status.equals("0")) {
+                WaitingStatusFragment.UpdateStatusListener objUpdateStatusListener = (WaitingStatusFragment.UpdateStatusListener) getActivity();
                 objUpdateStatusListener.UpdateStatus(false);
             }
         }

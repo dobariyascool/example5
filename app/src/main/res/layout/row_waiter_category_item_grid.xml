@@ -25,7 +25,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/control_TextMedium" />
 
             <ToggleButton
@@ -48,7 +48,7 @@
             android:ellipsize="end"
             android:maxLines="3"
             android:text="Description"
-            android:textColor="@color/darkgoldenrod"
+            android:textColor="@color/primary_black"
             android:textSize="@dimen/control_TextSmall"
             android:visibility="gone"
             tools:ignore="HardcodedText" />
@@ -127,7 +127,7 @@
                 android:layout_gravity="end"
                 android:maxLines="1"
                 android:text="@string/abBuildVersion"
-                android:textColor="@color/yellow"
+                android:textColor="@color/primary_black"
                 android:textSize="@dimen/control_TextMedium"
                 tools:ignore="HardcodedText" />
 

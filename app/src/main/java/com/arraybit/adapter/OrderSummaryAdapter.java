@@ -1,6 +1,7 @@
 package com.arraybit.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,9 @@ import android.widget.LinearLayout;
 import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderMaster;
+import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.R;
+import com.arraybit.pos.WaiterHomeActivity;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -120,10 +123,20 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
                     txtRate[i].setText(Globals.dfWithPrecision.format(alOrderItemTran.get(i).getActualSellPrice()));
                     txtAmount[i].setText(Globals.dfWithPrecision.format(alOrderItemTran.get(i).getSellPrice()));
 
-                    txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
-                    txtName[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
-                    txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
-                    txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+                    if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
+                    {
+                        txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+                        txtName[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+                        txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+                        txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
+                    }
+                    else
+                    {
+                        txtName[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                        txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                        txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                        txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                    }
 
                 } else {
 
@@ -137,10 +150,20 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
                     txtRate[i].setText(Globals.dfWithPrecision.format(alOrderItemTran.get(i).getActualSellPrice()));
                     txtAmount[i].setText(Globals.dfWithPrecision.format((alOrderItemTran.get(i).getSellPrice())));
 
-                    txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
-                    txtName[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
-                    txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
-                    txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
+                    {
+                        txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                        txtName[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                        txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                        txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    }
+                    else
+                    {
+                        txtName[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                        txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                        txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                        txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                    }
                 }
 
                 layout[i].addView(txtName[i]);
@@ -169,6 +192,19 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
 
 
             orderItemLayout = (LinearLayout) itemView.findViewById(R.id.orderItemLayout);
+
+            if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
+            {
+//                if(Globals.objAppThemeMaster!=null)
+//                {
+                    cvOrderItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+//                }
+//                else
+//                {
+//                Globals.CustomView(cvOrderItem, ContextCompat.getColor(context, R.color.card_white), ContextCompat.getColor(context, android.R.color.transparent));
+//                }
+            }
+
         }
     }
 }

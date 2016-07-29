@@ -1,5 +1,7 @@
 package com.arraybit.parser;
 
+import android.util.Log;
+
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.ItemMaster;

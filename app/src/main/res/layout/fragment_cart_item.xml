@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+        layout="@layout/app_bar_dynamic" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginTop="@dimen/control_SpecingTiny"
-            android:background="@color/accent_secondary"
+            android:background="@color/primary_black"
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="@dimen/control_SpecingTiny">
@@ -60,7 +60,7 @@
                 android:paddingStart="@dimen/control_SpecingTiny"
                 android:text="@string/cifItem"
                 android:textAllCaps="false"
-                android:textColor="@color/primary" />
+                android:textColor="@android:color/white" />
 
             <com.rey.material.widget.TextView
                 android:id="@+id/txtHeaderNo"
@@ -70,7 +70,7 @@
                 android:gravity="center"
                 android:text="@string/cifQty"
                 android:textAllCaps="false"
-                android:textColor="@color/primary" />
+                android:textColor="@android:color/white" />
 
             <com.rey.material.widget.TextView
                 android:id="@+id/txtHeaderRate"
@@ -80,7 +80,7 @@
                 android:gravity="center|end"
                 android:text="@string/cifRate"
                 android:textAllCaps="false"
-                android:textColor="@color/primary" />
+                android:textColor="@android:color/white" />
 
             <com.rey.material.widget.TextView
                 android:id="@+id/txtHeaderAmount"
@@ -90,7 +90,7 @@
                 android:gravity="center|end"
                 android:text="@string/cifAmount"
                 android:textAllCaps="false"
-                android:textColor="@color/primary" />
+                android:textColor="@android:color/white" />
 
             <com.rey.material.widget.TextView
                 android:layout_width="0dp"
@@ -98,7 +98,7 @@
                 android:layout_marginStart="@dimen/control_SpecingSmall"
                 android:layout_weight="0.14"
                 android:gravity="center|end"
-                android:textColor="@color/primary"
+                android:textColor="@android:color/white"
                 android:visibility="invisible" />
 
         </LinearLayout>
@@ -125,7 +125,7 @@
             android:paddingTop="@dimen/control_SpecingTiny"
             android:text="@string/cifEditMessage"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Display4"
-            android:textColor="#81e29801"
+            android:textColor="#90c62828"
             android:textSize="@dimen/control_TextNormal" />
 
         <android.support.v7.widget.CardView
@@ -152,7 +152,7 @@
                     android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:drawableEnd="@drawable/edit_accent_vector_drawable"
                     android:text="@string/aiqfRemark"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@color/primary_black" />
 
                 <com.rey.material.widget.TextView
                     android:id="@+id/txtRemark"
@@ -162,7 +162,7 @@
                     android:maxLines="2"
                     android:paddingEnd="@dimen/control_SpecingMedium"
                     android:paddingStart="@dimen/control_SpecingMedium"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/primary_black"
                     android:textSize="@dimen/control_TextSmall"
                     android:visibility="gone" />
             </LinearLayout>

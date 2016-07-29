@@ -60,7 +60,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         setSupportActionBar(app_bar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setLogo(R.mipmap.app_logo);
+            getSupportActionBar().setLogo(R.drawable.central_logo);
         }
         //end
 
@@ -83,7 +83,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
         //relativelayout
         waitingMainLayout = (LinearLayout) findViewById(R.id.waitingMainLayout);
-        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null, null);
+        waitingMainLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.background_img));
+//        Globals.SetScaleImageBackground(WaitingActivity.this, waitingMainLayout, null, null);
         //end
 
         //drawerlayout and actionbardrawertoggle

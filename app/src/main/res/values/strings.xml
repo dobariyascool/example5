@@ -469,4 +469,8 @@
 
 
     <string name="title_fragment_thank_you">Thank You</string>
+    <string name="guestEncodedImage1">EncodedBackImage1</string>
+    <string name="guestEncodedImage2">EncodedBackImageName2</string>
+    <string name="encodedLogoImage">EncodedLogoImageName</string>
+    <string name="encodedProfileImage">EncodedProfileImageName</string>
 </resources>

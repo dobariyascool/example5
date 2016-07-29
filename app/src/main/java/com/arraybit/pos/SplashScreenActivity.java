@@ -14,7 +14,7 @@ import com.arraybit.global.SharePreferenceManage;
 
 @SuppressWarnings({"unchecked", "NullArgumentToVariableArgMethod"})
 public class SplashScreenActivity extends AppCompatActivity {
-    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();;
+    SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
     RelativeLayout splashScreenLayout;
 
     @Override
@@ -25,6 +25,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         splashScreenLayout = (RelativeLayout) findViewById(R.id.splashScreenLayout);
 
 //        Glide.with(SplashScreenActivity.this).load(R.drawable.arraybit).asBitmap().into(ivLogo);
+
+
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -46,7 +49,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                     objSharePreferenceManage = new SharePreferenceManage();
                     Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this);
                     //end
-
+                    Intent intent = new Intent(SplashScreenActivity.this, AppThemeIntentService.class);
+                    startService(intent);
                 }
 
             }

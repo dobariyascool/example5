@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -72,7 +73,8 @@ public class CounterFragment extends Fragment {
 
         counterLayout = (LinearLayout) view.findViewById(R.id.counterLayout);
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
-        Globals.SetScaleImageBackground(getActivity(), counterLayout, null, null);
+//        Globals.SetScaleImageBackground(getActivity(), counterLayout, null, null);
+        counterLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
 
         rvCounter = (RecyclerView) view.findViewById(R.id.rvCounter);
         rvCounter.setVisibility(View.GONE);

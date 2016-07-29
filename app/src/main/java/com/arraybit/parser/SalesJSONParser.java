@@ -198,6 +198,7 @@ public class SalesJSONParser
             stringer.key("linktoBusinessMasterId").value(objSalesMaster.getlinktoBusinessMasterId());
             stringer.key("CreateDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoUserMasterIdCreatedBy").value(objSalesMaster.getlinktoUserMasterIdCreatedBy());
+            stringer.key("RateIndex").value(objSalesMaster.getRateIndex());
 
             stringer.endObject();
 

@@ -37,7 +37,7 @@
 
     <item
         android:id="@+id/cart_layout"
-        android:orderInCategory="400"
+        android:orderInCategory="500"
         android:title="@string/wmCart"
         android:visible="false"
         app:actionLayout="@layout/cart_layout"
@@ -46,7 +46,7 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/home"
-        android:orderInCategory="500"
+        android:orderInCategory="600"
         android:title="@string/navHome"
         android:visible="false"
         app:showAsAction="always"/>

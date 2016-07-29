@@ -1,5 +1,8 @@
 package com.arraybit.pos;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -30,8 +33,12 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_waiter_option_list, container, false);
 
+        GuestHomeActivity.isGuestMode = false;
+
         waiterOptionLayout = (LinearLayout) view.findViewById(R.id.waiterOptionLayout);
-        Globals.SetHomePageBackground(getActivity(), waiterOptionLayout, null, null);
+
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
+        waiterOptionLayout.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
 
         CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);
         CardView cvDineIn = (CardView) view.findViewById(R.id.cvDineIn);
@@ -47,7 +54,6 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
 
         return view;
     }
-
 
     @Override
     public void onClick(View v) {

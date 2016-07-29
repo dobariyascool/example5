@@ -16,7 +16,7 @@ import com.arraybit.modal.ItemMaster;
 import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
-public class WishListActivity extends AppCompatActivity{
+public class WishListActivity extends AppCompatActivity {
 
     LinearLayout errorLayout;
     ArrayList<String> alString;
@@ -28,7 +28,7 @@ public class WishListActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wish_list);
 
-        FrameLayout wishListLayout = (FrameLayout)findViewById(R.id.wishListLayout);
+        FrameLayout wishListLayout = (FrameLayout) findViewById(R.id.wishListLayout);
         Globals.SetScaleImageBackground(this, null, null, wishListLayout);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -47,23 +47,25 @@ public class WishListActivity extends AppCompatActivity{
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                 && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_detail))) {
-            DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_detail));
+            DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_detail));
             detailFragment.SaveWishListData();
             DetailFragment.isItemSuggestedClick = false;
             DetailFragment.alOptionValue = new ArrayList<>();
             DetailFragment.alSubItemOptionValue = new ArrayList<>();
             getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        }else if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName() != null
-                &&  getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_sub_detail))){
+        } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_sub_detail))) {
             getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_sub_detail), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_sub_detail));
+            DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.title_fragment_sub_detail));
             detailFragment.SaveWishListData();
             DetailFragment.isItemSuggestedClick = false;
             DetailFragment.alOptionValue = new ArrayList<>();
             DetailFragment.alSubItemOptionValue = new ArrayList<>();
-        }else{
-            super.onBackPressed();
+        } else {
+//            super.onBackPressed();
             SaveWishListInSharePreference(true);
+            finish();
+            overridePendingTransition(0, R.anim.right_exit);
         }
 
     }

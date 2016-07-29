@@ -3,6 +3,7 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -36,13 +37,15 @@ public class ThankYouFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_thank_you, container, false);
 
+        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Monotype Corsiva.ttf");
         LinearLayout thankYouFragment = (LinearLayout) view.findViewById(R.id.thankYouFragment);
         LinearLayout buttonLayout = (LinearLayout) view.findViewById(R.id.buttonLayout);
         Globals.SetScaleImageBackground(getActivity(), thankYouFragment, null, null);
 
         TextView txtTitle = (TextView) view.findViewById(R.id.txtTitle);
         TextView txtTitle2 = (TextView) view.findViewById(R.id.txtTitle2);
-
+        txtTitle.setTypeface(custom_font);
+        txtTitle2.setTypeface(custom_font);
         Button btnFeedback = (Button) view.findViewById(R.id.btnFeedback);
         Button btnSkip = (Button) view.findViewById(R.id.btnSkip);
 
@@ -85,9 +88,7 @@ public class ThankYouFragment extends Fragment {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        if (isShowButton) {
-
-                        } else {
+                        if (!isShowButton) {
                             Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);

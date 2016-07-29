@@ -28,13 +28,13 @@
 
         <com.rey.material.widget.CompoundButton
             android:id="@+id/cbSkip"
-            style="@style/CompoundButton"
+            style="@style/CompoundButtonGuest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
             android:padding="@dimen/control_SpecingTiny"
             android:text="@string/ldSkip"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -70,7 +70,7 @@
 
         <com.rey.material.widget.CompoundButton
             android:id="@+id/cbSignUp"
-            style="@style/CompoundButton"
+            style="@style/CompoundButtonGuest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/control_SpecingTiny"

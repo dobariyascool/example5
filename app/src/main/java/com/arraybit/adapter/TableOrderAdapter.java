@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Slide;
@@ -43,7 +44,7 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
     double totalTaxPercentage, totalTaxAmount, totalNetAmount;
     int previousPosition;
 
-    public TableOrderAdapter(Context context, ArrayList<OrderMaster> result, ArrayList<TaxMaster> alTaxMaster, FragmentManager fragmentManager,boolean isItemAnimate) {
+    public TableOrderAdapter(Context context, ArrayList<OrderMaster> result, ArrayList<TaxMaster> alTaxMaster, FragmentManager fragmentManager, boolean isItemAnimate) {
         this.context = context;
         alOrderMaster = result;
         this.layoutInflater = LayoutInflater.from(context);
@@ -90,19 +91,19 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
         holder.txtTableName.setText(objOrderMaster.getTableName());
         holder.txtTotalOrder.setText(objOrderMaster.getTotalKOT() + " Orders ");
         holder.txtTotalItem.setText(objOrderMaster.getTotalItem() + " Items");
-        if(objOrderMaster.getlinktoOrderTypeMasterId()==Globals.OrderType.DineIn.getValue()){
+        if (objOrderMaster.getlinktoOrderTypeMasterId() == Globals.OrderType.DineIn.getValue()) {
             holder.txtOrderType.setVisibility(View.VISIBLE);
             holder.txtOrderType.setText("Dine In");
-        }else if(objOrderMaster.getlinktoOrderTypeMasterId()==Globals.OrderType.TakeAway.getValue()){
+        } else if (objOrderMaster.getlinktoOrderTypeMasterId() == Globals.OrderType.TakeAway.getValue()) {
             holder.txtOrderType.setVisibility(View.VISIBLE);
             holder.txtOrderType.setText("Take Away");
-        }else{
+        } else {
             holder.txtOrderType.setVisibility(View.GONE);
         }
-        holder.txtTotalAmount.setText(context.getResources().getString(R.string.dfRupee)+" "+Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount() + objOrderMaster.getTotalTax()));
+        holder.txtTotalAmount.setText(context.getResources().getString(R.string.dfRupee) + " " + Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount() + objOrderMaster.getTotalTax()));
 
         //holder animation
-        if(isItemAnimate) {
+        if (isItemAnimate) {
             if (position > previousPosition) {
                 Globals.SetItemAnimator(holder);
             }
@@ -116,7 +117,7 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
     }
 
     @SuppressLint("RtlHardcoded")
-    private void ReplaceFragment(Fragment fragment,String fragmentName){
+    private void ReplaceFragment(Fragment fragment, String fragmentName) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (Build.VERSION.SDK_INT >= 21) {
             Slide slideTransition = new Slide();
@@ -133,7 +134,7 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
 
     class TableOrderViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtOrderTimeDifference, txtOrderTime, txtTableName, txtTotalOrder, txtTotalItem, txtTotalAmount,txtOrderType;
+        TextView txtOrderTimeDifference, txtOrderTime, txtTableName, txtTotalOrder, txtTotalItem, txtTotalAmount, txtOrderType;
         CardView cvOrder;
 
         public TableOrderViewHolder(View itemView) {
@@ -167,7 +168,7 @@ public class TableOrderAdapter extends RecyclerView.Adapter<TableOrderAdapter.Ta
                     OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
                     orderSummaryFragment.setArguments(bundle);
 
-                    ReplaceFragment(orderSummaryFragment,context.getResources().getString(R.string.title_fragment_order_summary));
+                    ReplaceFragment(orderSummaryFragment, context.getResources().getString(R.string.title_fragment_order_summary));
                 }
             });
         }

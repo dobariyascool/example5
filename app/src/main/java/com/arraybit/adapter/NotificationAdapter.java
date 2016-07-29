@@ -2,6 +2,9 @@ package com.arraybit.adapter;
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -80,7 +83,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     class NotificationViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtTableName, txtNotificationTime, txtNotificationText;
-        CardView cvTable;
+        CardView cvItem;
         ImageView ivClear;
 
         public NotificationViewHolder(View itemView) {
@@ -90,7 +93,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             txtNotificationTime = (TextView) itemView.findViewById(R.id.txtNotificationTime);
             txtNotificationText = (TextView) itemView.findViewById(R.id.txtNotificationText);
             ivClear = (ImageView) itemView.findViewById(R.id.ivClear);
-            cvTable = (CardView) itemView.findViewById(R.id.cvTable);
+            cvItem = (CardView) itemView.findViewById(R.id.cvItem);
+
+            txtTableName.setTextColor(ContextCompat.getColor(context, R.color.guestTabColor1));
+            txtNotificationText.setTextColor(ContextCompat.getColor(context, R.color.guestTabColor1));
+            txtNotificationTime.setTextColor(ContextCompat.getColor(context, R.color.waitingTitleIconColor));
 
             ivClear.setOnClickListener(new View.OnClickListener() {
                 @Override

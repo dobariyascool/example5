@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -46,7 +47,7 @@ public class NotificationSettingsFragment extends Fragment {
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if(Build.VERSION.SDK_INT >=21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
@@ -54,7 +55,7 @@ public class NotificationSettingsFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        LinearLayout notificationLayout = (LinearLayout)view.findViewById(R.id.notificationLayout);
+        LinearLayout notificationLayout = (LinearLayout) view.findViewById(R.id.notificationLayout);
 
 //        if(Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19){
 //            notificationLayout.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.card_view_with_border));
@@ -63,6 +64,11 @@ public class NotificationSettingsFragment extends Fragment {
         txtOnTime = (TextView) view.findViewById(R.id.txtOnTime);
         txtOffTime = (TextView) view.findViewById(R.id.txtOffTime);
 
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+        } else {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
+        }
 
         sPushNotificationOnOff = (Switch) view.findViewById(R.id.sPushNotificationOnOff);
         objSharePreferenceManage = new SharePreferenceManage();
@@ -133,6 +139,7 @@ public class NotificationSettingsFragment extends Fragment {
         menu.findItem(R.id.login).setVisible(false);
         menu.findItem(R.id.logout).setVisible(false);
         menu.findItem(R.id.shortList).setVisible(false);
+        menu.findItem(R.id.cart_layout).setVisible(false);
     }
 
     @Override

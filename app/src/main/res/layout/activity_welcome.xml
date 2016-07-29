@@ -26,7 +26,8 @@
                     android:id="@+id/ivLeft"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="top" />
+                    android:layout_gravity="top"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <LinearLayout
@@ -38,7 +39,8 @@
                 <ImageView
                     android:id="@+id/ivLogo"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -51,7 +53,8 @@
                 <ImageView
                     android:id="@+id/ivText"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -77,7 +80,8 @@
                 <ImageView
                     android:id="@+id/ivRight"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

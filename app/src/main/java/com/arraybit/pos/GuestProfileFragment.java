@@ -1,10 +1,13 @@
 package com.arraybit.pos;
 
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -44,6 +48,7 @@ public class GuestProfileFragment extends Fragment {
     Date birthDate;
     View view;
     UpdateResponseListener objUpdateResponseListener;
+    RelativeLayout topPanel;
 
 
     public GuestProfileFragment() {
@@ -83,8 +88,24 @@ public class GuestProfileFragment extends Fragment {
         spnrArea = (AppCompatSpinner) view.findViewById(R.id.spnrArea);
 
         btnUpdateProfile = (Button) view.findViewById(R.id.btnUpdateProfile);
+        topPanel = (RelativeLayout) view.findViewById(R.id.topPanel);
 
         SetUserName(container);
+
+
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            topPanel.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            Drawable drawable = txtLoginChar.getBackground();
+            drawable.mutate().setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_IN);
+            txtLoginChar.setBackgroundDrawable(drawable);
+            txtLoginChar.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            Globals.CustomView(btnUpdateProfile, ContextCompat.getColor(getActivity(), R.color.accent_dark), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+            btnUpdateProfile.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+        } else {
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
+            topPanel.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary_black));
+        }
 
         spnrArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -182,7 +203,7 @@ public class GuestProfileFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-        }else{
+        } else {
             if (Service.CheckNet(getActivity())) {
                 new UserInformationLoading().execute();
             } else {
@@ -198,7 +219,7 @@ public class GuestProfileFragment extends Fragment {
         objSharePreferenceManage.RemovePreference("RegistrationPreference", "FirstName", getActivity());
         if (!etFirstName.getText().toString().isEmpty()) {
             objSharePreferenceManage.CreatePreference("RegistrationPreference", "FullName", objCustomerMaster.getCustomerName(), getActivity());
-            objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName",  objCustomerMaster.getCustomerName(), getActivity());
+            objSharePreferenceManage.CreatePreference("RegistrationPreference", "FirstName", objCustomerMaster.getCustomerName(), getActivity());
         }
     }
 
@@ -220,8 +241,9 @@ public class GuestProfileFragment extends Fragment {
 
     //region LoadingTask
     class UserInformationLoading extends AsyncTask {
-         int customerMasterId;
+        int customerMasterId;
         CustomerMaster objCustomerMaster;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -241,12 +263,13 @@ public class GuestProfileFragment extends Fragment {
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            if(objCustomerMaster!=null){
+            if (objCustomerMaster != null) {
                 MyAccountFragment.objCustomerMaster = objCustomerMaster;
             }
         }
 
     }
+
     class UpdateLoadingTask extends AsyncTask {
 
         com.arraybit.pos.ProgressDialog progressDialog;

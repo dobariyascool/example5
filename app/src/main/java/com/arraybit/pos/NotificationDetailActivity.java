@@ -1,9 +1,12 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.adapter.NotificationAdapter;
@@ -21,6 +25,7 @@ import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.WaiterNotificationMaster;
 import com.arraybit.parser.WaiterNotificationJSONParser;
+import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -37,6 +42,8 @@ public class NotificationDetailActivity extends AppCompatActivity implements Not
     FrameLayout notificationLayout;
     ItemTouchHelper.SimpleCallback simpleItemTouchHelper;
     ArrayList<WaiterNotificationMaster> alWaiterNotificationMaster;
+    TextView txtMsg;
+    ImageView ivErrorIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +62,17 @@ public class NotificationDetailActivity extends AppCompatActivity implements Not
         //end
 
         notificationLayout = (FrameLayout) findViewById(R.id.notificationLayout);
-        Globals.SetScaleImageBackground(this, null, null, notificationLayout);
+
 
         errorLayout = (LinearLayout) findViewById(R.id.errorLayout);
+        txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
         rvNotification = (RecyclerView) findViewById(R.id.rvNotification);
 
         isBackHome = getIntent().getBooleanExtra("isBackHome", false);
+
+        Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary_black), ContextCompat.getColor(this, android.R.color.white));
+        notificationLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.background_img));
 
         if (Service.CheckNet(this)) {
             new NotificationLodingTask().execute();
@@ -233,7 +245,7 @@ public class NotificationDetailActivity extends AppCompatActivity implements Not
                 Globals.ShowSnackBar(notificationLayout, getResources().getString(R.string.MsgServerNotResponding), NotificationDetailActivity.this, 2000);
             } else if (status.equals("0")) {
                 notificationAdapter.NotificationDataRemove(position);
-                if(alWaiterNotificationMaster.size()==0){
+                if (alWaiterNotificationMaster.size() == 0) {
                     Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound), getResources().getString(R.string.notification)), rvNotification, 0);
                 }
             }

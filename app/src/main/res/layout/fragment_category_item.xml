@@ -13,7 +13,7 @@
 
         <include
             android:id="@+id/app_bar"
-            layout="@layout/app_bar" />
+            layout="@layout/app_bar_dynamic" />
 
         <include
             android:id="@+id/errorLayout"
@@ -26,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             app:tabMode="scrollable" />
+        <!--android:background="@drawable/underline"-->
 
         <android.support.v4.view.ViewPager
             android:id="@+id/itemViewPager"

@@ -2,6 +2,7 @@ package com.arraybit.pos;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -37,7 +39,7 @@ import com.rey.material.widget.TextView;
 import java.util.ArrayList;
 
 @SuppressWarnings({"ConstantConditions", "unchecked"})
-public class WishListFragment extends Fragment implements CategoryItemAdapter.ItemClickListener,DetailFragment.ResponseListener,AddItemQtyDialogFragment.AddToCartListener{
+public class WishListFragment extends Fragment implements CategoryItemAdapter.ItemClickListener, DetailFragment.ResponseListener, AddItemQtyDialogFragment.AddToCartListener {
 
     LinearLayout errorLayout;
     RecyclerView rvWishItemMaster;
@@ -57,6 +59,8 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
     FrameLayout wishListFragment;
     StringBuilder sbItemMasterIds;
     SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+    ImageView ivErrorIcon;
+    TextView txtMsg;
 
     public WishListFragment() {
         // Required empty public constructor
@@ -76,6 +80,15 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             app_bar.setTitle(getActivity().getResources().getString(R.string.title_activity_wish_list));
 
+            if(Globals.objAppThemeMaster!=null)
+            {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            }
+            else
+            {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            }
+
             if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
@@ -87,11 +100,9 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
         displayMetrics = getResources().getDisplayMetrics();
 
         wishListFragment = (FrameLayout) view.findViewById(R.id.wishListFragment);
-        Globals.SetScaleImageBackground(getActivity(), null, null, wishListFragment);
-
         errorLayout = (LinearLayout) view.findViewById(R.id.errorLayout);
-
-
+        txtMsg = (TextView) errorLayout.findViewById(R.id.txtMsg);
+        ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
         rvWishItemMaster = (RecyclerView) view.findViewById(R.id.rvWishItemMaster);
         rvWishItemMaster.setVisibility(View.GONE);
 
@@ -113,13 +124,23 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
             }
             if (!sbItemMasterIds.toString().equals("")) {
                 new ItemLoadingTask().execute();
-            }else{
+            } else {
                 Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound), getResources().getString(R.string.MsgShortItem)), rvWishItemMaster, 0);
             }
 
         } else {
             Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvWishItemMaster, R.drawable.wifi_drawable);
         }
+
+
+        if (Globals.objAppThemeMaster != null) {
+            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+            txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+        } else {
+            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+            txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+        }
+
 
         return view;
     }
@@ -178,10 +199,10 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
     @Override
     public void onResume() {
         super.onResume();
-        if(isShowMsg){
-            if(itemName!=null && !itemName.equals("")){
-                Globals.ShowSnackBar(rvWishItemMaster, String.format(getActivity().getResources().getString(R.string.MsgCartItem), itemName),getActivity(), 3000);
-            }else{
+        if (isShowMsg) {
+            if (itemName != null && !itemName.equals("")) {
+                Globals.ShowSnackBar(rvWishItemMaster, String.format(getActivity().getResources().getString(R.string.MsgCartItem), itemName), getActivity(), 3000);
+            } else {
                 Globals.ShowSnackBar(rvWishItemMaster, getActivity().getResources().getString(R.string.MsgCartWithNoName), getActivity(), 3000);
             }
             isShowMsg = false;
@@ -266,7 +287,7 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
         if (alItemMaster == null) {
             Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgSelectFail), rvWishItemMaster, 0);
         } else if (alItemMaster.size() == 0) {
-            Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound),getResources().getString(R.string.MsgShortItem)), rvWishItemMaster, 0);
+            Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound), getResources().getString(R.string.MsgShortItem)), rvWishItemMaster, 0);
         } else {
             Globals.SetErrorLayout(errorLayout, false, null, rvWishItemMaster, 0);
             itemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getActivity().getSupportFragmentManager(), false, this, false, true);
@@ -279,14 +300,14 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
     public void ButtonOnClick(ItemMaster objItemMaster) {
         if (objItemMaster.getItemModifierIds().equals("") && objItemMaster.getOptionValueTranIds().equals("")) {
             AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
-            addItemQtyDialogFragment.setTargetFragment(this,0);
+            addItemQtyDialogFragment.setTargetFragment(this, 0);
             addItemQtyDialogFragment.show(getActivity().getSupportFragmentManager(), "");
         } else {
             Bundle bundle = new Bundle();
-            bundle.putBoolean("IsWishList",true);
+            bundle.putBoolean("IsWishList", true);
             DetailFragment detailFragment = new DetailFragment(objItemMaster);
             detailFragment.setArguments(bundle);
-            detailFragment.setTargetFragment(this,0);
+            detailFragment.setTargetFragment(this, 0);
             ReplaceFragment(detailFragment, getResources().getString(R.string.title_fragment_detail));
         }
     }
@@ -311,18 +332,19 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
     }
 
     @Override
-    public void ShowMessage(String itemName,boolean isWishListUpdate,ItemMaster objItemMaster) {
-        if(isWishListUpdate){
-            if(objItemMaster!=null) {
-                itemAdapter.CheckIdInCurrentList(objItemMaster.getIsChecked(),objItemMaster.getItemMasterId(),objItemMaster.getIsChecked()==1?(short)0:(short)1,objItemMaster);
+    public void ShowMessage(String itemName, boolean isWishListUpdate, ItemMaster objItemMaster) {
+        if (isWishListUpdate) {
+            if (objItemMaster != null) {
+                itemAdapter.CheckIdInCurrentList(objItemMaster.getIsChecked(), objItemMaster.getItemMasterId(), objItemMaster.getIsChecked() == 1 ? (short) 0 : (short) 1, objItemMaster);
             }
-        }else{
+        } else {
             isShowMsg = true;
             this.itemName = itemName;
             SetCartNumber(txtCartNumber);
         }
 
     }
+
     @SuppressLint("CommitTransaction")
     public void ReplaceFragment(Fragment fragment, String fragmentName) {
         if (Build.VERSION.SDK_INT >= 21) {
@@ -349,7 +371,7 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
                 Globals.counter = Globals.counter + 1;
                 SetCartNumber(txtCartNumber);
                 Globals.alOrderItemTran.add(objOrderItemTran);
-                Globals.ShowSnackBar(rvWishItemMaster,String.format(getActivity().getResources().getString(R.string.MsgCartItem),objOrderItemTran.getItemName()), getActivity(), 3000);
+                Globals.ShowSnackBar(rvWishItemMaster, String.format(getActivity().getResources().getString(R.string.MsgCartItem), objOrderItemTran.getItemName()), getActivity(), 3000);
             }
         }
     }

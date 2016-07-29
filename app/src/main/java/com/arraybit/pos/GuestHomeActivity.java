@@ -3,6 +3,8 @@ package com.arraybit.pos;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,35 +14,45 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.TableMaster;
+import com.google.gson.Gson;
 import com.rey.material.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONStringer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 @SuppressWarnings({"RedundantIfStatement", "ResourceType"})
-public class GuestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GuestLoginDialogFragment.LoginResponseListener {
+public class GuestHomeActivity extends AppCompatActivity implements GuestLoginDialogFragment.LoginResponseListener, NavigationView.OnNavigationItemSelectedListener {
 
     public static TableMaster objTableMaster;
     public static String userName;
     public static boolean isMenuMode;
+    public static boolean isGuestMode = false;
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -49,7 +61,14 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     ImageView imageView, ivLogo;
     TextView txtLetter, txtName;
     LinearLayout nameLayout;
+    LinearLayout llNavHeader;
     boolean isShowMessage;
+    LinearLayout errorLayout;
+    RelativeLayout footerLayout;
+    com.rey.material.widget.TextView txtCartNumber;
+    RelativeLayout relativeLayout;
+    boolean isBackPressed = false, isRestart;
+
     SharePreferenceManage objSharePreferenceManage;
 
     @SuppressLint("InflateParams")
@@ -61,44 +80,76 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         //app_bar
         app_bar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(app_bar);
+
+        this.setTheme(R.style.AppThemeGuest);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setLogo(R.mipmap.app_logo);
+            getSupportActionBar().setLogo(R.drawable.central_logo);
             if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
         //end
 
+        footerLayout = (RelativeLayout) findViewById(R.id.footerLayout);
+        footerLayout.setVisibility(View.GONE);
+
         Intent intent = getIntent();
         isMenuMode = intent.getBooleanExtra("IsMenuMode", false);
         if (isMenuMode) {
             Globals.orderTypeMasterId = (short) intent.getIntExtra("linktoOrderTypeMasterId", 0);
             if (app_bar != null) {
+                Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
                 getSupportActionBar().setTitle(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? getResources().getString(R.string.title_activity_home) + " - Dine In" : getResources().getString(R.string.title_activity_home) + " - Take Away");
             }
         } else {
+            isGuestMode = true;
             objTableMaster = intent.getParcelableExtra("TableMaster");
+            MenuActivity.objTableMaster = GuestHomeActivity.objTableMaster;
             if (objTableMaster != null && objTableMaster.getlinktoOrderTypeMasterId() != 0) {
                 Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
                 if (app_bar != null) {
+//                    if (isGuestMode) {
+                    if (Globals.objAppThemeMaster != null) {
+//                            Globals.SetToolBarBackground(this, app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(this, android.R.color.white));
+//                        } else {
+                        Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
+//                        }
+                    } else {
+                        Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
+                    }
                     getSupportActionBar().setTitle(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? getResources().getString(R.string.title_activity_home) + " - Dine In" : getResources().getString(R.string.title_activity_home) + " - Take Away");
                 }
             }
         }
-
         //navigationView
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         if (isMenuMode) {
             navigationView.getMenu().findItem(R.id.feedback).setVisible(false);
         }
         headerView = LayoutInflater.from(GuestHomeActivity.this).inflate(R.layout.navigation_header, null);
+        llNavHeader = (LinearLayout) headerView.findViewById(R.id.llNavHeader);
         nameLayout = (LinearLayout) headerView.findViewById(R.id.nameLayout);
         imageView = (ImageView) headerView.findViewById(R.id.imageView);
         ivLogo = (ImageView) headerView.findViewById(R.id.ivLogo);
         txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
         txtName = (TextView) headerView.findViewById(R.id.txtName);
+
+        Drawable drawable = imageView.getDrawable();
+        drawable.mutate().setColorFilter(ContextCompat.getColor(this,R.color.accent), PorterDuff.Mode.SRC_IN);
+        imageView.setImageDrawable(drawable);
+        txtLetter.setTextColor(ContextCompat.getColor(this, R.color.primary));
+
         SetGuestName();
+
+//        if (GuestHomeActivity.isGuestMode) {
+//            if (Globals.objAppThemeMaster != null) {
+//                llNavHeader.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorPrimary()));
+//            } else {
+//                llNavHeader.setBackground(new ColorDrawable(ContextCompat.getColor(this, R.color.guestTabColor)));
+//            }
+//        }
         navigationView.addHeaderView(headerView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
@@ -108,11 +159,31 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         Globals.SetNavigationDrawer(actionBarDrawerToggle, GuestHomeActivity.this, drawerLayout, app_bar, getSupportFragmentManager());
         //end
 
-        AddFragmentInLayout(new GuestOptionListFragment());
+        if (savedInstanceState == null) {
+            AddFragmentInLayout(new GuestOptionListFragment(this));
+        }
         SaveObjectInPreference();
 
         isShowMessage = getIntent().getBooleanExtra("ShowMessage", false);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Globals.targetFragment = null;
+            if (requestCode == 0) {
+                if (data != null) {
+                    if (!isMenuMode) {
+                        SetCartNumber(txtCartNumber);
+                    }
+                }
+            } else if (requestCode == 100) {
+                isRestart = true;
+                onRestart();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -134,11 +205,34 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
+        if (!isMenuMode) {
+            MenuItem cartItem = menu.findItem(R.id.cart_layout);
+
+            relativeLayout = (RelativeLayout) MenuItemCompat.getActionView(cartItem);
+            final RelativeLayout cartLayout = (RelativeLayout) relativeLayout.findViewById(R.id.cartLayout);
+            txtCartNumber = (TextView) relativeLayout.findViewById(R.id.txtCartNumber);
+            SaveCartDataInSharePreference();
+
+            SetCartNumber(txtCartNumber);
+
+            cartLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Globals.HideKeyBoard(GuestHomeActivity.this, v);
+
+                    Intent intent = new Intent(GuestHomeActivity.this, CartItemActivity.class);
+                    intent.putExtra("isHome", true);
+                    startActivityForResult(intent, 0);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                }
+            });
+        }
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+
         if (isMenuMode) {
             menu.findItem(R.id.callWaiter).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
@@ -152,6 +246,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
             Globals.SetOptionMenu(Globals.userName, GuestHomeActivity.this, menu);
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.callWaiter).setVisible(true);
+            menu.findItem(R.id.cart_layout).setVisible(true);
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -166,7 +261,7 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                 && !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName()
                 .equals(getResources().getString(R.string.title_fragment_offer_detail))) {
             Globals.OptionMenuItemClick(item, GuestHomeActivity.this, getSupportFragmentManager());
-            SetGuestName();
+//            SetGuestName();
         } else if (item.getItemId() == R.id.callWaiter) {
             CallWaiterDialog callWaiterDialog = new CallWaiterDialog();
             callWaiterDialog.show(getSupportFragmentManager(), "");
@@ -206,7 +301,6 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
                     guestLoginDialogFragment.setTargetFragment(currentFragment, 0);
                     guestLoginDialogFragment.show(getSupportFragmentManager(), "");
                 }
-
             } else if (menuItem.getItemId() == R.id.rate) {
                 Uri uri = Uri.parse("market://details?id=" + getPackageName());
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -229,6 +323,25 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
     @Override
     public void LoginResponse() {
         SetGuestName();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (isRestart) {
+            Globals.isWishListShow = 1;
+            Intent intent = new Intent(GuestHomeActivity.this, GuestHomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            if (isMenuMode) {
+                intent.putExtra("IsMenuMode", isMenuMode);
+                intent.putExtra("linktoOrderTypeMasterId", Globals.orderTypeMasterId);
+            } else {
+                intent.putExtra("TableMaster", objTableMaster);
+            }
+            startActivity(intent);
+//            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            finish();
+        }
     }
 
     public void EditTextOnClick(View view) {
@@ -309,9 +422,9 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         }
     }
 
-
     private void AddFragmentInLayout(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragment.setTargetFragment(Globals.targetFragment, 0);
         fragmentTransaction.replace(R.id.guestFragmentLayout, fragment, getResources().getString(R.string.title_fragment_guest_options));
         fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_guest_options));
         fragmentTransaction.commit();
@@ -350,6 +463,26 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         }
     }
 
+    public void ReplaceFragment(Fragment fragment, String fragmentName) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Fade fade = new Fade();
+            fade.setDuration(500);
+            fragment.setEnterTransition(fade);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
+            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
+            fragmentTransaction.addToBackStack(fragmentName);
+            fragmentTransaction.commit();
+        } else {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
+            fragmentTransaction.addToBackStack(fragmentName);
+            fragmentTransaction.commit();
+        }
+    }
+
     private void ShowSnackBarWithAction(final String msg) {
         //getResources().getString(R.string.ybAddBookingSuccessMsg)
         Snackbar snackbar = Snackbar
@@ -376,5 +509,47 @@ public class GuestHomeActivity extends AppCompatActivity implements NavigationVi
         snackbar.show();
     }
 
-    //endregion
+    private void SaveCartDataInSharePreference() {
+        Gson gson = new Gson();
+        SharePreferenceManage objSharePreferenceManage;
+        List<ItemMaster> lstItemMaster;
+        try {
+            if (Globals.alOrderItemTran.size() == 0) {
+                objSharePreferenceManage = new SharePreferenceManage();
+                String string = objSharePreferenceManage.GetPreference("CartItemListPreference", "CartItemList", GuestHomeActivity.this);
+                if (string != null) {
+                    ItemMaster[] objItemMaster = gson.fromJson(string,
+                            ItemMaster[].class);
+
+                    lstItemMaster = Arrays.asList(objItemMaster);
+                    Globals.alOrderItemTran.addAll(new ArrayList<>(lstItemMaster));
+                    Globals.counter = Globals.alOrderItemTran.size();
+                    if (objSharePreferenceManage.GetPreference("CartItemListPreference", "OrderRemark", GuestHomeActivity.this) != null) {
+                        RemarkDialogFragment.strRemark = objSharePreferenceManage.GetPreference("CartItemListPreference", "OrderRemark", GuestHomeActivity.this);
+                    }
+                } else {
+                    objSharePreferenceManage.RemovePreference("CheckOutDataPreference", "CheckOutData", GuestHomeActivity.this);
+                    objSharePreferenceManage.ClearPreference("CheckOutDataPreference", GuestHomeActivity.this);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void SetCartNumber(TextView txtCartNumber) {
+        if (Globals.counter > 0) {
+            txtCartNumber.setVisibility(View.VISIBLE);
+            txtCartNumber.setText(String.valueOf(Globals.counter));
+            txtCartNumber.setSoundEffectsEnabled(true);
+            txtCartNumber.setBackground(ContextCompat.getDrawable(GuestHomeActivity.this, R.drawable.cart_number));
+            txtCartNumber.setAnimation(AnimationUtils.loadAnimation(GuestHomeActivity.this, R.anim.fab_scale_up));
+        } else {
+            txtCartNumber.setVisibility(View.GONE);
+            txtCartNumber.setBackgroundColor(ContextCompat.getColor(GuestHomeActivity.this, android.R.color.transparent));
+        }
+    }
+
+//endregion
+
 }
