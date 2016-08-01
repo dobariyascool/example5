@@ -330,7 +330,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
             objTable = new TableMaster();
             objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Vacant.getValue());
-            objTable.setTableMasterId( objWaiting.getLinktoTableMasterId());
+            objTable.setTableMasterId(objWaiting.getLinktoTableMasterId());
         }
 
         @Override
