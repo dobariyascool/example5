@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -66,6 +67,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
         //naviagtionview
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(WaitingActivity.this).inflate(R.layout.navigation_header, null);
+        LinearLayout llNavHeader = (LinearLayout) headerView.findViewById(R.id.llNavHeader);
+        llNavHeader.setBackground(new ColorDrawable(ContextCompat.getColor(this, R.color.primary_black)));
         ImageView ivLogo = (ImageView) headerView.findViewById(R.id.ivLogo);
         ivLogo.setVisibility(View.GONE);
         TextView txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);

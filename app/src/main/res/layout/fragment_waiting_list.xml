@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/leftHeight"
             android:layout_marginTop="@dimen/control_SpecingTiny"
-            android:background="@color/primary_black"
+            android:background="@color/accent_red"
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="@dimen/control_SpecingTiny">

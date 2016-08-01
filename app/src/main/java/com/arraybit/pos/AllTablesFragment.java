@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.transition.Slide;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -549,6 +550,8 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                                 alTableMaster.add(objTableMaster);
                             } else if (objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Vacant.getValue()) {
                                 alTableMaster.add(objTableMaster);
+                            }else if (objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Occupied.getValue()) {
+                                alTableMaster.add(objTableMaster);
                             }
                         }
                     }
@@ -617,6 +620,9 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             objUpdateWaitingMaster.setWaitingMasterId(objWaitingMaster.getWaitingMasterId());
             objUpdateWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.Assign.getValue());
             objUpdateWaitingMaster.setLinktoTableMasterId((short) tableMasterId);
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity()) != null) {
+                objUpdateWaitingMaster.setLinktoUserMasterIdUpdatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
+            }
         }
 
         @Override

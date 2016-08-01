@@ -52,11 +52,17 @@ public class WelcomeActivity extends AppCompatActivity {
         objSharePreferenceManage = new SharePreferenceManage();
         Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", WelcomeActivity.this);
         //end
-        if (Globals.objAppThemeMaster != null) {
-            new ImageLoadingTask(getResources().getString(R.string.guestEncodedImage1), Globals.objAppThemeMaster.getBackImageName1()).execute();
-            new ImageLoadingTask(getResources().getString(R.string.guestEncodedImage2), Globals.objAppThemeMaster.getBackImageName2()).execute();
-            new ImageLoadingTask(getResources().getString(R.string.encodedLogoImage), Globals.objAppThemeMaster.getLogoImageName()).execute();
-            new ImageLoadingTask(getResources().getString(R.string.encodedProfileImage), Globals.objAppThemeMaster.getProfileImageName()).execute();
+        try {
+            if (Globals.objAppThemeMaster != null) {
+                new ImageLoadingTask(getResources().getString(R.string.guestEncodedImage1), Globals.objAppThemeMaster.getBackImageName1()).execute();
+                new ImageLoadingTask(getResources().getString(R.string.guestEncodedImage2), Globals.objAppThemeMaster.getBackImageName2()).execute();
+                new ImageLoadingTask(getResources().getString(R.string.encodedLogoImage), Globals.objAppThemeMaster.getLogoImageName()).execute();
+                new ImageLoadingTask(getResources().getString(R.string.encodedProfileImage), Globals.objAppThemeMaster.getProfileImageName()).execute();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
         mainLayout = (DrawerLayout) findViewById(R.id.mainLayout);

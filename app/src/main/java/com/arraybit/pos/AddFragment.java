@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -177,8 +178,8 @@ public class AddFragment extends Fragment {
             objWaitingMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
 
             objSharePreferenceManage = new SharePreferenceManage();
-            if (objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity()) != null) {
-                objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaitingPreference", "UserMasterId", getActivity())));
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity()) != null) {
+                objWaitingMaster.setlinktoUserMasterIdCreatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
             }
             objWaitingJSONParser = new WaitingJSONParser();
         }

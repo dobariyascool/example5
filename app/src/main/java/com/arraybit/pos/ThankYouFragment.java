@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,12 @@ public class ThankYouFragment extends Fragment {
             buttonLayout.setVisibility(View.GONE);
             txtTitle2.setVisibility(View.GONE);
         }
+
+        Globals.CustomView(btnSkip, ContextCompat.getColor(getActivity(),android.R.color.transparent), ContextCompat.getColor(getActivity(),R.color.accent_dark));
+        btnSkip.setTextColor(ContextCompat.getColor(getActivity(),R.color.accent_dark));
+
+        Globals.CustomView(btnFeedback, ContextCompat.getColor(getActivity(),R.color.accent_dark), ContextCompat.getColor(getActivity(),android.R.color.transparent));
+        btnFeedback.setTextColor(ContextCompat.getColor(getActivity(),R.color.primary));
 
         txtTitle.setText(message);
 

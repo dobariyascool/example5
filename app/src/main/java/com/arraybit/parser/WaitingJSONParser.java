@@ -1,5 +1,7 @@
 package com.arraybit.parser;
 
+import android.util.Log;
+
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
 import com.arraybit.modal.WaitingMaster;
@@ -125,6 +127,7 @@ public class WaitingJSONParser {
     //region Update
 
     public String UpdateWaitingStatus(WaitingMaster objWaitingMaster) {
+        dt= new Date();
         try {
             JSONStringer stringer = new JSONStringer();
             stringer.object();
@@ -132,8 +135,13 @@ public class WaitingJSONParser {
             stringer.key("waitingMaster");
             stringer.object();
 
+            stringer.key("UpdateDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("WaitingMasterId").value(objWaitingMaster.getWaitingMasterId());
             stringer.key("linktoWaitingStatusMasterId").value(objWaitingMaster.getlinktoWaitingStatusMasterId());
+
+//            if(objWaitingMaster.getLinktoUserMasterIdUpdatedBy()!=0) {
+                stringer.key("linktoUserMasterIdUpdatedBy").value(objWaitingMaster.getLinktoUserMasterIdUpdatedBy());
+//            }
             if(objWaitingMaster.getLinktoTableMasterId()!=0){
                 stringer.key("linktoTableMasterId").value(objWaitingMaster.getLinktoTableMasterId());
             }
@@ -171,12 +179,12 @@ public class WaitingJSONParser {
 
     //region SelectAll
 
-    public ArrayList<WaitingMaster> SelectAllWaitingMasterByWaitingStatusMasterId(int linktoWaitingStatusMasterId, int linktoBusinessMasterId) {
+    public ArrayList<WaitingMaster> SelectAllWaitingMasterByWaitingStatusMasterId(int linktoWaitingStatusMasterId, int linktoBusinessMasterId, String OrderBy) {
         ArrayList<WaitingMaster> lstWaitingMaster = null;
         Date date;
         try {
             date = new Date();
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMasterByWaitingStatusId + "/" + linktoWaitingStatusMasterId + "/" + sdfControlDateFormat.format(date) + "/" + linktoBusinessMasterId);
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaitingMasterByWaitingStatusId + "/" + linktoWaitingStatusMasterId + "/" + sdfControlDateFormat.format(date) + "/" + linktoBusinessMasterId +"/"+OrderBy);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllWaitingMasterByWaitingStatusId + "Result");
                 if (jsonArray != null) {

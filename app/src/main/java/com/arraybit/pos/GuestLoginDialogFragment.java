@@ -3,6 +3,7 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -12,11 +13,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.transition.Slide;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
@@ -29,14 +34,13 @@ import com.rey.material.widget.EditText;
 public class GuestLoginDialogFragment extends DialogFragment {
 
     EditText etUserName = null, etPassword = null;
-    View view;
+    View view,rootView;
     SharePreferenceManage objSharePreferenceManage;
     CustomerMaster objCustomerMaster;
     LoginResponseListener objLoginResponseListener;
 
     public GuestLoginDialogFragment() {
         // Required empty public constructor
-
     }
 
     @NonNull
@@ -56,8 +60,44 @@ public class GuestLoginDialogFragment extends DialogFragment {
 
                 CompoundButton cbSignUp = (CompoundButton) getDialog().findViewById(R.id.cbSignUp);
                 CompoundButton cbSkip = (CompoundButton) getDialog().findViewById(R.id.cbSkip);
-                Button positive = (alertDialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                etUserName = (EditText) getDialog().findViewById(R.id.etUserName);
+                etPassword = (EditText) getDialog().findViewById(R.id.etPassword);
 
+                etUserName.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        etUserName.clearError();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                etPassword.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        etPassword.clearError();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                Button positive = (alertDialog).getButton(DialogInterface.BUTTON_POSITIVE);
                 if (getTargetFragment() != null) {
                     Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
                     if (getTargetFragment() == currentFragment || getTargetFragment().getTag().equals(getActivity().getResources().getString(R.string.title_fragment_order_summary))) {
@@ -70,18 +110,19 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(View v) {
                         Globals.HideKeyBoard(getActivity(),v);
-                        etUserName = (EditText) getDialog().findViewById(R.id.etUserName);
-                        etPassword = (EditText) getDialog().findViewById(R.id.etPassword);
+
                         view = v;
                         if (!ValidateControls()) {
-                            Globals.ShowSnackBar(v, getResources().getString(R.string.MsgValidation), getActivity(), 1000);
+                            Toast.makeText(getActivity(), getResources().getString(R.string.MsgValidation), Toast.LENGTH_SHORT).show();
+//                            GuestOptionListFragment.ShowSnackBar( getResources().getString(R.string.MsgValidation), getActivity(), 1000);
                             return;
                         }
                         if (Service.CheckNet(getActivity())) {
                             new SignInLodingTask().execute();
 
                         } else {
-                            Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                            Toast.makeText(getActivity(), getResources().getString(R.string.MsgCheckConnection), Toast.LENGTH_SHORT).show();
+//                            Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                         }
                     }
                 });
@@ -188,7 +229,7 @@ public class GuestLoginDialogFragment extends DialogFragment {
             IsValid = false;
         }
         if (!Globals.IsValidEmail(etUserName.getText().toString())) {
-            etUserName.setError("Enter " + getResources().getString(R.string.siUserName));
+            etUserName.setError("Enter Valid " + getResources().getString(R.string.siUserName));
             IsValid = false;
         }
 
@@ -248,14 +289,16 @@ public class GuestLoginDialogFragment extends DialogFragment {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             if (result == null) {
-                Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginFailedMsg), getActivity(), 1000);
+                Toast.makeText(getActivity(), getResources().getString(R.string.siLoginFailedMsg), Toast.LENGTH_SHORT).show();
+//                Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginFailedMsg), getActivity(), 1000);
             } else {
                 if (getTargetFragment() != null) {
                     Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.guestFragmentLayout);
                     if (getTargetFragment() == currentFragment) {
                         CreateGuestPreference();
                         ClearControls();
-                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
+                        Toast.makeText(getActivity(), getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_SHORT).show();
+//                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
                         objSharePreferenceManage = new SharePreferenceManage();
                         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
                             Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
@@ -265,7 +308,8 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     } else if (getTargetFragment() == getActivity().getSupportFragmentManager().findFragmentByTag(getActivity().getResources().getString(R.string.title_fragment_offer_detail))) {
                         CreateGuestPreference();
                         ClearControls();
-                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
+                        Toast.makeText(getActivity(), getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_SHORT).show();
+//                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
                         objSharePreferenceManage = new SharePreferenceManage();
                         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
                             Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
@@ -274,7 +318,8 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     } else if (MenuActivity.parentActivity && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
                         CreateGuestPreference();
                         ClearControls();
-                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
+                        Toast.makeText(getActivity(), getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_SHORT).show();
+//                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
                         objSharePreferenceManage = new SharePreferenceManage();
                         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
                             Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
@@ -283,7 +328,8 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     } else {
                         CreateGuestPreference();
                         ClearControls();
-                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
+                        Toast.makeText(getActivity(), getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_SHORT).show();
+//                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
                         objSharePreferenceManage = new SharePreferenceManage();
                         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
                             Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
@@ -299,7 +345,8 @@ public class GuestLoginDialogFragment extends DialogFragment {
                             .equals(getActivity().getString(R.string.title_fragment_guest_options))) {
                         CreateGuestPreference();
                         ClearControls();
-                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
+                        Toast.makeText(getActivity(), getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_SHORT).show();
+//                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
                         objSharePreferenceManage = new SharePreferenceManage();
                         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
                             Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());
@@ -310,7 +357,8 @@ public class GuestLoginDialogFragment extends DialogFragment {
                     } else {
                         CreateGuestPreference();
                         ClearControls();
-                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
+                        Toast.makeText(getActivity(), getResources().getString(R.string.siLoginSucessMsg), Toast.LENGTH_SHORT).show();
+//                        Globals.ShowSnackBar(view, getResources().getString(R.string.siLoginSucessMsg), getActivity(), 1000);
                         objSharePreferenceManage = new SharePreferenceManage();
                         if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
                             Globals.userName = objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity());

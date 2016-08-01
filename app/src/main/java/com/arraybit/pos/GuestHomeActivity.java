@@ -424,7 +424,7 @@ public class GuestHomeActivity extends AppCompatActivity implements GuestLoginDi
 
     private void AddFragmentInLayout(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragment.setTargetFragment(Globals.targetFragment, 0);
+        fragment.setTargetFragment(fragment, 0);
         fragmentTransaction.replace(R.id.guestFragmentLayout, fragment, getResources().getString(R.string.title_fragment_guest_options));
         fragmentTransaction.addToBackStack(getResources().getString(R.string.title_fragment_guest_options));
         fragmentTransaction.commit();

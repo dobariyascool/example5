@@ -30,6 +30,8 @@ public class Service {
 
     public static JSONObject HttpGetService(String url) {
         try {
+            Log.e("url"," "+url);
+
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
 
@@ -53,6 +55,8 @@ public class Service {
                 responseStrBuilder.append(inputStr);
             }
 
+            Log.e("response"," "+responseStrBuilder.toString());
+
             return new JSONObject(responseStrBuilder.toString());
         } catch (Exception e) {
             return null;
@@ -61,6 +65,9 @@ public class Service {
 
     public static JSONObject HttpPostService(String url, JSONStringer stringer) {
         try {
+            Log.e("urlPost"," "+url);
+            Log.e("JsonPost"," "+stringer);
+
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
 
@@ -90,6 +97,8 @@ public class Service {
             while ((inputStr = streamReader.readLine()) != null) {
                 responseStrBuilder.append(inputStr);
             }
+
+            Log.e("responsePost"," "+responseStrBuilder.toString());
 
             return new JSONObject(responseStrBuilder.toString());
         } catch (Exception e) {

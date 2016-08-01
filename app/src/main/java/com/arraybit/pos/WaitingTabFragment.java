@@ -134,7 +134,16 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         protected Object doInBackground(Object[] objects) {
 
             WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
-            return objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(objWaitingStatusMaster.getWaitingStatusMasterId(),Globals.businessMasterId);
+            String OrderBy;
+            if(objWaitingStatusMaster.getWaitingStatusMasterId()==0)
+            {
+                OrderBy="WaitingMasterId";
+            }
+            else
+            {
+                OrderBy="UpdateDateTime";
+            }
+            return objWaitingJSONParser.SelectAllWaitingMasterByWaitingStatusMasterId(objWaitingStatusMaster.getWaitingStatusMasterId(),Globals.businessMasterId,OrderBy);
         }
 
         @Override

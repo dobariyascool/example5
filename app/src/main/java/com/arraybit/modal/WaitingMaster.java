@@ -14,7 +14,9 @@ public class WaitingMaster implements Parcelable {
     short linktoWaitingStatusMasterId;
     short linktoBusinessMasterId;
     short linktoTableMasterId;
+    short linktoUserMasterIdUpdatedBy;
 
+    String UpdateDateTime;
     String CreateDateTime;
     short linktoUserMasterIdCreatedBy;
     /// Extra
@@ -31,6 +33,8 @@ public class WaitingMaster implements Parcelable {
             objWaitingMaster.linktoUserMasterIdCreatedBy = (short)source.readInt();
             objWaitingMaster.linktoBusinessMasterId =(short) source.readInt();
             objWaitingMaster.linktoTableMasterId =(short) source.readInt();
+            objWaitingMaster.linktoUserMasterIdUpdatedBy =(short) source.readInt();
+            objWaitingMaster.UpdateDateTime = source.readString();
 
             /// Extra
             objWaitingMaster.WaitingStatus = source.readString();
@@ -85,6 +89,45 @@ public class WaitingMaster implements Parcelable {
         this.linktoTableMasterId = linktoTableMasterId;
     }
 
+    public String getUpdateDateTime() {
+        return UpdateDateTime;
+    }
+
+    public void setUpdateDateTime(String updateDateTime) {
+        UpdateDateTime = updateDateTime;
+    }
+
+    public short getLinktoUserMasterIdCreatedBy() {
+        return linktoUserMasterIdCreatedBy;
+    }
+
+    public void setLinktoUserMasterIdCreatedBy(short linktoUserMasterIdCreatedBy) {
+        this.linktoUserMasterIdCreatedBy = linktoUserMasterIdCreatedBy;
+    }
+
+    public short getLinktoUserMasterIdUpdatedBy() {
+        return linktoUserMasterIdUpdatedBy;
+    }
+
+    public void setLinktoUserMasterIdUpdatedBy(short linktoUserMasterIdUpdatedBy) {
+        this.linktoUserMasterIdUpdatedBy = linktoUserMasterIdUpdatedBy;
+    }
+
+    public short getLinktoBusinessMasterId() {
+        return linktoBusinessMasterId;
+    }
+
+    public void setLinktoBusinessMasterId(short linktoBusinessMasterId) {
+        this.linktoBusinessMasterId = linktoBusinessMasterId;
+    }
+
+    public short getLinktoWaitingStatusMasterId() {
+        return linktoWaitingStatusMasterId;
+    }
+
+    public void setLinktoWaitingStatusMasterId(short linktoWaitingStatusMasterId) {
+        this.linktoWaitingStatusMasterId = linktoWaitingStatusMasterId;
+    }
 
     //endregion
 
@@ -106,6 +149,8 @@ public class WaitingMaster implements Parcelable {
         parcel.writeInt(linktoUserMasterIdCreatedBy);
         parcel.writeInt(linktoBusinessMasterId);
         parcel.writeInt(linktoTableMasterId);
+        parcel.writeInt(linktoUserMasterIdUpdatedBy);
+        parcel.writeString(UpdateDateTime);
 
         /// Extra
         parcel.writeString(WaitingStatus);

@@ -2,6 +2,8 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -11,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,7 @@ import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.Service;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.TableJSONParser;
@@ -76,6 +80,8 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
         btnCancel.setOnClickListener(this);
         btnCall.setOnClickListener(this);
 
+        Drawable[] drawable = btnWaiting.getCompoundDrawablesRelative();
+        drawable[1].mutate().setColorFilter(ContextCompat.getColor(getContext(), R.color.waitingTitleIconColor), PorterDuff.Mode.SRC_IN);
 
         objUpdateStatusListener = (UpdateStatusListener) getTargetFragment();
 
@@ -206,11 +212,11 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             btnServe.setVisibility(View.VISIBLE);
             btnNot.setVisibility(View.GONE);
             btnCancel.setVisibility(View.VISIBLE);
-        } else {
-            btnWaiting.setVisibility(View.VISIBLE);
-            btnServe.setVisibility(View.VISIBLE);
-            btnNot.setVisibility(View.VISIBLE);
-            btnCancel.setVisibility(View.VISIBLE);
+//        } else {
+//            btnWaiting.setVisibility(View.VISIBLE);
+//            btnServe.setVisibility(View.VISIBLE);
+//            btnNot.setVisibility(View.VISIBLE);
+//            btnCancel.setVisibility(View.VISIBLE);
         }
     }
 
@@ -249,6 +255,10 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
             progressDialog = new com.arraybit.pos.ProgressDialog();
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
+            SharePreferenceManage objSharePreferenceManage= new SharePreferenceManage();
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity()) != null) {
+                objWaitingMaster.setLinktoUserMasterIdUpdatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
+            }
         }
 
         @Override
@@ -320,7 +330,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
             objTable = new TableMaster();
             objTable.setlinktoTableStatusMasterId((short) Globals.TableStatus.Vacant.getValue());
-            objTable.setTableMasterId((short) objWaiting.getLinktoTableMasterId());
+            objTable.setTableMasterId(objWaiting.getLinktoTableMasterId());
         }
 
         @Override
