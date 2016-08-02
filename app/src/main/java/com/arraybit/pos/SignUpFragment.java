@@ -424,7 +424,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            lstSpinnerItem = objAreaJSONParser.SelectAllAreaMaster();
+            objSharePreferenceManage = new SharePreferenceManage();
+            lstSpinnerItem = objAreaJSONParser.SelectAllAreaMaster(String.valueOf(Globals.businessMasterId),objSharePreferenceManage.GetPreference("WaiterPreference", "linktoCityMasterId", getActivity()));
             return lstSpinnerItem;
         }
 

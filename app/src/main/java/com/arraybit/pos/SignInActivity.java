@@ -71,8 +71,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         ibClear = (ImageButton) findViewById(R.id.ibClear);
         //end
 
-        Globals.CustomView(btnSignIn, ContextCompat.getColor(this,R.color.accent_red), ContextCompat.getColor(this,android.R.color.transparent));
-        btnSignIn.setTextColor(ContextCompat.getColor(this,android.R.color.white));
+        Globals.CustomView(btnSignIn, ContextCompat.getColor(this, R.color.accent_red), ContextCompat.getColor(this, android.R.color.transparent));
+        btnSignIn.setTextColor(ContextCompat.getColor(this, android.R.color.white));
 
         //event
         btnSignIn.setOnClickListener(this);
@@ -272,6 +272,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             if (objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId", SignInActivity.this) == null) {
                 objSharePreferenceManage.CreatePreference("WaiterPreference", "WaiterMasterId", String.valueOf(objUserMaster.getWaiterMasterId()), SignInActivity.this);
+            }
+
+            if (objSharePreferenceManage.GetPreference("WaiterPreference", "linktoCityMasterId", SignInActivity.this) == null) {
+                objSharePreferenceManage.CreatePreference("WaiterPreference", "linktoCityMasterId", String.valueOf(objUserMaster.getLinktoCityMasterId()), SignInActivity.this);
             }
 
             objSharePreferenceManage.CreatePreference("WaiterPreference", "linktoBusinessMasterId", String.valueOf(objUserMaster.getLinktoBusinessMasterId()), SignInActivity.this);

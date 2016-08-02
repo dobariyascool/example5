@@ -57,12 +57,17 @@ public class AreaJSONParser {
     //endregion
 
     //region SelectAll
-    public ArrayList<SpinnerItem> SelectAllAreaMaster() {
+    public ArrayList<SpinnerItem> SelectAllAreaMaster(String linktoBusinessMasterId, String linktoCityMasterId) {
         ArrayList<SpinnerItem> lstSpinnerItem = new ArrayList<SpinnerItem>();
         SpinnerItem objSpinnerItem = null;
 
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllAreaMaster);
+            JSONObject jsonResponse;
+            if (!linktoBusinessMasterId.equals("") && !linktoCityMasterId.equals("")) {
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllAreaMaster + "/" + linktoBusinessMasterId + "/" + linktoCityMasterId);
+            } else {
+                jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllAreaMaster + "/1/1");
+            }
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllAreaMaster + "Result");
                 if (jsonArray != null) {
