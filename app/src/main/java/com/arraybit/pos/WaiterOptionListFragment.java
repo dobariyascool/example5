@@ -37,7 +37,7 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
 
         waiterOptionLayout = (LinearLayout) view.findViewById(R.id.waiterOptionLayout);
 
-        Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.waiter_home);
         waiterOptionLayout.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
 
         CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);

@@ -78,6 +78,7 @@
 
     <!-- START Buttons -->
     <dimen name="button_Height">38dp</dimen>
+    <dimen name="button_login_height">45dp</dimen>
     <dimen name="button_TouchableHeight">48dp</dimen>
     <dimen name="button_MinimumWidth">88dp</dimen>
     <dimen name="button_Margin">8dp</dimen>

@@ -2,74 +2,133 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/offwhite"
+    android:background="@drawable/background_img"
     android:orientation="vertical"
     tools:context="com.arraybit.pos.SignInActivity">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/control_SpecingMedium">
-
-        <com.rey.material.widget.EditText
-            android:id="@+id/etName"
-            style="@style/EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/siUserName"
-            android:inputType="text"
-            android:paddingEnd="@dimen/control_SpecingMedium"
-            android:paddingStart="@dimen/control_SpecingMedium" />
-
-        <ImageButton
-            android:id="@+id/ibClear"
-            android:layout_width="@dimen/control_SpecingLarge"
-            android:layout_height="@dimen/control_SpecingLarge"
-            android:layout_alignEnd="@+id/etName"
-            android:layout_marginEnd="@dimen/control_SpecingMedium"
-            android:layout_marginTop="@dimen/button_Margin"
-            android:background="@mipmap/close"
-            android:contentDescription="@string/clear_text"
-            android:visibility="gone"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <com.rey.material.widget.EditText
-            android:id="@+id/etPassword"
-            style="@style/EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/siPassword"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword"
-            android:paddingEnd="@dimen/control_SpecingMedium"
-            android:paddingStart="@dimen/control_SpecingMedium" />
-
-        <ToggleButton
-            android:id="@+id/tbPasswordShow"
-            style="@style/EditTextToogleButton"
-            android:layout_alignEnd="@+id/etPassword"
-            android:layout_marginEnd="@dimen/control_SpecingMedium"
-            android:background="@drawable/showhideselector"
-            android:paddingEnd="@dimen/control_SpecingLarge"
-            android:paddingStart="@dimen/control_SpecingLarge"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-    <com.rey.material.widget.Button
-        android:id="@+id/btnSignIn"
-        style="@style/Button"
+    <!--<include-->
+    <!--android:id="@+id/app_bar"-->
+    <!--layout="@layout/app_bar" />-->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_Height"
-        android:layout_margin="@dimen/control_SpecingMedium"
-        android:text="@string/siSignIn" />
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/ivLogo"
+                    android:layout_width="@dimen/ct_width"
+                    android:layout_height="@dimen/ct_width"
+                    android:layout_gravity="center"
+                    android:src="@drawable/logo"
+                    tools:ignore="ContentDescription" />
+
+                <com.rey.material.widget.TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Central POS"
+                    android:textSize="20dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/control_SpecingTiny">
+
+            <com.rey.material.widget.EditText
+                android:id="@+id/etName"
+                style="@style/EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/siUserName"
+                android:inputType="text"
+                android:paddingEnd="@dimen/control_SpecingMedium"
+                android:paddingStart="@dimen/control_SpecingMedium" />
+
+            <ImageButton
+                android:id="@+id/ibClear"
+                android:layout_width="@dimen/control_SpecingLarge"
+                android:layout_height="@dimen/control_SpecingLarge"
+                android:layout_alignEnd="@+id/etName"
+                android:layout_marginEnd="@dimen/control_SpecingMedium"
+                android:layout_marginTop="@dimen/button_Margin"
+                android:background="@mipmap/close"
+                android:contentDescription="@string/clear_text"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/control_SpecingTiny">
+
+            <com.rey.material.widget.EditText
+                android:id="@+id/etPassword"
+                style="@style/EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/siPassword"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:paddingEnd="@dimen/control_SpecingMedium"
+                android:paddingStart="@dimen/control_SpecingMedium" />
+
+            <ToggleButton
+                android:id="@+id/tbPasswordShow"
+                style="@style/EditTextToogleButton"
+                android:layout_alignEnd="@+id/etPassword"
+                android:layout_marginEnd="@dimen/control_SpecingMedium"
+                android:background="@drawable/showhideselector"
+                android:paddingEnd="@dimen/control_SpecingLarge"
+                android:paddingStart="@dimen/control_SpecingLarge"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/control_SpecingTiny"
+            android:layout_weight="0.3"
+            android:orientation="vertical">
+
+            <com.rey.material.widget.Button
+                android:id="@+id/btnSignIn"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_Height"
+                android:layout_margin="@dimen/control_SpecingMedium"
+                android:text="@string/siSignIn" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

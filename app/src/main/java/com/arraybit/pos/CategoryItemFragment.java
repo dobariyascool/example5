@@ -398,23 +398,24 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
     @SuppressLint("CommitTransaction")
     public void ReplaceFragment(Fragment fragment, String fragmentName) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            Fade fade = new Fade();
-            fade.setDuration(500);
-            fragment.setEnterTransition(fade);
+//        if (Build.VERSION.SDK_INT >= 21) {
+//            Fade fade = new Fade();
+//            fade.setDuration(500);
+//            fragment.setEnterTransition(fade);
+//            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
+//            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
+//            fragmentTransaction.addToBackStack(fragmentName);
+//            fragmentTransaction.commit();
+//        } else {
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
+//        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
             fragmentTransaction.addToBackStack(fragmentName);
             fragmentTransaction.commit();
-        } else {
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
-            fragmentTransaction.addToBackStack(fragmentName);
-            fragmentTransaction.commit();
-        }
+//        }
     }
 
     private void RemoveFragment(FragmentTransaction fragmentTransaction, int selectedPosition) {

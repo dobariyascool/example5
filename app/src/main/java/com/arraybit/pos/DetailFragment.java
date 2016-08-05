@@ -217,17 +217,15 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
                 Globals.CustomView(btnOrderDisable, ContextCompat.getColor(getActivity(), R.color.transparent_accent), ContextCompat.getColor(getActivity(), android.R.color.transparent));
                 btnOrderDisable.setTextColor(ContextCompat.getColor(getActivity(), R.color.dimWhite));
             } else {
-                app_bar.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.guestTabColor1)));
+                app_bar.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.primary)));
                 Drawable drawable = app_bar.getOverflowIcon();
                 DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(getActivity(), android.R.color.white));
                 app_bar.setOverflowIcon(drawable);
 
-//                GradientDrawable shape = new GradientDrawable();
-//                shape.setShape(GradientDrawable.RECTANGLE);
-//                shape.setBounds(-5, -5, -5, 1);
-//                shape.setStroke(3, ContextCompat.getColor(getActivity(), R.color.accent_secondary));
-//                scrollView.setBackground(shape);
-//                Drawable drawable1 = scrollView.getBackground();
+                LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.separator);
+                GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.separator1);
+                gradientDrawable.setStroke(2,ContextCompat.getColor(getActivity(), R.color.accent_dark)); // change color
+                scrollView.setBackground(shape);
 
                 Globals.CustomView(btnOrder, ContextCompat.getColor(getActivity(), R.color.accent_secondary), ContextCompat.getColor(getActivity(), android.R.color.transparent));
                 btnOrder.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
@@ -241,7 +239,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(getActivity(), android.R.color.white));
             app_bar.setOverflowIcon(drawable);
 
-            Globals.CustomView(btnOrder, ContextCompat.getColor(getActivity(), R.color.red_tab_indicator), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+            Globals.CustomView(btnOrder, ContextCompat.getColor(getActivity(), R.color.accent_red_dark ), ContextCompat.getColor(getActivity(), android.R.color.transparent));
             btnOrder.setTextColor(ContextCompat.getColor(getActivity(), android.R.color.white));
             Globals.CustomView(btnOrderDisable, ContextCompat.getColor(getActivity(), R.color.transparent_red), ContextCompat.getColor(getActivity(), android.R.color.transparent));
             btnOrderDisable.setTextColor(ContextCompat.getColor(getActivity(), R.color.waitingTitleIconColor));

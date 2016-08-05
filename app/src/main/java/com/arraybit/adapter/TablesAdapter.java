@@ -116,12 +116,10 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
                 } else {
                     holder.txtWaitingPersons.setVisibility(View.INVISIBLE);
                 }
-
             } else {
                 holder.txtWaitingPersons.setVisibility(View.INVISIBLE);
             }
         }
-
 
         //holder animation
         if (isItemAnimate) {

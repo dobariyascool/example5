@@ -53,11 +53,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_in);
 
         //app_bar
-        Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
-        if (Build.VERSION.SDK_INT >= 21) {
-            app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
-        }
-        setSupportActionBar(app_bar);
+//        Toolbar app_bar = (Toolbar) findViewById(R.id.app_bar);
+//        if (Build.VERSION.SDK_INT >= 21) {
+//            app_bar.setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
+//        }
+//        setSupportActionBar(app_bar);
         //end
 
         //edittext
