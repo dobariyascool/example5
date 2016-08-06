@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llNavHeader"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/llNavHeader"
     android:background="@color/primary"
     android:orientation="vertical">
 
@@ -16,7 +16,7 @@
         android:scaleType="centerInside"
         android:src="@drawable/likeat_logo"
         android:visibility="gone"
-        tools:ignore="ContentDescription,HardcodedText"/>
+        tools:ignore="ContentDescription,HardcodedText" />
 
     <LinearLayout
         android:id="@+id/nameLayout"
@@ -26,7 +26,7 @@
         android:gravity="center|start"
         android:orientation="vertical">
 
-      <RelativeLayout
+        <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -50,6 +50,7 @@
                 android:textSize="@dimen/control_TextLarge"
                 tools:ignore="HardcodedText" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,28 +58,30 @@
             android:paddingEnd="@dimen/control_SpecingSmall"
             android:paddingStart="@dimen/control_SpecingSmall"
             android:paddingTop="@dimen/control_SpecingTiny">
-        <com.rey.material.widget.TextView
-            android:id="@+id/txtName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="start"
-            android:maxLength="28"
-            android:maxLines="1"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/control_TextNormal" />
-        <com.rey.material.widget.CompoundButton
-            android:id="@+id/cbLogout"
-            style="@style/CompoundButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/txtName"
-            android:gravity="start"
-            android:paddingEnd="@dimen/control_SpecingSmall"
-            android:paddingStart="@dimen/control_SpecingSmall"
-            android:text="@string/wmLogout"
-            android:textSize="@dimen/control_TextNormal"
-            android:visibility="gone"/>
+
+            <com.rey.material.widget.TextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:maxLength="28"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/control_TextNormal" />
+
+            <com.rey.material.widget.CompoundButton
+                android:id="@+id/cbLogout"
+                style="@style/CompoundButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/txtName"
+                android:gravity="end"
+                android:paddingEnd="@dimen/control_SpecingSmall"
+                android:paddingStart="@dimen/control_SpecingSmall"
+                android:text="@string/wmLogout"
+                android:textSize="@dimen/control_TextNormal"
+                android:visibility="gone" />
         </RelativeLayout>
-        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
