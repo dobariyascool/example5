@@ -6,7 +6,7 @@ android:useLevel="false">
 
 <!--<corners android:radius="4dp" />-->
 <!--<solid android:color="#a674711c" />-->
-<solid android:color="#f5f5f5" />
+<solid android:color="#eeeeee" />
 
 <!--<gradient-->
 <!--android:endColor="@color/guestMenuEndColor"-->
