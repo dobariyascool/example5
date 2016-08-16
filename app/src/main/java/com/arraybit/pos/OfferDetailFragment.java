@@ -1,11 +1,8 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
@@ -14,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -130,37 +126,39 @@ public class OfferDetailFragment extends Fragment implements View.OnClickListene
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
             getActivity().setTheme(R.style.AppThemeGuest);
-//            if (Globals.objAppThemeMaster != null) {
-//                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
-//                discountLayout.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorAccent()));
-//                txtOfferDiscount.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
-//            } else {
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-            discountLayout.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.accent)));
-            txtOfferDiscount.setTextColor(ContextCompat.getColor(getActivity(), R.color.purple));
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(),Globals.objAppThemeMaster.getColorCardText());
+                discountLayout.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorAccent()));
+                txtOfferDiscount.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
 
-            LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.separator);
-            GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.separator1);
-            gradientDrawable.setStroke(2, ContextCompat.getColor(getActivity(), R.color.accent_dark)); // change color
-            highLightsLayout.setBackground(shape);
-            termsConditionLayout.setBackground(shape);
-            txtBuyGetItem.setBackground(shape);
-//            Drawable drawable = ivTimings.getDrawable();
-//            DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(getActivity(), R.color.accent));
-            ivTimings.setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_IN);
-//            GradientDrawable shape1 = new GradientDrawable();
-//            shape1.setShape(GradientDrawable.RECTANGLE);
-//            shape1.setBounds(new Rect(-5, -5, -5, 1));
-//            shape1.setColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-//            shape1.setStroke(3, ContextCompat.getColor(getActivity(), R.color.accent_secondary));
-//            highLightsLayout.setBackground(shape1);
-//            termsConditionLayout.setBackground(shape1);
+                LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.separator);
+                GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.separator1);
+                gradientDrawable.setStroke(2, Globals.objAppThemeMaster.getColorAccentDark()); // change color
+                highLightsLayout.setBackground(shape);
+                termsConditionLayout.setBackground(shape);
+                txtBuyGetItem.setBackground(shape);
+                ivTimings.setColorFilter(Globals.objAppThemeMaster.getColorAccent(), PorterDuff.Mode.SRC_IN);
 
-            txtOfferCode.setBackgroundDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.offer_code_layout_guest));
-            //            }
+                txtOfferCode.setBackgroundDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.offer_code_layout_guest));
+
+            } else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+                discountLayout.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.accent)));
+                txtOfferDiscount.setTextColor(ContextCompat.getColor(getActivity(), R.color.purple));
+
+                LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.separator);
+                GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.separator1);
+                gradientDrawable.setStroke(2, ContextCompat.getColor(getActivity(), R.color.accent_dark)); // change color
+                highLightsLayout.setBackground(shape);
+                termsConditionLayout.setBackground(shape);
+                txtBuyGetItem.setBackground(shape);
+
+                ivTimings.setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_IN);
+
+                txtOfferCode.setBackgroundDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.offer_code_layout_guest));
+            }
         } else {
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.guestTabColor1), ContextCompat.getColor(getActivity(), android.R.color.white));
-
+            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
         }
 
         ibVisible.setOnClickListener(new View.OnClickListener() {

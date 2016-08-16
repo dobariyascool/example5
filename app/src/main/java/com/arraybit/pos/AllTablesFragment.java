@@ -23,7 +23,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.transition.Slide;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -98,38 +97,19 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_all_tables));
                 if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-//                if(Globals.objAppThemeMaster!=null) {
-//                    Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
-//                }
-//                else
-//                {
-                    Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-//                }
+                    if (Globals.objAppThemeMaster != null) {
+                        Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
+                    } else {
+                        Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+                    }
                 } else {
                     Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
                 }
             }
-
-            allTablesFragment = (CoordinatorLayout) view.findViewById(R.id.allTablesFragment);
-//            Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
-            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-//            if (Globals.objAppThemeMaster != null) {
-////                    sharePreferenceManage = new SharePreferenceManage();
-////                    String encodedImage= sharePreferenceManage.GetPreference("GuestAppTheme",getActivity().getString(R.string.guestEncodedImage1),getActivity());
-////                    Globals.SetPageBackground(getActivity(), encodedImage, null, null, null, categoryItemFragment);
-//            } else {
-//                Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
-//                categoryItemFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
-//            }
-                Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
-            } else {
-                allTablesFragment.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
-            }
-
             setHasOptionsMenu(true);
         }
 
-
+        allTablesFragment = (CoordinatorLayout) view.findViewById(R.id.allTablesFragment);
 
         displayMetrics = getActivity().getResources().getDisplayMetrics();
 
@@ -145,17 +125,23 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-//            if (Globals.objAppThemeMaster != null) {
-////                    sharePreferenceManage = new SharePreferenceManage();
-////                    String encodedImage= sharePreferenceManage.GetPreference("GuestAppTheme",getActivity().getString(R.string.guestEncodedImage1),getActivity());
-////                    Globals.SetPageBackground(getActivity(), encodedImage, null, null, null, categoryItemFragment);
-//            } else {
-//                Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
-//                categoryItemFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
-//            }
-            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(),R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+            if (Globals.objAppThemeMaster != null) {
+                objSharePreferenceManage = new SharePreferenceManage();
+                String encodedImage = objSharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity());
+                if (encodedImage != null && !encodedImage.equals("")) {
+                    Globals.SetPageBackground(getActivity(), encodedImage, null, null, null, allTablesFragment);
+                } else {
+                    Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
+                }
+            } else {
+                Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
+            }
+            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
             txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+        } else {
+            allTablesFragment.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
         }
+
 
         //get counterMasterId
         objSharePreferenceManage = new SharePreferenceManage();
@@ -550,7 +536,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                                 alTableMaster.add(objTableMaster);
                             } else if (objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Vacant.getValue()) {
                                 alTableMaster.add(objTableMaster);
-                            }else if (objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Occupied.getValue()) {
+                            } else if (objTableMaster.getlinktoTableStatusMasterId() == Globals.TableStatus.Occupied.getValue()) {
                                 alTableMaster.add(objTableMaster);
                             }
                         }

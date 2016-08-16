@@ -11,7 +11,7 @@
         <!--android:angle="45" />-->
         <stroke
             android:width="2dp"
-            android:color="@color/red_tab_indicator" />
+            android:color="@color/accent_red" />
         <corners android:radius="4dp" />
     </shape>
 </inset>

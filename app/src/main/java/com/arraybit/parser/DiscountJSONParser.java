@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class DiscountJSONParser {
 
     public String SelectAllDiscountMaster = "SelectAllDiscountMaster";
+    public String UpdateOrderMasterDiscount = "UpdateOrderMasterDiscount";
 
     private DiscountMaster SetClassPropertiesFromJSONObject(JSONObject jsonObject) {
         DiscountMaster objDiscountMaster = null;
@@ -68,6 +69,22 @@ public class DiscountJSONParser {
             return lstDiscountMaster;
         } catch (Exception ex) {
             return null;
+        }
+    }
+
+
+    public String UpdateOrderMasterDiscount(String orderMasterIds,double discount,int isPercentage) {
+        try {
+            String Discount = String.valueOf(discount).replace(".","2E2");
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.UpdateOrderMasterDiscount + "/" + orderMasterIds+"/"+Discount+"/"+String.valueOf(isPercentage));
+            if(jsonResponse!=null){
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateOrderMasterDiscount + "Result");
+                return String.valueOf(jsonObject.getInt("ErrorCode"));
+            }else{
+                return "-1";
+            }
+        } catch (Exception ex) {
+            return "-1";
         }
     }
 }

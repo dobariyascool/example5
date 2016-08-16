@@ -225,6 +225,7 @@ public class FeedbackViewFragment extends Fragment {
                             alFeedbackAnswer.get(rowNumber).setFeedbackRowPosition(rowPosition);
                             alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
                             alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
+                            alFeedbackAnswer.get(rowNumber).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
                         } else {
                             rbAnswer[alFeedbackAnswer.get(rowNumber).getFeedbackRowPosition()].setChecked(false);
                             alFeedbackAnswer.get(rowNumber).setAnswer(null);
@@ -233,6 +234,7 @@ public class FeedbackViewFragment extends Fragment {
                             alFeedbackAnswer.get(rowNumber).setFeedbackRowPosition(rowPosition);
                             alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
                             alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
+                            alFeedbackAnswer.get(rowNumber).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
                         }
                     } else {
                         rowPosition = buttonView.getId();
@@ -245,10 +247,12 @@ public class FeedbackViewFragment extends Fragment {
                             alFeedbackAnswer.get(rowNumber).setFeedbackRowPosition(rowPosition);
                             alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
                             alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
+                            alFeedbackAnswer.get(rowNumber).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
                         } else {
                             alFeedbackAnswer.get(rowNumber).setFeedbackRowPosition(rowPosition);
                             alFeedbackAnswer.get(rowNumber).setAnswer(buttonView.getText().toString());
                             alFeedbackAnswer.get(rowNumber).setFeedbackAnswerMasterId((Integer) buttonView.getTag());
+                            alFeedbackAnswer.get(rowNumber).setlinktoFeedbackQuestionMasterId(objFeedbackQuestionMaster.getFeedbackQuestionMasterId());
                         }
                     }
                 }
@@ -472,7 +476,11 @@ public class FeedbackViewFragment extends Fragment {
 
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            stars.getDrawable(2).setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_ATOP);
+            if (Globals.objAppThemeMaster != null) {
+                stars.getDrawable(2).setColorFilter(Globals.objAppThemeMaster.getColorAccent(), PorterDuff.Mode.SRC_ATOP);
+            } else {
+                stars.getDrawable(2).setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_ATOP);
+            }
         } else {
             stars.getDrawable(2).setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent_red), PorterDuff.Mode.SRC_ATOP);
         }
@@ -599,8 +607,13 @@ public class FeedbackViewFragment extends Fragment {
         btnSubmit.setLayoutParams(btnSubmitLayoutParams);
         btnSubmit.applyStyle(R.style.Button);
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            Globals.CustomView(btnSubmit, ContextCompat.getColor(getActivity(), R.color.accent), ContextCompat.getColor(getActivity(), android.R.color.transparent));
-            btnSubmit.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            if (Globals.objAppThemeMaster != null) {
+                Globals.CustomView(btnSubmit, Globals.objAppThemeMaster.getColorAccent(), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnSubmit.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
+            } else {
+                Globals.CustomView(btnSubmit, ContextCompat.getColor(getActivity(), R.color.accent), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnSubmit.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            }
         } else {
             Globals.CustomView(btnSubmit, ContextCompat.getColor(getActivity(), R.color.accent_red), ContextCompat.getColor(getActivity(), android.R.color.transparent));
             btnSubmit.setTextColor(ContextCompat.getColor(getActivity(), android.R.color.white));

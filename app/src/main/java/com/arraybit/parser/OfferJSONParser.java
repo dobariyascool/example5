@@ -7,6 +7,7 @@ import com.arraybit.modal.OfferMaster;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,7 @@ public class OfferJSONParser {
 
     public String SelectAllOfferMaster = "SelectAllOfferMaster";
     public String SelectOfferMaster = "SelectOfferMaster";
+    public String SelectOfferMasterOfferCodeVerification = "SelectOfferMasterOfferCodeVerification";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     SimpleDateFormat sdfControlTimeFormat = new SimpleDateFormat(Globals.TimeFormat, Locale.US);
@@ -73,6 +75,7 @@ public class OfferJSONParser {
                     objOfferMaster.setlinktoUserMasterIdUpdatedBy((short) jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
                 }
                 objOfferMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
+                objOfferMaster.setLinktoCustomerMasterId(jsonObject.getInt("linktoCustomerMasterId"));
                 objOfferMaster.setTermsAndConditions(jsonObject.getString("TermsAndConditions"));
                 objOfferMaster.setIsEnabled(jsonObject.getBoolean("IsEnabled"));
                 objOfferMaster.setIsDeleted(jsonObject.getBoolean("IsDeleted"));
@@ -160,6 +163,7 @@ public class OfferJSONParser {
                     objOfferMaster.setlinktoUserMasterIdUpdatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
                 }
                 objOfferMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
+                objOfferMaster.setLinktoCustomerMasterId(jsonArray.getJSONObject(i).getInt("linktoCustomerMasterId"));
                 objOfferMaster.setTermsAndConditions(jsonArray.getJSONObject(i).getString("TermsAndConditions"));
                 objOfferMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
                 objOfferMaster.setIsDeleted(jsonArray.getJSONObject(i).getBoolean("IsDeleted"));
@@ -207,6 +211,40 @@ public class OfferJSONParser {
             JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectOfferMaster + "/" + offerMasterId);
             if (jsonResponse != null) {
                 JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectOfferMaster + "Result");
+                if (jsonObject != null) {
+                    objOfferMaster = SetClassPropertiesFromJSONObject(jsonObject);
+                }
+            }
+            return objOfferMaster;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public OfferMaster SelectOfferCodeVerification(OfferMaster offerMaster) {
+
+        OfferMaster objOfferMaster = null;
+        try {
+
+            JSONStringer stringer = new JSONStringer();
+            stringer.object();
+
+            stringer.key("objOfferMaster");
+            stringer.object();
+
+            stringer.key("OfferCode").value(offerMaster.getOfferCode());
+            stringer.key("MinimumBillAmount").value(offerMaster.getMinimumBillAmount());
+            stringer.key("linktoBusinessMasterId").value(offerMaster.getlinktoBusinessMasterId());
+            stringer.key("linktoCustomerMasterId").value(offerMaster.getLinktoCustomerMasterId());
+            stringer.key("linktoOrderTypeMasterIds").value(offerMaster.getlinktoOrderTypeMasterId());
+
+            stringer.endObject();
+
+            stringer.endObject();
+
+            JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.SelectOfferMasterOfferCodeVerification ,stringer);
+            if (jsonResponse != null) {
+                JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectOfferMasterOfferCodeVerification + "Result");
                 if (jsonObject != null) {
                     objOfferMaster = SetClassPropertiesFromJSONObject(jsonObject);
                 }

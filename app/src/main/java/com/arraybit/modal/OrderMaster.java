@@ -22,6 +22,7 @@ public class OrderMaster implements Parcelable {
     double TotalAmount;
     double TotalTax;
     double Discount;
+    double DiscountPercentage;
     double ExtraAmount;
     double NetAmount;
     short TotalItemPoint;
@@ -57,6 +58,7 @@ public class OrderMaster implements Parcelable {
             objOrderMaster.TotalAmount = source.readDouble();
             objOrderMaster.TotalTax = source.readDouble();
             objOrderMaster.Discount = source.readDouble();
+            objOrderMaster.DiscountPercentage = source.readDouble();
             objOrderMaster.ExtraAmount = source.readDouble();
             objOrderMaster.TotalItemPoint = (short) source.readInt();
             objOrderMaster.TotalDeductedPoint = (short) source.readInt();
@@ -352,6 +354,14 @@ public class OrderMaster implements Parcelable {
         NetAmount = netAmount;
     }
 
+    public double getDiscountPercentage() {
+        return DiscountPercentage;
+    }
+
+    public void setDiscountPercentage(double discountPercentage) {
+        DiscountPercentage = discountPercentage;
+    }
+
     //endregion
 
     @Override
@@ -374,6 +384,7 @@ public class OrderMaster implements Parcelable {
         parcel.writeDouble(TotalAmount);
         parcel.writeDouble(TotalTax);
         parcel.writeDouble(Discount);
+        parcel.writeDouble(DiscountPercentage);
         parcel.writeDouble(ExtraAmount);
         parcel.writeInt(TotalItemPoint);
         parcel.writeInt(TotalDeductedPoint);

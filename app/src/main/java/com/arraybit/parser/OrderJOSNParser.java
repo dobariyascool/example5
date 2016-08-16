@@ -57,6 +57,7 @@ public class OrderJOSNParser {
                 objOrderMaster.setTotalAmount(jsonObject.getDouble("TotalAmount"));
                 objOrderMaster.setTotalTax(jsonObject.getDouble("TotalTax"));
                 objOrderMaster.setDiscount(jsonObject.getDouble("Discount"));
+                objOrderMaster.setDiscountPercentage(jsonObject.getDouble("DiscountPercentage"));
                 objOrderMaster.setExtraAmount(jsonObject.getDouble("ExtraAmount"));
                 objOrderMaster.setTotalItemPoint((short) jsonObject.getInt("TotalItemPoint"));
                 objOrderMaster.setTotalDeductedPoint((short) jsonObject.getInt("TotalDeductedPoint"));
@@ -116,6 +117,7 @@ public class OrderJOSNParser {
                 objOrderMaster.setTotalAmount(jsonArray.getJSONObject(i).getDouble("TotalAmount"));
                 objOrderMaster.setTotalTax(jsonArray.getJSONObject(i).getDouble("TotalTax"));
                 objOrderMaster.setDiscount(jsonArray.getJSONObject(i).getDouble("Discount"));
+                objOrderMaster.setDiscountPercentage(jsonArray.getJSONObject(i).getDouble("DiscountPercentage"));
                 objOrderMaster.setExtraAmount(jsonArray.getJSONObject(i).getDouble("ExtraAmount"));
                 objOrderMaster.setTotalItemPoint((short) jsonArray.getJSONObject(i).getInt("TotalItemPoint"));
                 objOrderMaster.setTotalDeductedPoint((short) jsonArray.getJSONObject(i).getInt("TotalDeductedPoint"));

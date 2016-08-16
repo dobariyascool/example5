@@ -47,8 +47,8 @@ public class MenuActivity extends AppCompatActivity {
                 objTableMaster = intent.getParcelableExtra("TableMaster");
                 Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
                 if (Globals.selectTableMasterId != objTableMaster.getTableMasterId()) {
-                    CategoryItemFragment.i = 0;
-                    CategoryItemFragment.isViewChange = false;
+//                    CategoryItemFragment.i = 0;
+//                    CategoryItemFragment.isViewChange = false;
                     Globals.counter = 0;
                     Globals.selectTableMasterId = 0;
                     Globals.alOrderItemTran = new ArrayList<>();

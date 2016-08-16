@@ -1,7 +1,6 @@
 package com.arraybit.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +15,6 @@ import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.R;
-import com.arraybit.pos.WaiterHomeActivity;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,7 +29,7 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
     ArrayList<OrderMaster> alOrderMaster;
     int previousPosition;
 
-    public OrderSummaryAdapter(Context context, ArrayList<ItemMaster> result, ArrayList<OrderMaster> alOrderMasterId,boolean isItemAnimate) {
+    public OrderSummaryAdapter(Context context, ArrayList<ItemMaster> result, ArrayList<OrderMaster> alOrderMasterId, boolean isItemAnimate) {
         this.context = context;
         alOrderItemTran = result;
         this.layoutInflater = LayoutInflater.from(context);
@@ -96,7 +94,6 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
                 txtQty[i].setGravity(Gravity.CENTER);
 
 
-
                 txtRate[i] = new TextView(context);
                 LinearLayout.LayoutParams txtRateLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
                 txtRateLayoutParams.weight = 0.22f;
@@ -123,15 +120,16 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
                     txtRate[i].setText(Globals.dfWithPrecision.format(alOrderItemTran.get(i).getActualSellPrice()));
                     txtAmount[i].setText(Globals.dfWithPrecision.format(alOrderItemTran.get(i).getSellPrice()));
 
-                    if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
-                    {
+                    if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//                        if (Globals.objAppThemeMaster != null) {
+//
+//                        } else {
                         txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
                         txtName[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
                         txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
                         txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.white_blur));
-                    }
-                    else
-                    {
+//                    }
+                    } else {
                         txtName[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
                         txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
                         txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
@@ -150,61 +148,59 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
                     txtRate[i].setText(Globals.dfWithPrecision.format(alOrderItemTran.get(i).getActualSellPrice()));
                     txtAmount[i].setText(Globals.dfWithPrecision.format((alOrderItemTran.get(i).getSellPrice())));
 
-                    if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
-                    {
-                        txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
-                        txtName[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
-                        txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
-                        txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//                        if (Globals.objAppThemeMaster != null) {
+//
+//                        } else {
+                            txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                            txtName[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                            txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+                            txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
+//                        }
+                        }
+                        else
+                        {
+                            txtName[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                            txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                            txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                            txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+                        }
                     }
-                    else
-                    {
-                        txtName[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
-                        txtQty[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
-                        txtRate[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
-                        txtAmount[i].setTextColor(ContextCompat.getColor(context, R.color.primary_black));
+
+                    layout[i].addView(txtName[i]);
+                    layout[i].addView(txtQty[i]);
+                    layout[i].addView(txtRate[i]);
+                    layout[i].addView(txtAmount[i]);
+
+                    holder.orderItemLayout.addView(layout[i]);
+
+                }
+            }
+        }
+
+        class OrderSummeryViewHolder extends RecyclerView.ViewHolder {
+
+            CardView cvOrderItem;
+            TextView txtOrderNumber;
+            LinearLayout orderItemLayout;
+
+            public OrderSummeryViewHolder(View itemView) {
+                super(itemView);
+
+                cvOrderItem = (CardView) itemView.findViewById(R.id.cvOrderItem);
+
+                txtOrderNumber = (TextView) itemView.findViewById(R.id.txtOrderNumber);
+
+                orderItemLayout = (LinearLayout) itemView.findViewById(R.id.orderItemLayout);
+
+                if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+                    if (Globals.objAppThemeMaster != null) {
+                        cvOrderItem.setCardBackgroundColor(Globals.objAppThemeMaster.getColorCardView());
+                    } else {
+                        cvOrderItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
                     }
                 }
 
-                layout[i].addView(txtName[i]);
-                layout[i].addView(txtQty[i]);
-                layout[i].addView(txtRate[i]);
-                layout[i].addView(txtAmount[i]);
-
-                holder.orderItemLayout.addView(layout[i]);
-
             }
         }
     }
-
-    class OrderSummeryViewHolder extends RecyclerView.ViewHolder {
-
-        CardView cvOrderItem;
-        TextView txtOrderNumber;
-        LinearLayout orderItemLayout;
-
-        public OrderSummeryViewHolder(View itemView) {
-            super(itemView);
-
-            cvOrderItem = (CardView) itemView.findViewById(R.id.cvOrderItem);
-
-            txtOrderNumber = (TextView) itemView.findViewById(R.id.txtOrderNumber);
-
-
-            orderItemLayout = (LinearLayout) itemView.findViewById(R.id.orderItemLayout);
-
-            if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
-            {
-//                if(Globals.objAppThemeMaster!=null)
-//                {
-                    cvOrderItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
-//                }
-//                else
-//                {
-//                Globals.CustomView(cvOrderItem, ContextCompat.getColor(context, R.color.card_white), ContextCompat.getColor(context, android.R.color.transparent));
-//                }
-            }
-
-        }
-    }
-}

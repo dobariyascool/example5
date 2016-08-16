@@ -88,12 +88,25 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
         rvOptions.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-            topPanel.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary));
-            Drawable drawable = txtLoginChar.getBackground();
-            drawable.mutate().setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent), PorterDuff.Mode.SRC_IN);
-            txtLoginChar.setBackgroundDrawable(drawable);
-            txtLoginChar.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            if(Globals.objAppThemeMaster!=null)
+            {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
+                topPanel.setBackgroundColor(Globals.objAppThemeMaster.getColorPrimary());
+                Drawable drawable = txtLoginChar.getBackground();
+                drawable.mutate().setColorFilter(Globals.objAppThemeMaster.getColorAccent(), PorterDuff.Mode.SRC_IN);
+                txtLoginChar.setBackgroundDrawable(drawable);
+                txtLoginChar.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
+                txtFullName.setTextColor(Globals.objAppThemeMaster.getColorCardText());
+                txtEmail.setTextColor(Globals.objAppThemeMaster.getColorCardText());
+            }
+            else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+                topPanel.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary));
+                Drawable drawable = txtLoginChar.getBackground();
+                drawable.mutate().setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_IN);
+                txtLoginChar.setBackgroundDrawable(drawable);
+                txtLoginChar.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            }
         } else {
             Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
             topPanel.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary_black));

@@ -99,13 +99,13 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
         ivPrevious.setOnClickListener(this);
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-//            if (Globals.objAppThemeMaster != null) {
-//                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
-//                feedbackHeader.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorPrimaryLight()));
-//            } else {
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-            feedbackHeader.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.primary)));
-//            }
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
+                feedbackHeader.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorPrimary()));
+            } else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+                feedbackHeader.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.primary)));
+            }
         } else {
             Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
         }

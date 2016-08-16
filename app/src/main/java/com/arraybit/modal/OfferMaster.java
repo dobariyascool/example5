@@ -32,6 +32,7 @@ public class OfferMaster implements Parcelable {
     String UpdateDateTime;
     short linktoUserMasterIdUpdatedBy;
     short linktoBusinessMasterId;
+    int linktoCustomerMasterId;
     String TermsAndConditions;
     boolean IsEnabled;
     boolean IsDeleted;
@@ -76,6 +77,7 @@ public class OfferMaster implements Parcelable {
             objOfferMaster.UpdateDateTime = source.readString();
             objOfferMaster.linktoUserMasterIdUpdatedBy = (short)source.readInt();
             objOfferMaster.linktoBusinessMasterId = (short)source.readInt();
+            objOfferMaster.linktoCustomerMasterId = source.readInt();
             objOfferMaster.TermsAndConditions = source.readString();
             objOfferMaster.IsEnabled = source.readByte() != 0;
             objOfferMaster.IsDeleted = source.readByte() != 0;
@@ -87,7 +89,7 @@ public class OfferMaster implements Parcelable {
             objOfferMaster.linktoOrderTypeMasterId = (short)source.readInt();
 
             /// Extra
-            objOfferMaster.OfferType = source.readString();;
+            objOfferMaster.OfferType = source.readString();
             objOfferMaster.Business = source.readString();
             return objOfferMaster;
         }
@@ -332,6 +334,13 @@ public class OfferMaster implements Parcelable {
         return XL_ImagePhysicalName;
     }
 
+    public int getLinktoCustomerMasterId() {
+        return linktoCustomerMasterId;
+    }
+
+    public void setLinktoCustomerMasterId(int linktoCustomerMasterId) {
+        this.linktoCustomerMasterId = linktoCustomerMasterId;
+    }
 
     //endregion
 
@@ -370,6 +379,7 @@ public class OfferMaster implements Parcelable {
         parcel.writeString(UpdateDateTime);
         parcel.writeInt(linktoUserMasterIdUpdatedBy);
         parcel.writeInt(linktoBusinessMasterId);
+        parcel.writeInt(linktoCustomerMasterId);
         parcel.writeString(TermsAndConditions);
         parcel.writeByte((byte)(IsEnabled ? 1 : 0));
         parcel.writeByte((byte)(IsDeleted ? 1 : 0));

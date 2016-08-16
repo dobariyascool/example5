@@ -80,12 +80,9 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             app_bar.setTitle(getActivity().getResources().getString(R.string.title_activity_wish_list));
 
-            if(Globals.objAppThemeMaster!=null)
-            {
-                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-            }
-            else
-            {
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
+            } else {
                 Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
             }
 
@@ -132,15 +129,8 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
             Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvWishItemMaster, R.drawable.wifi_drawable);
         }
 
-
-        if (Globals.objAppThemeMaster != null) {
-            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
-            txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
-        } else {
-            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
-            txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
-        }
-
+        ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+        txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
 
         return view;
     }

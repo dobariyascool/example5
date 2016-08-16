@@ -57,4 +57,3 @@ public class BusinessInfoAdapter extends RecyclerView.Adapter<BusinessInfoAdapte
         }
     }
 }
-

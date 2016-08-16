@@ -81,11 +81,12 @@ public class AppThemeIntentService extends IntentService {
         if (intent != null) {
             try {
                 AppThemeJSONParser appThemeJSONParser = new AppThemeJSONParser();
-                final JSONObject jsonObject = appThemeJSONParser.SelectAppThemeMaster(4);
+                final JSONObject jsonObject = appThemeJSONParser.SelectAppThemeMaster(1);
                 final SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
                 sharePreferenceManage.CreatePreference("GuestAppTheme", "AppThemeJson", jsonObject.toString(), AppThemeIntentService.this);
                 Globals.objAppThemeMaster = appThemeJSONParser.SetClassPropertiesFromJSONObject(jsonObject);
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

@@ -406,8 +406,8 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
                 } else {
                     isRestart = true;
                     onRestart();
-                    CategoryItemFragment.i = 0;
-                    CategoryItemFragment.isViewChange = false;
+//                    CategoryItemFragment.i = 0;
+//                    CategoryItemFragment.isViewChange = false;
                     Globals.counter = 0;
                     Globals.alOrderItemTran = new ArrayList<>();
                     Globals.targetFragment = null;

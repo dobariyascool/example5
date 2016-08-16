@@ -412,18 +412,18 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 if(Globals.objAppThemeMaster!=null)
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        cvItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvItem.setCardBackgroundColor(Globals.objAppThemeMaster.getColorCardView());
                         cvItem.setElevation(4f);
                     } else {
-                        cvItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvItem.setCardBackgroundColor(Globals.objAppThemeMaster.getColorCardView());
                     }
-                    Globals.CustomView(btnAdd, ContextCompat.getColor(context, R.color.accent_secondary), ContextCompat.getColor(context, android.R.color.transparent));
-                    btnAdd.setTextColor(ContextCompat.getColor(context, R.color.primary));
-                    txtItemName.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    Globals.CustomView(btnAdd, Globals.objAppThemeMaster.getColorAccent(), ContextCompat.getColor(context, android.R.color.transparent));
+                    btnAdd.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
+                    txtItemName.setTextColor(Globals.objAppThemeMaster.getColorCardText());
                     txtItemDescription.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.darkgoldenrod)));
                     txtItemPrice.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.yellow)));
                     Globals.CustomView(btnAddDisable, ContextCompat.getColor(context, R.color.transparent_accent), ContextCompat.getColor(context, android.R.color.transparent));
-                    btnAddDisable.setTextColor(ContextCompat.getColor(context, R.color.transparentBrown));
+                    btnAddDisable.setTextColor(ContextCompat.getColor(context, R.color.dimWhite));
 
 //                    ibLike.setButtonDrawable(ContextCompat.getDrawable(context, R.drawable.like_drawable));
             }

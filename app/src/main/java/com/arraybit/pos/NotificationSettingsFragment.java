@@ -65,7 +65,11 @@ public class NotificationSettingsFragment extends Fragment {
         txtOffTime = (TextView) view.findViewById(R.id.txtOffTime);
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
+            } else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            }
         } else {
             Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
         }

@@ -76,11 +76,21 @@ public class InformationFragment extends Fragment {
 
         if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
         {
-            ivAddress.setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent_dark), PorterDuff.Mode.SRC_IN);
-            ivCall.setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent_dark), PorterDuff.Mode.SRC_IN);
-            ivEmail.setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent_dark), PorterDuff.Mode.SRC_IN);
-            ivFax.setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent_dark), PorterDuff.Mode.SRC_IN);
-            ivWebSite.setColorFilter(ContextCompat.getColor(getActivity(),R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+            if(Globals.objAppThemeMaster!=null)
+            {
+                ivAddress.setColorFilter(Globals.objAppThemeMaster.getColorAccentDark(), PorterDuff.Mode.SRC_IN);
+                ivCall.setColorFilter(Globals.objAppThemeMaster.getColorAccentDark(), PorterDuff.Mode.SRC_IN);
+                ivEmail.setColorFilter(Globals.objAppThemeMaster.getColorAccentDark(), PorterDuff.Mode.SRC_IN);
+                ivFax.setColorFilter(Globals.objAppThemeMaster.getColorAccentDark(), PorterDuff.Mode.SRC_IN);
+                ivWebSite.setColorFilter(Globals.objAppThemeMaster.getColorAccentDark(), PorterDuff.Mode.SRC_IN);
+            }
+            else {
+                ivAddress.setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+                ivCall.setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+                ivEmail.setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+                ivFax.setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+                ivWebSite.setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+            }
         }
 
         if (lstBusinessHoursTran == null) {

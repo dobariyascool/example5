@@ -19,8 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class SalesJSONParser
-{
+public class SalesJSONParser {
     public String InsertSalesMaster = "InsertSalesMaster";
     public String UpdateSalesMaster = "UpdateSalesMaster";
     public String SelectSalesMaster = "SelectSalesMaster";
@@ -41,7 +40,7 @@ public class SalesJSONParser
                 objSalesMaster.setBillNumber(jsonObject.getString("BillNumber"));
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("BillDateTime"));
                 objSalesMaster.setBillDateTime(sdfControlDateFormat.format(dt));
-                objSalesMaster.setlinktoCounterMasterId((short)jsonObject.getInt("linktoCounterMasterId"));
+                objSalesMaster.setlinktoCounterMasterId((short) jsonObject.getInt("linktoCounterMasterId"));
                 objSalesMaster.setlinktoTableMasterIds(jsonObject.getString("linktoTableMasterIds"));
                 if (!jsonObject.getString("linktoWaiterMasterId").equals("null")) {
                     objSalesMaster.setlinktoWaiterMasterId(jsonObject.getInt("linktoWaiterMasterId"));
@@ -52,8 +51,8 @@ public class SalesJSONParser
                 if (!jsonObject.getString("linktoCustomerMasterId").equals("null")) {
                     objSalesMaster.setlinktoCustomerMasterId(jsonObject.getInt("linktoCustomerMasterId"));
                 }
-                objSalesMaster.setlinktoOrderTypeMasterId((short)jsonObject.getInt("linktoOrderTypeMasterId"));
-                objSalesMaster.setlinktoOrderStatusMasterId((short)jsonObject.getInt("linktoOrderStatusMasterId"));
+                objSalesMaster.setlinktoOrderTypeMasterId((short) jsonObject.getInt("linktoOrderTypeMasterId"));
+                objSalesMaster.setlinktoOrderStatusMasterId((short) jsonObject.getInt("linktoOrderStatusMasterId"));
                 objSalesMaster.setTotalAmount(jsonObject.getDouble("TotalAmount"));
                 objSalesMaster.setTotalTax(jsonObject.getDouble("TotalTax"));
                 objSalesMaster.setDiscountPercentage(jsonObject.getDouble("DiscountPercentage"));
@@ -66,16 +65,16 @@ public class SalesJSONParser
                 objSalesMaster.setBalanceAmount(jsonObject.getDouble("BalanceAmount"));
                 objSalesMaster.setRemark(jsonObject.getString("Remark"));
                 objSalesMaster.setIscomplimentary(jsonObject.getBoolean("Iscomplimentary"));
-                objSalesMaster.setTotalItemPoint((short)jsonObject.getInt("TotalItemPoint"));
-                objSalesMaster.setTotalDeductedPoint((short)jsonObject.getInt("TotalDeductedPoint"));
-                objSalesMaster.setlinktoBusinessMasterId((short)jsonObject.getInt("linktoBusinessMasterId"));
+                objSalesMaster.setTotalItemPoint((short) jsonObject.getInt("TotalItemPoint"));
+                objSalesMaster.setTotalDeductedPoint((short) jsonObject.getInt("TotalDeductedPoint"));
+                objSalesMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
                 objSalesMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
-                objSalesMaster.setlinktoUserMasterIdCreatedBy((short)jsonObject.getInt("linktoUserMasterIdCreatedBy"));
+                objSalesMaster.setlinktoUserMasterIdCreatedBy((short) jsonObject.getInt("linktoUserMasterIdCreatedBy"));
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("UpdateDateTime"));
                 objSalesMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
                 if (!jsonObject.getString("linktoUserMasterIdUpdatedBy").equals("null")) {
-                    objSalesMaster.setlinktoUserMasterIdUpdatedBy((short)jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
+                    objSalesMaster.setlinktoUserMasterIdUpdatedBy((short) jsonObject.getInt("linktoUserMasterIdUpdatedBy"));
                 }
 
                 /// Extra
@@ -105,7 +104,7 @@ public class SalesJSONParser
                 objSalesMaster.setBillNumber(jsonArray.getJSONObject(i).getString("BillNumber"));
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("BillDateTime"));
                 objSalesMaster.setBillDateTime(sdfControlDateFormat.format(dt));
-                objSalesMaster.setlinktoCounterMasterId((short)jsonArray.getJSONObject(i).getInt("linktoCounterMasterId"));
+                objSalesMaster.setlinktoCounterMasterId((short) jsonArray.getJSONObject(i).getInt("linktoCounterMasterId"));
                 objSalesMaster.setlinktoTableMasterIds(jsonArray.getJSONObject(i).getString("linktoTableMasterIds"));
                 if (!jsonArray.getJSONObject(i).getString("linktoWaiterMasterId").equals("null")) {
                     objSalesMaster.setlinktoWaiterMasterId(jsonArray.getJSONObject(i).getInt("linktoWaiterMasterId"));
@@ -116,8 +115,8 @@ public class SalesJSONParser
                 if (!jsonArray.getJSONObject(i).getString("linktoCustomerMasterId").equals("null")) {
                     objSalesMaster.setlinktoCustomerMasterId(jsonArray.getJSONObject(i).getInt("linktoCustomerMasterId"));
                 }
-                objSalesMaster.setlinktoOrderTypeMasterId((short)jsonArray.getJSONObject(i).getInt("linktoOrderTypeMasterId"));
-                objSalesMaster.setlinktoOrderStatusMasterId((short)jsonArray.getJSONObject(i).getInt("linktoOrderStatusMasterId"));
+                objSalesMaster.setlinktoOrderTypeMasterId((short) jsonArray.getJSONObject(i).getInt("linktoOrderTypeMasterId"));
+                objSalesMaster.setlinktoOrderStatusMasterId((short) jsonArray.getJSONObject(i).getInt("linktoOrderStatusMasterId"));
                 objSalesMaster.setTotalAmount(jsonArray.getJSONObject(i).getDouble("TotalAmount"));
                 objSalesMaster.setTotalTax(jsonArray.getJSONObject(i).getDouble("TotalTax"));
                 objSalesMaster.setDiscountPercentage(jsonArray.getJSONObject(i).getDouble("DiscountPercentage"));
@@ -130,16 +129,16 @@ public class SalesJSONParser
                 objSalesMaster.setBalanceAmount(jsonArray.getJSONObject(i).getDouble("BalanceAmount"));
                 objSalesMaster.setRemark(jsonArray.getJSONObject(i).getString("Remark"));
                 objSalesMaster.setIscomplimentary(jsonArray.getJSONObject(i).getBoolean("Iscomplimentary"));
-                objSalesMaster.setTotalItemPoint((short)jsonArray.getJSONObject(i).getInt("TotalItemPoint"));
-                objSalesMaster.setTotalDeductedPoint((short)jsonArray.getJSONObject(i).getInt("TotalDeductedPoint"));
-                objSalesMaster.setlinktoBusinessMasterId((short)jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
+                objSalesMaster.setTotalItemPoint((short) jsonArray.getJSONObject(i).getInt("TotalItemPoint"));
+                objSalesMaster.setTotalDeductedPoint((short) jsonArray.getJSONObject(i).getInt("TotalDeductedPoint"));
+                objSalesMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));
                 objSalesMaster.setCreateDateTime(sdfControlDateFormat.format(dt));
-                objSalesMaster.setlinktoUserMasterIdCreatedBy((short)jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
+                objSalesMaster.setlinktoUserMasterIdCreatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdCreatedBy"));
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("UpdateDateTime"));
                 objSalesMaster.setUpdateDateTime(sdfControlDateFormat.format(dt));
                 if (!jsonArray.getJSONObject(i).getString("linktoUserMasterIdUpdatedBy").equals("null")) {
-                    objSalesMaster.setlinktoUserMasterIdUpdatedBy((short)jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
+                    objSalesMaster.setlinktoUserMasterIdUpdatedBy((short) jsonArray.getJSONObject(i).getInt("linktoUserMasterIdUpdatedBy"));
                 }
 
                 /// Extra
@@ -160,7 +159,7 @@ public class SalesJSONParser
         }
     }
 
-    public String InsertSalesMaster(SalesMaster objSalesMaster,ArrayList<ItemMaster> alSalesItemTran,ArrayList<TaxMaster> alTaxMaster,ArrayList<OrderMaster> alOrderMaster) {
+    public String InsertSalesMaster(SalesMaster objSalesMaster, ArrayList<ItemMaster> alSalesItemTran, ArrayList<TaxMaster> alTaxMaster, ArrayList<OrderMaster> alOrderMaster) {
         dt = new Date();
         try {
             JSONStringer stringer = new JSONStringer();
@@ -175,7 +174,7 @@ public class SalesJSONParser
             stringer.key("linktoTableMasterIds").value(objSalesMaster.getlinktoTableMasterIds());
             stringer.key("linktoWaiterMasterId").value(objSalesMaster.getlinktoWaiterMasterId());
             stringer.key("linktoWaiterMasterIdCaptain").value(objSalesMaster.getlinktoWaiterMasterIdCaptain());
-            if(objSalesMaster.getlinktoCustomerMasterId()>0) {
+            if (objSalesMaster.getlinktoCustomerMasterId() > 0) {
                 stringer.key("linktoCustomerMasterId").value(objSalesMaster.getlinktoCustomerMasterId());
             }
             stringer.key("linktoOrderTypeMasterId").value(objSalesMaster.getlinktoOrderTypeMasterId());
@@ -199,13 +198,16 @@ public class SalesJSONParser
             stringer.key("CreateDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoUserMasterIdCreatedBy").value(objSalesMaster.getlinktoUserMasterIdCreatedBy());
             stringer.key("RateIndex").value(objSalesMaster.getRateIndex());
+            stringer.key("linktoOfferMasterId").value(objSalesMaster.getLinktoOfferMasterId());
+            stringer.key("linktoSourceMasterId").value(objSalesMaster.getLinktoSourceMasterId());
+            stringer.key("OfferCode").value(objSalesMaster.getOfferCode());
 
             stringer.endObject();
 
             stringer.key("lstSalesItemTran");
             stringer.array();
 
-            for(int i=0;i<alSalesItemTran.size();i++) {
+            for (int i = 0; i < alSalesItemTran.size(); i++) {
                 stringer.object();
                 stringer.key("ItemMasterId").value(alSalesItemTran.get(i).getItemMasterId());
                 stringer.key("linktoUnitMasterId").value(alSalesItemTran.get(i).getlinktoUnitMasterId());
@@ -216,7 +218,7 @@ public class SalesJSONParser
                 stringer.key("Remark").value(alSalesItemTran.get(i).getRemark());
                 stringer.key("lstOrderItemModifierTran");
                 stringer.array();
-                for(int j=0;j<alSalesItemTran.get(i).getAlOrderItemModifierTran().size();j++){
+                for (int j = 0; j < alSalesItemTran.get(i).getAlOrderItemModifierTran().size(); j++) {
                     stringer.object();
                     stringer.key("ItemModifierMasterIds").value(alSalesItemTran.get(i).getAlOrderItemModifierTran().get(j).getItemModifierIds());
                     stringer.key("ActualSellPrice").value(alSalesItemTran.get(i).getAlOrderItemModifierTran().get(j).getActualSellPrice());
@@ -229,7 +231,7 @@ public class SalesJSONParser
 
             stringer.key("lstTaxMaster");
             stringer.array();
-            for(int i=0;i<alTaxMaster.size();i++) {
+            for (int i = 0; i < alTaxMaster.size(); i++) {
                 stringer.object();
                 stringer.key("TaxMasterId").value(alTaxMaster.get(i).getTaxMasterId());
                 stringer.key("TaxName").value(alTaxMaster.get(i).getTaxName());
@@ -241,7 +243,7 @@ public class SalesJSONParser
 
             stringer.key("lstOrderMaster");
             stringer.array();
-            for(int i=0;i<alOrderMaster.size();i++){
+            for (int i = 0; i < alOrderMaster.size(); i++) {
                 stringer.object();
                 stringer.key("OrderMasterId").value(alOrderMaster.get(i).getOrderMasterId());
                 stringer.endObject();
@@ -250,16 +252,13 @@ public class SalesJSONParser
             stringer.endObject();
 
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.InsertSalesMaster, stringer);
-            if(jsonResponse!=null) {
+            if (jsonResponse != null) {
                 JSONObject jsonObject = jsonResponse.getJSONObject(this.InsertSalesMaster + "Result");
                 return String.valueOf(jsonObject.getInt("ErrorCode"));
-            }
-            else
-            {
+            } else {
                 return "-1";
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return "-1";
         }
     }
@@ -309,12 +308,10 @@ public class SalesJSONParser
             JSONObject jsonResponse = Service.HttpPostService(Service.Url + this.UpdateSalesMaster, stringer);
             JSONObject jsonObject = jsonResponse.getJSONObject(this.UpdateSalesMaster + "Result");
             return String.valueOf(jsonObject.getInt("ErrorCode"));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return "-1";
         }
     }
-
 
 
     public SalesMaster SelectSalesMaster(long salesMasterId) {
@@ -327,8 +324,7 @@ public class SalesJSONParser
                 }
             }
             return null;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -344,8 +340,7 @@ public class SalesJSONParser
                 }
             }
             return lstSalesMaster;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -368,8 +363,7 @@ public class SalesJSONParser
                 }
             }
             return lstSpinnerItem;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -382,8 +376,7 @@ public class SalesJSONParser
                 number = jsonResponse.getString(this.SelectBillNumber + "Result");
             }
             return number;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }

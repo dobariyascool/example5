@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
@@ -85,13 +86,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cart_item, container, false);
 
-//        if (getArguments() != null) {
-//            isHome = getArguments().getBoolean("isHome", false);
-//        } else {
-//            isHome = false;
-//        }
-
-       isHome = getArguments() != null && getArguments().getBoolean("isHome", false);
+        isHome = getArguments() != null && getArguments().getBoolean("isHome", false);
 
         //app_bar
         Toolbar app_bar = (Toolbar) view.findViewById(R.id.app_bar);
@@ -142,94 +137,84 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
             getActivity().setTheme(R.style.AppThemeGuest);
 
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-            Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
-//            if (Globals.objAppThemeMaster != null) {
-//                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
-//                objSharePreferenceManage = new SharePreferenceManage();
-//                if (objSharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity()) != null &&
-//                        !objSharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity()).equals("")) {
-//                    String encodedImage = objSharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity());
-//                    Globals.SetPageBackground(getActivity(), encodedImage, cartItemFragment, null, null, null);
-//                } else {
-//                    Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
-//                    cartItemFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
-//                }
-//                headerLayout.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorPrimaryLight()));
-//                txtHeaderItem.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorTextPrimary()));
-//                txtHeaderNo.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorTextPrimary()));
-//                txtHeaderRate.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorTextPrimary()));
-//                txtHeaderAmount.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorTextPrimary()));
-//
-//                ColorStateList colorButtonStateList = new ColorStateList(
-//                        new int[][]
-//                                {
-//                                        new int[]{android.R.attr.state_pressed},
-//                                        new int[]{}
-//                                },
-//                        new int[]
-//                                {
-//                                        Globals.objAppThemeMaster.getColorButtonRipple(),
-//                                        Globals.objAppThemeMaster.getColorPrimary()
-//                                }
-//                );
-////                Globals.CustomView(btnAddMore, android.R.color.transparent, Globals.objAppThemeMaster.getColorPrimaryLight());
-//                Globals.CustomView(btnAddMore, android.R.color.transparent, ContextCompat.getColor(getActivity(), android.R.color.black));
-//                btnAddMore.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
-////                btnAddMore.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorAccent()));
-//                Globals.CustomView(btnConfirmOrder, Globals.objAppThemeMaster.getColorPrimaryLight(), android.R.color.transparent);
-//                btnConfirmOrder.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorTextPrimary()));
-////                Globals.ButtonTint(btnAddMore, Globals.objAppThemeMaster.getColorButtonRipple(), android.R.color.transparent);
-////                Globals.ButtonTint(btnConfirmOrder, Globals.objAppThemeMaster.getColorButtonRipple(), Globals.objAppThemeMaster.getColorPrimary());
-//              }else{
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
+                objSharePreferenceManage = new SharePreferenceManage();
+                String encodedImage = objSharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity());
+                if (encodedImage != null && !encodedImage.equals("")) {
+                    Globals.SetPageBackground(getActivity(), encodedImage, cartItemFragment, null, null, null);
+                } else {
+                    Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
+                }
 
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                RippleDrawable rippleDrawable = (RippleDrawable) btnAddMore.getBackground(); // assumes bg is a RippleDrawable
-//
-//                int[][] states = new int[][]{new int[]{android.R.attr.state_enabled}};
-//                int[] colors = new int[]{R.color.holo_blue_dark}; // sets the ripple color to blue
-//
-//                ColorStateList colorStateList = new ColorStateList(states, colors);
-//                rippleDrawable.setTintList(colorStateList);
-//            }
-//
-//            } else {
-//                Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
-//                cartItemFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
+                txtMsg.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
+                cbMenu.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorAccent()));
 
-            txtMsg.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
-            cbMenu.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent_secondary)));
+                headerLayout.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorAccentDark()));
+                txtHeaderItem.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+                txtHeaderNo.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+                txtHeaderRate.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+                txtHeaderAmount.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
 
-            headerLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent_secondary));
+                Globals.CustomView(btnAddMore, ContextCompat.getColor(getActivity(), android.R.color.transparent), Globals.objAppThemeMaster.getColorAccent());
+                btnAddMore.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorAccent()));
+                Globals.CustomView(btnConfirmOrder, Globals.objAppThemeMaster.getColorAccent(), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnConfirmOrder.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
 
-            txtHeaderItem.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-            txtHeaderNo.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-            txtHeaderRate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-            txtHeaderAmount.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-
-            Globals.CustomView(btnAddMore, ContextCompat.getColor(getActivity(), android.R.color.transparent), ContextCompat.getColor(getActivity(), R.color.accent_secondary));
-            btnAddMore.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent_secondary)));
-            Globals.CustomView(btnConfirmOrder, ContextCompat.getColor(getActivity(), R.color.accent_secondary), ContextCompat.getColor(getActivity(), android.R.color.transparent));
-            btnConfirmOrder.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-
-            btnRemark.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
-            cvRemark.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.transparent_orange));
-            Drawable drawable[] = btnRemark.getCompoundDrawablesRelative();
-            drawable[2].mutate().setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_IN);
+                btnRemark.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
+                cvRemark.setCardBackgroundColor(Globals.objAppThemeMaster.getColorCardView());
+                Drawable drawable[] = btnRemark.getCompoundDrawablesRelative();
+                drawable[2].mutate().setColorFilter(Globals.objAppThemeMaster.getColorAccent(), PorterDuff.Mode.SRC_IN);
 //            DrawableCompat.setTint(drawable[2].mutate(), ContextCompat.getColor(getActivity(), R.color.accent));
-            btnRemark.setCompoundDrawablesRelative(drawable[0], drawable[1], drawable[2], drawable[3]);
-            txtRemark.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey)));
+                btnRemark.setCompoundDrawablesRelative(drawable[0], drawable[1], drawable[2], drawable[3]);
+                txtRemark.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey)));
 
-            txtEditMessage.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.text_info)));
-            LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.dash_line_separator);
-            GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.dash_separator);
-            gradientDrawable.setStroke(2, ContextCompat.getColor(getActivity(), R.color.text_info), 6, 6);
+                txtEditMessage.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.text_info)));
+                LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.dash_line_separator);
+                GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.dash_separator);
+                gradientDrawable.setStroke(2, ContextCompat.getColor(getActivity(), R.color.text_info), 6, 6);
 //            txtEditMessage.setBackground(shape);
 
-            txtEditMessage.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.dash_line_separator));
-            rvCartItem.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.dash_line_separator));
+                txtEditMessage.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.dash_line_separator));
+                rvCartItem.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.dash_line_separator));
 
-//            }
+            } else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+                Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
+
+                txtMsg.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
+                cbMenu.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent_secondary)));
+
+                headerLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent_secondary));
+                txtHeaderItem.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+                txtHeaderNo.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+                txtHeaderRate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+                txtHeaderAmount.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+
+                Globals.CustomView(btnAddMore, ContextCompat.getColor(getActivity(), android.R.color.transparent), ContextCompat.getColor(getActivity(), R.color.accent_secondary));
+                btnAddMore.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent_secondary)));
+                Globals.CustomView(btnConfirmOrder, ContextCompat.getColor(getActivity(), R.color.accent_secondary), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnConfirmOrder.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+
+                btnRemark.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
+                cvRemark.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.transparent_orange));
+                Drawable drawable[] = btnRemark.getCompoundDrawablesRelative();
+                drawable[2].mutate().setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_IN);
+//            DrawableCompat.setTint(drawable[2].mutate(), ContextCompat.getColor(getActivity(), R.color.accent));
+                btnRemark.setCompoundDrawablesRelative(drawable[0], drawable[1], drawable[2], drawable[3]);
+//                btnRemark.setCompoundDrawableTintList(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorAccent()));
+                txtRemark.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey)));
+
+                txtEditMessage.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.text_info)));
+                LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.dash_line_separator);
+                GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.dash_separator);
+                gradientDrawable.setStroke(2, ContextCompat.getColor(getActivity(), R.color.text_info), 6, 6);
+//            txtEditMessage.setBackground(shape);
+
+                txtEditMessage.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.dash_line_separator));
+                rvCartItem.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.dash_line_separator));
+
+            }
 //            }
         } else {
             Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));

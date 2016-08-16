@@ -126,18 +126,18 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
             if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
                 if (Globals.objAppThemeMaster != null) {
                     if (Build.VERSION.SDK_INT >= 21) {
-                        cvOffer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvOffer.setCardBackgroundColor(Globals.objAppThemeMaster.getColorCardView());
                         cvOffer.setElevation(4f);
                     } else {
-                        cvOffer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvOffer.setCardBackgroundColor(Globals.objAppThemeMaster.getColorCardView());
                     }
 
                     titleLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.transparentBrown));
-                    dateLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.accent));
-                    txtOfferTitle.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    dateLayout.setBackgroundColor(Globals.objAppThemeMaster.getColorAccent());
+                    txtOfferTitle.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
                     txtOfferContent.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.dimWhite)));
-                    txtOfferExpired.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.purple)));
-                    txtOfferExpiredDate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.purple)));
+                    txtOfferExpired.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+                    txtOfferExpiredDate.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
                 } else {
                     if (Build.VERSION.SDK_INT >= 21) {
                         cvOffer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));

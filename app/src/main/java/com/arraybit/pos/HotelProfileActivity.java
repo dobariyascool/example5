@@ -81,22 +81,33 @@ public class HotelProfileActivity extends AppCompatActivity {
         if (Globals.objAppThemeMaster != null) {
             sharePreferenceManage = new SharePreferenceManage();
             String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getString(R.string.encodedProfileImage), HotelProfileActivity.this);
-            byte[] decodedString = Base64.decode(encodedImage.getBytes(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            ivBackground.setImageDrawable(new BitmapDrawable(getResources(), decodedByte));
-            ivBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//            Picasso.with(HotelProfileActivity.this).load().fit().centerCrop().into(ivBackground);
+            if (encodedImage != null && !encodedImage.equals("")) {
+                byte[] decodedString = Base64.decode(encodedImage.getBytes(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                ivBackground.setImageDrawable(new BitmapDrawable(getResources(), decodedByte));
+                ivBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            } else {
+                Picasso.with(HotelProfileActivity.this).load(R.drawable.profile_background).fit().centerCrop().into(ivBackground);
+            }
         } else {
             Picasso.with(HotelProfileActivity.this).load(R.drawable.profile_background).fit().centerCrop().into(ivBackground);
         }
 
 
-
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            collapsingToolbar.setContentScrimColor(ContextCompat.getColor(this, R.color.primary));
-            tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.primary));
-            tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.accent));
-            tabLayout.setTabTextColors(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.white)));
+            if(Globals.objAppThemeMaster!=null)
+            {
+                collapsingToolbar.setContentScrimColor(Globals.objAppThemeMaster.getColorPrimary());
+                tabLayout.setBackgroundColor(Globals.objAppThemeMaster.getColorPrimary());
+                tabLayout.setSelectedTabIndicatorColor(Globals.objAppThemeMaster.getColorAccent());
+                tabLayout.setTabTextColors(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
+            }
+            else {
+                collapsingToolbar.setContentScrimColor(ContextCompat.getColor(this, R.color.primary));
+                tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.primary));
+                tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.accent));
+                tabLayout.setTabTextColors(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.white)));
+            }
         }
 
         if (Service.CheckNet(this)) {

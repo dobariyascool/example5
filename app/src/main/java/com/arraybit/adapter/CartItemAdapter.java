@@ -224,16 +224,16 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
 
             if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
                 if (Globals.objAppThemeMaster != null) {
-                    llCartItem.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
-//                    Drawable drawable = ivClose.getDrawable();
-//                    DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(context, R.color.accent_secondary));
-//                    ivClose.setImageDrawable(drawable);
-                    ivClose.setColorFilter(ContextCompat.getColor(context, R.color.accent_secondary));
-                    txtItem.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
-                    txtAmount.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
-                    txtRate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
-                    txtQty.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
-                    txtRemark.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, android.R.color.white)));
+                    llCartItem.setBackgroundColor(Globals.objAppThemeMaster.getColorCardView());
+                    Drawable drawable = ivClose.getDrawable();
+                    DrawableCompat.setTint(drawable.mutate(), Globals.objAppThemeMaster.getColorAccentDark());
+                    ivClose.setImageDrawable(drawable);
+                    ivClose.setColorFilter(Globals.objAppThemeMaster.getColorAccent());
+                    txtItem.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
+                    txtAmount.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
+                    txtRate.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
+                    txtQty.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
+                    txtRemark.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
                 } else {
                     llCartItem.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
                     Drawable drawable = ivClose.getDrawable();

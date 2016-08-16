@@ -106,7 +106,7 @@
     <dimen name="card_TextPadding">14dp</dimen>
     <dimen name="card_TitleArea">72dp</dimen>
     <dimen name="card_CornerRadius">4dp</dimen>
-    <dimen name="card_Elevation">2dp</dimen>
+    <dimen name="card_Elevation">1dp</dimen>
     <dimen name="card_Margin">8dp</dimen>
 
     <dimen name="card_PrimaryText">24sp</dimen>

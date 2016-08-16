@@ -4,18 +4,19 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,17 +34,21 @@ import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.DiscountMaster;
 import com.arraybit.modal.ItemMaster;
+import com.arraybit.modal.OfferMaster;
 import com.arraybit.modal.OrderMaster;
 import com.arraybit.modal.SalesMaster;
 import com.arraybit.modal.TableMaster;
 import com.arraybit.modal.TaxMaster;
+import com.arraybit.parser.DiscountJSONParser;
 import com.arraybit.parser.ItemJSONParser;
+import com.arraybit.parser.OfferJSONParser;
 import com.arraybit.parser.OrderJOSNParser;
 import com.arraybit.parser.SalesJSONParser;
 import com.arraybit.parser.TableJSONParser;
 import com.arraybit.parser.TaxJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.CompoundButton;
+import com.rey.material.widget.EditText;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -53,8 +58,9 @@ import java.util.ArrayList;
 public class OrderSummaryFragment extends Fragment implements View.OnClickListener, AddDiscountDialogFragment.DiscountSelectionListener, GuestLoginDialogFragment.LoginResponseListener, ConfirmDialog.ConfirmationResponseListener {
 
 
+    public DiscountMaster discountMaster;
     RecyclerView rvOrderItemSummery;
-    LinearLayout headerLayout, amountLayout, taxLayout, errorLayout;
+    LinearLayout headerLayout, amountLayout, taxLayout, errorLayout, cvOfferCode;
     FrameLayout orderSummeryLayout;
     TableMaster objTableMaster;
     SharePreferenceManage objSharePreferenceManage;
@@ -71,9 +77,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     OrderSummaryAdapter orderSummeryAdapter;
     boolean isHomeShow = false;
     com.arraybit.pos.ProgressDialog progressDialog;
-    View focusView;
-    CompoundButton cbOrderPlace;
-    SharePreferenceManage sharePreferenceManage;
+    View focusView, snackFocus;
+    CompoundButton cbOrderPlace, cbGetPromoCode;
+    EditText etOfferCode;
+    Button btnApply;
+    OfferMaster objOfferMaster;
 
     public OrderSummaryFragment() {
     }
@@ -131,6 +139,10 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         ivErrorIcon = (ImageView) errorLayout.findViewById(R.id.ivErrorIcon);
         cbOrderPlace = (CompoundButton) errorLayout.findViewById(R.id.cbOrderPlace);
 
+        cvOfferCode = (LinearLayout) view.findViewById(R.id.cvOfferCode);
+        cbGetPromoCode = (CompoundButton) view.findViewById(R.id.cbGetPromoCode);
+        etOfferCode = (EditText) view.findViewById(R.id.etOfferCode);
+        btnApply = (Button) view.findViewById(R.id.btnApply);
         txtTotalAmount = (TextView) view.findViewById(R.id.txtTotalAmount);
         txtTotalDiscount = (TextView) view.findViewById(R.id.txtTotalDiscount);
         txtNetAmount = (TextView) view.findViewById(R.id.txtNetAmount);
@@ -152,43 +164,91 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         TextView txtHeaderAmount = (TextView) view.findViewById(R.id.txtHeaderAmount);
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-//            if (Globals.objAppThemeMaster != null) {
-//                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
-//
-//                sharePreferenceManage = new SharePreferenceManage();
-//                String encodedImage= sharePreferenceManage.GetPreference("GuestAppTheme","EncodedBackImage1",getActivity());
-//                Globals.SetPageBackground(getActivity(), encodedImage, null, null, orderSummeryLayout, null);
-////                Globals.SetPageBackground(getActivity(), Globals.objAppThemeMaster.getBackImageName1(), null, null, orderSummeryLayout, null);
-//
-//            } else {
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(),  Globals.objAppThemeMaster.getColorCardText());
 
-            Globals.SetScaleImageBackground(getActivity(), null, null, orderSummeryLayout);
+                objSharePreferenceManage = new SharePreferenceManage();
+                String encodedImage= objSharePreferenceManage.GetPreference("GuestAppTheme","EncodedBackImage1",getActivity());
+                if (encodedImage != null && !encodedImage.equals("")) {
+                    Globals.SetPageBackground(getActivity(), encodedImage, null, null, orderSummeryLayout, null);
+//                Globals.SetPageBackground(getActivity(), Globals.objAppThemeMaster.getBackImageName1(), null, null, orderSummeryLayout, null);
+                } else {
+                    Globals.SetScaleImageBackground(getActivity(), null, null, orderSummeryLayout);
+                }
 
-            headerLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent_dark));
+                headerLayout.setBackgroundColor(Globals.objAppThemeMaster.getColorAccentDark());
+                txtHeaderItem.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+                txtHeaderNo.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+                txtHeaderRate.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+                txtHeaderAmount.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
 
-            txtHeaderItem.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-            txtHeaderNo.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-            txtHeaderRate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-            txtHeaderAmount.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+                txtHeaderNetAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.white_blur));
+                txtHeaderTotalAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.white_blur));
+                txtHeaderRounding.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                txtTotalAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                txtNetAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                txtRoundingOff.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                txtTotalDiscount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
 
-            txtHeaderNetAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.white_blur));
-            txtHeaderTotalAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.white_blur));
-            txtHeaderRounding.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
-            txtTotalAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
-            txtNetAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
-            txtRoundingOff.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
-            txtTotalDiscount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+                txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                cbOrderPlace.setTextColor(Globals.objAppThemeMaster.getColorAccent());
 
-            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
-            txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
-            cbOrderPlace.setTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
+                cbGetPromoCode.setTextColor(Globals.objAppThemeMaster.getColorAccentDark());
+                btnApply.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.rightside_rounded_button));
+                btnApply.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
+                etOfferCode.setTextColor(Globals.objAppThemeMaster.getColorCardText());
 
-            Globals.CustomView(btnAddMore, ContextCompat.getColor(getActivity(), android.R.color.transparent),ContextCompat.getColor(getActivity(), R.color.accent_secondary));
-            Globals.CustomView(btnCheckOut, ContextCompat.getColor(getActivity(), R.color.accent_secondary),ContextCompat.getColor(getActivity(), android.R.color.transparent));
-            btnAddMore.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent_secondary)));
-            btnCheckOut.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+                GradientDrawable gd = new GradientDrawable();
+                gd.setShape(GradientDrawable.RECTANGLE);
+                gd.setCornerRadius(8);
+                gd.setStroke(4,Globals.objAppThemeMaster.getColorAccent());
+                etOfferCode.setBackground(gd);
 
+                Globals.CustomView(btnAddMore, ContextCompat.getColor(getActivity(), android.R.color.transparent),Globals.objAppThemeMaster.getColorAccent());
+                Globals.CustomView(btnCheckOut, Globals.objAppThemeMaster.getColorAccent(), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnAddMore.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorAccent()));
+                btnCheckOut.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+
+            } else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+
+                Globals.SetScaleImageBackground(getActivity(), null, null, orderSummeryLayout);
+
+                headerLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent_dark));
+
+                txtHeaderItem.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+                txtHeaderNo.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+                txtHeaderRate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+                txtHeaderAmount.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+
+                txtHeaderNetAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.white_blur));
+                txtHeaderTotalAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.white_blur));
+                txtHeaderRounding.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                txtTotalAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                txtNetAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                txtRoundingOff.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                txtTotalDiscount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+
+                ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+                txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                cbOrderPlace.setTextColor(ContextCompat.getColor(getActivity(), R.color.accent));
+
+                cbGetPromoCode.setTextColor(ContextCompat.getColor(getActivity(), R.color.accent_dark));
+                btnApply.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.rightside_rounded_button));
+                btnApply.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+                etOfferCode.setTextColor(ContextCompat.getColor(getActivity(), android.R.color.white));
+                GradientDrawable gd = new GradientDrawable();
+                gd.setShape(GradientDrawable.RECTANGLE);
+                gd.setCornerRadius(8);
+                gd.setStroke(4, Globals.objAppThemeMaster.getColorAccent());
+                etOfferCode.setBackground(gd);
+
+                Globals.CustomView(btnAddMore, ContextCompat.getColor(getActivity(), android.R.color.transparent), ContextCompat.getColor(getActivity(), R.color.accent_secondary));
+                Globals.CustomView(btnCheckOut, ContextCompat.getColor(getActivity(), R.color.accent_secondary), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnAddMore.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent_secondary)));
+                btnCheckOut.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+            }
         } else {
             Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
             orderSummeryLayout.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
@@ -199,16 +259,54 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             btnCheckOut.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
         }
 
+        etOfferCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (etOfferCode.getText().toString().equals("")) {
+                    btnApply.setText(getResources().getString(R.string.coaCancel));
+//                    OfferMaster objOfferMaster = new OfferMaster();
+//                    objOfferMaster.setOfferCode("Remove");
+//                    if (tbHomeDelivery.isChecked()) {
+//                        SaveCheckOutData(null, objOfferMaster, Globals.OrderType.HomeDelivery.getValue());
+//                    } else if (tbTakeAway.isChecked()) {
+//                        SaveCheckOutData(null, objOfferMaster, Globals.OrderType.TakeAway.getValue());
+//                    }
+
+                } else {
+                    if (!etOfferCode.getText().toString().equals(etOfferCode.getText().toString().toUpperCase())) {
+                        etOfferCode.setText(etOfferCode.getText().toString().toUpperCase());
+                    }
+                    if (etOfferCode.getText().toString().contains(" ")) {
+                        etOfferCode.setText(etOfferCode.getText().toString().trim());
+                    }
+                    etOfferCode.setSelection(etOfferCode.getText().length());
+                    btnApply.setText(getResources().getString(R.string.coaApply));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         btnAddMore.setOnClickListener(this);
         btnCheckOut.setOnClickListener(this);
         cbOrderPlace.setOnClickListener(this);
+        cbGetPromoCode.setOnClickListener(this);
+        btnApply.setOnClickListener(this);
 
         if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount() - 1).getName() != null
                 && getActivity().getSupportFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getString(R.string.title_fragment_guest_options))) {
-                txtHeaderDiscount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+            txtHeaderDiscount.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
         } else {
-                txtHeaderDiscount.setTextColor(ContextCompat.getColor(getActivity(), R.color.accent_red));
-                txtHeaderDiscount.setOnClickListener(this);
+            txtHeaderDiscount.setTextColor(ContextCompat.getColor(getActivity(), R.color.accent_red));
+            txtHeaderDiscount.setOnClickListener(this);
         }
 
         GetValueFromSharePreference();
@@ -258,6 +356,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
         if (item.getItemId() == android.R.id.home) {
             getActivity().getSupportFragmentManager().popBackStack();
+            Globals.objDiscountMaster = null;
         }
         if (item.getItemId() == R.id.home) {
             if (MenuActivity.parentActivity) {
@@ -284,7 +383,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         if (v.getId() == R.id.btnAddMore) {
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
-                if (MenuActivity.parentActivity) {
+                if (MenuActivity.parentActivity || GuestHomeActivity.isGuestMode) {
+                    if(GuestHomeActivity.isGuestMode)
+                    {
+                        getActivity().getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_summary), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    }
                     Globals.isWishListShow = 1;
                     Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
                     Intent intent = new Intent(getActivity(), MenuActivity.class);
@@ -324,6 +427,18 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         } else if (v.getId() == R.id.txtHeaderDiscount) {
             Bundle bundle = new Bundle();
             bundle.putDouble("TotalAmount", totalAmount);
+            if (lstOrderMaster.get(0).getDiscountPercentage() != 0) {
+                bundle.putDouble("Discount", lstOrderMaster.get(0).getDiscountPercentage());
+                bundle.putBoolean("isPercentage", true);
+            } else {
+                double totaldiscount = 0;
+                for (int i = 0; i < lstOrderMaster.size(); i++) {
+                    totaldiscount = totaldiscount + lstOrderMaster.get(i).getDiscount();
+                }
+                Log.e("dis", " " + totaldiscount);
+                bundle.putDouble("Discount", totaldiscount);
+                bundle.putBoolean("isPercentage", false);
+            }
             AddDiscountDialogFragment addDiscountDialogFragment = new AddDiscountDialogFragment();
             addDiscountDialogFragment.setTargetFragment(this, 0);
             addDiscountDialogFragment.setArguments(bundle);
@@ -354,12 +469,49 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                     getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }
             }
+        } else if (v.getId() == R.id.cbGetPromoCode) {
+            cbGetPromoCode.setVisibility(View.GONE);
+            etOfferCode.setVisibility(View.VISIBLE);
+            btnApply.setSelected(true);
+            btnApply.setVisibility(View.VISIBLE);
+        } else if (v.getId() == R.id.btnApply) {
+            Globals.HideKeyBoard(getActivity(), v);
+            snackFocus = v;
+            if (btnApply.getText().equals(getResources().getString(R.string.coaCancel))) {
+                etOfferCode.setVisibility(View.GONE);
+                btnApply.setVisibility(View.GONE);
+                cbGetPromoCode.setVisibility(View.VISIBLE);
+                if (discountMaster != null) {
+                    Globals.objDiscountMaster = discountMaster;
+                    discountMaster = null;
+                    objOfferMaster= null;
+                    CalculateDiscount(totalAmount, totalTax);
+                    etOfferCode.setText("");
+
+                }
+            } else {
+                if (Service.CheckNet(getActivity())) {
+                    new RequestVerifyOfferCode().execute();
+                } else {
+                    Globals.ShowSnackBar(snackFocus, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+            }
         }
     }
 
     @Override
     public void DiscountCount(DiscountMaster objDiscountMaster) {
         Globals.objDiscountMaster = objDiscountMaster;
+//        if(discountMaster!=null)
+//        {
+        etOfferCode.setVisibility(View.GONE);
+        btnApply.setVisibility(View.GONE);
+        cbGetPromoCode.setVisibility(View.VISIBLE);
+        discountMaster = null;
+        objOfferMaster = null;
+        etOfferCode.setText("");
+        btnApply.setText(getResources().getString(R.string.coaApply));
+//        }
         CalculateDiscount(totalAmount, totalTax);
     }
 
@@ -466,6 +618,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             for (int i = 0; i < lstOrderMaster.size(); i++) {
                 totalAmount = totalAmount + lstOrderMaster.get(i).getTotalAmount();
                 totalTax = totalTax + lstOrderMaster.get(i).getTotalTax();
+                totalDiscount = totalDiscount + lstOrderMaster.get(i).getDiscount();
             }
         }
         txtTotalAmount.setText(Globals.dfWithPrecision.format(totalAmount));
@@ -483,6 +636,19 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             }
 
             if (totalDiscount <= totalAmount) {
+                if (discountMaster == null) {
+                    String orderMasterIds = null;
+                    DiscountJSONParser discountJSONParser = new DiscountJSONParser();
+                    for (int i = 0; i < lstOrderMaster.size(); i++) {
+                        if (i == 0) {
+                            orderMasterIds = String.valueOf(lstOrderMaster.get(i).getOrderMasterId());
+                        } else {
+                            orderMasterIds = orderMasterIds + "," + lstOrderMaster.get(i).getOrderMasterId();
+                        }
+                    }
+                    Log.e("ids", " " + orderMasterIds);
+                    discountJSONParser.UpdateOrderMasterDiscount(orderMasterIds, Globals.objDiscountMaster.getDiscount(), (Globals.objDiscountMaster.getIsPercentage()) ? 1 : 0);
+                }
                 txtTotalDiscount.setText(Globals.dfWithPrecision.format(totalDiscount));
                 strNetAmount = Globals.dfWithPrecision.format((totalAmount + totalTax) - totalDiscount);
                 txtNetAmount.setText(Globals.dfWithPrecision.format(Math.round((totalAmount + totalTax) - totalDiscount)));
@@ -495,11 +661,73 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 txtRoundingOff.setText("- 0." + strNetAmount.substring(strNetAmount.lastIndexOf(".") + 1, strNetAmount.length()));
                 txtNetAmount.setText(Globals.dfWithPrecision.format(Math.round(totalAmount + totalTax)));
             }
+            SetDiscountListOrderMaster();
         } else {
-            strNetAmount = Globals.dfWithPrecision.format(totalAmount + totalTax);
-            txtNetAmount.setText(Globals.dfWithPrecision.format(Math.round(totalAmount + totalTax)));
-            if (!strNetAmount.isEmpty()) {
-                txtRoundingOff.setText("- 0." + strNetAmount.substring(strNetAmount.lastIndexOf(".") + 1, strNetAmount.length()));
+            if (totalDiscount == 0) {
+
+                strNetAmount = Globals.dfWithPrecision.format(totalAmount + totalTax);
+                txtNetAmount.setText(Globals.dfWithPrecision.format(Math.round(totalAmount + totalTax)));
+                if (!strNetAmount.isEmpty()) {
+                    txtRoundingOff.setText("- 0." + strNetAmount.substring(strNetAmount.lastIndexOf(".") + 1, strNetAmount.length()));
+                }
+                Globals.objDiscountMaster = new DiscountMaster();
+                if (lstOrderMaster.get(0).getDiscountPercentage() != 0) {
+                    Globals.objDiscountMaster.setDiscount(lstOrderMaster.get(0).getDiscountPercentage());
+                    Globals.objDiscountMaster.setIsPercentage(true);
+                } else {
+                    Globals.objDiscountMaster.setDiscount(totalDiscount);
+                    Globals.objDiscountMaster.setIsPercentage(false);
+                }
+            } else {
+                if (totalDiscount <= totalAmount) {
+                    txtTotalDiscount.setText(Globals.dfWithPrecision.format(totalDiscount));
+                    strNetAmount = Globals.dfWithPrecision.format((totalAmount + totalTax) - totalDiscount);
+                    txtNetAmount.setText(Globals.dfWithPrecision.format(Math.round((totalAmount + totalTax) - totalDiscount)));
+                    if (!strNetAmount.isEmpty()) {
+                        txtRoundingOff.setText("- 0." + strNetAmount.substring(strNetAmount.lastIndexOf(".") + 1, strNetAmount.length()));
+                    }
+                    Globals.objDiscountMaster = new DiscountMaster();
+                    if (lstOrderMaster.get(0).getDiscountPercentage() != 0) {
+                        Globals.objDiscountMaster.setDiscount(lstOrderMaster.get(0).getDiscountPercentage());
+                        Globals.objDiscountMaster.setIsPercentage(true);
+                    } else {
+                        Globals.objDiscountMaster.setDiscount(totalDiscount);
+                        Globals.objDiscountMaster.setIsPercentage(false);
+                    }
+                } else {
+                    txtTotalDiscount.setText(Globals.dfWithPrecision.format(0.00));
+                    strNetAmount = Globals.dfWithPrecision.format(totalAmount + totalTax);
+                    txtRoundingOff.setText("- 0." + strNetAmount.substring(strNetAmount.lastIndexOf(".") + 1, strNetAmount.length()));
+                    txtNetAmount.setText(Globals.dfWithPrecision.format(Math.round(totalAmount + totalTax)));
+                }
+            }
+        }
+    }
+
+    private void SetDiscountListOrderMaster() {
+        if (Globals.objDiscountMaster.getIsPercentage()) {
+            for (int i = 0; i < lstOrderMaster.size(); i++) {
+                lstOrderMaster.get(i).setDiscountPercentage(Globals.objDiscountMaster.getDiscount());
+                lstOrderMaster.get(i).setDiscount((lstOrderMaster.get(i).getTotalAmount() * Globals.objDiscountMaster.getDiscount()) / 100);
+            }
+        } else {
+            long maxIndex = lstOrderMaster.get(0).getOrderMasterId();
+            double maxAmount = lstOrderMaster.get(0).getTotalAmount();
+            for (int i = 1; i < lstOrderMaster.size(); i++) {
+                if (maxAmount < lstOrderMaster.get(i).getTotalAmount()) {
+                    maxAmount = lstOrderMaster.get(i).getTotalAmount();
+                    maxIndex = lstOrderMaster.get(i).getOrderMasterId();
+                }
+            }
+
+            for (int i = 0; i < lstOrderMaster.size(); i++) {
+                if (lstOrderMaster.get(i).getOrderMasterId() == maxIndex) {
+                    lstOrderMaster.get(i).setDiscountPercentage(0.00);
+                    lstOrderMaster.get(i).setDiscount(Globals.objDiscountMaster.getDiscount());
+                } else {
+                    lstOrderMaster.get(i).setDiscountPercentage(0.00);
+                    lstOrderMaster.get(i).setDiscount(0.00);
+                }
             }
         }
     }
@@ -571,6 +799,31 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         }
 
     }
+
+    private void SetOffer(OfferMaster objOfferMaster) {
+
+        if (objOfferMaster == null) {
+            etOfferCode.setText("");
+            Globals.ShowSnackBar(snackFocus, getResources().getString(R.string.MsgOfferCodeFailed), getActivity(), 2000);
+        } else {
+            if (objOfferMaster.getOfferCode() == null) {
+                etOfferCode.setText("");
+                Globals.ShowSnackBar(snackFocus, getResources().getString(R.string.MsgOfferCodeFailed), getActivity(), 2000);
+            } else {
+                Globals.ShowSnackBar(snackFocus, getResources().getString(R.string.MsgOfferCodeSuccess), getActivity(), 2000);
+//                discountMaster= Globals.objDiscountMaster;
+                discountMaster = new DiscountMaster();
+                discountMaster.setIsPercentage(Globals.objDiscountMaster.getIsPercentage());
+                discountMaster.setDiscount(Globals.objDiscountMaster.getDiscount());
+                Globals.objDiscountMaster.setDiscount(objOfferMaster.getDiscount());
+                Globals.objDiscountMaster.setIsPercentage(objOfferMaster.getIsDiscountPercentage());
+                btnApply.setText(getResources().getString(R.string.coaCancel));
+
+                CalculateDiscount(totalAmount, totalTax);
+            }
+        }
+    }
+
     //endregion
 
     //region LoadingTask
@@ -744,6 +997,12 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             objSalesMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
             objSalesMaster.setlinktoUserMasterIdCreatedBy(userMasterId);
             objSalesMaster.setRateIndex(lstOrderMaster.get(0).getRateIndex());
+            if(objOfferMaster != null)
+            {
+                objSalesMaster.setLinktoOfferMasterId((short) objOfferMaster.getOfferMasterId());
+                objSalesMaster.setOfferCode(objOfferMaster.getOfferCode());
+                objSalesMaster.setLinktoSourceMasterId((short) Globals.sourceMasterId);
+            }
             Log.e("rate", " " + lstOrderMaster.get(0).getRateIndex());
         }
 
@@ -796,7 +1055,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             super.onPostExecute(o);
             progressDialog.dismiss();
             if (status.equals("0")) {
-                if (MenuActivity.parentActivity) {
+                if (MenuActivity.parentActivity || GuestHomeActivity.isGuestMode) {
                     Globals.counter = 0;
                     Globals.alOrderItemTran.clear();
                     Globals.alOrderItemSummery = new ArrayList<>();
@@ -844,6 +1103,45 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             super.onPostExecute(result);
 
             alTaxMaster = (ArrayList<TaxMaster>) result;
+        }
+    }
+
+    class RequestVerifyOfferCode extends AsyncTask {
+        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.show(getActivity().getSupportFragmentManager(), "");
+            objOfferMaster = new OfferMaster();
+            objOfferMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
+            if (objSharePreferenceManage.GetPreference("RegistrationPreference", "UserName", getActivity()) != null) {
+                objOfferMaster.setLinktoCustomerMasterId(Integer.parseInt(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity())));
+            }
+            objOfferMaster.setOfferCode(etOfferCode.getText().toString().trim());
+            objOfferMaster.setlinktoOrderTypeMasterId((short) Globals.orderTypeMasterId);
+            objOfferMaster.setMinimumBillAmount(totalAmount);
+
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            OfferJSONParser offerJSONParser = new OfferJSONParser();
+            objOfferMaster = offerJSONParser.SelectOfferCodeVerification(objOfferMaster);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            progressDialog.dismiss();
+            SetOffer(objOfferMaster);
+//            if (tbTakeAway.isChecked()) {
+//                SaveCheckOutData(null, objOfferMaster, Globals.OrderType.TakeAway.getValue());
+//            } else if (tbHomeDelivery.isChecked()) {
+//                SaveCheckOutData(null, objOfferMaster, Globals.OrderType.HomeDelivery.getValue());
+//            }
         }
     }
     //endregion

@@ -349,6 +349,7 @@
     <string name="osfNetAmount">Net Amount</string>
     <string name="osfTax">Tax</string>
     <string name="osfDiscount">Discount</string>
+    <string name="osfRemoveDiscount">Remove</string>
     <string name="osfAmountPaid">Amount Paid</string>
     <string name="osfBalance">Balance Amt.</string>
     <string name="osfNumber">0.00</string>
@@ -473,4 +474,9 @@
     <string name="guestEncodedImage2">EncodedBackImageName2</string>
     <string name="encodedLogoImage">EncodedLogoImageName</string>
     <string name="encodedProfileImage">EncodedProfileImageName</string>
+    <string name="coaGetCode">Get Promo Code\u003F</string>
+    <string name="coaCancel">Cancel</string>
+    <string name="coaApply">Apply</string>
+    <string name="MsgOfferCodeFailed">Offer Not Valid</string>
+    <string name="MsgOfferCodeSuccess">Offer Applied</string>
 </resources>

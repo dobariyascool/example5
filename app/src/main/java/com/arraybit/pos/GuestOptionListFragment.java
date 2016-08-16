@@ -2,10 +2,6 @@ package com.arraybit.pos;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -52,31 +48,24 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
 
         footerLayout = (RelativeLayout) view.findViewById(R.id.footerLayout);
 
-//        if (GuestHomeActivity.isGuestMode ) {
-            if (Globals.objAppThemeMaster != null) {
-//                sharePreferenceManage = new SharePreferenceManage();
-//                String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity());
-//                if (!encodedImage.equals("")) {
-//                    Globals.SetPageBackground(getActivity(), encodedImage, guestOptionLayout, null, null, null);
-//                } else {
-//                    Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.splash_screen_background);
-//                    guestOptionLayout.setBackground(new BitmapDrawable(context.getResources(), originalBitmap));
-//                }
-//            } else {
-//                Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.splash_screen_background);
-//                guestOptionLayout.setBackground(new BitmapDrawable(context.getResources(), originalBitmap));
-//            }
-                Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
-        } else {
-            Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
-        }
-
         CardView cvMenu = (CardView) view.findViewById(R.id.cvMenu);
         CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);
         CardView cvOffers = (CardView) view.findViewById(R.id.cvOffers);
         CardView cvFeedback = (CardView) view.findViewById(R.id.cvFeedback);
         CardView cvMenuModeMenu = (CardView) view.findViewById(R.id.cvMenuModeMenu);
         CardView cvMenuModeOffers = (CardView) view.findViewById(R.id.cvMenuModeOffers);
+
+        if (Globals.objAppThemeMaster != null) {
+            sharePreferenceManage = new SharePreferenceManage();
+            String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity());
+            if (encodedImage != null && !encodedImage.equals("")) {
+                Globals.SetPageBackground(getActivity(), encodedImage, guestOptionLayout, null, null, null);
+            } else {
+                Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
+            }
+        } else {
+            Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
+        }
 
         cvMenu.setOnClickListener(this);
         cvOrders.setOnClickListener(this);

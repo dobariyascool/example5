@@ -102,6 +102,7 @@ public class Globals {
     public static short customerType = 2;
     public static short businessMasterId;
     public static short businessTypeMasterId;
+    public static short orderType;
     public static short itemType = 2;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
     public static int counter = 0;
@@ -711,9 +712,9 @@ public class Globals {
     }
 
     public static void CategoryItemFragmentResetStaticVariable() {
-        CategoryItemFragment.isViewChange = false;
+//        CategoryItemFragment.isViewChange = false;
         Globals.targetFragment = null;
-        CategoryItemFragment.i = 0;
+//        CategoryItemFragment.i = 0;
         CategoryItemFragment.objCategoryMaster = null;
         CategoryItemFragment.sbItemTypeMasterId = new StringBuilder();
     }

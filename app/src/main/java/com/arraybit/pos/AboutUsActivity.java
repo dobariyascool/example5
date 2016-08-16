@@ -64,18 +64,18 @@ public class AboutUsActivity extends AppCompatActivity {
         TextView txtVersionCode = (TextView) findViewById(R.id.txtVersionCode);
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            //                if(Globals.objAppThemeMaster!=null) {
-//                    Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
-//                }
-//                else
-//                {
-            Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
-//                }
-            txtCardPolicy.setTextColor(ContextCompat.getColor(this, R.color.accent_dark));
-            txtCardTerms.setTextColor(ContextCompat.getColor(this, R.color.accent_dark));
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(this, app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
+                txtCardPolicy.setTextColor(Globals.objAppThemeMaster.getColorAccentDark());
+                txtCardTerms.setTextColor(Globals.objAppThemeMaster.getColorAccentDark());
+            } else {
+                Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
+                txtCardPolicy.setTextColor(ContextCompat.getColor(this, R.color.accent_dark));
+                txtCardTerms.setTextColor(ContextCompat.getColor(this, R.color.accent_dark));
+            }
+
         } else {
             Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary_black), ContextCompat.getColor(this, android.R.color.white));
-
         }
 
         wvAbout = (WebView) findViewById(R.id.wvAbout);

@@ -37,6 +37,8 @@ public class SalesMaster implements Parcelable {
     short linktoUserMasterIdUpdatedBy;
     double Rounding;
     short RateIndex;
+    short linktoOfferMasterId;
+    String OfferCode;
 
 
     /// Extra
@@ -47,6 +49,8 @@ public class SalesMaster implements Parcelable {
     String OrderType;
     String OrderStatus;
     String Business;
+    short linktoSourceMasterId;
+
     public static final Parcelable.Creator<SalesMaster> CREATOR = new Creator<SalesMaster>() {
         public SalesMaster createFromParcel(Parcel source) {
             SalesMaster objSalesMaster = new SalesMaster();
@@ -80,6 +84,8 @@ public class SalesMaster implements Parcelable {
             objSalesMaster.UpdateDateTime = source.readString();
             objSalesMaster.linktoUserMasterIdUpdatedBy = (short) source.readInt();
             objSalesMaster.RateIndex = (short) source.readInt();
+            objSalesMaster.linktoOfferMasterId = (short) source.readInt();
+            objSalesMaster.OfferCode = source.readString();
 
             /// Extra
             objSalesMaster.Counter = source.readString();
@@ -89,6 +95,7 @@ public class SalesMaster implements Parcelable {
             objSalesMaster.OrderType = source.readString();
             objSalesMaster.OrderStatus = source.readString();
             objSalesMaster.Business = source.readString();
+            objSalesMaster.linktoSourceMasterId = (short) source.readInt();
             return objSalesMaster;
         }
 
@@ -403,6 +410,30 @@ public class SalesMaster implements Parcelable {
         Rounding = rounding;
     }
 
+    public short getLinktoOfferMasterId() {
+        return linktoOfferMasterId;
+    }
+
+    public void setLinktoOfferMasterId(short linktoOfferMasterId) {
+        this.linktoOfferMasterId = linktoOfferMasterId;
+    }
+
+    public String getOfferCode() {
+        return OfferCode;
+    }
+
+    public void setOfferCode(String offerCode) {
+        OfferCode = offerCode;
+    }
+
+    public short getLinktoSourceMasterId() {
+        return linktoSourceMasterId;
+    }
+
+    public void setLinktoSourceMasterId(short linktoSourceMasterId) {
+        this.linktoSourceMasterId = linktoSourceMasterId;
+    }
+
     public int describeContents() {
         return 0;
     }
@@ -438,6 +469,8 @@ public class SalesMaster implements Parcelable {
         parcel.writeString(UpdateDateTime);
         parcel.writeInt(linktoUserMasterIdUpdatedBy);
         parcel.writeInt(RateIndex);
+        parcel.writeInt(linktoOfferMasterId);
+        parcel.writeString(OfferCode);
 
         /// Extra
         parcel.writeString(Counter);
@@ -447,5 +480,6 @@ public class SalesMaster implements Parcelable {
         parcel.writeString(OrderType);
         parcel.writeString(OrderStatus);
         parcel.writeString(Business);
+        parcel.writeInt(linktoSourceMasterId);
     }
 }

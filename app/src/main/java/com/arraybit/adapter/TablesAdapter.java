@@ -173,13 +173,13 @@ public class TablesAdapter extends RecyclerView.Adapter<TablesAdapter.TableViewH
             if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
                 if (Globals.objAppThemeMaster != null) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvTable.setCardBackgroundColor(Globals.objAppThemeMaster.getColorCardView());
                         cvTable.setElevation(4f);
                     } else {
-                        cvTable.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
+                        cvTable.setCardBackgroundColor(Globals.objAppThemeMaster.getColorCardView());
                     }
 
-                    txtTableName.setTextColor(ContextCompat.getColor(context, android.R.color.white));
+                    txtTableName.setTextColor(Globals.objAppThemeMaster.getColorCardText());
                     txtPersons.setTextColor(ContextCompat.getColor(context, R.color.grey));
                     txtTableStatusTime.setTextColor(ContextCompat.getColor(context, R.color.grey));
                     txtWaitingPersons.setTextColor(ContextCompat.getColor(context, R.color.yellow));

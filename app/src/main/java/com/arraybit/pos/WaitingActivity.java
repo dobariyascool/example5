@@ -75,6 +75,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         TextView txtName = (TextView) headerView.findViewById(R.id.txtName);
         CompoundButton cbLogout = (CompoundButton)headerView.findViewById(R.id.cbLogout);
         cbLogout.setVisibility(View.VISIBLE);
+        txtLetter.setTextColor(ContextCompat.getColor(this, android.R.color.white));
 
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         SetWaiterName(txtName, txtLetter, navigationView);

@@ -91,8 +91,64 @@
                 android:layout_marginEnd="@dimen/control_SpecingTiny"
                 android:layout_marginStart="@dimen/control_SpecingTiny"
                 android:layout_marginTop="@dimen/control_SpecingSmall"
-                android:layout_weight="7"
+                android:layout_weight="6"
                 tools:ignore="NestedWeights" />
+
+            <LinearLayout
+                android:id="@+id/cvOfferCode"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:animateLayoutChanges="true">
+
+                    <com.rey.material.widget.CompoundButton
+                        android:id="@+id/cbGetPromoCode"
+                        style="@style/CompoundButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:textSize="15dp"
+                        android:padding="@dimen/control_SpecingSmall"
+                        android:text="@string/coaGetCode"
+                        android:visibility="visible" />
+
+                    <com.rey.material.widget.EditText
+                        android:id="@+id/etOfferCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:inputType="textCapSentences"
+                        android:layout_marginEnd="@dimen/control_SpecingSmall"
+                        android:layout_marginStart="@dimen/control_SpecingSmall"
+                        android:background="@drawable/toggle_drawable_red"
+                        android:hint="Enter promo code"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+                        android:padding="@dimen/control_SpecingSmall"
+                        android:singleLine="true"
+                        android:textColor="@android:color/black"
+                        android:textColorHint="@color/disable_grey"
+                        android:visibility="gone"
+                        tools:ignore="HardcodedText" />
+                    <!--android:layout_marginEnd="@dimen/control_SpecingMedium"-->
+                    <!--android:layout_marginStart="@dimen/control_SpecingMedium"-->
+
+                    <com.rey.material.widget.Button
+                        android:id="@+id/btnApply"
+                        style="@style/ToogleButtonRightSelector"
+                        android:background="@drawable/rightside_rounded_button_red"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignEnd="@+id/etOfferCode"
+                        android:layout_centerInParent="true"
+                        android:text="@string/coaCancel"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/amountLayout"

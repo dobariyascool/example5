@@ -38,7 +38,8 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
     ToggleButton tbPercentage, tbRupee;
     DiscountSelectionListener objDiscountSelectionListener;
     DiscountMaster objDiscountMaster;
-    double totalAmount;
+    double totalAmount, discount;
+    boolean isPercentage;
 
     public AddDiscountDialogFragment() {
         // Required empty public constructor
@@ -75,6 +76,8 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
         tbRupee = (ToggleButton) view.findViewById(R.id.tbRupee);
 
         totalAmount = getArguments().getDouble("TotalAmount", 0);
+        discount = getArguments().getDouble("Discount", 0);
+        isPercentage = getArguments().getBoolean("isPercentage", false);
 
         actDiscount.setOnClickListener(this);
         etDiscount.setOnClickListener(this);
@@ -99,6 +102,22 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
             new ModifierLoadingTask().execute();
         } else {
             Globals.ShowSnackBar(getActivity().getCurrentFocus(), getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+        }
+
+        if(discount!=0)
+        {
+            etDiscount.setText(String.valueOf(discount));
+       etDiscount.setSelection(etDiscount.getText().length());
+            if(isPercentage)
+            {
+                tbPercentage.setChecked(true);
+                tbRupee.setChecked(false);
+            }
+            else
+            {
+                tbPercentage.setChecked(false);
+                tbRupee.setChecked(true);
+            }
         }
 
         etDiscount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -137,7 +156,12 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
                         strDiscount = etDiscount.getText().toString().trim().substring(0, 1);
                         if (strDiscount.equals("0")) {
                             strDiscount = etDiscount.getText().toString().trim().substring(1, etDiscount.getText().length());
-                            objDiscountMaster.setDiscount(Double.valueOf(strDiscount));
+                            if(!strDiscount.equals("") && strDiscount!=null) {
+                                objDiscountMaster.setDiscount(Double.valueOf(strDiscount));
+                            }
+                            else {
+                                objDiscountMaster.setDiscount(Double.valueOf(etDiscount.getText().toString().trim()));
+                            }
                         } else {
                             objDiscountMaster.setDiscount(Double.valueOf(etDiscount.getText().toString().trim()));
                         }

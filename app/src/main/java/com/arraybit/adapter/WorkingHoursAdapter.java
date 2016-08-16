@@ -67,19 +67,19 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         }
 
         //holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue().charAt(0)).toUpperCase());
-        holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue().substring(0,3)).toUpperCase());
+        holder.txtDayOfWeek.setText(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue().substring(0, 3)).toUpperCase());
         Calendar calendar = Calendar.getInstance();
         if (calendar.get(Calendar.DAY_OF_WEEK) == 1) {
             if (Globals.Days.valueOf("Day" + 0).getValue().equals(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()))) {
-                TextColorChange(holder,true);
+                TextColorChange(holder, true);
             } else {
                 TextColorChange(holder, false);
             }
         } else {
-            if (Globals.Days.valueOf("Day" + ((calendar.get(Calendar.DAY_OF_WEEK))-1)).getValue().equals(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()))) {
-                TextColorChange(holder,true);
+            if (Globals.Days.valueOf("Day" + ((calendar.get(Calendar.DAY_OF_WEEK)) - 1)).getValue().equals(String.valueOf(Globals.Days.valueOf("Day" + current.getDayOfWeek()).getValue()))) {
+                TextColorChange(holder, true);
             } else {
-                TextColorChange(holder,false);
+                TextColorChange(holder, false);
             }
         }
 
@@ -103,25 +103,29 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         return alBusinessHoursTran.size();
     }
 
-    private void TextColorChange(WorkingHoursViewHolder holder,boolean isMatch){
-        if(isMatch){
-            if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
-            {
-                holder.txtStartTime.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
-                holder.txtEndTime.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
-                holder.txtDayOfWeek.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
-            }else {
+    private void TextColorChange(WorkingHoursViewHolder holder, boolean isMatch) {
+        if (isMatch) {
+            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+                if (Globals.objAppThemeMaster != null) {
+                    holder.txtStartTime.setTextColor(Globals.objAppThemeMaster.getColorAccentDark());
+                    holder.txtEndTime.setTextColor(Globals.objAppThemeMaster.getColorAccentDark());
+                    holder.txtDayOfWeek.setTextColor(Globals.objAppThemeMaster.getColorAccentDark());
+                } else {
+                    holder.txtStartTime.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
+                    holder.txtEndTime.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
+                    holder.txtDayOfWeek.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
+                }
+            } else {
                 holder.txtStartTime.setSelected(true);
                 holder.txtEndTime.setSelected(true);
                 holder.txtDayOfWeek.setSelected(true);
             }
-        }else{
+        } else {
             holder.txtStartTime.setSelected(false);
             holder.txtEndTime.setSelected(false);
             holder.txtDayOfWeek.setSelected(false);
         }
     }
-
 
     class WorkingHoursViewHolder extends RecyclerView.ViewHolder {
         TextView txtDayOfWeek, txtStartTime, txtEndTime, txtHeader;
@@ -131,7 +135,7 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
         public WorkingHoursViewHolder(View itemView) {
             super(itemView);
 
-            ivTimings = (ImageView)itemView.findViewById(R.id.ivTimings);
+            ivTimings = (ImageView) itemView.findViewById(R.id.ivTimings);
 
             layoutChild = (LinearLayout) itemView.findViewById(R.id.layoutChild);
             txtDayOfWeek = (TextView) itemView.findViewById(R.id.txtDayOfWeek);
@@ -139,10 +143,16 @@ public class WorkingHoursAdapter extends RecyclerView.Adapter<WorkingHoursAdapte
             txtEndTime = (TextView) itemView.findViewById(R.id.txtEndTime);
             txtHeader = (TextView) itemView.findViewById(R.id.txtHeader);
 
-            if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
-            {
-                ivTimings.setColorFilter(ContextCompat.getColor(context, R.color.accent_dark), PorterDuff.Mode.SRC_IN);
-                txtHeader.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
+            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+                if(Globals.objAppThemeMaster!=null)
+                {
+                    ivTimings.setColorFilter(Globals.objAppThemeMaster.getColorAccentDark(), PorterDuff.Mode.SRC_IN);
+                    txtHeader.setTextColor(Globals.objAppThemeMaster.getColorAccentDark());
+                }
+                else {
+                    ivTimings.setColorFilter(ContextCompat.getColor(context, R.color.accent_dark), PorterDuff.Mode.SRC_IN);
+                    txtHeader.setTextColor(ContextCompat.getColor(context, R.color.accent_dark));
+                }
             }
 
         }

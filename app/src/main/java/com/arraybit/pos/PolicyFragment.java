@@ -44,7 +44,7 @@ public class PolicyFragment extends Fragment {
         if (app_bar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if(Build.VERSION.SDK_INT >=21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 app_bar.setElevation(getActivity().getResources().getDimension(R.dimen.app_bar_elevation));
             }
         }
@@ -54,12 +54,13 @@ public class PolicyFragment extends Fragment {
             app_bar.setTitle(getResources().getString(R.string.title_fragment_terms_service));
         }
         setHasOptionsMenu(true);
-        if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
-        {
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-        }
-        else
-        {
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
+            } else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+            }
+        } else {
             Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
         }
 
@@ -98,9 +99,9 @@ public class PolicyFragment extends Fragment {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             menu.findItem(R.id.mWaiting).setVisible(false);
         }
-        if(Globals.isWishListShow==0 && !GuestHomeActivity.isMenuMode) {
+        if (Globals.isWishListShow == 0 && !GuestHomeActivity.isMenuMode) {
             menu.findItem(R.id.logout).setVisible(false);
-        }else if(Globals.isWishListShow==1){
+        } else if (Globals.isWishListShow == 1) {
             menu.findItem(R.id.login).setVisible(false);
 //            menu.findItem(R.id.registration).setVisible(false);
             menu.findItem(R.id.shortList).setVisible(false);
@@ -123,10 +124,10 @@ public class PolicyFragment extends Fragment {
         protected Object doInBackground(Object[] objects) {
 
             BusinessDescriptionJSONParser objBusinessDescriptionJSONParser = new BusinessDescriptionJSONParser();
-            if(value==1){
-                return objBusinessDescriptionJSONParser.SelectBusinessDescription(getActivity(), String.valueOf(Globals.businessMasterId),Globals.PrivacyPolicy);
-            }else{
-                return objBusinessDescriptionJSONParser.SelectBusinessDescription(getActivity(), String.valueOf(Globals.businessMasterId),Globals.TermsOfService);
+            if (value == 1) {
+                return objBusinessDescriptionJSONParser.SelectBusinessDescription(getActivity(), String.valueOf(Globals.businessMasterId), Globals.PrivacyPolicy);
+            } else {
+                return objBusinessDescriptionJSONParser.SelectBusinessDescription(getActivity(), String.valueOf(Globals.businessMasterId), Globals.TermsOfService);
             }
         }
 
@@ -135,7 +136,7 @@ public class PolicyFragment extends Fragment {
             super.onPostExecute(result);
             progressDialog.dismiss();
             BusinessDescription objBusinessDescription = (BusinessDescription) result;
-            if(objBusinessDescription!=null && objBusinessDescription.getDescription()!=null && !objBusinessDescription.getDescription().equals("")){
+            if (objBusinessDescription != null && objBusinessDescription.getDescription() != null && !objBusinessDescription.getDescription().equals("")) {
                 wvPolicy.setVisibility(View.VISIBLE);
                 wvPolicy.loadData(objBusinessDescription.getDescription(), "text/html; charset=UTF-8", null);
             }

@@ -5,9 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -16,11 +14,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -90,13 +86,11 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_category_item));
             if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-//                if(Globals.objAppThemeMaster!=null) {
-//                    Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
-//                }
-//                else
-//                {
-                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-//                }
+                if (Globals.objAppThemeMaster != null) {
+                    Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
+                } else {
+                    Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+                }
             } else {
                 Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
 
@@ -108,10 +102,14 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             categoryItemFragment = (CoordinatorLayout) view.findViewById(R.id.categoryItemFragment);
             if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
                 if (Globals.objAppThemeMaster != null) {
-//                    sharePreferenceManage = new SharePreferenceManage();
-//                    String encodedImage= sharePreferenceManage.GetPreference("GuestAppTheme",getActivity().getString(R.string.guestEncodedImage1),getActivity());
-//                    Globals.SetPageBackground(getActivity(), encodedImage, null, null, null, categoryItemFragment);
-                    Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
+                    sharePreferenceManage = new SharePreferenceManage();
+                    String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity());
+                    if (encodedImage != null && !encodedImage.equals("")) {
+                        Globals.SetPageBackground(getActivity(), encodedImage, null, null, null, categoryItemFragment);
+//                    Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
+                    } else {
+                        Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
+                    }
                 } else {
 //                    Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
 //                    categoryItemFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
@@ -139,23 +137,16 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
             getActivity().setTheme(R.style.AppThemeGuest);
             if (Globals.objAppThemeMaster != null) {
-////                itemTabLayout.setSelectedTabIndicatorColor(Globals.objAppThemeMaster.getColorTextPrimary());
-//                itemTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getActivity(), R.color.red_tab_indicator));
-//                itemTabLayout.setTabTextColors(Globals.objAppThemeMaster.getColorTextSecondary(), Globals.objAppThemeMaster.getColorTextPrimary());
-//                itemTabLayout.setBackgroundColor(Globals.objAppThemeMaster.getColorPrimaryLight());
-                itemTabLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary));
-                itemTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getActivity(), R.color.accent));
-                itemTabLayout.setTabTextColors(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
-                ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
-                txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                itemTabLayout.setSelectedTabIndicatorColor(Globals.objAppThemeMaster.getColorAccentDark());
+                itemTabLayout.setTabTextColors(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
+                itemTabLayout.setBackgroundColor(Globals.objAppThemeMaster.getColorPrimary());
             } else {
                 itemTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getActivity(), R.color.accent));
                 itemTabLayout.setTabTextColors(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
                 itemTabLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary));
-                ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
-                txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
-
             }
+            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+            txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
         }
 
         itemViewPager = (ViewPager) view.findViewById(R.id.itemViewPager);
@@ -293,8 +284,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
             } else {
                 itemTabFragment.ItemDataFilter(sbItemTypeMasterId.toString());
             }
-
-
         } else if (v.getId() == R.id.fabNonVeg) {
             famRoot.close(true);
             if (isNonVegCheck == 0) {
@@ -408,13 +397,13 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 //            fragmentTransaction.addToBackStack(fragmentName);
 //            fragmentTransaction.commit();
 //        } else {
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
         fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
 //        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
-            fragmentTransaction.addToBackStack(fragmentName);
-            fragmentTransaction.commit();
+        fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
+        fragmentTransaction.addToBackStack(fragmentName);
+        fragmentTransaction.commit();
 //        }
     }
 

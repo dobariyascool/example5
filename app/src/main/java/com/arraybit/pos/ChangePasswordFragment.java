@@ -85,9 +85,17 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
 
         if(GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode)
         {
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-            Globals.CustomView(btnChangePassword, ContextCompat.getColor(getActivity(), R.color.accent_dark), ContextCompat.getColor(getActivity(), android.R.color.transparent));
-            btnChangePassword.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            if(Globals.objAppThemeMaster!=null)
+            {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
+                Globals.CustomView(btnChangePassword, Globals.objAppThemeMaster.getColorAccentDark(), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnChangePassword.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
+            }
+            else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+                Globals.CustomView(btnChangePassword, ContextCompat.getColor(getActivity(), R.color.accent_dark), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnChangePassword.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            }
         }else
         {
             Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));

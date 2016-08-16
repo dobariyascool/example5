@@ -65,15 +65,16 @@ public class AboutUsFragment extends Fragment {
             txtCardTerms.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.card_view_with_border));
         }
 
-        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {//                if(Globals.objAppThemeMaster!=null) {
-//                    Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
-//                }
-//                else
-//                {
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-//                }
-            txtCardPolicy.setTextColor(ContextCompat.getColor(getActivity(), R.color.accent_dark));
-            txtCardTerms.setTextColor(ContextCompat.getColor(getActivity(), R.color.accent_dark));
+        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
+                txtCardPolicy.setTextColor(Globals.objAppThemeMaster.getColorAccentDark());
+                txtCardTerms.setTextColor(Globals.objAppThemeMaster.getColorAccentDark());
+            } else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+                txtCardPolicy.setTextColor(ContextCompat.getColor(getActivity(), R.color.accent_dark));
+                txtCardTerms.setTextColor(ContextCompat.getColor(getActivity(), R.color.accent_dark));
+            }
         } else {
             Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
         }

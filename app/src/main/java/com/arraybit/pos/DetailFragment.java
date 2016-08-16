@@ -196,7 +196,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
             getActivity().setTheme(R.style.AppThemeGuest);
             if (Globals.objAppThemeMaster != null) {
-                app_bar.setBackground(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.primary)));
+                app_bar.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorPrimary()));
                 Drawable drawable = app_bar.getOverflowIcon();
                 DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(getActivity(), android.R.color.white));
                 app_bar.setOverflowIcon(drawable);
@@ -209,11 +209,11 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
                 LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.separator);
                 GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.separator1);
-                gradientDrawable.setStroke(2,ContextCompat.getColor(getActivity(), R.color.accent_dark)); // change color
+                gradientDrawable.setStroke(2,Globals.objAppThemeMaster.getColorAccentDark()); // change color
                 scrollView.setBackground(shape);
 
-                Globals.CustomView(btnOrder, ContextCompat.getColor(getActivity(), R.color.accent_secondary), ContextCompat.getColor(getActivity(), android.R.color.transparent));
-                btnOrder.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+                Globals.CustomView(btnOrder, Globals.objAppThemeMaster.getColorAccent(), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnOrder.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
                 Globals.CustomView(btnOrderDisable, ContextCompat.getColor(getActivity(), R.color.transparent_accent), ContextCompat.getColor(getActivity(), android.R.color.transparent));
                 btnOrderDisable.setTextColor(ContextCompat.getColor(getActivity(), R.color.dimWhite));
             } else {

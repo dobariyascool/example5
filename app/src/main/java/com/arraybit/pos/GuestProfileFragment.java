@@ -92,16 +92,26 @@ public class GuestProfileFragment extends Fragment {
 
         SetUserName(container);
 
-
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-            topPanel.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary));
-            Drawable drawable = txtLoginChar.getBackground();
-            drawable.mutate().setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_IN);
-            txtLoginChar.setBackgroundDrawable(drawable);
-            txtLoginChar.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
-            Globals.CustomView(btnUpdateProfile, ContextCompat.getColor(getActivity(), R.color.accent_dark), ContextCompat.getColor(getActivity(), android.R.color.transparent));
-            btnUpdateProfile.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
+                topPanel.setBackgroundColor(Globals.objAppThemeMaster.getColorPrimary());
+                Drawable drawable = txtLoginChar.getBackground();
+                drawable.mutate().setColorFilter(Globals.objAppThemeMaster.getColorAccent(), PorterDuff.Mode.SRC_IN);
+                txtLoginChar.setBackgroundDrawable(drawable);
+                txtLoginChar.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
+                Globals.CustomView(btnUpdateProfile, Globals.objAppThemeMaster.getColorAccentDark(), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnUpdateProfile.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
+            } else {
+                Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+                topPanel.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary));
+                Drawable drawable = txtLoginChar.getBackground();
+                drawable.mutate().setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent), PorterDuff.Mode.SRC_IN);
+                txtLoginChar.setBackgroundDrawable(drawable);
+                txtLoginChar.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+                Globals.CustomView(btnUpdateProfile, ContextCompat.getColor(getActivity(), R.color.accent_dark), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+                btnUpdateProfile.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            }
         } else {
             Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
             topPanel.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary_black));

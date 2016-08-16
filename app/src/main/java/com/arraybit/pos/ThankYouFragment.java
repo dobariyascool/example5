@@ -58,11 +58,11 @@ public class ThankYouFragment extends Fragment {
             txtTitle2.setVisibility(View.GONE);
         }
 
-        Globals.CustomView(btnSkip, ContextCompat.getColor(getActivity(),android.R.color.transparent), ContextCompat.getColor(getActivity(),R.color.accent_dark));
-        btnSkip.setTextColor(ContextCompat.getColor(getActivity(),R.color.accent_dark));
+        Globals.CustomView(btnSkip, ContextCompat.getColor(getActivity(), android.R.color.transparent), ContextCompat.getColor(getActivity(), R.color.accent_dark));
+        btnSkip.setTextColor(ContextCompat.getColor(getActivity(), R.color.accent_dark));
 
-        Globals.CustomView(btnFeedback, ContextCompat.getColor(getActivity(),R.color.accent_dark), ContextCompat.getColor(getActivity(),android.R.color.transparent));
-        btnFeedback.setTextColor(ContextCompat.getColor(getActivity(),R.color.primary));
+        Globals.CustomView(btnFeedback, ContextCompat.getColor(getActivity(), R.color.accent_dark), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+        btnFeedback.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
 
         txtTitle.setText(message);
 
@@ -92,17 +92,19 @@ public class ThankYouFragment extends Fragment {
         thankYouFragment.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (!isShowButton) {
-                            Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                if (WaiterHomeActivity.isWaiterMode) {
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (!isShowButton) {
+                                Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                            }
                         }
-                    }
-                }, 1000);
+                    }, 1000);
+                }
                 return false;
             }
         });
