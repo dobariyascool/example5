@@ -91,10 +91,10 @@ public class AppThemeJSONParser
 		}
 	}
 
-	public JSONObject SelectAppThemeMaster(int appThemeMasterId) {
+	public JSONObject SelectAppThemeMaster(int linktoBusinessMasterId) {
 		try {
 
-			JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAppThemeMaster + "/" + appThemeMasterId);
+			JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAppThemeMaster + "/" + linktoBusinessMasterId);
 			Log.e("json"," "+jsonResponse);
 			if (jsonResponse != null) {
 				JSONObject jsonObject = jsonResponse.getJSONObject(this.SelectAppThemeMaster + "Result");

@@ -80,11 +80,16 @@ public class AppThemeIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             try {
-                AppThemeJSONParser appThemeJSONParser = new AppThemeJSONParser();
-                final JSONObject jsonObject = appThemeJSONParser.SelectAppThemeMaster(1);
-                final SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
-                sharePreferenceManage.CreatePreference("GuestAppTheme", "AppThemeJson", jsonObject.toString(), AppThemeIntentService.this);
-                Globals.objAppThemeMaster = appThemeJSONParser.SetClassPropertiesFromJSONObject(jsonObject);
+                SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
+                int linktoBusinessMasterId ;
+                if(sharePreferenceManage.GetPreference("WaiterPreference","linktoBusinessMasterId",this)!=null &&
+                        !sharePreferenceManage.GetPreference("WaiterPreference","linktoBusinessMasterId",this).equals("")) {
+                    linktoBusinessMasterId= Integer.parseInt(sharePreferenceManage.GetPreference("WaiterPreference","linktoBusinessMasterId",this));
+                    AppThemeJSONParser appThemeJSONParser = new AppThemeJSONParser();
+                    final JSONObject jsonObject = appThemeJSONParser.SelectAppThemeMaster(linktoBusinessMasterId);
+                    sharePreferenceManage.CreatePreference("GuestAppTheme", "AppThemeJson", jsonObject.toString(), AppThemeIntentService.this);
+                    Globals.objAppThemeMaster = appThemeJSONParser.SetClassPropertiesFromJSONObject(jsonObject);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

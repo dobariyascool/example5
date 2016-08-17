@@ -280,7 +280,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             objSharePreferenceManage.CreatePreference("WaiterPreference", "linktoBusinessMasterId", String.valueOf(objUserMaster.getLinktoBusinessMasterId()), SignInActivity.this);
             objSharePreferenceManage.CreatePreference("WaiterPreference", "linktoBusinessTypeMasterId", String.valueOf(objUserMaster.getLinktoBusinessTypeMasterId()), SignInActivity.this);
+
         }
+        Intent intent = new Intent(SignInActivity.this, AppThemeIntentService.class);
+        startService(intent);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
