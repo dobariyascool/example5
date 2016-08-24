@@ -30,7 +30,6 @@ public class TaxJSONParser {
                 objTaxMaster.setTaxMasterId((short) jsonObject.getInt("TaxMasterId"));
                 objTaxMaster.setTaxName(jsonObject.getString("TaxName"));
                 objTaxMaster.setTaxRate(jsonObject.getDouble("TaxRate"));
-                objTaxMaster.setIsPercentage(jsonObject.getBoolean("IsPercentage"));
                 objTaxMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
                 objTaxMaster.setIsEnabled(jsonObject.getBoolean("IsEnabled"));
                 dt = sdfDateTimeFormat.parse(jsonObject.getString("CreateDateTime"));
@@ -59,7 +58,6 @@ public class TaxJSONParser {
                 objTaxMaster.setTaxMasterId((short) jsonArray.getJSONObject(i).getInt("TaxMasterId"));
                 objTaxMaster.setTaxName(jsonArray.getJSONObject(i).getString("TaxName"));
                 objTaxMaster.setTaxRate(jsonArray.getJSONObject(i).getDouble("TaxRate"));
-                objTaxMaster.setIsPercentage(jsonArray.getJSONObject(i).getBoolean("IsPercentage"));
                 objTaxMaster.setlinktoBusinessMasterId((short) jsonArray.getJSONObject(i).getInt("linktoBusinessMasterId"));
                 objTaxMaster.setIsEnabled(jsonArray.getJSONObject(i).getBoolean("IsEnabled"));
                 dt = sdfDateTimeFormat.parse(jsonArray.getJSONObject(i).getString("CreateDateTime"));

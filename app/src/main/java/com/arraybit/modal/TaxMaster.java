@@ -9,7 +9,6 @@ public class TaxMaster implements Parcelable {
     short TaxMasterId;
     String TaxName;
     double TaxRate;
-    boolean IsPercentage;
     short linktoBusinessMasterId;
     boolean IsEnabled;
     boolean IsDeleted;
@@ -23,7 +22,6 @@ public class TaxMaster implements Parcelable {
             objTaxMaster.TaxMasterId = (short) source.readInt();
             objTaxMaster.TaxName = source.readString();
             objTaxMaster.TaxRate = source.readDouble();
-            objTaxMaster.IsPercentage = source.readByte() != 0;
             objTaxMaster.linktoBusinessMasterId = (short) source.readInt();
             objTaxMaster.IsEnabled = source.readByte() != 0;
             objTaxMaster.IsDeleted = source.readByte() != 0;
@@ -61,14 +59,6 @@ public class TaxMaster implements Parcelable {
 
     public void setTaxRate(double taxRate) {
         this.TaxRate = taxRate;
-    }
-
-    public boolean getIsPercentage() {
-        return this.IsPercentage;
-    }
-
-    public void setIsPercentage(boolean isPercentage) {
-        this.IsPercentage = isPercentage;
     }
 
     public short getlinktoBusinessMasterId() {
@@ -138,7 +128,6 @@ public class TaxMaster implements Parcelable {
         parcel.writeInt(TaxMasterId);
         parcel.writeString(TaxName);
         parcel.writeDouble(TaxRate);
-        parcel.writeByte((byte) (IsPercentage ? 1 : 0));
         parcel.writeInt(linktoBusinessMasterId);
         parcel.writeByte((byte) (IsEnabled ? 1 : 0));
         parcel.writeByte((byte) (IsDeleted ? 1 : 0));

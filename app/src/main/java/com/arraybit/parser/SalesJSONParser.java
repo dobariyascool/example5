@@ -236,7 +236,6 @@ public class SalesJSONParser {
                 stringer.key("TaxMasterId").value(alTaxMaster.get(i).getTaxMasterId());
                 stringer.key("TaxName").value(alTaxMaster.get(i).getTaxName());
                 stringer.key("TaxRate").value(alTaxMaster.get(i).getTaxRate());
-                stringer.key("IsPercentage").value(alTaxMaster.get(i).getIsPercentage());
                 stringer.endObject();
             }
             stringer.endArray();

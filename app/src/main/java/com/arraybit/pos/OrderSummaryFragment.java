@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -165,10 +164,10 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
             if (Globals.objAppThemeMaster != null) {
-                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(),  Globals.objAppThemeMaster.getColorCardText());
+                Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), Globals.objAppThemeMaster.getColorCardText());
 
                 objSharePreferenceManage = new SharePreferenceManage();
-                String encodedImage= objSharePreferenceManage.GetPreference("GuestAppTheme","EncodedBackImage1",getActivity());
+                String encodedImage = objSharePreferenceManage.GetPreference("GuestAppTheme", "EncodedBackImage1", getActivity());
                 if (encodedImage != null && !encodedImage.equals("")) {
                     Globals.SetPageBackground(getActivity(), encodedImage, null, null, orderSummeryLayout, null);
 //                Globals.SetPageBackground(getActivity(), Globals.objAppThemeMaster.getBackImageName1(), null, null, orderSummeryLayout, null);
@@ -202,10 +201,10 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 GradientDrawable gd = new GradientDrawable();
                 gd.setShape(GradientDrawable.RECTANGLE);
                 gd.setCornerRadius(8);
-                gd.setStroke(4,Globals.objAppThemeMaster.getColorAccent());
+                gd.setStroke(4, Globals.objAppThemeMaster.getColorAccent());
                 etOfferCode.setBackground(gd);
 
-                Globals.CustomView(btnAddMore, ContextCompat.getColor(getActivity(), android.R.color.transparent),Globals.objAppThemeMaster.getColorAccent());
+                Globals.CustomView(btnAddMore, ContextCompat.getColor(getActivity(), android.R.color.transparent), Globals.objAppThemeMaster.getColorAccent());
                 Globals.CustomView(btnCheckOut, Globals.objAppThemeMaster.getColorAccent(), ContextCompat.getColor(getActivity(), android.R.color.transparent));
                 btnAddMore.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorAccent()));
                 btnCheckOut.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
@@ -384,8 +383,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         if (v.getId() == R.id.btnAddMore) {
             if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
                 if (MenuActivity.parentActivity || GuestHomeActivity.isGuestMode) {
-                    if(GuestHomeActivity.isGuestMode)
-                    {
+                    if (GuestHomeActivity.isGuestMode) {
                         getActivity().getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_order_summary), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     }
                     Globals.isWishListShow = 1;
@@ -484,7 +482,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 if (discountMaster != null) {
                     Globals.objDiscountMaster = discountMaster;
                     discountMaster = null;
-                    objOfferMaster= null;
+                    objOfferMaster = null;
                     CalculateDiscount(totalAmount, totalTax);
                     etOfferCode.setText("");
 
@@ -763,29 +761,24 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             txtTaxRate[i].setTextSize(10f);
 
 
-            if (alTaxMaster.get(i).getIsPercentage()) {
-                String str = String.valueOf(alTaxMaster.get(i).getTaxRate());
-                String precision = str.substring(str.lastIndexOf(".") + 1);
+            String str = String.valueOf(alTaxMaster.get(i).getTaxRate());
+            String precision = str.substring(str.lastIndexOf(".") + 1);
 
-                if (Integer.valueOf(precision) > 0) {
-                    txtTaxName[i].setText(alTaxMaster.get(i).getTaxName() + "  [" + " " + str + " % ]");
-                } else {
-                    txtTaxName[i].setText(alTaxMaster.get(i).getTaxName() + "  [" + " " + str.substring(0, str.lastIndexOf(".")) + " % ]");
-                }
-                if (i == 0) {
-                    txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax1));
-                } else if (i == 1) {
-                    txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax2));
-                } else if (i == 2) {
-                    txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax3));
-                } else if (i == 3) {
-                    txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax4));
-                } else if (i == 4) {
-                    txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax5));
-                }
+            if (Integer.valueOf(precision) > 0) {
+                txtTaxName[i].setText(alTaxMaster.get(i).getTaxName() + "  [" + " " + str + " % ]");
             } else {
-                txtTaxName[i].setText(alTaxMaster.get(i).getTaxName());
-                txtTaxRate[i].setText(Globals.dfWithPrecision.format(alTaxMaster.get(i).getTaxRate()));
+                txtTaxName[i].setText(alTaxMaster.get(i).getTaxName() + "  [" + " " + str.substring(0, str.lastIndexOf(".")) + " % ]");
+            }
+            if (i == 0) {
+                txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax1));
+            } else if (i == 1) {
+                txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax2));
+            } else if (i == 2) {
+                txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax3));
+            } else if (i == 3) {
+                txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax4));
+            } else if (i == 4) {
+                txtTaxRate[i].setText(Globals.dfWithPrecision.format(tax5));
             }
 
             if (WaiterHomeActivity.isWaiterMode) {
@@ -997,8 +990,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
             objSalesMaster.setlinktoBusinessMasterId(Globals.businessMasterId);
             objSalesMaster.setlinktoUserMasterIdCreatedBy(userMasterId);
             objSalesMaster.setRateIndex(lstOrderMaster.get(0).getRateIndex());
-            if(objOfferMaster != null)
-            {
+            if (objOfferMaster != null) {
                 objSalesMaster.setLinktoOfferMasterId((short) objOfferMaster.getOfferMasterId());
                 objSalesMaster.setOfferCode(objOfferMaster.getOfferCode());
                 objSalesMaster.setLinktoSourceMasterId((short) Globals.sourceMasterId);
@@ -1120,7 +1112,7 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
                 objOfferMaster.setLinktoCustomerMasterId(Integer.parseInt(objSharePreferenceManage.GetPreference("RegistrationPreference", "CustomerMasterId", getActivity())));
             }
             objOfferMaster.setOfferCode(etOfferCode.getText().toString().trim());
-            objOfferMaster.setlinktoOrderTypeMasterId((short) Globals.orderTypeMasterId);
+            objOfferMaster.setlinktoOrderTypeMasterId( Globals.orderTypeMasterId);
             objOfferMaster.setMinimumBillAmount(totalAmount);
 
         }

@@ -2,21 +2,16 @@ package com.arraybit.pos;
 
 import android.app.Activity;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
-import android.transition.Fade;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,7 +56,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     CategoryMaster objCategoryMaster;
     int counterMasterId;
     DisplayMetrics displayMetrics;
-    boolean isFilter = false,isFavorite;
+    boolean isFilter = false, isFavorite;
     String searchText;
     TextView txtCartNumber;
     RelativeLayout relativeLayout;
@@ -116,13 +111,10 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         //end
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            if(Globals.objAppThemeMaster!=null)
-            {
-                ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(),R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+            if (Globals.objAppThemeMaster != null) {
+                ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
                 txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
-            }
-            else
-            {
+            } else {
                 ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
                 txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
             }
@@ -133,7 +125,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         if (Service.CheckNet(getActivity())) {
             new GuestHomeItemLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvItem,R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvItem, R.drawable.wifi_drawable);
         }
 
         return view;
@@ -176,17 +168,17 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 }
             }
             if (alItemMasterFilter.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem,0);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem, 0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvItem,0);
+                Globals.SetErrorLayout(errorLayout, false, null, rvItem, 0);
                 SetupRecyclerView(false, alItemMasterFilter);
             }
 
         } else {
             if (alItemMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem,0);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem, 0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvItem,0);
+                Globals.SetErrorLayout(errorLayout, false, null, rvItem, 0);
                 SetupRecyclerView(false, alItemMaster);
             }
 
@@ -202,7 +194,6 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         relativeLayout = (RelativeLayout) MenuItemCompat.getActionView(cartItem);
         final RelativeLayout cartLayout = (RelativeLayout) relativeLayout.findViewById(R.id.cartLayout);
         txtCartNumber = (TextView) relativeLayout.findViewById(R.id.txtCartNumber);
-
 
         SetCartNumber(txtCartNumber);
 
@@ -228,17 +219,32 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         // Do something when collapsed
-                        if (CategoryItemFragment.sbItemTypeMasterId.toString().equals("")) {
-                            if (alItemMaster.size() != 0 && alItemMaster != null) {
-                                categoryItemAdapter.SetSearchFilter(alItemMaster);
-                                Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                        if (getActivity().getResources().getBoolean(R.bool.isTablet) && WaiterHomeActivity.isWaiterMode) {
+                            if (ItemCartListFragment.sbItemTypeMasterId.toString().equals("")) {
+                                if (alItemMaster.size() != 0 && alItemMaster != null) {
+                                    categoryItemAdapter.SetSearchFilter(alItemMaster);
+                                    Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                                }
+                            } else {
+                                if (alItemMasterFilter.size() != 0 && alItemMasterFilter != null) {
+                                    categoryItemAdapter.SetSearchFilter(alItemMasterFilter);
+                                    Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                                }
                             }
                         } else {
-                            if (alItemMasterFilter.size() != 0 && alItemMasterFilter != null) {
-                                categoryItemAdapter.SetSearchFilter(alItemMasterFilter);
-                                Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                            if (CategoryItemFragment.sbItemTypeMasterId.toString().equals("")) {
+                                if (alItemMaster.size() != 0 && alItemMaster != null) {
+                                    categoryItemAdapter.SetSearchFilter(alItemMaster);
+                                    Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                                }
+                            } else {
+                                if (alItemMasterFilter.size() != 0 && alItemMasterFilter != null) {
+                                    categoryItemAdapter.SetSearchFilter(alItemMasterFilter);
+                                    Globals.HideKeyBoard(getActivity(), MenuItemCompat.getActionView(searchItem));
+                                }
                             }
                         }
+
                         return true; // Return true to collapse action view
                     }
 
@@ -257,17 +263,33 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if (CategoryItemFragment.sbItemTypeMasterId.toString().equals("")) {
-            if (alItemMaster.size() != 0 && alItemMaster != null) {
-                searchText = newText;
-                final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, newText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
+        if (getActivity().getResources().getBoolean(R.bool.isTablet) && WaiterHomeActivity.isWaiterMode) {
+            if (ItemCartListFragment.sbItemTypeMasterId.toString().equals("")) {
+                if (alItemMaster.size() != 0 && alItemMaster != null) {
+                    searchText = newText;
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, newText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                }
+            } else {
+                if (alItemMasterFilter.size() != 0 && alItemMasterFilter != null) {
+                    searchText = newText;
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, newText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                }
             }
         } else {
-            if (alItemMasterFilter.size() != 0 && alItemMasterFilter != null) {
-                searchText = newText;
-                final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, newText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
+            if (CategoryItemFragment.sbItemTypeMasterId.toString().equals("")) {
+                if (alItemMaster.size() != 0 && alItemMaster != null) {
+                    searchText = newText;
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, newText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                }
+            } else {
+                if (alItemMasterFilter.size() != 0 && alItemMasterFilter != null) {
+                    searchText = newText;
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, newText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                }
             }
         }
         return false;
@@ -306,77 +328,152 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 Globals.counter = Globals.counter + 1;
                 SetCartNumber(txtCartNumber);
                 Globals.alOrderItemTran.add(objOrderItemTran);
-                Globals.isAdded=true;
+                Globals.isAdded = true;
                 SaveCartDataInSharePreference();
-                Toast.makeText(getActivity(),String.format(getActivity().getResources().getString(R.string.MsgCartItem),objOrderItemTran.getItemName()),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), String.format(getActivity().getResources().getString(R.string.MsgCartItem), objOrderItemTran.getItemName()), Toast.LENGTH_SHORT).show();
+            }
+
+            if (getResources().getBoolean(R.bool.isTablet)) {
+                AddItemToCart objAddItemToCart = (AddItemToCart) Globals.targetFragment;
+                objAddItemToCart.AddToCart();
             }
         }
     }
 
+    public void SetCartNumber()
+    {
+        SetCartNumber(txtCartNumber);
+    }
+
     public void SetupRecyclerView(final boolean isFilter, ArrayList<ItemMaster> alItemMaster) {
-        if (alItemMaster == null && !isFilter) {
-            categoryItemAdapter = new CategoryItemAdapter(getActivity(), this.alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this, false,false);
-            rvItem.setVisibility(View.VISIBLE);
-            rvItem.setAdapter(categoryItemAdapter);
-            if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
-                rvItem.setLayoutManager(gridLayoutManager);
-            } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
-                rvItem.setLayoutManager(linearLayoutManager);
-            } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
-                final ArrayList<ItemMaster> filteredList = Filter(this.alItemMaster, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
-                rvItem.setLayoutManager(gridLayoutManager);
-            } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
-                final ArrayList<ItemMaster> filteredList = Filter(this.alItemMaster, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
-                rvItem.setLayoutManager(linearLayoutManager);
-            }
-        } else if (alItemMaster == null && isFilter) {
-            categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMasterFilter, getFragmentManager(), CategoryItemFragment.isViewChange, this, false,false);
-            rvItem.setVisibility(View.VISIBLE);
-            rvItem.setAdapter(categoryItemAdapter);
-            if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
-                rvItem.setLayoutManager(gridLayoutManager);
-            } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
-                rvItem.setLayoutManager(linearLayoutManager);
-            } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
-                final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
-                rvItem.setLayoutManager(gridLayoutManager);
-            } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
-                final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
-                rvItem.setLayoutManager(linearLayoutManager);
+        if (getActivity().getResources().getBoolean(R.bool.isTablet) && WaiterHomeActivity.isWaiterMode) {
+            if (alItemMaster == null && !isFilter) {
+                categoryItemAdapter = new CategoryItemAdapter(getActivity(), this.alItemMaster, getFragmentManager(), ItemCartListFragment.isViewChange, this, false, false);
+                rvItem.setVisibility(View.VISIBLE);
+                rvItem.setAdapter(categoryItemAdapter);
+                if (ItemCartListFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!ItemCartListFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(linearLayoutManager);
+                } else if (ItemCartListFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(this.alItemMaster, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!ItemCartListFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(this.alItemMaster, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(linearLayoutManager);
+                }
+            } else if (alItemMaster == null && isFilter) {
+                categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMasterFilter, getFragmentManager(), ItemCartListFragment.isViewChange, this, false, false);
+                rvItem.setVisibility(View.VISIBLE);
+                rvItem.setAdapter(categoryItemAdapter);
+                if (ItemCartListFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!ItemCartListFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(linearLayoutManager);
+                } else if (ItemCartListFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!ItemCartListFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(linearLayoutManager);
+                }
+
+            } else {
+                categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), ItemCartListFragment.isViewChange, this, false, false);
+                rvItem.setVisibility(View.VISIBLE);
+                rvItem.setAdapter(categoryItemAdapter);
+                if (ItemCartListFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!ItemCartListFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(linearLayoutManager);
+                } else if (ItemCartListFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!ItemCartListFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(linearLayoutManager);
+                }
             }
 
+            if (ItemCartListFragment.objCategoryMaster != null && ItemCartListFragment.objCategoryMaster.getCategoryName().equals(objCategoryMaster.getCategoryName())) {
+                if (objCategoryMaster.getDescription() != null && !objCategoryMaster.getDescription().equals("")) {
+                    Toast.makeText(getActivity(), String.format(getActivity().getResources().getString(R.string.MsgCartItem), objCategoryMaster.getDescription()), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.MsgCartWithNoName), Toast.LENGTH_LONG).show();
+                }
+                ItemCartListFragment.objCategoryMaster = null;
+            }
         } else {
-            categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this, false,false);
-            rvItem.setVisibility(View.VISIBLE);
-            rvItem.setAdapter(categoryItemAdapter);
-            if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
-                rvItem.setLayoutManager(gridLayoutManager);
-            } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
-                rvItem.setLayoutManager(linearLayoutManager);
-            } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
-                final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
-                rvItem.setLayoutManager(gridLayoutManager);
-            } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
-                final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
-                categoryItemAdapter.SetSearchFilter(filteredList);
-                rvItem.setLayoutManager(linearLayoutManager);
-            }
+            if (alItemMaster == null && !isFilter) {
+                categoryItemAdapter = new CategoryItemAdapter(getActivity(), this.alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this, false, false);
+                rvItem.setVisibility(View.VISIBLE);
+                rvItem.setAdapter(categoryItemAdapter);
+                if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(linearLayoutManager);
+                } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(this.alItemMaster, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(this.alItemMaster, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(linearLayoutManager);
+                }
+            } else if (alItemMaster == null && isFilter) {
+                categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMasterFilter, getFragmentManager(), CategoryItemFragment.isViewChange, this, false, false);
+                rvItem.setVisibility(View.VISIBLE);
+                rvItem.setAdapter(categoryItemAdapter);
+                if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(linearLayoutManager);
+                } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMasterFilter, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(linearLayoutManager);
+                }
 
+            } else {
+                categoryItemAdapter = new CategoryItemAdapter(getActivity(), alItemMaster, getFragmentManager(), CategoryItemFragment.isViewChange, this, false, false);
+                rvItem.setVisibility(View.VISIBLE);
+                rvItem.setAdapter(categoryItemAdapter);
+                if (CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!CategoryItemFragment.isViewChange && (searchText == null || searchText.isEmpty())) {
+                    rvItem.setLayoutManager(linearLayoutManager);
+                } else if (CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(gridLayoutManager);
+                } else if (!CategoryItemFragment.isViewChange && !searchText.isEmpty()) {
+                    final ArrayList<ItemMaster> filteredList = Filter(alItemMaster, searchText);
+                    categoryItemAdapter.SetSearchFilter(filteredList);
+                    rvItem.setLayoutManager(linearLayoutManager);
+                }
+
+            }
+            if (CategoryItemFragment.objCategoryMaster != null && CategoryItemFragment.objCategoryMaster.getCategoryName().equals(objCategoryMaster.getCategoryName())) {
+                if (objCategoryMaster.getDescription() != null && !objCategoryMaster.getDescription().equals("")) {
+                    Toast.makeText(getActivity(), String.format(getActivity().getResources().getString(R.string.MsgCartItem), objCategoryMaster.getDescription()), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.MsgCartWithNoName), Toast.LENGTH_LONG).show();
+                }
+                CategoryItemFragment.objCategoryMaster = null;
+            }
         }
 
-        if (CategoryItemFragment.objCategoryMaster != null && CategoryItemFragment.objCategoryMaster.getCategoryName().equals(objCategoryMaster.getCategoryName())) {
-            if(objCategoryMaster.getDescription()!=null && !objCategoryMaster.getDescription().equals("")){
-                Toast.makeText(getActivity(), String.format(getActivity().getResources().getString(R.string.MsgCartItem), objCategoryMaster.getDescription()),Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(getActivity(),getActivity().getResources().getString(R.string.MsgCartWithNoName),Toast.LENGTH_LONG).show();
-            }
-            CategoryItemFragment.objCategoryMaster = null;
-        }
         rvItem.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -401,8 +498,8 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         }
     }
 
-    public void UpdateWishList(ItemMaster objItemMaster){
-        if(objItemMaster!=null && objItemMaster.getRowPosition()!=-1) {
+    public void UpdateWishList(ItemMaster objItemMaster) {
+        if (objItemMaster != null && objItemMaster.getRowPosition() != -1) {
             categoryItemAdapter.UpdateWishList(objItemMaster.getRowPosition(), objItemMaster.getIsChecked());
         }
     }
@@ -460,9 +557,15 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
     interface CartIconListener {
         void CartIconOnClick();
+
         void CardViewOnClick(ItemMaster objItemMaster);
 
     }
+
+    public interface AddItemToCart {
+        void AddToCart();
+    }
+
 
     //endregion
 
@@ -470,7 +573,6 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     class GuestHomeItemLoadingTask extends AsyncTask {
 
         com.arraybit.pos.ProgressDialog progressDialog;
-
 
         @Override
         protected void onPreExecute() {
@@ -486,9 +588,9 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         @Override
         protected Object doInBackground(Object[] objects) {
             ItemJSONParser objItemJSONParser = new ItemJSONParser();
-            if(GuestHomeActivity.isMenuMode){
-                return objItemJSONParser.SelectAllItemMaster(counterMasterId,Globals.orderTypeMasterId, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId, Globals.businessMasterId, 0, null);
-            }else {
+            if (GuestHomeActivity.isMenuMode) {
+                return objItemJSONParser.SelectAllItemMaster(counterMasterId, Globals.orderTypeMasterId, objCategoryMaster.getCategoryMasterId(), itemTypeMasterId, Globals.businessMasterId, 0, null);
+            } else {
                 if (isFavorite) {
                     return objItemJSONParser.SelectAllItemMaster(counterMasterId, MenuActivity.objTableMaster.getlinktoOrderTypeMasterId(), objCategoryMaster.getCategoryMasterId(), itemTypeMasterId, Globals.businessMasterId, 1, null);
                 } else {
@@ -508,18 +610,29 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
 
             ArrayList<ItemMaster> lstItemMaster = (ArrayList<ItemMaster>) result;
             if (lstItemMaster == null) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvItem,0);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgSelectFail), rvItem, 0);
             } else if (lstItemMaster.size() == 0) {
-                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem,0);
+                Globals.SetErrorLayout(errorLayout, true, getActivity().getResources().getString(R.string.MsgItem), rvItem, 0);
             } else {
-                Globals.SetErrorLayout(errorLayout, false, null, rvItem,0);
+                Globals.SetErrorLayout(errorLayout, false, null, rvItem, 0);
                 alItemMaster = lstItemMaster;
-                if (CategoryItemFragment.sbItemTypeMasterId.toString().equals("")) {
-                    SetupRecyclerView(false, alItemMaster);
-                    // cnt = 1;
+
+                if (getActivity().getResources().getBoolean(R.bool.isTablet) && WaiterHomeActivity.isWaiterMode) {
+                    if (ItemCartListFragment.sbItemTypeMasterId.toString().equals("")) {
+                        SetupRecyclerView(false, alItemMaster);
+                        // cnt = 1;
+                    } else {
+                        ItemDataFilter(ItemCartListFragment.sbItemTypeMasterId.toString());
+                        //cnt = 1;
+                    }
                 } else {
-                    ItemDataFilter(CategoryItemFragment.sbItemTypeMasterId.toString());
-                    //cnt = 1;
+                    if (CategoryItemFragment.sbItemTypeMasterId.toString().equals("")) {
+                        SetupRecyclerView(false, alItemMaster);
+                        // cnt = 1;
+                    } else {
+                        ItemDataFilter(CategoryItemFragment.sbItemTypeMasterId.toString());
+                        //cnt = 1;
+                    }
                 }
             }
         }

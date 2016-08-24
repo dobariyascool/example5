@@ -535,7 +535,7 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             }
 
             objOrderMaster = new OrderMaster();
-            objOrderMaster.setOrderNumber(orderNumber);
+//            objOrderMaster.setOrderNumber(orderNumber);
             objOrderMaster.setlinktoCounterMasterId(counterMasterId);
             objOrderMaster.setlinktoTableMasterIds(String.valueOf(MenuActivity.objTableMaster.getTableMasterId()));
             objOrderMaster.setlinktoOrderTypeMasterId(MenuActivity.objTableMaster.getlinktoOrderTypeMasterId());
@@ -692,7 +692,8 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             super.onPostExecute(result);
 
             alTaxMaster = (ArrayList<TaxMaster>) result;
-            new OrderNumberLoadingTask().execute();
+//            new OrderNumberLoadingTask().execute();
+            new OrderLoadingTask().execute();
         }
     }
 

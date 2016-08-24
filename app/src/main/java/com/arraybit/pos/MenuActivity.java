@@ -61,10 +61,17 @@ public class MenuActivity extends AppCompatActivity {
             SaveWishListInSharePreference(false);
         }
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(android.R.id.content, new CategoryItemFragment(getIntent().getBooleanExtra("IsFavoriteShow", false)));
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        if (getResources().getBoolean(R.bool.isTablet) && WaiterHomeActivity.isWaiterMode) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(android.R.id.content, new ItemCartListFragment(getIntent().getBooleanExtra("IsFavoriteShow", false)));
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        } else {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(android.R.id.content, new CategoryItemFragment(getIntent().getBooleanExtra("IsFavoriteShow", false)));
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
 
     }
 

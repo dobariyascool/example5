@@ -164,7 +164,7 @@ public class OrderJOSNParser {
             stringer.key("orderMaster");
             stringer.object();
 
-            stringer.key("OrderNumber").value(objOrderMaster.getOrderNumber());
+//            stringer.key("OrderNumber").value(objOrderMaster.getOrderNumber());
             stringer.key("OrderDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoCounterMasterId").value(objOrderMaster.getlinktoCounterMasterId());
             stringer.key("linktoTableMasterIds").value(objOrderMaster.getlinktoTableMasterIds());
@@ -227,7 +227,6 @@ public class OrderJOSNParser {
                     stringer.key("TaxMasterId").value(alTaxMaster.get(i).getTaxMasterId());
                     stringer.key("TaxName").value(alTaxMaster.get(i).getTaxName());
                     stringer.key("TaxRate").value(alTaxMaster.get(i).getTaxRate());
-                    stringer.key("IsPercentage").value(alTaxMaster.get(i).getIsPercentage());
                     stringer.endObject();
                 }
             }

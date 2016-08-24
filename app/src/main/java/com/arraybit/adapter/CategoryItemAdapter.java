@@ -22,7 +22,9 @@ import com.arraybit.global.Globals;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.GuestHomeActivity;
+import com.arraybit.pos.ItemCartListFragment;
 import com.arraybit.pos.R;
+import com.arraybit.pos.WaiterHomeActivity;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.TextView;
 import com.squareup.picasso.Picasso;
@@ -62,11 +64,20 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (isViewChange) {
-            if (CategoryItemFragment.i == 1) {
-                view = LayoutInflater.from(context).inflate(R.layout.row_category_item_grid, parent, false);
+            if (context.getResources().getBoolean(R.bool.isTablet) && WaiterHomeActivity.isWaiterMode) {
+                if (ItemCartListFragment.i == 1) {
+                    view = LayoutInflater.from(context).inflate(R.layout.row_category_item_grid, parent, false);
+                } else {
+                    isWaiterGrid = true;
+                    view = LayoutInflater.from(context).inflate(R.layout.row_waiter_category_item_grid, parent, false);
+                }
             } else {
-                isWaiterGrid = true;
-                view = LayoutInflater.from(context).inflate(R.layout.row_waiter_category_item_grid, parent, false);
+                if (CategoryItemFragment.i == 1) {
+                    view = LayoutInflater.from(context).inflate(R.layout.row_category_item_grid, parent, false);
+                } else {
+                    isWaiterGrid = true;
+                    view = LayoutInflater.from(context).inflate(R.layout.row_waiter_category_item_grid, parent, false);
+                }
             }
         } else {
             view = LayoutInflater.from(context).inflate(R.layout.row_category_item, parent, false);
@@ -409,8 +420,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             }
 
             if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-                if(Globals.objAppThemeMaster!=null)
-                {
+                if (Globals.objAppThemeMaster != null) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         cvItem.setCardBackgroundColor(Globals.objAppThemeMaster.getColorCardView());
                         cvItem.setElevation(4f);
@@ -426,9 +436,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     btnAddDisable.setTextColor(ContextCompat.getColor(context, R.color.dimWhite));
 
 //                    ibLike.setButtonDrawable(ContextCompat.getDrawable(context, R.drawable.like_drawable));
-            }
-                else
-                {
+                } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         cvItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));
                         cvItem.setElevation(4f);
