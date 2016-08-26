@@ -615,9 +615,11 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
         if (lstOrderMaster.size() != 0) {
             for (int i = 0; i < lstOrderMaster.size(); i++) {
                 totalAmount = totalAmount + lstOrderMaster.get(i).getTotalAmount();
-                totalTax = totalTax + lstOrderMaster.get(i).getTotalTax();
+//                totalTax = totalTax + lstOrderMaster.get(i).getTotalTax();
                 totalDiscount = totalDiscount + lstOrderMaster.get(i).getDiscount();
             }
+            totalTax = tax1+tax2+tax3+tax4+tax5;
+
         }
         txtTotalAmount.setText(Globals.dfWithPrecision.format(totalAmount));
         SetTextLayout();
@@ -1100,7 +1102,6 @@ public class OrderSummaryFragment extends Fragment implements View.OnClickListen
 
     class RequestVerifyOfferCode extends AsyncTask {
         SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
-
 
         @Override
         protected void onPreExecute() {

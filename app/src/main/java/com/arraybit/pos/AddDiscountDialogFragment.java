@@ -106,7 +106,7 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
 
         if(discount!=0)
         {
-            etDiscount.setText(String.valueOf(discount));
+            etDiscount.setText(String.valueOf((int) discount));
        etDiscount.setSelection(etDiscount.getText().length());
             if(isPercentage)
             {
