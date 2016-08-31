@@ -147,10 +147,10 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if (id == R.id.mWaiting) {
             if (item.getTitle().equals("T")) {
                 item.setTitle("W");
-                item.setIcon(R.drawable.waiting_list_drawable);
-//                Drawable drawable = item.getIcon();
-//                drawable = DrawableCompat.wrap(drawable);
-//                DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
+                item.setIcon(R.mipmap.waiting_list);
+                Drawable drawable = item.getIcon();
+                drawable = DrawableCompat.wrap(drawable);
+                DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
                 ReplaceFragment(new AllTablesFragment(WaitingActivity.this, false, null));
             } else {
                 item.setTitle("T");

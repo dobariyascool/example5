@@ -181,7 +181,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 bis.close();
                 is.close();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                bm.compress(Bitmap.CompressFormat.PNG, 0, baos);
                 byte[] b = baos.toByteArray();
                 encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
                 Log.e("image"," "+encodedImage);

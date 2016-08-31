@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -79,6 +78,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -182,16 +183,26 @@ public class Globals {
         }
     }
 
-    public static void CallNotificationReceiver(Activity activity) {
-        Calendar calendar = Calendar.getInstance();
+    public static void CallNotificationReceiver(final Activity activity) {
+        final Calendar calendar = Calendar.getInstance();
 
         //intent registerd the broadcast receiver
         Intent myIntent = new Intent(activity, NotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, 0, myIntent, 0);
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, 0, myIntent, 0);
 
         //set the repeating alarm
-        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 20 * 1000, pendingIntent);
+//        final AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10 * 1000, pendingIntent);
+
+        int delay = 1000; // delay for 1 sec.
+        int period = 5000; // repeat every 5 sec.
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                final AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+        }, delay, period);
     }
 
     public static void SetAppBarPadding(Toolbar app_bar) {
@@ -539,10 +550,14 @@ public class Globals {
     }
 
     public static void SetToolBarBackground(final Context context, final Toolbar app_bar, final int backgroundColor, final int tintColor) {
-        app_bar.setBackground(new ColorDrawable(backgroundColor));
-        Drawable drawable = app_bar.getOverflowIcon();
-        DrawableCompat.setTint(drawable.mutate(), tintColor);
-        app_bar.setOverflowIcon(drawable);
+        try {
+            app_bar.setBackground(new ColorDrawable(backgroundColor));
+            Drawable drawable = app_bar.getOverflowIcon();
+            DrawableCompat.setTint(drawable.mutate(), tintColor);
+            app_bar.setOverflowIcon(drawable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void InitializeFragment(Fragment fragment, FragmentManager fragmentManager) {

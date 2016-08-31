@@ -471,9 +471,9 @@
 
     <string name="title_fragment_thank_you">Thank You</string>
     <string name="guestEncodedImage1">EncodedBackImage1</string>
-    <string name="guestEncodedImage2">EncodedBackImageName2</string>
-    <string name="encodedLogoImage">EncodedLogoImageName</string>
-    <string name="encodedProfileImage">EncodedProfileImageName</string>
+    <string name="guestEncodedImage2">EncodedBackImage2</string>
+    <string name="encodedLogoImage">EncodedLogoImage</string>
+    <string name="encodedProfileImage">EncodedProfileImage</string>
     <string name="coaGetCode">Get Promo Code\u003F</string>
     <string name="coaCancel">Cancel</string>
     <string name="coaApply">Apply</string>

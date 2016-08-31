@@ -6,16 +6,21 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 
 public class WaiterOptionListFragment extends Fragment implements View.OnClickListener {
 
     LinearLayout waiterOptionLayout;
+    ImageView ivHomeActivityImage;
+
 //    NotificationListener notificationListener;
 
     public WaiterOptionListFragment() {
@@ -39,6 +44,19 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
 
         Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.waiter_home);
         waiterOptionLayout.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
+
+        ivHomeActivityImage= (ImageView) view.findViewById(R.id.ivHomeActivityImage);
+        if (Globals.objAppThemeMaster != null) {
+
+            SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
+            String encodedLogoImage = sharePreferenceManage.GetPreference("GuestAppTheme", getResources().getString(R.string.encodedLogoImage), getActivity());
+
+            if (encodedLogoImage != null && !encodedLogoImage.equals("")) {
+                byte[] decodedString = Base64.decode(encodedLogoImage.getBytes(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                ivHomeActivityImage.setImageDrawable(new BitmapDrawable(getActivity().getResources(), decodedByte));
+            }
+        }
 
         CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);
         CardView cvDineIn = (CardView) view.findViewById(R.id.cvDineIn);

@@ -2,15 +2,20 @@ package com.arraybit.pos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -26,6 +31,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
     RelativeLayout relativeLayout;
     RelativeLayout footerLayout;
     Context context;
+    ImageView ivHomeActivityImage;
     SharePreferenceManage sharePreferenceManage;
 
 
@@ -44,6 +50,8 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
 //        if (!getActivity().getResources().getBoolean(R.bool.isTablet)) {
         menuModeLayout = (LinearLayout) view.findViewById(R.id.menuModeLayout);
         guestModeLayout = (LinearLayout) view.findViewById(R.id.guestModeLayout);
+
+        ivHomeActivityImage= (ImageView) view.findViewById(R.id.ivHomeActivityImage);
 //        }
 
         footerLayout = (RelativeLayout) view.findViewById(R.id.footerLayout);
@@ -57,11 +65,18 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
 
         if (Globals.objAppThemeMaster != null) {
             sharePreferenceManage = new SharePreferenceManage();
-            String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity());
+            String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage2), getActivity());
+            String encodedLogoImage=sharePreferenceManage.GetPreference("GuestAppTheme",getResources().getString(R.string.encodedLogoImage),getActivity());
             if (encodedImage != null && !encodedImage.equals("")) {
                 Globals.SetPageBackground(getActivity(), encodedImage, guestOptionLayout, null, null, null);
             } else {
                 Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
+            }
+
+            if (encodedLogoImage != null && !encodedLogoImage.equals("")) {
+                byte[] decodedString = Base64.decode(encodedLogoImage.getBytes(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                ivHomeActivityImage.setImageDrawable(new BitmapDrawable(getActivity().getResources(), decodedByte));
             }
         } else {
             Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
