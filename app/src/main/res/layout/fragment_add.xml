@@ -10,7 +10,7 @@
         layout="@layout/app_bar"/>
 
     <com.rey.material.widget.EditText
-        android:id="@+id/etName"
+        android:id="@+id/etNameWait"
         style="@style/EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

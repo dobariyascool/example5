@@ -20,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -86,6 +87,9 @@ public class HotelProfileActivity extends AppCompatActivity {
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 ivBackground.setImageDrawable(new BitmapDrawable(getResources(), decodedByte));
                 ivBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            if (Globals.objAppThemeMaster.getProfileImageName()!= null && !Globals.objAppThemeMaster.getProfileImageName().equals("")) {
+////                Log.e("image", " " + Globals.objAppThemeMaster.getProfileImageName());
+//                Picasso.with(HotelProfileActivity.this).load(Globals.objAppThemeMaster.getProfileImageName()).fit().centerCrop().into(ivBackground);
             } else {
                 Picasso.with(HotelProfileActivity.this).load(R.drawable.profile_background).fit().centerCrop().into(ivBackground);
             }
@@ -93,16 +97,18 @@ public class HotelProfileActivity extends AppCompatActivity {
             Picasso.with(HotelProfileActivity.this).load(R.drawable.profile_background).fit().centerCrop().into(ivBackground);
         }
 
+        if (ivBackground.getDrawable() == null) {
+            Picasso.with(HotelProfileActivity.this).load(R.drawable.profile_background).fit().centerCrop().into(ivBackground);
+        }
+
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            if(Globals.objAppThemeMaster!=null)
-            {
+            if (Globals.objAppThemeMaster != null) {
                 collapsingToolbar.setContentScrimColor(Globals.objAppThemeMaster.getColorPrimary());
                 tabLayout.setBackgroundColor(Globals.objAppThemeMaster.getColorPrimary());
                 tabLayout.setSelectedTabIndicatorColor(Globals.objAppThemeMaster.getColorAccent());
                 tabLayout.setTabTextColors(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
-            }
-            else {
+            } else {
                 collapsingToolbar.setContentScrimColor(ContextCompat.getColor(this, R.color.primary));
                 tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.primary));
                 tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.accent));
@@ -254,7 +260,7 @@ public class HotelProfileActivity extends AppCompatActivity {
 
                 pageAdapter.addFragment(new InformationFragment(objBusinessMaster), "Information");
                 pageAdapter.addFragment(new GalleryFragment(objBusinessMaster.getBusinessMasterId()), "Gallery");
-                pageAdapter.addFragment(new BusinessInformationFragment(), "BusinessInformation");
+                pageAdapter.addFragment(new BusinessInformationFragment(), "Business Info");
 
                 viewPager.setAdapter(pageAdapter);
                 tabLayout.setupWithViewPager(viewPager);

@@ -47,15 +47,17 @@ public class WaiterOptionListFragment extends Fragment implements View.OnClickLi
 
         ivHomeActivityImage= (ImageView) view.findViewById(R.id.ivHomeActivityImage);
         if (Globals.objAppThemeMaster != null) {
-
             SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
             String encodedLogoImage = sharePreferenceManage.GetPreference("GuestAppTheme", getResources().getString(R.string.encodedLogoImage), getActivity());
-
             if (encodedLogoImage != null && !encodedLogoImage.equals("")) {
                 byte[] decodedString = Base64.decode(encodedLogoImage.getBytes(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 ivHomeActivityImage.setImageDrawable(new BitmapDrawable(getActivity().getResources(), decodedByte));
             }
+//            if (Globals.objAppThemeMaster.getLogoImageName() != null && !Globals.objAppThemeMaster.getLogoImageName().equals("")) {
+//                Log.e("image", " " + Globals.objAppThemeMaster.getLogoImageName());
+//                Glide.with(this).load(Globals.objAppThemeMaster.getLogoImageName()).asBitmap().into(ivHomeActivityImage);
+//            }
         }
 
         CardView cvOrders = (CardView) view.findViewById(R.id.cvOrders);

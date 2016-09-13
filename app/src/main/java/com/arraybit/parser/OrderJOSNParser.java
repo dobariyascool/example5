@@ -83,6 +83,12 @@ public class OrderJOSNParser {
                 objOrderMaster.setOrderType(jsonObject.getString("OrderType"));
                 objOrderMaster.setTableName(jsonObject.getString("TableName"));
                 objOrderMaster.setTotalKOT(jsonObject.getInt("TotalKOT"));
+                if (!jsonObject.getString("PrintCount").equals("null")) {
+                    objOrderMaster.setPrintCount((short) jsonObject.getInt("PrintCount"));
+                }
+                if (jsonObject.getString("linktoSourceMasterId").equals("null")) {
+                    objOrderMaster.setPrintCount((short) jsonObject.getInt("linktoSourceMasterId"));
+                }
             }
             return objOrderMaster;
         } catch (JSONException e) {
@@ -144,7 +150,12 @@ public class OrderJOSNParser {
                 objOrderMaster.setTableName(jsonArray.getJSONObject(i).getString("TableName"));
                 objOrderMaster.setTotalItem(jsonArray.getJSONObject(i).getInt("TotalItem"));
                 objOrderMaster.setTotalKOT(jsonArray.getJSONObject(i).getInt("TotalKOT"));
-
+                if (!jsonArray.getJSONObject(i).getString("PrintCount").equals("null")) {
+                    objOrderMaster.setPrintCount((short) jsonArray.getJSONObject(i).getInt("PrintCount"));
+                }
+                if (!jsonArray.getJSONObject(i).getString("linktoSourceMasterId").equals("null")) {
+                    objOrderMaster.setPrintCount((short) jsonArray.getJSONObject(i).getInt("linktoSourceMasterId"));
+                }
                 lstOrderMaster.add(objOrderMaster);
             }
             return lstOrderMaster;
@@ -187,6 +198,8 @@ public class OrderJOSNParser {
             //stringer.key("linktoSalesMasterId").value(null);
             stringer.key("CreateDateTime").value(sdfDateTimeFormat.format(dt));
             stringer.key("linktoUserMasterIdCreatedBy").value(objOrderMaster.getlinktoUserMasterIdCreatedBy());
+            stringer.key("PrintCount").value(objOrderMaster.getPrintCount());
+            stringer.key("linktoSourceMasterId").value(objOrderMaster.getLinktoSourceMasterId());
 
             stringer.endObject();
 

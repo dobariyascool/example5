@@ -3,7 +3,11 @@ package com.arraybit.pos;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +24,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +38,7 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.TableMaster;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.rey.material.widget.TextView;
 
@@ -67,7 +73,7 @@ public class GuestHomeActivity extends AppCompatActivity implements GuestLoginDi
     RelativeLayout footerLayout;
     com.rey.material.widget.TextView txtCartNumber;
     RelativeLayout relativeLayout;
-    boolean isBackPressed = false, isRestart;
+    boolean isBackPressed = false, isRestart, isStart;
 
     SharePreferenceManage objSharePreferenceManage;
 
@@ -97,31 +103,42 @@ public class GuestHomeActivity extends AppCompatActivity implements GuestLoginDi
 
         Intent intent = getIntent();
         isMenuMode = intent.getBooleanExtra("IsMenuMode", false);
+        isStart = intent.getBooleanExtra("isStart", false);
         if (isMenuMode) {
             Globals.orderTypeMasterId = (short) intent.getIntExtra("linktoOrderTypeMasterId", 0);
-            if (app_bar != null) {
-                Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
-                getSupportActionBar().setTitle(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? getResources().getString(R.string.title_activity_home) + " - Dine In" : getResources().getString(R.string.title_activity_home) + " - Take Away");
-            }
+//            if (app_bar != null) {
+//                Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
+//                getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_home));
+////                getSupportActionBar().setTitle(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? getResources().getString(R.string.title_activity_home) + " - Dine In" : getResources().getString(R.string.title_activity_home) + " - Take Away");
+//            }
         } else {
             isGuestMode = true;
             objTableMaster = intent.getParcelableExtra("TableMaster");
             MenuActivity.objTableMaster = GuestHomeActivity.objTableMaster;
             if (objTableMaster != null && objTableMaster.getlinktoOrderTypeMasterId() != 0) {
                 Globals.orderTypeMasterId = objTableMaster.getlinktoOrderTypeMasterId();
-                if (app_bar != null) {
-//                    if (isGuestMode) {
-                    if (Globals.objAppThemeMaster != null) {
-//                            Globals.SetToolBarBackground(this, app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(this, android.R.color.white));
-//                        } else {
-                        Globals.SetToolBarBackground(this, app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(this, android.R.color.white));
-//                        }
-                    } else {
-                        Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
-                    }
-                    getSupportActionBar().setTitle(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? getResources().getString(R.string.title_activity_home) + " - Dine In" : getResources().getString(R.string.title_activity_home) + " - Take Away");
-                }
+//                if (app_bar != null) {
+////                    if (isGuestMode) {
+//                    if (Globals.objAppThemeMaster != null) {
+////                            Globals.SetToolBarBackground(this, app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(this, android.R.color.white));
+////                        } else {
+//                        Globals.SetToolBarBackground(this, app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(this, android.R.color.white));
+////                        }
+//                    } else {
+//                        Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
+//                    }
+//                    getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_home));
+////                    getSupportActionBar().setTitle(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? getResources().getString(R.string.title_activity_home) + " - Dine In" : getResources().getString(R.string.title_activity_home) + " - Take Away");
+//                }
             }
+        }
+        if (app_bar != null) {
+            if (Globals.objAppThemeMaster != null) {
+                Globals.SetToolBarBackground(this, app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(this, android.R.color.white));
+            } else {
+                Globals.SetToolBarBackground(this, app_bar, ContextCompat.getColor(this, R.color.primary), ContextCompat.getColor(this, android.R.color.white));
+            }
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_home));
         }
         //navigationView
         navigationView = (NavigationView) findViewById(R.id.navigationView);
@@ -136,20 +153,34 @@ public class GuestHomeActivity extends AppCompatActivity implements GuestLoginDi
         txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
         txtName = (TextView) headerView.findViewById(R.id.txtName);
 
-        Drawable drawable = imageView.getDrawable();
-        drawable.mutate().setColorFilter(ContextCompat.getColor(this,R.color.accent), PorterDuff.Mode.SRC_IN);
-        imageView.setImageDrawable(drawable);
-        txtLetter.setTextColor(ContextCompat.getColor(this, R.color.primary));
-
+        if (Globals.objAppThemeMaster != null) {
+            llNavHeader.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorPrimary()));
+            Drawable drawable = imageView.getDrawable();
+            drawable.mutate().setColorFilter(Globals.objAppThemeMaster.getColorAccent(), PorterDuff.Mode.SRC_IN);
+            imageView.setImageDrawable(drawable);
+            txtLetter.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
+            if (isStart) {
+                if (Globals.objAppThemeMaster.getLogoImageName() != null && !Globals.objAppThemeMaster.getLogoImageName().equals("")) {
+//                Log.e("image", " " + Globals.objAppThemeMaster.getLogoImageName());
+                    Glide.with(this).load(Globals.objAppThemeMaster.getLogoImageName()).asBitmap().into(ivLogo);
+                }
+            } else {
+                SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
+                String encodedLogoImage = sharePreferenceManage.GetPreference("GuestAppTheme", getResources().getString(R.string.encodedLogoImage), this);
+                if (encodedLogoImage != null && !encodedLogoImage.equals("")) {
+                    byte[] decodedString = Base64.decode(encodedLogoImage.getBytes(), Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    ivLogo.setImageDrawable(new BitmapDrawable(getResources(), decodedByte));
+                }
+            }
+        } else {
+            llNavHeader.setBackground(new ColorDrawable(ContextCompat.getColor(this, R.color.primary)));
+            Drawable drawable = imageView.getDrawable();
+            drawable.mutate().setColorFilter(ContextCompat.getColor(this, R.color.accent), PorterDuff.Mode.SRC_IN);
+            imageView.setImageDrawable(drawable);
+            txtLetter.setTextColor(ContextCompat.getColor(this, R.color.primary));
+        }
         SetGuestName();
-
-//        if (GuestHomeActivity.isGuestMode) {
-//            if (Globals.objAppThemeMaster != null) {
-//                llNavHeader.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorPrimary()));
-//            } else {
-//                llNavHeader.setBackground(new ColorDrawable(ContextCompat.getColor(this, R.color.guestTabColor)));
-//            }
-//        }
         navigationView.addHeaderView(headerView);
         navigationView.setNavigationItemSelectedListener(this);
         //end
@@ -160,7 +191,11 @@ public class GuestHomeActivity extends AppCompatActivity implements GuestLoginDi
         //end
 
         if (savedInstanceState == null) {
-            AddFragmentInLayout(new GuestOptionListFragment(this));
+            GuestOptionListFragment guestOptionListFragment = new GuestOptionListFragment(this);
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isStart", isStart);
+            guestOptionListFragment.setArguments(bundle);
+            AddFragmentInLayout(guestOptionListFragment);
         }
         SaveObjectInPreference();
 

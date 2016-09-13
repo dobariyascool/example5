@@ -34,6 +34,8 @@ public class OrderMaster implements Parcelable {
     String UpdateDateTime;
     short linktoUserMasterIdUpdatedBy;
     String OrderTime;
+    short PrintCount;
+    short linktoSourceMasterId;
     /// Extra
     String Counter;
     String Waiter;
@@ -68,6 +70,8 @@ public class OrderMaster implements Parcelable {
             objOrderMaster.linktoUserMasterIdCreatedBy = (short) source.readInt();
             objOrderMaster.UpdateDateTime = source.readString();
             objOrderMaster.linktoUserMasterIdUpdatedBy = (short) source.readInt();
+            objOrderMaster.PrintCount = (short) source.readInt();
+            objOrderMaster.linktoSourceMasterId= (short) source.readInt();
 
             /// Extra
             objOrderMaster.Counter = source.readString();
@@ -337,6 +341,7 @@ public class OrderMaster implements Parcelable {
     public void setLinktoBusinessMasterId(short linktoBusinessMasterId) {
         this.linktoBusinessMasterId = linktoBusinessMasterId;
     }
+
     public short getRateIndex() {
         return RateIndex;
     }
@@ -360,6 +365,98 @@ public class OrderMaster implements Parcelable {
 
     public void setDiscountPercentage(double discountPercentage) {
         DiscountPercentage = discountPercentage;
+    }
+
+    public short getLinktoCounterMasterId() {
+        return linktoCounterMasterId;
+    }
+
+    public void setLinktoCounterMasterId(short linktoCounterMasterId) {
+        this.linktoCounterMasterId = linktoCounterMasterId;
+    }
+
+    public String getLinktoTableMasterIds() {
+        return linktoTableMasterIds;
+    }
+
+    public void setLinktoTableMasterIds(String linktoTableMasterIds) {
+        this.linktoTableMasterIds = linktoTableMasterIds;
+    }
+
+    public int getLinktoWaiterMasterId() {
+        return linktoWaiterMasterId;
+    }
+
+    public void setLinktoWaiterMasterId(int linktoWaiterMasterId) {
+        this.linktoWaiterMasterId = linktoWaiterMasterId;
+    }
+
+    public short getLinktoCustomerMasterId() {
+        return linktoCustomerMasterId;
+    }
+
+    public void setLinktoCustomerMasterId(short linktoCustomerMasterId) {
+        this.linktoCustomerMasterId = linktoCustomerMasterId;
+    }
+
+    public short getLinktoOrderTypeMasterId() {
+        return linktoOrderTypeMasterId;
+    }
+
+    public void setLinktoOrderTypeMasterId(short linktoOrderTypeMasterId) {
+        this.linktoOrderTypeMasterId = linktoOrderTypeMasterId;
+    }
+
+    public Short getLinktoOrderStatusMasterId() {
+        return linktoOrderStatusMasterId;
+    }
+
+    public void setLinktoOrderStatusMasterId(Short linktoOrderStatusMasterId) {
+        this.linktoOrderStatusMasterId = linktoOrderStatusMasterId;
+    }
+
+    public long getLinktoSalesMasterId() {
+        return linktoSalesMasterId;
+    }
+
+    public void setLinktoSalesMasterId(long linktoSalesMasterId) {
+        this.linktoSalesMasterId = linktoSalesMasterId;
+    }
+
+    public short getLinktoUserMasterIdCreatedBy() {
+        return linktoUserMasterIdCreatedBy;
+    }
+
+    public void setLinktoUserMasterIdCreatedBy(short linktoUserMasterIdCreatedBy) {
+        this.linktoUserMasterIdCreatedBy = linktoUserMasterIdCreatedBy;
+    }
+
+    public short getLinktoUserMasterIdUpdatedBy() {
+        return linktoUserMasterIdUpdatedBy;
+    }
+
+    public void setLinktoUserMasterIdUpdatedBy(short linktoUserMasterIdUpdatedBy) {
+        this.linktoUserMasterIdUpdatedBy = linktoUserMasterIdUpdatedBy;
+    }
+
+    public short getPrintCount() {
+        return PrintCount;
+    }
+
+    public void setPrintCount(short printCount) {
+        PrintCount = printCount;
+    }
+
+    public short getLinktoSourceMasterId() {
+        return linktoSourceMasterId;
+    }
+
+    public void setLinktoSourceMasterId(short linktoSourceMasterId) {
+        this.linktoSourceMasterId = linktoSourceMasterId;
+    }
+
+    public static Creator<OrderMaster> getCREATOR() {
+        return CREATOR;
     }
 
     //endregion
@@ -394,6 +491,8 @@ public class OrderMaster implements Parcelable {
         parcel.writeInt(linktoUserMasterIdCreatedBy);
         parcel.writeString(UpdateDateTime);
         parcel.writeInt(linktoUserMasterIdUpdatedBy);
+        parcel.writeInt(PrintCount);
+        parcel.writeInt(linktoSourceMasterId);
 
         /// Extra
         parcel.writeString(Counter);

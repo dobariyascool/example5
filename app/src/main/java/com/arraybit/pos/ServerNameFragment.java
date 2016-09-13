@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,8 +16,11 @@ import android.widget.LinearLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.parser.AppThemeJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
+
+import org.json.JSONObject;
 
 @SuppressWarnings("unchecked")
 public class ServerNameFragment extends Fragment {
@@ -40,15 +42,15 @@ public class ServerNameFragment extends Fragment {
         //linearlayout
         mainLayout = (LinearLayout) view.findViewById(R.id.mainLayout);
 //        Globals.SetScaleImageBackground(getContext(), mainLayout, null, null);
-        Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
-        mainLayout.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
+//        Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
+//        mainLayout.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
         //end
 
         etServerName = (EditText) view.findViewById(R.id.etServerName);
         btnSave = (com.rey.material.widget.Button) view.findViewById(R.id.btnSave);
 
-        Globals.CustomView(btnSave, ContextCompat.getColor(getActivity(),R.color.accent_red), ContextCompat.getColor(getActivity(),android.R.color.transparent));
-        btnSave.setTextColor(ContextCompat.getColor(getActivity(),android.R.color.white));
+        Globals.CustomView(btnSave, ContextCompat.getColor(getActivity(), R.color.accent_red), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+        btnSave.setTextColor(ContextCompat.getColor(getActivity(), android.R.color.white));
 
         return view;
 
@@ -56,7 +58,7 @@ public class ServerNameFragment extends Fragment {
 
 
     @Override
-    public void onActivityCreated( Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -73,9 +75,24 @@ public class ServerNameFragment extends Fragment {
                     Globals.serverName = etServerName.getText().toString();
                     Globals.ChangeUrl();
 
-                    Intent intent1= new Intent(getActivity(),AppThemeIntentService.class);
-                    getActivity().startService(intent1);
-
+//                    Intent intent1= new Intent(getActivity(),AppThemeIntentService.class);
+//                    getActivity().startService(intent1);
+//                    try {
+//                        SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
+//                        int linktoBusinessMasterId;
+//                        if (sharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", getActivity()) != null &&
+//                                !sharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", getActivity()).equals("")) {
+//                            linktoBusinessMasterId = Integer.parseInt(sharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", getActivity()));
+//                            AppThemeJSONParser appThemeJSONParser = new AppThemeJSONParser();
+//                            final JSONObject jsonObject = appThemeJSONParser.SelectAppThemeMaster(linktoBusinessMasterId);
+//                            if(jsonObject!=null) {
+//                                sharePreferenceManage.CreatePreference("GuestAppTheme", "AppThemeJson", jsonObject.toString(), getActivity());
+//                                Globals.objAppThemeMaster = appThemeJSONParser.SetClassPropertiesFromJSONObject(jsonObject);
+//                            }
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
                     if (Build.VERSION.SDK_INT >= 21) {
                         ActivityOptions options =
                                 ActivityOptions.makeSceneTransitionAnimation(getActivity());

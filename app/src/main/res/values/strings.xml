@@ -64,7 +64,8 @@
     <string name="MsgConfirmDelete">Delete Record?</string>
     <string name="MsgConfirmLogout">Are you sure to Logout?</string>
     <string name="MsgConfirmSettings">Push notification off?</string>
-    <string name="MsgServerNotResponding">Server not responding, Try again later</string>
+    <string name="MsgServerNotResponding">Connection establishment failed, Try again</string>
+    <!--<string name="MsgServerNotResponding">Server not responding, Try again later</string>-->
     <string name="MsgFeedback">Thank you for your feedback, your response will help us to improve the quality of service.</string>
     <string name="MsgVerification">Your Phone Number is Verified.</string>
     <string name="MsgCart">Cart is empty.</string>

@@ -4,9 +4,7 @@ package com.arraybit.global;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -60,9 +58,11 @@ import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.OrderItemTran;
 import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.FeedbackFragment;
+import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.GuestLoginDialogFragment;
 import com.arraybit.pos.MenuActivity;
 import com.arraybit.pos.MyAccountFragment;
+import com.arraybit.pos.NotificationService;
 import com.arraybit.pos.R;
 import com.arraybit.pos.SignInActivity;
 import com.arraybit.pos.SignUpFragment;
@@ -78,8 +78,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,6 +105,7 @@ public class Globals {
     public static short itemType = 2;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
     public static int counter = 0;
+    public static int totalCounter = 0;
     public static ArrayList<ItemMaster> alOrderItemTran = new ArrayList<>();
     public static ArrayList<OrderItemTran> alOrderItemSummery = new ArrayList<>();
     public static ArrayList<Long> alOrderMasterId = new ArrayList<>();
@@ -186,23 +185,26 @@ public class Globals {
     public static void CallNotificationReceiver(final Activity activity) {
         final Calendar calendar = Calendar.getInstance();
 
+        Intent intent = new Intent(activity, NotificationService.class);
+        activity.startService(intent);
+
         //intent registerd the broadcast receiver
-        Intent myIntent = new Intent(activity, NotificationReceiver.class);
-        final PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, 0, myIntent, 0);
+//        Intent myIntent = new Intent(activity, NotificationReceiver.class);
+//        final PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, 0, myIntent, 0);
 
         //set the repeating alarm
-//        final AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+//        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10 * 1000, pendingIntent);
 
-        int delay = 1000; // delay for 1 sec.
-        int period = 5000; // repeat every 5 sec.
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            public void run() {
-                final AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            }
-        }, delay, period);
+//        int delay = 1000; // delay for 1 sec.
+//        int period = 5000; // repeat every 5 sec.
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            public void run() {
+//                final AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+//                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+//            }
+//        }, delay, period);
     }
 
     public static void SetAppBarPadding(Toolbar app_bar) {
@@ -442,6 +444,11 @@ public class Globals {
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmLogout)) {
                     ClearPreference(activity.getApplication());
                     Globals.userName = null;
+                    if(activity instanceof GuestHomeActivity)
+                    {
+                        GuestHomeActivity activity1= (GuestHomeActivity) activity;
+                        activity1.LoginResponse();
+                    }
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.wmMyAccount)) {
                     Globals.ReplaceAnimatedFragment(new MyAccountFragment(), fragmentManager, activity.getResources().getString(R.string.title_fragment_myaccount));
                 } else if (menuItem.getTitle() == activity.getResources().getString(R.string.navShortList)) {
@@ -599,7 +606,7 @@ public class Globals {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (Build.VERSION.SDK_INT >= 21) {
             Slide slideTransition = new Slide();
-            slideTransition.setSlideEdge(Gravity.RIGHT);
+            slideTransition.setSlideEdge(Gravity.END);
             slideTransition.setDuration(350);
             fragment.setEnterTransition(slideTransition);
         } else {
@@ -932,6 +939,7 @@ public class Globals {
     }
 
     //endregion
+
 
     //region CommentCode
 

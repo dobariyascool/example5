@@ -1,6 +1,7 @@
 package com.arraybit.parser;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -161,6 +162,7 @@ public class WaiterNotificationJSONParser
 		try {
 			date = new Date(System.currentTimeMillis() - duration * 60 * 1000);
 			//date = new Date();
+			Log.e("date:"," "+sdfDateFormat.format(date));
 			JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllWaiterNotificationMaster + "/" + linktoWaiterMasterId + "/" +sdfDateFormat.format(date));
 			if (jsonResponse != null) {
 				JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllWaiterNotificationMaster + "Result");

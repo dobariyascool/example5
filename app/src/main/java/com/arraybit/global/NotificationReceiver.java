@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
@@ -31,9 +32,9 @@ import java.util.Date;
 import java.util.Locale;
 
 @SuppressWarnings("unchecked")
-public class NotificationReceiver extends BroadcastReceiver{
+public class NotificationReceiver extends BroadcastReceiver {
 
-    public static int notificationCount=0;
+    public static int notificationCount = 0;
     public final String SelectAllWaiterNotificationMaster = "SelectAllWaiterNotificationMaster";
     int linktoWaiterMasterId;
     Context context;
@@ -60,7 +61,13 @@ public class NotificationReceiver extends BroadcastReceiver{
                 notificationText = context.getResources().getString(R.string.notificationText);
             }
 
-            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo);
+            Bitmap bitmap;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo);
+            } else {
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.notification_logo);
+            }
             if (isSoundPlay) {
                 notification = new Notification.Builder(context)
                         .setContentText(notificationText)
@@ -84,15 +91,15 @@ public class NotificationReceiver extends BroadcastReceiver{
             notificationManager.notify(notificationID, notification);
             notificationCount++;
             AppCompatActivity activity = POSApplication.getAppCompatActivity();
-            if(activity!=null) {
+            if (activity != null) {
 
-                notificationListener = (NotificationListener)activity;
+                notificationListener = (NotificationListener) activity;
                 notificationListener.ShowNotificationCount();
 
-    //            WaiterOptionListFragment waiterOptionListFragment = (WaiterOptionListFragment) activity.getSupportFragmentManager().findFragmentByTag(activity.getResources().getString(R.string.title_fragment_waiter_options));
-    //            if (waiterOptionListFragment != null) {
-    //                waiterOptionListFragment.ShowNotification();
-    //            }
+                //            WaiterOptionListFragment waiterOptionListFragment = (WaiterOptionListFragment) activity.getSupportFragmentManager().findFragmentByTag(activity.getResources().getString(R.string.title_fragment_waiter_options));
+                //            if (waiterOptionListFragment != null) {
+                //                waiterOptionListFragment.ShowNotification();
+                //            }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,9 +110,8 @@ public class NotificationReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         this.context = context;
         if (Service.CheckNet(context)) {
-            if(objSharePreferenceManage.GetPreference("ServerPreference", "ServerName",context)!=null);
-            {
-                Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName",context);
+            if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", context) != null) {
+                Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", context);
                 Globals.ChangeUrl();
                 RequestNotification();
             }
@@ -121,18 +127,18 @@ public class NotificationReceiver extends BroadcastReceiver{
                 if (objSharePreferenceManage.GetPreference("NotificationPreference", "TodaysDate", context).equals(date)) {
                     if (objSharePreferenceManage.GetStringListPreference("NotificationPreference", "NotificationList", context) != null) {
                         alString = objSharePreferenceManage.GetStringListPreference("NotificationPreference", "NotificationList", context);
-                        for(String str : alString) alNotificationId.add(Integer.valueOf(str));
-                        Collections.sort(alNotificationId,Collections.reverseOrder());
+                        for (String str : alString) alNotificationId.add(Integer.valueOf(str));
+                        Collections.sort(alNotificationId, Collections.reverseOrder());
                         for (WaiterNotificationMaster objWaiterNotificationMaster : alWaiterList) {
                             if (alNotificationId.size() > 4) {
                                 for (int i = 0; i < 5; i++) {
-                                    if (alNotificationId.get(i)==objWaiterNotificationMaster.getWaiterNotificationMasterId()) {
+                                    if (alNotificationId.get(i) == objWaiterNotificationMaster.getWaiterNotificationMasterId()) {
                                         isDuplicate = true;
                                     }
                                 }
                             } else {
                                 for (Integer waiterMasterId : alNotificationId) {
-                                    if (waiterMasterId==objWaiterNotificationMaster.getWaiterNotificationMasterId()) {
+                                    if (waiterMasterId == objWaiterNotificationMaster.getWaiterNotificationMasterId()) {
                                         isDuplicate = true;
                                     }
                                 }
@@ -251,7 +257,7 @@ public class NotificationReceiver extends BroadcastReceiver{
         queue.add(jsonObjectRequest);
     }
 
-    public interface NotificationListener{
+    public interface NotificationListener {
         void ShowNotificationCount();
     }
 }

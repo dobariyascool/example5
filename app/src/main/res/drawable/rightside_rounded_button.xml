@@ -1,66 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true">
-        <layer-list>
-            <item>
-                <shape>
-                    <solid android:angle="270.0" android:color="@color/accent" />
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/gradientDrawable1">
+        <shape>
+            <solid
+                android:angle="270.0"
+                android:color="@color/accent_red" />
 
-                    <corners android:radius="3dp" />
-                </shape>
-            </item>
-            <item android:right="50dp" android:top="30dp">
-                <shape>
-                    <solid android:color="@color/accent" />
-                </shape>
-            </item>
-            <item android:bottom="30dp" android:right="50dp">
-                <shape>
-                    <solid android:color="@color/accent" />
-                </shape>
-            </item>
-        </layer-list>
+            <corners android:radius="3dp" />
+        </shape>
+    </item >
+    <item android:id="@+id/gradientDrawable2"
+        android:right="50dp"
+        android:top="30dp">
+        <shape>
+            <solid android:color="@color/accent_red" />
+        </shape>
     </item>
-    <item android:state_selected="true">
-        <layer-list>
-            <item>
-                <shape>
-                    <solid android:angle="270.0" android:color="@color/accent" />
+    <item android:id="@+id/gradientDrawable3"
+        android:bottom="30dp"
+        android:right="50dp">
+        <shape>
+            <solid android:color="@color/accent_red" />
+        </shape>
+    </item>
+</layer-list>
 
-                    <corners android:radius="3dp" />
-                </shape>
-            </item>
-            <item android:right="50dp" android:top="30dp">
-                <shape>
-                    <solid android:color="@color/accent" />
-                </shape>
-            </item>
-            <item android:bottom="30dp" android:right="50dp">
-                <shape>
-                    <solid android:color="@color/accent" />
-                </shape>
-            </item>
-        </layer-list>
-    </item>
-    <item android:state_checked="false">
-        <layer-list>
-            <item>
-                <shape>
-                    <solid android:angle="270.0" android:color="@android:color/transparent" />
-
-                    <corners android:radius="3dp" />
-                </shape>
-            </item>
-            <item android:right="50dp" android:top="30dp">
-                <shape>
-                    <solid android:color="@android:color/transparent" />
-                </shape>
-            </item>
-            <item android:bottom="30dp" android:right="50dp">
-                <shape>
-                    <solid android:color="@android:color/transparent" />
-                </shape>
-            </item>
-        </layer-list>
-    </item>
-</selector>

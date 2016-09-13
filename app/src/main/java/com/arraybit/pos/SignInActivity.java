@@ -25,10 +25,13 @@ import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CounterMaster;
 import com.arraybit.modal.UserMaster;
+import com.arraybit.parser.AppThemeJSONParser;
 import com.arraybit.parser.CounterJSONParser;
 import com.arraybit.parser.UserMasterJSONParser;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -282,8 +285,26 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             objSharePreferenceManage.CreatePreference("WaiterPreference", "linktoBusinessTypeMasterId", String.valueOf(objUserMaster.getLinktoBusinessTypeMasterId()), SignInActivity.this);
 
         }
-        Intent intent = new Intent(SignInActivity.this, AppThemeIntentService.class);
-        startService(intent);
+//        Intent intent = new Intent(SignInActivity.this, AppThemeIntentService.class);
+//        startService(intent);
+            try {
+                SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
+                int linktoBusinessMasterId;
+                if (sharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", SignInActivity.this) != null &&
+                        !sharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", SignInActivity.this).equals("")) {
+                    linktoBusinessMasterId = Integer.parseInt(sharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", SignInActivity.this));
+                    AppThemeJSONParser appThemeJSONParser = new AppThemeJSONParser();
+                    final JSONObject jsonObject = appThemeJSONParser.SelectAppThemeMaster(linktoBusinessMasterId);
+                    if(jsonObject!=null) {
+                        sharePreferenceManage.CreatePreference("GuestAppTheme", "AppThemeJson", jsonObject.toString(), SignInActivity.this);
+                        Globals.objAppThemeMaster = appThemeJSONParser.SetClassPropertiesFromJSONObject(jsonObject);
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -367,13 +388,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             ArrayList<CounterMaster> lstCounterMaster = (ArrayList<CounterMaster>) result;
             if (lstCounterMaster != null && lstCounterMaster.size() != 0) {
                 if (lstCounterMaster.size() > 1) {
+                    Globals.totalCounter= lstCounterMaster.size();
                     Globals.ReplaceFragment(new CounterFragment(objUserMaster.getLinktoUserTypeMasterId()), getSupportFragmentManager(), null);
                 } else {
 
                     objSharePreferenceManage = new SharePreferenceManage();
                     objSharePreferenceManage.CreatePreference("CounterPreference", "CounterMasterId", String.valueOf(lstCounterMaster.get(0).getCounterMasterId()), SignInActivity.this);
                     objSharePreferenceManage.CreatePreference("CounterPreference", "CounterName", lstCounterMaster.get(0).getCounterName(), SignInActivity.this);
-
+                    Globals.totalCounter= 1;
                     Intent intent = new Intent(SignInActivity.this, WelcomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

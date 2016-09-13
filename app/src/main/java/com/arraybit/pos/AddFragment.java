@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +27,7 @@ import com.rey.material.widget.EditText;
 @SuppressWarnings("unchecked")
 public class AddFragment extends Fragment {
 
-    EditText etName, etMobileNo, etPersons;
+    EditText etNameWait, etMobileNo, etPersons;
     Button btnAdd;
     WaitingMaster objWaitingMaster;
     WaitingJSONParser objWaitingJSONParser;
@@ -59,7 +58,7 @@ public class AddFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        etName = (EditText) view.findViewById(R.id.etName);
+        etNameWait = (EditText) view.findViewById(R.id.etNameWait);
         etMobileNo = (EditText) view.findViewById(R.id.etMobileNo);
         etPersons = (EditText) view.findViewById(R.id.etPersons);
 
@@ -121,37 +120,37 @@ public class AddFragment extends Fragment {
 
     //region Private Methods
     void ClearControls() {
-        etName.setText("");
+        etNameWait.setText("");
         etMobileNo.setText("");
         etPersons.setText("");
     }
 
     boolean ValidateControls() {
         boolean IsValid = true;
-        if (etName.getText().toString().equals("")
+        if (etNameWait.getText().toString().equals("")
                 && !etPersons.getText().toString().equals("")) {
-            etName.setError("Enter " + getResources().getString(R.string.afName));
+            etNameWait.setError("Enter " + getResources().getString(R.string.afName));
             etPersons.clearError();
             IsValid = false;
         } else if (etPersons.getText().toString().equals("")
-                && !etName.getText().toString().equals("")) {
+                && !etNameWait.getText().toString().equals("")) {
             etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
-            etName.clearError();
+            etNameWait.clearError();
             IsValid = false;
-        } else if (etName.getText().toString().equals("")
+        } else if (etNameWait.getText().toString().equals("")
                 && etPersons.getText().toString().equals("")) {
             etPersons.setError("Enter " + getResources().getString(R.string.afPerson));
-            etName.setError("Enter " + getResources().getString(R.string.afName));
+            etNameWait.setError("Enter " + getResources().getString(R.string.afName));
             IsValid = false;
         } else if (!etMobileNo.getText().toString().equals("")
-                && !etName.getText().toString().equals("") && !etPersons.getText().toString().equals("")) {
+                && !etNameWait.getText().toString().equals("") && !etPersons.getText().toString().equals("")) {
             if (etMobileNo.getText().length() != 10) {
                 etMobileNo.setError("Enter 10 digit " + getResources().getString(R.string.afMobileNo));
                 IsValid = false;
             } else {
                 etMobileNo.clearError();
             }
-            etName.clearError();
+            etNameWait.clearError();
             etPersons.clearError();
         }
         return IsValid;
@@ -171,7 +170,7 @@ public class AddFragment extends Fragment {
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
 
             objWaitingMaster = new WaitingMaster();
-            objWaitingMaster.setPersonName(etName.getText().toString().trim().substring(0, 1).toUpperCase() + etName.getText().toString().trim().substring(1));
+            objWaitingMaster.setPersonName(etNameWait.getText().toString().trim().substring(0, 1).toUpperCase() + etNameWait.getText().toString().trim().substring(1));
             objWaitingMaster.setPersonMobile(etMobileNo.getText().toString().trim());
             objWaitingMaster.setNoOfPersons(Short.valueOf(etPersons.getText().toString().trim()));
             objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("Waiting").getValue());

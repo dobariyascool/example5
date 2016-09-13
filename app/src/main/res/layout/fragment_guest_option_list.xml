@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7"
+        android:layout_weight="0.9"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -41,7 +41,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_margin="@dimen/control_SpecingSmall"
+                android:layout_marginEnd="@dimen/control_SpecingSmall"
+                android:layout_marginStart="@dimen/control_SpecingSmall"
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.CardView
@@ -49,7 +50,7 @@
                     style="@style/CardViewOption"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_margin="@dimen/control_SpecingTiny"
                     android:layout_weight="1">
 
                     <LinearLayout
@@ -86,6 +87,7 @@
                     style="@style/CardViewOption"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_margin="@dimen/control_SpecingTiny"
                     android:layout_weight="1">
 
                     <LinearLayout
@@ -132,7 +134,7 @@
                     style="@style/CardViewOption"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/control_SpecingSmall"
+                    android:layout_margin="@dimen/control_SpecingTiny"
                     android:layout_weight="1">
 
                     <LinearLayout
@@ -170,6 +172,7 @@
                     style="@style/CardViewOption"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_margin="@dimen/control_SpecingTiny"
                     android:layout_weight="1">
 
                     <LinearLayout
@@ -217,7 +220,7 @@
                 style="@style/CardViewOption"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/control_SpecingSmall"
+                android:layout_margin="@dimen/control_SpecingTiny"
                 android:layout_weight="1">
 
                 <LinearLayout
@@ -255,6 +258,7 @@
                 style="@style/CardViewOption"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_margin="@dimen/control_SpecingTiny"
                 android:layout_weight="1">
 
                 <LinearLayout
@@ -293,35 +297,42 @@
     <RelativeLayout
         android:id="@+id/footerLayout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/transparent"
-        android:gravity="end|bottom"
+        android:layout_height="30dp"
+        android:background="#65000000"
+        android:gravity="bottom"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/ivCompany"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/control_SpecingSmall"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
-            android:layout_marginTop="@dimen/control_SpecingSmall"
-            android:contentDescription="@string/splash_screen"
-            android:scaleType="fitEnd"
-            android:visibility="gone" />
-        <!--android:src="@drawable/cmp_logo"-->
 
-        <ImageView
-            android:id="@+id/ivCompanyLogo"
-            android:layout_width="160dp"
+        <com.rey.material.widget.TextView
+            android:id="@+id/txtTableName"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/control_SpecingSmall"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
             android:layout_marginTop="@dimen/control_SpecingSmall"
-            android:layout_toEndOf="@+id/ivCompany"
-            android:contentDescription="@string/splash_screen"
-            android:gravity="start|center"
-            android:scaleType="fitStart"
-            android:src="@drawable/arraybit_text" />
+            android:layout_marginBottom="@dimen/control_SpecingTiny"
+            android:layout_marginStart="@dimen/control_SpecingMedium"
+            android:textColor="@android:color/white"
+            android:gravity="start"
+            android:textSize="12dp"
+            android:text="home:" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/txtTableName"
+            android:gravity="end">
+
+            <ImageView
+                android:id="@+id/ivCompanyLogo"
+                android:layout_width="160dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/control_SpecingSmall"
+                android:layout_marginEnd="@dimen/control_SpecingSmall"
+                android:layout_marginTop="@dimen/control_SpecingSmall"
+                android:contentDescription="@string/splash_screen"
+                android:gravity="end"
+                android:scaleType="fitEnd"
+                android:src="@drawable/arraybit_text" />
+        </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>
 

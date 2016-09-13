@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7"
+        android:layout_weight="0.9"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -33,7 +33,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_margin="@dimen/control_SpecingSmall"
+            android:layout_marginStart="@dimen/control_SpecingSmall"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
             android:orientation="horizontal">
 
             <android.support.v7.widget.CardView
@@ -41,7 +42,8 @@
                 style="@style/CardViewOption"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/control_SpecingSmall"
+                android:layout_margin="@dimen/control_SpecingTiny"
+                android:layout_marginEnd="@dimen/control_SpecingTiny"
                 android:layout_weight="1">
 
                 <LinearLayout
@@ -78,6 +80,7 @@
                 android:id="@+id/cvTakeAway"
                 style="@style/CardViewOption"
                 android:layout_width="0dp"
+                android:layout_margin="@dimen/control_SpecingTiny"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
@@ -125,6 +128,7 @@
                 android:id="@+id/cvOrders"
                 style="@style/CardViewOption"
                 android:layout_width="0dp"
+                android:layout_margin="@dimen/control_SpecingTiny"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/control_SpecingSmall"
                 android:layout_weight="1">
@@ -162,6 +166,7 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/cvBill"
                 style="@style/CardViewOption"
+                android:layout_margin="@dimen/control_SpecingTiny"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -201,8 +206,8 @@
     <RelativeLayout
         android:id="@+id/footerLayout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/transparent"
+        android:layout_height="30dp"
+        android:background="#65000000"
         android:gravity="end|bottom"
         android:orientation="vertical">
 
@@ -222,14 +227,13 @@
             android:id="@+id/ivCompanyLogo"
             android:layout_width="160dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/control_SpecingTiny"
-            android:layout_marginEnd="@dimen/control_SpecingTiny"
+            android:layout_marginBottom="@dimen/control_SpecingSmall"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
             android:layout_marginTop="@dimen/control_SpecingSmall"
-            android:paddingTop="@dimen/control_SpecingTiny"
             android:layout_toEndOf="@+id/ivCompany"
             android:contentDescription="@string/splash_screen"
-            android:gravity="start|center"
-            android:scaleType="fitStart"
+            android:gravity="center"
+            android:scaleType="fitEnd"
             android:src="@drawable/arraybit_text" />
     </RelativeLayout>
 </LinearLayout>

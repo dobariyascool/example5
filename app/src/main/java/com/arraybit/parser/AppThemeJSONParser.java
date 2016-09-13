@@ -33,6 +33,7 @@ public class AppThemeJSONParser
 				objAppThemeMaster.setProfileImageName(jsonObject.getString("ProfileImageName"));
 				objAppThemeMaster.setBackImageName1(jsonObject.getString("BackImageName1"));
 				objAppThemeMaster.setBackImageName2(jsonObject.getString("BackImageName2"));
+				objAppThemeMaster.setWelcomeBackImage(jsonObject.getString("WelcomeBackImage"));
 				objAppThemeMaster.setContactMap(jsonObject.getString("ContactMap"));
 				objAppThemeMaster.setColorPrimary(Color.parseColor("#" + jsonObject.getString("ColorPrimary")));
 				objAppThemeMaster.setColorPrimaryDark(Color.parseColor("#" + jsonObject.getString("ColorPrimaryDark")));
@@ -41,7 +42,7 @@ public class AppThemeJSONParser
 				objAppThemeMaster.setColorAccentDark(Color.parseColor("#"+jsonObject.getString("ColorAccentDark")));
 				objAppThemeMaster.setColorAccentLight(Color.parseColor("#"+jsonObject.getString("ColorAccentLight")));
 				objAppThemeMaster.setColorTextPrimary(Color.parseColor("#"+jsonObject.getString("ColorTextPrimary")));
-				objAppThemeMaster.setColorTextSecondary(Color.parseColor("#"+jsonObject.getString("ColorTextSecondary")));
+				objAppThemeMaster.setColorFloatingButton(Color.parseColor("#"+jsonObject.getString("ColorFloatingButton")));
 				objAppThemeMaster.setColorButtonRipple(Color.parseColor("#"+jsonObject.getString("ColorButtonRipple")));
 				objAppThemeMaster.setColorCardView(Color.parseColor("#"+jsonObject.getString("ColorCardView")));
 				objAppThemeMaster.setColorCardViewRipple(Color.parseColor("#"+jsonObject.getString("ColorCardViewRipple")));
@@ -67,6 +68,7 @@ public class AppThemeJSONParser
 				objAppThemeMaster.setProfileImageName(jsonArray.getJSONObject(i).getString("ProfileImageName"));
 				objAppThemeMaster.setBackImageName1(jsonArray.getJSONObject(i).getString("BackImageName1"));
 				objAppThemeMaster.setBackImageName2(jsonArray.getJSONObject(i).getString("BackImageName2"));
+				objAppThemeMaster.setWelcomeBackImage(jsonArray.getJSONObject(i).getString("WelcomebackImage"));
 				objAppThemeMaster.setContactMap(jsonArray.getJSONObject(i).getString("ContactMap"));
 				objAppThemeMaster.setColorPrimary(Color.parseColor("#"+jsonArray.getJSONObject(i).getString("ColorPrimary")));
 				objAppThemeMaster.setColorPrimaryDark(Color.parseColor("#"+jsonArray.getJSONObject(i).getString("ColorPrimaryDark")));
@@ -75,7 +77,7 @@ public class AppThemeJSONParser
 				objAppThemeMaster.setColorAccentDark(Color.parseColor("#"+jsonArray.getJSONObject(i).getString("ColorAccentDark")));
 				objAppThemeMaster.setColorAccentLight(Color.parseColor("#"+jsonArray.getJSONObject(i).getString("ColorAccentLight")));
 				objAppThemeMaster.setColorTextPrimary(Color.parseColor("#"+jsonArray.getJSONObject(i).getString("ColorTextPrimary")));
-				objAppThemeMaster.setColorTextSecondary(Color.parseColor("#"+jsonArray.getJSONObject(i).getString("ColorTextSecondary")));
+				objAppThemeMaster.setColorFloatingButton(Color.parseColor("#" + jsonArray.getJSONObject(i).getString("ColorFloatingButton")));
 				objAppThemeMaster.setColorButtonRipple(Color.parseColor("#"+jsonArray.getJSONObject(i).getString("ColorButtonRipple")));
 				objAppThemeMaster.setColorCardView(Color.parseColor("#"+jsonArray.getJSONObject(i).getString("ColorCardView")));
 				objAppThemeMaster.setColorCardViewRipple(Color.parseColor("#"+jsonArray.getJSONObject(i).getString("ColorCardViewRipple")));

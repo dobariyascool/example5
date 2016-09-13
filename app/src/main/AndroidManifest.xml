@@ -54,7 +54,7 @@
             android:label="@string/title_fragment_category_item"
             android:screenOrientation="portrait" />
 
-        <!--<receiver android:name="com.arraybit.global.TimeScheduler" />-->
+        <!-- <receiver android:name="com.arraybit.global.TimeScheduler" /> -->
         <receiver
             android:name="com.arraybit.global.NotificationReceiver"
             android:exported="true">
@@ -83,15 +83,15 @@
             android:name=".NotificationDetailActivity"
             android:label="@string/title_activity_notification_detail"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".CartItemActivity"
+            android:label="@string/title_fragment_cart_item"
+            android:screenOrientation="portrait" />
 
         <service
-            android:name=".AppThemeIntentService"
-            android:exported="false" />
-
-        <activity android:name=".CartItemActivity"
-            android:label="@string/title_fragment_cart_item"
-            android:screenOrientation="portrait"/>
-
+            android:name=".NotificationService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

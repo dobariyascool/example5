@@ -37,7 +37,6 @@ import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CategoryMaster;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.parser.CategoryJSONParser;
-import com.arraybit.pos.R;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
@@ -50,7 +49,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ItemCartListFragment extends Fragment implements View.OnClickListener, ItemTabFragment.CartIconListener, DetailFragment.ResponseListener, GuestLoginDialogFragment.LoginResponseListener, CartItemAdapter.CartItemOnClickListener, ItemTabFragment.AddItemToCart{
+public class ItemCartListFragment extends Fragment implements View.OnClickListener, ItemTabFragment.CartIconListener, DetailFragment.ResponseListener, GuestLoginDialogFragment.LoginResponseListener, CartItemAdapter.CartItemOnClickListener, ItemTabFragment.AddItemToCart {
 
     public static boolean isViewChange = true;
     public static short i = 2;
@@ -393,11 +392,8 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
         if (Globals.alOrderItemTran.size() == 0) {
             SetRecyclerView();
         }
-        else
-        {
-            ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.getItem(itemTabLayout.getSelectedTabPosition());
-            itemTabFragment.SetCartNumber();
-        }
+        ItemTabFragment itemTabFragment = (ItemTabFragment) itemPagerAdapter.getItem(itemTabLayout.getSelectedTabPosition());
+        itemTabFragment.SetCartNumber();
 //        SaveCartDataInSharePreference(isBackPressed);
 //        if (getActivity() instanceof GuestHomeActivity) {
 //            AddMoreOnClickListener addMoreOnClickListener = (AddMoreOnClickListener) context;

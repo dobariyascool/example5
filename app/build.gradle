@@ -11,6 +11,9 @@ android {
         versionName "1.0"
         // Stops the Gradle plugin’s automatic rasterization of vectors
 //        generatedDensities = []
+
+        vectorDrawables.useSupportLibrary = true
+
     }
     buildTypes {
         applicationVariants.all { variant ->

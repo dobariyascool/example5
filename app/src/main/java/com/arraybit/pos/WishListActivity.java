@@ -28,8 +28,35 @@ public class WishListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wish_list);
 
-        FrameLayout wishListLayout = (FrameLayout) findViewById(R.id.wishListLayout);
-        Globals.SetScaleImageBackground(this, null, null, wishListLayout);
+        final FrameLayout wishListLayout = (FrameLayout) findViewById(R.id.wishListLayout);
+        if (Globals.objAppThemeMaster != null) {
+            SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
+            String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getString(R.string.guestEncodedImage1), this);
+            if (encodedImage != null && !encodedImage.equals("")) {
+                Globals.SetPageBackground(this, encodedImage, null, null, wishListLayout, null);
+//                    Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
+            } else {
+                Globals.SetScaleImageBackground(this, null, null, wishListLayout);
+            }
+//            if (Globals.objAppThemeMaster.getBackImageName1() != null && !Globals.objAppThemeMaster.getBackImageName1().equals("")) {
+////                Log.e("image", " " + Globals.objAppThemeMaster.getBackImageName1());
+//                Glide.with(this).load(Globals.objAppThemeMaster.getBackImageName1()).asBitmap().into(new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                        Drawable drawable = new BitmapDrawable(resource);
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                            wishListLayout.setBackground(drawable);
+//                        }
+//                    }
+//                });
+//            } else {
+//                Globals.SetScaleImageBackground(this, null, null, wishListLayout);
+//            }
+
+        } else {
+            Globals.SetScaleImageBackground(this, null, null, wishListLayout);
+        }
+
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.wishListLayout, new WishListFragment(), getResources().getString(R.string.title_activity_wish_list));

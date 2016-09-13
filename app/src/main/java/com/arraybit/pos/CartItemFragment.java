@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -21,6 +23,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +42,9 @@ import com.arraybit.modal.TaxMaster;
 import com.arraybit.parser.OrderJOSNParser;
 import com.arraybit.parser.TableJSONParser;
 import com.arraybit.parser.TaxJSONParser;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.Gson;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.CompoundButton;
@@ -146,6 +152,21 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                 } else {
                     Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
                 }
+//                if (Globals.objAppThemeMaster.getBackImageName1() != null && !Globals.objAppThemeMaster.getBackImageName1().equals("")) {
+////                    Log.e("image", " " + Globals.objAppThemeMaster.getBackImageName1());
+//                    Glide.with(this).load(Globals.objAppThemeMaster.getBackImageName1()).asBitmap().into(new SimpleTarget<Bitmap>() {
+//                        @Override
+//                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                            Drawable drawable = new BitmapDrawable(resource);
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                                cartItemFragment.setBackground(drawable);
+//                            }
+//                        }
+//                    });
+//
+//                } else {
+//                    Globals.SetScaleImageBackground(getActivity(), cartItemFragment, null, null);
+//                }
 
                 txtMsg.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
                 cbMenu.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorAccent()));
@@ -548,6 +569,8 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
             objOrderMaster.setTotalDeductedPoint((short) 0);
             objOrderMaster.setlinktoWaiterMasterId(waiterMasterId);
             objOrderMaster.setlinktoUserMasterIdCreatedBy(userMasterId);
+            objOrderMaster.setPrintCount((short) 0);
+            objOrderMaster.setLinktoSourceMasterId((short) Globals.sourceMasterId);
             objOrderMaster.setRateIndex(Globals.alOrderItemTran.get(0).getRateIndex());
             if (Globals.userName != null) {
                 objSharePreferenceManage = new SharePreferenceManage();

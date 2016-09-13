@@ -4,8 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -17,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +37,9 @@ import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CategoryMaster;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.parser.CategoryJSONParser;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.rey.material.widget.TextView;
@@ -110,11 +118,26 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                     } else {
                         Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
                     }
+//                    if (Globals.objAppThemeMaster.getBackImageName1() != null && !Globals.objAppThemeMaster.getBackImageName1().equals("")) {
+////                        Log.e("image", " " + Globals.objAppThemeMaster.getBackImageName1());
+//                        Glide.with(this).load(Globals.objAppThemeMaster.getBackImageName1()).asBitmap().into(new SimpleTarget<Bitmap>() {
+//                            @Override
+//                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                                Drawable drawable = new BitmapDrawable(resource);
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                                    categoryItemFragment.setBackground(drawable);
+//                                }
+//                            }
+//                        });
+//                    } else {
+//                        Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
+//                    }
                 } else {
 //                    Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
 //                    categoryItemFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
                     Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
                 }
+
             } else {
                 categoryItemFragment.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
             }
@@ -140,6 +163,9 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                 itemTabLayout.setSelectedTabIndicatorColor(Globals.objAppThemeMaster.getColorAccentDark());
                 itemTabLayout.setTabTextColors(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
                 itemTabLayout.setBackgroundColor(Globals.objAppThemeMaster.getColorPrimary());
+                famRoot.setMenuButtonColorNormal(Globals.objAppThemeMaster.getColorFloatingButton());
+                famRoot.setMenuButtonColorPressed(Globals.objAppThemeMaster.getColorFloatingButton());
+                famRoot.setMenuButtonColorRipple(Globals.objAppThemeMaster.getColorFloatingButton());
             } else {
                 itemTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getActivity(), R.color.accent));
                 itemTabLayout.setTabTextColors(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
@@ -154,7 +180,6 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         fabVeg.setOnClickListener(this);
         fabNonVeg.setOnClickListener(this);
         fabJain.setOnClickListener(this);
-
 
         if (Service.CheckNet(getActivity())) {
             new GuestHomeCategoryLodingTask().execute();

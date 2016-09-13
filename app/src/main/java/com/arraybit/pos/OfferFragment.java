@@ -3,7 +3,10 @@ package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +32,9 @@ import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.OfferMaster;
 import com.arraybit.parser.OfferJSONParser;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -87,10 +94,26 @@ public class OfferFragment extends Fragment {
                 } else {
                     Globals.SetScaleImageBackground(getActivity(), null, null, offerFragment);
                 }
+//                if (Globals.objAppThemeMaster.getBackImageName1() != null && !Globals.objAppThemeMaster.getBackImageName1().equals("")) {
+////                    Log.e("image", " " + Globals.objAppThemeMaster.getBackImageName1());
+//                    Glide.with(this).load(Globals.objAppThemeMaster.getBackImageName1()).asBitmap().into(new SimpleTarget<Bitmap>() {
+//                        @Override
+//                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                            Drawable drawable = new BitmapDrawable(resource);
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                                offerFragment.setBackground(drawable);
+//                            }
+//                        }
+//                    });
+//
+//                } else {
+//                    Globals.SetScaleImageBackground(getActivity(), null, null, offerFragment);
+//                }
             } else {
                 Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
                 Globals.SetScaleImageBackground(getActivity(), null, null, offerFragment);
             }
+
             ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
             txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
         } else {

@@ -1,6 +1,7 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,9 @@ import android.widget.RelativeLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.parser.AppThemeJSONParser;
+
+import org.json.JSONObject;
 
 
 @SuppressWarnings({"unchecked", "NullArgumentToVariableArgMethod"})
@@ -21,40 +25,63 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
-        splashScreenLayout = (RelativeLayout) findViewById(R.id.splashScreenLayout);
+        try {
+            splashScreenLayout = (RelativeLayout) findViewById(R.id.splashScreenLayout);
 
 //        Glide.with(SplashScreenActivity.this).load(R.drawable.arraybit).asBitmap().into(ivLogo);
 
 
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-
-                if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this) == null) {
-                    Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
-                } else {
-
-                    if ((objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SplashScreenActivity.this) == null) && (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", SplashScreenActivity.this) == null)) {
-                        RedirectActivity(SignInActivity.class);
-
+                    if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this) == null) {
+                        Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
                     } else {
-                        Globals.SetBusinessMasterId(SplashScreenActivity.this);
-                        RedirectActivity(WelcomeActivity.class);
-                    }
-                    //get server name
-                    objSharePreferenceManage = new SharePreferenceManage();
-                    Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this);
-                    //end
-                    Intent intent = new Intent(SplashScreenActivity.this, AppThemeIntentService.class);
-                    startService(intent);
-                }
 
-            }
-        }, 3000);
+                        if ((objSharePreferenceManage.GetPreference("WaitingPreference", "UserName", SplashScreenActivity.this) == null) && (objSharePreferenceManage.GetPreference("WaiterPreference", "UserName", SplashScreenActivity.this) == null)) {
+                            RedirectActivity(SignInActivity.class);
+
+                        } else {
+                            Globals.SetBusinessMasterId(SplashScreenActivity.this);
+                            RedirectActivity(WelcomeActivity.class);
+                        }
+                        //get server name
+                        objSharePreferenceManage = new SharePreferenceManage();
+                        Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this);
+                        //end
+//                    Intent intent = new Intent(SplashScreenActivity.this, AppThemeIntentService.class);
+//                    startService(intent);
+                        SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
+                        int linktoBusinessMasterId ;
+                        if(sharePreferenceManage.GetPreference("WaiterPreference","linktoBusinessMasterId",SplashScreenActivity.this)!=null &&
+                                !sharePreferenceManage.GetPreference("WaiterPreference","linktoBusinessMasterId",SplashScreenActivity.this).equals("")) {
+                            linktoBusinessMasterId= Integer.parseInt(sharePreferenceManage.GetPreference("WaiterPreference","linktoBusinessMasterId",SplashScreenActivity.this));
+                            AppThemeJSONParser appThemeJSONParser = new AppThemeJSONParser();
+                            try {
+                                final JSONObject jsonObject = appThemeJSONParser.SelectAppThemeMaster(linktoBusinessMasterId);
+                                if (jsonObject != null) {
+//                                    sharePreferenceManage.CreatePreference("GuestAppTheme", "AppThemeJson", jsonObject.toString(), SplashScreenActivity.this);
+                                    Globals.objAppThemeMaster = appThemeJSONParser.SetClassPropertiesFromJSONObject(jsonObject);
+//                                } else if (sharePreferenceManage.GetPreference("GuestAppTheme", "AppThemeJson", SplashScreenActivity.this) != null &&
+//                                        !sharePreferenceManage.GetPreference("GuestAppTheme", "AppThemeJson", SplashScreenActivity.this).equals("")) {
+//                                    JSONObject jsonObject1 = new JSONObject(sharePreferenceManage.GetPreference("GuestAppTheme", "AppThemeJson", SplashScreenActivity.this));
+//                                    Globals.objAppThemeMaster = appThemeJSONParser.SetClassPropertiesFromJSONObject(jsonObject1);
+                                }
+                            }catch(Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                }
+            }, 3000);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

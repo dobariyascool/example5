@@ -98,6 +98,9 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
                 txtLoginChar.setTextColor(Globals.objAppThemeMaster.getColorPrimary());
                 txtFullName.setTextColor(Globals.objAppThemeMaster.getColorCardText());
                 txtEmail.setTextColor(Globals.objAppThemeMaster.getColorCardText());
+                fabEdit.setColorNormal(Globals.objAppThemeMaster.getColorFloatingButton());
+                fabEdit.setColorPressed(Globals.objAppThemeMaster.getColorFloatingButton());
+                fabEdit.setColorRipple(Globals.objAppThemeMaster.getColorFloatingButton());
             }
             else {
                 Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));

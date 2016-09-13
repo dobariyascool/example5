@@ -3,6 +3,11 @@ package com.arraybit.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -105,6 +110,10 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 } else {
                     Picasso.with(holder.ivItem.getContext()).load(objItemMaster.getSM_ImagePhysicalName()).into(holder.ivItem);
                 }
+            }
+
+            if (holder.ivItem.getDrawable() == null) {
+                Picasso.with(holder.ivItem.getContext()).load(R.drawable.default_image).into(holder.ivItem);
             }
             if (objItemMaster.getShortDescription().equals("")) {
                 holder.txtItemDescription.setVisibility(View.INVISIBLE);
@@ -434,7 +443,13 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     txtItemPrice.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.yellow)));
                     Globals.CustomView(btnAddDisable, ContextCompat.getColor(context, R.color.transparent_accent), ContextCompat.getColor(context, android.R.color.transparent));
                     btnAddDisable.setTextColor(ContextCompat.getColor(context, R.color.dimWhite));
-
+                    StateListDrawable drawable = (StateListDrawable)ibLike.getBackground();
+                    DrawableContainer.DrawableContainerState dcs = (DrawableContainer.DrawableContainerState)drawable.getConstantState();
+                    Drawable[] drawableItems = dcs.getChildren();
+//                    GradientDrawable gradientDrawableChecked = (GradientDrawable)drawableItems[0]; // item 1
+//                    GradientDrawable gradientDrawableUnChecked = (GradientDrawable)drawableItems[1]; // item 2
+                    drawableItems[1].mutate();
+                    drawableItems[1].setColorFilter(Globals.objAppThemeMaster.getColorAccent(), PorterDuff.Mode.SRC_IN);
 //                    ibLike.setButtonDrawable(ContextCompat.getDrawable(context, R.drawable.like_drawable));
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

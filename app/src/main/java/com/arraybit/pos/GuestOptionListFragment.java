@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -21,6 +23,10 @@ import android.widget.RelativeLayout;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.rey.material.widget.TextView;
 
 public class GuestOptionListFragment extends Fragment implements View.OnClickListener {
 
@@ -33,6 +39,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
     Context context;
     ImageView ivHomeActivityImage;
     SharePreferenceManage sharePreferenceManage;
+    TextView txtTableName;
 
 
     public GuestOptionListFragment(Context context) {
@@ -45,13 +52,14 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_guest_option_list, container, false);
-
+        boolean isStart = getArguments().getBoolean("isStart", false);
         guestOptionLayout = (LinearLayout) view.findViewById(R.id.guestOptionLayout);
 //        if (!getActivity().getResources().getBoolean(R.bool.isTablet)) {
         menuModeLayout = (LinearLayout) view.findViewById(R.id.menuModeLayout);
         guestModeLayout = (LinearLayout) view.findViewById(R.id.guestModeLayout);
 
-        ivHomeActivityImage= (ImageView) view.findViewById(R.id.ivHomeActivityImage);
+        ivHomeActivityImage = (ImageView) view.findViewById(R.id.ivHomeActivityImage);
+        txtTableName = (TextView) view.findViewById(R.id.txtTableName);
 //        }
 
         footerLayout = (RelativeLayout) view.findViewById(R.id.footerLayout);
@@ -64,19 +72,40 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         CardView cvMenuModeOffers = (CardView) view.findViewById(R.id.cvMenuModeOffers);
 
         if (Globals.objAppThemeMaster != null) {
-            sharePreferenceManage = new SharePreferenceManage();
-            String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage2), getActivity());
-            String encodedLogoImage=sharePreferenceManage.GetPreference("GuestAppTheme",getResources().getString(R.string.encodedLogoImage),getActivity());
-            if (encodedImage != null && !encodedImage.equals("")) {
-                Globals.SetPageBackground(getActivity(), encodedImage, guestOptionLayout, null, null, null);
-            } else {
-                Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
-            }
+            if (isStart) {
+                if (Globals.objAppThemeMaster.getBackImageName2() != null && !Globals.objAppThemeMaster.getBackImageName2().equals("")) {
+//                Log.e("image", " " + Globals.objAppThemeMaster.getBackImageName2());
+                    Glide.with(this).load(Globals.objAppThemeMaster.getBackImageName2()).asBitmap().into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            Drawable drawable = new BitmapDrawable(resource);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                guestOptionLayout.setBackground(drawable);
+                            }
+                        }
+                    });
+                } else {
+                    Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
+                }
 
-            if (encodedLogoImage != null && !encodedLogoImage.equals("")) {
-                byte[] decodedString = Base64.decode(encodedLogoImage.getBytes(), Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                ivHomeActivityImage.setImageDrawable(new BitmapDrawable(getActivity().getResources(), decodedByte));
+                if (Globals.objAppThemeMaster.getLogoImageName() != null && !Globals.objAppThemeMaster.getLogoImageName().equals("")) {
+//                Log.e("image", " " + Globals.objAppThemeMaster.getLogoImageName());
+                    Glide.with(this).load(Globals.objAppThemeMaster.getLogoImageName()).asBitmap().into(ivHomeActivityImage);
+                }
+            } else {
+                sharePreferenceManage = new SharePreferenceManage();
+                String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage2), getActivity());
+                String encodedLogoImage = sharePreferenceManage.GetPreference("GuestAppTheme", getResources().getString(R.string.encodedLogoImage), getActivity());
+                if (encodedImage != null && !encodedImage.equals("")) {
+                    Globals.SetPageBackground(getActivity(), encodedImage, guestOptionLayout, null, null, null);
+                } else {
+                    Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
+                }
+                if (encodedLogoImage != null && !encodedLogoImage.equals("")) {
+                    byte[] decodedString = Base64.decode(encodedLogoImage.getBytes(), Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    ivHomeActivityImage.setImageDrawable(new BitmapDrawable(getActivity().getResources(), decodedByte));
+                }
             }
         } else {
             Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
@@ -90,9 +119,11 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         cvMenuModeOffers.setOnClickListener(this);
 
         if (GuestHomeActivity.isMenuMode) {
+            txtTableName.setText(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? "Dine In" : "Take Away");
             menuModeLayout.setVisibility(View.VISIBLE);
             guestModeLayout.setVisibility(View.GONE);
         } else {
+            txtTableName.setText(Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? GuestHomeActivity.objTableMaster.getTableName() + " - Dine In" : GuestHomeActivity.objTableMaster.getTableName() + " - Take Away");
             menuModeLayout.setVisibility(View.GONE);
             guestModeLayout.setVisibility(View.VISIBLE);
         }

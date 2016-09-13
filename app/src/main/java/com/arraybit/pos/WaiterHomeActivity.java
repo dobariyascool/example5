@@ -96,7 +96,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
         TextView txtName = (TextView) headerView.findViewById(R.id.txtName);
         CompoundButton cbLogout = (CompoundButton) headerView.findViewById(R.id.cbLogout);
         cbLogout.setVisibility(View.VISIBLE);
-        txtLetter.setTextColor(ContextCompat.getColor(this,android.R.color.white));
+        txtLetter.setTextColor(ContextCompat.getColor(this, android.R.color.white));
 
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         SetWaiterName(txtName, txtLetter, navigationView);
@@ -114,10 +114,19 @@ public class WaiterHomeActivity extends AppCompatActivity implements NavigationV
 
         AddFragmentInLayout(new WaiterOptionListFragment());
 
-        if (Service.CheckNet(WaiterHomeActivity.this)) {
-            new CounterLoadingTask().execute();
+
+        if (Globals.totalCounter > 0) {
+            if (Globals.totalCounter > 1) {
+                navigationView.getMenu().findItem(R.id.wChangeCounter).setEnabled(true);
+            } else {
+                navigationView.getMenu().findItem(R.id.wChangeCounter).setEnabled(false);
+            }
         } else {
-            Globals.ShowSnackBar(waiterHomeMainLayout, getResources().getString(R.string.MsgCheckConnection), WaiterHomeActivity.this, 1000);
+            if (Service.CheckNet(WaiterHomeActivity.this)) {
+                new CounterLoadingTask().execute();
+            } else {
+                Globals.ShowSnackBar(waiterHomeMainLayout, getResources().getString(R.string.MsgCheckConnection), WaiterHomeActivity.this, 1000);
+            }
         }
 
         cbLogout.setOnClickListener(this);

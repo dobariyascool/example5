@@ -209,7 +209,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
                 LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.separator);
                 GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.separator1);
-                gradientDrawable.setStroke(2,Globals.objAppThemeMaster.getColorAccentDark()); // change color
+                gradientDrawable.setStroke(2, Globals.objAppThemeMaster.getColorAccentDark()); // change color
                 scrollView.setBackground(shape);
 
                 Globals.CustomView(btnOrder, Globals.objAppThemeMaster.getColorAccent(), ContextCompat.getColor(getActivity(), android.R.color.transparent));
@@ -224,7 +224,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 
                 LayerDrawable shape = (LayerDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.separator);
                 GradientDrawable gradientDrawable = (GradientDrawable) shape.findDrawableByLayerId(R.id.separator1);
-                gradientDrawable.setStroke(2,ContextCompat.getColor(getActivity(), R.color.accent_dark)); // change color
+                gradientDrawable.setStroke(2, ContextCompat.getColor(getActivity(), R.color.accent_dark)); // change color
                 scrollView.setBackground(shape);
 
                 Globals.CustomView(btnOrder, ContextCompat.getColor(getActivity(), R.color.accent_secondary), ContextCompat.getColor(getActivity(), android.R.color.transparent));
@@ -239,7 +239,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(getActivity(), android.R.color.white));
             app_bar.setOverflowIcon(drawable);
 
-            Globals.CustomView(btnOrder, ContextCompat.getColor(getActivity(), R.color.accent_red_dark ), ContextCompat.getColor(getActivity(), android.R.color.transparent));
+            Globals.CustomView(btnOrder, ContextCompat.getColor(getActivity(), R.color.accent_red_dark), ContextCompat.getColor(getActivity(), android.R.color.transparent));
             btnOrder.setTextColor(ContextCompat.getColor(getActivity(), android.R.color.white));
             Globals.CustomView(btnOrderDisable, ContextCompat.getColor(getActivity(), R.color.transparent_red), ContextCompat.getColor(getActivity(), android.R.color.transparent));
             btnOrderDisable.setTextColor(ContextCompat.getColor(getActivity(), R.color.waitingTitleIconColor));
@@ -651,6 +651,10 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
             if (objItemMaster.getMD_ImagePhysicalName() != null && !objItemMaster.getMD_ImagePhysicalName().equals("")) {
                 Picasso.with(getActivity()).load(objItemMaster.getMD_ImagePhysicalName()).into(ivItemImage);
             } else {
+                Picasso.with(getActivity()).load(R.drawable.default_image).into(ivItemImage);
+            }
+
+            if (ivItemImage.getDrawable() == null) {
                 Picasso.with(getActivity()).load(R.drawable.default_image).into(ivItemImage);
             }
             if (!objItemMaster.getOptionValueTranIds().equals("")) {

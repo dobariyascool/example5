@@ -2,11 +2,16 @@ package com.arraybit.pos;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +22,9 @@ import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.modal.TableMaster;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -28,6 +36,7 @@ public class MenuActivity extends AppCompatActivity {
     public static TableMaster objTableMaster = null;
     public static boolean parentActivity = false;
     FrameLayout mainLayout;
+    SharePreferenceManage sharePreferenceManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +45,33 @@ public class MenuActivity extends AppCompatActivity {
 
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
+            if (Globals.objAppThemeMaster != null) {
+                sharePreferenceManage = new SharePreferenceManage();
+                String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getString(R.string.guestEncodedImage1), this);
+                if (encodedImage != null && !encodedImage.equals("")) {
+                    Globals.SetPageBackground(this, encodedImage, null, null, mainLayout, null);
+//                    Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
+                } else {
+                    Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
+                }
+//                if (Globals.objAppThemeMaster.getBackImageName1() != null && !Globals.objAppThemeMaster.getBackImageName1().equals("")) {
+////                        Log.e("image", " " + Globals.objAppThemeMaster.getBackImageName1());
+//                    Glide.with(this).load(Globals.objAppThemeMaster.getBackImageName1()).asBitmap().into(new SimpleTarget<Bitmap>() {
+//                        @Override
+//                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                            Drawable drawable = new BitmapDrawable(resource);
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                                mainLayout.setBackground(drawable);
+//                            }
+//                        }
+//                    });
+//                } else {
+//                    Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
+//                }
+            } else {
+                Globals.SetScaleImageBackground(MenuActivity.this, null, null, mainLayout);
+            }
+
         } else {
             mainLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.background_img));
         }

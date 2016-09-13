@@ -19,7 +19,7 @@
             android:contentDescription="@string/splash_screen"
             android:padding="50dp"
             android:scaleType="centerInside"
-            android:visibility="gone"/>
+            android:visibility="gone" />
         <!--android:src="@drawable/splash_screen_image"-->
 
     </RelativeLayout>
@@ -27,8 +27,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_alignParentBottom="true"
+        android:background="@android:color/black"
         android:gravity="end|bottom|center">
 
         <ImageView
@@ -43,6 +44,7 @@
             android:visibility="gone" />
         <!--android:src="@drawable/cmp_logo"-->
 
+
         <ImageView
             android:id="@+id/ivCompanyLogo"
             android:layout_width="160dp"
@@ -50,10 +52,11 @@
             android:layout_marginBottom="@dimen/control_SpecingSmall"
             android:layout_marginEnd="@dimen/control_SpecingSmall"
             android:layout_marginTop="@dimen/control_SpecingSmall"
+            android:layout_toEndOf="@+id/ivCompany"
             android:contentDescription="@string/splash_screen"
-            android:gravity="start|center"
-            android:scaleType="fitStart"
-            android:src="@drawable/arraybit_text"
-            android:visibility="gone"/>
+            android:gravity="center"
+            android:scaleType="fitEnd"
+            android:src="@drawable/arraybit_text" />
     </LinearLayout>
+
 </RelativeLayout>

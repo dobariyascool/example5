@@ -18,6 +18,8 @@ public class AppThemeMaster implements Parcelable {
     String BackImageName1;
     String BackImageName2Bytes;
     String BackImageName2;
+    String WelcomeBackImageBytes;
+    String WelcomeBackImage;
     String ContactMap;
     int ColorPrimary;
     int ColorPrimaryDark;
@@ -26,7 +28,7 @@ public class AppThemeMaster implements Parcelable {
     int ColorAccentDark;
     int ColorAccentLight;
     int ColorTextPrimary;
-    int ColorTextSecondary;
+    int ColorFloatingButton;
     int ColorButtonRipple;
     int ColorCardView;
     int ColorCardViewRipple;
@@ -46,6 +48,8 @@ public class AppThemeMaster implements Parcelable {
             appThemeMaster.BackImageName1 = in.readString();
             appThemeMaster.BackImageName2Bytes = in.readString();
             appThemeMaster.BackImageName2 = in.readString();
+            appThemeMaster.WelcomeBackImageBytes= in.readString();
+            appThemeMaster.WelcomeBackImage = in.readString();
             appThemeMaster.ContactMap = in.readString();
             appThemeMaster.ColorPrimary = in.readInt();
             appThemeMaster.ColorPrimaryDark = in.readInt();
@@ -54,7 +58,7 @@ public class AppThemeMaster implements Parcelable {
             appThemeMaster.ColorAccentDark = in.readInt();
             appThemeMaster.ColorAccentLight = in.readInt();
             appThemeMaster.ColorTextPrimary = in.readInt();
-            appThemeMaster.ColorTextSecondary = in.readInt();
+            appThemeMaster.ColorFloatingButton = in.readInt();
             appThemeMaster.ColorButtonRipple = in.readInt();
             appThemeMaster.ColorCardView = in.readInt();
             appThemeMaster.ColorCardViewRipple = in.readInt();
@@ -205,12 +209,12 @@ public class AppThemeMaster implements Parcelable {
         ColorTextPrimary = colorTextPrimary;
     }
 
-    public int getColorTextSecondary() {
-        return ColorTextSecondary;
+    public int getColorFloatingButton() {
+        return ColorFloatingButton;
     }
 
-    public void setColorTextSecondary(int colorTextSecondary) {
-        ColorTextSecondary = colorTextSecondary;
+    public void setColorFloatingButton(int colorFloatingButton) {
+        ColorFloatingButton = colorFloatingButton;
     }
 
     public int getColorButtonRipple() {
@@ -253,6 +257,22 @@ public class AppThemeMaster implements Parcelable {
         ColorHeaderText = colorHeaderText;
     }
 
+    public String getWelcomeBackImageBytes() {
+        return WelcomeBackImageBytes;
+    }
+
+    public void setWelcomeBackImageBytes(String welcomeBackImageBytes) {
+        WelcomeBackImageBytes = welcomeBackImageBytes;
+    }
+
+    public String getWelcomeBackImage() {
+        return WelcomeBackImage;
+    }
+
+    public void setWelcomeBackImage(String welcomeBackImage) {
+        WelcomeBackImage = welcomeBackImage;
+    }
+
     public static Creator<AppThemeMaster> getCREATOR() {
         return CREATOR;
     }
@@ -273,6 +293,8 @@ public class AppThemeMaster implements Parcelable {
         dest.writeString(BackImageName1);
         dest.writeString(BackImageName2Bytes);
         dest.writeString(BackImageName2);
+        dest.writeString(WelcomeBackImageBytes);
+        dest.writeString(WelcomeBackImage);
         dest.writeString(ContactMap);
         dest.writeInt(ColorPrimary);
         dest.writeInt(ColorPrimaryDark);
@@ -281,7 +303,7 @@ public class AppThemeMaster implements Parcelable {
         dest.writeInt(ColorAccentDark);
         dest.writeInt(ColorAccentLight);
         dest.writeInt(ColorTextPrimary);
-        dest.writeInt(ColorTextSecondary);
+        dest.writeInt(ColorFloatingButton);
         dest.writeInt(ColorButtonRipple);
         dest.writeInt(ColorCardView);
         dest.writeInt(ColorCardViewRipple);

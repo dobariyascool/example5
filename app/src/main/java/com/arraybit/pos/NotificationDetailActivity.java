@@ -174,7 +174,7 @@ public class NotificationDetailActivity extends AppCompatActivity implements Not
 
     private void SetRecyclerView(ArrayList<WaiterNotificationMaster> alWaiterNotificationMaster) {
         if (alWaiterNotificationMaster == null) {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgServerNotResponding), rvNotification, 0);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgSelectFail), rvNotification, 0);
         } else if (alWaiterNotificationMaster.size() == 0) {
             Globals.SetErrorLayout(errorLayout, true, String.format(getResources().getString(R.string.MsgNoRecordFound), getResources().getString(R.string.notification)), rvNotification, 0);
         } else {

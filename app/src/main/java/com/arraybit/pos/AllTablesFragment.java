@@ -4,7 +4,10 @@ package com.arraybit.pos;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.transition.Slide;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +45,9 @@ import com.arraybit.modal.TableMaster;
 import com.arraybit.modal.WaitingMaster;
 import com.arraybit.parser.TableJSONParser;
 import com.arraybit.parser.WaitingJSONParser;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.rey.material.widget.TextView;
@@ -124,6 +131,11 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
 
+        //floating action menu
+        famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
+        famRoot.setClosedOnTouchOutside(true);
+        //end
+
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
             if (Globals.objAppThemeMaster != null) {
                 objSharePreferenceManage = new SharePreferenceManage();
@@ -133,6 +145,20 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                 } else {
                     Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
                 }
+//                if (Globals.objAppThemeMaster.getBackImageName1() != null && !Globals.objAppThemeMaster.getBackImageName1().equals("")) {
+////                    Log.e("image", " " + Globals.objAppThemeMaster.getBackImageName1());
+//                    Glide.with(this).load(Globals.objAppThemeMaster.getBackImageName1()).asBitmap().into(new SimpleTarget<Bitmap>() {
+//                        @Override
+//                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                            Drawable drawable = new BitmapDrawable(resource);
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                                allTablesFragment.setBackground(drawable);
+//                            }
+//                        }
+//                    });
+//                } else {
+//                    Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
+//                }
             } else {
                 Globals.SetScaleImageBackground(getActivity(), allTablesFragment);
             }
@@ -141,7 +167,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         } else {
             allTablesFragment.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
         }
-
 
         //get counterMasterId
         objSharePreferenceManage = new SharePreferenceManage();
@@ -156,12 +181,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             objWaitingMaster = bundle.getParcelable("WaitingMaster");
             this.linktoOrderTypeMasterId = String.valueOf(bundle.getInt("linktoOrderTypeMasterId"));
         }
-
-
-        //floating action menu
-        famRoot = (FloatingActionMenu) view.findViewById(R.id.famRoot);
-        famRoot.setClosedOnTouchOutside(true);
-        //end
 
         //floating action button
         FloatingActionButton fabVacant = (FloatingActionButton) view.findViewById(R.id.fabVacant);
