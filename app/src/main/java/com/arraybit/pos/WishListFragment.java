@@ -126,7 +126,7 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
             }
 
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvWishItemMaster, R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvWishItemMaster, R.drawable.wifi_off);
         }
 
         ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);

@@ -80,7 +80,7 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
 
         actRemark = (AppCompatMultiAutoCompleteTextView) view.findViewById(R.id.actRemark);
         if (Globals.isWishListShow == 0) {
-            actRemark.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getActivity(), R.drawable.arrow_drop_down_vector_drawable), null);
+            actRemark.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getActivity(), R.drawable.arrow_drop_down), null);
         }
 
         focusText = (TextView)view.findViewById(R.id.focusText);

@@ -63,9 +63,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/menu_drawable"
                 android:text="@string/cmfMenuMode"
                 android:visibility="visible"/>
+            <!--android:drawableTop="@drawable/menu_drawable"-->
 
         </LinearLayout>
         <LinearLayout

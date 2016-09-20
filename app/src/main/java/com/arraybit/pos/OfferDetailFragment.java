@@ -165,12 +165,12 @@ public class OfferDetailFragment extends Fragment implements View.OnClickListene
             @Override
             public void onClick(View v) {
                 if (isShow == 0) {
-                    ibVisible.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.collapse_drawable));
+                    ibVisible.setImageResource(R.drawable.collapse);
                     cvCondition.setVisibility(View.VISIBLE);
                     wvCondition.loadData(objOfferMaster.getTermsAndConditions(), "text/html", "UTF-8");
                     isShow = 1;
                 } else {
-                    ibVisible.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.expand_drawable));
+                    ibVisible.setImageResource(R.drawable.expand);
                     cvCondition.setVisibility(View.GONE);
                     isShow = 0;
                 }
@@ -181,12 +181,12 @@ public class OfferDetailFragment extends Fragment implements View.OnClickListene
             @Override
             public void onClick(View v) {
                 if (isShow == 0) {
-                    ibVisible.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.collapse_drawable));
+                    ibVisible.setImageResource(R.drawable.collapse);
                     cvCondition.setVisibility(View.VISIBLE);
                     wvCondition.loadData(objOfferMaster.getTermsAndConditions(), "text/html", "UTF-8");
                     isShow = 1;
                 } else {
-                    ibVisible.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.expand_drawable));
+                    ibVisible.setImageResource(R.drawable.expand);
                     cvCondition.setVisibility(View.GONE);
                     isShow = 0;
                 }
@@ -200,7 +200,7 @@ public class OfferDetailFragment extends Fragment implements View.OnClickListene
             new OfferLoadingTask().execute();
         } else {
             scrollView.setVisibility(View.GONE);
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), null, R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), null, R.drawable.wifi_off);
         }
 
 
@@ -245,12 +245,12 @@ public class OfferDetailFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         if (v.getId() == R.id.termsConditionLayout || v.getId() == R.id.ibVisible) {
             if (isShow == 0) {
-                ibVisible.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.collapse_drawable));
+                ibVisible.setImageResource(R.drawable.collapse);
                 cvCondition.setVisibility(View.VISIBLE);
                 wvCondition.loadData(objOfferMaster.getTermsAndConditions(), "text/html", "UTF-8");
                 isShow = 1;
             } else {
-                ibVisible.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.expand_drawable));
+                ibVisible.setImageResource(R.drawable.expand);
                 cvCondition.setVisibility(View.GONE);
                 isShow = 0;
             }

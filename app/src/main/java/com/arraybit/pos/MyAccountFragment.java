@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -78,6 +79,15 @@ public class MyAccountFragment extends Fragment implements GuestProfileFragment.
         txtEmail = (TextView) view.findViewById(R.id.txtEmail);
 
         fabEdit = (FloatingActionButton) view.findViewById(R.id.fabEdit);
+
+        Drawable fabEditIcon;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            fabEditIcon= VectorDrawableCompat.create(getResources(), R.drawable.edit, getContext().getTheme());
+        } else {
+            fabEditIcon = getResources().getDrawable(R.drawable.edit, getContext().getTheme());
+        }
+
+        fabEdit.setImageDrawable(fabEditIcon);
 
         GetData();
         SetUserName();

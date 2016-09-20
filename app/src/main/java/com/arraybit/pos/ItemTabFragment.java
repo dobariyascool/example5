@@ -125,7 +125,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         if (Service.CheckNet(getActivity())) {
             new GuestHomeItemLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvItem, R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvItem, R.drawable.wifi_off);
         }
 
         return view;

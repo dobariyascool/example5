@@ -143,11 +143,12 @@
                     android:id="@+id/ibLike"
                     android:layout_width="24dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/wishlist_drawable"
                     android:padding="@dimen/control_SpecingSmall"
                     android:textOff=""
                     android:textOn=""
                     android:visibility="visible" />
+                <!--android:background="@drawable/wishlist_drawable"-->
+
             </LinearLayout>
 
             <Space

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -100,10 +101,13 @@ public class FeedbackViewFragment extends Fragment {
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//                            Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                            startActivity(intent);
+//                            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//                            getActivity().getSupportFragmentManager().popBackStack();
+                            getActivity().getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_feedback), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
                         }
                     }, 1000);
                 }

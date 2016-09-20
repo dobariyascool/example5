@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.arraybit.pos.InformationFragment"
     tools:ignore="ContentDescription">
@@ -35,8 +36,7 @@
                         android:id="@+id/ivAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/address_drawable"
-                        />
+                        app:srcCompat="@drawable/address" />
 
                     <com.rey.material.widget.TextView
                         android:id="@+id/txtAddress"
@@ -71,7 +71,7 @@
                         android:id="@+id/ivCall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/call_drawable" />
+                        app:srcCompat="@drawable/call" />
 
                     <LinearLayout
                         android:id="@+id/phoneLayout"
@@ -120,7 +120,7 @@
                         android:id="@+id/ivEmail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/email_drawable" />
+                        app:srcCompat="@drawable/email" />
 
                     <com.rey.material.widget.TextView
                         android:id="@+id/txtEmail"
@@ -156,7 +156,7 @@
                         android:id="@+id/ivWebSite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/website_drawable" />
+                        app:srcCompat="@drawable/website" />
 
                     <com.rey.material.widget.TextView
                         android:id="@+id/txtWebSite"
@@ -192,7 +192,7 @@
                         android:id="@+id/ivFax"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/fax_drawable" />
+                        app:srcCompat="@drawable/fax" />
 
                     <com.rey.material.widget.TextView
                         android:id="@+id/txtFax"
@@ -214,7 +214,6 @@
                     android:background="@drawable/divider"
                     android:orientation="horizontal" />
 
-
             </LinearLayout>
 
             <LinearLayout
@@ -232,7 +231,7 @@
                     android:id="@+id/ivTimings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/timing_drawable"
+                    app:srcCompat="@drawable/timings"
                     tools:ignore="ContentDescription" />
 
                 <com.rey.material.widget.TextView

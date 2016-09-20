@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.arraybit.pos.AddDiscountDialogFragment"
     tools:ignore="HardcodedText">
 
@@ -16,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/control_SpecingSmall"
-            android:drawableEnd="@drawable/arrow_drop_down_vector_drawable"
             android:dropDownHeight="190dp"
             android:dropDownListViewStyle="@style/DropDownListViewStyle"
             android:editable="false"
@@ -29,6 +29,7 @@
             android:textColorHint="@color/primary_dark"
             android:textSize="14sp"
             tools:ignore="Deprecated" />
+        <!--android:drawableEnd="@drawable/arrow_drop_down"-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -233,7 +234,8 @@
                 android:layout_marginBottom="@dimen/control_SpecingTiny"
                 android:layout_marginEnd="@dimen/control_SpecingTiny"
                 android:layout_weight="1"
-                android:src="@drawable/keyboard_clear_vector_drawable" />
+                />
+            <!--android:src="@drawable/keyboard_clear"-->
 
         </LinearLayout>
 

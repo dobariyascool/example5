@@ -9,6 +9,7 @@ import android.graphics.drawable.DrawableContainer;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -428,6 +429,18 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 ivItem.setLayoutParams(layoutParams);
             }
 
+            if (ibLike != null) {
+                VectorDrawableCompat vcAccept = VectorDrawableCompat.create(context.getResources(), R.drawable.wishlist_fill_icon, context.getTheme());
+                VectorDrawableCompat vcAcceptWhite = VectorDrawableCompat.create(context.getResources(), R.drawable.wishlist_icon, context.getTheme());
+
+                StateListDrawable stateList = new StateListDrawable();
+                stateList.addState(new int[]{android.R.attr.state_checked, -android.R.attr.state_pressed}, vcAccept);
+                stateList.addState(new int[]{-android.R.attr.state_checked, android.R.attr.state_pressed}, vcAcceptWhite);
+                stateList.addState(new int[]{android.R.attr.state_pressed, android.R.attr.state_pressed}, vcAcceptWhite);
+                stateList.addState(new int[]{}, vcAcceptWhite);
+                ibLike.setBackground(stateList);
+            }
+
             if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
                 if (Globals.objAppThemeMaster != null) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -443,6 +456,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     txtItemPrice.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.yellow)));
                     Globals.CustomView(btnAddDisable, ContextCompat.getColor(context, R.color.transparent_accent), ContextCompat.getColor(context, android.R.color.transparent));
                     btnAddDisable.setTextColor(ContextCompat.getColor(context, R.color.dimWhite));
+
                     StateListDrawable drawable = (StateListDrawable)ibLike.getBackground();
                     DrawableContainer.DrawableContainerState dcs = (DrawableContainer.DrawableContainerState)drawable.getConstantState();
                     Drawable[] drawableItems = dcs.getChildren();
@@ -451,6 +465,9 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     drawableItems[1].mutate();
                     drawableItems[1].setColorFilter(Globals.objAppThemeMaster.getColorAccent(), PorterDuff.Mode.SRC_IN);
 //                    ibLike.setButtonDrawable(ContextCompat.getDrawable(context, R.drawable.like_drawable));
+
+
+
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         cvItem.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent_orange));

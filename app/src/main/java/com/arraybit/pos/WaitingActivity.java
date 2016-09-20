@@ -151,6 +151,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
                 Drawable drawable = item.getIcon();
                 drawable = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
+                item.setIcon(drawable);
                 ReplaceFragment(new AllTablesFragment(WaitingActivity.this, false, null));
             } else {
                 item.setTitle("T");
@@ -213,7 +214,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     @Override
     public void UpdateStatus(boolean flag) {
         if(flag){
-            app_bar.getMenu().findItem(R.id.mWaiting).setTitle("W").setIcon(R.mipmap.call_waiter);
+            app_bar.getMenu().findItem(R.id.mWaiting).setTitle("W").setIcon(R.mipmap.waiting_list);
         }else{
             app_bar.getMenu().findItem(R.id.mWaiting).setTitle("T").setIcon(R.mipmap.view_table);
             ReplaceFragment(new WaitingListFragment());

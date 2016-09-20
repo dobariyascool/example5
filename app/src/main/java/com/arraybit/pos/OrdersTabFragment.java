@@ -135,7 +135,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
                 }
             }
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvOrder, R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvOrder, R.drawable.wifi_off);
         }
     }
 
@@ -177,7 +177,7 @@ public class OrdersTabFragment extends Fragment implements SearchView.OnQueryTex
         if (Service.CheckNet(getActivity())) {
             new OrderMasterLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvOrder, R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvOrder, R.drawable.wifi_off);
         }
 
     }

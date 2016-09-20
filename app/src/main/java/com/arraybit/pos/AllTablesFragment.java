@@ -197,7 +197,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         if (Service.CheckNet(getActivity())) {
             new TableMasterLoadingTask().execute();
         } else {
-            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), R.drawable.wifi_drawable);
+            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), R.drawable.wifi_off);
         }
 
         return view;
@@ -217,10 +217,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                         && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1)
                         .getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_tables))) {
                     Globals.isWishListShow = 0;
-                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                     getActivity().getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             } else {
                 getActivity().finish();
@@ -415,7 +412,7 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
         if (errorIcon != 0) {
             ivErrorIcon.setImageResource(errorIcon);
         } else {
-            ivErrorIcon.setImageResource(R.drawable.alert_drawable);
+            ivErrorIcon.setImageResource(R.drawable.alert);
         }
         if (isShow) {
             errorLayout.setVisibility(View.VISIBLE);

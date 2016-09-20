@@ -6,10 +6,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -165,9 +167,27 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         btnOrder = (Button) view.findViewById(R.id.btnOrder);
         btnOrderDisable = (Button) view.findViewById(R.id.btnOrderDisable);
 
+        if (tbLike != null) {
+            VectorDrawableCompat vcAccept = VectorDrawableCompat.create(getActivity().getResources(), R.drawable.wishlist_fill_icon, getActivity().getTheme());
+            VectorDrawableCompat vcAcceptWhite = VectorDrawableCompat.create(getActivity().getResources(), R.drawable.wish_list_primary, getActivity().getTheme());
+
+            StateListDrawable stateList = new StateListDrawable();
+            stateList.addState(new int[]{android.R.attr.state_checked, -android.R.attr.state_pressed}, vcAccept);
+            stateList.addState(new int[]{-android.R.attr.state_checked, android.R.attr.state_pressed}, vcAcceptWhite);
+            stateList.addState(new int[]{android.R.attr.state_pressed, android.R.attr.state_pressed}, vcAcceptWhite);
+            stateList.addState(new int[]{}, vcAcceptWhite);
+            tbLike.setBackground(stateList);
+        }
+
         actRemark = (AppCompatMultiAutoCompleteTextView) view.findViewById(R.id.actRemark);
         if (Globals.isWishListShow == 0) {
-            actRemark.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getActivity(), R.drawable.arrow_drop_down_vector_drawable), null);
+            Drawable actRemarkIcon;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                actRemarkIcon = VectorDrawableCompat.create(getResources(), R.drawable.arrow_drop_down, getContext().getTheme());
+            } else {
+                actRemarkIcon= getResources().getDrawable(R.drawable.arrow_drop_down, getContext().getTheme());
+            }
+            actRemark.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, actRemarkIcon, null);
         }
         textInputLayout = (TextInputLayout) view.findViewById(R.id.textInputLayout);
 

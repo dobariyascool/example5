@@ -87,7 +87,7 @@ public class CounterFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new CounterLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvCounter,R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvCounter,R.drawable.wifi_off);
         }
 
         return view;
@@ -99,7 +99,7 @@ public class CounterFragment extends Fragment {
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiting))) {
             menu.findItem(R.id.mWaiting).setVisible(false);
             menu.findItem(R.id.logout).setVisible(false);
-            menu.findItem(R.id.notification_layout).setVisible(false);
+//            menu.findItem(R.id.notification_layout).setVisible(false);
         } else if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_activity_waiter_home))) {
             menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.notification_layout).setVisible(false);

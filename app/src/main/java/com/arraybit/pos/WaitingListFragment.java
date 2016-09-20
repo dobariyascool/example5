@@ -1,10 +1,13 @@
 package com.arraybit.pos;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -57,6 +60,15 @@ public class WaitingListFragment extends Fragment {
 
         errorLayout = (LinearLayout)view.findViewById(R.id.errorLayout);
         headerLayout = (LinearLayout)view.findViewById(R.id.headerLayout);
+
+        Drawable fabAddIcon;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            fabAddIcon = VectorDrawableCompat.create(getResources(), R.drawable.plus_white, getContext().getTheme());
+        } else {
+            fabAddIcon = getResources().getDrawable(R.drawable.plus_white, getContext().getTheme());
+        }
+
+        fabAdd.setImageDrawable(fabAddIcon);
 
         if (Service.CheckNet(getActivity())) {
             new WaitingStatusLoadingTask().execute();

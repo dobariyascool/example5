@@ -195,7 +195,7 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
         if (Service.CheckNet(getActivity())) {
             new GuestHomeCategoryLodingTask().execute();
         } else {
-            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), itemTabLayout, itemViewPager, R.drawable.wifi_drawable);
+            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), itemTabLayout, itemViewPager, R.drawable.wifi_off);
         }
 
         setHasOptionsMenu(true);

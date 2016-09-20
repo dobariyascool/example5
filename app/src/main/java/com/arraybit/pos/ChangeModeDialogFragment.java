@@ -4,10 +4,11 @@ package com.arraybit.pos;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,16 @@ public class ChangeModeDialogFragment extends DialogFragment implements View.OnC
 
         txtSubmit = (TextView) view.findViewById(R.id.txtSubmit);
         txtCancel = (TextView) view.findViewById(R.id.txtCancel);
+
+        Drawable btnMenuIcon;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            btnMenuIcon = VectorDrawableCompat.create(getResources(), R.drawable.menu, getContext().getTheme());
+        } else {
+            btnMenuIcon = getResources().getDrawable(R.drawable.menu, getContext().getTheme());
+        }
+
+        btnMenuMode.setCompoundDrawablesRelativeWithIntrinsicBounds(null, btnMenuIcon, null, null);
+
         Drawable[] drawable = btnWaiterMode.getCompoundDrawablesRelative();
         drawable[1].mutate().setColorFilter(ContextCompat.getColor(getContext(), R.color.waitingTitleIconColor), PorterDuff.Mode.SRC_IN);
         SetVisibility();

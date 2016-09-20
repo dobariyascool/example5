@@ -98,7 +98,7 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
         if (Service.CheckNet(getActivity())) {
             new OrdersLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder, R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvTableOrder, R.drawable.wifi_off);
         }
 
 
@@ -110,10 +110,11 @@ public class TableOrderFragment extends Fragment implements View.OnClickListener
         if (item.getItemId() == android.R.id.home) {
             if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() == null) {
                 Globals.isWishListShow = 0;
-                Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//                Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intent);
+//                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         }
         return super.onOptionsItemSelected(item);

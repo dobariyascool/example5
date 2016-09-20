@@ -59,7 +59,10 @@
                 android:id="@+id/ivPrevious"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/previous_selector" />
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                />
+            <!--android:src="@drawable/previous_selector"-->
 
             <com.rey.material.widget.TextView
                 android:id="@+id/txtPrevious"
@@ -100,7 +103,10 @@
                 android:id="@+id/ivNext"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/next_selector" />
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                 />
+            <!--android:src="@drawable/next_selector"-->
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

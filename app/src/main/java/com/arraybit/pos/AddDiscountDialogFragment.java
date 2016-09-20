@@ -1,8 +1,11 @@
 package com.arraybit.pos;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.view.LayoutInflater;
@@ -79,6 +82,18 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
         discount = getArguments().getDouble("Discount", 0);
         isPercentage = getArguments().getBoolean("isPercentage", false);
 
+        Drawable btnClerIcon, actDiscountIcon;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            btnClerIcon = VectorDrawableCompat.create(getResources(), R.drawable.keyboard_clear, getContext().getTheme());
+            actDiscountIcon = VectorDrawableCompat.create(getResources(), R.drawable.arrow_drop_down, getContext().getTheme());
+        } else {
+            btnClerIcon = getResources().getDrawable(R.drawable.keyboard_clear, getContext().getTheme());
+            actDiscountIcon = getResources().getDrawable(R.drawable.arrow_drop_down, getContext().getTheme());
+        }
+
+        btnClear.setImageDrawable(btnClerIcon);
+        actDiscount.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, actDiscountIcon, null);
+
         actDiscount.setOnClickListener(this);
         etDiscount.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
@@ -104,17 +119,13 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
             Globals.ShowSnackBar(getActivity().getCurrentFocus(), getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
         }
 
-        if(discount!=0)
-        {
+        if (discount != 0) {
             etDiscount.setText(String.valueOf((int) discount));
-       etDiscount.setSelection(etDiscount.getText().length());
-            if(isPercentage)
-            {
+            etDiscount.setSelection(etDiscount.getText().length());
+            if (isPercentage) {
                 tbPercentage.setChecked(true);
                 tbRupee.setChecked(false);
-            }
-            else
-            {
+            } else {
                 tbPercentage.setChecked(false);
                 tbRupee.setChecked(true);
             }
@@ -156,10 +167,9 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
                         strDiscount = etDiscount.getText().toString().trim().substring(0, 1);
                         if (strDiscount.equals("0")) {
                             strDiscount = etDiscount.getText().toString().trim().substring(1, etDiscount.getText().length());
-                            if(!strDiscount.equals("") && strDiscount!=null) {
+                            if (!strDiscount.equals("") && strDiscount != null) {
                                 objDiscountMaster.setDiscount(Double.valueOf(strDiscount));
-                            }
-                            else {
+                            } else {
                                 objDiscountMaster.setDiscount(Double.valueOf(etDiscount.getText().toString().trim()));
                             }
                         } else {
@@ -305,8 +315,8 @@ public class AddDiscountDialogFragment extends DialogFragment implements View.On
                         || sbDiscount.toString().length() > 4 && !sbDiscount.toString().equals("100") && sbDiscount.toString().contains("."))) {
             etDiscount.setError(getActivity().getResources().getString(R.string.ddfErrorDiscount));
             return false;
-        }else if(tbRupee.isChecked() && !etDiscount.getText().toString().isEmpty()
-                 && Double.valueOf(etDiscount.getText().toString()) >= totalAmount){
+        } else if (tbRupee.isChecked() && !etDiscount.getText().toString().isEmpty()
+                && Double.valueOf(etDiscount.getText().toString()) >= totalAmount) {
             etDiscount.setError(getActivity().getResources().getString(R.string.ddfErrorDiscount));
             return false;
         }

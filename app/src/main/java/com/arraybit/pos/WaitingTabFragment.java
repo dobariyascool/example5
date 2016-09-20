@@ -79,7 +79,7 @@ public class WaitingTabFragment extends Fragment implements WaitingListAdapter.c
         if (Service.CheckNet(context)) {
             new WaitingMasterLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvWaiting,R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout,true,getResources().getString(R.string.MsgCheckConnection),rvWaiting,R.drawable.wifi_off);
         }
 
     }

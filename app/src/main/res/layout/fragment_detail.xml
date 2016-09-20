@@ -59,10 +59,11 @@
                             android:id="@+id/tbLike"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:background="@drawable/wish_list_primary_drawable"
                             android:padding="@dimen/control_SpecingSmall"
                             android:textOff=""
                             android:textOn="" />
+                        <!--android:background="@drawable/wish_list_primary_drawable"-->
+
                     </LinearLayout>
                 </RelativeLayout>
 

@@ -127,7 +127,7 @@ public class OfferFragment extends Fragment {
         if (Service.CheckNet(getActivity())) {
             new OfferLoadingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvOffer, R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvOffer, R.drawable.wifi_off);
         }
 
         return view;

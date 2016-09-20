@@ -518,7 +518,7 @@
         <item name="rd_rippleColor">@color/orange_light</item>
         <item name="fab_size">normal</item>
         <item name="fab_colorPressed">@color/orange</item>
-        <item name="android:src">@drawable/plus_white_drawable</item>
+        <!--<item name="android:src">@drawable/plus_white_drawable</item>-->
     </style>
 
     <style name="FloatingMiniButton" parent="FloatingActionButton">
@@ -526,7 +526,7 @@
         <item name="rd_rippleColor">@color/orange_light</item>
         <item name="fab_size">mini</item>
         <item name="fab_colorPressed">@color/orange</item>
-        <item name="android:src">@drawable/edit_vector_drawable</item>
+        <!--<item name="android:src">@drawable/edit_vector_drawable</item>-->
     </style>
 
     <style name="TextView">

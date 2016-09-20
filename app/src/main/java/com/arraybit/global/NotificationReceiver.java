@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
@@ -20,6 +21,7 @@ import com.arraybit.modal.WaiterNotificationMaster;
 import com.arraybit.parser.WaiterNotificationJSONParser;
 import com.arraybit.pos.NotificationDetailActivity;
 import com.arraybit.pos.R;
+import com.arraybit.pos.WaiterHomeActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,14 +94,13 @@ public class NotificationReceiver extends BroadcastReceiver {
             notificationCount++;
             AppCompatActivity activity = POSApplication.getAppCompatActivity();
             if (activity != null) {
-
-                notificationListener = (NotificationListener) activity;
-                notificationListener.ShowNotificationCount();
-
-                //            WaiterOptionListFragment waiterOptionListFragment = (WaiterOptionListFragment) activity.getSupportFragmentManager().findFragmentByTag(activity.getResources().getString(R.string.title_fragment_waiter_options));
-                //            if (waiterOptionListFragment != null) {
-                //                waiterOptionListFragment.ShowNotification();
-                //            }
+                if (notificationCount > 0) {
+                    if (activity instanceof WaiterHomeActivity) {
+                        Fragment fragment= activity.getSupportFragmentManager().findFragmentById(R.id.waiterHomeFragment);
+                        notificationListener = (NotificationListener) activity;
+                        notificationListener.ShowNotificationCount();
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

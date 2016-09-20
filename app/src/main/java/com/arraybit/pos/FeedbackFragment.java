@@ -5,9 +5,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -93,6 +95,30 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         SetViewPagerElevation();
 
+        if (ivPrevious != null) {
+            VectorDrawableCompat vcAccept = VectorDrawableCompat.create(getActivity().getResources(), R.drawable.previous, getActivity().getTheme());
+            VectorDrawableCompat vcAcceptWhite = VectorDrawableCompat.create(getActivity().getResources(), R.drawable.previous_grey, getActivity().getTheme());
+
+            StateListDrawable stateList = new StateListDrawable();
+            stateList.addState(new int[]{android.R.attr.state_enabled, -android.R.attr.state_pressed}, vcAccept);
+            stateList.addState(new int[]{-android.R.attr.state_enabled, android.R.attr.state_pressed}, vcAcceptWhite);
+            stateList.addState(new int[]{android.R.attr.state_enabled, android.R.attr.state_pressed}, vcAcceptWhite);
+            stateList.addState(new int[]{}, vcAcceptWhite);
+            ivPrevious.setImageDrawable(stateList);
+        }
+
+        if (ivNext != null) {
+            VectorDrawableCompat vcAccept = VectorDrawableCompat.create(getActivity().getResources(), R.drawable.next, getActivity().getTheme());
+            VectorDrawableCompat vcAcceptWhite = VectorDrawableCompat.create(getActivity().getResources(), R.drawable.next_grey, getActivity().getTheme());
+
+            StateListDrawable stateList = new StateListDrawable();
+            stateList.addState(new int[]{android.R.attr.state_enabled, -android.R.attr.state_pressed}, vcAccept);
+            stateList.addState(new int[]{-android.R.attr.state_enabled, android.R.attr.state_pressed}, vcAcceptWhite);
+            stateList.addState(new int[]{android.R.attr.state_enabled, android.R.attr.state_pressed}, vcAcceptWhite);
+            stateList.addState(new int[]{}, vcAcceptWhite);
+            ivNext.setImageDrawable(stateList);
+        }
+
         txtNext.setOnClickListener(this);
         txtPrevious.setOnClickListener(this);
         ivNext.setOnClickListener(this);
@@ -125,10 +151,12 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener, 
                         @Override
                         public void run() {
 
-                            Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//                            Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                            startActivity(intent);
+//                            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
+                            getActivity().getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_feedback), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         }
                     }, 1000);
                 }

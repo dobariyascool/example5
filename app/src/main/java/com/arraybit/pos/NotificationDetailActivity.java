@@ -77,7 +77,7 @@ public class NotificationDetailActivity extends AppCompatActivity implements Not
         if (Service.CheckNet(this)) {
             new NotificationLodingTask().execute();
         } else {
-            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvNotification, R.drawable.wifi_drawable);
+            Globals.SetErrorLayout(errorLayout, true, getResources().getString(R.string.MsgCheckConnection), rvNotification, R.drawable.wifi_off);
         }
 
 

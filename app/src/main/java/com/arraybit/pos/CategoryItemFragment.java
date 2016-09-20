@@ -184,7 +184,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         if (Service.CheckNet(getActivity())) {
             new GuestHomeCategoryLodingTask().execute();
         } else {
-            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), itemTabLayout, itemViewPager, R.drawable.wifi_drawable);
+            SetErrorLayout(true, getResources().getString(R.string.MsgCheckConnection), itemTabLayout, itemViewPager, R.drawable.wifi_off);
         }
 
         setHasOptionsMenu(true);
@@ -238,10 +238,13 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                     getActivity().overridePendingTransition(0, R.anim.right_exit);
                 } else {
                     Globals.CategoryItemFragmentResetStaticVariable();
-                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
+//                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    getActivity().setResult(Activity.RESULT_OK);
+                    getActivity().finish();
+                    getActivity().overridePendingTransition(0, R.anim.right_exit);
                 }
             } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                     && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
@@ -392,7 +395,7 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
         if (errorIcon != 0) {
             ivErrorIcon.setImageResource(errorIcon);
         } else {
-            ivErrorIcon.setImageResource(R.drawable.alert_drawable);
+            ivErrorIcon.setImageResource(R.drawable.alert);
         }
         if (isShow) {
             errorLayout.setVisibility(View.VISIBLE);

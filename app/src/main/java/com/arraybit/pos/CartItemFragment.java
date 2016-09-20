@@ -15,6 +15,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -139,6 +140,15 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
         TextView txtHeaderNo = (TextView) view.findViewById(R.id.txtHeaderNo);
         TextView txtHeaderRate = (TextView) view.findViewById(R.id.txtHeaderRate);
         TextView txtHeaderAmount = (TextView) view.findViewById(R.id.txtHeaderAmount);
+
+        Drawable btnRemarkIcon;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            btnRemarkIcon = VectorDrawableCompat.create(getResources(), R.drawable.edit_accent, getContext().getTheme());
+        } else {
+            btnRemarkIcon = getResources().getDrawable(R.drawable.edit_accent, getContext().getTheme());
+        }
+
+        btnRemark.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, btnRemarkIcon, null);
 
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
             getActivity().setTheme(R.style.AppThemeGuest);
