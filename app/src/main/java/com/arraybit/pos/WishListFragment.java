@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -287,7 +286,7 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
     }
 
     @Override
-    public void ButtonOnClick(ItemMaster objItemMaster) {
+    public void ButtonOnClick(ItemMaster objItemMaster, int position) {
         if (objItemMaster.getItemModifierIds().equals("") && objItemMaster.getOptionValueTranIds().equals("")) {
             AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
             addItemQtyDialogFragment.setTargetFragment(this, 0);
@@ -337,21 +336,11 @@ public class WishListFragment extends Fragment implements CategoryItemAdapter.It
 
     @SuppressLint("CommitTransaction")
     public void ReplaceFragment(Fragment fragment, String fragmentName) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            Fade fade = new Fade();
-            fade.setDuration(500);
-            fragment.setEnterTransition(fade);
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.wishListLayout, fragment, fragmentName);
-            fragmentTransaction.addToBackStack(fragmentName);
-            fragmentTransaction.commit();
-        } else {
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.wishListLayout, fragment, fragmentName);
-            fragmentTransaction.addToBackStack(fragmentName);
-            fragmentTransaction.commit();
-        }
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
+        fragmentTransaction.replace(R.id.wishListLayout, fragment, fragmentName);
+        fragmentTransaction.addToBackStack(fragmentName);
+        fragmentTransaction.commit();
     }
 
     @Override

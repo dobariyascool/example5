@@ -103,6 +103,7 @@ public class Globals {
     public static short businessTypeMasterId;
     public static short orderType;
     public static short itemType = 2;
+    public static int userType = 0;
     public static DecimalFormat dfWithPrecision = new DecimalFormat("0.00");
     public static int counter = 0;
     public static int totalCounter = 0;
@@ -112,13 +113,13 @@ public class Globals {
     public static short orderTypeMasterId = 0;
     public static short isWishListShow = 0;
     public static short selectTableMasterId;
+    public static short SettingMasterId = 21;
     public static Fragment targetFragment;
     public static DiscountMaster objDiscountMaster;
     public static AppThemeMaster objAppThemeMaster;
     public static String userName;
     static FragmentManager fragmentManager;
     static int y, M, d, H, m;
-
 
     public static float ConvertDp(float dp, Context context) {
         Resources resources = context.getResources();
@@ -145,7 +146,6 @@ public class Globals {
                     Globals.businessTypeMasterId = Short.parseShort(strBusinessTypeMaster);
                 }
             }
-
         } else {
             Globals.businessMasterId = 1;
         }
@@ -258,7 +258,6 @@ public class Globals {
         dp.hide();
         dp.show();
     }
-
 
     public static boolean IsValidEmail(String email) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -391,7 +390,6 @@ public class Globals {
         dp.show();
     }
 
-
     public static void OptionMenuItemClick(MenuItem menuItem, Activity activity, FragmentManager fragmentManager) {
         activityName = activity.getTitle().toString();
         if (menuItem.getItemId() != android.R.id.home) {
@@ -501,10 +499,9 @@ public class Globals {
     }
 
     public static void SetScaleImageBackground(final Context context, final LinearLayout linearLayout, final RelativeLayout relativeLayout, final FrameLayout frameLayout) {
-
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mainbackground);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.background_default);
         Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
 
         if (relativeLayout != null) {
@@ -517,10 +514,9 @@ public class Globals {
     }
 
     public static void SetScaleImageBackground(final Context context, final CoordinatorLayout coordinatorLayout) {
-
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mainbackground);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.background_default);
         Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
 
         coordinatorLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
@@ -529,14 +525,17 @@ public class Globals {
     public static void SetPageBackground(final Context context, final String encodedImage, final LinearLayout linearLayout, final RelativeLayout relativeLayout, final FrameLayout frameLayout, final CoordinatorLayout coordinatorLayout) {
         byte[] decodedString = Base64.decode(encodedImage.getBytes(), Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
+        Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(decodedByte, displayMetrics.widthPixels, displayMetrics.heightPixels);
         if (relativeLayout != null) {
-            relativeLayout.setBackground(new BitmapDrawable(context.getResources(), decodedByte));
+            relativeLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
         } else if (frameLayout != null) {
-            frameLayout.setBackground(new BitmapDrawable(context.getResources(), decodedByte));
+            frameLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
         } else if (linearLayout != null) {
-            linearLayout.setBackground(new BitmapDrawable(context.getResources(), decodedByte));
+            linearLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
         } else if (coordinatorLayout != null) {
-            coordinatorLayout.setBackground(new BitmapDrawable(context.getResources(), decodedByte));
+            coordinatorLayout.setBackground(new BitmapDrawable(context.getResources(), resizeBitmap));
         }
     }
 
@@ -544,7 +543,7 @@ public class Globals {
 
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.background_default);
         Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
 
         if (relativeLayout != null) {
@@ -600,7 +599,6 @@ public class Globals {
         fragmentTransaction.addToBackStack(fragmentName);
         fragmentTransaction.commit();
     }
-
 
     public static void ReplaceFragment(Fragment fragment, FragmentManager fragmentManager, String fragmentName) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -693,7 +691,6 @@ public class Globals {
         Globals.alOrderItemSummery = new ArrayList<>();
         Globals.targetFragment = null;
     }
-
 
     public static void HideNavigationBar(Activity activity) {
         if (Build.VERSION.SDK_INT >= 17 && Build.VERSION.SDK_INT < 19) {
@@ -939,7 +936,6 @@ public class Globals {
     }
 
     //endregion
-
 
     //region CommentCode
 

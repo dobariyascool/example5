@@ -12,8 +12,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.transition.Fade;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,18 +99,17 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
     @Override
     public void onClick(View v) {
-
         objWaitingMaster = new WaitingMaster();
         focusView = v;
         if (v.getId() == R.id.btnWaiting) {
-            if(objWaiting.getlinktoWaitingStatusMasterId()==Globals.WaitingStatus.Assign.getValue()){
+            if (objWaiting.getlinktoWaitingStatusMasterId() == Globals.WaitingStatus.Assign.getValue()) {
                 if (Service.CheckNet(getActivity())) {
                     btnId = R.id.btnWaiting;
                     new OrderLoadingTask().execute();
                 } else {
                     Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                 }
-            }else {
+            } else {
                 objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnWaiting.getText().toString()).getValue());
                 objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
@@ -125,27 +122,38 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             }
         }
         if (v.getId() == R.id.btnServe) {
-            objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnServe.getText().toString()).getValue());
-            objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
-            dismiss();
-            AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(), false, null);
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("WaitingMaster",objWaiting);
-            bundle.putBoolean("IsClick",true);
-            allTablesFragment.setArguments(bundle);
-            ReplaceFragment(allTablesFragment);
-            objUpdateStatusListener = (UpdateStatusListener)getActivity();
-            objUpdateStatusListener.UpdateStatus(true);
+            if (WaitingActivity.isTableAssign) {
+                objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnServe.getText().toString()).getValue());
+                objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
+                dismiss();
+                AllTablesFragment allTablesFragment = new AllTablesFragment(getActivity(), false, null);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("WaitingMaster", objWaiting);
+                bundle.putBoolean("IsClick", true);
+                allTablesFragment.setArguments(bundle);
+                ReplaceFragment(allTablesFragment);
+                objUpdateStatusListener = (UpdateStatusListener) getActivity();
+                objUpdateStatusListener.UpdateStatus(true);
+            } else {
+                objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnServe.getText().toString()).getValue());
+                objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
+                if (Service.CheckNet(getActivity())) {
+                    new UpdateWaitingStatusLoadingTask().execute();
+                } else {
+                    Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
+                }
+                dismiss();
+            }
         }
         if (v.getId() == R.id.btnNot) {
-            if(objWaiting.getlinktoWaitingStatusMasterId()==Globals.WaitingStatus.Assign.getValue()){
+            if (objWaiting.getlinktoWaitingStatusMasterId() == Globals.WaitingStatus.Assign.getValue()) {
                 if (Service.CheckNet(getActivity())) {
                     btnId = R.id.btnNot;
                     new OrderLoadingTask().execute();
                 } else {
                     Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                 }
-            }else {
+            } else {
                 objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("NA").getValue());
                 objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
@@ -159,14 +167,14 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
         }
         if (v.getId() == R.id.btnCancel) {
-            if(objWaiting.getlinktoWaitingStatusMasterId()==Globals.WaitingStatus.Assign.getValue()){
+            if (objWaiting.getlinktoWaitingStatusMasterId() == Globals.WaitingStatus.Assign.getValue()) {
                 if (Service.CheckNet(getActivity())) {
                     btnId = R.id.btnCancel;
                     new OrderLoadingTask().execute();
                 } else {
                     Globals.ShowSnackBar(v, getResources().getString(R.string.MsgCheckConnection), getActivity(), 1000);
                 }
-            }else {
+            } else {
                 objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnCancel.getText().toString()).getValue());
                 objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
 
@@ -183,7 +191,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
             //call the calling interface
             Intent intent = new Intent(Intent.ACTION_DIAL);
-            intent.setData(Uri.parse("tel:" + objWaiting.getPersonMobile()));
+            intent.setData(Uri.parse("tel:0" + objWaiting.getPersonMobile()));
             startActivity(intent);
             getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             dismiss();
@@ -222,21 +230,11 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
     @SuppressLint("CommitTransaction")
     private void ReplaceFragment(Fragment fragment) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            Fade fade = new Fade();
-            fade.setDuration(500);
-            fragment.setEnterTransition(fade);
-            fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentLayout, fragment);
-            fragmentTransaction.commit();
-        } else {
-            fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.fragmentLayout, fragment);
-            fragmentTransaction.commit();
-        }
+        fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
+        fragmentTransaction.replace(R.id.fragmentLayout, fragment);
+        fragmentTransaction.commit();
     }
-
 
     interface UpdateStatusListener {
         void UpdateStatus(boolean flag);
@@ -255,7 +253,7 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
             progressDialog = new com.arraybit.pos.ProgressDialog();
             progressDialog.show(getActivity().getSupportFragmentManager(), "");
-            SharePreferenceManage objSharePreferenceManage= new SharePreferenceManage();
+            SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity()) != null) {
                 objWaitingMaster.setLinktoUserMasterIdUpdatedBy(Short.valueOf(objSharePreferenceManage.GetPreference("WaiterPreference", "UserMasterId", getActivity())));
             }
@@ -275,15 +273,16 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
             if (status.equals("-1")) {
                 objUpdateStatusListener.UpdateStatus(false);
             } else if (status.equals("0")) {
-                if(isOrderPlace){
+                if (isOrderPlace) {
                     objUpdateStatusListener.UpdateStatus(true);
-                }else{
+                } else {
                     new UpdateTableStatusLoadingTask().execute();
                 }
             }
             progressDialog.dismiss();
         }
     }
+
     class OrderLoadingTask extends AsyncTask {
 
         @Override
@@ -297,16 +296,16 @@ public class WaitingStatusFragment extends DialogFragment implements View.OnClic
 
         @Override
         protected void onPostExecute(Object result) {
-            if(isOrderPlace){
-                Globals.ShowSnackBar(focusView,getResources().getString(R.string.MsgOrderPlace),getActivity(),2000);
-            }else{
-                if(btnId==R.id.btnWaiting){
+            if (isOrderPlace) {
+                Globals.ShowSnackBar(focusView, getResources().getString(R.string.MsgOrderPlace), getActivity(), 2000);
+            } else {
+                if (btnId == R.id.btnWaiting) {
                     objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnWaiting.getText().toString()).getValue());
                     objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
-                }else if(btnId==R.id.btnNot){
+                } else if (btnId == R.id.btnNot) {
                     objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf("NA").getValue());
                     objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
-                }else if(btnId==R.id.btnCancel){
+                } else if (btnId == R.id.btnCancel) {
                     objWaitingMaster.setlinktoWaitingStatusMasterId((short) Globals.WaitingStatus.valueOf(btnCancel.getText().toString()).getValue());
                     objWaitingMaster.setWaitingMasterId(objWaiting.getWaitingMasterId());
                 }

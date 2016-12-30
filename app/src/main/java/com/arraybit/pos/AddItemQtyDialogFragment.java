@@ -1,9 +1,12 @@
 package com.arraybit.pos;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
@@ -79,8 +82,17 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         Button btnNum9 = (Button) view.findViewById(R.id.btnNum9);
 
         actRemark = (AppCompatMultiAutoCompleteTextView) view.findViewById(R.id.actRemark);
+
+        Drawable actRemarkIcon;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            actRemarkIcon = VectorDrawableCompat.create(getResources(), R.drawable.arrow_drop_down, getContext().getTheme());
+        } else {
+            actRemarkIcon = getResources().getDrawable(R.drawable.arrow_drop_down, getContext().getTheme());
+        }
+
         if (Globals.isWishListShow == 0) {
-            actRemark.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getActivity(), R.drawable.arrow_drop_down), null);
+            actRemark.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, actRemarkIcon, null);
+            actRemark.setOnClickListener(this);
         }
 
         focusText = (TextView)view.findViewById(R.id.focusText);
@@ -94,9 +106,6 @@ public class AddItemQtyDialogFragment extends DialogFragment implements View.OnC
         btnCancel.setOnClickListener(this);
         btnOk.setOnClickListener(this);
         textInputLayout.setOnClickListener(this);
-        if (Globals.isWishListShow == 0) {
-            actRemark.setOnClickListener(this);
-        }
 
         btnNum1.setOnClickListener(this);
         btnNum2.setOnClickListener(this);

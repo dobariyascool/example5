@@ -6,11 +6,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,8 +44,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
     SharePreferenceManage sharePreferenceManage;
     TextView txtTableName;
 
-
-    public GuestOptionListFragment(Context context) {
+    public GuestOptionListFragment (Context context) {
         // Required empty public constructor
         this.context = context;
     }
@@ -72,27 +74,29 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
         CardView cvMenuModeOffers = (CardView) view.findViewById(R.id.cvMenuModeOffers);
 
         if (Globals.objAppThemeMaster != null) {
-            if (isStart) {
-                if (Globals.objAppThemeMaster.getBackImageName2() != null && !Globals.objAppThemeMaster.getBackImageName2().equals("")) {
-//                Log.e("image", " " + Globals.objAppThemeMaster.getBackImageName2());
-                    Glide.with(this).load(Globals.objAppThemeMaster.getBackImageName2()).asBitmap().into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            Drawable drawable = new BitmapDrawable(resource);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                guestOptionLayout.setBackground(drawable);
-                            }
-                        }
-                    });
-                } else {
-                    Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
-                }
-
-                if (Globals.objAppThemeMaster.getLogoImageName() != null && !Globals.objAppThemeMaster.getLogoImageName().equals("")) {
-//                Log.e("image", " " + Globals.objAppThemeMaster.getLogoImageName());
-                    Glide.with(this).load(Globals.objAppThemeMaster.getLogoImageName()).asBitmap().into(ivHomeActivityImage);
-                }
-            } else {
+//            if (isStart) {
+//                if (Globals.objAppThemeMaster.getBackImageName2() != null && !Globals.objAppThemeMaster.getBackImageName2().equals("")) {
+////                Log.e("image", " " + Globals.objAppThemeMaster.getBackImageName2());
+//                    Glide.with(this).load(Globals.objAppThemeMaster.getBackImageName2()).asBitmap().into(new SimpleTarget<Bitmap>() {
+//                        @Override
+//                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                            DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+//                            Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(resource, displayMetrics.widthPixels, displayMetrics.heightPixels);
+//                            Drawable drawable = new BitmapDrawable(getResources(),resizeBitmap);
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                                guestOptionLayout.setBackground(drawable);
+//                            }
+//                        }
+//                    });
+//                } else {
+//                    Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
+//                }
+//
+//                if (Globals.objAppThemeMaster.getLogoImageName() != null && !Globals.objAppThemeMaster.getLogoImageName().equals("")) {
+////                Log.e("image", " " + Globals.objAppThemeMaster.getLogoImageName());
+//                    Glide.with(this).load(Globals.objAppThemeMaster.getLogoImageName()).asBitmap().into(ivHomeActivityImage);
+//                }
+//            } else {
                 sharePreferenceManage = new SharePreferenceManage();
                 String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage2), getActivity());
                 String encodedLogoImage = sharePreferenceManage.GetPreference("GuestAppTheme", getResources().getString(R.string.encodedLogoImage), getActivity());
@@ -106,7 +110,7 @@ public class GuestOptionListFragment extends Fragment implements View.OnClickLis
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     ivHomeActivityImage.setImageDrawable(new BitmapDrawable(getActivity().getResources(), decodedByte));
                 }
-            }
+//            }
         } else {
             Globals.SetHomePageBackground(getActivity(), guestOptionLayout, null, null);
         }

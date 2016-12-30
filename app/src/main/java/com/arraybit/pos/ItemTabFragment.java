@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,7 +55,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     SharePreferenceManage objSharePreferenceManage;
     CategoryItemAdapter categoryItemAdapter;
     CategoryMaster objCategoryMaster;
-    int counterMasterId;
+    int counterMasterId, position= 0;
     DisplayMetrics displayMetrics;
     boolean isFilter = false, isFavorite;
     String searchText;
@@ -296,8 +297,10 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     }
 
     @Override
-    public void ButtonOnClick(ItemMaster objItemMaster) {
+    public void ButtonOnClick(ItemMaster objItemMaster, int position) {
         MenuItemCompat.collapseActionView(searchItem);
+        this.position= position;
+        Log.e("getAdapteronclick"," "+position);
         if (objItemMaster.getItemModifierIds().equals("") && objItemMaster.getOptionValueTranIds().equals("")) {
             AddItemQtyDialogFragment addItemQtyDialogFragment = new AddItemQtyDialogFragment(objItemMaster);
             addItemQtyDialogFragment.setTargetFragment(this, 0);
@@ -332,7 +335,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
                 SaveCartDataInSharePreference();
                 Toast.makeText(getActivity(), String.format(getActivity().getResources().getString(R.string.MsgCartItem), objOrderItemTran.getItemName()), Toast.LENGTH_SHORT).show();
             }
-
+            categoryItemAdapter.SetItemAdded(position,objOrderItemTran);
             if (getResources().getBoolean(R.bool.isTablet)) {
                 AddItemToCart objAddItemToCart = (AddItemToCart) Globals.targetFragment;
                 objAddItemToCart.AddToCart();
@@ -345,7 +348,7 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
         SetCartNumber(txtCartNumber);
     }
 
-    public void SetupRecyclerView(final boolean isFilter, ArrayList<ItemMaster> alItemMaster) {
+    public void SetupRecyclerView(final boolean isFilter, ArrayList<ItemMaster>  alItemMaster) {
         if (getActivity().getResources().getBoolean(R.bool.isTablet) && WaiterHomeActivity.isWaiterMode) {
             if (alItemMaster == null && !isFilter) {
                 categoryItemAdapter = new CategoryItemAdapter(getActivity(), this.alItemMaster, getFragmentManager(), ItemCartListFragment.isViewChange, this, false, false);
@@ -565,7 +568,6 @@ public class ItemTabFragment extends Fragment implements SearchView.OnQueryTextL
     public interface AddItemToCart {
         void AddToCart();
     }
-
 
     //endregion
 

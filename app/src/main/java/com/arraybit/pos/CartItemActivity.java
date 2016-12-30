@@ -2,14 +2,10 @@ package com.arraybit.pos;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Fade;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.arraybit.global.Globals;

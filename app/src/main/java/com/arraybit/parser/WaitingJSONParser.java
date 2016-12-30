@@ -22,11 +22,11 @@ public class WaitingJSONParser {
     public String UpdateWaitingStatus = "UpdateWaitingStatus";
     public String SelectOrderMasterByTableMasterId = "SelectOrderMasterByTableMasterId";
     public String SelectAllWaitingMasterByWaitingStatusId = "SelectAllWaitingMasterByWaitingStatusMasterId";
+    public String SelectTableAssignmentSetting = "SelectTableAssignmentSetting";
 
     SimpleDateFormat sdfControlDateFormat = new SimpleDateFormat(Globals.DateFormat, Locale.US);
     Date dt = null;
     SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-
 
     //region Class Methods
 
@@ -87,7 +87,6 @@ public class WaitingJSONParser {
     //endregion
 
     //region Insert
-
     public String InsertWaitingMaster(WaitingMaster objWaitingMaster) {
         dt = new Date();
         try {
@@ -121,11 +120,9 @@ public class WaitingJSONParser {
             return "-1";
         }
     }
-
     //endregion
 
     //region Update
-
     public String UpdateWaitingStatus(WaitingMaster objWaitingMaster) {
         dt= new Date();
         try {
@@ -160,7 +157,6 @@ public class WaitingJSONParser {
             return "-1";
         }
     }
-
     //endregion
 
     public boolean CheckOrderPlaceForTableMasterId(int businessMasterId,String linktoTableMasterId){
@@ -177,8 +173,22 @@ public class WaitingJSONParser {
         }
     }
 
-    //region SelectAll
+    //region Select
+    public boolean SelectTableAssignmentSettingById(String businessMasterId, String settingMasterId) {
+        boolean isTableAssign = false;
+        try {
+            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectTableAssignmentSetting + "/" + businessMasterId + "/" + settingMasterId );
+            if (jsonResponse != null) {
+                isTableAssign = jsonResponse.optBoolean(this.SelectTableAssignmentSetting + "Result");
+            }
+            return isTableAssign;
+        } catch (Exception ex) {
+            return isTableAssign;
+        }
+    }
+    //endregion
 
+    // region SelectAll
     public ArrayList<WaitingMaster> SelectAllWaitingMasterByWaitingStatusMasterId(int linktoWaitingStatusMasterId, int linktoBusinessMasterId, String OrderBy) {
         ArrayList<WaitingMaster> lstWaitingMaster = null;
         Date date;
@@ -196,6 +206,5 @@ public class WaitingJSONParser {
             return null;
         }
     }
-
     //endregion
 }

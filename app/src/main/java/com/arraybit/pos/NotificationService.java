@@ -39,10 +39,10 @@ public class NotificationService extends Service {
 
         //set the repeating alarm
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10 * 1000, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
         int delay = 1000; // delay for 1 sec.
-        int period = 5000; // repeat every 5 sec.
+        int period = 9000; // repeat every 9 sec.
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {

@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:padding="@dimen/control_SpecingTiny"
         android:scaleType="centerInside"
-        android:src="@drawable/likeat_logo"
+        android:src="@drawable/central_logo_default"
         android:visibility="gone"
         tools:ignore="ContentDescription,HardcodedText" />
 

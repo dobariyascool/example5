@@ -7,8 +7,9 @@
     tools:context="com.arraybit.pos.SignInActivity">
 
     <include
-    android:id="@+id/app_bar"
-    layout="@layout/app_bar_dynamic" />
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar_dynamic" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,19 +19,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.4"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.8"
-                android:orientation="vertical"/>
+                android:layout_weight="1"
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_weight="4.2"
                 android:orientation="vertical">
 
                 <ImageView
@@ -45,34 +46,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/control_SpecingSmall"
                     android:gravity="center"
-                    android:text="Member Login"
+                    android:text="@string/member_login"
                     android:textSize="15dp" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.8"
-                android:orientation="vertical"/>
+                android:layout_weight="1"
+                android:orientation="vertical" />
 
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/control_SpecingTiny">
+            android:layout_marginBottom="@dimen/control_SpecingTiny"
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_marginStart="@dimen/control_SpecingSmall">
 
             <com.rey.material.widget.EditText
                 android:id="@+id/etName"
                 style="@style/EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
+                android:focusableInTouchMode="true"
                 android:hint="@string/siUserName"
+                android:imeOptions="actionNext"
                 android:inputType="text"
-                android:paddingEnd="@dimen/control_SpecingMedium"
-                android:paddingStart="@dimen/control_SpecingMedium" />
+                android:paddingEnd="@dimen/control_SpecingTiny"
+                android:paddingStart="@dimen/control_SpecingTiny" />
 
             <ImageButton
                 android:id="@+id/ibClear"
@@ -90,7 +96,9 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/control_SpecingTiny">
+            android:layout_marginEnd="@dimen/control_SpecingSmall"
+            android:layout_marginStart="@dimen/control_SpecingSmall"
+            android:layout_marginTop="@dimen/control_SpecingTiny">
 
             <com.rey.material.widget.EditText
                 android:id="@+id/etPassword"
@@ -100,8 +108,8 @@
                 android:hint="@string/siPassword"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
-                android:paddingEnd="@dimen/control_SpecingMedium"
-                android:paddingStart="@dimen/control_SpecingMedium" />
+                android:paddingEnd="@dimen/control_SpecingTiny"
+                android:paddingStart="@dimen/control_SpecingTiny" />
 
             <ToggleButton
                 android:id="@+id/tbPasswordShow"
@@ -117,7 +125,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="@dimen/control_SpecingTiny"
+            android:layout_margin="@dimen/control_SpecingSmall"
             android:layout_weight="0.3"
             android:orientation="vertical">
 
@@ -125,9 +133,9 @@
                 android:id="@+id/btnSignIn"
                 style="@style/Button"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_Height"
-                android:layout_margin="@dimen/control_SpecingMedium"
-                android:text="@string/siSignIn" />
+                android:layout_height="@dimen/button_login_height"
+                android:text="@string/siSignIn"
+                android:textSize="15dp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

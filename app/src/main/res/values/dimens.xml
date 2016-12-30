@@ -64,6 +64,7 @@
 
     <dimen name="toolbar_Height">56dp</dimen>
 
+    <dimen name="control_SpecingTinyTablet">2dp</dimen>
     <dimen name="control_SpecingTiny">4dp</dimen>
     <dimen name="control_SpecingSmall">8dp</dimen>
     <dimen name="control_SpecingNormal">12dp</dimen>

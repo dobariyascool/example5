@@ -147,6 +147,36 @@
                 android:textSize="@dimen/control_TextMedium"
                 tools:ignore="HardcodedText" />
 
+            <RelativeLayout
+                android:id="@+id/itemCartLayout"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/ivItemCart"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/cart_number"
+                    android:contentDescription="@string/wmCart" />
+
+                <com.rey.material.widget.TextView
+                    android:id="@+id/txtItemCartNumber"
+                    android:layout_width="20dp"
+                    android:layout_height="24dp"
+                    android:layout_alignEnd="@+id/ivItemCart"
+                    android:layout_alignStart="@+id/ivItemCart"
+                    android:layout_alignTop="@+id/ivItemCart"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    tools:ignore="SmallSp" />
+
+            </RelativeLayout>
+
             <com.rey.material.widget.Button
                 android:id="@+id/btnAdd"
                 style="@style/AddButton"

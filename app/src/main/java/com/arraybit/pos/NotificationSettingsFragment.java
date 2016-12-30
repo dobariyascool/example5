@@ -31,7 +31,6 @@ public class NotificationSettingsFragment extends Fragment {
     SharePreferenceManage objSharePreferenceManage;
     String strOnOff;
 
-
     public NotificationSettingsFragment() {
         // Required empty public constructor
     }

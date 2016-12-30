@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CounterMaster;
 import com.arraybit.pos.R;
-import com.arraybit.pos.WelcomeActivity;
+import com.arraybit.pos.WaiterHomeActivity;
+import com.arraybit.pos.WaitingActivity;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
     short userType;
     private LayoutInflater inflater;
 
-    public CounterAdapter(Context context, ArrayList<CounterMaster> alCounterMaster,short userType) {
+    public CounterAdapter(Context context, ArrayList<CounterMaster> alCounterMaster, short userType) {
         this.context = context;
         this.alCounterMaster = alCounterMaster;
         inflater = LayoutInflater.from(context);
@@ -65,10 +67,14 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
                     objSharePreferenceManage = new SharePreferenceManage();
                     objSharePreferenceManage.CreatePreference("CounterPreference", "CounterMasterId", String.valueOf(alCounterMaster.get(getAdapterPosition()).getCounterMasterId()), context);
                     objSharePreferenceManage.CreatePreference("CounterPreference", "CounterName", alCounterMaster.get(getAdapterPosition()).getCounterName(), context);
-
-                    Intent intent = new Intent(context, WelcomeActivity.class);
+                    Intent intent;
+                    if (Globals.userType == Globals.UserType.Waiting.getValue()) {
+                        intent = new Intent(context, WaitingActivity.class);
+                    } else {
+                        intent = new Intent(context, WaiterHomeActivity.class);
+                    }
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("UserType",userType);
+//                    intent.putExtra("UserType",userType);
                     context.startActivity(intent);
                     ((Activity) context).overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 }

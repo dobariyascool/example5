@@ -187,7 +187,6 @@ public class OfferFragment extends Fragment {
 
     //region Private Methods
     private void SetupRecyclerView() {
-
         offerAdapter = new OfferAdapter(getActivity(), alOfferMaster, getActivity().getSupportFragmentManager(), false);
         rvOffer.setAdapter(offerAdapter);
         rvOffer.setLayoutManager(new LinearLayoutManager(getActivity()));

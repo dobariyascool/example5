@@ -5,24 +5,20 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,14 +31,16 @@ import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.CounterMaster;
 import com.arraybit.parser.CounterJSONParser;
+import com.arraybit.parser.WaitingJSONParser;
 import com.rey.material.widget.CompoundButton;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
-public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,WaitingStatusFragment.UpdateStatusListener,ConfirmDialog.ConfirmationResponseListener {
+public class WaitingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, WaitingStatusFragment.UpdateStatusListener, ConfirmDialog.ConfirmationResponseListener {
 
+    public static boolean isTableAssign = false;
     LinearLayout fragmentLayout, waitingMainLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     FragmentTransaction fragmentTransaction;
@@ -50,6 +48,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     NavigationView navigationView;
     SharePreferenceManage objSharePreferenceManage;
     Toolbar app_bar;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +64,12 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         }
         //end
 
+        if (Service.CheckNet(WaitingActivity.this)) {
+            new SettingLoadingTask().execute();
+        }
+
+        Globals.userType = Globals.UserType.Waiting.getValue();
+
         //naviagtionview
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(WaitingActivity.this).inflate(R.layout.navigation_header, null);
         LinearLayout llNavHeader = (LinearLayout) headerView.findViewById(R.id.llNavHeader);
@@ -73,7 +78,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         ivLogo.setVisibility(View.GONE);
         TextView txtLetter = (TextView) headerView.findViewById(R.id.txtLetter);
         TextView txtName = (TextView) headerView.findViewById(R.id.txtName);
-        CompoundButton cbLogout = (CompoundButton)headerView.findViewById(R.id.cbLogout);
+        CompoundButton cbLogout = (CompoundButton) headerView.findViewById(R.id.cbLogout);
         cbLogout.setVisibility(View.VISIBLE);
         txtLetter.setTextColor(ContextCompat.getColor(this, android.R.color.white));
 
@@ -122,6 +127,7 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_waiting, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -148,10 +154,10 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
             if (item.getTitle().equals("T")) {
                 item.setTitle("W");
                 item.setIcon(R.mipmap.waiting_list);
-                Drawable drawable = item.getIcon();
-                drawable = DrawableCompat.wrap(drawable);
-                DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
-                item.setIcon(drawable);
+//                Drawable drawable = item.getIcon();
+//                drawable = DrawableCompat.wrap(drawable);
+//                DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
+//                item.setIcon(drawable);
                 ReplaceFragment(new AllTablesFragment(WaitingActivity.this, false, null));
             } else {
                 item.setTitle("T");
@@ -169,8 +175,8 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         if (menuItem.getItemId() == R.id.wExit) {
             System.exit(0);
         } else if (menuItem.getItemId() == R.id.wChangeMode) {
-            ConfirmDialog confirmDialog = new ConfirmDialog(getResources().getString(R.string.MsgChangeMode),true);
-            confirmDialog.show(getSupportFragmentManager(),"");
+            ConfirmDialog confirmDialog = new ConfirmDialog(getResources().getString(R.string.MsgChangeMode), true);
+            confirmDialog.show(getSupportFragmentManager(), "");
         } else if (menuItem.getItemId() == R.id.wChangeCounter) {
             objSharePreferenceManage = new SharePreferenceManage();
             if (objSharePreferenceManage.GetPreference("CounterPreference", "CounterMasterId", WaitingActivity.this) != null) {
@@ -213,12 +219,12 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public void UpdateStatus(boolean flag) {
-        if(flag){
+        if (flag) {
             app_bar.getMenu().findItem(R.id.mWaiting).setTitle("W").setIcon(R.mipmap.waiting_list);
-        }else{
+        } else {
             app_bar.getMenu().findItem(R.id.mWaiting).setTitle("T").setIcon(R.mipmap.view_table);
             ReplaceFragment(new WaitingListFragment());
-            Globals.ShowSnackBar(waitingMainLayout,getResources().getString(R.string.MsgTableAssign),WaitingActivity.this,3000);
+            Globals.ShowSnackBar(waitingMainLayout, getResources().getString(R.string.MsgTableAssign), WaitingActivity.this, 3000);
         }
     }
 
@@ -237,12 +243,17 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
         //fragment backPressed
         Globals.HideKeyBoard(WaitingActivity.this, getCurrentFocus());
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            if(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName()!=null
-                    && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(getResources().getString(R.string.title_fragment_all_tables)))
-            {
+            if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
+                    && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_tables))) {
                 getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }else{
+            } else {
                 getSupportFragmentManager().popBackStack();
+            }
+        } else {
+            if (getSupportFragmentManager().findFragmentById(R.id.fragmentLayout) instanceof AllTablesFragment) {
+                menu.getItem(0).setIcon(ContextCompat.getDrawable(WaitingActivity.this,R.mipmap.view_table));
+                menu.getItem(0).setTitle("T");
+                ReplaceFragment(new WaitingListFragment());
             }
         }
         //end
@@ -259,19 +270,10 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
 
     @SuppressLint("CommitTransaction")
     private void ReplaceFragment(Fragment fragment) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            Fade fade = new Fade();
-            fade.setDuration(500);
-            fragment.setEnterTransition(fade);
-            fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentLayout, fragment);
-            fragmentTransaction.commit();
-        } else {
-            fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.fragmentLayout, fragment);
-            fragmentTransaction.commit();
-        }
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
+        fragmentTransaction.replace(R.id.fragmentLayout, fragment);
+        fragmentTransaction.commit();
     }
 
     private void SetWaiterName(TextView txtName, TextView txtLetter, NavigationView navigationView) {
@@ -349,6 +351,28 @@ public class WaitingActivity extends AppCompatActivity implements NavigationView
                     navigationView.getMenu().findItem(R.id.wChangeCounter).setEnabled(false);
                 }
             }
+        }
+    }
+
+    class SettingLoadingTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            objSharePreferenceManage = new SharePreferenceManage();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            WaitingJSONParser objWaitingJSONParser = new WaitingJSONParser();
+            isTableAssign = objWaitingJSONParser.SelectTableAssignmentSettingById(String.valueOf(Globals.businessMasterId), String.valueOf(Globals.SettingMasterId));
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            objSharePreferenceManage.CreatePreference("Waiting", "IsTableAssign", String.valueOf(isTableAssign), WaitingActivity.this);
         }
     }
     //endregion

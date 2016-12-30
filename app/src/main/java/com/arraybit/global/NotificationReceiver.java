@@ -77,6 +77,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                         .setSmallIcon(R.mipmap.call_waiter)
                         .setLargeIcon(bitmap)
                         .setContentIntent(pendingIntent)
+                        .setVibrate(new long[]{100, 250, 100, 250, 100, 250})
                         .setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_SOUND)
                         .setWhen(System.currentTimeMillis()).build();
@@ -87,6 +88,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                         .setSmallIcon(R.mipmap.call_waiter)
                         .setLargeIcon(bitmap)
                         .setContentIntent(pendingIntent)
+                        .setVibrate(new long[]{100, 250, 100, 250, 100, 250})
                         .setAutoCancel(true)
                         .setWhen(System.currentTimeMillis()).build();
             }
@@ -96,7 +98,8 @@ public class NotificationReceiver extends BroadcastReceiver {
             if (activity != null) {
                 if (notificationCount > 0) {
                     if (activity instanceof WaiterHomeActivity) {
-                        Fragment fragment= activity.getSupportFragmentManager().findFragmentById(R.id.waiterHomeFragment);
+                       String name = activity.getSupportFragmentManager().getBackStackEntryAt(activity.getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
+//                        .equals(activity.getResources().getString(R.string.title_fragment_waiter_options))
                         notificationListener = (NotificationListener) activity;
                         notificationListener.ShowNotificationCount();
                     }

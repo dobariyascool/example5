@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -33,6 +34,8 @@ import com.arraybit.parser.CounterJSONParser;
 import com.rey.material.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SuppressWarnings({"unchecked", "ResourceType"})
 @SuppressLint("InflateParams")
@@ -139,6 +142,8 @@ public class WaiterHomeActivity extends AppCompatActivity implements Notificatio
             }
         }
 
+        waiterHomeMainLayout = (LinearLayout) findViewById(R.id.waiterHomeFragment);
+
         tableName = getIntent().getStringExtra("TableName");
         isShowMessage = getIntent().getBooleanExtra("ShowMessage", false);
         isCheckOutMessage = getIntent().getBooleanExtra("IsCheckOutMessage", false);
@@ -150,38 +155,36 @@ public class WaiterHomeActivity extends AppCompatActivity implements Notificatio
         fragment.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.waiterHomeFragment, fragment, "Waiter Home");
+        fragmentTransaction.add(R.id.waiterHomeFragment, fragment, "Waiter Home");
         fragmentTransaction.addToBackStack("Waiter Home");
-        fragmentTransaction.commit();
-
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        if (isShowMessage) {
-//            new Timer().schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    if (tableName != null && !tableName.equals("")) {
-//                        ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace), " of " + tableName));
-//                    } else {
-//                        ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace), " successfully"));
-//                    }
-//                    isShowMessage = false;
-//                }
-//            }, 1000);
-//        }
-//        if (isCheckOutMessage) {
-//            new Timer().schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    Globals.ShowSnackBar(drawerLayout, getResources().getString(R.string.MsgBillGenerateSuccess), WaiterHomeActivity.this, 2000);
-//                    isCheckOutMessage = false;
-//                }
-//            }, 1000);
-//        }
-
+        if (isShowMessage) {
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (tableName != null && !tableName.equals("")) {
+                        ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace), " of " + tableName));
+                    } else {
+                        ShowSnackBarWithAction(String.format(getResources().getString(R.string.MsgConfirmOrderPlace), " successfully"));
+                    }
+                    isShowMessage = false;
+                }
+            }, 1000);
+        }
+        if (isCheckOutMessage) {
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Globals.ShowSnackBar(waiterHomeMainLayout, getResources().getString(R.string.MsgBillGenerateSuccess), WaiterHomeActivity.this, 2000);
+                    isCheckOutMessage = false;
+                }
+            }, 1000);
+        }
     }
 
     @Override
@@ -311,8 +314,28 @@ public class WaiterHomeActivity extends AppCompatActivity implements Notificatio
 
     @Override
     public void ShowNotificationCount() {
-        WaiterHomeFragment fragment = (WaiterHomeFragment) getSupportFragmentManager().findFragmentByTag("Waiter Home");
-        fragment.SetNotificationNumber();
+
+        for (int entry = 0; entry < getSupportFragmentManager().getBackStackEntryCount(); entry++) {
+            Log.e("fragment", "Found fragment: " + getSupportFragmentManager().getBackStackEntryAt(entry).getName() + " " + getSupportFragmentManager().getBackStackEntryAt(entry).getId());
+            if (getSupportFragmentManager().getBackStackEntryAt(entry).getName().equals("Waiter Home")) {
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag("Waiter Home");
+                Log.e("fragment"," "+fragment);
+                FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
+                fragTransaction.detach(fragment);
+                fragTransaction.attach(fragment);
+                fragTransaction.commitAllowingStateLoss();
+            }
+        }
+
+//        Fragment fragment = getSupportFragmentManager().findFragmentByTag("Waiter Home");
+//        fragment.SetNotificationNumber();
+//        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.waiterHomeFragment);
+//        if (currentFragment instanceof WaiterHomeFragment) {
+//            FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
+//            fragTransaction.detach(currentFragment);
+//            fragTransaction.attach(currentFragment);
+//            fragTransaction.commitAllowingStateLoss();
+//        }
 //        SetNotificationNumber(txtNotificationNumber);
     }
 
@@ -368,12 +391,12 @@ public class WaiterHomeActivity extends AppCompatActivity implements Notificatio
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        if (resultCode == RESULT_OK) {
-//            if (requestCode == 100) {
+//            if (requestCode == 1) {
 ////                onRestart();
 //            } else if (requestCode == 0) {
-//                WaiterHomeFragment fragment = (WaiterHomeFragment) getSupportFragmentManager().findFragmentByTag("Waiter Home");
-//                fragment.SetNotificationNumber();
-////                SetNotificationNumber(txtNotificationNumber);
+////                WaiterHomeFragment fragment = (WaiterHomeFragment) getSupportFragmentManager().findFragmentByTag("Waiter Home");
+////                fragment.SetNotificationNumber();
+//////                SetNotificationNumber(txtNotificationNumber);
 //            }
 //        }
 //        super.onActivityResult(requestCode, resultCode, data);
@@ -404,6 +427,8 @@ public class WaiterHomeActivity extends AppCompatActivity implements Notificatio
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_all_tables))) {
 //                    isRestart = true;
 //                    onRestart();
+                    isWaiterMode = true;
+                    GuestHomeActivity.isGuestMode = false;
                     getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                         && getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getResources().getString(R.string.title_fragment_policy))) {
@@ -472,7 +497,7 @@ public class WaiterHomeActivity extends AppCompatActivity implements Notificatio
 
     private void ShowSnackBarWithAction(final String msg) {
         Snackbar snackbar = Snackbar
-                .make(drawerLayout, msg, Snackbar.LENGTH_LONG)
+                .make(waiterHomeMainLayout, msg, Snackbar.LENGTH_LONG)
                 .setAction("View", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

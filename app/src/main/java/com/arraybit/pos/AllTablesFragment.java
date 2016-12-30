@@ -217,6 +217,8 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                         && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1)
                         .getName().equals(getActivity().getResources().getString(R.string.title_fragment_all_tables))) {
                     Globals.isWishListShow = 0;
+                    WaiterHomeActivity.isWaiterMode = true;
+                    GuestHomeActivity.isGuestMode = false;
                      getActivity().getSupportFragmentManager().popBackStack(getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             } else {
@@ -291,7 +293,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                         }
                     });
         }
-
     }
 
     @Override
@@ -337,10 +338,14 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                     Globals.selectTableMasterId = objTableMaster.getTableMasterId();
                     Globals.alOrderItemTran = new ArrayList<>();
                     Globals.DisableBroadCastReceiver(getActivity());
-                    Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+                    getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+//                    intent.putExtra("TableMaster", objTableMaster);
+                    Intent intent = new Intent(getActivity(), WelcomeActivity.class);
                     intent.putExtra("TableMaster", objTableMaster);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    getActivity().finish();
                 } else {
                     if (Globals.selectTableMasterId == 0) {
                         Globals.selectTableMasterId = objTableMaster.getTableMasterId();
@@ -360,10 +365,14 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
             if (isVacant) {
                 Globals.isWishListShow = 1;
                 Globals.DisableBroadCastReceiver(getActivity());
-                Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+                getActivity().getSupportFragmentManager().popBackStack(getActivity().getResources().getString(R.string.title_fragment_all_tables), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                Intent intent = new Intent(getActivity(), GuestHomeActivity.class);
+//                intent.putExtra("TableMaster", objTableMaster);
+                Intent intent = new Intent(getActivity(), WelcomeActivity.class);
                 intent.putExtra("TableMaster", objTableMaster);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                getActivity().finish();
             } else {
                 AllTablesFragment.isRefresh = true;
                 Bundle bundle = new Bundle();
@@ -375,7 +384,6 @@ public class AllTablesFragment extends Fragment implements View.OnClickListener,
                     Slide slideTransition = new Slide();
                     slideTransition.setSlideEdge(Gravity.RIGHT);
                     slideTransition.setDuration(500);
-
                     orderSummaryFragment.setEnterTransition(slideTransition);
                 } else {
                     fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out);

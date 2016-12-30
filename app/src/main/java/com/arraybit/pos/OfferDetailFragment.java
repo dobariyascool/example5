@@ -262,14 +262,7 @@ public class OfferDetailFragment extends Fragment implements View.OnClickListene
     @SuppressLint("RtlHardcoded")
     private void ReplaceFragment(Fragment fragment, String fragmentName) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >= 21) {
-            Fade fade = new Fade();
-            fade.setDuration(500);
-            fragment.setEnterTransition(fade);
-            fragment.setEnterTransition(fade);
-        } else {
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        }
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
         fragmentTransaction.replace(R.id.offerDetailFragment, fragment, fragmentName);
         fragmentTransaction.addToBackStack(fragmentName);
         fragmentTransaction.commit();

@@ -2,7 +2,6 @@ package com.arraybit.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -21,7 +20,6 @@ import android.widget.LinearLayout;
 import com.arraybit.global.Globals;
 import com.arraybit.modal.OrderItemTran;
 import com.arraybit.modal.OrderMaster;
-import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.R;
 import com.arraybit.pos.WaiterHomeActivity;
 import com.rey.material.widget.TextView;
@@ -93,31 +91,31 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         }
 
         holder.txtOrderTime.setText(objOrderMaster.getOrderTime());
-        if(objOrderMaster.getTableName().length() > 8 && objOrderMaster.getOrderNumber().length() >= 2){
-            holder.txtTableName.setText(objOrderMaster.getTableName().substring(0,8)+".."+"[" + objOrderMaster.getOrderNumber() + "]");
-        }else{
-            holder.txtTableName.setText(objOrderMaster.getTableName()+" "+"[" + objOrderMaster.getOrderNumber() + "]");
+        if (objOrderMaster.getTableName().length() > 8 && objOrderMaster.getOrderNumber().length() >= 2) {
+            holder.txtTableName.setText(objOrderMaster.getTableName().substring(0, 8) + ".." + "[" + objOrderMaster.getOrderNumber() + "]");
+        } else {
+            holder.txtTableName.setText(objOrderMaster.getTableName() + " " + "[" + objOrderMaster.getOrderNumber() + "]");
         }
 
 
-        if(objOrderMaster.getlinktoOrderStatusMasterId()!=null){
+        if (objOrderMaster.getlinktoOrderStatusMasterId() != null) {
             holder.ivOrderIcon.setVisibility(View.VISIBLE);
-            if(objOrderMaster.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Cooking.getValue()){
+            if (objOrderMaster.getlinktoOrderStatusMasterId() == Globals.OrderStatus.Cooking.getValue()) {
                 holder.ivOrderIcon.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.cooking));
-            }else if(objOrderMaster.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Ready.getValue()){
+            } else if (objOrderMaster.getlinktoOrderStatusMasterId() == Globals.OrderStatus.Ready.getValue()) {
                 holder.ivOrderIcon.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.ready));
-            }else if(objOrderMaster.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Served.getValue()){
+            } else if (objOrderMaster.getlinktoOrderStatusMasterId() == Globals.OrderStatus.Served.getValue()) {
                 holder.ivOrderIcon.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.served));
-            }else if(objOrderMaster.getlinktoOrderStatusMasterId()==Globals.OrderStatus.Cancelled.getValue()){
+            } else if (objOrderMaster.getlinktoOrderStatusMasterId() == Globals.OrderStatus.Cancelled.getValue()) {
                 holder.ivOrderIcon.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.cancel));
             }
 
-            if(WaiterHomeActivity.isWaiterMode) {
+            if (WaiterHomeActivity.isWaiterMode) {
                 Drawable drawable = holder.ivOrderIcon.getDrawable();
                 DrawableCompat.setTint(drawable.mutate(), ContextCompat.getColor(context, R.color.red_tab_indicator));
             }
 
-        }else{
+        } else {
             holder.ivOrderIcon.setVisibility(View.GONE);
         }
 
@@ -129,7 +127,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         if (objOrderMaster.getTotalItem() != 0) {
             SetItemLayout(objOrderMaster, holder, position);
         }
-        holder.txtTotalAmount.setText(context.getResources().getString(R.string.dfRupee)+" "+ Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
+        holder.txtTotalAmount.setText(context.getResources().getString(R.string.dfRupee) + " " + Globals.dfWithPrecision.format(objOrderMaster.getTotalAmount()));
 
         //holder animation
         if (isItemAnimate) {
@@ -176,7 +174,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         totalModifier = 0;
     }
 
-    public void UpdateOrder(int position,short linktoOrderStatusMasterId){
+    public void UpdateOrder(int position, short linktoOrderStatusMasterId) {
         alOrderMaster.get(position).setlinktoOrderStatusMasterId(linktoOrderStatusMasterId);
         notifyDataSetChanged();
         isItemAnimate = false;
@@ -210,7 +208,11 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                 LinearLayout.LayoutParams txtItemQtyParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
                 txtItemQtyParams.weight = 0.1f;
                 txtItemQty[i].setLayoutParams(txtItemQtyParams);
-                txtItemQty[i].setTextSize(12f);
+                if (context.getResources().getBoolean(R.bool.isTablet)) {
+                    txtItemQty[i].setTextSize(16f);
+                } else {
+                    txtItemQty[i].setTextSize(12f);
+                }
                 txtItemQty[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
                 txtItemQty[i].setMaxLines(1);
                 txtItemQty[i].setText(String.valueOf(alOrderItemTran.get(i).getQuantity()));
@@ -219,7 +221,11 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                 LinearLayout.LayoutParams txtItemNameParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
                 txtItemNameParams.weight = 0.7f;
                 txtItemName[i].setLayoutParams(txtItemNameParams);
-                txtItemName[i].setTextSize(12f);
+                if (context.getResources().getBoolean(R.bool.isTablet)) {
+                    txtItemName[i].setTextSize(12f);
+                } else {
+                    txtItemName[i].setTextSize(12f);
+                }
                 txtItemName[i].setGravity(Gravity.START);
                 txtItemName[i].setMaxLines(1);
                 txtItemName[i].setTextColor(ContextCompat.getColor(context, R.color.grey));
@@ -244,8 +250,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                         ivStatus[i].setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.cancel));
                     }
                 }
-                ivStatus[i].setColorFilter(ContextCompat.getColor(context,R.color.accent_red), PorterDuff.Mode.SRC_IN);
-                ivStatus[i].setBackground(ContextCompat.getDrawable(context,R.drawable.icon_hover_drawable));
+                ivStatus[i].setColorFilter(ContextCompat.getColor(context, R.color.accent_red), PorterDuff.Mode.SRC_IN);
+                ivStatus[i].setBackground(ContextCompat.getDrawable(context, R.drawable.icon_hover_drawable));
 
                 ivStatus[i].setOnClickListener(new View.OnClickListener() {
                     @Override

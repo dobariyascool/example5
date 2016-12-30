@@ -27,4 +27,7 @@
     <dimen name="button_Height">55dp</dimen>
     <dimen name="button_login_height">55dp</dimen>
     <dimen name="leftHeight">60dp</dimen>
+
+    <dimen name="control_SpecingTinyTablet">12dp</dimen>
+
 </resources>

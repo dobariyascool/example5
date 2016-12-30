@@ -37,6 +37,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -715,7 +716,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
         }
     }
 
-    private void UpdateArrayListAdapter(String name) {
+    private void    UpdateArrayListAdapter(String name) {
         int isRemove = -1;
         String str;
         if (name == null && isDeleted) {
@@ -1315,7 +1316,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener, Mo
 //            }
 //        }
     }
-
 
     interface ResponseListener {
         void ShowMessage(String itemName, boolean isWishListUpdate, ItemMaster objItemMaster);

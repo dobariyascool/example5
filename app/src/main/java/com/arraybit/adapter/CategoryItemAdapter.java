@@ -6,7 +6,6 @@ import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableContainer;
-import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -16,21 +15,25 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.SharePreferenceManage;
 import com.arraybit.modal.ItemMaster;
 import com.arraybit.pos.CategoryItemFragment;
 import com.arraybit.pos.GuestHomeActivity;
 import com.arraybit.pos.ItemCartListFragment;
 import com.arraybit.pos.R;
 import com.arraybit.pos.WaiterHomeActivity;
+import com.google.gson.Gson;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.TextView;
 import com.squareup.picasso.Picasso;
@@ -55,6 +58,10 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     ItemClickListener objItemClickListener;
     int previousPosition, cnt = 0;
     boolean isVeg, isNonVeg, isJain;
+    Gson gson = new Gson();
+    SharePreferenceManage objSharePreferenceManage;
+    List<ItemMaster> lstItemMaster;
+    ArrayList<ItemMaster> alOrderItemTran = new ArrayList<>();
 
 
     public CategoryItemAdapter(Context context, ArrayList<ItemMaster> result, FragmentManager fragmentManager, boolean isViewChange, ItemClickListener objItemClickListener, boolean isItemAnimate, boolean isLikeClick) {
@@ -65,6 +72,16 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         this.objItemClickListener = objItemClickListener;
         this.isItemAnimate = isItemAnimate;
         this.isLikeClick = isLikeClick;
+        alOrderItemTran = Globals.alOrderItemTran;
+//        SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
+//        String string = objSharePreferenceManage.GetPreference("CartItemListPreference", "CartItemList", context);
+//        if (string != null) {
+//            ItemMaster[] objItemMaster = gson.fromJson(string,
+//                    ItemMaster[].class);
+//
+//            lstItemMaster = Arrays.asList(objItemMaster);
+//            alOrderItemTran.addAll(new ArrayList<>(lstItemMaster));
+//        }
     }
 
     @Override
@@ -96,6 +113,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
+        Log.e("position"," "+position);
         objItemMaster = alItemMaster.get(position);
         objItemMaster.setRowPosition(position);
         if (!isWaiterGrid) {
@@ -257,6 +275,25 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             previousPosition = position;
         }
 
+        // display count of order of specific item
+        if (alOrderItemTran != null && alOrderItemTran.size() != 0) {
+            for (ItemMaster itemMaster : alOrderItemTran) {
+                if (itemMaster.getItemMasterId() == objItemMaster.getItemMasterId() ) {
+                    if (itemMaster.getQuantity() > 0) {
+                        Log.e("position", " " + position);
+                        holder.itemCartLayout.setVisibility(View.VISIBLE);
+                        holder.txtItemCartNumber.setText(String.valueOf(itemMaster.getQuantity()));
+                        break;
+                    } else {
+                        holder.itemCartLayout.setVisibility(View.GONE);
+                    }
+                } else {
+                    holder.itemCartLayout.setVisibility(View.GONE);
+                }
+            }
+        } else {
+            holder.itemCartLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -269,6 +306,60 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         alItemMaster = new ArrayList<>();
         alItemMaster.addAll(result);
         notifyDataSetChanged();
+    }
+
+//    public void ItemDataChanged(ArrayList<ItemMaster> result) {
+//        alItemMaster.addAll(result);
+//        isItemAnimate = false;
+//        notifyDataSetChanged();
+//    }
+
+    public void SetItemAdded(int position, ItemMaster objItemMaster) {
+        if (Globals.counter > 0) {
+            alOrderItemTran = Globals.alOrderItemTran;
+            int count =  alItemMaster.get(position).getQuantity() + objItemMaster.getQuantity();
+            Log.e("count"," "+count);
+            alItemMaster.get(position).setQuantity(count);
+            notifyItemChanged(position);
+        }
+    }
+
+    public void RemoveData(int position, boolean isRemoveFromList) {
+        if (isRemoveFromList) {
+            CheckDuplicate(String.valueOf(0), alItemMaster.get(position));
+        }
+        alItemMaster.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void UpdateWishList(int position, short isCheck) {
+        isItemAnimate = false;
+        isWishListChange = true;
+        CheckDuplicate(String.valueOf(isCheck), alItemMaster.get(position));
+        alItemMaster.get(position).setIsChecked(isCheck);
+        notifyItemChanged(position);
+    }
+
+    public void CheckIdInCurrentList(short isChecked, int itemMasterId, short oldCheckValue, ItemMaster objWishList) {
+        int count = 0;
+        boolean isDuplicate = false;
+        for (ItemMaster objItemMaster : alItemMaster) {
+            if (objItemMaster.getItemMasterId() == itemMasterId) {
+                isDuplicate = true;
+                CheckDuplicate(String.valueOf(0), objItemMaster);
+                alItemMaster.remove(count);
+                notifyItemRemoved(count);
+                break;
+            }
+            count++;
+        }
+        if (!isDuplicate) {
+            if (objWishList != null) {
+                CheckDuplicate(String.valueOf(isChecked), objWishList);
+                alItemMaster.add(alItemMaster.size(), objWishList);
+                notifyItemInserted(alItemMaster.size());
+            }
+        }
     }
 
     private boolean CheckOptionValue(String optionValueIds, String optionValue) {
@@ -337,52 +428,8 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         }
     }
 
-//    public void ItemDataChanged(ArrayList<ItemMaster> result) {
-//        alItemMaster.addAll(result);
-//        isItemAnimate = false;
-//        notifyDataSetChanged();
-//    }
-
-    public void RemoveData(int position, boolean isRemoveFromList) {
-        if (isRemoveFromList) {
-            CheckDuplicate(String.valueOf(0), alItemMaster.get(position));
-        }
-        alItemMaster.remove(position);
-        notifyItemRemoved(position);
-    }
-
-    public void UpdateWishList(int position, short isCheck) {
-        isItemAnimate = false;
-        isWishListChange = true;
-        CheckDuplicate(String.valueOf(isCheck), alItemMaster.get(position));
-        alItemMaster.get(position).setIsChecked(isCheck);
-        notifyItemChanged(position);
-    }
-
-    public void CheckIdInCurrentList(short isChecked, int itemMasterId, short oldCheckValue, ItemMaster objWishList) {
-        int count = 0;
-        boolean isDuplicate = false;
-        for (ItemMaster objItemMaster : alItemMaster) {
-            if (objItemMaster.getItemMasterId() == itemMasterId) {
-                isDuplicate = true;
-                CheckDuplicate(String.valueOf(0), objItemMaster);
-                alItemMaster.remove(count);
-                notifyItemRemoved(count);
-                break;
-            }
-            count++;
-        }
-        if (!isDuplicate) {
-            if (objWishList != null) {
-                CheckDuplicate(String.valueOf(isChecked), objWishList);
-                alItemMaster.add(alItemMaster.size(), objWishList);
-                notifyItemInserted(alItemMaster.size());
-            }
-        }
-    }
-
     public interface ItemClickListener {
-        void ButtonOnClick(ItemMaster objItemMaster);
+        void ButtonOnClick(ItemMaster objItemMaster, int position);
 
         void CardViewOnClick(ItemMaster objItemMaster);
 
@@ -391,11 +438,12 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtItemName, txtItemDescription, txtItemPrice, txtItemDineOnly;
+        TextView txtItemName, txtItemDescription, txtItemPrice, txtItemDineOnly, txtItemCartNumber;
         CardView cvItem;
         Button btnAdd, btnAddDisable;
         ImageView ivItem, ivJain, ivSpicy, ivDoubleSpicy, ivSweet, ivNonVeg;
         ToggleButton ibLike;
+        RelativeLayout itemCartLayout;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -403,6 +451,8 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             cvItem = (CardView) itemView.findViewById(R.id.cvItem);
 
             ibLike = (ToggleButton) itemView.findViewById(R.id.ibLike);
+
+            itemCartLayout = (RelativeLayout) itemView.findViewById(R.id.itemCartLayout);
 
             ivItem = (ImageView) itemView.findViewById(R.id.ivItem);
             ivJain = (ImageView) itemView.findViewById(R.id.ivJain);
@@ -415,6 +465,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             txtItemDescription = (TextView) itemView.findViewById(R.id.txtItemDescription);
             txtItemPrice = (TextView) itemView.findViewById(R.id.txtItemPrice);
             txtItemDineOnly = (TextView) itemView.findViewById(R.id.txtItemDineOnly);
+            txtItemCartNumber = (TextView) itemView.findViewById(R.id.txtItemCartNumber);
 
             btnAdd = (Button) itemView.findViewById(R.id.btnAdd);
             btnAddDisable = (Button) itemView.findViewById(R.id.btnAddDisable);
@@ -457,15 +508,14 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     Globals.CustomView(btnAddDisable, ContextCompat.getColor(context, R.color.transparent_accent), ContextCompat.getColor(context, android.R.color.transparent));
                     btnAddDisable.setTextColor(ContextCompat.getColor(context, R.color.dimWhite));
 
-                    StateListDrawable drawable = (StateListDrawable)ibLike.getBackground();
-                    DrawableContainer.DrawableContainerState dcs = (DrawableContainer.DrawableContainerState)drawable.getConstantState();
+                    StateListDrawable drawable = (StateListDrawable) ibLike.getBackground();
+                    DrawableContainer.DrawableContainerState dcs = (DrawableContainer.DrawableContainerState) drawable.getConstantState();
                     Drawable[] drawableItems = dcs.getChildren();
 //                    GradientDrawable gradientDrawableChecked = (GradientDrawable)drawableItems[0]; // item 1
 //                    GradientDrawable gradientDrawableUnChecked = (GradientDrawable)drawableItems[1]; // item 2
                     drawableItems[1].mutate();
                     drawableItems[1].setColorFilter(Globals.objAppThemeMaster.getColorAccent(), PorterDuff.Mode.SRC_IN);
 //                    ibLike.setButtonDrawable(ContextCompat.getDrawable(context, R.drawable.like_drawable));
-
 
 
                 } else {
@@ -494,7 +544,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     Globals.HideKeyBoard(context, v);
                     if (isWaiterGrid) {
                         if (!GuestHomeActivity.isMenuMode) {
-                            objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()));
+                            objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()), getAdapterPosition());
                         }
                     } else {
                         objItemClickListener.CardViewOnClick(alItemMaster.get(getAdapterPosition()));
@@ -508,7 +558,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                 public void onClick(View v) {
 
                     Globals.HideKeyBoard(context, v);
-                    objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()));
+                    objItemClickListener.ButtonOnClick(alItemMaster.get(getAdapterPosition()), getAdapterPosition());
                 }
             });
 

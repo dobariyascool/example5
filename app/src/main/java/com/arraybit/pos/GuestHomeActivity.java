@@ -23,7 +23,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -499,23 +498,12 @@ public class GuestHomeActivity extends AppCompatActivity implements GuestLoginDi
     }
 
     public void ReplaceFragment(Fragment fragment, String fragmentName) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            Fade fade = new Fade();
-            fade.setDuration(500);
-            fragment.setEnterTransition(fade);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
+            fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
             fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
             fragmentTransaction.addToBackStack(fragmentName);
             fragmentTransaction.commit();
-        } else {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
-            fragmentTransaction.addToBackStack(fragmentName);
-            fragmentTransaction.commit();
-        }
+
     }
 
     private void ShowSnackBarWithAction(final String msg) {

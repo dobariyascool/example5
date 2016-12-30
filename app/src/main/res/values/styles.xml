@@ -415,6 +415,7 @@
         <item name="android:layout_height">@dimen/card_MinimumHeight</item>
         <item name="cardCornerRadius">@dimen/card_CornerRadius</item>
         <item name="cardElevation">@dimen/card_Elevation</item>
+        <item name="android:foreground">@drawable/cardview_ripple_effect</item>
         <!--<item name="android:layout_marginBottom">@dimen/card_Margin</item>-->
     </style>
 
@@ -518,7 +519,7 @@
         <item name="rd_rippleColor">@color/orange_light</item>
         <item name="fab_size">normal</item>
         <item name="fab_colorPressed">@color/orange</item>
-        <!--<item name="android:src">@drawable/plus_white_drawable</item>-->
+        <!--<item name="app:srcCompat">@drawable/plus_white</item>-->
     </style>
 
     <style name="FloatingMiniButton" parent="FloatingActionButton">

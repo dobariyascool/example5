@@ -2,6 +2,7 @@ package com.arraybit.parser;
 
 import com.arraybit.global.Service;
 import com.arraybit.modal.CategoryMaster;
+import com.arraybit.pos.GuestHomeActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,7 +80,13 @@ public class CategoryJSONParser {
     public ArrayList<CategoryMaster> SelectAllCategoryMaster(int linktoBusinessMasterId) {
         ArrayList<CategoryMaster> lstCategoryMaster = null;
         try {
-            JSONObject jsonResponse = Service.HttpGetService(Service.Url + this.SelectAllCategoryMaster + "/" + linktoBusinessMasterId);
+            String url = null;
+            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+                url = Service.Url + this.SelectAllCategoryMaster + "/" + linktoBusinessMasterId+ "/true";
+            }else {
+                url = Service.Url + this.SelectAllCategoryMaster + "/" + linktoBusinessMasterId+ "/false";
+            }
+            JSONObject jsonResponse = Service.HttpGetService(url);
             if (jsonResponse != null) {
                 JSONArray jsonArray = jsonResponse.getJSONArray(this.SelectAllCategoryMaster + "Result");
                 if (jsonArray != null) {

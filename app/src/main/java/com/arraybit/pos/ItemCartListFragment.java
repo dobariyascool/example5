@@ -1,6 +1,5 @@
 package com.arraybit.pos;
 
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -49,7 +48,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ItemCartListFragment extends Fragment implements View.OnClickListener, ItemTabFragment.CartIconListener, DetailFragment.ResponseListener, GuestLoginDialogFragment.LoginResponseListener, CartItemAdapter.CartItemOnClickListener, ItemTabFragment.AddItemToCart {
+public class ItemCartListFragment extends Fragment implements View.OnClickListener, ItemTabFragment.CartIconListener, DetailFragment.ResponseListener, CartItemAdapter.CartItemOnClickListener, ItemTabFragment.AddItemToCart {
 
     public static boolean isViewChange = true;
     public static short i = 2;
@@ -75,13 +74,15 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
     int position;
     SharePreferenceManage sharePreferenceManage;
 
+    public ItemCartListFragment() {
+    }
+
     public ItemCartListFragment(boolean isFavoriteShow) {
         if (!GuestHomeActivity.isMenuMode) {
             this.isFavoriteShow = isFavoriteShow;
             Globals.isWishListShow = (short) (isFavoriteShow ? 0 : 1);
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,39 +96,38 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
             ((AppCompatActivity) getActivity()).setSupportActionBar(app_bar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             app_bar.setTitle(getActivity().getResources().getString(R.string.title_fragment_category_item));
-            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-                if (Globals.objAppThemeMaster != null) {
-                    Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
-                } else {
-                    Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
-                }
-            } else {
+//            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//                if (Globals.objAppThemeMaster != null) {
+//                    Globals.SetToolBarBackground(getActivity(), app_bar, Globals.objAppThemeMaster.getColorPrimary(), ContextCompat.getColor(getActivity(), android.R.color.white));
+//                } else {
+//                    Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary), ContextCompat.getColor(getActivity(), android.R.color.white));
+//                }
+//            } else {
                 Globals.SetToolBarBackground(getActivity(), app_bar, ContextCompat.getColor(getActivity(), R.color.primary_black), ContextCompat.getColor(getActivity(), android.R.color.white));
-
-            }
+//            }
         }
         //end
 
         if (getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
             categoryItemCartFragment = (CoordinatorLayout) view.findViewById(R.id.categoryItemCartFragment);
-            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-                if (Globals.objAppThemeMaster != null) {
-                    sharePreferenceManage = new SharePreferenceManage();
-                    String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity());
-                    if (encodedImage != null && !encodedImage.equals("")) {
-                        Globals.SetPageBackground(getActivity(), encodedImage, null, null, null, categoryItemCartFragment);
-//                    Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
-                    } else {
-                        Globals.SetScaleImageBackground(getActivity(), categoryItemCartFragment);
-                    }
-                } else {
-//                    Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
-//                    categoryItemFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
-                    Globals.SetScaleImageBackground(getActivity(), categoryItemCartFragment);
-                }
-            } else {
+//            if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//                if (Globals.objAppThemeMaster != null) {
+//                    sharePreferenceManage = new SharePreferenceManage();
+//                    String encodedImage = sharePreferenceManage.GetPreference("GuestAppTheme", getActivity().getString(R.string.guestEncodedImage1), getActivity());
+//                    if (encodedImage != null && !encodedImage.equals("")) {
+//                        Globals.SetPageBackground(getActivity(), encodedImage, null, null, null, categoryItemCartFragment);
+////                    Globals.SetScaleImageBackground(getActivity(), categoryItemFragment);
+//                    } else {
+//                        Globals.SetScaleImageBackground(getActivity(), categoryItemCartFragment);
+//                    }
+//                } else {
+////                    Bitmap originalBitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.splash_screen_background);
+////                    categoryItemFragment.setBackground(new BitmapDrawable(getActivity().getResources(), originalBitmap));
+//                    Globals.SetScaleImageBackground(getActivity(), categoryItemCartFragment);
+//                }
+//            } else {
                 categoryItemCartFragment.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.background_img));
-            }
+//            }
         }
 //      cart view
         headerLayout = (LinearLayout) view.findViewById(R.id.headerLayout);
@@ -158,32 +158,32 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
 //      menu view end
 
         itemTabLayout.setClickable(true);
-        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
-            getActivity().setTheme(R.style.AppThemeGuest);
-            if (Globals.objAppThemeMaster != null) {
-                headerLayout.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorAccentDark()));
-                txtHeaderItem.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
-                txtHeaderNo.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
-                txtHeaderRate.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
-                txtHeaderAmount.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
-
-                itemTabLayout.setSelectedTabIndicatorColor(Globals.objAppThemeMaster.getColorAccentDark());
-                itemTabLayout.setTabTextColors(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
-                itemTabLayout.setBackgroundColor(Globals.objAppThemeMaster.getColorPrimary());
-            } else {
-                headerLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent_secondary));
-                txtHeaderItem.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-                txtHeaderNo.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-                txtHeaderRate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-                txtHeaderAmount.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
-
-                itemTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getActivity(), R.color.accent));
-                itemTabLayout.setTabTextColors(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
-                itemTabLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary));
-            }
-            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
-            txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
-        }
+//        if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
+//            getActivity().setTheme(R.style.AppThemeGuest);
+//            if (Globals.objAppThemeMaster != null) {
+//                headerLayout.setBackground(new ColorDrawable(Globals.objAppThemeMaster.getColorAccentDark()));
+//                txtHeaderItem.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+//                txtHeaderNo.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+//                txtHeaderRate.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+//                txtHeaderAmount.setTextColor(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorPrimary()));
+//
+//                itemTabLayout.setSelectedTabIndicatorColor(Globals.objAppThemeMaster.getColorAccentDark());
+//                itemTabLayout.setTabTextColors(ColorStateList.valueOf(Globals.objAppThemeMaster.getColorCardText()));
+//                itemTabLayout.setBackgroundColor(Globals.objAppThemeMaster.getColorPrimary());
+//            } else {
+//                headerLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent_secondary));
+//                txtHeaderItem.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+//                txtHeaderNo.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+//                txtHeaderRate.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+//                txtHeaderAmount.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.primary)));
+//
+//                itemTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getActivity(), R.color.accent));
+//                itemTabLayout.setTabTextColors(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), android.R.color.white)));
+//                itemTabLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary));
+//            }
+//            ivErrorIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.errorIconColor), PorterDuff.Mode.SRC_IN);
+//            txtMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey));
+//        }
         SetRecyclerView();
         itemViewPager = (ViewPager) view.findViewById(R.id.itemViewPager);
 
@@ -239,20 +239,20 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
                 if (Globals.isWishListShow == 1) {
                     SaveWishListInSharePreference(true);
                 }
-                if (MenuActivity.parentActivity || GuestHomeActivity.isMenuMode) {
-                    Globals.targetFragment = null;
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("IsMenu", true);
-                    getActivity().setResult(Activity.RESULT_OK, returnIntent);
-                    getActivity().finish();
-                    getActivity().overridePendingTransition(0, R.anim.right_exit);
-                } else {
+//                if (MenuActivity.parentActivity || GuestHomeActivity.isMenuMode) {
+//                    Globals.targetFragment = null;
+//                    Intent returnIntent = new Intent();
+//                    returnIntent.putExtra("IsMenu", true);
+//                    getActivity().setResult(Activity.RESULT_OK, returnIntent);
+//                    getActivity().finish();
+//                    getActivity().overridePendingTransition(0, R.anim.right_exit);
+//                } else {
                     Globals.CategoryItemFragmentResetStaticVariable();
                     Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                }
+//                }
             } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                     && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
                 Globals.targetFragment = null;
@@ -294,7 +294,7 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
             }
         }
         if (MenuActivity.parentActivity || getActivity().getTitle().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
-            OptionMenuClick(item);
+//            OptionMenuClick(item);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -420,10 +420,10 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
     }
 
     //compound button signup click event form guest login
-    @Override
-    public void LoginResponse() {
-        ReplaceFragment(new SignUpFragment(), getActivity().getResources().getString(R.string.title_fragment_signup));
-    }
+//    @Override
+//    public void LoginResponse() {
+//        ReplaceFragment(new SignUpFragment(), getActivity().getResources().getString(R.string.title_fragment_signup));
+//    }
 
     @Override
     public void AddToCart() {
@@ -511,15 +511,15 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
         if (errorIcon != 0) {
             ivErrorIcon.setImageResource(errorIcon);
         } else {
-            ivErrorIcon.setImageResource(R.drawable.alert_drawable);
+            ivErrorIcon.setImageResource(R.drawable.alert);
         }
+
         if (isShow) {
             errorLayout.setVisibility(View.VISIBLE);
             txtMsg.setText(errorMsg);
             tabLayout.setVisibility(View.GONE);
             viewPager.setVisibility(View.GONE);
             famRoot.setVisibility(View.GONE);
-
         } else {
             errorLayout.setVisibility(View.GONE);
             tabLayout.setVisibility(View.VISIBLE);
@@ -530,24 +530,12 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
 
     @SuppressLint("CommitTransaction")
     public void ReplaceFragment(Fragment fragment, String fragmentName) {
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            Fade fade = new Fade();
-//            fade.setDuration(500);
-//            fragment.setEnterTransition(fade);
-//            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
-//            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
-//            fragmentTransaction.addToBackStack(fragmentName);
-//            fragmentTransaction.commit();
-//        } else {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
         fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
-//        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
         fragmentTransaction.addToBackStack(fragmentName);
         fragmentTransaction.commit();
-//        }
     }
 
     private void RemoveFragment(FragmentTransaction fragmentTransaction, int selectedPosition) {
@@ -747,7 +735,6 @@ public class ItemCartListFragment extends Fragment implements View.OnClickListen
         }
     }
     //endregion
-
 
     //region Loading Task
     public class GuestHomeCategoryLodingTask extends AsyncTask {

@@ -130,7 +130,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
                     } else {
                         sbRemark.append(objItemMaster.getItemRemark()).append(", ").append(objItemMaster.getOptionValue());
                     }
-
                 } else {
                     sbRemark.append(objItemMaster.getOptionValue());
                 }

@@ -3,13 +3,14 @@
     android:id="@+id/splashScreenLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_screen_background_central_symbol"
     android:gravity="center"
     tools:context="com.arraybit.pos.SplashScreenActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:id="@+id/ivLogo"
@@ -17,9 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:contentDescription="@string/splash_screen"
-            android:padding="50dp"
+            android:padding="70dp"
             android:scaleType="centerInside"
-            android:visibility="gone" />
+            android:src="@drawable/central_splash_logo" />
         <!--android:src="@drawable/splash_screen_image"-->
 
     </RelativeLayout>
@@ -33,30 +34,17 @@
         android:gravity="end|bottom|center">
 
         <ImageView
-            android:id="@+id/ivCompany"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/control_SpecingSmall"
-            android:layout_marginEnd="@dimen/control_SpecingSmall"
-            android:layout_marginTop="@dimen/control_SpecingSmall"
-            android:contentDescription="@string/splash_screen"
-            android:scaleType="fitEnd"
-            android:visibility="gone" />
-        <!--android:src="@drawable/cmp_logo"-->
-
-
-        <ImageView
             android:id="@+id/ivCompanyLogo"
             android:layout_width="160dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/control_SpecingSmall"
             android:layout_marginEnd="@dimen/control_SpecingSmall"
             android:layout_marginTop="@dimen/control_SpecingSmall"
-            android:layout_toEndOf="@+id/ivCompany"
             android:contentDescription="@string/splash_screen"
             android:gravity="center"
             android:scaleType="fitEnd"
             android:src="@drawable/arraybit_text" />
     </LinearLayout>
+
 
 </RelativeLayout>

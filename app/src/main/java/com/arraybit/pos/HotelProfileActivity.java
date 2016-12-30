@@ -101,7 +101,6 @@ public class HotelProfileActivity extends AppCompatActivity {
             Picasso.with(HotelProfileActivity.this).load(R.drawable.profile_background).fit().centerCrop().into(ivBackground);
         }
 
-
         if (GuestHomeActivity.isGuestMode || GuestHomeActivity.isMenuMode) {
             if (Globals.objAppThemeMaster != null) {
                 collapsingToolbar.setContentScrimColor(Globals.objAppThemeMaster.getColorPrimary());
@@ -248,8 +247,7 @@ public class HotelProfileActivity extends AppCompatActivity {
                 Globals.ShowSnackBar(hotelProfileFragment, getResources().getString(R.string.MsgSelectFail), HotelProfileActivity.this, 1000);
             } else {
 
-                Glide.with(HotelProfileActivity.this).load(objBusinessMaster.getImageName()).asBitmap().override(150, 150).centerCrop().into(new BitmapImageViewTarget(ivLogo) {
-                    @Override
+                Glide.with(HotelProfileActivity.this).load(objBusinessMaster.getImageName()).asBitmap().override(150, 150).into(new BitmapImageViewTarget(ivLogo) {                    @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable =
                                 RoundedBitmapDrawableFactory.create(getResources(), resource);

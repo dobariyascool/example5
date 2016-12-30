@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.arraybit.global.Globals;
 import com.arraybit.global.SharePreferenceManage;
@@ -35,7 +37,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.zip.GZIPOutputStream;
 
 @SuppressWarnings("ConstantConditions")
 public class WelcomeActivity extends AppCompatActivity {
@@ -53,43 +54,44 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         try {
+            displayMetrics = getResources().getDisplayMetrics();
             //get server name
             objSharePreferenceManage = new SharePreferenceManage();
             Globals.serverName = objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", WelcomeActivity.this);
             //end
-            if(Globals.objAppThemeMaster!=null)
-            {
-                if(Globals.objAppThemeMaster.getWelcomeBackImage()!=null && !Globals.objAppThemeMaster.getWelcomeBackImage().equals(""))
-                {
-//                    Log.e("image"," 1");
+            if (Globals.objAppThemeMaster != null) {
+                if (Globals.objAppThemeMaster.getWelcomeBackImage() != null && !Globals.objAppThemeMaster.getWelcomeBackImage().equals("")) {
                     Glide.with(this).load(Globals.objAppThemeMaster.getWelcomeBackImage()).asBitmap().into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            Drawable drawable = new BitmapDrawable(resource);
+                            Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(resource, displayMetrics.widthPixels, displayMetrics.heightPixels);
+                            Drawable drawable = new BitmapDrawable(getResources(), resizeBitmap);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                                 mainLayout.setBackground(drawable);
-//                                Log.e("image"," 1"+mainLayout.getBackground());
                             }
                         }
                     });
-                }
-                else
-                {
-//                    Log.e("image"," 2");
+                } else {
                     Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.welcome_background_full);
-//        Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
-
-                    mainLayout.setBackground(new BitmapDrawable(getResources(), originalBitmap));
+                    Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
+                    mainLayout.setBackground(new BitmapDrawable(getResources(), resizeBitmap));
                 }
-            }
-            else
-            {
-//                Log.e("image"," 3");
+            } else {
                 Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.welcome_background_full);
-//        Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
-
-                mainLayout.setBackground(new BitmapDrawable(getResources(), originalBitmap));
+                Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
+                mainLayout.setBackground(new BitmapDrawable(getResources(), resizeBitmap));
             }
+
+            mainLayout = (DrawerLayout) findViewById(R.id.mainLayout);
+            displayMetrics = getResources().getDisplayMetrics();
+
+            ivLeft = (ImageView) findViewById(R.id.ivLeft);
+            ivRight = (ImageView) findViewById(R.id.ivRight);
+            ivLogo = (ImageView) findViewById(R.id.ivLogo);
+            ivText = (ImageView) findViewById(R.id.ivText);
+            ivSwipe = (ImageView) findViewById(R.id.ivSwipe);
+
+            Glide.with(WelcomeActivity.this).load(R.drawable.swipe).asGif().into(ivSwipe);
 
             if (Globals.objAppThemeMaster != null) {
                 new ImageLoadingTask(getResources().getString(R.string.guestEncodedImage1), Globals.objAppThemeMaster.getBackImageName1()).execute();
@@ -98,48 +100,31 @@ public class WelcomeActivity extends AppCompatActivity {
                 new ImageLoadingTask(getResources().getString(R.string.encodedProfileImage), Globals.objAppThemeMaster.getProfileImageName()).execute();
             }
 
-
-            mainLayout = (DrawerLayout) findViewById(R.id.mainLayout);
-            displayMetrics = getResources().getDisplayMetrics();
-
-
-
-//            if(mainLayout.getBackground()==null) {
-//                Log.e("image"," 4"+mainLayout.getBackground());
-//                Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.welcome_background_full);
-////        Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
-//
-//                mainLayout.setBackground(new BitmapDrawable(getResources(), originalBitmap));
-//            }
-
-
-            ivLeft = (ImageView) findViewById(R.id.ivLeft);
-            ivRight = (ImageView) findViewById(R.id.ivRight);
-            ivLogo = (ImageView) findViewById(R.id.ivLogo);
-            ivText = (ImageView) findViewById(R.id.ivText);
-            ivSwipe = (ImageView) findViewById(R.id.ivSwipe);
-
-//        if (displayMetrics.widthPixels > displayMetrics.heightPixels) {
-//            Picasso.with(WelcomeActivity.this).load(R.drawable.left_design).resize((displayMetrics.widthPixels * 35) / 100, (displayMetrics.heightPixels * 30) / 100).into(ivLeft);
-//            Picasso.with(WelcomeActivity.this).load(R.drawable.right_design).resize((displayMetrics.widthPixels * 35) / 100, (displayMetrics.heightPixels * 30) / 100).into(ivRight);
-//            Picasso.with(WelcomeActivity.this).load(R.drawable.likeat_logo).resize((displayMetrics.widthPixels * 20) / 100, (displayMetrics.heightPixels * 14) / 100).into(ivLogo);
-//            Picasso.with(WelcomeActivity.this).load(R.drawable.welcome_text).resize((displayMetrics.widthPixels * 70) / 100, (displayMetrics.heightPixels * 12) / 100).into(ivText);
-//            Glide.with(WelcomeActivity.this).load(R.drawable.swipe).asGif().into(ivSwipe);
-//        } else {
-//            Picasso.with(WelcomeActivity.this).load(R.drawable.left_design).resize((displayMetrics.widthPixels * 50) / 100, (displayMetrics.heightPixels * 20) / 100).into(ivLeft);
-//            Picasso.with(WelcomeActivity.this).load(R.drawable.right_design).resize((displayMetrics.widthPixels * 50) / 100, (displayMetrics.heightPixels * 20) / 100).into(ivRight);
-//            Picasso.with(WelcomeActivity.this).load(R.drawable.likeat_logo).resize((displayMetrics.widthPixels * 25) / 100, (displayMetrics.heightPixels * 8) / 100).into(ivLogo);
-//            Picasso.with(WelcomeActivity.this).load(R.drawable.welcome_text).resize((displayMetrics.widthPixels * 80) / 100, (displayMetrics.heightPixels * 6) / 100).into(ivText);
-            Glide.with(WelcomeActivity.this).load(R.drawable.swipe).asGif().into(ivSwipe);
-//        }
-
+            Intent intent = getIntent();
+            if (intent.getParcelableExtra("TableMaster") != null) {
+                Log.e("intent", " " + getIntent());
+                objTableMaster = intent.getParcelableExtra("TableMaster");
+                Log.e("intent", " " + objTableMaster);
+                String toastMessage = Globals.orderTypeMasterId == Globals.OrderType.DineIn.getValue() ? objTableMaster.getTableName() + " - Dine In" : objTableMaster.getTableName() + " - Take Away";
+                Log.e("toast", " " + toastMessage);
+                Toast.makeText(WelcomeActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
+            }
 
             mainLayout.setOnTouchListener(new View.OnTouchListener() {
                                               @SuppressLint("ShortAlarm")
                                               @Override
                                               public boolean onTouch(View v, MotionEvent event) {
-
-                                                  if (count == 0) {
+                                                  if (objTableMaster != null) {
+                                                      Globals.isWishListShow = 1;
+                                                      Globals.selectTableMasterId = objTableMaster.getTableMasterId();
+//                                                      GuestHomeActivity.isGuestMode = true;
+                                                      Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
+                                                      i.putExtra("TableMaster", objTableMaster);
+                                                      i.putExtra("isStart", true);
+                                                      startActivity(i);
+                                                      overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                                                      finish();
+                                                  } else if (count == 0) {
                                                       count++;
                                                       objSharePreferenceManage = new SharePreferenceManage();
                                                       String userTypeMasterId = objSharePreferenceManage.GetPreference("WaiterPreference", "UserTypeMasterId", WelcomeActivity.this);
@@ -166,7 +151,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                                                   Globals.selectTableMasterId = objTableMaster.getTableMasterId();
                                                                   Intent i = new Intent(WelcomeActivity.this, GuestHomeActivity.class);
                                                                   i.putExtra("TableMaster", objTableMaster);
-                                                                  i.putExtra("isStart",true);
+                                                                  i.putExtra("isStart", true);
                                                                   startActivity(i);
                                                                   overridePendingTransition(R.anim.right_in, R.anim.left_out);
                                                                   finish();
@@ -223,6 +208,12 @@ public class WelcomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
+
+    //region Private Methods
     private TableMaster GetObjectFromPreference() {
         JSONObject jsonObject;
         try {
@@ -242,9 +233,9 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         return objTableMaster;
     }
+    //endregion
 
-
-    //region Private Methods
+    //region Loading task
 
     class ImageLoadingTask extends AsyncTask {
         String imagePreferenceName, urlImage;
@@ -271,10 +262,8 @@ public class WelcomeActivity extends AppCompatActivity {
                 bm.compress(Bitmap.CompressFormat.PNG, 0, baos);
                 byte[] b = baos.toByteArray();
                 encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-//                Log.e("image", " " + encodedImage);
                 String encodedImage1 = objSharePreferenceManage.GetPreference("GuestAppTheme", imagePreferenceName, WelcomeActivity.this);
                 if (encodedImage1 != null && !encodedImage1.equals("")) {
-//                    Log.e("removeimage", " " + encodedImage1);
                     sharePreferenceManage.RemovePreference("GuestAppTheme", imagePreferenceName, WelcomeActivity.this);
                     sharePreferenceManage.CreatePreference("GuestAppTheme", imagePreferenceName, encodedImage, WelcomeActivity.this);
                 } else {

@@ -232,7 +232,7 @@
                             android:dropDownHeight="190dp"
                             android:gravity="top"
                             android:imeOptions="actionDone"
-                            android:singleLine="true"
+                            android:maxLines="1"
                             android:textSize="@dimen/control_TextNormal" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -302,7 +302,6 @@
                 android:enabled="false"
                 android:src="@mipmap/plus_small"
                 android:visibility="gone"/>
-
 
             <com.rey.material.widget.Button
                 android:id="@+id/btnOrder"

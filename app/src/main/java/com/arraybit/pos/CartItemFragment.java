@@ -628,10 +628,12 @@ public class CartItemFragment extends Fragment implements CartItemAdapter.CartIt
                     objSharePreferenceManage.RemovePreference("CartItemListPreference", "OrderRemark", getActivity());
                     objSharePreferenceManage.ClearPreference("CartItemListPreference", getActivity());
                     if (getActivity() instanceof MenuActivity) {
+                        getActivity().setResult(Activity.RESULT_OK);
                         getActivity().finish();
                     } else if (getActivity() instanceof GuestHomeActivity) {
                         getActivity().onBackPressed();
                     } else {
+                        getActivity().setResult(Activity.RESULT_OK);
                         getActivity().finish();
                         Globals.counter = 0;
                         Globals.alOrderItemTran.clear();

@@ -47,7 +47,6 @@ import com.rey.material.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 @SuppressLint("ValidFragment")
 public class CategoryItemFragment extends Fragment implements View.OnClickListener, ItemTabFragment.CartIconListener, DetailFragment.ResponseListener, GuestLoginDialogFragment.LoginResponseListener {
@@ -238,13 +237,13 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
                     getActivity().overridePendingTransition(0, R.anim.right_exit);
                 } else {
                     Globals.CategoryItemFragmentResetStaticVariable();
-//                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(intent);
-//                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                    getActivity().setResult(Activity.RESULT_OK);
-                    getActivity().finish();
-                    getActivity().overridePendingTransition(0, R.anim.right_exit);
+                    Intent intent = new Intent(getActivity(), WaiterHomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//                    getActivity().setResult(Activity.RESULT_OK);
+//                    getActivity().finish();
+//                    getActivity().overridePendingTransition(0, R.anim.right_exit);
                 }
             } else if (getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName() != null
                     && getActivity().getSupportFragmentManager().getBackStackEntryAt(getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(getActivity().getResources().getString(R.string.title_fragment_category_item))) {
@@ -415,24 +414,12 @@ public class CategoryItemFragment extends Fragment implements View.OnClickListen
 
     @SuppressLint("CommitTransaction")
     public void ReplaceFragment(Fragment fragment, String fragmentName) {
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            Fade fade = new Fade();
-//            fade.setDuration(500);
-//            fragment.setEnterTransition(fade);
-//            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//            RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
-//            fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
-//            fragmentTransaction.addToBackStack(fragmentName);
-//            fragmentTransaction.commit();
-//        } else {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         RemoveFragment(fragmentTransaction, itemTabLayout.getSelectedTabPosition());
         fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, 0, R.anim.right_exit);
-//        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(android.R.id.content, fragment, fragmentName);
         fragmentTransaction.addToBackStack(fragmentName);
         fragmentTransaction.commit();
-//        }
     }
 
     private void RemoveFragment(FragmentTransaction fragmentTransaction, int selectedPosition) {

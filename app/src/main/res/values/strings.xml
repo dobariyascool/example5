@@ -480,4 +480,5 @@
     <string name="coaApply">Apply</string>
     <string name="MsgOfferCodeFailed">Offer Not Valid</string>
     <string name="MsgOfferCodeSuccess">Offer Applied</string>
+    <string name="member_login">Member Login</string>
 </resources>

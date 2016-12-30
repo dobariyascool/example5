@@ -1,25 +1,33 @@
 package com.arraybit.pos;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
 import com.arraybit.global.Globals;
+import com.arraybit.global.Service;
 import com.arraybit.global.SharePreferenceManage;
+import com.arraybit.modal.TableMaster;
 import com.arraybit.parser.AppThemeJSONParser;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-
 
 @SuppressWarnings({"unchecked", "NullArgumentToVariableArgMethod"})
 public class SplashScreenActivity extends AppCompatActivity {
     SharePreferenceManage objSharePreferenceManage = new SharePreferenceManage();
     RelativeLayout splashScreenLayout;
+    TableMaster objTableMaster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +36,16 @@ public class SplashScreenActivity extends AppCompatActivity {
         try {
             splashScreenLayout = (RelativeLayout) findViewById(R.id.splashScreenLayout);
 
-//        Glide.with(SplashScreenActivity.this).load(R.drawable.arraybit).asBitmap().into(ivLogo);
+            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
+            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.central_splash);
+            Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels);
+            splashScreenLayout.setBackground(new BitmapDrawable(getResources(),resizeBitmap));
+//        Glide.with(SplashScreenActivity.this).load(R.drawable.arraybit).asBitmap().into(ivLogo);
 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
 
                     if (objSharePreferenceManage.GetPreference("ServerPreference", "ServerName", SplashScreenActivity.this) == null) {
                         Globals.InitializeFragment(new ServerNameFragment(), getSupportFragmentManager());
@@ -45,7 +56,19 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                         } else {
                             Globals.SetBusinessMasterId(SplashScreenActivity.this);
-                            RedirectActivity(WelcomeActivity.class);
+                            String obj = objSharePreferenceManage.GetPreference("GuestModePreference", "GuestMode", SplashScreenActivity.this);
+                            if (obj == null && GetObjectFromPreference() == null) {
+                                if (objSharePreferenceManage.GetPreference("WaiterPreference", "WaiterMasterId", SplashScreenActivity.this) != null) {
+                                    Globals.isWishListShow = 0;
+                                    Intent i = new Intent(SplashScreenActivity.this, WaiterHomeActivity.class);
+                                    startActivity(i);
+                                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                                    finish();
+                                }
+                            }
+                            else {
+                                RedirectActivity(WelcomeActivity.class);
+                            }
                         }
                         //get server name
                         objSharePreferenceManage = new SharePreferenceManage();
@@ -53,25 +76,21 @@ public class SplashScreenActivity extends AppCompatActivity {
                         //end
 //                    Intent intent = new Intent(SplashScreenActivity.this, AppThemeIntentService.class);
 //                    startService(intent);
-                        SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
-                        int linktoBusinessMasterId ;
-                        if(sharePreferenceManage.GetPreference("WaiterPreference","linktoBusinessMasterId",SplashScreenActivity.this)!=null &&
-                                !sharePreferenceManage.GetPreference("WaiterPreference","linktoBusinessMasterId",SplashScreenActivity.this).equals("")) {
-                            linktoBusinessMasterId= Integer.parseInt(sharePreferenceManage.GetPreference("WaiterPreference","linktoBusinessMasterId",SplashScreenActivity.this));
-                            AppThemeJSONParser appThemeJSONParser = new AppThemeJSONParser();
-                            try {
-                                final JSONObject jsonObject = appThemeJSONParser.SelectAppThemeMaster(linktoBusinessMasterId);
-                                if (jsonObject != null) {
-//                                    sharePreferenceManage.CreatePreference("GuestAppTheme", "AppThemeJson", jsonObject.toString(), SplashScreenActivity.this);
-                                    Globals.objAppThemeMaster = appThemeJSONParser.SetClassPropertiesFromJSONObject(jsonObject);
-//                                } else if (sharePreferenceManage.GetPreference("GuestAppTheme", "AppThemeJson", SplashScreenActivity.this) != null &&
-//                                        !sharePreferenceManage.GetPreference("GuestAppTheme", "AppThemeJson", SplashScreenActivity.this).equals("")) {
-//                                    JSONObject jsonObject1 = new JSONObject(sharePreferenceManage.GetPreference("GuestAppTheme", "AppThemeJson", SplashScreenActivity.this));
-//                                    Globals.objAppThemeMaster = appThemeJSONParser.SetClassPropertiesFromJSONObject(jsonObject1);
+                        if (Service.CheckNet(SplashScreenActivity.this)) {
+                            SharePreferenceManage sharePreferenceManage = new SharePreferenceManage();
+                            int linktoBusinessMasterId;
+                            if (sharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", SplashScreenActivity.this) != null &&
+                                    !sharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", SplashScreenActivity.this).equals("")) {
+                                linktoBusinessMasterId = Integer.parseInt(sharePreferenceManage.GetPreference("WaiterPreference", "linktoBusinessMasterId", SplashScreenActivity.this));
+                                AppThemeJSONParser appThemeJSONParser = new AppThemeJSONParser();
+                                try {
+                                    final JSONObject jsonObject = appThemeJSONParser.SelectAppThemeMaster(linktoBusinessMasterId);
+                                    if (jsonObject != null) {
+                                        Globals.objAppThemeMaster = appThemeJSONParser.SetClassPropertiesFromJSONObject(jsonObject);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            }catch(Exception e)
-                            {
-                                e.printStackTrace();
                             }
                         }
                     }
@@ -108,8 +127,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
-        overridePendingTransition(0, R.anim.right_exit);
+//        finish();
+//        overridePendingTransition(0, R.anim.right_exit);
     }
 
     private void RedirectActivity(Class<?> activity) {
@@ -117,5 +136,31 @@ public class SplashScreenActivity extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.left_out);
         finish();
+    }
+
+    private TableMaster GetObjectFromPreference() {
+        JSONObject jsonObject;
+        try {
+            if(objSharePreferenceManage.GetPreference("GuestModePreference", "GuestMode", SplashScreenActivity.this)!=null) {
+                jsonObject = new JSONObject(objSharePreferenceManage.GetPreference("GuestModePreference", "GuestMode", SplashScreenActivity.this));
+                objTableMaster = new TableMaster();
+                objTableMaster.setTableMasterId((short) jsonObject.getInt("TableMasterId"));
+                objTableMaster.setTableName(jsonObject.getString("TableName"));
+                objTableMaster.setShortName(jsonObject.getString("ShortName"));
+                objTableMaster.setlinktoTableStatusMasterId((short) jsonObject.getInt("linktoTableStatusMasterId"));
+                objTableMaster.setlinktoOrderTypeMasterId((short) jsonObject.getInt("linktoOrderTypeMasterId"));
+                //objTableMaster.setlinktoSectionMasterId((short) jsonObject.getInt("linktoSectionMasterId"));
+                objTableMaster.setlinktoBusinessMasterId((short) jsonObject.getInt("linktoBusinessMasterId"));
+            }
+            else
+            {
+                objTableMaster = null;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            objTableMaster = null;
+        }
+        return objTableMaster;
     }
 }
